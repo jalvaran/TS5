@@ -672,32 +672,10 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 
 	public function CrearPreventa($idUser){
 
-		/////////////////////Si no existen datos de venta activa deberá crearse
-	
-	
 		
-		$this->consulta=mysql_query("SELECT MAX(NumCotizacion) as NumCotizacion, MAX(NumVenta) as NumVenta, MAX(NumFactura) as NumFactura  FROM vestasactivas") or die('problemas para consultas vestasactivas: ' . mysql_error());
-		$this->fetch=mysql_fetch_array($this->consulta);
-		
-		if($this->CotiUser>0){
-				
-			
-			mysql_query("INSERT INTO vestasactivas (`Nombre`,`Usuario_idUsuario`,`Clientes_idClientes`, `NumCotizacion`,`NumVenta`,`NumFactura` ) 
-						VALUES('Venta por: $this->NombreUser','$this->idUser','1','$this->CotiUser','$this->NumVenta','$this->NumFactura')") 
-						or die('problemas para actualizar vestasactivas: ' . mysql_error());
-						
-		}else{
-			$this->NumCotizacion = $this->fetch["NumCotizacion"]+1;
-			$this->NumVenta = $this->fetch["NumVenta"]+1;
-			$this->NumFactura = $this->fetch["NumFactura"]+1;		
-			mysql_query("INSERT INTO vestasactivas (`Nombre`,`Usuario_idUsuario`,`Clientes_idClientes`, `NumCotizacion`,`NumVenta`,`NumFactura` ) 
-						VALUES('Venta por: $this->NombreUser','$this->idUser','1','$this->NumCotizacion','$this->NumVenta','$this->NumFactura')") 
-						or die('problemas para actualizar vestasactivas: ' . mysql_error());
-		}
-
-		
-		return array();
-	
+            $sql="INSERT INTO vestasactivas (`Nombre`,`Usuario_idUsuario`,`Clientes_idClientes` ) 
+                                    VALUES('Venta por: $this->NombreUser','$this->idUser','1')";
+            $this->Query($sql);        	
 		
 		
 	}	

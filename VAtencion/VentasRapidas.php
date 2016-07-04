@@ -11,7 +11,8 @@ if (!isset($_SESSION['username']))
   
 }
 $obVenta = new ProcesoVenta($idUser);
-$DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+$Datos=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
+$DatosCaja=$obVenta->FetchArray($Datos);
 if($DatosCaja["ID"]<=0){
     
    header("location:401.php");

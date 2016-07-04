@@ -78,6 +78,7 @@ if($TipoUser<>"administrador"){
 		$css->FinTabs();
 		$css->NuevaTabs(2);
 			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar");
+                        $css->SubTabs("../VAtencion/HabilitarUser.php","_self","../images/autorizarcajas.png","Asignar usuarios a cajas");
 		$css->FinTabs();
 		$css->NuevaTabs(3);
 			$css->SubTabs("../VAtencion/impret.php","_self","../images/impuestos.png","Crear/Editar un impuesto o una retencion");
