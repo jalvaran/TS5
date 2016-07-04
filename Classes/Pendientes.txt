@@ -1,0 +1,55 @@
+REVISAR ESTADO DE RESULTADOS, SI NO SE REGISTRAN GASTOS O COMPRAS NO HAY BALANCE
+Modulo de anticipos
+    Crear tabla de anticipos e ingresar los datos en ella.
+NOTAS CREDITO PARA LOS ANTICIPOS O ASIGNACION DE ELLOS A FACTURAS
+Cotizacion incluyendo numero de dias
+Cargo basico que no sume por numero de dias
+Facturar desde remision
+Anular Facturas
+Mostrar Email en Carteras
+//Cambiar cuenta de anticipos por la 238020
+Hacer Pagina de Anticipos
+Ajustar el movimiento contable del iva asumido a regimen simplificado
+Modificar proveedores y colocarle terceros
+poder realizar movimientos contables para sacar dinero desde un anticipo a un pago de transporte
+//agregar el campo de ciudad en la creacion de los clientes
+INVENTARIOS
+    //CREACION DE KITS
+    Agregar a Kits desde todas las tablas de productos
+    ALQUILER DE MAQUINARIA
+    productos venta (Imprimir codigo de barras desde alli)
+    productos para alquilar
+    Servicios para la venta
+    Dar de Baja
+    Imprimir codigos de Barra
+    Ordenes de salida y entrada de activos
+    Activos
+    Crear Departamentos
+    Crear Subgrupos
+
+INGRESOS
+    Comprobantes de ingresos
+    Registrar un ingreso
+
+AGREGAR TODOS LOS ELEMENTOS DE UN KIT EN COTIZACIONES
+
+CARTERA
+    //Ver
+    //Ingresar Pago
+    //Ver Rotacion
+    Ingresar Abono
+    //Ver Total
+    Castigar Cartera
+NOTAS CONTABLES
+    Notas Credito
+    Movimientos Contables
+VENTAS RAPIDAS
+DEVOLUCIONES EN VENTAS
+CERRAR TURNO
+INFORMES
+CLIENTES
+PROVEEDORES
+CUENTASXPAGAR
+CREAR EQUIVALENTES NIFF Y LIBRO NIFF CON TRIGGERS
+SALIR
+REQUERIMIENTOS ASESOR FINANCIERO
