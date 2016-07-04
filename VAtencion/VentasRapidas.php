@@ -10,7 +10,12 @@ if (!isset($_SESSION['username']))
   exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
   
 }
-
+$obVenta = new ProcesoVenta($idUser);
+$DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+if($DatosCaja["ID"]<=0){
+    
+   header("location:401.php");
+}
 $idPreventa="";
 //////Si recibo una preventa
 if(!empty($_REQUEST['CmbPreVentaAct'])){
@@ -59,7 +64,7 @@ $css->CabeceraFin();
 $NombreUser=$_SESSION['nombre'];
 $idUser=$_SESSION['idUser'];	
 $obTabla = new Tabla($db);
-$obVenta = new ProcesoVenta(1);
+
 if(!empty($_REQUEST["TxtidFactura"])){
             
     $idFactura=$_REQUEST["TxtidFactura"];
