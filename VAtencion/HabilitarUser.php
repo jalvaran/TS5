@@ -28,13 +28,21 @@ $css->CabeceraFin();
 $css->CrearDiv("principal", "container", "Center", 1, 1);
 $obVenta=new ProcesoVenta($idUser);
 if(!empty($_REQUEST['ImgCerrarCajas'])){
+            
+    $obVenta->VaciarTabla("vestasactivas");// vaciar ventas activas
+    $obVenta->VaciarTabla("preventa");// Crea otra preventa
+    $css->CrearNotificacionRoja("Se han borrado todas las preventas", 16);
+            
+}
 
-            
-            $obVenta->VaciarTabla("vestasactivas");// vaciar ventas activas
-            $obVenta->VaciarTabla("preventa");// Crea otra preventa
-            $css->CrearNotificacionRoja("Se han borrado todas las preventas", 16);
-            
-    }
+if(!empty($_REQUEST['BtnAsignar'])){
+    
+    $idUsuario=$_REQUEST['CmbUser'];
+    $idCaja=$_REQUEST['TxtIdCaja'];
+    $css->CrearNotificacionRoja("entra user $idUsuario caja $idCaja", 16);
+    $obVenta->update("cajas", "idUsuario", $idUsuario, "WHERE ID='$idCaja'");
+             
+}
     
 $css->CrearTabla();
 print("<td>");
@@ -60,8 +68,32 @@ $css->CrearTabla();
                 $css->ColTabla($DatosCajas["ID"], 1);
                 $css->ColTabla($DatosCajas["Nombre"], 1);
                 $css->ColTabla($DatosCajas["Base"], 1);
-                $css->ColTabla($DatosCajas["idUsuario"], 1);
-                $css->ColTabla($DatosCajas["Estado"], 1);
+                print("<td>");
+                $css->CrearForm2("FormAsign$DatosCajas[ID]", $myPage, "post", "_self");
+                $css->CrearInputText("TxtIdCaja", "hidden", "", $DatosCajas["ID"], "", "", "", "", "", "", "", "");
+                $VarSelect["Ancho"]="100";
+                $VarSelect["PlaceHolder"]="Usuarios";
+                $VarSelect["Title"]="";
+                $css->CrearSelectChosen("CmbUser", $VarSelect);
+    
+                $sql="SELECT idUsuarios, Nombre, Apellido, Identificacion FROM usuarios";
+                $ConsultaUsuarios=$obVenta->Query($sql);
+                $css->CrearOptionSelect("0", "Seleccione un usuario" , 0);
+                while($DatosUsuarios=$obVenta->FetchArray($ConsultaUsuarios)){
+                    $sel=0;
+                    if($DatosUsuarios["idUsuarios"]==$DatosCajas["idUsuario"]){
+                        $sel=1;
+                    }
+                    $css->CrearOptionSelect("$DatosUsuarios[idUsuarios]", "$DatosUsuarios[Nombre] / $DatosUsuarios[Apellido] / $DatosUsuarios[Identificacion]" , $sel);
+                   }
+           
+            $css->CerrarSelect();
+            $VectorBoton["Fut"]=0;
+            $css->CrearBotonEvento("BtnAsignar", "Asignar", 1, "", "", "naranja", $VectorBoton);
+            $css->CerrarForm();            
+            print("</td>");
+                
+            $css->ColTabla($DatosCajas["Estado"], 1);
             $css->CierraFilaTabla();
         }
         

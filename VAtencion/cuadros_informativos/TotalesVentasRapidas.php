@@ -103,24 +103,7 @@
            }
            
     $css->CerrarSelect();
-    //print("<br>");
-    /*
-    $VarSelect["Ancho"]="200";
-    $VarSelect["PlaceHolder"]="Cuenta Destino";
-    $VarSelect["Title"]="";
-    $css->CrearSelectChosen("TxtCuentaDestino", $VarSelect);
     
-        $sql="SELECT * FROM cuentasfrecuentes";
-        $Consulta=$obVenta->Query($sql);
-        while($DatosCuenta=$obVenta->FetchArray($Consulta)){
-            $sel=0;
-               if($DatosCuenta["CuentaPUC"]=="110510"){
-                   $sel=1;
-               }
-               $css->CrearOptionSelect("$DatosCuenta[CuentaPUC]", "$DatosCuenta[CuentaPUC] / $DatosCuenta[Nombre]" , $sel);
-           }
-    $css->CerrarSelect();
-    */
     $VarSelect["Ancho"]="200";
     $VarSelect["PlaceHolder"]="Forma de Pago";
     $VarSelect["Title"]="";
