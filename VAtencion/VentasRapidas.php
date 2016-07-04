@@ -10,22 +10,25 @@ if (!isset($_SESSION['username']))
   exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
   
 }
+
 $obVenta = new ProcesoVenta($idUser);
-$Datos=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
-$DatosCaja=$obVenta->FetchArray($Datos);
+$ConsultaCajas=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
+$DatosCaja=$obVenta->FetchArray($ConsultaCajas);
 if($DatosCaja["ID"]<=0){
     
    header("location:401.php");
-}
+}   
+
 $idPreventa="";
 //////Si recibo una preventa
 if(!empty($_REQUEST['CmbPreVentaAct'])){
 
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
-       
+  
 $myPage="VentasRapidas.php";
 $css =  new CssIni("TS5 Ventas");
+  
 $css->CabeceraIni("TS5 Ventas"); 
     $css->CreaBotonAgregaPreventa($myPage,$idUser);
     $css->CreaBotonDesplegable("DialCliente","Cliente");
@@ -51,7 +54,7 @@ $css->CabeceraIni("TS5 Ventas");
 
     $css->CerrarSelect();
     $css->CerrarForm();
-    if($idPreventa>1){
+    if($idPreventa>=1){
         $css->CrearForm("FrmBuscarSeparados",$myPage,"post","_self");
         $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
         $css->CrearInputText("TxtBuscarSeparado", "text", " Buscar Separado ", "", "Buscar separado", "white", "", "", 200, 30, 0, 1);
@@ -90,13 +93,7 @@ if(!empty($_REQUEST["TxtIdEgreso"])){
     $css->CerrarTabla();
 }
 include_once("procesadores/procesaVentasRapidas.php");
-/*
- * Creo el cuadro de dialogo que perimitirá crear un cliente
- */
 
-    //$css->CreaMenuBasico("Menu"); 
-    //	$css->CreaSubMenuBasico("Cerrar Turno","$myPage?BtnCerrarTurno=1"); 
-    //$css->CierraMenuBasico(); 
 $Visible=0;
 if($idPreventa>0){
     $Visible=1;

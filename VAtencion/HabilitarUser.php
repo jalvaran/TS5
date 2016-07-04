@@ -39,20 +39,13 @@ if(!empty($_REQUEST['BtnAsignar'])){
     
     $idUsuario=$_REQUEST['CmbUser'];
     $idCaja=$_REQUEST['TxtIdCaja'];
-    $css->CrearNotificacionRoja("entra user $idUsuario caja $idCaja", 16);
+    $Estado=$_REQUEST['CmbEstado'];
+    
     $obVenta->update("cajas", "idUsuario", $idUsuario, "WHERE ID='$idCaja'");
+    $obVenta->update("cajas", "Estado", $Estado, "WHERE ID='$idCaja'");
              
 }
-    
-$css->CrearTabla();
-print("<td>");
-$css->CrearDiv("vaciar", "", "Center", 1, 1);
-$css->CrearNotificacionRoja("Click para Borrar Todas las preventas: ", 18);
-$css->CrearImageLink("$myPage?ImgCerrarCajas=1", "../images/CerrarCajas.png", "_self", 200, 200);
-$css->CerrarDiv();
-print("</td>");
-$css->CerrarTabla();
-
+$css->CrearNotificacionAzul("Asignar Usuarios y Habilitar Cajas: ", 20); 
 $css->CrearTabla();
     $Consulta=$obVenta->ConsultarTabla("cajas", "");
     if($obVenta->NumRows($Consulta)){
@@ -60,8 +53,8 @@ $css->CrearTabla();
         $css->ColTabla("<strong>ID</strong>", 1);
         $css->ColTabla("<strong>Nombre</strong>", 1);
         $css->ColTabla("<strong>Base</strong>", 1);
-        $css->ColTabla("<strong>Usuario</strong>", 1);
-        $css->ColTabla("<strong>Estado</strong>", 1);
+        $css->ColTabla("<strong>Asignar y Abrir o Cerrar Cajas</strong>", 1);
+        
         $css->CierraFilaTabla();
         while ($DatosCajas=$obVenta->FetchArray($Consulta)){
             $css->FilaTabla(14);
@@ -88,18 +81,43 @@ $css->CrearTabla();
                    }
            
             $css->CerrarSelect();
+            print(" < / / > ");
+            $Sel1=0;
+            $Sel2=0;
+            $css->CrearSelect("CmbEstado", "");
+                if($DatosCajas["Estado"]=="ABIERTA"){
+                    $Sel1=1;
+                    $Sel2=0;
+                }else{
+                    $Sel1=0;
+                    $Sel2=1;
+                }
+                
+                $css->CrearOptionSelect("ABIERTA", "Abierta", $Sel1);
+                $css->CrearOptionSelect("CERRADA", "Cerrada", $Sel2);
+            $css->CerrarSelect(); 
+            print(" < / / > ");
             $VectorBoton["Fut"]=0;
-            $css->CrearBotonEvento("BtnAsignar", "Asignar", 1, "", "", "naranja", $VectorBoton);
+            $css->CrearBotonEvento("BtnAsignar", "Editar", 1, "", "", "naranja", $VectorBoton);
             $css->CerrarForm();            
             print("</td>");
                 
-            $css->ColTabla($DatosCajas["Estado"], 1);
+            
             $css->CierraFilaTabla();
         }
         
     }else{
         $css->CrearFilaNotificacion("No hay Cajas Creadas", 16);
     }
+$css->CerrarTabla();
+
+$css->CrearTabla();
+print("<td>");
+$css->CrearDiv("vaciar", "", "Center", 1, 1);
+$css->CrearNotificacionRoja("Click para Borrar Todas las preventas: ", 18);
+$css->CrearImageLink("$myPage?ImgCerrarCajas=1", "../images/CerrarCajas.png", "_self", 200, 200);
+$css->CerrarDiv();
+print("</td>");
 $css->CerrarTabla();
 $css->CerrarDiv();
 
