@@ -3067,8 +3067,9 @@ public function CalculePesoRemision($idCotizacion)
         
         $consulta=$this->Query($sql);
         $DatosSeparadoItems=  $this->FetchArray($consulta);
-        $CentroCostos=1;
-        $ResolucionDian=1;
+        $DatosCaja=$this->DevuelveValores("cajas", "idUsuario", $this->idUser);
+        $CentroCostos=$DatosCaja["CentroCostos"];
+        $ResolucionDian=$DatosCaja["idResolucionDian"];
         
         //$CuentaDestino=$_REQUEST["CmbCuentaDestino"];
         //$CuentaDestino=110510;
@@ -3166,7 +3167,7 @@ public function CalculePesoRemision($idCotizacion)
                 /////
                 /////
                 
-                
+                $CuentaDestino="1305";
                 $Datos["idSeparado"]=$idSeparado;
                 $Datos["NumFactura"]=$idFactura;
                 $Datos["FechaFactura"]=$FechaFactura;

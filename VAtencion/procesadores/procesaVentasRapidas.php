@@ -178,10 +178,13 @@
             $DatosVentaRapida["PagaTarjeta"]=$Tarjeta;
             $DatosVentaRapida["idTarjeta"]=$idTarjeta;
             $DatosVentaRapida["PagaOtros"]=$OtrosPaga;
-            
-            $DatosVentaRapida["CentroCostos"]=1;
-            $DatosVentaRapida["ResolucionDian"]=1;
-            
+            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+            $DatosVentaRapida["CentroCostos"]=$DatosCaja["CentroCostos"];
+            $DatosVentaRapida["ResolucionDian"]=$DatosCaja["idResolucionDian"];
+            if($TipoPago<>"Contado" AND $idCliente<=1){
+                print("<script>alert('Debe seleccionar un Cliente para realizar una venta a credito')</script>");
+                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+            }
             $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
 
             $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
@@ -218,8 +221,11 @@
                 if($DatosImpresora["Habilitado"]=="SI"){
                     $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 2);
                 }
-                $CuentaDestino="110510";
-                $CentroCosto=1;
+                
+                
+                $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+                $CentroCosto=$DatosCaja["CentroCostos"];
+                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
                 $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
                 $VectorIngreso["fut"]="";
                 $obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
@@ -328,15 +334,17 @@
             $VectorSeparados["Fut"]=0;
             $Saldo=$obVenta->RegistreAbonoSeparado($idSeparado,$Valor,$fecha,$Hora,$VectorSeparados);
             $idCliente=$_REQUEST['TxtIdClientes'];
-            $CuentaDestino="110510";
-            $CentroCosto=1;
+            
+            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+            $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+            $CentroCosto=$DatosCaja["CentroCostos"];
             $Concepto="ABONO A SEPARADO No $idSeparado";
             $VectorIngreso["fut"]="";
             $obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($Saldo==0){
                 $VectorSeparados["Ft"]="";
-                $CuentaDestino="110510";
+                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
                 $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$idPreventa,$CuentaDestino,$VectorSeparados);
                if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
@@ -390,9 +398,11 @@
             
                 
             //Pendientes por definir de donde tomar los valores
-            $CuentaOrigen=11051001;
-            $CentroCostos=1;
-            $CuentaPUCIVA=2408;
+            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+            
+            $CuentaOrigen=$DatosCaja["CuentaPUCEfectivo"];
+            $CentroCostos=$DatosCaja["CentroCostos"];
+            $CuentaPUCIVA=$DatosCaja["CuentaPUCIVAEgresos"];
             ///
             //Constantes para este caso
             $TipoEgreso="VentasRapidas";
