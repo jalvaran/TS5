@@ -3471,6 +3471,149 @@ public function CalculePesoRemision($idCotizacion)
                 
         return ($NumEgreso);
     }
+    
+    /*
+     * Imprime en un egreso en POS
+     * 
+     */
+    
+    public function ImprimeEgresoPOS($idEgreso,$VectorEgresos,$COMPrinter,$Copias){
+            
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosEgreso=$this->DevuelveValores("egresos", "idEgresos", $idEgreso);
+       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", 1);
+       $RazonSocial=$DatosEmpresa["RazonSocial"];
+        $NIT=$DatosEmpresa["NIT"];
+        $Direccion=$DatosEmpresa["Direccion"];
+        $Ciudad=$DatosEmpresa["Ciudad"];
+       
+        $Telefono=$DatosEmpresa["Telefono"];
+
+       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosEgreso["Usuario_idUsuario"]);
+             
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$NIT);
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Direccion);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Ciudad);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Telefono);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+
+        fwrite($handle,"Usuario:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+        fwrite($handle,"FECHA: $DatosEgreso[Fecha]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"COMPROBANTE DE EGRESO:   $idEgreso");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"_____________________________________");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+        /////////////////////////////Beneficiario
+       
+        fwrite($handle,"DATOS DEL BENEFICIARIO");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+
+        fwrite($handle,str_pad("Razon Social: $DatosEgreso[Beneficiario]",10," ",STR_PAD_LEFT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("NIT: $DatosEgreso[NIT]",10," ",STR_PAD_LEFT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("Direccion: $DatosEgreso[Direccion]",10," ",STR_PAD_LEFT));
+        
+        fwrite($handle, chr(27). chr(100). chr(1));
+        fwrite($handle,str_pad("Ciudad: $DatosEgreso[Ciudad]",10," ",STR_PAD_LEFT));
+        fwrite($handle, chr(27). chr(100). chr(1));
+    /////////////////////////////TOTALES
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    /////////////////////////////Beneficiario
+    
+    fwrite($handle,"CONCEPTO");
+    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,$DatosEgreso["Concepto"]);
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    /////////////////////////////Totales
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"SUBTOTAL:      ".str_pad("$".number_format($DatosEgreso["Subtotal"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"IVA:           ".str_pad("$".number_format($DatosEgreso["IVA"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL:         ".str_pad("$".number_format($DatosEgreso["Valor"]),20," ",STR_PAD_LEFT));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"RECIBIDO:     _______________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"REALIZA:      _______________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"APRUEBA:      _______________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
+   
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
+    //fwrite($handle, chr(27). chr(100). chr(0));
+    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
+    //fwrite($handle,"=================================");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    
+    }
+    
+    
 //////////////////////////////Fin	
 }
 	

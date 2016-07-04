@@ -124,7 +124,7 @@
         echo '<br>';
         $css->CrearInputNumber("TxtSubtotalEgreso","number","Subtotal:<br>",0,"Subtotal","black","onkeyup","CalculeTotalEgresosVR()",200,30,0,1,1,'',"");
         echo '<br>';
-        $css->CrearInputNumber("TxtIVAEgreso","number","IVA:<br>",0,"IVA","black","onkeyup","CalculeTotalEgresosVR()",200,30,0,1,1,'',"");
+        $css->CrearInputNumber("TxtIVAEgreso","number","IVA:<br>",0,"IVA","black","onkeyup","CalculeTotalEgresosVR()",200,30,0,1,0,'',"");
         echo '<br>';
         $css->CrearInputNumber("TxtValorEgreso","number","Total:<br>","","Total","black","","",200,30,1,1,1,1,1);
         echo '<br>';

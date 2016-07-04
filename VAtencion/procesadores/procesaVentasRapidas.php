@@ -397,6 +397,12 @@
             
             $idEgreso=$obVenta->CrearEgreso($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$VectorEgreso);
             
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            $VectorEgresos["Fut"]=1;
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obVenta->ImprimeEgresoPOS($idEgreso,$VectorEgresos,$DatosImpresora["Puerto"],1);
+                    
+            }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
         }
         

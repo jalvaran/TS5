@@ -4,7 +4,7 @@ include("../../modelo/php_conexion.php");
 ////////////////////////////////////////////
 /////////////Obtengo el ID de la Factura a que se imprimirá 
 ////////////////////////////////////////////
-
+$obVenta=new ProcesoVenta(1);
 $idEgresos = $_REQUEST["ImgPrintComp"];
 
 $idFormatoCalidad=11;
@@ -16,7 +16,7 @@ require_once('Encabezado.php');
 /////////////Obtengo datos del egresos
 ////////////////////////////////////////////
 
-$obVenta=new ProcesoVenta(1);
+
 $DatosEgreso=$obVenta->DevuelveValores("egresos","idEgresos",$idEgresos);
 
 $nombre_file=$DatosEgreso["idEgresos"]."_Egreso_".$DatosEgreso["Beneficiario"];
@@ -113,96 +113,13 @@ $pdf->Output($nombre_file.'.pdf', 'I');
 
 ///////////////////////////////////////////
 /////////////////////IMPRESORA POS
+$DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+$VectorEgresos["Fut"]=1;
+print("<script>alert('Entra')</script>");
+if($DatosImpresora["Habilitado"]=="SI"){
+    print("<script>alert('Entra')</script>");
+    $obVenta->ImprimeEgresoPOS($idEgresos,$VectorEgresos,$DatosImpresora["Puerto"],1);
 
-
-if(($handle = @fopen($COMPrinter, "w")) === FALSE){
-        die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
-    }
-
-
-
-$con=mysql_connect($host,$user,$pw) or die("problemas con el servidor");
-mysql_select_db($db,$con) or die("la base de datos no abre");
-
-$sql="SELECT * FROM empresapro WHERE idEmpresaPro='1'";
-$DatosEmpresa=mysql_query($sql,$con) or die('no se pudo obtener los datos de la empresa: ' . mysql_error());
-
-$DatosEmpresa=mysql_fetch_array($DatosEmpresa);
-$RazonSocial=$DatosEmpresa["RazonSocial"];
-$NIT=$DatosEmpresa["NIT"];
-$Direccion=$DatosEmpresa["Direccion"];
-$Ciudad=$DatosEmpresa["Ciudad"];
-$ResolucionDian=$DatosEmpresa["ResolucionDian"];
-$Telefono=$DatosEmpresa["Telefono"];
-
-
-fwrite($handle,chr(27). chr(64));//REINICIO
-//fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
-fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
-fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
-fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-fwrite($handle,"=================================");
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$NIT);
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$ResolucionDian);
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$Direccion);
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$Ciudad);
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,$Telefono);
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle,"=================================");
-fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-
-				
-		fwrite($handle,"Comprobante de egreso Numero: ".$idEgresos."..");
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"Beneficiario: $DatosEgreso[8]");
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"NIT: ".$DatosEgreso[9]);
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"Direccion: ".$DatosEgreso[10]);
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"Factura No: ".$DatosEgreso["NumFactura"]);
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"Valor: ".($DatosEgreso["Valor"]-$DatosEgreso["Retenciones"]));
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle,"Concepto: ".$DatosEgreso[5]);
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle, chr(27). chr(100). chr(1));
-		fwrite($handle,"Aprobado por: ________________________");
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle, chr(27). chr(100). chr(1));
-		fwrite($handle,"Recibe: ______________________________");
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle, chr(27). chr(100). chr(1));
-		fwrite($handle,"Cedula: ______________________________");
-		fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-
-		fwrite($handle, chr(27). chr(100). chr(1));
-fwrite($handle, chr(27). chr(100). chr(1));
-fwrite($handle,"***Comprobante impreso por SoftConTech***");
-fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-fwrite($handle,"Software diseniado por Techno Soluciones, 3177740609, www.technosoluciones.com");
-//fwrite($handle,"=================================");
-fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-fwrite($handle, chr(27). chr(100). chr(1));
-fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-fwrite($handle, chr(27). chr(100). chr(1));
-fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-fwrite($handle, chr(27). chr(100). chr(1));
-
-fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
-fclose($handle); // cierra el fichero PRN
-$salida = shell_exec("lpr $COMPrinter");
-
+}
 
 ?>
