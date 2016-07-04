@@ -3236,14 +3236,20 @@ public function CalculePesoRemision($idCotizacion)
 		}
                 //$Subtotal=$Subtotal;   //Se le restan las retenciones
                 $Valor=$Total;
-		$Total=$Total-$ReteICA-$ReteIVA-$Retefuente; 
-		$Retenciones=$ReteICA+$ReteIVA+$Retefuente;
+		$Total=$Total-$ReteICA-$ReteIVA-$ReteFuente; 
+		$Retenciones=$ReteICA+$ReteIVA+$ReteFuente;
 		//////registramos en egresos
 		
 				
 		$DatosProveedor=$this->DevuelveValores("proveedores","idProveedores",$idProveedor);
 		$DatosCentroCosto=$this->DevuelveValores("centrocosto","ID",$CentroCostos);
-		$DatosTipoEgreso=$this->DevuelveValores("egresos_tipo","id",$TipoEgreso);
+                $NombreTipoEgreso="";
+                if($TipoEgreso=="VentasRapidas"){
+                    $NombreTipoEgreso=$TipoEgreso;
+                }else{
+                    $DatosTipoEgreso=$this->DevuelveValores("egresos_tipo","id",$TipoEgreso);
+                    $NombreTipoEgreso=$DatosTipoEgreso["Nombre"];
+                }
 		$RazonSocial=$DatosProveedor["RazonSocial"];
 		$NIT=$DatosProveedor["Num_Identificacion"];
 		$idEmpresa=$DatosCentroCosto["EmpresaPro"];
@@ -3262,7 +3268,7 @@ public function CalculePesoRemision($idCotizacion)
                     $Columnas[5]="Usuario_idUsuario";	$Valores[5]=$idUser;
                     $Columnas[6]="PagoProg";			$Valores[6]=$TipoPago;
                     $Columnas[7]="FechaPagoPro";		$Valores[7]=$fecha;
-                    $Columnas[8]="TipoEgreso";			$Valores[8]=$DatosTipoEgreso["Nombre"];
+                    $Columnas[8]="TipoEgreso";			$Valores[8]=$NombreTipoEgreso;
                     $Columnas[9]="Direccion";			$Valores[9]=$DatosProveedor["Direccion"];
                     $Columnas[10]="Ciudad";				$Valores[10]=$DatosProveedor["Ciudad"];
                     $Columnas[11]="Subtotal";			$Valores[11]=$Subtotal;
@@ -3277,7 +3283,7 @@ public function CalculePesoRemision($idCotizacion)
 
                     $this->InsertarRegistro("egresos",$NumRegistros,$Columnas,$Valores);
                     
-                    $NumEgreso=$tabla->ObtenerMAX("egresos","idEgresos", 1, "");
+                    $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, "");
                     $DocumentoSoporte="CompEgreso";
                     $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$NumEgreso";
                 }
@@ -3352,7 +3358,7 @@ public function CalculePesoRemision($idCotizacion)
 		
 		/////////////////////////////////////////////////////////////////
 		//////contra partida
-		if($_POST["TipoPago"]=="Contado"){
+		if($TipoPago=="Contado"){
 			
 			
 			$CuentaPUC=$CuentaOrigen; //cuenta de donde sacaremos el valor del egreso
@@ -3360,7 +3366,7 @@ public function CalculePesoRemision($idCotizacion)
 			$DatosCuenta=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaPUC);
 			$NombreCuenta=$DatosCuenta["Nombre"];
 		}
-		if($_POST["TipoPago"]=="Programado"){
+		if($TipoPago=="Programado"){
 			$CuentaPUC="2205";
 			$NombreCuenta="Proveedores Nacionales $RazonSocial $NIT";
 		}
@@ -3411,7 +3417,7 @@ public function CalculePesoRemision($idCotizacion)
 			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 		}
                 
-                if(!empty($Retefuente)){   //Si hay retencion en la fuente se registra
+                if(!empty($ReteFuente)){   //Si hay retencion en la fuente se registra
                     
 			
                     $DatosCuenta=$this->DevuelveValores("tiposretenciones","ID",1);
@@ -3422,8 +3428,8 @@ public function CalculePesoRemision($idCotizacion)
                     $Valores[15]=$CuentaPUC;
                     $Valores[16]=$NombreCuenta;
                     $Valores[18]=0;
-                    $Valores[19]=$Retefuente; 						
-                    $Valores[20]=$Retefuente*(-1);  											//Credito se escribe el total de la venta menos los impuestos
+                    $Valores[19]=$ReteFuente; 						
+                    $Valores[20]=$ReteFuente*(-1);  											//Credito se escribe el total de la venta menos los impuestos
 
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
                 }
@@ -3463,7 +3469,7 @@ public function CalculePesoRemision($idCotizacion)
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
                 }
                 
-        return ($RutaPrintComp);
+        return ($NumEgreso);
     }
 //////////////////////////////Fin	
 }

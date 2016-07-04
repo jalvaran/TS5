@@ -295,6 +295,22 @@ function CalculeTotalImpuestos() {
 
 }
 
+//Calcula el total en los egresos desde ventas rapidas
+
+function CalculeTotalEgresosVR() {
+
+	var Subtotal;
+	var IVA;
+	var Total;
+	
+	Subtotal = parseInt(document.getElementById("TxtSubtotalEgreso").value);
+	IVA = parseInt(document.getElementById("TxtIVAEgreso").value);
+	Total= parseInt(Subtotal) + parseInt(IVA);
+	
+	document.getElementById("TxtValorEgreso").value=Total;
+
+}
+
 // esta funcion permite cambiar un link
 function CambiaLinkKit(idProducto,idLink,idCantidad,idkit,page){
     

@@ -75,6 +75,14 @@ if(!empty($_REQUEST["TxtidFactura"])){
     }
             
 }
+
+if(!empty($_REQUEST["TxtIdEgreso"])){
+    $idEgreso=$_REQUEST["TxtIdEgreso"];
+    $RutaPrint="../tcpdf/examples/imprimircomp.php?ImgPrintComp=".$idEgreso;
+    $css->CrearTabla();
+        $css->CrearFilaNotificacion("Egreso Creado Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Egreso No. $idEgreso</a>",16);
+    $css->CerrarTabla();
+}
 include_once("procesadores/procesaVentasRapidas.php");
 /*
  * Creo el cuadro de dialogo que perimitirá crear un cliente

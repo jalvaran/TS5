@@ -359,7 +359,7 @@
             
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
-            $FechaProgramada=
+            $FechaProgramada=$fecha;
             $Hora=date("H:i:s");
             $destino="";
             if(!empty($_FILES['foto']['name'])){
@@ -372,18 +372,30 @@
             }
             
             $CuentaDestino=$_REQUEST['CmbCuentaDestino'];
-            $CuentaOrigen=11051001;
+            $NumFact=$_REQUEST["TxtNumFactura"];
+            $Concepto=$_REQUEST["TxtConcepto"];
+            $idProveedor=$_REQUEST["CmbProveedores"];
             $Subtotal=$_REQUEST["TxtSubtotalEgreso"];
             $IVA=$_REQUEST["TxtIVAEgreso"];
             $Total=$_REQUEST["TxtValorEgreso"];
+            //Pendientes por definir de donde tomar los valores
+            $CuentaOrigen=11051001;
+            $CentroCostos=1;
+            $CuentaPUCIVA=2408;
+            ///
+            //Constantes para este caso
+            $TipoEgreso="VentasRapidas";
+            $TipoPago="Contado";
+            $Sanciones=0;
+            $Intereses=0;
+            $Impuestos=0;
+            $ReteFuente=0;
+            $ReteIVA=0;
+            $ReteICA=0;
+            $VectorEgreso["Fut"]=0;  //Uso futuro
+            ///                
             
-            $NumFactura=$_REQUEST["TxtNumFactura"];
-            $Concepto=$_REQUEST["TxtConcepto"];
-            $idProveedor=$_REQUEST["CmbProveedores"];
-                    
-            $DatosProveedor=$tabla->DevuelveValores("proveedores","idProveedores",$idProveedor);
-            $CentroCostos=$tabla->DevuelveValores("centrocosto","ID",$_REQUEST["CmbCentroCosto"]);
-            $obVenta->CrearEgreso($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$VectorEgreso);
+            $idEgreso=$obVenta->CrearEgreso($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$VectorEgreso);
             
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
         }
