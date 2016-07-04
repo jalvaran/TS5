@@ -360,7 +360,23 @@
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
             $FechaProgramada=$fecha;
-            $Hora=date("H:i:s");
+            $CuentaDestino=$_REQUEST['CmbCuentaDestino'];
+            $NumFact=$_REQUEST["TxtNumFactura"];
+            $Concepto=$_REQUEST["TxtConcepto"];
+            $idProveedor=$_REQUEST["CmbProveedores"];
+            $Subtotal=$_REQUEST["TxtSubtotalEgreso"];
+            $IVA=$_REQUEST["TxtIVAEgreso"];
+            $Total=$_REQUEST["TxtValorEgreso"];
+            
+            if($idProveedor<=0){
+                print("<script>alert('Debe seleccionar un Proveedor para poder ejecutar esta accion')</script>");
+                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+            }
+            
+            if($CuentaDestino<=0){
+                print("<script>alert('Debe seleccionar un egreso para poder ejecutar esta accion')</script>");
+                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+            }
             $destino="";
             if(!empty($_FILES['foto']['name'])){
                  //echo "<script>alert ('entra foto')</script>";
@@ -371,13 +387,8 @@
                 move_uploaded_file($_FILES['foto']['tmp_name'],$destino);
             }
             
-            $CuentaDestino=$_REQUEST['CmbCuentaDestino'];
-            $NumFact=$_REQUEST["TxtNumFactura"];
-            $Concepto=$_REQUEST["TxtConcepto"];
-            $idProveedor=$_REQUEST["CmbProveedores"];
-            $Subtotal=$_REQUEST["TxtSubtotalEgreso"];
-            $IVA=$_REQUEST["TxtIVAEgreso"];
-            $Total=$_REQUEST["TxtValorEgreso"];
+            
+                
             //Pendientes por definir de donde tomar los valores
             $CuentaOrigen=11051001;
             $CentroCostos=1;
