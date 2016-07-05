@@ -59,7 +59,7 @@
     $Visible=0;
     print("<td>");
     //$css->ColTablaInputText("TxtPaga","number","","","Paga","","onkeyup","CalculeDevuelta()",150,30,0,0); 
-    $css->CrearInputNumber("TxtPaga","number","Efectivo: <br>",$Total,"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
+    $css->CrearInputNumber("TxtPaga","number","Efectivo: <br>",round($Total),"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
     print("<strong>+</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpcionesPago');>");
     $css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
     //print("<br>");
@@ -169,7 +169,13 @@
             $Evento="ConfirmarFormPass(`$Clave`); return false;";
             $css->ColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","onClick",$Evento,"Habilita('TxtEditarPrecio$DatosPreventa[idPrecotizacion]','0')","150","30",0,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
             $css->ColTabla(number_format($DatosPreventa['Subtotal']),1);
-            $css->ColTablaDel($myPage,"preventa","idPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
+            //$css->ColTablaDel($myPage,"preventa","idPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
+            print("<td>");
+            $VectorDatosExtra["ID"]="LinkDel$DatosPreventa[idPrecotizacion]";
+            $VectorDatosExtra["JS"]="onclick='ConfirmarFormPass(`$Clave`); return false;'";
+            $link="$myPage?del=$DatosPreventa[idPrecotizacion]&TxtTabla=preventa&TxtIdTabla=idPrecotizacion&TxtIdPre=$idPreventa";
+            $css->CrearLinkID($link,"_self","X",$VectorDatosExtra);
+            print("</td>");
             //$css->CierraColTabla();
             $css->CierraFilaTabla();
     }

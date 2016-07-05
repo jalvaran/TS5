@@ -1493,7 +1493,7 @@ public function CalculePesoRemision($idCotizacion)
         $TelContacto=$DatosCliente["TelContacto"];
         $TotalFactura=$DatosFactura["Total"];
         $tab="cartera";       
-        $NumRegistros=12; 
+        $NumRegistros=13; 
                 
         $Columnas[0]="Facturas_idFacturas";         $Valores[0]=$idFactura;
         $Columnas[1]="FechaIngreso";                $Valores[1]=$FechaIngreso;
@@ -1507,6 +1507,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[9]="TotalFactura";                $Valores[9]=$TotalFactura;
         $Columnas[10]="TotalAbonos";                $Valores[10]=0;
         $Columnas[11]="Saldo";                      $Valores[11]=$TotalFactura;
+        $Columnas[12]="idUsuarios";                 $Valores[12]= $this->idUser;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                 
@@ -2351,7 +2352,7 @@ public function CalculePesoRemision($idCotizacion)
 
             fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
 
-            fwrite($handle,str_pad(substr($DatosVenta["Nombre"],0,20),20," ",STR_PAD_BOTH)."   ");
+            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,26),20," ",STR_PAD_BOTH)."   ");
 
             fwrite($handle,str_pad("$".number_format($SubTotalITem),10," ",STR_PAD_LEFT));
 
@@ -2621,6 +2622,8 @@ public function CalculePesoRemision($idCotizacion)
     $Consulta=$this->ConsultarTabla("separados_abonos", " WHERE idSeparado='$idSeparado'");
     while($DatosAbonos=$this->FetchArray($Consulta)){
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"CI No: $DatosAbonos[idComprobanteIngreso]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"Fecha:  $DatosAbonos[Fecha]  Valor: ".str_pad("$".number_format($DatosAbonos["Valor"]),10," ",STR_PAD_LEFT));
                
     }
@@ -2742,9 +2745,9 @@ public function CalculePesoRemision($idCotizacion)
                 $this->InserteKardex($DatosKardex);
             }
         }
-        
+        $idComprobanteAbono=$DatosSeparado["idCompIngreso"];
         $tab="separados_abonos";
-        $NumRegistros=7;
+        $NumRegistros=8;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
@@ -2752,6 +2755,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[4]="Valor";               $Valores[4]=$Abono;
         $Columnas[5]="idCliente";            $Valores[5]=$idCliente;
         $Columnas[6]="idUsuarios";           $Valores[6]=$this->idUser;
+        $Columnas[7]="idComprobanteIngreso"; $Valores[7]=$idComprobanteAbono;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
@@ -3029,10 +3033,10 @@ public function CalculePesoRemision($idCotizacion)
     ///Registre un abono a un separado
     //
     public function RegistreAbonoSeparado($idSeparado,$Valor,$fecha,$Hora,$VectorSeparados) {
-        
+        $idIngresos=$VectorSeparados["idCompIngreso"];
         $DatosSeparado=  $this->DevuelveValores("separados", "ID", $idSeparado);
         $tab="separados_abonos";
-        $NumRegistros=7;
+        $NumRegistros=8;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
@@ -3040,6 +3044,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[4]="Valor";               $Valores[4]=$Valor;
         $Columnas[5]="idCliente";            $Valores[5]=$DatosSeparado["idCliente"];
         $Columnas[6]="idUsuarios";           $Valores[6]=$this->idUser;
+        $Columnas[7]="idComprobanteIngreso"; $Valores[7]=$idIngresos;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
