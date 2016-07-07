@@ -813,10 +813,18 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
                 }
             }else{
                 if($lengCampo<100){
-
-                    $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);
+                    if($NombreCol=="RutaImagen"){
+                        $this->css->CrearUpload($NombreCol);
+                    }else{
+                        $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);    
+                    }
                 }else{
-                    $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
+                    if($NombreCol=="RutaImagen"){
+                        $this->css->CrearUpload($NombreCol);
+                    }else{    
+                        $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
+                    }
+                    
                 }
             }
                 print("<td></tr>");    

@@ -17,9 +17,26 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
     
     $i=0;   
     foreach($NombresColumnas as $NombreCol){
+        if($NombreCol=="RutaImagen"){
+               $destino="";
+                //echo "<script>alert ('entra a las columnas $NombreCol')</script>"; 
+		if(!empty($_FILES['RutaImagen']['name'])){
+                    //echo "<script>alert ('entra foto')</script>";
+                        $dir= "../../"; 
+			$carpeta="LogosEmpresas/";
+			opendir($dir.$carpeta);
+                        $Name=str_replace(' ','_',$_FILES['RutaImagen']['name']);  
+			$destino=$carpeta.$Name;
+			move_uploaded_file($_FILES['RutaImagen']['tmp_name'],$dir.$destino);
+		}
+                $Columnas[$i]=$NombreCol;  $Valores[$i]=$destino;
+                $i++;
+           }
         if(isset($_REQUEST[$NombreCol])){
-           $Columnas[$i]=$NombreCol;  $Valores[$i]=$_REQUEST[$NombreCol];
-           $i++;
+            //echo "<script>alert ('entra a las columnas $NombreCol')</script>"; 
+           
+                $Columnas[$i]=$NombreCol;  $Valores[$i]=$_REQUEST[$NombreCol];
+            $i++;
         }
        
     }

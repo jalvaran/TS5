@@ -178,7 +178,7 @@ class CssIni{
 	/////////////////////Crea un Formulario
 	
 	function CrearFormularioEvento($nombre,$action,$method,$target,$evento){
-		print('<form name= "'.$nombre.'" action="'.$action.'" id="'.$nombre.'" method="'.$method.'" target="'.$target.'" '.$evento.'>');
+		print('<form name= "'.$nombre.'" action="'.$action.'" id="'.$nombre.'" method="'.$method.'" target="'.$target.'" '.$evento.'" enctype="multipart/form-data">');
 		
 	}
 	
