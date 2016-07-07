@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-07-2016 a las 19:32:45
+-- Tiempo de generación: 07-07-2016 a las 09:34:45
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -248,11 +248,8 @@ CREATE TABLE IF NOT EXISTS `cajas` (
   `idUsuario` int(11) NOT NULL,
   `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPUCEfectivo` bigint(20) NOT NULL,
-  `NombreCuentaEfectivo` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPUCCheques` bigint(20) NOT NULL,
-  `NombreCuentaPUCCheques` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPUCOtros` bigint(20) NOT NULL,
-  `NombreCuentaPUCOtros` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPUCIVAEgresos` bigint(20) NOT NULL,
   `CentroCostos` int(11) NOT NULL,
   `idResolucionDian` int(11) NOT NULL,
@@ -263,9 +260,9 @@ CREATE TABLE IF NOT EXISTS `cajas` (
 -- Volcado de datos para la tabla `cajas`
 --
 
-INSERT INTO `cajas` (`ID`, `Nombre`, `Base`, `idUsuario`, `Estado`, `CuentaPUCEfectivo`, `NombreCuentaEfectivo`, `CuentaPUCCheques`, `NombreCuentaPUCCheques`, `CuentaPUCOtros`, `NombreCuentaPUCOtros`, `CuentaPUCIVAEgresos`, `CentroCostos`, `idResolucionDian`) VALUES
-(1, 'CAJA 1', '50000', 4, 'ABIERTA', 11051001, 'CAJA MENOR CAJA 1', 11100502, 'CUENTA DE AHORROS DAVIVIENDA CHEQUES', 11100503, 'CUENTA DE AHORROS DAVIVIENDA OTRAS FORMAS DE PAGO', 2408, 1, 2),
-(2, 'CAJA 2', '50000', 3, 'ABIERTA', 11051002, 'CAJA MENOR CAJA 2', 11100502, 'CUENTA DE AHORROS DAVIVIENDA CHEQUES', 11100503, 'CUENTA DE AHORROS DAVIVIENDA OTRAS FORMAS DE PAGO', 2408, 1, 1);
+INSERT INTO `cajas` (`ID`, `Nombre`, `Base`, `idUsuario`, `Estado`, `CuentaPUCEfectivo`, `CuentaPUCCheques`, `CuentaPUCOtros`, `CuentaPUCIVAEgresos`, `CentroCostos`, `idResolucionDian`) VALUES
+(1, 'CAJA 1', '50000', 4, 'ABIERTA', 11051001, 11100502, 11100503, 2408, 1, 2),
+(2, 'CAJA 2', '50000', 3, 'ABIERTA', 11051002, 11100502, 11100503, 2408, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -417,8 +414,8 @@ INSERT INTO `cartera` (`idCartera`, `Facturas_idFacturas`, `FechaIngreso`, `Fech
 (11, '201606271234510.77308900 1467048891', '2016-06-27', '2016-07-12', -8, '66', 'JULIAN ANDRES ALVARAN VALENCIA', '3177740609', '', '', 394400, 0, 394400, NULL, 0),
 (12, '201607041719250.05808200 1467670765', '2016-07-04', '2016-07-19', -15, '1', 'CLIENTES VARIOS', '', '', '', 47800, 0, 47800, NULL, 0),
 (13, '201607041720010.86018700 1467670801', '2016-07-04', '2016-08-03', -30, '1', 'CLIENTES VARIOS', '', '', '', 23900, 0, 23900, NULL, 0),
-(14, '201607041849070.89822500 1467676147', '2016-07-04', '2016-08-03', 0, '15', 'JHON FERNANDO MARIN', '3156706879', 'JHON FERNANDO MARIN', '3156706879', 19900, 0, 19900, NULL, 3),
-(15, '201607041851160.13045100 1467676276', '2016-07-04', '2016-08-03', 0, '14', 'Taller Industrial Servi Torno', '2282077', 'Juan David Gomez', '3174276965', 19900, 0, 19900, NULL, 3);
+(14, '201607041849070.89822500 1467676147', '2016-07-04', '2016-08-03', -30, '15', 'JHON FERNANDO MARIN', '3156706879', 'JHON FERNANDO MARIN', '3156706879', 19900, 0, 19900, NULL, 3),
+(15, '201607041851160.13045100 1467676276', '2016-07-04', '2016-08-03', -30, '14', 'Taller Industrial Servi Torno', '2282077', 'Juan David Gomez', '3174276965', 19900, 0, 19900, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -4588,6 +4585,7 @@ INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Te
 
 CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NombreInterno` text COLLATE utf8_spanish2_ci NOT NULL,
   `NumResolucion` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
   `Fecha` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `NumSolicitud` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -4607,9 +4605,9 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
 -- Volcado de datos para la tabla `empresapro_resoluciones_facturacion`
 --
 
-INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`) VALUES
-(1, '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO'),
-(2, '1555431', '2016-03-27', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO');
+INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`) VALUES
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO'),
+(2, 'Facturas por POS', '1555431', '2016-03-27', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO');
 
 -- --------------------------------------------------------
 
@@ -25390,7 +25388,7 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `TotalVenta` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `TipoItem` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -32592,6 +32590,7 @@ CREATE TABLE IF NOT EXISTS `subcuentas` (
 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`) VALUES
 (1435, 'Mercancias no fabricadas por la empresa', '0', '1435'),
+(2408, 'IVA', NULL, '2408'),
 (4135, 'COMERCIO AL POR MAYOR Y AL POR MENOR', '0', '4135'),
 (110505, ' Caja general', '0', '1105'),
 (110510, ' Cajas menores', '0', '1105'),
@@ -34148,6 +34147,8 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`) VALUES
 (939925, 'Dividendos o participaciones decretadas en ac', '0', '9399'),
 (939930, 'Resultados de ejercicios anteriores', '0', '9399'),
 (11100501, 'CUENTA DE AHORROS DAVIVIENDA', '0', '1110'),
+(11100502, 'CHEQUES RECIBIDOS', NULL, '1110'),
+(11100503, 'BONOS U OTROS RECIBIDOS', NULL, '1110'),
 (13050517, 'CLIENTES NACIONALES SEGURIDAD ATLAS LTDA', '0', '1305'),
 (23657502, 'Autorretenciones (CREE)', '0', '2365'),
 (51950101, 'Peajes', '0', '5195');
