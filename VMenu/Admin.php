@@ -75,6 +75,8 @@ if($TipoUser<>"administrador"){
 			$css->SubTabs("../VAtencion/empresapro.php","_self","../images/empresa.png","Crear/Editar");
                         $css->SubTabs("../VAtencion/empresapro_resoluciones_facturacion.php","_self","../images/resolucion.png","Resoluciones de Facturacion");
                         $css->SubTabs("../VAtencion/formatos_calidad.php","_self","../images/notacredito.png","Formatos de Calidad");
+                        $css->SubTabs("../VAtencion/centrocosto.php","_self","../images/centrocostos.png","Crear Centro de Costos");
+                        $css->SubTabs("../VAtencion/cajas.php","_self","../images/cajas.png","Crear/Editar Cajas");
 		$css->FinTabs();
 		$css->NuevaTabs(2);
 			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar");
