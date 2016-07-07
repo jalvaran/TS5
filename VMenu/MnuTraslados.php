@@ -1,24 +1,3 @@
-<?php
-ob_start();
-session_start();
-
-include_once("../modelo/php_conexion.php");
-include_once("css_construct.php");
-
-if (!isset($_SESSION['username']))
-{
- exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-
-}
-if ($_SESSION['tipouser']<>"administrador")
-{
- exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
-
-?>
 <!DOCTYPE html>
 <script src="js/funciones.js"></script>
 <html lang="es">
@@ -28,7 +7,26 @@ $idUser=$_SESSION['idUser'];
 	 
 	 
 	 
+	 <?php
+	 session_start();
+
+	include_once("../modelo/php_conexion.php");
+	include_once("css_construct.php");
+
+	if (!isset($_SESSION['username']))
+	{
+	  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
+	  
+	}
+	if ($_SESSION['tipouser']<>"administrador")
+	{
+	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
+	  
+	}
+	$NombreUser=$_SESSION['nombre'];
+	$idUser=$_SESSION['idUser'];	
 	
+	 ?>
        
      </head>
      <body  class="">
@@ -36,7 +34,7 @@ $idUser=$_SESSION['idUser'];
 <!--==============================header=================================-->
 
  <?php 
-	$myPage="MnuInventarios.php";
+	$myPage="MnuTraslados.php";
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 
@@ -55,22 +53,22 @@ $idUser=$_SESSION['idUser'];
     
 	<?php 
  
-	$css->IniciaMenu("Inventarios"); 
-            $css->MenuAlfaIni("Inventarios");
-                $css->SubMenuAlfa("Clasificacion de Inventarios",2);	
+	$css->IniciaMenu("Traslados"); 
+            $css->MenuAlfaIni("Crear");
+                $css->SubMenuAlfa("Seguimiento",2);	
 	$css->MenuAlfaFin();
             
 	$css->IniciaTabs();
 
             $css->NuevaTabs(1);
-                $css->SubTabs("../VAtencion/productosventa.php","_self","../images/productosventa.png","Productos para la venta");
-                $css->SubTabs("../VAtencion/productosalquiler.php","_self","../images/alquiler.png","Productos para alquilar");
-                $css->SubTabs("../VAtencion/servicios.php","_self","../images/servicios.png","Servicios para la venta");
-                $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
-                $css->SubTabs("../VAtencion/kardexmercancias.php","_self","../images/kardex.png","Kardex");
+                $css->SubTabs("../VAtencion/productosventa.php","_blank","../images/productosventa.png","Productos para la venta");
+                $css->SubTabs("../VAtencion/productosalquiler.php","_blank","../images/alquiler.png","Productos para alquilar");
+                $css->SubTabs("../VAtencion/servicios.php","_blank","../images/servicios.png","Servicios para la venta");
+                $css->SubTabs("../VAtencion/ordenesdecompra.php","_blank","../images/ordendecompra.png","Ordenes de Compra");
+                $css->SubTabs("../VAtencion/kardexmercancias.php","_blank","../images/kardex.png","Kardex");
                 //$css->SubTabs("../VAtencion/kits.php","_blank","../images/kits.png","Creacion de KITS");
                 //$css->SubTabs("../VAtencion/CompraMercancias.php","_blank","../images/dardebaja.png","Dar de Baja");    
-                $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
+                //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/codigobarras.png","Imprimir Codigos de Barra");
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/ordenessalida.png","Ordenes de salida y entrada de activos");
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/activos.png","Activos");
             $css->FinTabs();
@@ -107,6 +105,3 @@ $idUser=$_SESSION['idUser'];
 </body>
 
 </html>
-<?php
-ob_end_flush();
-?>
