@@ -16,8 +16,12 @@ $VersionFormato=$DatosFormato["Version"];
 $CodigoFormato=$DatosFormato["Codigo"];
 $FechaFormato=$DatosFormato["Fecha"];
 $PiePagina=$DatosFormato["NotasPiePagina"];
-		  
-$DatosEmpresaPro=$obVenta->DevuelveValores("empresapro","idEmpresaPro",1);
+if(isset($DatosCentroCostos["EmpresaPro"])){
+    $idEmpresaPro=$DatosCentroCostos["EmpresaPro"];
+}else{
+    $idEmpresaPro=1;
+}		  
+$DatosEmpresaPro=$obVenta->DevuelveValores("empresapro","idEmpresaPro",$idEmpresaPro);
 $RazonSocialEP=$DatosEmpresaPro["RazonSocial"];
 $DireccionEP=$DatosEmpresaPro["Direccion"];
 $TelefonoEP=$DatosEmpresaPro["Celular"];
@@ -64,6 +68,8 @@ if (@file_exists(dirname(__FILE__).'/lang/spa.php')) {
 // add a page
 $pdf->AddPage();
 $pdf->SetFont('helvetica', '', 8);
+
+$RutaLogo="../../$DatosEmpresaPro[RutaImagen]";
 ///////////////////////////////////////////////////////
 //////////////encabezado//////////////////
 ////////////////////////////////////////////////////////
@@ -72,7 +78,7 @@ $pdf->SetFont('helvetica', '', 8);
 $tbl = <<<EOD
 <table cellspacing="0" cellpadding="1" border="1">
     <tr border="1">
-        <td rowspan="3" border="1" style="text-align: center;"><img src="images/header-logo.png" style="width:110px;height:60px;"></td>
+        <td rowspan="3" border="1" style="text-align: center;"><img src="$RutaLogo" style="width:110px;height:60px;"></td>
         
         <td rowspan="3" width="270px" style="text-align: center; vertical-align: center;"><h2><br>$TituloFormato</h2></td>
         <td width="70px" style="text-align: center;">Versión<br></td>
