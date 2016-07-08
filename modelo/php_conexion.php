@@ -3596,7 +3596,21 @@ public function CalculePesoRemision($idCotizacion)
     $salida = shell_exec('lpr $COMPrinter');
     
     }
-    
+    //Funcion para Conetarse a un servidor y seleccionar una base de datos
+     public function ConToServer($ip,$User,$Pass,$db){
+        
+        $con = mysql_connect($ip,$User,$Pass);
+        mysql_select_db($db,$con) or die(mysql_error());
+        
+     }
+     
+     //Funcion para Conetarse a un servidor y seleccionar una base de datos
+     public function CerrarCon(){
+        
+         mysql_close();
+        
+        
+     }
     
 //////////////////////////////Fin	
 }

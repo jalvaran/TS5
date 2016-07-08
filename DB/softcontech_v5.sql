@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-07-2016 a las 12:49:29
+-- Tiempo de generación: 08-07-2016 a las 09:21:46
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -3034,7 +3034,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad` (
   `Usuarios_idUsuarios` int(11) NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=57 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=58 ;
 
 --
 -- Volcado de datos para la tabla `comprobantes_contabilidad`
@@ -3090,7 +3090,8 @@ INSERT INTO `comprobantes_contabilidad` (`ID`, `Fecha`, `Hora`, `Concepto`, `Usu
 (53, '2016-06-16', '08:55', 'ABONO A LA CUENTA POR COBRAR ESPECIFICADA EN EL LIBRO DIARIO CON ID=1033 del Tercero Techno Soluciones con NIT 900833180 por total de: 25000, Nuevo saldo: 15000', 3, ''),
 (54, '2016-06-16', '16:37', 'ABONO A LA CUENTA POR PAGAR ESPECIFICADA EN EL LIBRO DIARIO CON ID=1024 del Tercero GVS COLOMBIA SAS con NIT 900298074 por total de: 100000, Nuevo saldo: 87000', 3, ''),
 (55, '2016-06-21', '12:18', 'AJUSTE POR ERROR DL', 3, 'C'),
-(56, '2016-06-27', '16:37', 'ajuste en cualquier cosa', 3, 'C');
+(56, '2016-06-27', '16:37', 'ajuste en cualquier cosa', 3, 'C'),
+(57, '2016-07-07', '16:13', 'dsds', 3, '');
 
 -- --------------------------------------------------------
 
@@ -3395,7 +3396,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_pre` (
   `idComprobanteContabilidad` int(16) NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=28 ;
 
 --
 -- Volcado de datos para la tabla `comprobantes_pre`
@@ -3423,7 +3424,8 @@ INSERT INTO `comprobantes_pre` (`ID`, `Fecha`, `Concepto`, `idComprobanteContabi
 (23, '2016-06-12', 'dsadas', 44, 'C'),
 (24, '2016-06-16', 'prueba', 49, 'C'),
 (25, '2016-06-21', 'AJUSTE POR ERROR DL', 55, 'C'),
-(26, '2016-06-27', 'ajuste en cualquier cosa', 56, 'C');
+(26, '2016-06-27', 'ajuste en cualquier cosa', 56, 'C'),
+(27, '2016-07-07', 'dsds', 57, '');
 
 -- --------------------------------------------------------
 
@@ -32556,20 +32558,21 @@ INSERT INTO `servicios` (`idProductosVenta`, `Referencia`, `Nombre`, `PrecioVent
 --
 
 CREATE TABLE IF NOT EXISTS `servidores` (
-  `idServer` int(11) NOT NULL AUTO_INCREMENT,
-  `Direccion` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `IP` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Usuario` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `Password` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  PRIMARY KEY (`idServer`)
+  `DataBase` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
 
 --
 -- Volcado de datos para la tabla `servidores`
 --
 
-INSERT INTO `servidores` (`idServer`, `Direccion`, `Nombre`, `Usuario`, `Password`) VALUES
-(1, '192.168.1.104', 'PC OFICINA TECHNO', 'techno', 'pirlo1985');
+INSERT INTO `servidores` (`ID`, `IP`, `Nombre`, `Usuario`, `Password`, `DataBase`) VALUES
+(1, '213.239.232.149', 'SERVIDOR GENERAL', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_test_ts5');
 
 -- --------------------------------------------------------
 
@@ -34241,6 +34244,99 @@ INSERT INTO `tiposretenciones` (`ID`, `Nombre`, `CuentaPasivo`, `NombreCuentaPas
 (1, 'RETENCION EN LA FUENTE', '236540', 'Rete Fuente x compras', '135515', 'Anticipo de Impuestos Retefuente'),
 (2, 'RETEIVA', '236701', 'IVA retenido', '135517', 'Anticipo de Impuestos ReteIVA'),
 (3, 'RETE-ICA', '2368', 'Rete Fuente x ICA', '135518', 'Anticipo de Impuestos ReteICA');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `traslados_estados`
+--
+
+CREATE TABLE IF NOT EXISTS `traslados_estados` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
+
+--
+-- Volcado de datos para la tabla `traslados_estados`
+--
+
+INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`) VALUES
+(1, 'PREPARADO', 'una vez se agregan los items '),
+(2, 'EN TRANSITO', 'una vez es despachada la mercancia'),
+(3, 'EN DESTINO', 'una vez llega la mercancia a su destino'),
+(4, 'VERIFICADO', 'cuando el destino verifica la recepcion de la mercancia'),
+(5, 'RECHAZADO', 'cuando el destino rechaza el traslado'),
+(6, 'EN DESARROLLO', 'estado inicial mientras se agregan items ');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `traslados_mercancia`
+--
+
+CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
+  `ID` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Origen` int(11) NOT NULL,
+  `Destino` int(11) NOT NULL,
+  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Abre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Cierra` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `ServerSincronizado` datetime NOT NULL,
+  `DestinoSincronizado` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `traslados_mercancia`
+--
+
+INSERT INTO `traslados_mercancia` (`ID`, `Fecha`, `Hora`, `Origen`, `Destino`, `Descripcion`, `Estado`, `Abre`, `Cierra`, `ServerSincronizado`, `DestinoSincronizado`) VALUES
+('', '2016-07-07', '17:03:51', 0, 0, 'dsadsa', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.03833100 1467931184', '2016-07-07', '17:23:53', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.08332600 1467933118', '2016-07-07', '18:09:46', 0, 1, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.13842300 1467931686', '2016-07-07', '17:48:00', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.17865000 1467932669', '2016-07-07', '18:04:24', 0, 0, 'dsdsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.29138800 1467932472', '2016-07-07', '18:00:52', 0, 0, 'conexion a server 2', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.41107200 1467930026', '2016-07-07', '17:18:41', 0, 0, 'fdfdsf', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.43451900 1467933156', '2016-07-07', '18:11:59', 0, 2, 'buga', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.46692600 1467932184', '2016-07-07', '17:56:12', 0, 0, 'prueba con conexion a server', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.67327500 1467932085', '2016-07-07', '17:54:41', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.69430800 1467932680', '2016-07-07', '18:04:31', 0, 0, 'prueba 5', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.78750800 1467931512', '2016-07-07', '17:45:07', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.83529500 1467931753', '2016-07-07', '17:49:08', 0, 0, 'dsdsa', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-07-0.88914600 1467932642', '2016-07-07', '18:01:14', 0, 0, 'prueba 4\r\n', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+('2016-07-070.22008700 1467929921', '2016-07-07', '17:17:08', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `traslados_sucursales_disponibles`
+--
+
+CREATE TABLE IF NOT EXISTS `traslados_sucursales_disponibles` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Ciudad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Direccion` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `idEmpresaPro` int(11) NOT NULL,
+  `Visible` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `traslados_sucursales_disponibles`
+--
+
+INSERT INTO `traslados_sucursales_disponibles` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `idEmpresaPro`, `Visible`) VALUES
+(1, 'INIFINITO YOTOCO', 'YOTOCO', '', 1, 'SI'),
+(2, 'INIFINITO BUGA', 'BUGA', '', 2, 'SI'),
+(3, 'INIFINITO GINEBRA', 'BUGA', '', 3, 'SI'),
+(4, 'INIFINITO SAN PEDRO', 'SAN PEDRO', '', 4, 'SI');
 
 -- --------------------------------------------------------
 
