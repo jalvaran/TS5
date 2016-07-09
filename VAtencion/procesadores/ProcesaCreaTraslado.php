@@ -26,9 +26,10 @@ if(!empty($_REQUEST["BtnCrearTraslado"])){
     ////
     $Consecutivo=$obVenta->ObtenerMAX("traslados_mercancia", "ConsecutivoInterno", 1, 0);
     $Consecutivo++;
+    $DatosSucursalActual=$obVenta->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
     $tab="traslados_mercancia";
-    $NumRegistros=7; 
-    $id=  date("Y-m-d")."-".microtime();
+    $NumRegistros=9; 
+    $id=  $DatosSucursalActual["ID"]."-".$Consecutivo;
     $Columnas[0]="Fecha";               $Valores[0]=$fecha;
     $Columnas[1]="Descripcion";         $Valores[1]=$Concepto;
     $Columnas[2]="Hora";                $Valores[2]=$hora;
@@ -36,6 +37,8 @@ if(!empty($_REQUEST["BtnCrearTraslado"])){
     $Columnas[4]="Estado";              $Valores[4]="EN DESARROLLO";
     $Columnas[5]="ID";                  $Valores[5]=$id;
     $Columnas[6]="Destino";             $Valores[6]=$Destino;
+    $Columnas[7]="Origen";              $Valores[7]=$DatosSucursalActual["ID"];
+    $Columnas[8]="ConsecutivoInterno";  $Valores[8]=$Consecutivo;
     $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     $idComprobante=$id;
     $DatosServer2=$obVenta->DevuelveValores("servidores", "ID", 1);

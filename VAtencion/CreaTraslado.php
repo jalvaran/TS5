@@ -81,13 +81,13 @@ print("<body>");
             $VarSelect["PlaceHolder"]="Seleccione el destino";
             $css->CrearSelectChosen("CmbDestino", $VarSelect);
             $css->CrearOptionSelect("", "Seleccione un destino" , 0);
-            $sql="SELECT * FROM traslados_sucursales_disponibles WHERE Visible='SI'";
+            $sql="SELECT * FROM empresa_pro_sucursales WHERE Visible='SI'";
             $Consulta=$obVenta->Query($sql);
             
                while($DatosSucursales=$obVenta->FetchArray($Consulta)){
                    $Sel=0;
                    
-                   $css->CrearOptionSelect($DatosSucursales["idEmpresaPro"], "$DatosSucursales[Nombre] $DatosSucursales[Ciudad] $DatosSucursales[Direccion]" , $Sel);
+                   $css->CrearOptionSelect($DatosSucursales["ID"], "$DatosSucursales[Nombre] $DatosSucursales[Ciudad] $DatosSucursales[Direccion]" , $Sel);
                }
             $css->CerrarSelect();
         print("</td>");
