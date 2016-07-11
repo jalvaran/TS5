@@ -3654,7 +3654,7 @@ public function CalculePesoRemision($idCotizacion)
        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
        $CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
        $tab="traslados_items";
-       $NumRegistros=17;
+       $NumRegistros=18;
 
        $Columnas[0]="Fecha";			$Valores[0]=$DatosTraslado["Fecha"];
        $Columnas[1]="CodigoBarras";		$Valores[1]=$CodigoBarras["CodigoBarras"];
@@ -3673,6 +3673,7 @@ public function CalculePesoRemision($idCotizacion)
        $Columnas[14]="Sub5";                    $Valores[14]=$DatosProducto["Sub5"];
        $Columnas[15]="CuentaPUC";		$Valores[15]=$DatosProducto["CuentaPUC"];
        $Columnas[16]="idTraslado";		$Valores[16]=$idComprobante;
+       $Columnas[17]="Estado";                  $Valores[17]="EN DESARROLLO";
        
        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
@@ -3777,6 +3778,27 @@ public function CalculePesoRemision($idCotizacion)
         
         
         return($sql);
+    }
+    
+    //funcion para avanzar un traslado a pendiente por subir
+    
+    public function GuardarTrasladoMercancia($idComprobante) {
+        
+        $consulta=$this->ConsultarTabla("traslados_items", " WHERE idTraslado='$idComprobante'");
+        while($DatosItems=  $this->FetchArray($consulta)){
+            $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
+            $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
+            $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+            $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
+            $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+            $DatosKardex["Detalle"]="Traslado";
+            $DatosKardex["idDocumento"]=$idComprobante;
+            $DatosKardex["TotalCosto"]=$DatosItems['Cantidad']*$DatosProducto['CostoUnitario'];
+            $DatosKardex["Movimiento"]="SALIDA";
+            $this->InserteKardex($DatosKardex);
+        }
+        $this->update("traslados_mercancia", "Estado", "PREPARADO", "WHERE ID='$idComprobante'");
+        $this->update("traslados_items", "Estado", "PREPARADO", "WHERE idTraslado='$idComprobante'");
     }
     
     
