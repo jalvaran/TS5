@@ -187,8 +187,8 @@ print("<body>");
     $css->CerrarForm();
     
     $css->CrearForm2("FrmCerrarCompC", $myPage, "post", "_self");
-    $css->CrearInputText("TxtIdComprobanteContable","hidden",'',$idComprobante,'',"","","",300,30,0,0);
-    
+    $css->CrearInputText("TxtIdComprobante","hidden",'',$idComprobante,'',"","","",300,30,0,0);
+    $css->CrearBotonConfirmado2("BtnGuardar", "Guardar",1,"");
     
     print("<br>");
     $css->CerrarForm();
@@ -239,7 +239,7 @@ print("<body>");
         $css->CierraFilaTabla();
         
     }
-    $css->CrearBotonConfirmado2("BtnGuardar", "Guardar",1,"");
+    
     
     $css->CerrarTabla();
     $css->CerrarDiv();//Cerramos Div con los items agregados

@@ -43,10 +43,10 @@ if(!empty($_REQUEST["BtnAgregarItem"])){
 }
 
 // si se requiere guardar y cerrar
-if(!empty($_REQUEST["BtnGuardarMovimiento"])){
+if(!empty($_REQUEST["BtnGuardar"])){
     
-    $idComprobante=$_REQUEST["TxtIdComprobanteContable"];    
-    $obVenta->RegistreComprobanteContable($idComprobante);    
+    $idComprobante=$_REQUEST["TxtIdComprobante"];    
+    $obVenta->update("traslados_mercancia", "Estado", "PREPARADO", "WHERE ID='$idComprobante'");    
     header("location:$myPage?ImprimeCC=$idComprobante");
     
 }
