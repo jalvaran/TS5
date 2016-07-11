@@ -54,15 +54,17 @@
 	<?php 
  
 	$css->IniciaMenu("Traslados"); 
-            $css->MenuAlfaIni("Crear");
+            $css->MenuAlfaIni("Menu");
                 $css->SubMenuAlfa("Seguimiento",2);	
 	$css->MenuAlfaFin();
             
 	$css->IniciaTabs();
 
             $css->NuevaTabs(1);
+                $css->SubTabs("../VAtencion/traslados_mercancia.php","_blank","../images/historial.png","Historial");
                 $css->SubTabs("../VAtencion/CreaTraslado.php","_blank","../images/nuevo.png","Nuevo");
-                
+                $css->SubTabs("../VAtencion/SubirTraslado.php","_blank","../images/upload.png","Subir Traslados");
+                $css->SubTabs("../VAtencion/DescargarTraslados.php","_blank","../images/descargar.png","Descargar Traslados");
             $css->FinTabs();
             $css->NuevaTabs(2);    
                 $css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/departamentos.png","Crear Departamentos");

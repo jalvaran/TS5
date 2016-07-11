@@ -20,7 +20,7 @@ if(!empty($_REQUEST["BtnCrearTraslado"])){
     $Concepto=$_REQUEST["TxtDescripcion"];
     $Destino=$_REQUEST["CmbDestino"];
     $VectorTraslado["Fut"]=0;
-    $idComprobante=CrearTraslado($fecha,$hora,$Concepto,$Destino);
+    $idComprobante=$obVenta->CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado);
         
     //$obVenta->CerrarCon();
     header("location:$myPage");

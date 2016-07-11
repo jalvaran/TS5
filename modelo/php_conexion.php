@@ -17,6 +17,7 @@
 	$COMPrinter=3;
 	$PrintCuenta="SI";
         $CuentaAnticipos=2705;
+        
 	
 class Consultar_Producto{
 	private $consulta;
@@ -52,20 +53,15 @@ class ProcesoVenta{
         public  $ContraPartidaCREE=23657502;
 	public  $CuentaCostoMercancia=6135;
 	public  $CuentaInventarios=1435;
-	
+              
 	function __construct($idUserR){
-		//$this->consulta =mysql_query("SELECT MAX(NumCotizacion) as NumCotizacion ,MAX(NumVenta) as NumVenta, MAX(NumFactura) as NumFactura  FROM vestasactivas
-		
-		//WHERE Usuario_idUsuario='$idUserR'") or die('problemas para consultas vestasactivas: ' . mysql_error());
-		//$this->fetch = mysql_fetch_array($this->consulta);
-		//$this->CotiUser = $this->fetch['NumCotizacion'];
-		//$this->NumVenta = $this->fetch["NumVenta"];
-		//$this->NumFactura = $this->fetch["NumFactura"];
-		
+				
 		$this->consulta =mysql_query("SELECT Nombre FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
 		$this->fetch = mysql_fetch_array($this->consulta);
 		$this->NombreUser = $this->fetch['Nombre'];
 		$this->idUser=$idUserR;
+                
+                             
 		
 	}
 	
@@ -3600,10 +3596,19 @@ public function CalculePesoRemision($idCotizacion)
      public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
         
         $con = mysql_connect($ip,$User,$Pass);
-        mysql_select_db($db,$con) or die(mysql_error());
-        
-     }
+        if(!$con){
+            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".  mysql_error();
+            return($Mensaje);
+        }else{
+            $Mensaje="Conexion satisfactoria";
+            mysql_select_db($db,$con) or die("No es posible abrir la base de datos ".  mysql_error());
+            return($Mensaje);
+        }
+            
+            
+    }
      
+        
      //Funcion para Conetarse a un servidor y seleccionar una base de datos
      public function CerrarCon(){
         
@@ -3612,14 +3617,12 @@ public function CalculePesoRemision($idCotizacion)
         
      }
      
+     
+     
      //Funcion para Crear un nuevo traslado
      public function CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado){
-        
-         ////////////////Creo el comprobante
-    /////
-    ////
-         
-         $sql="SELECT Identificacion FROM usuarios WHERE idUsuarios='$this->idUser'";
+                 
+        $sql="SELECT Identificacion FROM usuarios WHERE idUsuarios='$this->idUser'";
         $Consulta=$this->Query($sql);
         $DatosUsuario=$this->FetchArray($Consulta);
 
@@ -3674,6 +3677,107 @@ public function CalculePesoRemision($idCotizacion)
        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
      }
+     
+     //Funcion para Crear un nuevo traslado
+     public function SubirTraslado($idServer,$VectorTraslado){
+        $host=$VectorTraslado["LocalHost"];
+        $user=$VectorTraslado["User"];
+        $pw=$VectorTraslado["PW"];
+        $db=$VectorTraslado["DB"];
+        $sql1="";
+        $sql2="";
+                
+        $VectorAS["f"]=0;
+        $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer); 
+        $FechaSinc=date("Y-m-d H:i:s");
+        //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
+        $CondicionUpdate=" WHERE ServerSincronizado = '0000-00-00 00:00:00'";
+        $sql1=$this->ArmeSqlInsert("traslados_mercancia", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
+        $sql2=$this->ArmeSqlInsert("traslados_items", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
+        
+        
+        $VectorCon["Fut"]=0;  
+        $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+        if(!empty($sql1)){
+            $this->Query($sql1);
+        }
+        if(!empty($sql2)){
+            $this->Query($sql2);
+        }
+        
+        $this->ConToServer($host, $user, $pw, $db, $VectorCon);   
+        $this->update("traslados_mercancia", "ServerSincronizado", $FechaSinc, $CondicionUpdate); 
+        $this->update("traslados_items", "ServerSincronizado", $FechaSinc, $CondicionUpdate); 
+        
+        return("Se han sincronizado todos los traslados");
+         
+     }
+     
+     //Obtiene los nombres de las columnas de una tabla
+     
+     public function MostrarColumnas($Tabla,$DataBase) {
+         
+        $sql="SHOW COLUMNS FROM `$DataBase`.`$Tabla`;";
+        $Results=$this->Query($sql);
+        $i=0;
+        while($Columnas = $this->FetchArray($Results) ){
+            $Nombres[$i]=$Columnas["Field"];
+            $i++;
+
+        }
+        return($Nombres);
+
+    }
+    
+    //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
+    
+    public function ArmeSqlInsert($Tabla,$db,$Condicion,$idServer,$FechaSinc, $VectorAS) {
+         
+        $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer);
+        ////Armo el sql de los items
+        $tb=$Tabla;
+        //$tb="librodiario";
+        $Columnas=  $this->MostrarColumnas($tb,$db);
+        $Leng=count($Columnas);
+        
+        $sql=" INSERT INTO `$DatosServer[DataBase]`.`$tb` (";
+        $i=0;
+        foreach($Columnas as $NombreCol){
+            if($NombreCol=="ServerSincronizado"){
+                $idServerCol=$i;
+            }
+            $sql.="`$NombreCol`,";
+            $i++;
+        }
+        $sql=substr($sql, 0, -1);
+        $sql.=") VALUES (";
+        $consulta=$this->ConsultarTabla($tb, $Condicion);
+        if($this->NumRows($consulta)){
+        while($Datos =  $this->FetchArray($consulta)){
+           
+            for ($i=0;$i<$Leng;$i++){
+                if($i==$idServerCol){
+                   $sql.="'$FechaSinc',"; 
+                }else{
+                   $sql.="'$Datos[$i]',";
+                }
+                    
+               
+            }
+            $sql=substr($sql, 0, -1);
+            $sql.="),(";
+            
+        }
+        $sql=substr($sql, 0, -2);
+        $sql.="; ";
+        }else{
+           $sql=""; 
+        }
+        
+        
+        return($sql);
+    }
+    
     
 //////////////////////////////Fin	
 }
