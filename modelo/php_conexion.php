@@ -3597,7 +3597,7 @@ public function CalculePesoRemision($idCotizacion)
     
     }
     //Funcion para Conetarse a un servidor y seleccionar una base de datos
-     public function ConToServer($ip,$User,$Pass,$db){
+     public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
         
         $con = mysql_connect($ip,$User,$Pass);
         mysql_select_db($db,$con) or die(mysql_error());
@@ -3610,6 +3610,69 @@ public function CalculePesoRemision($idCotizacion)
          mysql_close();
         
         
+     }
+     
+     //Funcion para Crear un nuevo traslado
+     public function CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado){
+        
+         ////////////////Creo el comprobante
+    /////
+    ////
+         
+         $sql="SELECT Identificacion FROM usuarios WHERE idUsuarios='$this->idUser'";
+        $Consulta=$this->Query($sql);
+        $DatosUsuario=$this->FetchArray($Consulta);
+
+        $Consecutivo=$this->ObtenerMAX("traslados_mercancia", "ConsecutivoInterno", 1, 0);
+        $Consecutivo++;
+        $DatosSucursalActual=$this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
+        $tab="traslados_mercancia";
+        $NumRegistros=9; 
+        $id=  $DatosSucursalActual["ID"]."-".$Consecutivo;
+        $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+        $Columnas[1]="Descripcion";         $Valores[1]=$Concepto;
+        $Columnas[2]="Hora";                $Valores[2]=$hora;
+        $Columnas[3]="Abre";                $Valores[3]=$DatosUsuario["Identificacion"];
+        $Columnas[4]="Estado";              $Valores[4]="EN DESARROLLO";
+        $Columnas[5]="ID";                  $Valores[5]=$id;
+        $Columnas[6]="Destino";             $Valores[6]=$Destino;
+        $Columnas[7]="Origen";              $Valores[7]=$DatosSucursalActual["ID"];
+        $Columnas[8]="ConsecutivoInterno";  $Valores[8]=$Consecutivo;
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    
+       return($id); 
+        
+     }
+     
+     //Funcion para Crear un nuevo traslado
+     public function AgregarItemTraslado($idComprobante,$idProducto,$Cantidad,$VectorItem){
+         
+       $DatosTraslado=$this->DevuelveValores("traslados_mercancia", "ID", $idComprobante);
+       $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+       $CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
+       $tab="traslados_items";
+       $NumRegistros=17;
+
+       $Columnas[0]="Fecha";			$Valores[0]=$DatosTraslado["Fecha"];
+       $Columnas[1]="CodigoBarras";		$Valores[1]=$CodigoBarras["CodigoBarras"];
+       $Columnas[2]="Referencia";		$Valores[2]=$DatosProducto["Referencia"];
+       $Columnas[3]="Nombre";			$Valores[3]=$DatosProducto["Nombre"];
+       $Columnas[4]="Cantidad";			$Valores[4]=$Cantidad;
+       $Columnas[5]="PrecioVenta";              $Valores[5]=$DatosProducto["PrecioVenta"];
+       $Columnas[6]="PrecioMayorista";		$Valores[6]=$DatosProducto["PrecioMayorista"];
+       $Columnas[7]="CostoUnitario";		$Valores[7]=$DatosProducto["CostoUnitario"];
+       $Columnas[8]="IVA";			$Valores[8]=$DatosProducto["IVA"];
+       $Columnas[9]="Departamento";		$Valores[9]=$DatosProducto["Departamento"];
+       $Columnas[10]="Sub1";                    $Valores[10]=$DatosProducto["Sub1"];
+       $Columnas[11]="Sub2";			$Valores[11]=$DatosProducto["Sub2"];
+       $Columnas[12]="Sub3";                    $Valores[12]=$DatosProducto["Sub3"];
+       $Columnas[13]="Sub4";			$Valores[13]=$DatosProducto["Sub4"];
+       $Columnas[14]="Sub5";                    $Valores[14]=$DatosProducto["Sub5"];
+       $Columnas[15]="CuentaPUC";		$Valores[15]=$DatosProducto["CuentaPUC"];
+       $Columnas[16]="idTraslado";		$Valores[16]=$idComprobante;
+       
+       $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    
      }
     
 //////////////////////////////Fin	

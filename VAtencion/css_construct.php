@@ -741,7 +741,7 @@ function Footer(){
            if(isset($VarSelect["Title"])){
                 print("<strong>$VarSelect[Title]</strong><br>");
            }
-           echo '<select id="'.$Nombre.'" data-placeholder="'.$PlaceHolder.'" class="chosen-select"  tabindex="2" name="'.$Nombre.'" $Required style="width:200px;">';
+           echo '<select id="'.$Nombre.'" data-placeholder="'.$PlaceHolder.'" class="chosen-select"  tabindex="2" name="'.$Nombre.'" '.$Required.' style="width:200px;">';
            
        	
 	}   
