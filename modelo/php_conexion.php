@@ -3691,7 +3691,8 @@ public function CalculePesoRemision($idCotizacion)
         $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer); 
         $FechaSinc=date("Y-m-d H:i:s");
         //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
-        $CondicionUpdate=" WHERE ServerSincronizado = '0000-00-00 00:00:00'";
+        
+        $CondicionUpdate=" WHERE ServerSincronizado = '0000-00-00 00:00:00' AND Estado='PREPARADO'";
         $sql1=$this->ArmeSqlInsert("traslados_mercancia", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
         $sql2=$this->ArmeSqlInsert("traslados_items", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
         

@@ -13,13 +13,14 @@ $idUser=$_SESSION['idUser'];
 $obVenta = new ProcesoVenta($idUser);
 $obTabla = new Tabla($db);
 $sql="";
+$myPage="SubirTraslado.php";
 if(isset($_REQUEST["LkSubir"])){
     $VectorTraslado["LocalHost"]=$host;
     $VectorTraslado["User"]=$user;
     $VectorTraslado["PW"]=$pw;
     $VectorTraslado["DB"]=$db;
     $Mensaje=$obVenta->SubirTraslado(1,$VectorTraslado);
-    
+    header("location:$myPage");
 }	
 
 print("<html>");
@@ -30,7 +31,7 @@ print("</head>");
 print("<body>");
     
     include_once("procesadores/ProcesaCreaTraslado.php");
-    $myPage="SubirTraslado.php";
+    
     $css->CabeceraIni("Subir Traslados a la Nube"); //Inicia la cabecera de la pagina
    
     $css->CabeceraFin(); 
@@ -54,7 +55,7 @@ print("<body>");
     $css->CrearDiv("Secundario", "container", "center",1,1);
     $css->Creartabla();
     $css->CrearNotificacionVerde("TRASLADOR PENDIENTES POR SUBIR", 16);
-    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE ServerSincronizado ='0000-00-00 00:00:00'");
+    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE ServerSincronizado ='0000-00-00 00:00:00' AND Estado='PREPARADO'");
     if($obVenta->NumRows($consulta)){
         $css->FilaTabla(16);
         $css->ColTabla("<strong>ID</strong>", 1);

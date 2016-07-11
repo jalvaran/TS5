@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-07-2016 a las 09:21:46
+-- Tiempo de generación: 11-07-2016 a las 17:33:46
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -4611,6 +4611,33 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`) VALUES
 (1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO'),
 (2, 'Facturas por POS', '1555431', '2016-03-27', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresa_pro_sucursales`
+--
+
+CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Ciudad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Direccion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `idEmpresaPro` int(11) NOT NULL,
+  `Visible` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
+  `Actual` bit(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `empresa_pro_sucursales`
+--
+
+INSERT INTO `empresa_pro_sucursales` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `idEmpresaPro`, `Visible`, `Actual`) VALUES
+(1, 'INFINITO YOTOCO', 'YOTOCO', '', 1, 'SI', b'0'),
+(2, 'INFINITO BUGA', 'BUGA', 'CALLE 7 CON 1', 1, 'SI', b'1'),
+(3, 'INFINITO GINEBRA', 'GINEBRA', '', 1, 'SI', b'0'),
+(4, 'INFINITO SAN PEDRO', 'SAN PEDRO', '', 1, 'SI', b'0');
 
 -- --------------------------------------------------------
 
@@ -25441,7 +25468,7 @@ INSERT INTO `productosalquiler` (`idProductosVenta`, `Referencia`, `Nombre`, `Ex
 CREATE TABLE IF NOT EXISTS `productosventa` (
   `idProductosVenta` int(11) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Referencia` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Nombre` varchar(70) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Existencias` double DEFAULT '0',
   `PrecioVenta` double DEFAULT NULL,
@@ -34273,6 +34300,89 @@ INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `traslados_items`
+--
+
+CREATE TABLE IF NOT EXISTS `traslados_items` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `idTraslado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `CodigoBarras` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Referencia` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Cantidad` int(11) NOT NULL,
+  `PrecioVenta` double NOT NULL,
+  `PrecioMayorista` double NOT NULL,
+  `CostoUnitario` double NOT NULL,
+  `IVA` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Departamento` int(11) NOT NULL,
+  `Sub1` int(11) NOT NULL,
+  `Sub2` int(11) NOT NULL,
+  `Sub3` int(11) NOT NULL,
+  `Sub4` int(11) NOT NULL,
+  `Sub5` int(11) NOT NULL,
+  `CuentaPUC` int(11) NOT NULL,
+  `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `ServerSincronizado` datetime NOT NULL,
+  `DestinoSincronizado` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=56 ;
+
+--
+-- Volcado de datos para la tabla `traslados_items`
+--
+
+INSERT INTO `traslados_items` (`ID`, `Fecha`, `idTraslado`, `CodigoBarras`, `Referencia`, `Nombre`, `Cantidad`, `PrecioVenta`, `PrecioMayorista`, `CostoUnitario`, `IVA`, `Departamento`, `Sub1`, `Sub2`, `Sub3`, `Sub4`, `Sub5`, `CuentaPUC`, `Estado`, `ServerSincronizado`, `DestinoSincronizado`) VALUES
+(2, '2016-07-08', '2-2', '01020000003', 'MAG2076', 'BLUSA MAGENTA ESTRAPLE GALLETA', 10, 23500, 23500, 17200, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(11, '2016-07-08', '2-1', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(12, '2016-07-08', '2-1', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(13, '2016-07-08', '2-1', '01020000004', 'NJF3992', 'BLUSA NJFASHION ESTRAPLE CON ENCAJE', 1, 21900, 21900, 15999, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(14, '2016-07-08', '2-2', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(15, '2016-07-08', '2-2', '01020000009', 'POTS0861', 'BLUSA POTASIO ENCAJE CORTA', 1, 24900, 24900, 18000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(16, '2016-07-08', '2-1', '01020000004', 'NJF3992', 'BLUSA NJFASHION ESTRAPLE CON ENCAJE', 1, 21900, 21900, 15999, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(17, '2016-07-08', '2-1', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(18, '2016-07-08', '2-1', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(19, '2016-07-08', '2-2', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(20, '2016-07-08', '2-2', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(21, '2016-07-08', '2-1', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(22, '2016-07-08', '2-2', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(23, '2016-07-08', '2-1', '01020000004', 'NJF3992', 'BLUSA NJFASHION ESTRAPLE CON ENCAJE', 1, 21900, 21900, 15999, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+(24, '2016-07-08', '2-1', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 16:59:55', '0000-00-00 00:00:00'),
+(25, '2016-07-08', '2-3', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(26, '2016-07-11', '2-7', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 18, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(27, '2016-07-11', '2-7', '01020000020', 'LAFYT0860', 'BLUSA GALLETA TIRAS', 12, 23900, 23900, 17500, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(28, '2016-07-11', '2-7', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(29, '2016-07-11', '2-7', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(30, '2016-07-11', '2-7', '01020000007', 'NJF4003', 'BLUSA NJ FASHION GALLETA TULL TIRAS', 1, 23900, 23900, 18200, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(31, '2016-07-11', '2-7', '01020000019', 'MAG2174', 'BLUSA MAGENTA EN TIRAS', 1, 22900, 22900, 16400, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(32, '2016-07-11', '2-7', '01020000034', 'REF34', 'BLUSA B2PINK CAMPESINA ESTAMPADA', 1, 31500, 31500, 23000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(33, '2016-07-11', '2-7', '01020000024', 'AMOBD642', 'BLUSA AMOR BENDITO BRILLANTES', 1, 23500, 23500, 16500, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(34, '2016-07-11', '2-7', '01020000020', 'LAFYT0860', 'BLUSA GALLETA TIRAS', 1, 23900, 23900, 17500, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(35, '2016-07-11', '2-8', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(36, '2016-07-11', '2-8', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(37, '2016-07-11', '2-8', '01020000013', 'ZONZF08', 'BLUSA ZONE FASHION CORTA PIEDRAS', 1, 18500, 18500, 13000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(38, '2016-07-11', '2-8', '06270002918', 'BOP', 'BOTON DE PANICO FIJO', 1, 20000, 10000, 5000, '0.16', 1, 27, 0, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(39, '2016-07-11', '2-8', '01020000019', 'MAG2174', 'BLUSA MAGENTA EN TIRAS', 1, 22900, 22900, 16400, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+(40, '2016-07-11', '2-9', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(41, '2016-07-11', '2-9', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(42, '2016-07-11', '2-9', '01020000013', 'ZONZF08', 'BLUSA ZONE FASHION CORTA PIEDRAS', 1, 18500, 18500, 13000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(43, '2016-07-11', '2-9', '01020000010', 'AMOBD840', 'BLUSA AMOR BENDITO ENCAJE ESQUELETO', 1, 26500, 26500, 18900, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(44, '2016-07-11', '2-9', '01020000019', 'MAG2174', 'BLUSA MAGENTA EN TIRAS', 1, 22900, 22900, 16400, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(45, '2016-07-11', '2-9', '01020000035', 'REF35', 'BLUSA B2 PINK TIRAS ESTAMPADA ETNICO', 1, 18900, 18900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(46, '2016-07-11', '2-9', '01020000052', 'REF52', 'BLUSA PRENSE DELANTERO', 1, 27000, 27000, 20000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(47, '2016-07-11', '2-9', '01020000052', 'REF52', 'BLUSA PRENSE DELANTERO', 1, 27000, 27000, 20000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '2016-07-11 17:16:54', '0000-00-00 00:00:00'),
+(48, '2016-07-11', '2-10', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(49, '2016-07-11', '2-10', '01020000002', 'KEBM-0120', 'BLUSA KEBONITA  ESTRAPLE ARGOLLA ', 1, 19900, 19900, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(50, '2016-07-11', '2-10', '01020000008', 'KEBM-0153', 'BLUSA KEBONITA CAMPESINA', 1, 21900, 21900, 16000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(51, '2016-07-11', '2-10', '01020000020', 'LAFYT0860', 'BLUSA GALLETA TIRAS', 1, 23900, 23900, 17500, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(52, '2016-07-11', '2-10', '01020000018', 'EUF847B', 'BLUSA EUFORIA VELO TIRAS CRUZADAS', 1, 23000, 23000, 17000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(53, '2016-07-11', '2-11', '01020000001', 'NJF4042', 'BLUSA NJFASHION GALLETA ', 1, 23900, 19500, 14000, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(54, '2016-07-11', '2-11', '01020000003', 'MAG2076', 'BLUSA MAGENTA ESTRAPLE GALLETA', 1, 23500, 23500, 17200, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(55, '2016-07-11', '2-11', '01020000019', 'MAG2174', 'BLUSA MAGENTA EN TIRAS', 1, 22900, 22900, 16400, '0.16', 1, 2, 23, 0, 0, 0, 4135, '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `traslados_mercancia`
 --
 
@@ -34281,6 +34391,7 @@ CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
   `Origen` int(11) NOT NULL,
+  `ConsecutivoInterno` bigint(20) NOT NULL,
   `Destino` int(11) NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
   `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -34295,48 +34406,17 @@ CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
 -- Volcado de datos para la tabla `traslados_mercancia`
 --
 
-INSERT INTO `traslados_mercancia` (`ID`, `Fecha`, `Hora`, `Origen`, `Destino`, `Descripcion`, `Estado`, `Abre`, `Cierra`, `ServerSincronizado`, `DestinoSincronizado`) VALUES
-('', '2016-07-07', '17:03:51', 0, 0, 'dsadsa', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.03833100 1467931184', '2016-07-07', '17:23:53', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.08332600 1467933118', '2016-07-07', '18:09:46', 0, 1, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.13842300 1467931686', '2016-07-07', '17:48:00', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.17865000 1467932669', '2016-07-07', '18:04:24', 0, 0, 'dsdsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.29138800 1467932472', '2016-07-07', '18:00:52', 0, 0, 'conexion a server 2', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.41107200 1467930026', '2016-07-07', '17:18:41', 0, 0, 'fdfdsf', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.43451900 1467933156', '2016-07-07', '18:11:59', 0, 2, 'buga', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.46692600 1467932184', '2016-07-07', '17:56:12', 0, 0, 'prueba con conexion a server', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.67327500 1467932085', '2016-07-07', '17:54:41', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.69430800 1467932680', '2016-07-07', '18:04:31', 0, 0, 'prueba 5', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.78750800 1467931512', '2016-07-07', '17:45:07', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.83529500 1467931753', '2016-07-07', '17:49:08', 0, 0, 'dsdsa', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-07-0.88914600 1467932642', '2016-07-07', '18:01:14', 0, 0, 'prueba 4\r\n', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-('2016-07-070.22008700 1467929921', '2016-07-07', '17:17:08', 0, 0, 'dsds', 'EN DESARROLLO', '94481747', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `traslados_sucursales_disponibles`
---
-
-CREATE TABLE IF NOT EXISTS `traslados_sucursales_disponibles` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Ciudad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Direccion` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idEmpresaPro` int(11) NOT NULL,
-  `Visible` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
-
---
--- Volcado de datos para la tabla `traslados_sucursales_disponibles`
---
-
-INSERT INTO `traslados_sucursales_disponibles` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `idEmpresaPro`, `Visible`) VALUES
-(1, 'INIFINITO YOTOCO', 'YOTOCO', '', 1, 'SI'),
-(2, 'INIFINITO BUGA', 'BUGA', '', 2, 'SI'),
-(3, 'INIFINITO GINEBRA', 'BUGA', '', 3, 'SI'),
-(4, 'INIFINITO SAN PEDRO', 'SAN PEDRO', '', 4, 'SI');
+INSERT INTO `traslados_mercancia` (`ID`, `Fecha`, `Hora`, `Origen`, `ConsecutivoInterno`, `Destino`, `Descripcion`, `Estado`, `Abre`, `Cierra`, `ServerSincronizado`, `DestinoSincronizado`) VALUES
+('2-1', '2016-07-08', '10:22:28', 2, 1, 2, 'Prueba', 'PREPARADO', '94481747', '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+('2-10', '2016-07-11', '17:17:06', 2, 10, 1, 'dadsa', 'PREPARADO', '94481747', '', '2016-07-11 17:30:44', '0000-00-00 00:00:00'),
+('2-11', '2016-07-11', '17:30:37', 2, 11, 4, 'PERS', 'PREPARADO', '94481747', '', '2016-07-11 17:32:41', '0000-00-00 00:00:00'),
+('2-2', '2016-07-08', '10:23:24', 2, 2, 4, 'prueba san pedro', 'PREPARADO', '94481747', '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+('2-3', '2016-07-08', '10:37:34', 2, 3, 3, 'traslado a ginebra', 'PREPARADO', '94481747', '', '2016-07-11 16:47:21', '0000-00-00 00:00:00'),
+('2-5', '2016-07-04', '12:40:06', 1, 3, 4, 'PRUEBA 1', 'PREPARADO', '1', '1', '2016-07-11 16:47:21', '2016-07-12 00:00:00'),
+('2-6', '2016-07-11', '09:12:00', 1, 6, 3, 'PRUEBA 5', 'PREPARADO', '2', '2', '2016-07-11 16:47:21', '2016-07-12 00:00:00'),
+('2-7', '2016-07-11', '17:07:30', 2, 7, 1, 'prueba 4', 'PREPARADO', '94481747', '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+('2-8', '2016-07-11', '17:08:24', 2, 8, 2, 'prueba con buga', 'PREPARADO', '94481747', '', '2016-07-11 17:11:31', '0000-00-00 00:00:00'),
+('2-9', '2016-07-11', '17:15:32', 2, 9, 1, 'prueba con yotoco', 'PREPARADO', '94481747', '', '2016-07-11 17:16:54', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
