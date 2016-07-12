@@ -1,7 +1,7 @@
 <?php 
 ob_start();
 session_start();
-include_once("../modelo/php_tablas.php");
+include_once("../modelo/php_conexion.php");
 include_once("css_construct.php");
 if (!isset($_SESSION['username']))
 {
@@ -11,28 +11,28 @@ if (!isset($_SESSION['username']))
 $NombreUser=$_SESSION['nombre'];
 $idUser=$_SESSION['idUser'];
 $obVenta = new ProcesoVenta($idUser);
-$obTabla = new Tabla($db);
+
 $sql="";
-$myPage="SubirTraslado.php";
-if(isset($_REQUEST["LkSubir"])){
+$myPage="DescargarTraslados.php";
+if(isset($_REQUEST["LkBajar"])){
     $VectorTraslado["LocalHost"]=$host;
     $VectorTraslado["User"]=$user;
     $VectorTraslado["PW"]=$pw;
     $VectorTraslado["DB"]=$db;
-    $Mensaje=$obVenta->SubirTraslado(1,$VectorTraslado);
+    $Mensaje=$obVenta->DescargarTraslado(1,$VectorTraslado);
     header("location:$myPage");
 }	
 
 print("<html>");
 print("<head>");
-$css =  new CssIni("Subir Traslados de Mercancia a la Nube");
+$css =  new CssIni("Descargar Traslados de Mercancia desde la Nube");
 
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/ProcesaCreaTraslado.php");
+    //include_once("procesadores/ProcesaCreaTraslado.php");
     
-    $css->CabeceraIni("Subir Traslados a la Nube"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("Descargar Traslados desde la Nube"); //Inicia la cabecera de la pagina
    
     $css->CabeceraFin(); 
     
@@ -43,19 +43,20 @@ print("<body>");
      
      
     $css->CrearDiv("principal", "container", "center",1,1);
+    $DatosSucursal=$obVenta->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
     $DatosServer=$obVenta->DevuelveValores("servidores", "ID", 1);
     $VectorCon["Fut"]=0;  //$DatosServer["IP"]
     
     $Mensaje=$obVenta->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
-    $css->CrearNotificacionAzul($Mensaje, 16);
+    $css->CrearNotificacionNaranja($Mensaje, 16);
     //$css->CrearNotificacionAzul($sql, 16);
-    print("<strong>Click para Subir</strong><br>");
-    $css->CrearImageLink($myPage."?LkSubir=1", "../images/upload.png", "_self", 200, 200);
-    $obVenta->ConToServer($host,$user,$pw,$db,$VectorCon);
+    print("<strong>Click para Descargar</strong><br>");
+    $css->CrearImageLink($myPage."?LkBajar=1", "../images/descargar.png", "_self", 200, 200);
+    //$obVenta->ConToServer($host,$user,$pw,$db,$VectorCon);
     $css->CrearDiv("Secundario", "container", "center",1,1);
     $css->Creartabla();
-    $css->CrearNotificacionVerde("TRASLADOS PENDIENTES POR SUBIR", 16);
-    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE ServerSincronizado ='0000-00-00 00:00:00' AND Estado='PREPARADO'");
+    $css->CrearNotificacionNaranja("TRASLADOS PENDIENTES POR DESCARGAR", 16);
+    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE DestinoSincronizado ='0000-00-00 00:00:00' AND Destino='$DatosSucursal[ID]'");
     if($obVenta->NumRows($consulta)){
         $css->FilaTabla(16);
         $css->ColTabla("<strong>ID</strong>", 1);
@@ -75,7 +76,7 @@ print("<body>");
             $css->CierraFilaTabla();
         }
     }else{
-        $css->CrearFilaNotificacion("No hay traslados pendientes por subir", 16);
+        $css->CrearFilaNotificacion("No hay traslados pendientes por descargar", 16);
     }   
     
     $css->CerrarTabla();

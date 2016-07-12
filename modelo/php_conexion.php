@@ -3654,7 +3654,7 @@ public function CalculePesoRemision($idCotizacion)
        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
        $CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
        $tab="traslados_items";
-       $NumRegistros=18;
+       $NumRegistros=19;
 
        $Columnas[0]="Fecha";			$Valores[0]=$DatosTraslado["Fecha"];
        $Columnas[1]="CodigoBarras";		$Valores[1]=$CodigoBarras["CodigoBarras"];
@@ -3674,6 +3674,7 @@ public function CalculePesoRemision($idCotizacion)
        $Columnas[15]="CuentaPUC";		$Valores[15]=$DatosProducto["CuentaPUC"];
        $Columnas[16]="idTraslado";		$Valores[16]=$idComprobante;
        $Columnas[17]="Estado";                  $Valores[17]="EN DESARROLLO";
+       $Columnas[18]="Destino";                 $Valores[18]=$DatosTraslado["Destino"];
        
        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
@@ -3694,8 +3695,8 @@ public function CalculePesoRemision($idCotizacion)
         //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
         
         $CondicionUpdate=" WHERE ServerSincronizado = '0000-00-00 00:00:00' AND Estado='PREPARADO'";
-        $sql1=$this->ArmeSqlInsert("traslados_mercancia", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
-        $sql2=$this->ArmeSqlInsert("traslados_items", $db, $CondicionUpdate,$idServer,$FechaSinc, $VectorAS);
+        $sql1=$this->ArmeSqlInsert("traslados_mercancia", $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
+        $sql2=$this->ArmeSqlInsert("traslados_items", $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
         
         
         $VectorCon["Fut"]=0;  
@@ -3715,6 +3716,49 @@ public function CalculePesoRemision($idCotizacion)
          
      }
      
+     /*
+      * Descargar Traslados
+      */
+     
+     //Funcion para Crear un nuevo traslado
+     public function DescargarTraslado($idServer,$VectorTraslado){
+        $host=$VectorTraslado["LocalHost"];
+        $user=$VectorTraslado["User"];
+        $pw=$VectorTraslado["PW"];
+        $db=$VectorTraslado["DB"];
+        $sql1="";
+        $sql2="";
+        $VectorCon["Fut"]=0; 
+        $this->ConToServer($host, $user, $pw, $db, $VectorCon);
+        $DatosSucursal=$this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);        
+        $VectorAS["f"]=0;
+        $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer); 
+        $FechaSinc=date("Y-m-d H:i:s");
+        
+        $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+        
+        $CondicionUpdate=" WHERE DestinoSincronizado ='0000-00-00 00:00:00' AND Destino='$DatosSucursal[ID]'";
+        $sql1=$this->ArmeSqlInsert("traslados_mercancia", $DatosServer["DataBase"], $CondicionUpdate,$db,$FechaSinc, $VectorAS);
+        $sql2=$this->ArmeSqlInsert("traslados_items", $DatosServer["DataBase"], $CondicionUpdate,$db,$FechaSinc, $VectorAS);
+        
+        $this->update("traslados_mercancia", "DestinoSincronizado", $FechaSinc, $CondicionUpdate); 
+        $this->update("traslados_items", "DestinoSincronizado", $FechaSinc, $CondicionUpdate); 
+         
+        $this->ConToServer($host, $user, $pw, $db, $VectorCon);  
+        if(!empty($sql1)){
+            $this->Query($sql1);
+        }
+        if(!empty($sql2)){
+            $this->Query($sql2);
+        }
+        
+        //$this->ConToServer($host, $user, $pw, $db, $VectorCon);   
+        $this->update("traslados_mercancia", "DestinoSincronizado", $FechaSinc, $CondicionUpdate); 
+        $this->update("traslados_items", "DestinoSincronizado", $FechaSinc, $CondicionUpdate); 
+        
+        return("Se han sincronizado todos los traslados");
+         
+     }
      //Obtiene los nombres de las columnas de una tabla
      
      public function MostrarColumnas($Tabla,$DataBase) {
@@ -3733,16 +3777,16 @@ public function CalculePesoRemision($idCotizacion)
     
     //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
     
-    public function ArmeSqlInsert($Tabla,$db,$Condicion,$idServer,$FechaSinc, $VectorAS) {
-         
-        $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer);
+    public function ArmeSqlInsert($Tabla,$db,$Condicion,$DataBaseDestino,$FechaSinc, $VectorAS) {
+        
+        
         ////Armo el sql de los items
         $tb=$Tabla;
         //$tb="librodiario";
         $Columnas=  $this->MostrarColumnas($tb,$db);
         $Leng=count($Columnas);
         
-        $sql=" INSERT INTO `$DatosServer[DataBase]`.`$tb` (";
+        $sql=" INSERT INTO `$DataBaseDestino`.`$tb` (";
         $i=0;
         foreach($Columnas as $NombreCol){
             if($NombreCol=="ServerSincronizado"){
