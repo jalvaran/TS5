@@ -51,7 +51,7 @@ print("<body>");
          
          
     if($ImprimeCC>0){
-        $RutaPrintCot="../tcpdf/examples/comprobantecontable.php?idComprobante=$ImprimeCC";			
+        $RutaPrintCot="../tcpdf/examples/imprimirTraslado.php?idTraslado=$ImprimeCC";			
        
         $css->CrearNotificacionNaranja("Comprobante Creado, <a href='$RutaPrintCot' target='_blank'>Imprimir Comprobante No. $ImprimeCC</a>",16);
         

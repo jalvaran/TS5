@@ -56,7 +56,7 @@ print("<body>");
     $css->CrearDiv("Secundario", "container", "center",1,1);
     $css->Creartabla();
     $css->CrearNotificacionNaranja("TRASLADOS PENDIENTES POR DESCARGAR", 16);
-    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE DestinoSincronizado ='0000-00-00 00:00:00' AND Destino='$DatosSucursal[ID]'");
+    $consulta=$obVenta->ConsultarTabla("traslados_mercancia", "WHERE DestinoSincronizado ='0000-00-00 00:00:00' AND Destino='$DatosSucursal[ID]' AND Estado='PREPARADO'");
     if($obVenta->NumRows($consulta)){
         $css->FilaTabla(16);
         $css->ColTabla("<strong>ID</strong>", 1);

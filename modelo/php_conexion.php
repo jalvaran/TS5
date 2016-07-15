@@ -3652,7 +3652,10 @@ public function CalculePesoRemision($idCotizacion)
          
        $DatosTraslado=$this->DevuelveValores("traslados_mercancia", "ID", $idComprobante);
        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
-       $CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
+       $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+       $consulta=$this->Query($sql);
+       $CodigoBarras=$this->FetchArray($consulta);
+       //$CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
        $tab="traslados_items";
        $NumRegistros=19;
 
@@ -3696,6 +3699,7 @@ public function CalculePesoRemision($idCotizacion)
         
         $CondicionUpdate=" WHERE ServerSincronizado = '0000-00-00 00:00:00' AND Estado='PREPARADO'";
         $sql1=$this->ArmeSqlInsert("traslados_mercancia", $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
+        $VectorAS["AI"]=1; //Indicamos que la tabla tiene id con autoincrement
         $sql2=$this->ArmeSqlInsert("traslados_items", $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
         
         
@@ -3739,6 +3743,7 @@ public function CalculePesoRemision($idCotizacion)
         
         $CondicionUpdate=" WHERE DestinoSincronizado ='0000-00-00 00:00:00' AND Destino='$DatosSucursal[ID]'";
         $sql1=$this->ArmeSqlInsert("traslados_mercancia", $DatosServer["DataBase"], $CondicionUpdate,$db,$FechaSinc, $VectorAS);
+        $VectorAS["AI"]=1; //Indicamos que la tabla tiene id con autoincrement
         $sql2=$this->ArmeSqlInsert("traslados_items", $DatosServer["DataBase"], $CondicionUpdate,$db,$FechaSinc, $VectorAS);
         
         $this->update("traslados_mercancia", "DestinoSincronizado", $FechaSinc, $CondicionUpdate); 
@@ -3778,6 +3783,11 @@ public function CalculePesoRemision($idCotizacion)
     //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
     
     public function ArmeSqlInsert($Tabla,$db,$Condicion,$DataBaseDestino,$FechaSinc, $VectorAS) {
+        $ai=0;
+        if(isset($VectorAS["AI"])){
+            $ai=1;
+        }
+            
         
         
         ////Armo el sql de los items
@@ -3800,14 +3810,18 @@ public function CalculePesoRemision($idCotizacion)
         $consulta=$this->ConsultarTabla($tb, $Condicion);
         if($this->NumRows($consulta)){
         while($Datos =  $this->FetchArray($consulta)){
-           
+            
             for ($i=0;$i<$Leng;$i++){
-                if($i==$idServerCol){
-                   $sql.="'$FechaSinc',"; 
+                if($i==0 and $ai==1){
+                   $sql.="'',"; 
                 }else{
-                   $sql.="'$Datos[$i]',";
-                }
                     
+                    if($i==$idServerCol){
+                       $sql.="'$FechaSinc',"; 
+                    }else{
+                       $sql.="'$Datos[$i]',";
+                    }
+                }   
                
             }
             $sql=substr($sql, 0, -1);
