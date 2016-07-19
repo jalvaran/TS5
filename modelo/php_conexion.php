@@ -1677,7 +1677,13 @@ public function CalculePesoRemision($idCotizacion)
     
     public function InserteKardex($DatosKardex){
         $Fecha=date("Y-m-d");
-        $Saldo=$DatosKardex["Existencias"]-$DatosKardex["Cantidad"];
+        if($DatosKardex["Movimiento"]=="SALIDA"){
+            $Saldo=$DatosKardex["Existencias"]-$DatosKardex["Cantidad"];
+        }else if($DatosKardex["Movimiento"]=="ENTRADA"){
+            $Saldo=$DatosKardex["Existencias"]+$DatosKardex["Cantidad"];
+        }else{
+            $Saldo=0;
+        }
         $TotalCostoSaldo=$Saldo*$DatosKardex["CostoUnitario"];
         
         /*
@@ -3859,6 +3865,92 @@ public function CalculePesoRemision($idCotizacion)
         $this->update("traslados_items", "Estado", "PREPARADO", "WHERE idTraslado='$idComprobante'");
     }
     
+    //funcion para avanzar un traslado a pendiente por subir
+    
+    public function GuardarTrasladoDescargado($idTraslado,$VectorTraslado) {
+        
+        $consulta=$this->ConsultarTabla("traslados_items", " WHERE idTraslado='$idTraslado'");
+        if($this->NumRows($consulta)){
+        while($DatosItems=  $this->FetchArray($consulta)){
+            $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
+            if(empty($DatosProducto["Referencia"])){
+                $VectorPTI["FUT"]="";
+                $idProducto=$this->CrearProductoFromItemTraslado($DatosItems["ID"],$VectorPTI);
+            }else{
+            
+                $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
+                $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+                $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
+                $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+                $DatosKardex["Detalle"]="Traslado";
+                $DatosKardex["idDocumento"]=$idTraslado;
+                $DatosKardex["TotalCosto"]=$DatosItems['Cantidad']*$DatosProducto['CostoUnitario'];
+                $DatosKardex["Movimiento"]="ENTRADA";
+                $this->InserteKardex($DatosKardex);                
+                $idProducto=$DatosProducto["idProductosVenta"];
+            }
+            $VectorCb["F"]="";
+            $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras'],$VectorCb);
+        }
+        
+        $this->update("traslados_mercancia", "Estado", "VERIFICADO", "WHERE ID='$idTraslado'");
+        $this->update("traslados_items", "Estado", "VERIFICADO", "WHERE idTraslado='$idTraslado'");
+        }
+    }
+    
+    //funcion para crear un producto desde un item de un traslado
+    
+    public function CrearProductoFromItemTraslado($idTrasladoItem,$VectorPTI) {
+        
+        $DatosItem =  $this->DevuelveValores("traslados_items", "ID", $idTrasladoItem);
+        $id = $this->ObtenerMAX("productosventa", "idProductosVenta", 1, "");
+        $id++;
+        $tab="productosventa";
+		
+        $NumRegistros=18;
+        
+        $Columnas[0]="idProductosVenta";$Valores[0]=$id;
+        $Columnas[1]="CodigoBarras";	$Valores[1]=$id;
+        $Columnas[2]="Referencia";	$Valores[2]=$DatosItem["Referencia"];
+        $Columnas[3]="Nombre";          $Valores[3]=$DatosItem["Nombre"];
+        $Columnas[4]="Existencias";	$Valores[4]=$DatosItem["Cantidad"];
+        $Columnas[5]="PrecioVenta";	$Valores[5]=$DatosItem["PrecioVenta"];
+        $Columnas[6]="PrecioMayorista";	$Valores[6]=$DatosItem["PrecioMayorista"];
+        $Columnas[7]="CostoUnitario";   $Valores[7]=$DatosItem["CostoUnitario"];
+        $Columnas[8]="CostoTotal";	$Valores[8]=$DatosItem["CostoUnitario"]*$DatosItem["Cantidad"];
+        $Columnas[9]="IVA";             $Valores[9]=$DatosItem["IVA"];
+        $Columnas[10]="Bodega_idBodega";$Valores[10]=1;
+        $Columnas[11]="Departamento";	$Valores[11]=$DatosItem["Departamento"];
+        $Columnas[12]="Sub1";           $Valores[12]=$DatosItem["Sub1"];
+        $Columnas[13]="Sub2";           $Valores[13]=$DatosItem["Sub2"];
+        $Columnas[14]="Sub3";           $Valores[14]=$DatosItem["Sub3"];
+        $Columnas[15]="Sub4";		$Valores[15]=$DatosItem["Sub4"];
+        $Columnas[16]="Sub5";		$Valores[16]=$DatosItem["Sub5"];
+        $Columnas[17]="CuentaPUC";	$Valores[17]=$DatosItem["CuentaPUC"];	
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        return $id;
+    }
+    //funcion para agregar un codigo de barras a un producto
+    
+    public function AgregueCodBarras($idProducto,$CB,$VectorCB) {
+        
+        $consulta=$this->ConsultarTabla("prod_codbarras", "WHERE ProductosVenta_idProductosVenta='$idProducto' AND CodigoBarras='$CB'");
+        if($this->NumRows($consulta)){
+            return;
+        }else{
+            $tab="prod_codbarras";
+		
+            $NumRegistros=2;
+
+            $Columnas[0]="ProductosVenta_idProductosVenta"; $Valores[0]=$idProducto;
+            $Columnas[1]="CodigoBarras";                    $Valores[1]=$CB;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+        
+        
+    }
     
 //////////////////////////////Fin	
 }

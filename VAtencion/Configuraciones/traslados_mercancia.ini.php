@@ -29,6 +29,17 @@ $Vector["EditarRegistro"]["Deshabilitado"]=1;
 $Ruta="../tcpdf/examples/imprimirTraslado.php?idTraslado=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="ID";
+
+
+
+// Nueva Accion
+$Ruta="RegistrarTraslado.php?idTraslado=";
+$Vector["NuevaAccionLink"][0]="RegistrarTraslado";
+$Vector["NuevaAccion"]["RegistrarTraslado"]["Titulo"]="Registrar";
+$Vector["NuevaAccion"]["RegistrarTraslado"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["RegistrarTraslado"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["RegistrarTraslado"]["Target"]="_self";
+
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas
