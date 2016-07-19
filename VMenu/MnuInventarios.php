@@ -68,7 +68,7 @@ $idUser=$_SESSION['idUser'];
                 $css->SubTabs("../VAtencion/servicios.php","_self","../images/servicios.png","Servicios para la venta");
                 $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
                 $css->SubTabs("../VAtencion/kardexmercancias.php","_self","../images/kardex.png","Kardex");
-                //$css->SubTabs("../VAtencion/kits.php","_blank","../images/kits.png","Creacion de KITS");
+                $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
                 //$css->SubTabs("../VAtencion/CompraMercancias.php","_blank","../images/dardebaja.png","Dar de Baja");    
                 $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/ordenessalida.png","Ordenes de salida y entrada de activos");
