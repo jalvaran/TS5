@@ -3847,9 +3847,12 @@ public function CalculePesoRemision($idCotizacion)
     //funcion para avanzar un traslado a pendiente por subir
     
     public function GuardarTrasladoMercancia($idComprobante) {
-        
+        $Costo=0;
         $consulta=$this->ConsultarTabla("traslados_items", " WHERE idTraslado='$idComprobante'");
+        $VectorCosto["F"]=0;
         while($DatosItems=  $this->FetchArray($consulta)){
+            $fecha=$DatosItems["Fecha"];
+            $Costo=$Costo+($DatosItems["CostoUnitario"]*$DatosItems["Cantidad"]);
             $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
             $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
             $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
@@ -3861,6 +3864,8 @@ public function CalculePesoRemision($idCotizacion)
             $DatosKardex["Movimiento"]="SALIDA";
             $this->InserteKardex($DatosKardex);
         }
+        
+        $this->RegistreCostoLibroDiario("NO", $Costo,$fecha,$idComprobante,1,$VectorCosto);
         $this->update("traslados_mercancia", "Estado", "PREPARADO", "WHERE ID='$idComprobante'");
         $this->update("traslados_items", "Estado", "PREPARADO", "WHERE idTraslado='$idComprobante'");
     }
@@ -3868,10 +3873,12 @@ public function CalculePesoRemision($idCotizacion)
     //funcion para avanzar un traslado a pendiente por subir
     
     public function GuardarTrasladoDescargado($idTraslado,$VectorTraslado) {
-        
+        $Costo=0;
         $consulta=$this->ConsultarTabla("traslados_items", " WHERE idTraslado='$idTraslado'");
         if($this->NumRows($consulta)){
         while($DatosItems=  $this->FetchArray($consulta)){
+            $fecha=$DatosItems["Fecha"];
+            $Costo=$Costo+($DatosItems["CostoUnitario"]*$DatosItems["Cantidad"]);
             $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
             if(empty($DatosProducto["Referencia"])){
                 $VectorPTI["FUT"]="";
@@ -3891,8 +3898,10 @@ public function CalculePesoRemision($idCotizacion)
             }
             $VectorCb["F"]="";
             $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras'],$VectorCb);
+            
         }
-        
+        $VectorCosto["Fut"]="";
+        $this->RegistreCostoLibroDiario("SI", $Costo,$fecha,$idTraslado,1,$VectorCosto);
         $this->update("traslados_mercancia", "Estado", "VERIFICADO", "WHERE ID='$idTraslado'");
         $this->update("traslados_items", "Estado", "VERIFICADO", "WHERE idTraslado='$idTraslado'");
         }
@@ -3952,6 +3961,82 @@ public function CalculePesoRemision($idCotizacion)
         
     }
     
+    public function RegistreCostoLibroDiario($Entrada, $Costo,$fecha,$idTraslado,$CentroCosto,$VectorCosto){
+        
+        $DatosCentro=  $this->DevuelveValores("centrocosto", "ID", $CentroCosto);
+        if($Entrada=="SI"){
+            $Creditos=0;
+            $Debitos=$Costo;
+            $Neto=$Debitos;
+        }else{
+            $Creditos=$Costo;
+            $Debitos=0;  
+            $Neto=$Creditos*(-1);
+        }
+        
+        $tab="librodiario";
+        $NumRegistros=26;
+        $CuentaPUC=1435;
+        
+        $DatosCuenta=  $this->DevuelveValores("subcuentas","PUC" , $CuentaPUC);
+       
+        $NombreCuenta=$DatosCuenta["Nombre"];
+        $CuentaPUCContraPartida=6135;
+        $DatosCuenta=  $this->DevuelveValores("subcuentas","PUC" , $CuentaPUCContraPartida);
+        $NombreCuentaContraPartida=$DatosCuenta["Nombre"];
+
+
+
+        $Columnas[0]="Fecha";			$Valores[0]=$fecha;
+        $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="Traslado";
+        $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idTraslado;
+        $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]="";
+        $Columnas[4]="Tercero_Identificacion";	$Valores[4]="";
+        $Columnas[5]="Tercero_DV";		$Valores[5]="";
+        $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]="";
+        $Columnas[7]="Tercero_Segundo_Apellido";$Valores[7]="";
+        $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]="";
+        $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]="";
+        $Columnas[10]="Tercero_Razon_Social";	$Valores[10]="PROPIO";
+        $Columnas[11]="Tercero_Direccion";		$Valores[11]="PROPIO";
+        $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]="";
+        $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]="";
+        $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]="";
+        $Columnas[15]="CuentaPUC";			$Valores[15]=$CuentaPUC;
+        $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
+        $Columnas[17]="Detalle";			$Valores[17]="Traslado de Mercancia";
+        $Columnas[18]="Debito";			$Valores[18]=$Debitos;
+        $Columnas[19]="Credito";		$Valores[19]=$Creditos;
+        $Columnas[20]="Neto";			$Valores[20]=$Neto;
+        $Columnas[21]="Mayor";			$Valores[21]="NO";
+        $Columnas[22]="Esp";			$Valores[22]="NO";
+        $Columnas[23]="Concepto";			$Valores[23]="Traslados";
+        $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
+        $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+
+        ///////////////////////Registramos contra partida del anticipo
+        $aux1=0;
+        $aux2=0;
+        $aux1=$Debitos;
+        $aux2=$Creditos;
+        $Neto=$Neto*(-1);
+        $Debitos=$aux2;
+        $Creditos=$aux1;
+        $CuentaPUC=$CuentaPUCContraPartida; 
+        $NombreCuenta=$NombreCuentaContraPartida;
+
+        $Valores[15]=$CuentaPUC;
+        $Valores[16]=$NombreCuenta;
+        $Valores[18]=$Debitos;
+        $Valores[19]=$Creditos; 			//Credito se escribe el total de la venta menos los impuestos
+        $Valores[20]=$Neto;  											//Credito se escribe el total de la venta menos los impuestos
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+    }
 //////////////////////////////Fin	
 }
 	
