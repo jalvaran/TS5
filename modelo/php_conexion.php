@@ -1715,7 +1715,7 @@ public function CalculePesoRemision($idCotizacion)
          * Actualizo inventarios
          */
         $sql="UPDATE productosventa SET Existencias='$Saldo', CostoTotal='$TotalCostoSaldo'"
-                . "WHERE idProductosVenta=$DatosKardex[idProductosVenta]";
+                . " WHERE idProductosVenta=$DatosKardex[idProductosVenta]";
         $this->Query($sql);
         
     }
@@ -4036,6 +4036,25 @@ public function CalculePesoRemision($idCotizacion)
 
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
+    }
+    
+    //Esta clase permite agregar items desde un archivo csv cargado
+    public function AgregarItemXCB($CodigoBarras, $Cantidad, $VectorItem) {
+        $DatosCodigo=  $this->DevuelveValores("prod_codbarras", "CodigoBarras", $CodigoBarras);
+        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosCodigo["ProductosVenta_idProductosVenta"]);
+        if(empty($DatosProducto["idProductosVenta"])){
+            return ("SR");
+        }
+        $DatosKardex["Cantidad"]=$Cantidad;
+        $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+        $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
+        $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+        $DatosKardex["Detalle"]="CargaCSV";
+        $DatosKardex["idDocumento"]="NA";
+        $DatosKardex["TotalCosto"]=$Cantidad*$DatosProducto['CostoUnitario'];
+        $DatosKardex["Movimiento"]="ENTRADA";
+        $this->InserteKardex($DatosKardex);
+        return($DatosProducto);
     }
 //////////////////////////////Fin	
 }

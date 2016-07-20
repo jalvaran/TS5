@@ -71,7 +71,7 @@ $idUser=$_SESSION['idUser'];
                 $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
                 //$css->SubTabs("../VAtencion/CompraMercancias.php","_blank","../images/dardebaja.png","Dar de Baja");    
                 $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
-                //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/ordenessalida.png","Ordenes de salida y entrada de activos");
+                $css->SubTabs("../VAtencion/AgregarItemsXCB.php","_blank","../images/csv.png","Agregar Productos desde CSV");
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/activos.png","Activos");
             $css->FinTabs();
             $css->NuevaTabs(2);    
