@@ -59,6 +59,7 @@ if(!empty($_REQUEST['BtnCargar'])){
             $css->CrearTabla();
             
             $css->FilaTabla(14);
+            $css->ColTabla("<strong>Item</strong>", 1);
             $css->ColTabla("<strong>ID</strong>", 1);
             $css->ColTabla("<strong>CodigoBarras</strong>", 1);
             $css->ColTabla("<strong>Nombre</strong>", 1);
@@ -68,8 +69,8 @@ if(!empty($_REQUEST['BtnCargar'])){
             $css->CierraFilaTabla();
             while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                 
-                $i++;
-                if($i>1){
+                
+                if($i>0){
                 
                 
                     $VectorItem["F"]="";
@@ -77,6 +78,7 @@ if(!empty($_REQUEST['BtnCargar'])){
                     
                     if($DatosProducto<>"SR"){
                         $css->FilaTabla(14);
+                        $css->ColTabla($i, 1);
                         $css->ColTabla($DatosProducto["idProductosVenta"], 1);
                         $css->ColTabla($data[0], 1);
                         $css->ColTabla($DatosProducto["Nombre"], 1);
@@ -91,7 +93,7 @@ if(!empty($_REQUEST['BtnCargar'])){
                    
                 }
                  
-                 
+                $i++; 
                 
             }
             $css->CerrarTabla();
