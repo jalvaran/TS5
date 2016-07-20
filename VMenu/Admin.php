@@ -77,10 +77,12 @@ if($TipoUser<>"administrador"){
                         $css->SubTabs("../VAtencion/formatos_calidad.php","_self","../images/notacredito.png","Formatos de Calidad");
                         $css->SubTabs("../VAtencion/centrocosto.php","_self","../images/centrocostos.png","Crear Centro de Costos");
                         $css->SubTabs("../VAtencion/cajas.php","_self","../images/cajas.png","Crear/Editar Cajas");
+                        $css->SubTabs("../VAtencion/config_tiketes_promocion.php","_self","../images/tiketes.png","Configurar Tikete de Promocion");
 		$css->FinTabs();
 		$css->NuevaTabs(2);
 			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar");
                         $css->SubTabs("../VAtencion/HabilitarUser.php","_self","../images/autorizarcajas.png","Asignar usuarios a cajas");
+                        
 		$css->FinTabs();
 		$css->NuevaTabs(3);
 			$css->SubTabs("../VAtencion/impret.php","_self","../images/impuestos.png","Crear/Editar un impuesto o una retencion");

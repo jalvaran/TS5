@@ -163,6 +163,7 @@
             //print("<script>alert('Entra 2')</script>");
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
+            $TotalVenta=$_REQUEST['TxtGranTotalH'];
             $idCliente=$_REQUEST["TxtCliente"];
             $idPreventa=$_REQUEST["CmbPreVentaAct"];
             $Efectivo=$_REQUEST["TxtPaga"];
@@ -199,6 +200,15 @@
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
+                $DatosTikete=$obVenta->DevuelveValores("config_tiketes_promocion", "ID", 1);
+                if($TotalVenta>=$DatosTikete["Tope"] AND $DatosTikete["Activo"]=="SI"){
+                    $VectorTiket["F"]=0;
+                    $Copias=1;
+                    if($DatosTikete["Multiple"]=="SI"){
+                        $Copias=floor($TotalVenta/$DatosTikete["Tope"]);
+                    }
+                    $obVenta->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
+                }
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
 		

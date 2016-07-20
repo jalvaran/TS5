@@ -2435,6 +2435,66 @@ public function CalculePesoRemision($idCotizacion)
     
     }
     
+    
+    //imprime un tikete de promo
+    public function ImprimirTiketePromo($idFactura,$Titulo,$COMPrinter,$Copias,$VectorTiket){
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
+        $Fecha=$DatosFactura["Fecha"];
+        $Hora=$DatosFactura["Hora"];
+        $NumFact=$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"];
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        //fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Titulo); // Titulo
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("NOMBRE:    ",40,"________________________________________",STR_PAD_RIGHT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("CEDULA:    ",40,"________________________________________",STR_PAD_RIGHT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("DIRECCION: ",40,"________________________________________",STR_PAD_RIGHT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("TELEFONO:  ",40,"________________________________________",STR_PAD_RIGHT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,str_pad("CIUDAD:    ",40,"________________________________________",STR_PAD_RIGHT));
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+        fwrite($handle,"FECHA: $Fecha      HORA: $Hora");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"Factura: $NumFact total: $". number_format($DatosFactura["Total"]));
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"_____________________________________");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    }
     /*
      * Imprime un codigo de barras
      * 
