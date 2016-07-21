@@ -738,6 +738,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 	
         }
 	}	
+        
+        
+        
 	
 	////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Actualizar registro en tabla
@@ -4136,6 +4139,70 @@ public function CalculePesoRemision($idCotizacion)
         $this->InserteKardex($DatosKardex);
         return($DatosProducto);
     }
+    
+    
+    ////////////////////////////////////////////////////////////////////
+//////////////////////Funcion agregar precotizacion
+///////////////////////////////////////////////////////////////////
+
+
+public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrecoti){
+    
+	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
+        $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
+        $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
+        $TipoItem=$DatosDepartamento["TipoItem"];
+        $sql="select * from fechas_descuentos where Fecha = '$fecha'";
+        $reg=$this->Query($sql);
+        $reg=$this->FetchArray($reg);
+        $Porcentaje=$reg["Porcentaje"];
+        $Departamento=$reg["Departamento"];
+
+
+        $impuesto=$DatosProductoGeneral["IVA"];
+        $impuesto=$impuesto+1;
+        if($DatosTablaItem["IVAIncluido"]=="SI"){
+            $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
+
+        }else{
+            $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
+
+        }
+        if($Porcentaje>0 and ($DatosProductoGeneral["Departamento"]==$Departamento) or $Departamento=="TODO"){
+
+                $Porcentaje=$Porcentaje/100;
+                $ValorUnitario=$ValorUnitario*$Porcentaje;
+
+        }
+
+        $Subtotal=$ValorUnitario*$Cantidad;
+        $IVA=($impuesto-1)*$Subtotal;
+        $Total=$Subtotal+$impuesto;
+
+        
+        $tab="precotizacion";
+        $NumRegistros=13;  
+
+
+        $Columnas[0]="Cantidad";						$Valores[0]=$Cantidad;
+        $Columnas[1]="Referencia";						$Valores[1]=$DatosProductoGeneral["Referencia"];
+        $Columnas[2]="ValorUnitario";					$Valores[2]=$ValorUnitario;
+        $Columnas[3]="SubTotal";						$Valores[3]=$Subtotal;
+        $Columnas[4]="Descripcion";						$Valores[4]=$DatosProductoGeneral["Nombre"];
+        $Columnas[5]="IVA";								$Valores[5]=$IVA;
+        $Columnas[6]="PrecioCosto";						$Valores[6]=$DatosProductoGeneral["CostoUnitario"];
+        $Columnas[7]="SubtotalCosto";					$Valores[7]=$DatosProductoGeneral["CostoUnitario"];
+        $Columnas[8]="Total";							$Valores[8]=$Total;
+        $Columnas[9]="TipoItem";						$Valores[9]=$DatosDepartamento["TipoItem"];
+        $Columnas[10]="idUsuario";						$Valores[10]=$this->idUser;
+        $Columnas[11]="CuentaPUC";						$Valores[11]=$DatosProductoGeneral["CuentaPUC"];
+        $Columnas[12]="Tabla";			    			$Valores[12]=$TablaItem;
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+               
+	
+        }
+		
 //////////////////////////////Fin	
 }
 	

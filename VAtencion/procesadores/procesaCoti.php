@@ -84,37 +84,12 @@
 		$DatosItem=explode(";",$_REQUEST['TxtAgregarItemPreventa']);
 		$idItem=$DatosItem[0];
 		$TablaItem=$DatosItem[1];
-		$fecha=date("Y-m-d");
+		
 		$Cantidad=1;
 		$idClientes=$_REQUEST['TxtIdCliente'];
 		$obVenta=new ProcesoVenta($idUser);
-		
-		$DatosProducto=$obVenta->DevuelveValores($TablaItem,"idProductosVenta",$idItem);
-		$DatosDepartamento=$obVenta->DevuelveValores("prod_departamentos","TablaOrigen",$TablaItem);
-		///////////////////////////Ingresar a Precotizacion 
-		$Subtotal=$DatosProducto["PrecioVenta"]*$Cantidad;
-		$IVA=$DatosProducto["PrecioVenta"]*$DatosProducto["IVA"];
-		$Total=$Subtotal+$IVA;
-		
-		$tab="precotizacion";
-		$NumRegistros=13;  
-							
-		
-		$Columnas[0]="Cantidad";						$Valores[0]=$Cantidad;
-		$Columnas[1]="Referencia";						$Valores[1]=$DatosProducto["Referencia"];
-		$Columnas[2]="ValorUnitario";					$Valores[2]=$DatosProducto["PrecioVenta"];
-		$Columnas[3]="SubTotal";						$Valores[3]=$Subtotal;
-		$Columnas[4]="Descripcion";						$Valores[4]=$DatosProducto["Nombre"];
-		$Columnas[5]="IVA";								$Valores[5]=$IVA;
-		$Columnas[6]="PrecioCosto";						$Valores[6]=$DatosProducto["CostoUnitario"];
-		$Columnas[7]="SubtotalCosto";					$Valores[7]=$DatosProducto["CostoUnitario"];
-		$Columnas[8]="Total";							$Valores[8]=$Total;
-		$Columnas[9]="TipoItem";						$Valores[9]=$DatosDepartamento["TipoItem"];
-		$Columnas[10]="idUsuario";						$Valores[10]=$idUser;
-		$Columnas[11]="CuentaPUC";						$Valores[11]=$DatosProducto["CuentaPUC"];
-		$Columnas[12]="Tabla";			    			$Valores[12]=$TablaItem;
-		
-		$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+		$VectorPrecoti["F"]=0;
+		$obVenta->AgregaPrecotizacion($Cantidad,$idItem,$TablaItem,$VectorPrecoti);
 		
 		header("location:Cotizaciones.php?TxtAsociarCliente=$idClientes");
 			
@@ -133,9 +108,18 @@
                 $flagMult=0;
 		
 		$obVenta=new ProcesoVenta($idUser);
+                
+                
 		$DatosPreventa=$obVenta->DevuelveValores('precotizacion',"ID",$idItem);
+                $DatosProductos=$obVenta->DevuelveValores($Tabla,"Referencia",$DatosPreventa["Referencia"]);
+                $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $DatosPreventa["Tabla"]);
+                if($DatosTablaItem["IVAIncluido"]=="SI"){
+                    $ValorAcordado=$ValorAcordado/($DatosProductos["IVA"]+1);
+
+                }
+                
 		$Subtotal=$ValorAcordado*$Cantidad*$Multiplicador;
-		$DatosProductos=$obVenta->DevuelveValores($Tabla,"Referencia",$DatosPreventa["Referencia"]);
+		
 		$IVA=$Subtotal*$DatosProductos["IVA"];
 		$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
 		$Total=$Subtotal+$IVA;
