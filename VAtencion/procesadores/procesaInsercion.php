@@ -51,8 +51,35 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
             $obVenta->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
         }
         
-        //print("<script>alert('ID: $ID')</script>");
+        
     }
+    
+    if($tab=="servicios"){
+        
+        
+        if(empty($_REQUEST["Referencia"])){
+            $Vector["Tabla"]="servicios";
+            $ID=$obTabla->ObtengaAutoIncrement($Vector);
+            $ID=$ID-1;
+            $obVenta->ActualizaRegistro($tab, "Referencia", "REFSER".$ID, "idProductosVenta", $ID);
+        }
+        
+        
+    }
+    
+    if($tab=="productosalquiler"){
+        
+        
+        if(empty($_REQUEST["Referencia"])){
+            $Vector["Tabla"]="productosalquiler";
+            $ID=$obTabla->ObtengaAutoIncrement($Vector);
+            $ID=$ID-1;
+            $obVenta->ActualizaRegistro($tab, "Referencia", "REFPQ".$ID, "idProductosVenta", $ID);
+        }
+        
+        
+    }
+    
     header("location:../$tab.php");
 }
 ?>

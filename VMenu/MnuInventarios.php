@@ -76,11 +76,11 @@ $idUser=$_SESSION['idUser'];
             $css->FinTabs();
             $css->NuevaTabs(2);    
                 $css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/departamentos.png","Crear Departamentos");
-                //$css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/uno.png","Subgrupo 1");
-                //$css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/dos.png","Subgrupo 2");
-                //$css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/tres.png","Subgrupo 3");
-                //$css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/cuatro.jpg","Subgrupo 4");
-                //$css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/cinco.png","Subgrupo 5");
+                $css->SubTabs("../VAtencion/prod_sub1.php","_blank","../images/uno.png","Subgrupo 1");
+                $css->SubTabs("../VAtencion/prod_sub2.php","_blank","../images/dos.png","Subgrupo 2");
+                $css->SubTabs("../VAtencion/prod_sub3.php","_blank","../images/tres.png","Subgrupo 3");
+                $css->SubTabs("../VAtencion/prod_sub4.php","_blank","../images/cuatro.jpg","Subgrupo 4");
+                $css->SubTabs("../VAtencion/prod_sub5.php","_blank","../images/cinco.png","Subgrupo 5");
                 
             $css->FinTabs();
             
