@@ -356,7 +356,7 @@
 			$Columnas[10]="Cod_Mcipio";						$Valores[10]=$DatosMunicipios["Cod_mcipio"];
 			$Columnas[11]="Pais_Domicilio";						$Valores[11]=169;
 			$Columnas[12]="Telefono";			    			$Valores[12]=$_REQUEST['TxtTelefono'];
-			$Columnas[13]="Ciudad";			    				$Valores[13]="BUGA";
+			$Columnas[13]="Ciudad";			    				$Valores[13]=$DatosMunicipios["Ciudad"];
 			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
 			
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);

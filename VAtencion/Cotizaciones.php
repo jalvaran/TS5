@@ -1,11 +1,6 @@
 <?php
 ob_start();
 session_start();
-?>
-<script src="../shortcuts.js" type="text/javascript">
-</script>
-<script src="js/funciones.js"></script>
-<?php 
 
 include_once("../modelo/php_conexion.php");
 include_once("css_construct.php");
@@ -37,7 +32,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 /////////
 
 include_once ('funciones/function.php');
-include_once("procesaCoti.php");
+include_once("procesadores/procesaCoti.php");
 	
 	
 ?>
@@ -113,16 +108,9 @@ include_once("procesaCoti.php");
 	 $css->CreaMenuBasico("Menu"); 
 	 $css->CreaSubMenuBasico("Historial de Cotizaciones","cot_itemscotizaciones.php"); 
 	 $css->CierraMenuBasico(); 
-	 ?>
-	
-
-	
-
-	
-    <div class="container">
-	<br>
-	<?php	
-	$css->CrearImageLink("../VMenu/MnuVentas.php", "../images/cotizacion.png", "_self",200,200);
+	 	
+        $css->CrearDiv("principal", "container", "center", 1, 1);
+	//$css->CrearImageLink("../VMenu/MnuVentas.php", "../images/cotizacion.png", "_self",200,200);
 	if(!empty($_REQUEST["TxtIdCotizacion"])){
 		$RutaPrintCot="../tcpdf/examples/imprimircoti.php?ImgPrintCoti=".$_REQUEST["TxtIdCotizacion"];			
 		$css->CrearTabla();
@@ -160,214 +148,152 @@ include_once("procesaCoti.php");
 	}
 	if($idClientes>0){
 		$DatosClientes=$obVenta->DevuelveValores("clientes","idClientes",$idClientes);
-		print("Precotizacion para el cliente $idClientes $DatosClientes[RazonSocial]<br>");
-		$css->CrearForm("FrmBuscarItem",$myPage,"get","_self");
+                $css->CrearNotificacionAzul("Precotizacion para el cliente $idClientes $DatosClientes[RazonSocial]<br>", 16);
+		
+		$css->CrearForm2("FrmBuscarItem",$myPage,"get","_self");
 			$css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",0,0,0,0);
 			$css->CrearInputText("page","hidden","",1,"","","","",0,0,0,0);
-			$css->CrearInputText("TxtBuscarItem","text","","","Busque Un Item","black","","",300,30,0,0);
-			$css->CrearSelect("CmbBuscarDpto","EnviaForm('FrmBuscarItem')");
-				 //$css->CrearOptionSelect("NO","Seleccione un departamento");				 
-				 $pa=mysql_query("SELECT * FROM prod_departamentos");	
+                        
+                        $VarSelect["Ancho"]="200";
+                        $VarSelect["PlaceHolder"]="Busque un Producto";
+                        $VarSelect["Title"]="Buscar por palabra clave";
+                        $css->CrearSelectChosen("TxtAgregarItemPreventa", $VarSelect);
+    
+                        $sql="SELECT * FROM productosventa";
+                        $Consulta=$obVenta->Query($sql);
+                         $css->CrearOptionSelect("", "Seleccione un producto", 1);
+                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
+
+                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];productosventa", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] / $DatosProducto[Existencias]" , 0);
+                           }
+
+                        $sql="SELECT * FROM servicios";
+                        $Consulta=$obVenta->Query($sql);
+
+                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
+
+                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];servicios", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] " , 0);
+                           }   
+                           $sql="SELECT * FROM productosalquiler";
+                        $Consulta=$obVenta->Query($sql);
+
+                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
+
+                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];productosalquiler", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] " , 0);
+                           }  
+                        $css->CerrarSelect();
+        
 					
-					while($DatosDepartamentos=mysql_fetch_array($pa)){
-																	
-						$css->CrearOptionSelect($DatosDepartamentos["idDepartamentos"],$DatosDepartamentos["Nombre"]);
-					
-					}
-					
-			 
-			 $css->CerrarSelect();
-	 
-			
-			
-			$css->CrearBoton("BtnAgregarItem", "Busqueda");
+			$css->CrearBoton("BtnAgregarItem", "Agregar");
 		$css->CerrarForm();
 	}
-	?>	
+        $css->CrearDiv("Productos Agregados", "container", "center", 1, 1);
 	
-     	  
-	  <div id="Productos Agregados" class="container" >
-	
-		<h2 align="center">
-					<?php 
 										
-					if(!empty($_REQUEST["CmbBuscarDpto"])){
-						$idDepartamento=$_REQUEST["CmbBuscarDpto"];
-						$DatosDepartamentos=$obVenta->DevuelveValores("prod_departamentos","idDepartamentos",$idDepartamento);
-					if(!empty($_REQUEST["TxtBuscarItem"]))
-						$Key=$_REQUEST["TxtBuscarItem"];
-					else
-						$Key=" ";
-					$statement = "$DatosDepartamentos[TablaOrigen] WHERE Departamento = '$idDepartamento' AND (Referencia LIKE '%$Key%' OR idProductosVenta = '$Key' OR Nombre LIKE '%$Key%' OR PrecioVenta = '$Key')";
-					
-					$pa=mysql_query("SELECT * FROM $statement LIMIT $startpoint,$limit") or die(mysql_error());
-					if(mysql_num_rows($pa)){
-						
-						//print("<br>");
-						
-						
-						
-						
-						$css->CrearTabla();
-						$css->FilaTabla(18);
-						$css->ColTabla("Productos Encontrados:",5);
-						$css->CierraFilaTabla();
-						while($DatosProductos=mysql_fetch_array($pa)){
-							$css->FilaTabla(14);
-							$css->ColTabla($DatosProductos['idProductosVenta'],1);
-							$css->ColTabla($DatosProductos['Referencia'],1);
-							$css->ColTabla($DatosProductos['Nombre'],1);
-							$css->ColTabla(number_format($DatosProductos['PrecioVenta']),1);
-							$css->ColTablaVar($myPage,"TxtAgregarItemPreventa","$DatosProductos[idProductosVenta]&TxtTabla=$DatosDepartamentos[TablaOrigen]&TxtAsociarCliente=$idClientes","","Agregar Item");
-							$css->CierraFilaTabla();
-					}
-			
-			$css->CerrarTabla(); 
-			$Ruta="TxtIdCliente=$idClientes&TxtBuscarItem=$Key&CmbBuscarDpto=$idDepartamento&";
-			print(pagination($Ruta,$statement,$limit,$page));
-		}else{
-			$css->CrearFilaNotificacion("No hay resultados para la busqueda",16);
-		}
-		
-	}				//////////////////////////Se dibujan los items en la precotizacion
+        //////////////////////////Se dibujan los items en la precotizacion
 					
 				
-					?></h2>
-               		<table class="table table-bordered" >
-                      <tr>
-                        <td>
-                        	
-                            <?php 
-							
-                            if($idClientes>0){
-
-                            $css->CrearTabla();
-
-                            $pa=mysql_query("SELECT * FROM  precotizacion WHERE idUsuario='$idUser' ORDER BY ID DESC") or die(mysql_error());
-                            if(mysql_num_rows($pa)){	
-
-                                    $css->FilaTabla(18);
-                                    $css->ColTabla('Referencia',1);
-                                    $css->ColTabla('Descripcion',1);
-                                    $css->ColTabla('Cantidad _ Multiplicador _ ValorUnitario',2);
-                                    $css->ColTabla('Subtotal',1);
-                                    $css->ColTabla('Borrar',1);
-                                    $css->CierraFilaTabla();
-
-                            while($row=mysql_fetch_array($pa)){
-                                    $css->FilaTabla(16);
-                                    $css->ColTabla($row['Referencia'],1);
-                                    $css->ColTabla($row['Descripcion'],1);
-                                    print("<td colspan=2>");
-                                    $css->CrearForm2("FrmEdit$row[ID]",$myPage,"post","_self");
-                                    $css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",0,0,0,0);
-                                    $css->CrearInputText("TxtTabla","hidden","",$row["Tabla"],"","","","",0,0,0,0);
-                                    $css->CrearInputText("TxtPrecotizacion","hidden","",$row["ID"],"","","","",0,0,0,0);
-                                    $css->CrearInputNumber("TxtEditar","number","",$row["Cantidad"],"","black","","",100,30,0,1,0, "","any");
-                                    $css->CrearInputNumber("TxtMultiplicador","number","",$row["Multiplicador"],"","black","","",100,30,0,1,1, "","any");
-                                    $css->CrearInputNumber("TxtValorUnitario","number","",$row["ValorUnitario"],"","black","","",150,30,0,1,$row["PrecioCosto"], $row["ValorUnitario"]*10,"any");
-                                    $css->CrearBoton("BtnEditar", "E");
-                                    $css->CerrarForm();
-                                    print("</td>");
-                                    $css->ColTabla(number_format($row['SubTotal']),1);
-                                    $css->ColTablaDel($myPage,"precotizacion","ID",$row['ID'],$idClientes);
-                                    $css->CierraFilaTabla();
-                                    
-
-                            }
-                            }
-
-                            $css->CerrarTabla();
 
 
 
-                            $Subtotal=$obVenta->SumeColumna("precotizacion","SubTotal", "idUsuario",$idUser);
-                            $IVA=$obVenta->SumeColumna("precotizacion","IVA", "idUsuario",$idUser);
+                if($idClientes>0){
 
-                            $Total=$Subtotal+$IVA;
+                $css->CrearTabla();
+                $sql="SELECT * FROM  precotizacion WHERE idUsuario='$idUser' ORDER BY ID DESC";
+                $pa=$obVenta->Query($sql);
+                
+                if($obVenta->NumRows($pa)){	
 
-                            $css->CrearForm("FrmGuarda",$myPage,"post","_self");
-                            $css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",150,30,0,0);
+                        $css->FilaTabla(18);
+                        $css->ColTabla('Referencia',1);
+                        $css->ColTabla('Descripcion',1);
+                        $css->ColTabla('Cantidad _ Multiplicador _ ValorUnitario',2);
+                        $css->ColTabla('Subtotal',1);
+                        $css->ColTabla('Borrar',1);
+                        $css->CierraFilaTabla();
 
-                            $css->CrearTabla();
-                            $css->FilaTabla(14);
-                            $css->ColTabla("Esta Cotizacion:",4);
-                            $css->CierraFilaTabla();
-                            $css->FilaTabla(18);
-                            $css->ColTabla("SUBTOTAL:",1);
-                            $css->ColTabla(number_format($Subtotal),3);
-                            $css->CierraFilaTabla();
-                            $css->FilaTabla(18);
-                            $css->ColTabla("IMPUESTOS:",1);
-                            $css->ColTabla(number_format($IVA),3);
-                            $css->CierraFilaTabla();
-
-                            $css->FilaTabla(18);
-                            $css->ColTabla("TOTAL:",1);
-                            $css->ColTabla(number_format($Total),3);
-                            $css->FilaTabla(18);
-                            print("<td colspan=4>");
-                            $css->CrearInputText("TxtNumOrden","text","","","Numero de Orden","black","","",150,30,0,0);
-
-                            $css->CrearInputText("TxtNumSolicitud","text","","","Numero de Solicitud","black","","",150,30,0,0);
-                            print("<br>");
-                            $css->CrearTextArea("TxtObservaciones","","","Observaciones para esta Cotizaciones","black","","",300,100,0,0);
-                            print("<br>");
-                            $css->CrearBotonConfirmado("BtnGuardar","Guardar");
-                            print("</td>");
-                            $css->CierraFilaTabla();
-
-                            $css->CerrarTabla(); 
-                            $css->CerrarForm();
-
-                            }else{
-                                    print('<tr><div class="alert alert-success" align="center"><strong>Por favor Seleccione un Cliente</strong></div></tr>');
-                            }
-                    ?>
+                while($row=$obVenta->FetchArray($pa)){
+                        $css->FilaTabla(16);
+                        $css->ColTabla($row['Referencia'],1);
+                        $css->ColTabla($row['Descripcion'],1);
+                        print("<td colspan=2>");
+                        $css->CrearForm2("FrmEdit$row[ID]",$myPage,"post","_self");
+                        $css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",0,0,0,0);
+                        $css->CrearInputText("TxtTabla","hidden","",$row["Tabla"],"","","","",0,0,0,0);
+                        $css->CrearInputText("TxtPrecotizacion","hidden","",$row["ID"],"","","","",0,0,0,0);
+                        $css->CrearInputNumber("TxtEditar","number","",$row["Cantidad"],"","black","","",100,30,0,1,0, "","any");
+                        $css->CrearInputNumber("TxtMultiplicador","number","",$row["Multiplicador"],"","black","","",100,30,0,1,1, "","any");
+                        $css->CrearInputNumber("TxtValorUnitario","number","",$row["ValorUnitario"],"","black","","",150,30,0,1,$row["PrecioCosto"], $row["ValorUnitario"]*10,"any");
+                        $css->CrearBoton("BtnEditar", "E");
+                        $css->CerrarForm();
+                        print("</td>");
+                        $css->ColTabla(number_format($row['SubTotal']),1);
+                        $css->ColTablaDel($myPage,"precotizacion","ID",$row['ID'],$idClientes);
+                        $css->CierraFilaTabla();
 
 
-                              </tr>
-                           
-                            	
-                            <?php 
-								$pa=mysql_query("SELECT * FROM precotizacion WHERE idUsuario='$idUser'");				
-								if(!$row=mysql_fetch_array($pa)){
-							?>
-                              <tr><div class="alert alert-success" align="center"><strong>No hay Productos agregados a esta Precotizacion</strong></div></tr>
-							  <?php  } $css->CerrarTabla(); ?>
-                           
-                        </td>
-                      </tr>
-		
+                }
+                $Visible=1;
+                }else{
+                    $css->CrearNotificacionRoja("No hay productos agregados a esta Cotizacion", 16);
+                    $Visible=0;
+                }
 
-    </div>
-	
-      			
-</div> <!-- /container -->
-     
+                $css->CerrarTabla();
 
-    
 
-<?php 
-    $css->AgregaJS();
-    $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
-?>
 
-   
-		
-<a style="display:scroll; position:fixed; bottom:10px; right:10px;" href="#" title="Volver arriba"><img src="../images/up1_amarillo.png" /></a>
+                $Subtotal=$obVenta->SumeColumna("precotizacion","SubTotal", "idUsuario",$idUser);
+                $IVA=$obVenta->SumeColumna("precotizacion","IVA", "idUsuario",$idUser);
 
-	
- 
-  </body>
-  
-  
-</html>
+                $Total=$Subtotal+$IVA;
+                $css->CrearDiv("DivTotales", "", "center", $Visible, 1);
+                $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
+                $css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",150,30,0,0);
+                
+                $css->CrearTabla();
+                $css->FilaTabla(14);
+                $css->ColTabla("Esta Cotizacion:",4);
+                $css->CierraFilaTabla();
+                $css->FilaTabla(18);
+                $css->ColTabla("SUBTOTAL:",1);
+                $css->ColTabla(number_format($Subtotal),3);
+                $css->CierraFilaTabla();
+                $css->FilaTabla(18);
+                $css->ColTabla("IMPUESTOS:",1);
+                $css->ColTabla(number_format($IVA),3);
+                $css->CierraFilaTabla();
 
-<script language="JavaScript"> 
-atajos();
-posiciona('TxtCodigoBarras');
-</script> 
-<?php
+                $css->FilaTabla(18);
+                $css->ColTabla("TOTAL:",1);
+                $css->ColTabla(number_format($Total),3);
+                $css->FilaTabla(18);
+                print("<td colspan=4>");
+                $css->CrearInputText("TxtNumOrden","text","","","Numero de Orden","black","","",150,30,0,0);
+
+                $css->CrearInputText("TxtNumSolicitud","text","","","Numero de Solicitud","black","","",150,30,0,0);
+                print("<br>");
+                $css->CrearTextArea("TxtObservaciones","","","Observaciones para esta Cotizaciones","black","","",300,100,0,0);
+                print("<br>");
+                $css->CrearBotonConfirmado("BtnGuardar","Guardar");
+                print("</td>");
+                $css->CierraFilaTabla();
+
+                $css->CerrarTabla(); 
+                $css->CerrarForm();
+                $css->CerrarDiv();
+                }else{
+                    $css->CrearNotificacionRoja("Por favor Seleccione un cliente", 18);
+                }
+        
+$css->CerrarTabla();
+$css->CerrarDiv();//Cerramos contenedor Secundario
+$css->CerrarDiv();//Cerramos contenedor Principal
+$css->AgregaJS();
+$css->AgregaSubir();
+$css->AnchoElemento("CmbCodMunicipio_chosen", 200);
+$css->Footer();
+print("</body></html>");
+
 ob_end_flush();
 ?>
