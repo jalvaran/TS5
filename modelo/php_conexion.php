@@ -451,11 +451,14 @@ class ProcesoVenta{
             $RazonSocialC=$DatosCliente["RazonSocial"];
             $EmpresaPro=$Datos["EmpresaPro"];
             $CentroCostos=$Datos["CentroCostos"];
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
             $sql="SELECT CuentaPUC, TipoItem, sum(SubtotalItem) as SubtotalItem,sum(TotalItem) as TotalItem,sum(IVAItem) as IVAItem ,sum(SubtotalCosto) as SubtotalCosto  "
                     . "FROM facturas_items WHERE idFactura='$idFact' GROUP BY CuentaPUC";
             $Consulta=$this->Query($sql);
+            
+              
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             while($DatosItems=$this->FetchArray($Consulta)){
                 
 		$Subtotal=$DatosItems["SubtotalItem"];
@@ -500,6 +503,7 @@ class ProcesoVenta{
 		$Columnas[23]="Concepto";		$Valores[23]="Ventas";
 		$Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCostos;
 		$Columnas[25]="idEmpresa";		$Valores[25]=$EmpresaPro;
+                $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
                 
 		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 		
@@ -971,8 +975,10 @@ public function FetchArray($Datos)
             
             ////Registro el anticipo en el libro diario
             
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
+            
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             $CuentaPUC=$CuentaDestino;
             $NombreCuenta=$DatosCuentasFrecuentes["Nombre"];
             $CuentaPUCContraPartida="238020".$NIT;
@@ -1006,6 +1012,7 @@ public function FetchArray($Datos)
             $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
             $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
             $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
 
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
@@ -1056,9 +1063,9 @@ public function FetchArray($Datos)
             $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
             
             ////Registro el anticipo en el libro diario
-            
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             $CuentaPUC=$CuentaDestino;
             $NombreCuenta=$DatosCuentasFrecuentes["Nombre"];
             $CuentaPUCContraPartida="2205".$NIT;
@@ -1092,7 +1099,7 @@ public function FetchArray($Datos)
             $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
             $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
             $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
-
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
@@ -1142,9 +1149,10 @@ public function FetchArray($Datos)
             $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
             
             ////Registro el anticipo en el libro diario
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
             
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             $CuentaPUC=$CuentaDestino;
             $NombreCuenta=$DatosCuentasFrecuentes["Nombre"];
             $CuentaPUCContraPartida="238020";
@@ -1178,7 +1186,7 @@ public function FetchArray($Datos)
             $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
             $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
             $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
-
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
@@ -1213,9 +1221,10 @@ public function FetchArray($Datos)
             $RazonSocialC=$DatosCliente["RazonSocial"];
                 
             ////Registro el anticipo en el libro diario
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);  
             
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             $CuentaPUC=$CuentaDestino;
             $NombreCuenta="Clientes Nacionales $RazonSocialC NIT: $NIT";
             $CuentaPUCContraPartida="238020";
@@ -1249,7 +1258,7 @@ public function FetchArray($Datos)
             $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
             $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
             $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
-
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
@@ -1302,9 +1311,10 @@ public function FetchArray($Datos)
         $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
 
         ////Registro el anticipo en el libro diario
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
         
         $tab="librodiario";
-        $NumRegistros=26;
+        $NumRegistros=27;
         $CuentaPUC="130505".$NIT;
         $NombreCuenta="Clientes Nacionales $RazonSocialC $NIT";
         
@@ -1334,7 +1344,8 @@ public function FetchArray($Datos)
         $Columnas[23]="Concepto";		$Valores[23]=$Detalle;
         $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCostos;
         $Columnas[25]="idEmpresa";		$Valores[25]=$idEmpresaPro;
-
+        $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
+        
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
@@ -1722,14 +1733,14 @@ public function CalculePesoRemision($idCotizacion)
     
     public function RegistreComprobanteContable($idComprobante){
         
-        
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
         $DatosGenerales=$this->DevuelveValores("comprobantes_contabilidad","ID",$idComprobante);
         $Consulta=$this->ConsultarTabla("comprobantes_contabilidad_items", "WHERE idComprobante=$idComprobante");
         while($DatosComprobante=$this->FetchArray($Consulta)){
             $Fecha=$DatosComprobante["Fecha"];
             
             $tab="librodiario";
-            $NumRegistros=26;
+            $NumRegistros=27;
             $CuentaPUC=$DatosComprobante["CuentaPUC"];
             $NombreCuenta=$DatosComprobante["NombreCuenta"];
             $DatosCliente=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosComprobante["Tercero"]);
@@ -1762,7 +1773,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[23]="Concepto";                   $Valores[23]=$DatosComprobante["Concepto"];
             $Columnas[24]="idCentroCosto";		$Valores[24]=$DatosComprobante["CentroCostos"];
             $Columnas[25]="idEmpresa";                  $Valores[25]=$DatosCentro["EmpresaPro"];
-
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             
@@ -1864,7 +1875,7 @@ public function CalculePesoRemision($idCotizacion)
 
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idComprobante=$this->ObtenerMAX($tab, "ID", 1, "");
-                
+             
         /*
          * Inserto los datos a la tabla de abonos correspondiente 
          */
@@ -1883,9 +1894,11 @@ public function CalculePesoRemision($idCotizacion)
          * Se registra en el libro diario
          * 
          */
-                        
+         
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);   
+        
         $tab="librodiario";
-        $NumRegistros=26;
+        $NumRegistros=27;
                 
         $Columnas[0]="Fecha";			$Valores[0]=$Fecha;
         $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="COMPROBANTE CONTABLE";
@@ -1913,7 +1926,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[23]="Concepto";		$Valores[23]=$Concepto;
         $Columnas[24]=$NomIdCentroCostos;       $Valores[24]=$DatosLibro[$NomIdCentroCostos];
         $Columnas[25]=$NomIdEmpresa;		$Valores[25]=$DatosLibro[$NomIdEmpresa];
-
+        $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
@@ -2030,9 +2043,10 @@ public function CalculePesoRemision($idCotizacion)
                 ////////////////Inserto datos de la factura
                 /////
                 ////
+                $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
                 $ID=date("YmdHis").microtime(false);
                 $tab="facturas";
-                $NumRegistros=31; 
+                $NumRegistros=32; 
                 
                 $Columnas[0]="TipoFactura";		    $Valores[0]=$DatosResolucion["Tipo"];
                 $Columnas[1]="Prefijo";                     $Valores[1]=$DatosResolucion["Prefijo"];
@@ -2065,6 +2079,7 @@ public function CalculePesoRemision($idCotizacion)
                 $Columnas[28]="Otros";                      $Valores[28]=$PagaOtros;
                 $Columnas[29]="Tarjetas";                   $Valores[29]=$Tarjetas;
                 $Columnas[30]="idTarjetas";                 $Valores[30]=$idTarjetas;
+                $Columnas[31]="idSucursal";                 $Valores[31]=$DatosSucursal["ID"];
                 
                 $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                 
@@ -2737,9 +2752,9 @@ public function CalculePesoRemision($idCotizacion)
      public function RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado) {
          ////Creo el Separado
          
-         
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
         $tab="separados";
-        $NumRegistros=8;
+        $NumRegistros=9;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
@@ -2748,6 +2763,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[5]="Estado";              $Valores[5]="Abierto";
         $Columnas[6]="Total";               $Valores[6]=0;
         $Columnas[7]="idUsuarios";          $Valores[7]= $this->idUser;
+        $Columnas[8]="idSucursal";          $Valores[8]=$DatosSucursal["ID"];
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idSeparado=$this->ObtenerMAX($tab, "ID", 1, "");
         
@@ -3193,9 +3209,10 @@ public function CalculePesoRemision($idCotizacion)
                 ////////////////Inserto datos de la factura
                 /////
                 ////
+                $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
                 $ID=date("YmdHis").microtime(false);
                 $tab="facturas";
-                $NumRegistros=27; 
+                $NumRegistros=28; 
                 
                 $Columnas[0]="TipoFactura";		    $Valores[0]=$DatosResolucion["Tipo"];
                 $Columnas[1]="Prefijo";                     $Valores[1]=$DatosResolucion["Prefijo"];
@@ -3224,6 +3241,7 @@ public function CalculePesoRemision($idCotizacion)
                 $Columnas[24]="Hora";                       $Valores[24]=date("H:i:s");
                 $Columnas[25]="Efectivo";                   $Valores[25]=0;
                 $Columnas[26]="Devuelve";                   $Valores[26]=0;
+                $Columnas[27]="idSucursal";                 $Valores[27]=$DatosSucursal["ID"];
                 
                 $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                 
@@ -3361,10 +3379,11 @@ public function CalculePesoRemision($idCotizacion)
                 
 		/////////////////////////////////////////////////////////////////
 		//////registramos en libro diario
-		
+		$DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
+                
 		$tab="librodiario";
 		
-		$NumRegistros=26;
+		$NumRegistros=27;
 		$CuentaPUC=$CuentaDestino;  			 
 		if($TipoEgreso==3) //Si es pago de impuestos
 			$DatosCuenta=$this->DevuelveValores("cuentas","idPUC",$CuentaPUC);	
@@ -3399,7 +3418,7 @@ public function CalculePesoRemision($idCotizacion)
 		$Columnas[23]="Concepto";		$Valores[23]=$Concepto;
 		$Columnas[24]="idCentroCosto";		$Valores[24]=$idCentroCostos;
 		$Columnas[25]="idEmpresa";              $Valores[25]=$idEmpresa;
-							
+		$Columnas[26]="idSucursal";             $Valores[26]=$DatosSucursal["ID"];					
 		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 		
 		/////////////////////////////////////////////////////////////////
@@ -4024,6 +4043,7 @@ public function CalculePesoRemision($idCotizacion)
     public function RegistreCostoLibroDiario($Entrada, $Costo,$fecha,$idTraslado,$CentroCosto,$VectorCosto){
         
         $DatosCentro=  $this->DevuelveValores("centrocosto", "ID", $CentroCosto);
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
         if($Entrada=="SI"){
             $Creditos=0;
             $Debitos=$Costo;
@@ -4035,7 +4055,7 @@ public function CalculePesoRemision($idCotizacion)
         }
         
         $tab="librodiario";
-        $NumRegistros=26;
+        $NumRegistros=27;
         $CuentaPUC=1435;
         
         $DatosCuenta=  $this->DevuelveValores("subcuentas","PUC" , $CuentaPUC);
@@ -4073,7 +4093,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[23]="Concepto";			$Valores[23]="Traslados";
         $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
         $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
-
+        $Columnas[26]="idSucursal";			$Valores[26]=$DatosSucursal["ID"];
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
 
