@@ -3,7 +3,7 @@
 $myTabla="facturas_items";
 $MyID="ID";
 $myPage="facturas_items.php";
-$myTitulo="Buscar Items Facturados";
+$myTitulo="Items Facturados";
 
 
 
@@ -22,8 +22,15 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
  */
 
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;            
-$Vector["VerRegistro"]["Deshabilitado"]=1;                      
-//$Vector["EditarRegistro"]["Deshabilitado"]=1;  
+//$Vector["VerRegistro"]["Deshabilitado"]=1;                      
+$Vector["EditarRegistro"]["Deshabilitado"]=1;  
+
+
+//Link para la accion ver
+$Ruta="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=";
+$Vector["VerRegistro"]["Link"]=$Ruta;
+$Vector["VerRegistro"]["ColumnaLink"]="idFactura";
+
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas
