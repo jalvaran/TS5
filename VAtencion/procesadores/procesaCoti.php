@@ -438,12 +438,16 @@
             $CuentaPUC=$_REQUEST['TxtCuentaPUC'];
             $IVA=$_REQUEST['CmbIVA'];
             $Departamento=$_REQUEST['CmbDepartamento'];
+            $Cantidad=1;
+            if(isset($_REQUEST['TxtCantidadPiezas'])){
+                $Cantidad=$_REQUEST['TxtCantidadPiezas'];
+            }
             $Tabla="servicios";            
             $obVenta=new ProcesoVenta($idUser);
             $VectorItem["Servitorno"]=0;
             $idItem=$obVenta->CrearItemServicio($Tabla,$Nombre,$PrecioVenta,$CostoUnitario,$CostoUnitario,$CuentaPUC,$IVA,$Departamento,$VectorItem);
             $VectorPrecoti["F"]=0;
-            $obVenta->AgregaPrecotizacion(1,$idItem,$Tabla,$VectorPrecoti);
+            $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$Tabla,$VectorPrecoti);
             header("location:Cotizaciones.php?TxtAsociarCliente=$idClientes");
 			
 	}

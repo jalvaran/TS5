@@ -67,7 +67,7 @@ print("</head><body align='center'>");
          $VectorCDC["F"]=0;
          
          $obTabla->CrearCuadroClientes("DialCliente","Crear Cliente",$myPage,$VectorCDC);
-	 $VectorCDSer["Servitorno"]=1;
+	 $VectorCDSer["servitorno"]=1;
          $obTabla->CrearCuadroCrearServicios("DialCrearItemServicios","Crear Nuevo Item Servicios",$myPage,$idClientes,$VectorCDSer); 
 	 	
         

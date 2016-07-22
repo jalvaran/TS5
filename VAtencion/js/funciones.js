@@ -384,3 +384,30 @@ function ObtengaValor(id){
     valor=document.getElementById(id).value;
     return valor;
 }
+
+// esta funcion permite calcular el valor y costo de un servicio, aplica solo para servitorno
+function Servitorno_CalculePrecioVenta(Costos){
+    
+    var Cantidad;
+    var TiempoMaquina;
+    var Margen;
+    var Maquinas;
+    var CostosTotales;
+    var ValorTotal;
+    var CostoTotal;
+        
+    Cantidad=document.getElementById('TxtCantidadPiezas').value;
+    if(Cantidad<=0){
+        Cantidad=1;
+    }
+    TiempoMaquina=document.getElementById('TxtTiempoMaquinas').value;
+    Margen=document.getElementById('TxtMargen').value;
+    Maquinas=document.getElementById('TxtNumMaquinas').value;
+    CostosTotales=Costos/Maquinas;
+    
+    ValorTotal=Math.round(((CostosTotales*TiempoMaquina)/Margen)/Cantidad);
+    CostoTotal=Math.round(((CostosTotales*TiempoMaquina))/Cantidad);
+    document.getElementById("TxtPrecioVenta").value = ValorTotal;
+    document.getElementById("TxtCostoUnitario").value = CostoTotal;
+    
+}

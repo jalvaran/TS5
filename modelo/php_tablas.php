@@ -1063,16 +1063,45 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
 	 
         $this->css->CrearForm2("FrmCrearItemServicio",$myPage,"post","_self");
         $this->css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"Precio Venta","black","","",200,30,0,1);
+        if(isset($VectorCDSer["servitorno"])){
+            $this->css->CrearInputText("TxtServitorno","hidden","",$VectorCDSer["servitorno"],"Precio Venta","black","","",200,30,0,1);
+        }
         
         $this->css->CrearTextArea("TxtNombre", "", "", "Descripcion", "", "", "", 200, 100, 0, 1);
+        
+        echo '<br>';
+        
+        if(isset($VectorCDSer["servitorno"])){
+            $TotalCostos=$this->obCon->Sume("costos", "ValorCosto", "");
+            $TotalCostos=$TotalCostos/192;
+            $this->css->CrearInputNumber("TxtCantidadPiezas","number","Cantidad de piezas:<br>",1,"Piezas","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,1,"",1);
+            $this->css->CrearInputNumber("TxtNumMaquinas","number","Maquinas:<br>",3,"Maquinas","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,1,"",1);
+            $this->css->CrearInputNumber("TxtMargen","number","Margen:<br>","0.58825","Margen","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,0,"","any");
+            $this->css->CrearInputNumber("TxtTiempoMaquinas","number","Tiempo Maquina:<br>",1,"Tiempo en Maquina","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,0,"","any");
+            
+        }
         print("</br>");
-        $this->css->CrearInputText("TxtPrecioVenta","number","","","Precio Venta","black","","",200,30,0,1);
+        
+        $this->css->CrearInputNumber("TxtPrecioVenta","number","PrecioVenta:<br>","","Precio Venta","black","","",200,30,0,1,1,"","");
         print("</br>");
-        $this->css->CrearInputText("TxtCostoUnitario","number","","","Costo Unitario","black","","",200,30,0,1);
+        $this->css->CrearInputNumber("TxtCostoUnitario","number","CostoUnitario:<br>","","Costo Unitario","black","","",200,30,0,1,1,"","");
         print("</br>");
         //$this->css->CrearInputText("TxtCuentaPUC","number","","","Cuenta Contable","black","","",200,30,0,1);
         
-        
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione el Departamento";
+        $VarSelect["Required"]=1;
+        $this->css->CrearSelectChosen("CmbDepartamento", $VarSelect);
+
+        $sql="SELECT * FROM prod_departamentos";
+        $Consulta=$this->obCon->Query($sql);
+        $this->css->CrearOptionSelect("", "Seleccione un Departamento", 0);
+           while($DatosDepartamentos=$this->obCon->FetchArray($Consulta)){
+                              
+               $this->css->CrearOptionSelect($DatosDepartamentos["idDepartamentos"], $DatosDepartamentos["Nombre"], 0);
+           }
+        $this->css->CerrarSelect();
+        print("</br></br>");
         $VarSelect["Ancho"]="200";
         $VarSelect["PlaceHolder"]="Seleccione la cuenta contable";
         $VarSelect["Required"]=1;
@@ -1091,6 +1120,13 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
         $this->css->CerrarSelect();
         echo '<br>';
         print("</br>");
+        $DatosEmpresa=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro",1 );
+        $IVA="";
+        if($DatosEmpresa["Regimen"]=="COMUN"){
+            $IVA=0.16;
+        }else if($DatosEmpresa["Regimen"]=="SIMPLIFICADO"){
+            $IVA=0;
+        }
         $VarSelect["Ancho"]="200";
         $VarSelect["PlaceHolder"]="Seleccione el IVA";
         $VarSelect["Required"]=1;
@@ -1100,25 +1136,14 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
         $Consulta=$this->obCon->Query($sql);
         $this->css->CrearOptionSelect("", "Seleccione el IVA", 0);
            while($DatosIVA=$this->obCon->FetchArray($Consulta)){
-                              
-               $this->css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], 0);
+               $sel=0;
+               if($IVA==$DatosIVA["Valor"]){
+                   $sel=1;
+               }               
+               $this->css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], $sel);
            }
         $this->css->CerrarSelect();
-        print("</br></br>");
-        $VarSelect["Ancho"]="200";
-        $VarSelect["PlaceHolder"]="Seleccione el Departamento";
-        $VarSelect["Required"]=1;
-        $this->css->CrearSelectChosen("CmbDepartamento", $VarSelect);
-
-        $sql="SELECT * FROM prod_departamentos";
-        $Consulta=$this->obCon->Query($sql);
-        $this->css->CrearOptionSelect("", "Seleccione un Departamento", 0);
-           while($DatosDepartamentos=$this->obCon->FetchArray($Consulta)){
-                              
-               $this->css->CrearOptionSelect($DatosDepartamentos["idDepartamentos"], $DatosDepartamentos["Nombre"], 0);
-           }
-        $this->css->CerrarSelect();
-        echo '<br><br>';
+               
         $this->css->CrearBoton("BtnCrearServicios", "Crear Servicio");
         $this->css->CerrarForm();
 
