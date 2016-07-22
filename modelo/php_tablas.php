@@ -1150,6 +1150,107 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
 	$this->css->CerrarCuadroDeDialogo(); 
 }
 
+//Funcion para Crear un Cuadro de dialogo que permita crear un servicio nuevo
+
+public function CrearCuadroBusqueda($myPage,$Hidden1,$ValHiden1,$Hidden2,$ValHiden2,$VectorCuaBus){
+    $this->css=new CssIni("");
+    $this->css->CrearForm2("FrmBuscarItem","$myPage","post","_self");
+            
+    $this->css->CrearInputText($Hidden1,"hidden","",$ValHiden1,"","","","",0,0,0,0);
+    $this->css->CrearInputText($Hidden2,"hidden","",$ValHiden2,"","","","",0,0,0,0);
+
+    $this->css->CrearInputText("TxtBusqueda", "text", "", "", "Buscar Item", "black", "", "", 200, 30, 0, 0);
+    $this->css->CerrarForm();
+}
+
+//Funcion para Dibujar un item buscado en las tablas de ventas
+
+public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
+    $this->css=new CssIni("");
+    
+    $Titulo="Crear Item En servicios";
+    $Nombre="ShowItemsBusqueda";
+    $RutaImage="";
+    $javascript="";
+    $VectorBim["f"]=0;
+    $target="#DialBusquedaItems";
+    $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",0,0,"fixed","left:10px;top:100",$VectorBim);
+    
+    $VectorDialogo["F"]=0;
+    $this->css->CrearCuadroDeDialogo("DialBusquedaItems", "Resultados");
+    $this->css->CrearDiv("DivBusqueda", "", "center", 1, 1);
+    $this->css->CrearTabla();
+    $tab="productosventa";
+    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
+    $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+    if($this->obCon->NumRows($consulta)){
+        while($DatosProducto=$this->obCon->FetchArray($consulta)){
+            $this->css->FilaTabla(16);
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            print("<td>Agregar");
+            $Titulo="";
+            $Nombre="Agregar";
+            $RutaImage="../images/add.png";
+            $javascript="";
+            $VectorBim["f"]=0;
+            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
+            $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
+            print("</td>");
+            $this->css->CierraFilaTabla();
+        }
+    }
+    
+    $tab="servicios";
+    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
+    $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+    if($this->obCon->NumRows($consulta)){
+        while($DatosProducto=$this->obCon->FetchArray($consulta)){
+            $this->css->FilaTabla(16);
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            print("<td>Agregar");
+            $Titulo="";
+            $Nombre="Agregar";
+            $RutaImage="../images/add.png";
+            $javascript="";
+            $VectorBim["f"]=0;
+            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
+            $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
+            print("</td>");
+            $this->css->CierraFilaTabla();
+        }
+    }
+    
+    $tab="productosalquiler";
+    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
+    $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+    if($this->obCon->NumRows($consulta)){
+        while($DatosProducto=$this->obCon->FetchArray($consulta)){
+            $this->css->FilaTabla(16);
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            print("<td>Agregar");
+            $Titulo="";
+            $Nombre="Agregar";
+            $RutaImage="../images/add.png";
+            $javascript="";
+            $VectorBim["f"]=0;
+            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
+            $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
+            print("</td>");
+            $this->css->CierraFilaTabla();
+        }
+    }
+    
+    $this->css->CerrarTabla();
+    $this->css->CerrarDiv();
+    $this->css->CerrarCuadroDeDialogo();
+   
+}
 // FIN Clases	
 }
 

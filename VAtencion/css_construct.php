@@ -328,11 +328,38 @@ class CssIni{
 	
 	function CrearCuadroDeDialogo($id,$title){
 		
-		print('<div id="'.$id.'" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+		print(' <div id="'.$id.'" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
        
           	
             <div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    	        <h3 id="myModalLabel">'.$title.'</h3>
+            </div>
+            <div class="modal-body">
+           	    <div class="row-fluid">
+	               
+    	            <div class="span6">
+                    	
+						
+                   
+            
+        ');
+		
+	}
+        
+        /////////////////////Crea un Cuadro de Dialogo
+	
+	function CrearCuadroDeDialogo2($id,$title,$visible,$VectorDialogo){
+            if($visible==1){
+                $visible=true;
+            }else{
+                $visible=false;
+            }
+		print('<div id="'.$id.'" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
+       
+          	
+            <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="'.$visible.'">×</button>
     	        <h3 id="myModalLabel">'.$title.'</h3>
             </div>
             <div class="modal-body">
@@ -765,9 +792,9 @@ function Footer(){
         
         /////////////////////Crear un frame
 	
-	function frame($page,$border,$alto,$ancho,$VectorFrame){
+	function frame($name,$page,$border,$alto,$ancho,$VectorFrame){
              
-          print("<iframe src='$page' frameborder=$border style='height: ".$alto."px; width:".$ancho."px'></iframe>"); 
+          print("<iframe name='$name' id='$name' src='$page' frameborder=$border style='height: ".$alto."%; width:".$ancho."%'></iframe>"); 
     
 	} 
         
@@ -786,6 +813,16 @@ function Footer(){
           //print("<a href='$target' title='$Titulo'><image name='$Nombre' id='$Nombre' src='$RutaImage' $javascript style='display:scroll; position:".$posicion."; right:10px; height:".$Alto."px; width: ".$Ancho."px;'></a>");
           
           print('<a href="'.$target.'" role="button"  data-toggle="modal" title="'.$Titulo.'" style="display:scroll; position:'.$posicion.'; '.$margenes.'; height:'.$Alto.'px; width: '.$Ancho.'px;">
+			<image src='.$RutaImage.' name='.$Nombre.' id='.$Nombre.' src='.$RutaImage.' '.$javascript.' ></a>');
+	} 
+        
+        /////////////////////Crear una imagen con una funcion javascrip
+	
+	function CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,$javascript,$Alto,$Ancho,$MasStilos,$margenes,$VectorBim){
+             
+          //print("<a href='$target' title='$Titulo'><image name='$Nombre' id='$Nombre' src='$RutaImage' $javascript style='display:scroll; position:".$posicion."; right:10px; height:".$Alto."px; width: ".$Ancho."px;'></a>");
+          
+          print('<a href="'.$target.'" role="button"  data-toggle="modal" title="'.$Titulo.'" style="display:scroll; height:'.$Alto.'px; width: '.$Ancho.'px;'.$MasStilos.'">
 			<image src='.$RutaImage.' name='.$Nombre.' id='.$Nombre.' src='.$RutaImage.' '.$javascript.' ></a>');
 	} 
         

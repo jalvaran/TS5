@@ -81,9 +81,9 @@
 	}
 		
 	if(!empty($_REQUEST['TxtAgregarItemPreventa'])){
-		$DatosItem=explode(";",$_REQUEST['TxtAgregarItemPreventa']);
-		$idItem=$DatosItem[0];
-		$TablaItem=$DatosItem[1];
+		
+		$idItem=$_REQUEST['TxtAgregarItemPreventa'];
+		$TablaItem=$_REQUEST['TxtTablaItem'];
 		
 		$Cantidad=1;
 		$idClientes=$_REQUEST['TxtIdCliente'];

@@ -69,7 +69,14 @@ print("</head><body align='center'>");
          $obTabla->CrearCuadroClientes("DialCliente","Crear Cliente",$myPage,$VectorCDC);
 	 $VectorCDSer["servitorno"]=1;
          $obTabla->CrearCuadroCrearServicios("DialCrearItemServicios","Crear Nuevo Item Servicios",$myPage,$idClientes,$VectorCDSer); 
-	 	
+	 
+         if(isset($_REQUEST["TxtBusqueda"])){
+                $key=$_REQUEST["TxtBusqueda"];
+                $PageReturn=$_REQUEST["TxtPageReturn"]."?TxtAgregarItemPreventa=";
+                
+                $obTabla->DibujeItemsBuscadosVentas($key,$PageReturn,$idClientes);
+                
+            }
         
 	//$css->CrearImageLink("../VMenu/MnuVentas.php", "../images/cotizacion.png", "_self",200,200);
 	if(!empty($_REQUEST["TxtIdCotizacion"])){
@@ -108,45 +115,12 @@ print("</head><body align='center'>");
 		
 	}
 	if($idClientes>0){
-		$DatosClientes=$obVenta->DevuelveValores("clientes","idClientes",$idClientes);
-                $css->CrearNotificacionAzul("Precotizacion para el cliente $idClientes $DatosClientes[RazonSocial]<br>", 16);
-		
-		$css->CrearForm2("FrmBuscarItem",$myPage,"get","_self");
-			$css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"","","","",0,0,0,0);
-			$css->CrearInputText("page","hidden","",1,"","","","",0,0,0,0);
-                        
-                        $VarSelect["Ancho"]="200";
-                        $VarSelect["PlaceHolder"]="Busque un Producto";
-                        $VarSelect["Title"]="Buscar por palabra clave";
-                        $css->CrearSelectChosen("TxtAgregarItemPreventa", $VarSelect);
-    
-                        $sql="SELECT * FROM productosventa";
-                        $Consulta=$obVenta->Query($sql);
-                         $css->CrearOptionSelect("", "Seleccione un producto", 1);
-                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
-
-                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];productosventa", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] / $DatosProducto[Existencias]" , 0);
-                           }
-
-                        $sql="SELECT * FROM servicios";
-                        $Consulta=$obVenta->Query($sql);
-
-                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
-
-                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];servicios", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] " , 0);
-                           }   
-                           $sql="SELECT * FROM productosalquiler";
-                        $Consulta=$obVenta->Query($sql);
-
-                           while($DatosProducto=$obVenta->FetchArray($Consulta)){
-
-                               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];productosalquiler", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] " , 0);
-                           }  
-                        $css->CerrarSelect();
-        
-					
-			$css->CrearBoton("BtnAgregarItem", "Agregar");
-		$css->CerrarForm();
+            $DatosClientes=$obVenta->DevuelveValores("clientes","idClientes",$idClientes);
+            $css->CrearNotificacionAzul("Precotizacion para el cliente $idClientes $DatosClientes[RazonSocial]<br>", 16);
+            
+            $VectorCuaBus["F"]=0;
+            $obTabla->CrearCuadroBusqueda($myPage,"TxtIdCliente",$idClientes,"TxtPageReturn",$myPage,$VectorCuaBus);
+            
 	}
         $css->CrearDiv("Productos Agregados", "container", "center", 1, 1);
 	
@@ -251,12 +225,16 @@ $css->CerrarTabla();
 $css->CerrarDiv();//Cerramos contenedor Secundario
 $css->CerrarDiv();//Cerramos contenedor Principal
 $css->AgregaJS();
+
 $css->AgregaSubir();
 $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
 $css->AnchoElemento("CmbDepartamento_chosen", 200);
 $css->AnchoElemento("CmbIVA_chosen", 200);
 $css->AnchoElemento("TxtCuentaPUC_chosen", 200);
 $css->Footer();
+if(isset($_REQUEST["TxtBusqueda"])){
+    print("<script>MostrarDialogo();</script>");
+}
 print("</body></html>");
 
 ob_end_flush();

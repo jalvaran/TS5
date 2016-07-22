@@ -1,3 +1,4 @@
+
 var idComprobanteC=0;
 
 function EnviaFormSC() {
@@ -246,6 +247,20 @@ function MuestraOculta(id){
     
 }
 
+// esta funcion permite mostrar u ocultar un elemento
+function Muestra(id){
+        
+    document.getElementById(id).style.display="block";
+       
+}
+
+// esta funcion permite mostrar u ocultar un elemento
+function Oculta(id){
+        
+    document.getElementById(id).style.display="none";
+       
+}
+
 
 // esta funcion permite deshabilitar o habilitar un elemento
 function Habilita(id,estado){
@@ -410,4 +425,10 @@ function Servitorno_CalculePrecioVenta(Costos){
     document.getElementById("TxtPrecioVenta").value = ValorTotal;
     document.getElementById("TxtCostoUnitario").value = CostoTotal;
     
+}
+
+function MostrarDialogo() {
+
+    document.getElementById('ShowItemsBusqueda').click();
+		
 }
