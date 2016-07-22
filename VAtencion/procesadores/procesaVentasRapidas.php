@@ -75,20 +75,19 @@
 		header("location:$myPage?CmbPreVentaAct=$IdPre");
 	}
 		
-	if(!empty($_REQUEST['CmbIDProducto'])){
+	if(!empty($_REQUEST['TxtAgregarItemPreventa'])){
 		
-		$DatosBuscar=  explode(";", $_REQUEST['CmbIDProducto']);
-		$idItem=$DatosBuscar[0];
-                if(isset($DatosBuscar[1])){
-                    $TablaItem=$DatosBuscar[1];
-                    $fecha=date("Y-m-d");
-                    $Cantidad=1;
+		$idItem=$_REQUEST['TxtAgregarItemPreventa'];
+		$TablaItem=$_REQUEST['TxtTablaItem'];
+                
+                $fecha=date("Y-m-d");
+                
 
-                    $obVenta=new ProcesoVenta($idUser);
+                $obVenta=new ProcesoVenta($idUser);
 
-                    $Cantidad=1;
-                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
-                }
+                $Cantidad=1;
+                $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
+                
 		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa");
 			
 	}

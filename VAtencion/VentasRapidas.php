@@ -162,7 +162,15 @@ if(!empty($_REQUEST["TxtBuscarSeparado"])){
     }
 }
 
+if(isset($_REQUEST["TxtBusqueda"]) and !empty($_REQUEST["TxtBusqueda"])){
+    $key=$_REQUEST["TxtBusqueda"];
+    
+    $PageReturn=$myPage."?CmbPreVentaAct=$idPreventa&TxtAgregarItemPreventa=";
 
+    $obTabla->DibujeItemsBuscadosVentas($key,$PageReturn,"");
+
+}
+            
 $css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
 $css->CrearTabla();
 $css->FilaTabla(16);
@@ -173,28 +181,9 @@ $css->CrearInputText("TxtCodigoBarras","text","Buscar por codigo de Barras:<br>"
 
 print("</td>");
 print("<td style='text-align:center'>");
-$VarSelect["Ancho"]="200";
-$VarSelect["PlaceHolder"]="Busque un Producto";
-$VarSelect["Title"]="Buscar por palabra clave";
-$css->CrearSelectChosen("CmbIDProducto", $VarSelect);
-    
-        $sql="SELECT * FROM productosventa";
-        $Consulta=$obVenta->Query($sql);
-         $css->CrearOptionSelect("", "Seleccione un producto", 1);
-           while($DatosProducto=$obVenta->FetchArray($Consulta)){
-               
-               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];productosventa", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] / $DatosProducto[Existencias]" , 0);
-           }
-     
-        $sql="SELECT * FROM servicios";
-        $Consulta=$obVenta->Query($sql);
-         
-           while($DatosProducto=$obVenta->FetchArray($Consulta)){
-               
-               $css->CrearOptionSelect("$DatosProducto[idProductosVenta];servicios", "$DatosProducto[idProductosVenta] / $DatosProducto[Referencia] / $DatosProducto[Nombre] " , 0);
-           }   
-        $css->CerrarSelect();
-$css->CrearBoton("BtnAgregarItem", "Agregar");
+$VectorCuaBus["F"]=0;
+$obTabla->CrearCuadroBusqueda($myPage,"CmbPreVentaAct",$idPreventa,"","",$VectorCuaBus);
+$css->CrearBoton("BtnAgregarItem", "Buscar");
 print("</td>");
 print("<td>");
 
@@ -223,6 +212,8 @@ $css->AnchoElemento("CmbProveedores_chosen", 300);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 $css->Footer();
-
+if(isset($_REQUEST["TxtBusqueda"])){
+    print("<script>MostrarDialogo();</script>");
+}
 ob_end_flush();
 ?>
