@@ -1007,6 +1007,124 @@ public function DibujaCuentasXPagar($VarCuentas)  {
     
     $this->css->CerrarTabla();
 }
+
+///Esta funcion permite dibujar un cuadro de dialogo para crear un cliente
+
+public function CrearCuadroClientes ($id,$titulo,$myPage,$VectorCDC){
+        $this->css=new CssIni("");
+    /////////////////Cuadro de dialogo de Clientes create
+	$this->css->CrearCuadroDeDialogo($id,$titulo); 
+	 
+        $this->css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
+        $this->css->CrearSelect("CmbTipoDocumento","Oculta()");
+        $this->css->CrearOptionSelect('13','Cedula',1);
+        $this->css->CrearOptionSelect('31','NIT',0);
+        $this->css->CerrarSelect();
+        //$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+        $this->css->CrearInputText("TxtNIT","number","","","Identificacion","black","","",200,30,0,1);
+        $this->css->CrearInputText("TxtPA","text","","","Primer Apellido","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+        $this->css->CrearInputText("TxtSA","text","","","Segundo Apellido","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+        $this->css->CrearInputText("TxtPN","text","","","Primer Nombre","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+        $this->css->CrearInputText("TxtON","text","","","Otros Nombres","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+        $this->css->CrearInputText("TxtRazonSocial","text","","","Razon Social","black","","",200,30,0,1);
+        $this->css->CrearInputText("TxtDireccion","text","","","Direccion","black","","",200,30,0,1);
+        $this->css->CrearInputText("TxtTelefono","text","","","Telefono","black","","",200,30,0,1);
+
+        $this->css->CrearInputText("TxtEmail","text","","","Email","black","","",200,30,0,1);
+
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione el municipio";
+        $this->css->CrearSelectChosen("CmbCodMunicipio", $VarSelect);
+
+        $sql="SELECT * FROM cod_municipios_dptos";
+        $Consulta=$this->obCon->Query($sql);
+           while($DatosMunicipios=$this->obCon->FetchArray($Consulta)){
+               $Sel=0;
+               if($DatosMunicipios["ID"]==1011){
+                   $Sel=1;
+               }
+               $this->css->CrearOptionSelect($DatosMunicipios["ID"], $DatosMunicipios["Ciudad"], $Sel);
+           }
+        $this->css->CerrarSelect();
+        echo '<br><br>';
+        $this->css->CrearBoton("BtnCrearCliente", "Crear Cliente");
+        $this->css->CerrarForm();
+
+	$this->css->CerrarCuadroDeDialogo(); 
+}
+
+//Funcion para Crear un Cuadro de dialogo que permita crear un servicio nuevo
+
+public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$VectorCDSer){
+        $this->css=new CssIni("");
+        $DatosTabla=$this->obCon->DevuelveValores("tablas_ventas", "NombreTabla", "servicios");
+    /////////////////Cuadro de dialogo de Clientes create
+	$this->css->CrearCuadroDeDialogo($id,$titulo); 
+	 
+        $this->css->CrearForm2("FrmCrearItemServicio",$myPage,"post","_self");
+        $this->css->CrearInputText("TxtIdCliente","hidden","",$idClientes,"Precio Venta","black","","",200,30,0,1);
+        
+        $this->css->CrearTextArea("TxtNombre", "", "", "Descripcion", "", "", "", 200, 100, 0, 1);
+        print("</br>");
+        $this->css->CrearInputText("TxtPrecioVenta","number","","","Precio Venta","black","","",200,30,0,1);
+        print("</br>");
+        $this->css->CrearInputText("TxtCostoUnitario","number","","","Costo Unitario","black","","",200,30,0,1);
+        print("</br>");
+        //$this->css->CrearInputText("TxtCuentaPUC","number","","","Cuenta Contable","black","","",200,30,0,1);
+        
+        
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione la cuenta contable";
+        $VarSelect["Required"]=1;
+        $this->css->CrearSelectChosen("TxtCuentaPUC", $VarSelect);
+
+        $sql="SELECT * FROM subcuentas WHERE PUC LIKE '41%'";
+        $Consulta=$this->obCon->Query($sql);
+        $this->css->CrearOptionSelect("", "Seleccione una cuenta contable", 0);
+           while($DatosCuenta=$this->obCon->FetchArray($Consulta)){
+               $sel=0;
+               if($DatosTabla["CuentaPUCDefecto"]==$DatosCuenta["PUC"]){
+                   $sel=1;
+               }               
+               $this->css->CrearOptionSelect($DatosCuenta["PUC"],"$DatosCuenta[PUC] $DatosCuenta[Nombre]", $sel);
+           }
+        $this->css->CerrarSelect();
+        echo '<br>';
+        print("</br>");
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione el IVA";
+        $VarSelect["Required"]=1;
+        $this->css->CrearSelectChosen("CmbIVA", $VarSelect);
+
+        $sql="SELECT * FROM porcentajes_iva";
+        $Consulta=$this->obCon->Query($sql);
+        $this->css->CrearOptionSelect("", "Seleccione el IVA", 0);
+           while($DatosIVA=$this->obCon->FetchArray($Consulta)){
+                              
+               $this->css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], 0);
+           }
+        $this->css->CerrarSelect();
+        print("</br></br>");
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione el Departamento";
+        $VarSelect["Required"]=1;
+        $this->css->CrearSelectChosen("CmbDepartamento", $VarSelect);
+
+        $sql="SELECT * FROM prod_departamentos";
+        $Consulta=$this->obCon->Query($sql);
+        $this->css->CrearOptionSelect("", "Seleccione un Departamento", 0);
+           while($DatosDepartamentos=$this->obCon->FetchArray($Consulta)){
+                              
+               $this->css->CrearOptionSelect($DatosDepartamentos["idDepartamentos"], $DatosDepartamentos["Nombre"], 0);
+           }
+        $this->css->CerrarSelect();
+        echo '<br><br>';
+        $this->css->CrearBoton("BtnCrearServicios", "Crear Servicio");
+        $this->css->CerrarForm();
+
+	$this->css->CerrarCuadroDeDialogo(); 
+}
+
 // FIN Clases	
 }
 

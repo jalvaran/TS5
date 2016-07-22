@@ -426,4 +426,26 @@
 			
 	}
         
+        
+        //si se recibe la solicitud de crear un servicio
+        
+        if(!empty($_REQUEST['BtnCrearServicios'])){
+            
+            $idClientes=$_REQUEST['TxtIdCliente'];
+            $Nombre=$_REQUEST['TxtNombre'];
+            $PrecioVenta=$_REQUEST['TxtPrecioVenta'];
+            $CostoUnitario=$_REQUEST['TxtCostoUnitario'];
+            $CuentaPUC=$_REQUEST['TxtCuentaPUC'];
+            $IVA=$_REQUEST['CmbIVA'];
+            $Departamento=$_REQUEST['CmbDepartamento'];
+            $Tabla="servicios";            
+            $obVenta=new ProcesoVenta($idUser);
+            $VectorItem["Servitorno"]=0;
+            $idItem=$obVenta->CrearItemServicio($Tabla,$Nombre,$PrecioVenta,$CostoUnitario,$CostoUnitario,$CuentaPUC,$IVA,$Departamento,$VectorItem);
+            $VectorPrecoti["F"]=0;
+            $obVenta->AgregaPrecotizacion(1,$idItem,$Tabla,$VectorPrecoti);
+            header("location:Cotizaciones.php?TxtAsociarCliente=$idClientes");
+			
+	}
+        
 	?>

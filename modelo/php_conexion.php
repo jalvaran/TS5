@@ -4203,6 +4203,38 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
 	
         }
 		
+        
+        //funcion para crear un servicio
+    
+    public function CrearItemServicio($Tabla,$Nombre,$PrecioVenta,$CostoUnitario,$CostoUnitario,$CuentaPUC,$IVA,$Departamento,$VectorItem) {
+        
+        
+        $id = $this->ObtenerMAX($Tabla, "idProductosVenta", 1, "");
+        $id++;
+        $tab=$Tabla;
+		
+        $NumRegistros=15;
+        
+        $Columnas[0]="idProductosVenta";$Valores[0]=$id;
+        $Columnas[1]="Referencia";	$Valores[1]="REFSER".$id;
+        $Columnas[2]="Nombre";          $Valores[2]=$Nombre;
+        $Columnas[3]="PrecioVenta";     $Valores[3]=$PrecioVenta;
+        $Columnas[4]="PrecioEspecial";	$Valores[4]=$PrecioVenta;
+        $Columnas[5]="CostoUnitario";	$Valores[5]=$CostoUnitario;
+        $Columnas[6]="IVA";             $Valores[6]=$IVA;
+        $Columnas[7]="Departamento";    $Valores[7]=$Departamento;
+        $Columnas[8]="ImagenRuta";	$Valores[8]="";
+        $Columnas[9]="CuentaPUC";       $Valores[9]=$CuentaPUC;
+        $Columnas[10]="Sub1";           $Valores[10]="";
+        $Columnas[11]="Sub2";           $Valores[11]="";
+        $Columnas[12]="Sub3";           $Valores[12]="";
+        $Columnas[13]="Sub4";           $Valores[13]="";
+        $Columnas[14]="Sub5";           $Valores[14]="";
+        
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        return $id;
+    }
 //////////////////////////////Fin	
 }
 	
