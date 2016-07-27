@@ -66,7 +66,7 @@ session_start();
                     $css->SubTabs("../VAtencion/cotizacionesv5.php","_blank","../images/historial.png","Historial Cotizaciones");
                     $css->SubTabs("../VAtencion/Cotizaciones.php","_blank","../images/cotizacion.png","Cotizar");
                     $css->SubTabs("../VAtencion/VentasRapidas.php","_blank","../images/vender.png","Ventas Rapidas");
-                    //$css->SubTabs("../VAtencion/subcuentas.php","_blank","../images/factura.png","Imprimir una Factura");
+                    $css->SubTabs("../VAtencion/cajas_aperturas_cierres.php","_blank","../images/cierres_caja.jpg","Historial de Cierres");
                     $css->SubTabs("../VAtencion/Remisiones.php","_blank","../images/remision.png","Remisiones");
                     $css->SubTabs("../VAtencion/Devoluciones.php","_blank","../images/devolucion2.png","Ajuste Remision");
                     //$css->SubTabs("../VAtencion/facturas_items.php","_blank","../images/buscar.png","Buscar Item");

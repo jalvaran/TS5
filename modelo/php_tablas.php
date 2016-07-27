@@ -1184,12 +1184,18 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
     $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
     if($this->obCon->NumRows($consulta)){
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>Agregar</strong>", 1);
+        $this->css->ColTabla("<strong>ID</strong>", 1);
+            $this->css->ColTabla("<strong>Referencia</strong>", 1);
+            $this->css->ColTabla("<strong>Nombre</strong>", 1);
+            $this->css->ColTabla("<strong>PrecioVenta</strong>", 1);
+            $this->css->ColTabla("<strong>Mayorista</strong>", 1);
+            $this->css->ColTabla("<strong>Existencias</strong>", 1);
+            $this->css->CierraFilaTabla();
         while($DatosProducto=$this->obCon->FetchArray($consulta)){
             $this->css->FilaTabla(16);
-            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
-            $this->css->ColTabla($DatosProducto["Referencia"], 1);
-            $this->css->ColTabla($DatosProducto["Nombre"], 1);
-            print("<td>Agregar");
+             print("<td>");
             $Titulo="";
             $Nombre="Agregar";
             $RutaImage="../images/add.png";
@@ -1198,6 +1204,13 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
             $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
             $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
             print("</td>");
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioMayorista"], 1);
+            $this->css->ColTabla($DatosProducto["Existencias"], 1);
+           
             $this->css->CierraFilaTabla();
         }
     }
@@ -1233,6 +1246,7 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
             $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
             $this->css->ColTabla($DatosProducto["Referencia"], 1);
             $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
             print("<td>Agregar");
             $Titulo="";
             $Nombre="Agregar";

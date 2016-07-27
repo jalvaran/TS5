@@ -583,8 +583,9 @@ $Datos=$obVenta->Query($sql);
 		//////////////////////Consulto egresos del usuario
 		
 		$sql="SELECT SUM(Valor) as TotalEgresos FROM egresos
-		WHERE $CondicionFecha2 AND Cuenta='110510' AND Usuario_idUsuario = '$idUser' ";
-		$DatosEgresos=$obVenta->Query($sql);
+		WHERE $CondicionFecha2 AND Cuenta LIKE '1105%' AND Usuario_idUsuario = '$idUser' ";
+		$Datos=$obVenta->Query($sql);
+                $DatosEgresos=$obVenta->FetchArray($Datos);
 		$TotalEgresosUser=number_format($DatosEgresos['TotalEgresos']);
 		$TotalEgresos=$TotalEgresos+$DatosEgresos['TotalEgresos'];
 		

@@ -4177,7 +4177,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
 
         $Subtotal=$ValorUnitario*$Cantidad;
         $IVA=($impuesto-1)*$Subtotal;
-        $Total=$Subtotal+$impuesto;
+        $Total=$Subtotal+$IVA;
 
         
         $tab="precotizacion";
@@ -4191,7 +4191,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         $Columnas[4]="Descripcion";						$Valores[4]=$DatosProductoGeneral["Nombre"];
         $Columnas[5]="IVA";								$Valores[5]=$IVA;
         $Columnas[6]="PrecioCosto";						$Valores[6]=$DatosProductoGeneral["CostoUnitario"];
-        $Columnas[7]="SubtotalCosto";					$Valores[7]=$DatosProductoGeneral["CostoUnitario"];
+        $Columnas[7]="SubtotalCosto";					$Valores[7]=$DatosProductoGeneral["CostoUnitario"]*$Cantidad;
         $Columnas[8]="Total";							$Valores[8]=$Total;
         $Columnas[9]="TipoItem";						$Valores[9]=$DatosDepartamento["TipoItem"];
         $Columnas[10]="idUsuario";						$Valores[10]=$this->idUser;
