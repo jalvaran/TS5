@@ -7,6 +7,10 @@ include("../../modelo/php_conexion.php");
 /////////////Obtengo el ID de la cotizacion a que se imprimirá 
 ////////////////////////////////////////////
 $idFactura = $_REQUEST["ImgPrintFactura"];
+$TipoFactura="ORIGINAL";
+if(isset($_REQUEST["TipoFactura"])){
+    $TipoFactura=$_REQUEST["TipoFactura"];
+}
 ////////////////////////////////////////////
 /////////////Obtengo valores de la Remision
 ////////////////////////////////////////////
@@ -45,7 +49,7 @@ $nombre_file="Factura_".$DatosFactura["Fecha"]."_".$DatosCliente["RazonSocial"];
 		   
 $idFormatoCalidad=2;
 
-$Documento="<strong>FACTURA DE VENTA No. $CodigoFactura</strong>";
+$Documento="<strong>FACTURA DE VENTA No. $CodigoFactura<BR>$TipoFactura</strong>";
 require_once('Encabezado.php');
 
 ////Datos del Cliente

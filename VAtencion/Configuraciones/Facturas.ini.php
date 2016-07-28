@@ -34,13 +34,31 @@ $Vector["VerRegistro"]["ColumnaLink"]="idFacturas";
  * Selecciono las Columnas que tendran valores de otras tablas
  */
 
+
+
+// Nueva Accion
+$Ruta="../tcpdf/examples/imprimirFactura.php?TipoFactura=COPIA&ImgPrintFactura=";
+$Vector["NuevaAccionLink"][2]="Copia";
+$Vector["NuevaAccion"]["Copia"]["Titulo"]=" Copia ";
+$Vector["NuevaAccion"]["Copia"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Copia"]["ColumnaLink"]="idFacturas";
+$Vector["NuevaAccion"]["Copia"]["Target"]="_blank";
+
+// Nueva Accion
+$Ruta="../tcpdf/examples/imprimirFactura.php?TipoFactura=CONTABILIDAD&ImgPrintFactura=";
+$Vector["NuevaAccionLink"][1]="Contabilidad";
+$Vector["NuevaAccion"]["Contabilidad"]["Titulo"]=" Contabilidad ";
+$Vector["NuevaAccion"]["Contabilidad"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Contabilidad"]["ColumnaLink"]="idFacturas";
+$Vector["NuevaAccion"]["Contabilidad"]["Target"]="_blank";
+
 // Nueva Accion
 $Ruta="AnularFactura.php?idFactura=";
-$Vector["NuevaAccionLink"][0]="AsociarCoti";
-$Vector["NuevaAccion"]["AsociarCoti"]["Titulo"]="Anular Factura";
-$Vector["NuevaAccion"]["AsociarCoti"]["Link"]=$Ruta;
-$Vector["NuevaAccion"]["AsociarCoti"]["ColumnaLink"]="idFacturas";
-$Vector["NuevaAccion"]["AsociarCoti"]["Target"]="_self";
+$Vector["NuevaAccionLink"][0]="Asociar";
+$Vector["NuevaAccion"]["Asociar"]["Titulo"]=" Anular Factura ";
+$Vector["NuevaAccion"]["Asociar"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Asociar"]["ColumnaLink"]="idFacturas";
+$Vector["NuevaAccion"]["Asociar"]["Target"]="_self";
 
 $Vector["CentroCosto"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["CentroCosto"]["TablaVinculo"]="centrocosto";  //tabla de donde se vincula
