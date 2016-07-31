@@ -42,7 +42,12 @@ print("<body>");
     print("<br>");
     ///////////////Creamos la imagen representativa de la pagina
     /////
-    /////	
+    /////
+    $css->CrearTabla();
+    $css->CrearForm2("FrmAgregaCotizacion", $myPage, "post", "_self");
+    $css->CrearInputNumber("TxtAsociarCotizacion", "number", "Agregue una cotizacion:<br>", "", "Cotizacion a Asociar", "black", "", "", 300, 30, 0, 1, 1, "", 1);
+    $css->CerrarForm();
+    $css->CerrarTabla();
     $css->CrearImageLink("FactCoti.php", "../images/cotizacion.png", "_self",200,200);
     
     ///////////////Si se crea una devolucion o una factura
@@ -69,37 +74,9 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("Secundario", "container", "center",1,1);
-   										
-   	
-    //////////////////////////Se dibujan los campos de la cotizacion
-    /////
-    /////
-    if(!empty($idCotizacion)){
-        //print("<script>alert('entra')</script>");
-        $DatosCotizacion=$obVenta->DevuelveValores("cotizacionesv5","ID",$idCotizacion);
-        $idCliente=$DatosCotizacion["Clientes_idClientes"];
-        $DatosCliente=$obVenta->DevuelveValores("clientes","idClientes",$idCliente);
-
-            $css->CrearTabla();
-           
-            $css->FilaTabla(16);
-            $css->ColTabla('COTIZACION:',1);
-            $css->ColTabla($idCotizacion,1);
-            $css->ColTabla('CLIENTE:',1);
-            $css->ColTabla($DatosCliente["RazonSocial"],1);
-            
-            $css->CierraFilaTabla();
-            $css->CerrarTabla();
-            
-            
-			
-    ///////////////////////////////////////////
-    /////////////Visualizamos la COTIZACION
-    ///
-    ///
-    ///
-    $sql="SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
-    $consulta=$obVenta->Query($sql);              
+   
+    $consulta=$obVenta->ConsultarTabla("facturas_pre"," WHERE idUsuarios='$idUser' ORDER BY ID desc");
+          
 
     if(mysql_affected_rows()){
 
@@ -118,22 +95,22 @@ print("<body>");
             $idItem=$DatosItemsCotizacion["ID"];
             $css->FilaTabla(16);
             $css->ColTabla($DatosItemsCotizacion["Referencia"], 1);
-            $css->ColTabla($DatosItemsCotizacion["Descripcion"], 1);
-            $DatosProducto=$obVenta->DevuelveValores($DatosItemsCotizacion["TablaOrigen"], "Referencia", $DatosItemsCotizacion["Referencia"]);
+            $css->ColTabla($DatosItemsCotizacion["Nombre"], 1);
+            
             print("<td>");
-                $css->CrearForm("FormEditarCotizacion$idItem", $myPage, "post", "_self");
-                $css->CrearInputText("TxtIdCotizacion", "hidden", "", $idCotizacion, "", "", "", "", "", "", 0, 0);
+                $css->CrearForm2("FormEditarCotizacion$idItem", $myPage, "post", "_self");
+                //$css->CrearInputText("TxtIdCotizacion", "hidden", "", $idCotizacion, "", "", "", "", "", "", 0, 0);
                 $css->CrearInputText("TxtIdItemCotizacion", "hidden", "", $idItem, "", "", "", "", "", "", 0, 0);
-                $css->CrearInputNumber("TxtValorUnitario", "number", "", $DatosItemsCotizacion["ValorUnitario"], "ValorUnitario", "black", "", "", 120, 30, 0, 1, $DatosProducto["CostoUnitario"], $DatosItemsCotizacion["ValorUnitario"]."0", "any");
+                $css->CrearInputNumber("TxtValorUnitario", "number", "", $DatosItemsCotizacion["ValorUnitarioItem"], "ValorUnitario", "black", "", "", 120, 30, 0, 1, $DatosItemsCotizacion["PrecioCostoUnitario"], $DatosItemsCotizacion["ValorUnitarioItem"]."0", "any");
                 $css->CrearInputNumber("TxtCantidad", "number", "", $DatosItemsCotizacion["Cantidad"], "ValorUnitario", "black", "", "", 80, 30, 0, 1, 0.00001, "", "any");
                 $css->CrearBotonVerde("BtnEditar", "E");
                 $css->CerrarForm();
             print("</td>");
             
             
-            $css->ColTabla($DatosItemsCotizacion["Subtotal"], 1);
+            $css->ColTabla($DatosItemsCotizacion["SubtotalItem"], 1);
             
-            $css->ColTablaDel($myPage,"cot_itemscotizaciones","ID",$DatosItemsCotizacion['ID'],$idCotizacion);
+            $css->ColTablaDel($myPage,"facturas_pre","ID",$DatosItemsCotizacion['ID'],"");
             $css->CierraFilaTabla();
         }
 
@@ -142,12 +119,12 @@ print("<body>");
         ////
         ////
         
-        $Subtotal=$obVenta->Sume("cot_itemscotizaciones", "Subtotal", "WHERE NumCotizacion='$idCotizacion'");
-        $IVA=$obVenta->Sume("cot_itemscotizaciones", "IVA", "WHERE NumCotizacion='$idCotizacion'");
-        $Total=$obVenta->Sume("cot_itemscotizaciones", "Total", "WHERE NumCotizacion='$idCotizacion'");
+        $Subtotal=$obVenta->Sume("facturas_pre", "SubtotalItem", "WHERE idUsuarios='$idUser'");
+        $IVA=$obVenta->Sume("facturas_pre", "IVAItem", "WHERE idUsuarios='$idUser'");
+        $Total=$obVenta->Sume("facturas_pre", "TotalItem", "WHERE idUsuarios='$idUser'");
         $css->CrearFormularioEvento("FormGeneraFactura", $myPage, "post", "_self","");
-        $css->CrearInputText("TxtIdCotizacion","hidden","",$idCotizacion,"","black","","",150,30,0,0);
-        $css->CrearInputText("TxtIdCliente","hidden","",$idCliente,"","black","","",150,30,0,0);      
+        
+             
         $css->CrearTabla();
         $css->FilaTabla(12);
         $css->ColTabla("<h4 align='right'>Subtotal</h4>", 1);
@@ -166,7 +143,23 @@ print("<body>");
         $css->CrearTabla();
         
         $css->FilaTabla(14);
-        
+       print("<strong>Seleccione un Cliente para esta Factura:<br>");
+        $VarSelect["Ancho"]="200";
+            $VarSelect["PlaceHolder"]="Seleccione un Cliente";
+            $VarSelect["Required"]=1;
+            $css->CrearSelectChosen("CmbCliente", $VarSelect);
+            $css->CrearOptionSelect("", "Seleccione un Cliente" , 0);
+            $sql="SELECT * FROM clientes";
+            $Consulta=$obVenta->Query($sql);
+            
+               while($DatosClientes=$obVenta->FetchArray($Consulta)){
+                   $Sel=0;
+                   
+                   $css->CrearOptionSelect($DatosClientes["idClientes"], "$DatosClientes[Num_Identificacion] $DatosClientes[RazonSocial] $DatosClientes[Ciudad]" , $Sel);
+               }
+            $css->CerrarSelect();
+           print("<br><br>");
+            //print("<td>");
         print("Centro de costos: <br>");
         $css->CrearSelect("CmbCentroCostos", "");
             $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
@@ -178,13 +171,14 @@ print("<body>");
                 $css->AlertaJS("No hay centros de costo creados por favor cree uno", 1, "", "");
             }
         $css->CerrarSelect();
+        //print("</td>");
         print("<br>");
         print("Resolucion:<br> ");
         $css->CrearSelect("CmbResolucion", "");
             $Consulta=$obVenta->ConsultarTabla("empresapro_resoluciones_facturacion", "WHERE Completada<>'SI'");
             if(mysql_num_rows($Consulta)){
             while($DatosResolucion=  mysql_fetch_array($Consulta)){
-                $css->CrearOptionSelect($DatosResolucion["ID"], $DatosResolucion["NumResolucion"], 0);
+                $css->CrearOptionSelect($DatosResolucion["ID"], "$DatosResolucion[NombreInterno] $DatosResolucion[NumResolucion]", 0);
             }
             }else{
                 
@@ -234,11 +228,7 @@ print("<body>");
     }
 
 
-    }else{
-            $css->CrearTabla();
-            $css->CrearFilaNotificacion("Por favor busque y asocie una cotizacion",16);
-            $css->CerrarTabla();
-    }
+    
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->Footer();

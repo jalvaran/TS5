@@ -1604,29 +1604,27 @@ public function CalculePesoRemision($idCotizacion)
     
     public function InsertarItemsCotizacionAItemsFactura($Datos){
         
-        $idCotizacion=$Datos["NumCotizacion"];
+        
         $NumFactura=$Datos["ID"];
         $FechaFactura=$Datos["FechaFactura"];
         
-        $sql="SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
+        $sql="SELECT * FROM facturas_pre WHERE idUsuarios='$this->idUser'";
         $Consulta=$this->Query($sql);
         $TotalSubtotal=0;
         $TotalIVA=0;
         $GranTotal=0;
         $TotalCostos=0;
-        while($DatosCotizacion=  mysql_fetch_array($Consulta)){
-
-            $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
+        while($DatosCotizacion =  mysql_fetch_array($Consulta)){
             ////Empiezo a insertar en la tabla items facturas
             ///
             ///
-            $SubtotalItem=$DatosCotizacion["Subtotal"];
+            $SubtotalItem=$DatosCotizacion["SubtotalItem"];
             $TotalSubtotal=$TotalSubtotal+$SubtotalItem; //se realiza la sumatoria del subtotal
             
-            $IVAItem=$DatosCotizacion["IVA"];
+            $IVAItem=$DatosCotizacion["IVAItem"];
             $TotalIVA=$TotalIVA+$IVAItem; //se realiza la sumatoria del iva
             
-            $TotalItem=$DatosCotizacion['Total'];
+            $TotalItem=$DatosCotizacion['TotalItem'];
             $GranTotal=$GranTotal+$TotalItem;//se realiza la sumatoria del total
             
             $SubtotalCosto=$DatosCotizacion['SubtotalCosto'];
@@ -1637,34 +1635,34 @@ public function CalculePesoRemision($idCotizacion)
             $NumRegistros=26;
             $Columnas[0]="ID";			$Valores[0]="";
             $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
-            $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaOrigen"];
+            $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaItems"];
             $Columnas[3]="Referencia";          $Valores[3]=$DatosCotizacion["Referencia"];
-            $Columnas[4]="Nombre";              $Valores[4]=$DatosProducto["Nombre"];
-            $Columnas[5]="Departamento";	$Valores[5]=$DatosProducto["Departamento"];
-            $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosProducto['Sub1'];
-            $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosProducto['Sub2'];
-            $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProducto['Sub3'];
-            $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProducto['Sub4'];
-            $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProducto['Sub5'];
-            $Columnas[11]="ValorUnitarioItem";	$Valores[11]=$DatosCotizacion['ValorUnitario'];
+            $Columnas[4]="Nombre";              $Valores[4]=$DatosCotizacion["Nombre"];
+            $Columnas[5]="Departamento";	$Valores[5]=$DatosCotizacion["Departamento"];
+            $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosCotizacion['SubGrupo1'];
+            $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosCotizacion['SubGrupo2'];
+            $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosCotizacion['SubGrupo3'];
+            $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosCotizacion['SubGrupo4'];
+            $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosCotizacion['SubGrupo5'];
+            $Columnas[11]="ValorUnitarioItem";	$Valores[11]=$DatosCotizacion['ValorUnitarioItem'];
             $Columnas[12]="Cantidad";		$Valores[12]=$DatosCotizacion['Cantidad'];
-            $Columnas[13]="Dias";		$Valores[13]=$DatosCotizacion['Multiplicador'];
-            $Columnas[14]="SubtotalItem";       $Valores[14]=$SubtotalItem;
-            $Columnas[15]="IVAItem";		$Valores[15]=$IVAItem;
-            $Columnas[16]="TotalItem";		$Valores[16]=$TotalItem;
-            $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
-            $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
+            $Columnas[13]="Dias";		$Valores[13]=$DatosCotizacion['Dias'];
+            $Columnas[14]="SubtotalItem";       $Valores[14]=$DatosCotizacion['SubtotalItem'];
+            $Columnas[15]="IVAItem";		$Valores[15]=$DatosCotizacion['IVAItem'];
+            $Columnas[16]="TotalItem";		$Valores[16]=$DatosCotizacion['TotalItem'];
+            $Columnas[17]="PorcentajeIVA";	$Valores[17]=$DatosCotizacion['PorcentajeIVA'];
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosCotizacion['PrecioCostoUnitario'];
+            $Columnas[19]="SubtotalCosto";	$Valores[19]=$DatosCotizacion['SubtotalCosto'];
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion["TipoItem"];
-            $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
+            $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosCotizacion['CuentaPUC'];
             $Columnas[22]="GeneradoDesde";	$Valores[22]="cotizacionesv5";
-            $Columnas[23]="NumeroIdentificador";$Valores[23]=$idCotizacion;
+            $Columnas[23]="NumeroIdentificador";$Valores[23]="";
             $Columnas[24]="FechaFactura";       $Valores[24]=$FechaFactura;
             $Columnas[25]="idUsuarios";         $Valores[25]=  $this->idUser;
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             if($DatosCotizacion["TipoItem"]=="PR"){
-                
+                $DatosProducto=  $this->DevuelveValores($DatosCotizacion["TablaItems"], "Referencia", $DatosCotizacion["Referencia"]);
                 $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
                 $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
                 $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
@@ -4240,6 +4238,199 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         return $id;
     }
+    /*
+     * Esta clase agrega items desde una cotizacion a una prefactura
+     */
+    public function AgregarCotizacionPrefactura($idCotizacion) {
+        $Datos=  $this->ConsultarTabla("cot_itemscotizaciones", " WHERE NumCotizacion='$idCotizacion'");
+        while($DatosCotizacion=  $this->FetchArray($Datos)){
+            $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
+            
+            $tab="facturas_pre";
+            $NumRegistros=26;
+            $Columnas[0]="ID";			$Valores[0]="";
+            $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
+            $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaOrigen"];
+            $Columnas[3]="Referencia";          $Valores[3]=$DatosCotizacion["Referencia"];
+            $Columnas[4]="Nombre";              $Valores[4]=$DatosCotizacion["Descripcion"];
+            $Columnas[5]="Departamento";	$Valores[5]=$DatosProducto["Departamento"];
+            $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosProducto['Sub1'];
+            $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosProducto['Sub2'];
+            $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProducto['Sub3'];
+            $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProducto['Sub4'];
+            $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProducto['Sub5'];
+            $Columnas[11]="ValorUnitarioItem";	$Valores[11]=$DatosCotizacion['ValorUnitario'];
+            $Columnas[12]="Cantidad";		$Valores[12]=$DatosCotizacion['Cantidad'];
+            $Columnas[13]="Dias";		$Valores[13]=1;
+            $Columnas[14]="SubtotalItem";       $Valores[14]=$DatosCotizacion['Subtotal'];
+            $Columnas[15]="IVAItem";		$Valores[15]=$DatosCotizacion['IVA'];
+            $Columnas[16]="TotalItem";		$Valores[16]=$DatosCotizacion['Total'];
+            $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
+            $Columnas[19]="SubtotalCosto";	$Valores[19]=$DatosProducto['CostoUnitario']*$DatosCotizacion['Cantidad'];
+            $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion['TipoItem'];
+            $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
+            $Columnas[22]="GeneradoDesde";	$Valores[22]="cotizacionesv5";
+            $Columnas[23]="NumeroIdentificador";$Valores[23]=$idCotizacion;
+            $Columnas[24]="FechaFactura";       $Valores[24]="";
+            $Columnas[25]="idUsuarios";         $Valores[25]= $this->idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+    }
+    
+    
+    /*
+     * Esta clase agrega items desde una cotizacion a una prefactura
+     */
+    
+    public function CrearFacturaDesdePrefactura($DatosFactura) {
+        
+        $idCliente=$DatosFactura['CmbCliente'];
+        
+        $CentroCostos=$DatosFactura["CmbCentroCostos"];
+        $ResolucionDian=$DatosFactura["CmbResolucion"];
+        $TipoPago=$DatosFactura["CmbFormaPago"];
+        $CuentaDestino=$DatosFactura["CmbCuentaDestino"];
+        $OrdenCompra=$DatosFactura["TxtOrdenCompra"];
+        $OrdenSalida=$DatosFactura["TxtOrdenSalida"];
+        $ObservacionesFactura=$DatosFactura["TxtObservacionesFactura"];
+        $FechaFactura=$DatosFactura["TxtFechaFactura"];
+        $NumeroForzado=$DatosFactura["TxtNumeroFactura"];
+        $Consulta=$this->DevuelveValores("centrocosto", "ID", $CentroCostos);
+        
+        $EmpresaPro=$Consulta["EmpresaPro"];
+        if($TipoPago=="Contado"){
+            $SumaDias=0;
+        }else{
+            $SumaDias=$TipoPago;
+        }
+        
+        ////////////////////////////////Preguntamos por disponibilidad
+        ///////////
+        ///////////
+        
+        $ID="";
+        $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+        if($DatosResolucion["Completada"]=="NO"){           ///Pregunto si la resolucion ya fue completada
+            $Disponibilidad=$DatosResolucion["Estado"];
+                                              //si entra a verificar es porque estaba ocupada y cambiará a 1
+            while($Disponibilidad=="OC"){                   //miro que esté disponible para facturar, esto para no crear facturas dobles
+                print("Esperando disponibilidad<br>");
+                usleep(300);
+                $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+                $Disponibilidad=$DatosResolucion["Estado"];
+                
+            }
+            
+            $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+            if($DatosResolucion["Completada"]<>"SI"){
+                $this->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "OC", "ID", $ResolucionDian); //Ocupo la resolucion
+                
+                $sql="SELECT MAX(NumeroFactura) as FacturaActual FROM facturas WHERE Prefijo='$DatosResolucion[Prefijo]' "
+                        . "AND TipoFactura='$DatosResolucion[Tipo]' AND idResolucion='$ResolucionDian'";
+                $Consulta=$this->Query($sql);
+                $Consulta=$this->FetchArray($Consulta);
+                $FacturaActual=$Consulta["FacturaActual"];
+                $idFactura=$FacturaActual+1;
+                if($NumeroForzado>0){
+                    $sql="SELECT NumeroFactura FROM facturas WHERE Prefijo='$DatosResolucion[Prefijo]' "
+                        . "AND TipoFactura='$DatosResolucion[Tipo]' AND idResolucion='$ResolucionDian'";
+                    $Consulta=$this->Query($sql);
+                    $Consulta=$this->FetchArray($Consulta);
+                    $Existe=$Consulta["NumeroFactura"];
+                    if($Existe==$NumeroForzado){
+                        //libero la resolucion
+                        $this->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "", "ID", $ResolucionDian);
+                        exit("<a href='FacturaCotizacion.php'>La factura $NumeroForzado ya existe, no se puede crear, Volver</a>");
+                    }else{
+                        $idFactura=$NumeroForzado;
+                    }
+                }
+                //Verificamos si ya se completó el numero de la resolucion y si es así se cambia su estado
+                if($DatosResolucion["Hasta"]==$idFactura){ 
+                    $this->ActualizaRegistro("empresapro_resoluciones_facturacion", "Completada", "SI", "ID", $ResolucionDian);
+                }
+                //Verificamos si es la primer factura que se creará con esta resolucion
+                //Si es así se inicia desde el numero autorizado
+                if($idFactura==1){
+                   $idFactura=$DatosResolucion["Desde"];
+                }
+                //Convertimos los dias en credito
+                $FormaPagoFactura=$TipoPago;
+                if($TipoPago<>"Contado"){
+                    $FormaPagoFactura="Credito a $TipoPago dias";
+                }
+                ////////////////Inserto datos de la factura
+                /////
+                ////
+                $ID=date("YmdHis").microtime(false);
+                $tab="facturas";
+                $NumRegistros=25; 
+                
+                $Columnas[0]="TipoFactura";		    $Valores[0]=$DatosResolucion["Tipo"];
+                $Columnas[1]="Prefijo";                     $Valores[1]=$DatosResolucion["Prefijo"];
+                $Columnas[2]="NumeroFactura";               $Valores[2]=$idFactura;
+                $Columnas[3]="Fecha";                       $Valores[3]=$FechaFactura;
+                $Columnas[4]="OCompra";                     $Valores[4]=$OrdenCompra;
+                $Columnas[5]="OSalida";                     $Valores[5]=$OrdenSalida;
+                $Columnas[6]="FormaPago";                   $Valores[6]=$FormaPagoFactura;
+                $Columnas[7]="Subtotal";                    $Valores[7]="";
+                $Columnas[8]="IVA";                         $Valores[8]="";
+                $Columnas[9]="Descuentos";                  $Valores[9]="";
+                $Columnas[10]="Total";                      $Valores[10]="";
+                $Columnas[11]="SaldoFact";                  $Valores[11]="";
+                $Columnas[12]="Cotizaciones_idCotizaciones";$Valores[12]="";
+                $Columnas[13]="EmpresaPro_idEmpresaPro";    $Valores[13]=$EmpresaPro;
+                $Columnas[14]="Usuarios_idUsuarios";        $Valores[14]=$this->idUser;
+                $Columnas[15]="Clientes_idClientes";        $Valores[15]=$idCliente;
+                $Columnas[16]="TotalCostos";                $Valores[16]="";
+                $Columnas[17]="CerradoDiario";              $Valores[17]="";
+                $Columnas[18]="FechaCierreDiario";          $Valores[18]="";
+                $Columnas[19]="HoraCierreDiario";           $Valores[19]="";
+                $Columnas[20]="ObservacionesFact";          $Valores[20]=$ObservacionesFactura;
+                $Columnas[21]="CentroCosto";                $Valores[21]=$CentroCostos;
+                $Columnas[22]="idResolucion";               $Valores[22]=$ResolucionDian;
+                $Columnas[23]="idFacturas";                 $Valores[23]=$ID;
+                $Columnas[24]="Hora";                       $Valores[24]=date("H:i:s");
+                
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                
+                //libero la resolucion
+                $this->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "", "ID", $ResolucionDian);
+                
+                //////////////////////Agrego Items a la Factura desde la devolucion
+                /////
+                /////
+                
+                $Datos["NumFactura"]=$idFactura;
+                $Datos["FechaFactura"]=$FechaFactura;
+                $Datos["ID"]=$ID;
+                $Datos["CuentaDestino"]=$CuentaDestino;
+                $Datos["EmpresaPro"]=$EmpresaPro;
+                $Datos["CentroCostos"]=$CentroCostos;
+                $this->InsertarItemsCotizacionAItemsFactura($Datos);///Relaciono los items de la factura
+                
+                $this->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
+               
+                if($TipoPago<>"Contado"){                   //Si es a Credito
+                    $Datos["Fecha"]=$FechaFactura; 
+                    $Datos["Dias"]=$SumaDias;
+                    $FechaVencimiento=$this->SumeDiasFecha($Datos);
+                    $Datos["idFactura"]=$Datos["ID"]; 
+                    $Datos["FechaFactura"]=$FechaFactura; 
+                    $Datos["FechaVencimiento"]=$FechaVencimiento;
+                    $Datos["idCliente"]=$idCliente;
+                    $this->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
+                }
+                 return ($ID);
+            }    
+           
+        }
+        
+       
+    }
+    
 //////////////////////////////Fin	
 }
 	
