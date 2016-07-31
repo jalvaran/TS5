@@ -3992,10 +3992,15 @@ public function CalculePesoRemision($idCotizacion)
     //funcion para crear un producto desde un item de un traslado
     
     public function CrearProductoFromItemTraslado($idTrasladoItem,$VectorPTI) {
-        
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", 1);
+        $Regimen=$DatosEmpresa["Regimen"];
         $DatosItem =  $this->DevuelveValores("traslados_items", "ID", $idTrasladoItem);
         $id = $this->ObtenerMAX("productosventa", "idProductosVenta", 1, "");
         $id++;
+        $IVA=$DatosItem["IVA"];
+        if($Regimen=="SIMPLIFICADO"){
+            $IVA=0;
+        }
         $tab="productosventa";
 		
         $NumRegistros=18;
@@ -4009,7 +4014,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[6]="PrecioMayorista";	$Valores[6]=$DatosItem["PrecioMayorista"];
         $Columnas[7]="CostoUnitario";   $Valores[7]=$DatosItem["CostoUnitario"];
         $Columnas[8]="CostoTotal";	$Valores[8]=$DatosItem["CostoUnitario"]*$DatosItem["Cantidad"];
-        $Columnas[9]="IVA";             $Valores[9]=$DatosItem["IVA"];
+        $Columnas[9]="IVA";             $Valores[9]=$IVA;
         $Columnas[10]="Bodega_idBodega";$Valores[10]=1;
         $Columnas[11]="Departamento";	$Valores[11]=$DatosItem["Departamento"];
         $Columnas[12]="Sub1";           $Valores[12]=$DatosItem["Sub1"];
