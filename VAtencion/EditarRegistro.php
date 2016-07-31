@@ -1,17 +1,18 @@
 <?php
 ob_start();
+session_start();
 /* Desarrollado por Julian Alvaran, Techno Soluciones SAS
  * Este archivo se encargará de insertar un registro nuevo a una tabla
  * 
  */
 $Parametros = json_decode(urldecode($_REQUEST['TxtParametros']));  //Decodifico el Vector y llega como un objeto
 $IDEdit=$_REQUEST['TxtIdEdit'];
-$VarEdit["ID"]=$IDEdit;
+$Vector["ID"]=$IDEdit;
 //print("Parametros: ");
 //print_r($Parametros);
-$TablaEdit=$Parametros->Tabla;
+$TablaEdit=$_REQUEST['TxtTabla'];
 $myPage="EditarRegistro.php";
-$myTitulo="Editar Registro En ".$Parametros->Titulo;
+$myTitulo="Editar Registro En ".$TablaEdit;
 
 //Con esto visualizo los parametros recibidos
 /*
@@ -22,7 +23,7 @@ echo ("</pre>");
 include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
 include_once("css_construct.php");
 $obTabla = new Tabla($db);
-$obVenta = new ProcesoVenta(1);
+$obVenta = new ProcesoVenta($_SESSION["idUser"]);
 include_once("procesadores/procesaEdicion.Conf.php"); //Procesa la insercion
 include_once("procesadores/procesaEdicion.php"); //Procesa la insercion
 print("<html>");
@@ -43,12 +44,12 @@ $css->CrearDiv("principal", "container", "center",1,1);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////
-$MyPage="$Parametros->Tabla.php";
-if(isset($VarEdit[$Parametros->Tabla]["MyPage"])){
-    $MyPage=$VarEdit[$Parametros->Tabla]["MyPage"];
+$MyPage="$TablaEdit.php";
+if(isset($Vector[$TablaEdit]["MyPage"])){
+    $MyPage=$Vector[$TablaEdit]["MyPage"];
 }
 $css->CrearImageLink($MyPage, "../images/volver.png", "_self",133,200);
-$obTabla->FormularioEditarRegistro($Parametros,$VarEdit);
+$obTabla->FormularioEditarRegistro($Parametros,$Vector,$TablaEdit);
 
 $css->CerrarDiv();//Cerramos contenedor Principal
 

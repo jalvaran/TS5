@@ -4,13 +4,78 @@
  * Columnas Excluidas
  */
 $TablaConfig="productosventa";
-$VarEdit[$TablaConfig]["CodigoBarras"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Existencias"]["Excluir"]=1;
-//$VarEdit[$TablaConfig]["Referencia"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Especial"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Kit"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["ImagenesProductos_idImagenesProductos"]["Excluir"]=1;
+$Vector[$TablaConfig]["Excluir"]["CodigoBarras"]=1;
+$Vector[$TablaConfig]["Excluir"]["Existencias"]=1;
 
+$Vector[$TablaConfig]["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;
+
+///Columnas excluidas
+
+$Vector[$TablaConfig]["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;   //Indico que esta columna no se mostrará
+$Vector[$TablaConfig]["Excluir"]["Especial"]=1;
+
+$Vector[$TablaConfig]["Excluir"]["Kit"]=1;
+///Columnas requeridas al momento de una insercion
+$Vector[$TablaConfig]["Required"]["Departamento"]=1;   
+$Vector[$TablaConfig]["Required"]["Nombre"]=1; 
+$Vector[$TablaConfig]["Required"]["PrecioVenta"]=1;
+$Vector[$TablaConfig]["Required"]["CostoUnitario"]=1;
+$Vector[$TablaConfig]["Required"]["CostoTotal"]=1;
+$Vector[$TablaConfig]["Required"]["IVA"]=1;
+$Vector[$TablaConfig]["Required"]["Bodega_idBodega"]=1;
+$Vector[$TablaConfig]["Required"]["CuentaPUC"]=1;
+
+//Selecciono las Columnas que tendran valores de otras tablas
+//
+//
+$Vector[$TablaConfig]["CodigoBarras"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["CodigoBarras"]["TablaVinculo"]="prod_codbarras";  //tabla de donde se vincula
+$Vector[$TablaConfig]["CodigoBarras"]["IDTabla"]="ProductosVenta_idProductosVenta"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["CodigoBarras"]["Display"]="CodigoBarras";                    //Columna que quiero mostrar
+$Vector[$TablaConfig]["CodigoBarras"]["Predeterminado"]="N";
+
+$Vector[$TablaConfig]["IVA"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["IVA"]["TablaVinculo"]="porcentajes_iva";  //tabla de donde se vincula
+$Vector[$TablaConfig]["IVA"]["IDTabla"]="Valor"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["IVA"]["Display"]="Nombre"; 
+$Vector[$TablaConfig]["IVA"]["Predeterminado"]=0;
+
+$Vector[$TablaConfig]["Bodega_idBodega"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Bodega_idBodega"]["TablaVinculo"]="bodega";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Bodega_idBodega"]["IDTabla"]="idBodega"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Bodega_idBodega"]["Display"]="Nombre";                    //Columna que quiero mostrar
+$Vector[$TablaConfig]["Bodega_idBodega"]["Predeterminado"]=1;
+
+$Vector[$TablaConfig]["Departamento"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Departamento"]["TablaVinculo"]="prod_departamentos";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Departamento"]["IDTabla"]="idDepartamentos"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Departamento"]["Display"]="Nombre";                    //Columna que quiero mostrar
+$Vector[$TablaConfig]["Departamento"]["Predeterminado"]="N";
+
+$Vector[$TablaConfig]["Sub1"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Sub1"]["TablaVinculo"]="prod_sub1";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Sub1"]["IDTabla"]="idSub1"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Sub1"]["Display"]="NombreSub1";                    //Columna que quiero mostrar
+
+$Vector[$TablaConfig]["Sub2"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Sub2"]["TablaVinculo"]="prod_sub2";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Sub2"]["IDTabla"]="idSub2"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Sub2"]["Display"]="NombreSub2";                    //Columna que quiero mostrar
+
+$Vector[$TablaConfig]["Sub3"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Sub3"]["TablaVinculo"]="prod_sub3";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Sub3"]["IDTabla"]="idSub3"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Sub3"]["Display"]="NombreSub3";                    //Columna que quiero mostrar
+
+$Vector[$TablaConfig]["Sub4"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Sub4"]["TablaVinculo"]="prod_sub4";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Sub4"]["IDTabla"]="idSub4"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Sub4"]["Display"]="NombreSub4";                    //Columna que quiero mostrar
+//
+$Vector[$TablaConfig]["Sub5"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Sub5"]["TablaVinculo"]="prod_sub5";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Sub5"]["IDTabla"]="idSub5"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Sub5"]["Display"]="NombreSub5";                    //Columna que quiero mostrar
 
 /*
  * Parametros de configuracion Tabla facturas_items
@@ -18,41 +83,41 @@ $VarEdit[$TablaConfig]["ImagenesProductos_idImagenesProductos"]["Excluir"]=1;
  */
 
 $TablaConfig="facturas_items";
-$VarEdit[$TablaConfig]["SubGrupo1"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubGrupo2"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubGrupo3"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubGrupo4"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubGrupo5"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubtotalItem"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["IVAItem"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TotalItem"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["PorcentajeIVA"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["PrecioCostoUnitario"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["SubtotalCosto"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TipoItem"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["CuentaPUC"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["GeneradoDesde"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["NumeroIdentificador"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["FechaFactura"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["idFactura"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TablaItems"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Referencia"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Departamento"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["ValorUnitarioItem"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Cantidad"]["Excluir"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubGrupo1"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubGrupo2"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubGrupo3"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubGrupo4"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubGrupo5"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubtotalItem"]=1;
+$Vector[$TablaConfig]["Excluir"]["IVAItem"]=1;
+$Vector[$TablaConfig]["Excluir"]["TotalItem"]=1;
+$Vector[$TablaConfig]["Excluir"]["PorcentajeIVA"]=1;
+$Vector[$TablaConfig]["Excluir"]["PrecioCostoUnitario"]=1;
+$Vector[$TablaConfig]["Excluir"]["SubtotalCosto"]=1;
+$Vector[$TablaConfig]["Excluir"]["TipoItem"]=1;
+$Vector[$TablaConfig]["Excluir"]["CuentaPUC"]=1;
+$Vector[$TablaConfig]["Excluir"]["GeneradoDesde"]=1;
+$Vector[$TablaConfig]["Excluir"]["NumeroIdentificador"]=1;
+$Vector[$TablaConfig]["Excluir"]["FechaFactura"]=1;
+$Vector[$TablaConfig]["Excluir"]["idFactura"]=1;
+$Vector[$TablaConfig]["Excluir"]["TablaItems"]=1;
+$Vector[$TablaConfig]["Excluir"]["Referencia"]=1;
+$Vector[$TablaConfig]["Excluir"]["Departamento"]=1;
+$Vector[$TablaConfig]["Excluir"]["ValorUnitarioItem"]=1;
+$Vector[$TablaConfig]["Excluir"]["Cantidad"]=1;
 
 /*
  * Campos Requridos
  */
 
-$VarEdit[$TablaConfig]["Dias"]["Required"]=1;
+$Vector[$TablaConfig]["Required"]["Dias"]=1;
 
 /*
  * Tabla Usuarios
  * Tipo de Texto
  */
 $TablaConfig="usuarios";
-$VarEdit[$TablaConfig]["Password"]["TipoText"]="password";
+$Vector[$TablaConfig]["Password"]["TipoText"]="password";
 
 
 /*
@@ -61,8 +126,8 @@ $VarEdit[$TablaConfig]["Password"]["TipoText"]="password";
  * Campos Requridos
  */
 $TablaConfig="librodiario";
-$VarEdit[$TablaConfig]["idEmpresa"]["Required"]=1;
-$VarEdit[$TablaConfig]["idCentroCosto"]["Required"]=1;
+$Vector[$TablaConfig]["Required"]["idEmpresa"]=1;
+$Vector[$TablaConfig]["Required"]["idCentroCosto"]=1;
 
 
 /*
@@ -70,15 +135,15 @@ $VarEdit[$TablaConfig]["idCentroCosto"]["Required"]=1;
  * Columnas Excluidas
  */
 $TablaConfig="subcuentas";
-$VarEdit[$TablaConfig]["Valor"]["Excluir"]=1;
+$Vector[$TablaConfig]["Excluir"]["Valor"]=1;
 
 /*
  * Parametros de configuracion subcuentas
  * CAmpos requeridos y Columnas Excluidas
  */
 $TablaConfig="cuentasfrecuentes";
-$VarEdit[$TablaConfig]["ClaseCuenta"]["Required"]=1;
-$VarEdit[$TablaConfig]["UsoFuturo"]["Excluir"]=1;
+$Vector[$TablaConfig]["Required"]["ClaseCuenta"]=1;
+$Vector[$TablaConfig]["Excluir"]["UsoFuturo"]=1;
 
 /*
  * Tabla cot_itemscotizaciones
@@ -86,7 +151,7 @@ $VarEdit[$TablaConfig]["UsoFuturo"]["Excluir"]=1;
  * Campos Requridos
  */
 $TablaConfig="cot_itemscotizaciones";
-$VarEdit[$TablaConfig]["CuentaPUC"]["Required"]=1;
+$Vector[$TablaConfig]["Required"]["CuentaPUC"]=1;
 
 /*
  * Tabla remisiones
@@ -94,10 +159,10 @@ $VarEdit[$TablaConfig]["CuentaPUC"]["Required"]=1;
  * Campos Requeridos
  */
 $TablaConfig="remisiones";
-$VarEdit[$TablaConfig]["Usuarios_idUsuarios"]["Required"]=1;
-$VarEdit[$TablaConfig]["MyPage"]="historialremisiones.php";
-$VarEdit[$TablaConfig]["Cotizaciones_idCotizaciones"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Anticipo"]["Excluir"]=1;
+$Vector[$TablaConfig]["Required"]["Usuarios_idUsuarios"]=1;
+$Vector[$TablaConfig]["MyPage"]="historialremisiones.php";
+$Vector[$TablaConfig]["Excluir"]["Cotizaciones_idCotizaciones"]=1;
+$Vector[$TablaConfig]["Excluir"]["Anticipo"]=1;
 
 
 /*
@@ -106,12 +171,12 @@ $VarEdit[$TablaConfig]["Anticipo"]["Excluir"]=1;
  * Campos Requridos
  */
 $TablaConfig="ordenesdetrabajo";
-$VarEdit[$TablaConfig]["Hora"]["Required"]=1;
-$VarEdit[$TablaConfig]["idCliente"]["Required"]=1;
-$VarEdit[$TablaConfig]["idUsuarioCreador"]["Required"]=1;
-$VarEdit[$TablaConfig]["Descripcion"]["Required"]=1;
-$VarEdit[$TablaConfig]["FechaOT"]["Required"]=1;
-$VarEdit[$TablaConfig]["Estado"]["Excluir"]=1;
+$Vector[$TablaConfig]["Required"]["Hora"]=1;
+$Vector[$TablaConfig]["Required"]["idCliente"]=1;
+$Vector[$TablaConfig]["Required"]["idUsuarioCreador"]=1;
+$Vector[$TablaConfig]["Required"]["Descripcion"]=1;
+$Vector[$TablaConfig]["Required"]["FechaOT"]=1;
+$Vector[$TablaConfig]["Excluir"]["Estado"]=1;
 
 /*
  * Tabla cotizacionesv5
@@ -119,11 +184,11 @@ $VarEdit[$TablaConfig]["Estado"]["Excluir"]=1;
  * 
  */
 $TablaConfig="cotizacionesv5";
-$VarEdit[$TablaConfig]["Seguimiento"]["Required"]=1;
-$VarEdit[$TablaConfig]["NumSolicitud"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["NumOrden"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Usuarios_idUsuarios"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Fecha"]["Excluir"]=1;
+$Vector[$TablaConfig]["Required"]["Seguimiento"]=1;
+$Vector[$TablaConfig]["Excluir"]["NumSolicitud"]=1;
+$Vector[$TablaConfig]["Excluir"]["NumOrden"]=1;
+$Vector[$TablaConfig]["Excluir"]["Usuarios_idUsuarios"]=1;
+//$Vector[$TablaConfig]["Fecha"]["Excluir"]=1;
 
 /*
  * Tabla ordenes de compra
@@ -132,24 +197,48 @@ $VarEdit[$TablaConfig]["Fecha"]["Excluir"]=1;
  */
 $TablaConfig="ordenesdecompra";
 
-$VarEdit[$TablaConfig]["Created"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["UsuarioCreador"]["Excluir"]=1;
+$Vector[$TablaConfig]["Excluir"]["Created"]=1;
+$Vector[$TablaConfig]["Excluir"]["UsuarioCreador"]=1;
 
 /*
  * Parametros de configuracion cartera
  * Columnas Excluidas
  */
 $TablaConfig="cartera";
-$VarEdit[$TablaConfig]["Facturas_idFacturas"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["FechaIngreso"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["FechaVencimiento"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["DiasCartera"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["idCliente"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["RazonSocial"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Telefono"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Contacto"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TelContacto"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TotalFactura"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["TotalAbonos"]["Excluir"]=1;
-$VarEdit[$TablaConfig]["Saldo"]["Excluir"]=1;
+$Vector[$TablaConfig]["Excluir"]["Facturas_idFacturas"]=1;
+$Vector[$TablaConfig]["Excluir"]["FechaIngreso"]=1;
+$Vector[$TablaConfig]["Excluir"]["FechaVencimiento"]=1;
+$Vector[$TablaConfig]["Excluir"]["DiasCartera"]=1;
+$Vector[$TablaConfig]["Excluir"]["idCliente"]=1;
+$Vector[$TablaConfig]["Excluir"]["RazonSocial"]=1;
+$Vector[$TablaConfig]["Excluir"]["Telefono"]=1;
+$Vector[$TablaConfig]["Excluir"]["Contacto"]=1;
+$Vector[$TablaConfig]["Excluir"]["TelContacto"]=1;
+$Vector[$TablaConfig]["Excluir"]["TotalFactura"]=1;
+$Vector[$TablaConfig]["Excluir"]["TotalAbonos"]=1;
+$Vector[$TablaConfig]["Excluir"]["Saldo"]=1;
+
+/*
+ * Tabla departamentos
+ * 
+ * 
+ */
+$TablaConfig="prod_departamentos";
+$Vector[$TablaConfig]["TablaOrigen"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["TablaOrigen"]["TablaVinculo"]="tablas_ventas";  //tabla de donde se vincula
+$Vector[$TablaConfig]["TablaOrigen"]["IDTabla"]="NombreTabla"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["TablaOrigen"]["Display"]="NombreTabla"; 
+$Vector[$TablaConfig]["TablaOrigen"]["Predeterminado"]=1;
+
+$Vector[$TablaConfig]["ManejaExistencias"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["ManejaExistencias"]["TablaVinculo"]="respuestas_condicional";  //tabla de donde se vincula
+$Vector[$TablaConfig]["ManejaExistencias"]["IDTabla"]="Valor"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["ManejaExistencias"]["Display"]="Valor"; 
+$Vector[$TablaConfig]["ManejaExistencias"]["Predeterminado"]=1;
+
+$Vector[$TablaConfig]["TipoItem"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["TipoItem"]["TablaVinculo"]="respuestas_tipo_item";  //tabla de donde se vincula
+$Vector[$TablaConfig]["TipoItem"]["IDTabla"]="Valor"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["TipoItem"]["Display"]="Valor"; 
+$Vector[$TablaConfig]["TipoItem"]["Predeterminado"]=1;
 ?>

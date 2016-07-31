@@ -454,7 +454,7 @@ public function DibujeTabla($Vector){
                 $this->css->CrearLink($Ruta,"_blank", "Ver // ");
             }
             if(!isset($Vector["EditarRegistro"]["Deshabilitado"])){
-                $Ruta="EditarRegistro.php?&TxtIdEdit=$DatosProducto[0]&TxtParametros=$Parametros";
+                $Ruta="EditarRegistro.php?&TxtIdEdit=$DatosProducto[0]&TxtTabla=$Tabla[Tabla]&TxtParametros=$Parametros";
                 $this->css->CrearLink($Ruta, "_self", "Editar // ");
             }
             /*
@@ -850,12 +850,12 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
  */
 
     
-public function FormularioEditarRegistro($Parametros,$VarEdit)  {
+public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     //print_r($Vector);
     $this->css=new CssIni("");
-    $Tabla["Tabla"]=$Parametros->Tabla;
+    $Tabla["Tabla"]=$TablaEdit;
     $tbl=$Tabla["Tabla"];
-    $Titulo=$Parametros->Titulo;
+    $Titulo=$TablaEdit;
     $IDEdit=$VarEdit["ID"];
     
     $Columnas=$this->Columnas($Tabla); //Se debe disenar la base de datos colocando siempre la llave primaria de primera
@@ -887,7 +887,7 @@ public function FormularioEditarRegistro($Parametros,$VarEdit)  {
         if(isset($VarEdit[$tbl][$NombreCol]["TipoText"])){
             $TipoText=$VarEdit[$tbl][$NombreCol]["TipoText"];
         }
-        if(isset($VarEdit[$tbl][$NombreCol]["Excluir"])){
+        if(isset($VarEdit[$tbl]["Excluir"][$NombreCol])){
             $excluir=1;
         }
         if(!$excluir){  //Si la columna no está excluida
@@ -915,17 +915,17 @@ public function FormularioEditarRegistro($Parametros,$VarEdit)  {
                 $ReadOnly=0;
            }
            
-           if(isset($VarEdit[$tbl][$NombreCol]["Required"])){
+           if(isset($VarEdit[$tbl]["Required"][$NombreCol])){
                $Required=1;
            }
             
             print("<td style='text-align: center'>");
             
             print($NombreCol."<br>");
-            if(property_exists($Parametros,$NombreCol)){
-                $Display=$Parametros->$NombreCol->Display;
-                $IDTabla=$Parametros->$NombreCol->IDTabla;
-                $TablaVinculo=$Parametros->$NombreCol->TablaVinculo;
+            if(isset($VarEdit[$tbl][$NombreCol]["Vinculo"])){
+                $Display=$VarEdit[$tbl][$NombreCol]["Display"];
+                $IDTabla=$VarEdit[$tbl][$NombreCol]["IDTabla"];
+                $TablaVinculo=$VarEdit[$tbl][$NombreCol]["TablaVinculo"];
                 
                 $sql="SELECT * FROM $TablaVinculo";
 
