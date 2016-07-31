@@ -61,7 +61,7 @@ $Vector["IVA"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["IVA"]["TablaVinculo"]="porcentajes_iva";  //tabla de donde se vincula
 $Vector["IVA"]["IDTabla"]="Valor"; //id de la tabla que se vincula
 $Vector["IVA"]["Display"]="Nombre"; 
-$Vector["IVA"]["Predeterminado"]=0;
+//$Vector["IVA"]["Predeterminado"]=0;
 
 $Vector["Bodega_idBodega"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["Bodega_idBodega"]["TablaVinculo"]="bodega";  //tabla de donde se vincula

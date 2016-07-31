@@ -19,7 +19,8 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     //$NumCols=Count($NombresColumnas);
     $i=1;
     foreach($NombresColumnas as $NombreCol){
-        if(isset($_REQUEST[$NombreCol]) && !empty($_REQUEST[$NombreCol])){
+        $NumCar=strlen($_REQUEST[$NombreCol]);
+        if(isset($_REQUEST[$NombreCol]) && $NumCar>0){
 
             $sql.=" $NombreCol = '$_REQUEST[$NombreCol]' ,";
         
