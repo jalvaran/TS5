@@ -721,7 +721,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             }
             if($Porcentaje>0 and ($DatosProductoGeneral["Departamento"]==$Departamento) or $Departamento=="TODO"){
 
-                    $Porcentaje=$Porcentaje/100;
+                    $Porcentaje=(100-$Porcentaje)/100;
                     $ValorUnitario=$ValorUnitario*$Porcentaje;
 
             }
@@ -4170,7 +4170,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         }
         if($Porcentaje>0 and ($DatosProductoGeneral["Departamento"]==$Departamento) or $Departamento=="TODO"){
 
-                $Porcentaje=$Porcentaje/100;
+                $Porcentaje=(100-$Porcentaje)/100;
                 $ValorUnitario=$ValorUnitario*$Porcentaje;
 
         }

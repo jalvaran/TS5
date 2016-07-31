@@ -158,7 +158,7 @@
 	
 	////Se guarda la Venta
 	
-	if(!empty($_REQUEST['TxtGranTotalH'])){
+	if(isset($_REQUEST['TxtGranTotalH'])){
             //print("<script>alert('Entra 2')</script>");
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
@@ -192,8 +192,9 @@
                 $DatosVentaRapida["idTarjeta"]=0;
                 $DatosVentaRapida["PagaOtros"]=0;
             }
+            //print("<script>alert('Entra 1')</script>");
             $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
-
+            //print("<script>alert('Entra 2')</script>");
             $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
             $obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
