@@ -111,4 +111,5 @@ $pdf->MultiCell(60, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
 $Documento.="<br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
 $pdf->MultiCell(60, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
 $pdf->writeHTML("<br>", true, false, false, false, '');
+
 ?>

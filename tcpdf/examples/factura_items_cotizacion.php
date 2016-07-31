@@ -21,11 +21,13 @@ EOD;
 $sql="SELECT fi.Dias, fi.Referencia, fi.Nombre, fi.ValorUnitarioItem, fi.Cantidad, fi.SubtotalItem"
         . " FROM facturas_items fi WHERE fi.idFactura='$idFactura'";
 $Consulta=$obVenta->Query($sql);
-$h=1;   
+$h=1;  
+
 while($DatosItemFactura=mysql_fetch_array($Consulta)){
     $ValorUnitario=  number_format($DatosItemFactura["ValorUnitarioItem"]);
     $SubTotalItem=  number_format($DatosItemFactura["SubtotalItem"]);
     $Multiplicador=$DatosItemFactura["Cantidad"];
+    
     if($DatosItemFactura["Dias"]>1){
         $Multiplicador="$DatosItemFactura[Cantidad] X $DatosItemFactura[Dias]";
     }

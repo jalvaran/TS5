@@ -143,14 +143,20 @@ if($Generado=="cotizacionesv5"){
 $SubtotalFactura=number_format($obVenta->SumeColumna("facturas_items", "SubtotalItem", "idFactura", $idFactura));
 $IVAFactura=number_format($obVenta->SumeColumna("facturas_items", "IVAItem", "idFactura", $idFactura));
 $TotalFactura=number_format($obVenta->SumeColumna("facturas_items", "TotalItem", "idFactura", $idFactura));
+$NumPages=$pdf->getNumPages();
+
 //$TotalLetras=numtoletras($TotalFactura, "PESOS COLOMBIANOS");
-
-
+if($NumPages<>1){
+   
+    for($i=1;$i<=$NumPages;$i++){
+        $pdf->AddPage();
+    }  
+}
 $tbl = <<<EOD
         
 <table cellspacing="1" cellpadding="2" border="1">
     <tr>
-        <td height="25" colspan="4">Observaciones: $DatosFactura[ObservacionesFact]</td> 
+        <td height="25" colspan="4">Observaciones: $DatosFactura[ObservacionesFact] $NumPages</td> 
         
         <td align="rigth"><h3>SUBTOTAL:</h3></td>
         <td align="rigth"><h3>$ $SubtotalFactura</h3></td>
@@ -173,6 +179,7 @@ $tbl = <<<EOD
 EOD;
 
 $pdf->MultiCell(180, 30, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+
 
 
 if($Generado=="rem_devoluciones"){
