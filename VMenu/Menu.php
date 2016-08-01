@@ -1,5 +1,6 @@
 <?php
-session_start();
+$myPage="Menu.php";
+include_once("../sesiones/php_control.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -54,22 +55,22 @@ session_start();
 	$css->MenuAlfaFin();
 	
 	$css->IniciaTabs();
-		$css->NuevaTabs(1);
-			$css->SubTabs("Admin.php","_blank","../images/admin.png","Administrar");
-			$css->SubTabs("MnuVentas.php","_blank","../images/ventas.png","Ventas");
-			$css->SubTabs("MnuFacturacion.php","_blank","../images/facturar.png","Facturación");
-			$css->SubTabs("../VAtencion/cartera.php","_blank","../images/cartera.png","Cartera");
-			$css->SubTabs("MnuIngresos.php","_blank","../images/ingresos.png","Ingresos");
-			$css->SubTabs("MnuEgresos.php","_blank","../images/egresos.png","Egresos");
-                        $css->SubTabs("../VAtencion/CreaComprobanteCont.php","_blank","../images/egresoitems.png","Comprobantes Contables");
-			$css->SubTabs("../VAtencion/clientes.php","_blank","../images/clientes.png","Clientes");
-			$css->SubTabs("../VAtencion/proveedores.php","_blank","../images/proveedores.png","Proveedores");
-			//$css->SubTabs("../VAtencion/CuentasXCobrar.php","_blank","../images/cuentasxcobrar.png","Cuentas Por Cobrar");
-                        $css->SubTabs("../VAtencion/CuentasXPagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
-			$css->SubTabs("MnuInventarios.php","_blank","../images/inventarios.png","Inventarios");
-                        $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
-			$css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
-			$css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");
+            $css->NuevaTabs(1);
+                    $css->SubTabs("Admin.php","_blank","../images/admin.png","Administrar");
+                    $css->SubTabs("MnuVentas.php","_blank","../images/ventas.png","Ventas");
+                    $css->SubTabs("MnuFacturacion.php","_blank","../images/facturar.png","Facturación");
+                    $css->SubTabs("../VAtencion/cartera.php","_blank","../images/cartera.png","Cartera");
+                    $css->SubTabs("MnuIngresos.php","_blank","../images/ingresos.png","Ingresos");
+                    $css->SubTabs("MnuEgresos.php","_blank","../images/egresos.png","Egresos");
+                    $css->SubTabs("../VAtencion/CreaComprobanteCont.php","_blank","../images/egresoitems.png","Comprobantes Contables");
+                    $css->SubTabs("../VAtencion/clientes.php","_blank","../images/clientes.png","Clientes");
+                    $css->SubTabs("../VAtencion/proveedores.php","_blank","../images/proveedores.png","Proveedores");
+                    //$css->SubTabs("../VAtencion/CuentasXCobrar.php","_blank","../images/cuentasxcobrar.png","Cuentas Por Cobrar");
+                    $css->SubTabs("../VAtencion/CuentasXPagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
+                    $css->SubTabs("MnuInventarios.php","_blank","../images/inventarios.png","Inventarios");
+                    $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
+                    $css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
+                    $css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");
 			
 	
 	$css->FinTabs();

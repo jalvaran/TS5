@@ -1,22 +1,7 @@
 <?php
-ob_start();
-session_start();
-
-include_once("../modelo/php_conexion.php");
-include_once("css_construct.php");
-
-if (!isset($_SESSION['username']))
-{
- exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-
-}
-if ($_SESSION['tipouser']<>"administrador")
-{
- exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+$myPage="MnuInventarios.php";
+include_once("../sesiones/php_control.php");
+include_once("css_construct.php");	
 
 ?>
 <!DOCTYPE html>

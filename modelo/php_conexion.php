@@ -56,13 +56,12 @@ class ProcesoVenta{
               
 	function __construct($idUserR){
 				
-		$this->consulta =mysql_query("SELECT Nombre FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
+		$this->consulta =mysql_query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
 		$this->fetch = mysql_fetch_array($this->consulta);
 		$this->NombreUser = $this->fetch['Nombre'];
 		$this->idUser=$idUserR;
-                
-                             
-		
+                $this->TipoUser=$this->fetch['TipoUser'];
+                //$this->VerificaPermisos($VectorPermisos);
 	}
 	
 	/////////////////////Funcion que permite verificar u obtener los datos de la venta activa si extisten
@@ -4431,6 +4430,19 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
        
     }
     
+   //Verifica los permisos de los usuarios
+    
+public function VerificaPermisos($VectorPermisos) {
+    if($this->TipoUser<>"administrador"){
+        $Page=$VectorPermisos["Page"];
+        $PaginasUser=  $this->DevuelveValores("paginas_bloques", "TipoUsuario", $this->TipoUser);
+        if($PaginasUser["Pagina"]==$Page){
+            return true;
+        }
+        return false;
+    }
+    return true;
+}
 //////////////////////////////Fin	
 }
 	

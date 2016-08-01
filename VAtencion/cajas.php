@@ -1,15 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
+$myPage="cajas.php";
+include_once("../sesiones/php_control.php");
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -23,10 +14,9 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
         
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
-include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
 include_once("Configuraciones/cajas.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-$obVenta = new ProcesoVenta(1);
+
 
 $statement = $obTabla->CreeFiltro($Vector);
 //print($statement);

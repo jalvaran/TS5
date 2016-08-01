@@ -1,11 +1,6 @@
 <?php
-session_start();
-$TipoUser=$_SESSION["tipouser"];
-
-if($TipoUser<>"administrador"){
-   
-   header("Location: Menu.php");
-   }
+$myPage="Admin.php";
+include_once("../sesiones/php_control.php");
 ?>
 <!DOCTYPE html>
 <script src="js/funciones.js"></script>
@@ -17,8 +12,7 @@ if($TipoUser<>"administrador"){
 	 
 	 
 	 <?php
-	 
-	include_once("../modelo/php_conexion.php");
+	
 	include_once("css_construct.php");
 
 	if (!isset($_SESSION['username']))
@@ -39,7 +33,7 @@ if($TipoUser<>"administrador"){
 <!--==============================header=================================-->
 
  <?php 
-	$myPage="Admin.php";
+	
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 

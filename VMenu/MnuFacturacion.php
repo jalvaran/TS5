@@ -1,6 +1,6 @@
 <?php
-ob_start();
-session_start();
+$myPage="MnuFacturacion.php";
+include_once("../sesiones/php_control.php");
 ?>
 <!DOCTYPE html>
 <script src="js/funciones.js"></script>
@@ -14,17 +14,11 @@ session_start();
 	 <?php
 	
 
-	include_once("../modelo/php_conexion.php");
+	
 	include_once("css_construct.php");
 
-	if (!isset($_SESSION['username']))
-	{
-	  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-	  
-	}
-	
 	$NombreUser=$_SESSION['nombre'];
-	$idUser=$_SESSION['idUser'];	
+	
 	
 	 ?>
        
@@ -34,7 +28,7 @@ session_start();
 <!--==============================header=================================-->
 
  <?php 
-	$myPage="MnuFacturacion.php";
+	
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 

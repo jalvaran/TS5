@@ -1265,6 +1265,7 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     $this->css->CerrarCuadroDeDialogo();
    
 }
+
 // FIN Clases	
 }
 

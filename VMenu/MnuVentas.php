@@ -1,5 +1,6 @@
 <?php
-session_start();
+$myPage="MnuVentas.php";
+include_once("../sesiones/php_control.php");
 ?>
 <!DOCTYPE html>
 <script src="js/funciones.js"></script>
@@ -12,21 +13,8 @@ session_start();
 	 
 	 <?php
 	 
-	include_once("../modelo/php_conexion.php");
-	include_once("css_construct.php");
-
-	if (!isset($_SESSION['username']))
-	{
-	  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-	  
-	}
-	if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
-	$NombreUser=$_SESSION['nombre'];
-	$idUser=$_SESSION['idUser'];	
+	
+	include_once("css_construct.php");	
 	
 	 ?>
        

@@ -1,17 +1,10 @@
 <?php 
-ob_start();
-session_start();
+$myPage="VentasRapidas.php";
+include_once("../sesiones/php_control.php");
 $NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];
-include_once("../modelo/php_tablas.php");
-include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
 
-$obVenta = new ProcesoVenta($idUser);
+include_once("css_construct.php");
+
 $ConsultaCajas=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
 $DatosCaja=$obVenta->FetchArray($ConsultaCajas);
 if($DatosCaja["ID"]<=0){
