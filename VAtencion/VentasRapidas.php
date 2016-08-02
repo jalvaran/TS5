@@ -24,7 +24,7 @@ $css =  new CssIni("TS5 Ventas");
   
 $css->CabeceraIni("TS5 Ventas"); 
     $css->CreaBotonAgregaPreventa($myPage,$idUser);
-    $css->CreaBotonDesplegable("DialCliente","Cliente");
+    $css->CreaBotonDesplegable("DialCliente","Tercero");
 
     $css->CrearForm("FrmPreventaSel",$myPage,"post","_self");
     $css->CrearSelect("CmbPreVentaAct","EnviaForm('FrmPreventaSel')");

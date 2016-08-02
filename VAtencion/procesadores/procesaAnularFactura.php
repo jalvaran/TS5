@@ -11,7 +11,7 @@ $fecha=$_REQUEST["TxtFechaAnulacion"];
 $ConceptoAnulacion=$_REQUEST["TxtConceptoAnulacion"];
 $hora=date("H:i");
 
-$DatosFactura=$obVenta->DevuelveValores("Facturas", "idFacturas",$idFactura);
+$DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas",$idFactura);
 $Concepto="Anulacion de Factura $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura] por: ".$ConceptoAnulacion;
 
 //Creo el comprobante que realizará la anulacion de la factura    

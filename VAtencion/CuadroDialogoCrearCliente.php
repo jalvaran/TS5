@@ -5,7 +5,7 @@
  */
 
 /////////////////Cuadro de dialogo de Clientes create
-	 $css->CrearCuadroDeDialogo("DialCliente","Crear Crear Cliente"); 
+	 $css->CrearCuadroDeDialogo("DialCliente","Crear Crear Tercero"); 
 	 
 		 $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
 		 $css->CrearSelect("CmbTipoDocumento","Oculta()");
@@ -85,16 +85,16 @@
         $VarSelect["Required"]=1;
         $VarSelect["Title"]="Tipo de Egreso: ";
         $css->CrearSelectChosen("CmbCuentaDestino", $VarSelect);
-
-        $sql="SELECT * FROM subcuentas WHERE PUC LIKE '5195%' OR PUC LIKE '5135%'";
+        $sql="SELECT * FROM cuentasfrecuentes WHERE ClaseCuenta='EGRESOS'";
+        //$sql="SELECT * FROM subcuentas WHERE PUC LIKE '5195%' OR PUC LIKE '5135%'";
         $Consulta=$obVenta->Query($sql);
         $css->CrearOptionSelect("", "Seleccione Un Tipo de Egreso" , 0);
            while($DatosEgresos=$obVenta->FetchArray($Consulta)){
-                $sql="SELECT * FROM cuentas WHERE idPUC ='$DatosEgresos[Cuentas_idPUC]' LIMIT 1";
+                $sql="SELECT * FROM cuentas WHERE idPUC ='$DatosEgresos[CuentaPUC]' LIMIT 1";
                 $Consulta2=$obVenta->Query($sql);
                 $DatosCuenta=$obVenta->FetchArray($Consulta2);
                 
-               $css->CrearOptionSelect($DatosEgresos["PUC"], "$DatosCuenta[Nombre] - $DatosEgresos[PUC] - $DatosEgresos[Nombre]" , 0);
+               $css->CrearOptionSelect($DatosEgresos["CuentaPUC"], "$DatosEgresos[Nombre]" , 0);
            }
         $css->CerrarSelect();
         echo '<br>';

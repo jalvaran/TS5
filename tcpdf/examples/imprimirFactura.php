@@ -156,7 +156,7 @@ $tbl = <<<EOD
         
 <table cellspacing="1" cellpadding="2" border="1">
     <tr>
-        <td height="25" colspan="4">Observaciones: $DatosFactura[ObservacionesFact] $NumPages</td> 
+        <td height="25" colspan="4">Observaciones: $DatosFactura[ObservacionesFact]</td> 
         
         <td align="rigth"><h3>SUBTOTAL:</h3></td>
         <td align="rigth"><h3>$ $SubtotalFactura</h3></td>

@@ -299,6 +299,8 @@
 			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
 			
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                        $tab="proveedores";
+                        $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 				
 			print("<script language='JavaScript'>alert('Se ha creado el Cliente $_REQUEST[TxtRazonSocial]')</script>");
 			
