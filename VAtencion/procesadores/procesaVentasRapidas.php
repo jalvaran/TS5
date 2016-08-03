@@ -126,7 +126,7 @@
         
         ////Se recibe edicion
 	
-	if(!empty($_REQUEST['BtnEditar'])){
+	if(!empty($_REQUEST['BtnEditar']) or isset($_REQUEST['BtnMayorista'])){
 		$obVenta=new ProcesoVenta($idUser);
 		$idItem=$_REQUEST['TxtPrecotizacion'];
 		//$idClientes=$_REQUEST['TxtIdCliente'];
@@ -138,9 +138,21 @@
                 $DatosPreventa=$obVenta->DevuelveValores("preventa", "idPrecotizacion", $idItem);
 		$Cantidad=$DatosPreventa["Cantidad"];
 		$idProducto=$DatosPreventa["ProductosVenta_idProductosVenta"];
+                
 		$Tabla=$DatosPreventa["TablaItem"];
+                $DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
+                if(isset($_REQUEST['BtnMayorista'])){
+                    $ValorAcordado=$DatosProductos["PrecioMayorista"];
+                }
+                $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $Tabla);
+                if($DatosTablaItem["IVAIncluido"]=="SI"){
+                    
+                    $ValorAcordado=$ValorAcordado/($DatosProductos["IVA"]+1);
+                    
+                }
 		$Subtotal=$ValorAcordado*$Cantidad;
-		$DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
+		
+                
 		$IVA=$Subtotal*$DatosProductos["IVA"];
 		//$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
 		$Total=$Subtotal+$IVA;
@@ -451,6 +463,20 @@
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
         }
         
+        if(!empty($_REQUEST['TxtAutorizacion'])){
+		
+		$key=$_POST['TxtAutorizacion'];
+		$obVenta=new ProcesoVenta($idUser);
+                $Pass=$obVenta->DevuelveValores("autorizaciones_generales","ID",1);
+                $Clave=$Pass["Clave"];
+                $NoAutorizado="";
+                if($key==$Clave){
+                    $obVenta->ActualizaRegistro("preventa", "Autorizado", 1, "VestasActivas_idVestasActivas", $idPreventa);
+                }else{
+                    $NoAutorizado="NoAutorizado=1";
+                }
+		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
+	}
         ///////////////Fin
         
 	?>

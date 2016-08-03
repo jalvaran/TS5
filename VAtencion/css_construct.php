@@ -466,18 +466,24 @@ class CssIni{
         
         /////////////////////Crear una columna con un formulario
 	
-	function ColTablaFormEditarPrecio($FormName,$Action,$Method,$Target,$TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtFuncion2,$TxtAncho,$TxtAlto,$ReadOnly,$Required,$TxtHide,$ValueHide,$idPreventa){
+	function ColTablaFormEditarPrecio($FormName,$Action,$Method,$Target,$TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtFuncion2,$TxtAncho,$TxtAlto,$ReadOnly,$Required,$TxtHide,$ValueHide,$idPreventa,$TxtPrecioMayor,$ValueMayor){
 				
 		print('<td>');
-                
+                 //print("<script>alert('Vector $ReadOnly')</script>");
 		$this->CrearForm2($FormName,$Action,$Method,$Target);
 		$this->CrearInputText($TxtHide,"hidden","",$ValueHide,"","","","","","","","");
+                $this->CrearInputText($TxtPrecioMayor,"hidden","",$ValueMayor,"","","","","","","","");
 		$this->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
                 
 		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
                 
-		print("<input type='submit' id='BtnEditar$TxtName' name='BtnEditar' value='E' style='width: 30px;height: 30px;' onClick='$TxtFuncion'>");
-		$this->CerrarForm();
+		//print("<input type='submit' id='BtnEditar$TxtName' name='BtnEditar' value='E' style='width: 30px;height: 30px;' onClick='$TxtFuncion'>");
+		$vector["Enable"]=$ReadOnly;
+                $vector["Color"]="Azul";
+                $this->CrearBotonPersonalizado("BtnEditar", "E",$vector);
+                $vector["Color"]="Verde";
+                $this->CrearBotonPersonalizado("BtnMayorista", "M",$vector);
+                $this->CerrarForm();
 		print('</td>');
                                
 		
@@ -636,6 +642,29 @@ class CssIni{
 	
 	function CrearBotonVerde($nombre,$value){
 		print('<input type="submit" id="'.$nombre.'"  name="'.$nombre.'" value="'.$value.'" class="btn btn-success">');
+		
+	}
+        
+        /////////////////////Crea un Boton Editar Green
+	
+	function CrearBotonPersonalizado($nombre,$value,$vector){
+           $Color=$vector["Color"];
+           if($Color=="Azul"){
+               $Class='class="btn btn-primary"';
+               
+           }
+           if($Color=="Verde"){
+               $Class='class="btn btn-success"';
+           }
+            if($vector["Enable"]==1){
+                
+                $enable='disabled="false"';
+            }else if($vector["Enable"]==0){
+                $enable='';
+                
+            }
+            
+            print('<input type="submit" id="'.$nombre.'" '.$enable.' name="'.$nombre.'" value="'.$value.'" '.$Class.'>');
 		
 	}
         

@@ -199,26 +199,18 @@ function Confirmar(){
 }
 
 // esta funcion permite confirmar el envio de un formulario
-function ConfirmarFormPass(Clave){
-    pass=prompt("Esta accion requiere un password"," ");
-    if (pass==Clave){
-        
-      this.form.submit();
-      
-    } 
+function ConfirmarFormPass(){
+    alert("Esta accion requiere autorizacion");
+   
 }
 
 // esta funcion permite confirmar el envio de un formulario
-function ConfirmarFormNegativo(id,clave){
+function ConfirmarFormNegativo(id){
     valor=parseInt(document.getElementById(id).value);
     
     if(valor<0){
-       pass=prompt("Esta accion requiere un password"," ");
-        if (pass==clave){
-
-          this.form.submit();
-
-        }
+       alert("Esta accion requiere autorizacion");
+        
         return false;
     }else{
         this.form.submit();

@@ -18,6 +18,7 @@ if(!empty($_REQUEST['CmbPreVentaAct'])){
 
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
+
   
 $myPage="VentasRapidas.php";
 $css =  new CssIni("TS5 Ventas");
@@ -84,6 +85,10 @@ if(!empty($_REQUEST["TxtIdEgreso"])){
     $css->CrearTabla();
         $css->CrearFilaNotificacion("Egreso Creado Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Egreso No. $idEgreso</a>",16);
     $css->CerrarTabla();
+}
+
+if(!empty($_REQUEST["NoAutorizado"])){
+    $css->CrearNotificacionRoja("Clave Incorrecta !", 18);
 }
 include_once("procesadores/procesaVentasRapidas.php");
 
@@ -177,6 +182,9 @@ print("<td style='text-align:center'>");
 $VectorCuaBus["F"]=0;
 $obTabla->CrearCuadroBusqueda($myPage,"CmbPreVentaAct",$idPreventa,"","",$VectorCuaBus);
 $css->CrearBoton("BtnAgregarItem", "Buscar");
+print("</td>");
+print("<td>");
+$css->CrearInputText("TxtAutorizacion", "password", "", "", "Autorizaciones", "", "", "", 200, 30, 0, 0);
 print("</td>");
 print("<td>");
 

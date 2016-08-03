@@ -159,20 +159,25 @@
             $DatosProducto=$obVenta->DevuelveValores($DatosPreventa["TablaItem"],"idProductosVenta",$DatosPreventa["ProductosVenta_idProductosVenta"]);
             $css->ColTabla($DatosProducto['Referencia'],1);
             $css->ColTabla($DatosProducto['Nombre'],1);
+            $Autorizado=!$DatosPreventa["Autorizado"];
             $NameTxt="TxtEditar$DatosPreventa[idPrecotizacion]";
-            $Pass=$obVenta->DevuelveValores("autorizaciones_generales","ID",1);
-            $Clave=$Pass["Clave"];
-            $Evento="ConfirmarFormNegativo(`$NameTxt`,`$Clave`);return false;";
             
+            if($Autorizado){
+                $Evento="ConfirmarFormNegativo(`$NameTxt`);return false;";
+                $VectorDatosExtra["JS"]="onclick='ConfirmarFormPass(); return false;'";
+            }else{
+                $Evento="";
+                $VectorDatosExtra["JS"]="";
+            }
             $css->ColTablaFormInputText("FrmEdit$DatosPreventa[idPrecotizacion]",$myPage,"post","_self",$NameTxt,"Number",$DatosPreventa['Cantidad'],"","","","onClick",$Evento,"150","30","","","TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
             $PrecioAcordado=round($DatosPreventa['ValorAcordado']);
-            $Evento="ConfirmarFormPass(`$Clave`); return false;";
-            $css->ColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","onClick",$Evento,"Habilita('TxtEditarPrecio$DatosPreventa[idPrecotizacion]','0')","150","30",0,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
+            
+            $css->ColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","","","","150","30",$Autorizado,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa,"TxtPrecioMayor",$DatosProducto["PrecioMayorista"]);
             $css->ColTabla(number_format($DatosPreventa['Subtotal']),1);
             //$css->ColTablaDel($myPage,"preventa","idPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
             print("<td>");
             $VectorDatosExtra["ID"]="LinkDel$DatosPreventa[idPrecotizacion]";
-            $VectorDatosExtra["JS"]="onclick='ConfirmarFormPass(`$Clave`); return false;'";
+            
             $link="$myPage?del=$DatosPreventa[idPrecotizacion]&TxtTabla=preventa&TxtIdTabla=idPrecotizacion&TxtIdPre=$idPreventa";
             $css->CrearLinkID($link,"_self","X",$VectorDatosExtra);
             print("</td>");
