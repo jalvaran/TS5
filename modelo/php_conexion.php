@@ -2363,7 +2363,7 @@ public function CalculePesoRemision($idCotizacion)
 		
             //$Descuentos=$DatosVenta["Descuentos"];
             //$Impuestos=$DatosVenta["Impuestos"];
-            $SubTotalITem=$DatosVenta["SubtotalItem"];
+            $SubTotalITem=$DatosVenta["TotalItem"];
             //$SubTotalITem=$TotalVenta-$Impuestos;
 
 

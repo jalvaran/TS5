@@ -46,9 +46,9 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("Secundario", "container", "center",1,1);
-   										
+    $DatosSucursal=$obVenta->DevuelveValores("empresa_pro_sucursales", "Actual", 1);										
     $DatosTraslado=$obVenta->DevuelveValores("traslados_mercancia", "ID", $idTraslado);
-    if($DatosTraslado["Estado"]=="VERIFICADO"){
+    if($DatosTraslado["Estado"]=="VERIFICADO" or $DatosTraslado["Origen"]==$DatosSucursal["ID"]){
         $css->CrearNotificacionRoja("El Traslado $idTraslado ya fue registrado", 18);
         exit();
     }

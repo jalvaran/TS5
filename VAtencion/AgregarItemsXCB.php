@@ -72,23 +72,24 @@ if(!empty($_REQUEST['BtnCargar'])){
                 
                 if($i>0){
                 
-                
+                    $CodigoBarras=str_pad($data[0], 11, "0", STR_PAD_LEFT);
                     $VectorItem["F"]="";
-                    $DatosProducto=$obVenta->AgregarItemXCB($data[0], $data[1], $VectorItem);
+                    $DatosProducto=$obVenta->AgregarItemXCB($CodigoBarras, $data[1], $VectorItem);
                     
                     if($DatosProducto<>"SR"){
                         $css->FilaTabla(14);
                         $css->ColTabla($i, 1);
                         $css->ColTabla($DatosProducto["idProductosVenta"], 1);
-                        $css->ColTabla($data[0], 1);
+                        $css->ColTabla($CodigoBarras, 1);
                         $css->ColTabla($DatosProducto["Nombre"], 1);
                         $css->ColTabla($DatosProducto["Existencias"], 1);
                         $css->ColTabla($data[1], 1);
                         $css->ColTabla($DatosProducto["Existencias"]+$data[1], 1);
                         $css->CierraFilaTabla();
                     }else{
-                        $css->CrearFilaNotificacion("No se encontro el producto con el codigo de Barras $data[0]", 16);
-                        
+                        if($CodigoBarras>0){
+                            $css->CrearFilaNotificacion("No se encontro el producto con el codigo de Barras $CodigoBarras", 16);
+                        }
                     }
                    
                 }

@@ -256,7 +256,7 @@
 		$idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
                 $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
                 if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 2);
+                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
                 }
                 
              
