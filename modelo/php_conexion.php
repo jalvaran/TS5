@@ -3683,7 +3683,7 @@ public function CalculePesoRemision($idCotizacion)
         $con = mysql_connect($ip,$User,$Pass);
         if(!$con){
             $Mensaje="No se pudo conectar al servidor en la ip: $ip ".  mysql_error();
-            return($Mensaje);
+            exit($Mensaje);
         }else{
             $Mensaje="Conexion satisfactoria";
             mysql_select_db($db,$con) or die("No es posible abrir la base de datos ".  mysql_error());
@@ -3881,7 +3881,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas=  $this->MostrarColumnas($tb,$db);
         $Leng=count($Columnas);
         
-        $sql=" INSERT INTO `$DataBaseDestino`.`$tb` (";
+        $sql=" REPLACE INTO `$DataBaseDestino`.`$tb` (";
         $i=0;
         foreach($Columnas as $NombreCol){
             if($NombreCol=="ServerSincronizado"){
@@ -3897,6 +3897,7 @@ public function CalculePesoRemision($idCotizacion)
         while($Datos =  $this->FetchArray($consulta)){
             
             for ($i=0;$i<$Leng;$i++){
+                $DatoN=  $this->normalizar($Datos[$i]);
                 if($i==0 and $ai==1){
                    $sql.="'',"; 
                 }else{
@@ -3904,7 +3905,67 @@ public function CalculePesoRemision($idCotizacion)
                     if($i==$idServerCol){
                        $sql.="'$FechaSinc',"; 
                     }else{
-                       $sql.="'$Datos[$i]',";
+                       $sql.="'$DatoN',";
+                    }
+                }   
+               
+            }
+            $sql=substr($sql, 0, -1);
+            $sql.="),(";
+            
+        }
+        $sql=substr($sql, 0, -2);
+        $sql.="; ";
+        }else{
+           $sql=""; 
+        }
+        
+        
+        return($sql);
+    }
+    
+    
+    //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
+    
+    public function ArmeSqlReplace($Tabla,$db,$Condicion,$DataBaseDestino,$FechaSinc, $VectorAS) {
+        $ai=0;
+        if(isset($VectorAS["AI"])){
+            $ai=1;
+        }
+            
+        
+        
+        ////Armo el sql de los items
+        $tb=$Tabla;
+        //$tb="librodiario";
+        $Columnas=  $this->MostrarColumnas($tb,$db);
+        $Leng=count($Columnas);
+        
+        $sql=" REPLACE INTO `$DataBaseDestino`.`$tb` (";
+        $i=0;
+        foreach($Columnas as $NombreCol){
+            if($NombreCol=="Sync"){
+                $idServerCol=$i;
+            }
+            $sql.="`$NombreCol`,";
+            $i++;
+        }
+        $sql=substr($sql, 0, -1);
+        $sql.=") VALUES (";
+        $consulta=$this->ConsultarTabla($tb, $Condicion);
+        if($this->NumRows($consulta)){
+        while($Datos =  $this->FetchArray($consulta)){
+            
+            for ($i=0;$i<$Leng;$i++){
+                $DatoN=  $this->normalizar($Datos[$i]);
+                if($i==0 and $ai==1){
+                   $sql.="'',"; 
+                }else{
+                    
+                    if($i==$idServerCol){
+                       $sql.="'$FechaSinc',"; 
+                    }else{
+                       $sql.="'$DatoN',";
                     }
                 }   
                
@@ -4221,7 +4282,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         $Columnas[1]="Referencia";	$Valores[1]="REFSER".$id;
         $Columnas[2]="Nombre";          $Valores[2]=$Nombre;
         $Columnas[3]="PrecioVenta";     $Valores[3]=$PrecioVenta;
-        $Columnas[4]="PrecioEspecial";	$Valores[4]=$PrecioVenta;
+        $Columnas[4]="PrecioMayorista";	$Valores[4]=$PrecioVenta;
         $Columnas[5]="CostoUnitario";	$Valores[5]=$CostoUnitario;
         $Columnas[6]="IVA";             $Valores[6]=$IVA;
         $Columnas[7]="Departamento";    $Valores[7]=$Departamento;
@@ -4443,6 +4504,84 @@ public function VerificaPermisos($VectorPermisos) {
     }
     return true;
 }
+
+
+//Funcion para Crear los backups
+     public function CrearBackup($idServer,$VectorBackup){
+        $host=$VectorBackup["LocalHost"];
+        $user=$VectorBackup["User"];
+        $pw=$VectorBackup["PW"];
+        $db=$VectorBackup["DB"];
+        $Tabla=$VectorBackup["Tabla"];
+        $AutoIncrement=$VectorBackup["AutoIncrement"];
+        
+        $sql="";
+                        
+        $VectorAS["f"]=0;
+        $DatosServer=$this->DevuelveValores("servidores", "ID", $idServer); 
+        $FechaSinc=date("Y-m-d H:i:s");
+        //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
+        
+        $CondicionUpdate=" WHERE Sync = '0000-00-00 00:00:00' OR Sync<>Updated";
+        if($AutoIncrement<>0){
+            $VectorAS["AI"]=$AutoIncrement; //Indicamos que la tabla tiene id con autoincrement
+        }
+        $sql=$this->ArmeSqlReplace($Tabla, $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
+        $VectorCon["Fut"]=0;               
+        
+        if(empty($sql)){
+            return("SA");
+        }
+        
+        
+        
+        $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+        
+        if(!empty($sql)){
+            $this->Query($sql);
+        }  
+        $this->ConToServer($host, $user, $pw, $db, $VectorCon); 
+        $sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
+        $this->Query($sqlUp);
+        
+        return("Backup Realizado a la tabla $Tabla");
+        //return("<pre>$sql</pre>");
+         
+     }
+     /*
+      * Muestra todas las tablas de una base de datos
+      */
+     public function MostrarTablas($DataBase,$Vector){
+         $sql="SHOW FULL TABLES FROM $DataBase";
+         $Datos=$this->Query($sql);
+         //$Tablas=$this->FetchArray($Datos);
+         return ($Datos);
+     }
+     
+     /*
+      * Agregar una Columna a una tabla
+      */
+     public function AgregarColumnaTabla($Tabla,$NombreCol,$Tipo,$Predeterminado,$Atributos,$Vector){
+         $sql="ALTER TABLE `$Tabla` ADD `$NombreCol` $Tipo $Atributos NOT NULL $Predeterminado";
+         $this->Query($sql);
+        
+     }
+     
+     /*
+      * Agregar una Columna a una tabla
+      */
+     public function CreeColumnasBackup($Tabla,$DataBase,$Vector){
+         
+        $ColumnaCol=$this->MostrarColumnas($Tabla, $DataBase);
+        foreach($ColumnaCol as $NombreCol){
+            if($NombreCol<>'Updated'){
+                $Vector["F"]="";
+                $this->AgregarColumnaTabla($Tabla, 'Updated', 'TIMESTAMP', 'CURRENT_TIMESTAMP', 'on update CURRENT_TIMESTAMP', $Vector);
+            }
+        }
+     }
+
+
 //////////////////////////////Fin	
 }
 	

@@ -316,7 +316,7 @@ if(mysql_num_rows($reg)){//Si existen resultados
 								<td>$ <?php echo number_format($TotalPre); ?></td>
                                 <td>
                                 	<a href="CompraMercancias.php?del=<?php print("$row[idPreCompra]&CbComprasActivas=$idCompra"); ?>" title="Eliminar de la Lista">
-                                		<i class="icon-remove"></i>
+                                		<i class="icon-remove">X</i>
                                     </a>
                                 </td>
                               </tr>

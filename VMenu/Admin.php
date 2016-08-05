@@ -61,6 +61,7 @@ include_once("../sesiones/php_control.php");
 		$css->SubMenuAlfa("Finanzas",6);
 		$css->SubMenuAlfa("Informes",7);
                 $css->SubMenuAlfa("Hardware",8);
+               
 	$css->MenuAlfaFin();
 	
 	$css->IniciaTabs();
