@@ -67,7 +67,8 @@ include_once("../sesiones/php_control.php");
 	$css->IniciaTabs();
 	
 		$css->NuevaTabs(1);
-			$css->SubTabs("../VAtencion/empresapro.php","_self","../images/empresa.png","Crear/Editar");
+			$css->SubTabs("../VAtencion/empresapro.php","_self","../images/empresa.png","Crear/Editar Empresa");
+                        $css->SubTabs("../VAtencion/empresa_pro_sucursales.php","_self","../images/sucursal.png","Crear/Editar Sucursal");
                         $css->SubTabs("../VAtencion/empresapro_resoluciones_facturacion.php","_self","../images/resolucion.png","Resoluciones de Facturacion");
                         $css->SubTabs("../VAtencion/formatos_calidad.php","_self","../images/notacredito.png","Formatos de Calidad");
                         $css->SubTabs("../VAtencion/centrocosto.php","_self","../images/centrocostos.png","Crear Centro de Costos");

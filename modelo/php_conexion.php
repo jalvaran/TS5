@@ -4580,6 +4580,41 @@ public function VerificaPermisos($VectorPermisos) {
             }
         }
      }
+     
+     /*
+      * Crear una Tabla de una sucursal 
+      */
+     public function CrearTablaBodegaSucursal($idBodega,$Vector){
+        $NombreTabla="productosventa_bodega_$idBodega"; 
+        $sql="CREATE TABLE IF NOT EXISTS `$NombreTabla` (
+            `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
+            `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `Nombre` varchar(70) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `Existencias` double DEFAULT '0',
+            `PrecioVenta` double DEFAULT NULL,
+            `PrecioMayorista` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `CostoUnitario` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `CostoTotal` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `IVA` varchar(10) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+            `Bodega_idBodega` int(11) NOT NULL DEFAULT '1',
+            `Departamento` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `Sub1` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Sub2` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Sub3` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Sub4` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Sub5` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Kit` int(11) NOT NULL,
+            `RutaImagen` text COLLATE utf8_spanish_ci NOT NULL,
+            `Especial` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+            `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL DEFAULT '4135',
+            `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+            PRIMARY KEY (`idProductosVenta`),
+            UNIQUE KEY `Referencia` (`Referencia`)
+          ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=0 ;";
+        $this->Query($sql);
+     }
 
 
 //////////////////////////////Fin	

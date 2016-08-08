@@ -34,8 +34,12 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
            }
         if(isset($_REQUEST[$NombreCol])){
             //echo "<script>alert ('entra a las columnas $NombreCol')</script>"; 
-           
-                $Columnas[$i]=$NombreCol;  $Valores[$i]=$_REQUEST[$NombreCol];
+            if($NombreCol=="Updated"){
+                $Valor=date("Y-m-d H:i:s");
+            }else{
+                $Valor=$_REQUEST[$NombreCol];
+            }
+                $Columnas[$i]=$NombreCol;  $Valores[$i]=$Valor;
             $i++;
         }
        
@@ -80,6 +84,18 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
         
     }
     
+    /*
+     * Si se crea una sucursal
+     */
+    if($tab=="bodega"){
+      $Vector["Tabla"]=$tab;
+      $ID=$obTabla->ObtengaAutoIncrement($Vector);
+      $ID=$ID-1;
+      $VectorB["F"]=0;
+      
+      $obVenta->CrearTablaBodegaSucursal($ID, $VectorB);   
+        
+    }
     header("location:../$tab.php");
 }
 ?>
