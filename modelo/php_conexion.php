@@ -3865,6 +3865,7 @@ public function CalculePesoRemision($idCotizacion)
 
     }
     
+    
     //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
     
     public function ArmeSqlInsert($Tabla,$db,$Condicion,$DataBaseDestino,$FechaSinc, $VectorAS) {
@@ -3938,13 +3939,28 @@ public function CalculePesoRemision($idCotizacion)
             $TablaDestino=$VectorAS["TablaDestino"];
         }
         
+        //Armo la informacion de la tabla
+        $VectorE["F"]=0;
+        $sql="CREATE TABLE IF NOT EXISTS `$TablaDestino` (\r";
+        $Datos=$this->MuestraEstructura($Tabla, $db, $VectorE);
+        while($Estructura=$this->FetchArray($Datos)){
+            $Comentarios="";
+            if(!empty($Estructura["COLUMN_COMMENT"])){
+                $Comentarios=" COMMENT '$Estructura[COLUMN_COMMENT]'";
+            }
+            $Defecto="";
+            if(!empty($Estructura["COLUMN_DEFAULT"])){
+                $Defecto=" DEFAULT $Estructura[COLUMN_DEFAULT]";
+            }
+            $sql.="`$Estructura[COLUMN_NAME]` $Estructura[COLUMN_TYPE] NOT NULL $Estructura[COLLATION_NAME] $Defecto $Estructura[EXTRA] $Comentarios,\r";
+        }
         ////Armo el sql de los items
         
         //$tb="librodiario";
         $Columnas=  $this->MostrarColumnas($TablaOrigen,$db);
         $Leng=count($Columnas);
         
-        $sql=" REPLACE INTO `$DataBaseDestino`.`$TablaDestino` (";
+        $sql.=" REPLACE INTO `$DataBaseDestino`.`$TablaDestino` (";
         $i=0;
         foreach($Columnas as $NombreCol){
             if($NombreCol=="Sync"){
@@ -4641,7 +4657,18 @@ public function VerificaPermisos($VectorPermisos) {
          //return($sql);
          
      }
-
+     
+     /*
+      * Muestra la estructura de una tabla
+      */
+     public function MuestraEstructura($Tabla,$DataBase,$Vector){
+         
+         $sql="SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '$DataBase' AND TABLE_NAME = '$Tabla' ";
+         $Datos=$this->Query($sql);
+         //$Tablas=$this->FetchArray($Datos);
+         return ($Datos);
+     }
+     
 //////////////////////////////Fin	
 }
 	
