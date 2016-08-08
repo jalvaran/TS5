@@ -934,7 +934,7 @@ public function ConsultarTabla($tabla,$Condicion)
 public function Query($sql)
   {		
 					
-    $Consul=mysql_query($sql) or die("no se pudo realizar la consulta $sql en query php_conexion: " . mysql_error());
+    $Consul=mysql_query($sql) or die("<pre>no se pudo realizar la consulta $sql en query php_conexion: " . mysql_error()."</pre>");
     return($Consul);
 }
 
@@ -3925,7 +3925,69 @@ public function CalculePesoRemision($idCotizacion)
         return($sql);
     }
     
+    //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
     
+    public function ArmeSQLCopiarTabla($Tabla,$db,$DataBaseDestino, $VectorAS) {
+        $ai=0;
+        if(isset($VectorAS["AI"])){
+            $ai=1;
+        }
+        $TablaOrigen=$Tabla;
+        $TablaDestino=$Tabla;
+        if(isset($VectorAS["TablaDestino"])){
+            $TablaDestino=$VectorAS["TablaDestino"];
+        }
+        
+        //Armo la informacion de la tabla
+        $VectorE["F"]=0;
+        //$sql=" SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+          //      SET time_zone = '+00:00';\r";
+        
+        $sql="CREATE TABLE IF NOT EXISTS `$DataBaseDestino`.`$TablaDestino` (\r";
+        $Datos=$this->MuestraEstructura($Tabla, $db, $VectorE);
+        $PrimaryKey="";
+        $UniqueKey="";
+        while($Estructura=$this->FetchArray($Datos)){
+            $Comentarios="";
+            
+            if(!empty($Estructura["COLUMN_COMMENT"])){
+                $Comentarios=" COMMENT '$Estructura[COLUMN_COMMENT]'";
+            }
+            if($Estructura["COLUMN_KEY"]=="PRI"){
+                $PrimaryKey="PRIMARY KEY (`$Estructura[COLUMN_NAME]`),";
+            }
+            $Nullable="";
+            if($Estructura["IS_NULLABLE"]=="NO"){
+                $Nullable="NOT NULL";
+            }
+            if($Estructura["COLUMN_KEY"]=="UNI"){
+                $UniqueKey="UNIQUE KEY (`$Estructura[COLUMN_NAME]`),";
+            }
+            if($Estructura["COLUMN_KEY"]=="MUL"){
+                $UniqueKey="KEY `$Estructura[COLUMN_NAME]` (`$Estructura[COLUMN_NAME]`),";
+            }
+            $Collaction="";
+            if(!empty($Estructura["COLLATION_NAME"])){
+                $Collaction="COLLATE ".$Estructura["COLLATION_NAME"];
+            }
+            $Defecto="";
+            if(!empty($Estructura["COLUMN_DEFAULT"])){
+                if($Estructura["COLUMN_DEFAULT"]=="CURRENT_TIMESTAMP"){
+                    $ValorDefecto="CURRENT_TIMESTAMP";
+                }else{
+                    $ValorDefecto="'$Estructura[COLUMN_DEFAULT]'";
+                }
+                $Defecto=" DEFAULT $ValorDefecto";
+            }
+            
+            $sql.="`$Estructura[COLUMN_NAME]` $Estructura[COLUMN_TYPE] $Nullable $Collaction $Defecto $Estructura[EXTRA] $Comentarios,";
+        }
+        $sql.="$PrimaryKey$UniqueKey";
+        $sql=substr($sql, 0, -1);
+        $sql.="\r";
+        $sql.=") ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci; \r";
+        return ($sql);
+    }
     //Funcion para armar un sql de los datos en una tabla de acuerdo a una condicion
     
     public function ArmeSqlReplace($Tabla,$db,$Condicion,$DataBaseDestino,$FechaSinc, $VectorAS) {
@@ -3939,28 +4001,11 @@ public function CalculePesoRemision($idCotizacion)
             $TablaDestino=$VectorAS["TablaDestino"];
         }
         
-        //Armo la informacion de la tabla
-        $VectorE["F"]=0;
-        $sql="CREATE TABLE IF NOT EXISTS `$TablaDestino` (\r";
-        $Datos=$this->MuestraEstructura($Tabla, $db, $VectorE);
-        while($Estructura=$this->FetchArray($Datos)){
-            $Comentarios="";
-            if(!empty($Estructura["COLUMN_COMMENT"])){
-                $Comentarios=" COMMENT '$Estructura[COLUMN_COMMENT]'";
-            }
-            $Defecto="";
-            if(!empty($Estructura["COLUMN_DEFAULT"])){
-                $Defecto=" DEFAULT $Estructura[COLUMN_DEFAULT]";
-            }
-            $sql.="`$Estructura[COLUMN_NAME]` $Estructura[COLUMN_TYPE] NOT NULL $Estructura[COLLATION_NAME] $Defecto $Estructura[EXTRA] $Comentarios,\r";
-        }
-        ////Armo el sql de los items
         
-        //$tb="librodiario";
         $Columnas=  $this->MostrarColumnas($TablaOrigen,$db);
         $Leng=count($Columnas);
         
-        $sql.=" REPLACE INTO `$DataBaseDestino`.`$TablaDestino` (";
+        $sql="\r REPLACE INTO `$DataBaseDestino`.`$TablaDestino` (";
         $i=0;
         foreach($Columnas as $NombreCol){
             if($NombreCol=="Sync"){
@@ -4533,7 +4578,7 @@ public function VerificaPermisos($VectorPermisos) {
         $db=$VectorBackup["DB"];
         $Tabla=$VectorBackup["Tabla"];
         $AutoIncrement=$VectorBackup["AutoIncrement"];
-        
+        $sqlCrearTabla="";
         $sql="";
                         
         $VectorAS["f"]=0;
@@ -4542,30 +4587,41 @@ public function VerificaPermisos($VectorPermisos) {
         //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
         
         $CondicionUpdate=" WHERE Sync = '0000-00-00 00:00:00' OR Sync<>Updated";
-        $CondicionUpdate="";
+        //$CondicionUpdate="";
         if($AutoIncrement<>0){
             $VectorAS["AI"]=$AutoIncrement; //Indicamos que la tabla tiene id con autoincrement
         }
         $sql=$this->ArmeSqlReplace($Tabla, $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
+        $Existe=  $this->DevuelveValores("plataforma_tablas", "Nombre", $Tabla);
+        if(empty($Existe)){
+            $sqlCrearTabla=$this->ArmeSQLCopiarTabla($Tabla, $db, $DatosServer["DataBase"], $VectorAS);
+                    
+        }
         $VectorCon["Fut"]=0;               
-        /*
+        
         if(empty($sql)){
             return("SA");
         }
         
-        */
         
-        //$this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
         
+        $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+        
+        if(!empty($sqlCrearTabla)){
+            $this->Query($sqlCrearTabla);
+        }
         if(!empty($sql)){
-            //$this->Query($sql);
-        }  
+            $this->Query($sql);
+        }
         $this->ConToServer($host, $user, $pw, $db, $VectorCon); 
-        //$sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
-        //$this->Query($sqlUp);
-        
-        //return("Backup Realizado a la tabla $Tabla");
-        return("<pre>$sql</pre>");
+        $sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
+        $this->Query($sqlUp);
+        if(!empty($sqlCrearTabla)){
+            $sqlInsertTabla="INSERT INTO plataforma_tablas (Nombre) VALUES ('$Tabla')";
+            $this->Query($sqlInsertTabla);
+        }
+        return("Backup Realizado a la tabla $Tabla");
+        //return("<pre>$sql</pre>");
          
      }
      /*
