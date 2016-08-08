@@ -42,7 +42,8 @@ include_once("css_construct.php");
  
 	$css->IniciaMenu("Inventarios"); 
             $css->MenuAlfaIni("Inventarios");
-                $css->SubMenuAlfa("Clasificacion de Inventarios",2);	
+                $css->SubMenuAlfa("Clasificacion de Inventarios",2);
+                $css->SubMenuAlfa("Bodegas",3);
 	$css->MenuAlfaFin();
             
 	$css->IniciaTabs();
@@ -54,7 +55,7 @@ include_once("css_construct.php");
                 $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
                 $css->SubTabs("../VAtencion/kardexmercancias.php","_self","../images/kardex.png","Kardex");
                 $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
-                $css->SubTabs("../VAtencion/bodega.php","_blank","../images/bodega.png","Ver/Crear/Editar Bodega");    
+                  
                 $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
                 $css->SubTabs("../VAtencion/AgregarItemsXCB.php","_blank","../images/csv.png","Agregar Productos desde CSV");
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/activos.png","Activos");
@@ -67,6 +68,11 @@ include_once("css_construct.php");
                 $css->SubTabs("../VAtencion/prod_sub4.php","_blank","../images/cuatro.jpg","Subgrupo 4");
                 $css->SubTabs("../VAtencion/prod_sub5.php","_blank","../images/cinco.png","Subgrupo 5");
                 
+            $css->FinTabs();
+            
+            $css->NuevaTabs(3);    
+                $css->SubTabs("../VAtencion/bodega.php","_blank","../images/bodega.png","Ver/Crear/Editar Bodega");  
+                $css->SubTabs("../VAtencion/bodegas_externas.php","_blank","../images/externas.png","Ver Bodegas Externas");  
             $css->FinTabs();
             
             

@@ -30,21 +30,28 @@ print("<body>");
     $VectorTraslado["PW"]=$pw;
     $VectorTraslado["DB"]=$db;
     $VectorTraslado["AutoIncrement"]=0;
-    $VectorT["f"]="";
+    $VectorT["F"]="";
     $Datos=$obVenta->MostrarTablas($db, $VectorT);
     set_time_limit(300);
+    /*
     while($TablasBackup=$obVenta->FetchArray($Datos)){
         $Mensaje="";
         $VectorTraslado["Tabla"]=$TablasBackup[0];
-        
-        $Mensaje=$obVenta->CrearBackup(2,$VectorTraslado);
-        
+        if($VectorTraslado["Tabla"]<>"productosventa_bodega_%"){
+            $Mensaje=$obVenta->CrearBackup(2,$VectorTraslado);
+        }
         if($Mensaje<>"SA"){
             
             $css->CrearNotificacionNaranja($Mensaje, 16);
         }        
     }
+     * 
+     
     $Mensaje="No se encontraron mas datos para sincronizar";
+     * 
+     */
+    $VectorTraslado["Tabla"]="bodega";
+    $Mensaje=$obVenta->CrearBackup(2,$VectorTraslado);
     $css->CrearNotificacionVerde($Mensaje, 16);
 //header("location:$myPage");
 }	

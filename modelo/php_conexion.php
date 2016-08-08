@@ -3932,16 +3932,19 @@ public function CalculePesoRemision($idCotizacion)
         if(isset($VectorAS["AI"])){
             $ai=1;
         }
-            
-        
+        $TablaOrigen=$Tabla;
+        $TablaDestino=$Tabla;
+        if(isset($VectorAS["TablaDestino"])){
+            $TablaDestino=$VectorAS["TablaDestino"];
+        }
         
         ////Armo el sql de los items
-        $tb=$Tabla;
+        
         //$tb="librodiario";
-        $Columnas=  $this->MostrarColumnas($tb,$db);
+        $Columnas=  $this->MostrarColumnas($TablaOrigen,$db);
         $Leng=count($Columnas);
         
-        $sql=" REPLACE INTO `$DataBaseDestino`.`$tb` (";
+        $sql=" REPLACE INTO `$DataBaseDestino`.`$TablaDestino` (";
         $i=0;
         foreach($Columnas as $NombreCol){
             if($NombreCol=="Sync"){
@@ -3952,7 +3955,7 @@ public function CalculePesoRemision($idCotizacion)
         }
         $sql=substr($sql, 0, -1);
         $sql.=") VALUES (";
-        $consulta=$this->ConsultarTabla($tb, $Condicion);
+        $consulta=$this->ConsultarTabla($TablaOrigen, $Condicion);
         if($this->NumRows($consulta)){
         while($Datos =  $this->FetchArray($consulta)){
             
@@ -4523,29 +4526,30 @@ public function VerificaPermisos($VectorPermisos) {
         //$Condicion=" WHERE ServerSincronizado='0000-00-00 00:00:00'";
         
         $CondicionUpdate=" WHERE Sync = '0000-00-00 00:00:00' OR Sync<>Updated";
+        $CondicionUpdate="";
         if($AutoIncrement<>0){
             $VectorAS["AI"]=$AutoIncrement; //Indicamos que la tabla tiene id con autoincrement
         }
         $sql=$this->ArmeSqlReplace($Tabla, $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
         $VectorCon["Fut"]=0;               
-        
+        /*
         if(empty($sql)){
             return("SA");
         }
         
+        */
         
-        
-        $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+        //$this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
         
         if(!empty($sql)){
-            $this->Query($sql);
+            //$this->Query($sql);
         }  
         $this->ConToServer($host, $user, $pw, $db, $VectorCon); 
-        $sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
-        $this->Query($sqlUp);
+        //$sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
+        //$this->Query($sqlUp);
         
-        return("Backup Realizado a la tabla $Tabla");
-        //return("<pre>$sql</pre>");
+        //return("Backup Realizado a la tabla $Tabla");
+        return("<pre>$sql</pre>");
          
      }
      /*
@@ -4615,7 +4619,28 @@ public function VerificaPermisos($VectorPermisos) {
           ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=0 ;";
         $this->Query($sql);
      }
-
+     /*
+      * Descarga una tabla desde un servidor y la guarda 
+      */
+     public function DescargarDesdeServidor($TablaDestino,$idServidor ,$VectorBackup) {
+         $host=$VectorBackup["LocalHost"];
+        $user=$VectorBackup["User"];
+        $pw=$VectorBackup["PW"];
+        $db=$VectorBackup["DB"];
+        $Tabla=$VectorBackup["Tabla"];
+        $AutoIncrement=$VectorBackup["AutoIncrement"];
+        $Condicion="";
+        $VectorCon["F"]=0;
+         $DatosServer=$this->DevuelveValores("servidores", "ID", $idServidor);
+         $this->ConToServer($DatosServer["IP"], $DatosServer["Usuario"], $DatosServer["Password"], $DatosServer["DataBase"], $VectorCon);
+         $VectorAS["TablaDestino"]=$TablaDestino;
+         $sql=  $this->ArmeSqlReplace($Tabla, $DatosServer["DataBase"], $Condicion, $db, "", $VectorAS);
+         $this->ConToServer($host, $user, $pw, $db, $VectorCon);
+         
+         $this->Query($sql);
+         //return($sql);
+         
+     }
 
 //////////////////////////////Fin	
 }
