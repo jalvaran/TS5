@@ -55,8 +55,9 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
             $obVenta->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
         }
         //Buscamos si hay mas bodegas para insertar los valores en cada una
-        $SqlCB="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID'";
+        $SqlCB="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID' LIMIT 1";
         $DatosCodigo=$obVenta->Query($SqlCB);
+        $DatosCodigo=$obVenta->FetchArray($DatosCodigo);
         $Datos=$obVenta->ConsultarTabla("bodega", "");
         
         while($DatosBodegas=$obVenta->FetchArray($Datos)){
