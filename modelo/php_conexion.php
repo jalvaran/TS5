@@ -3715,10 +3715,10 @@ public function CalculePesoRemision($idCotizacion)
         $sql="SELECT Identificacion FROM usuarios WHERE idUsuarios='$this->idUser'";
         $Consulta=$this->Query($sql);
         $DatosUsuario=$this->FetchArray($Consulta);
-
-        $Consecutivo=$this->ObtenerMAX("traslados_mercancia", "ConsecutivoInterno", 1, 0);
-        $Consecutivo++;
         $DatosSucursalActual=$this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
+        $Consecutivo=$this->ObtenerMAX("traslados_mercancia", "ConsecutivoInterno", "Origen", $DatosSucursalActual["ID"]);
+        $Consecutivo++;
+        
         $tab="traslados_mercancia";
         $NumRegistros=9; 
         $id=  $DatosSucursalActual["ID"]."-".$Consecutivo;
