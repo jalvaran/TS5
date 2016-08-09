@@ -454,7 +454,7 @@ public function DibujeTabla($Vector){
                 $this->css->CrearLink($Ruta,"_blank", "Ver // ");
             }
             if(!isset($Vector["EditarRegistro"]["Deshabilitado"])){
-                $Ruta="EditarRegistro.php?&TxtIdEdit=$DatosProducto[0]&TxtTabla=$Tabla[Tabla]&TxtParametros=$Parametros";
+                $Ruta="EditarRegistro.php?&TxtIdEdit=$DatosProducto[0]&TxtTabla=$Tabla[Tabla]&Others=".base64_encode($statement);
                 $this->css->CrearLink($Ruta, "_self", "Editar // ");
             }
             /*
@@ -857,7 +857,7 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     $tbl=$Tabla["Tabla"];
     $Titulo=$TablaEdit;
     $IDEdit=$VarEdit["ID"];
-    
+    $stament=$VarEdit["stament"];
     $Columnas=$this->Columnas($Tabla); //Se debe disenar la base de datos colocando siempre la llave primaria de primera
     $ColumnasInfo=$this->ColumnasInfo($Tabla); //Se debe disenar la base de datos colocando siempre la llave primaria de primera
     
@@ -871,6 +871,7 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     $this->css->CrearInputText("TxtTablaEdit", "hidden", "", $tbl, "", "", "", "", "", "", "", "");
     $this->css->CrearInputText("TxtIDEdit", "hidden", "", $IDEdit, "", "", "", "", "", "", "", "");
     $this->css->CrearInputText("TxtMyPage", "hidden", "", $myPage, "", "", "", "", "", "", "", "");
+    $this->css->CrearInputText("TxtStament", "hidden", "", $stament, "", "", "", "", "", "", "", "");
     $this->css->CrearTabla();
     $this->css->FilaTabla(18);
     print("<td style='text-align: center'><strong>$Titulo</strong>");

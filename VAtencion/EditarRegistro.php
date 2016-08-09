@@ -5,9 +5,12 @@ session_start();
  * Este archivo se encargará de insertar un registro nuevo a una tabla
  * 
  */
-$Parametros = json_decode(urldecode($_REQUEST['TxtParametros']));  //Decodifico el Vector y llega como un objeto
+//$Parametros = json_decode(urldecode($_REQUEST['TxtParametros']));  //Decodifico el Vector y llega como un objeto
+$Parametros="";
 $IDEdit=$_REQUEST['TxtIdEdit'];
+$stament=$_REQUEST['Others'];
 $Vector["ID"]=$IDEdit;
+$Vector["stament"]= "$stament";
 //print("Parametros: ");
 //print_r($Parametros);
 $TablaEdit=$_REQUEST['TxtTabla'];

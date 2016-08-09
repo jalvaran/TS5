@@ -8,7 +8,7 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     
     $obTabla = new Tabla($db);
     $obVenta = new ProcesoVenta(1);
-    
+    $stament=$_REQUEST["TxtStament"];
     $tab=$_REQUEST["TxtTablaEdit"];
     $myPage1=explode(".",$_REQUEST["TxtMyPage"]);
     $myPage=$myPage1[0];
@@ -33,7 +33,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     
     $PageReturn=  substr($myPage, 0, 21);
     if($PageReturn=="productosventa_bodega"){
-        $myPage="bodegas_externas";
+        $myPage="bodegas_externas.php?CmbBodega=$Vector[Tabla]&TxtStament=$stament";
+        header("location:../$myPage");
+        exit();
     }
     header("location:../$myPage.php");
 }
