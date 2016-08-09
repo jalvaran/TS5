@@ -1267,6 +1267,66 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
    
 }
 
+//Funcion para Dibujar un item buscado en las tablas de ventas
+
+public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
+    $this->css=new CssIni("");
+    $idPre=$Variable["idPre"];
+    $Titulo="Crear Item En servicios";
+    $Nombre="ShowItemsBusqueda";
+    $RutaImage="";
+    $javascript="";
+    $VectorBim["f"]=0;
+    $target="#DialBusquedaItems";
+    $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",0,0,"fixed","left:10px;top:100",$VectorBim);
+    
+    $VectorDialogo["F"]=0;
+    $this->css->CrearCuadroDeDialogo("DialBusquedaItems", "Resultados");
+    $this->css->CrearDiv("DivBusqueda", "", "center", 1, 1);
+    $this->css->CrearTabla();
+    $tab="productosventa";
+    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
+    $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+    if($this->obCon->NumRows($consulta)){
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>Agregar</strong>", 1);
+        $this->css->ColTabla("<strong>ID</strong>", 1);
+            $this->css->ColTabla("<strong>Referencia</strong>", 1);
+            $this->css->ColTabla("<strong>Nombre</strong>", 1);
+            $this->css->ColTabla("<strong>PrecioVenta</strong>", 1);
+            $this->css->ColTabla("<strong>Mayorista</strong>", 1);
+            $this->css->ColTabla("<strong>Existencias</strong>", 1);
+            $this->css->CierraFilaTabla();
+        while($DatosProducto=$this->obCon->FetchArray($consulta)){
+            $this->css->FilaTabla(16);
+            print("<td>");
+            $this->css->CrearForm2("FrmAgregarItem$DatosProducto[idProductosVenta]", $PageReturn, "post", "_self");
+            $this->css->CrearInputText("TxtIdItem", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 1);
+            $this->css->CrearInputText("TxtidPre", "hidden", "", $idPre, "", "", "", "", "", "", 0, 1);
+            $this->css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 1);
+            $this->css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 80, 30, 0, 1, 1, "", 1);
+            $this->css->CrearBotonNaranja("BtnAgregarItem", "Agregar");
+            $this->css->CerrarForm();
+            print("</td>");
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioMayorista"], 1);
+            $this->css->ColTabla($DatosProducto["Existencias"], 1);
+            
+            $this->css->CierraFilaTabla();
+        }
+    }
+    
+    
+    
+    $this->css->CerrarTabla();
+    $this->css->CerrarDiv();
+    $this->css->CerrarCuadroDeDialogo();
+   
+}
+
 // FIN Clases	
 }
 

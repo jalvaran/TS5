@@ -38,6 +38,14 @@ print("<body>");
     $css->CreaBotonDesplegable("CrearTraslado","Nuevo");  
     $css->CabeceraFin(); 
     
+         
+    if(isset($_REQUEST["TxtBusqueda"])){
+        $key=$_REQUEST["TxtBusqueda"];
+        $PageReturn=$_REQUEST["TxtPageReturn"]."";
+        $VectorDI["idPre"]=$idComprobante;
+        $obTabla->DibujeItemsBuscadosVentas2($key,$PageReturn,$VectorDI);
+
+    }
     
     ///////////////Creamos el contenedor
     /////
@@ -79,6 +87,7 @@ print("<body>");
         print("<td>"); 
         $VarSelect["Ancho"]="200";
             $VarSelect["PlaceHolder"]="Seleccione el destino";
+            $VarSelect["Required"]=1;
             $css->CrearSelectChosen("CmbDestino", $VarSelect);
             $css->CrearOptionSelect("", "Seleccione un destino" , 0);
             $sql="SELECT * FROM empresa_pro_sucursales WHERE Visible='SI'";
@@ -90,6 +99,21 @@ print("<body>");
                    $css->CrearOptionSelect($DatosSucursales["ID"], "$DatosSucursales[Nombre] $DatosSucursales[Ciudad] $DatosSucursales[Direccion]" , $Sel);
                }
             $css->CerrarSelect();
+        print("<br><br>"); 
+        $VectorSelect["Nombre"]="CmbBodega";
+        $VectorSelect["Evento"]="";
+        $VectorSelect["Funcion"]="";
+        $VectorSelect["Required"]=1;
+        $css->CrearSelect2($VectorSelect);
+        
+            $css->CrearOptionSelect("","Obtener Valores de:",0);
+            
+            $consulta = $obVenta->ConsultarTabla("bodega","");
+            while($DatosBodegas=mysql_fetch_array($consulta)){
+                
+                $css->CrearOptionSelect($DatosBodegas['idBodega'],$DatosBodegas['Nombre'],0);							
+            }
+        $css->CerrarSelect();    
         print("</td>");
         print("<td>");
         $css->CrearTextArea("TxtDescripcion","","","Escriba la descripcion del traslado","black","","",100,100,0,1);
@@ -145,16 +169,17 @@ print("<body>");
     $css->CierraFilaTabla();   
     $css->FilaTabla(16);
         
-        $css->ColTabla("<strong>Seleccione el Producto</strong>", 2);
-        $css->ColTabla("<strong>Cantidad</strong>", 1);
+        $css->ColTabla("<strong>Busque el Producto</strong>", 3);
         
         
-    $css->CierraFilaTabla();    
+        
+    $css->CierraFilaTabla();  
+    $css->CerrarForm();
     $css->FilaTabla(16);
         
         
-        print("<td colspan='2'>");
-					
+        print("<td colspan='3'>");
+	/*			
             $VarSelect["Ancho"]="200";
             $VarSelect["PlaceHolder"]="Seleccione un producto";
             $VarSelect["Required"]=1;
@@ -169,22 +194,19 @@ print("<body>");
                    $css->CrearOptionSelect($DatosProducto["idProductosVenta"], "$DatosProducto[idProductosVenta] $DatosProducto[Referencia] $DatosProducto[Nombre]" , $Sel);
                }
             $css->CerrarSelect();
-
+            */
+        
+        $VectorCuaBus["F"]=0;
+        $obTabla->CrearCuadroBusqueda($myPage,"","","CmbTrasladoID",$idComprobante,$VectorCuaBus);
         print("</td>");
-        print("<td>");
-            $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "black", "", "", 220, 30, 0, 1, 1, "", 1);
-        print("</td>");
-       
-        print("<td>");
-        $css->CrearBotonVerde("BtnAgregarItem", "Agregar Item");
-        print("</td>");
+        
         $css->CierraFilaTabla();
     $css->CierraFilaTabla();
     
     
     
     $css->CerrarTabla();
-    $css->CerrarForm();
+    
     
     $css->CrearForm2("FrmCerrarCompC", $myPage, "post", "_self");
     $css->CrearInputText("TxtIdComprobante","hidden",'',$idComprobante,'',"","","",300,30,0,0);
@@ -250,6 +272,9 @@ print("<body>");
     $css->AgregaSubir();
     $css->AnchoElemento("CmbDestino_chosen", 200);
     $css->AnchoElemento("CmbCuentaDestino_chosen", 200);
+    if(isset($_REQUEST["TxtBusqueda"])){
+        print("<script>MostrarDialogo();</script>");
+    }
     print("</body></html>");
     ob_end_flush();
 ?>

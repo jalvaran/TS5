@@ -19,7 +19,7 @@ if(!empty($_REQUEST["BtnCrearTraslado"])){
     $hora=$_REQUEST["TxtHora"];
     $Concepto=$_REQUEST["TxtDescripcion"];
     $Destino=$_REQUEST["CmbDestino"];
-    $VectorTraslado["Fut"]=0;
+    $VectorTraslado["idBodega"]=$_REQUEST["CmbBodega"];
     $idComprobante=$obVenta->CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado);
         
     //$obVenta->CerrarCon();
@@ -32,10 +32,10 @@ if(!empty($_REQUEST["BtnAgregarItem"])){
    
     $obVenta=new ProcesoVenta($idUser);
         
-    $idComprobante=$_REQUEST["TxtIdCC"];
+    $idComprobante=$_REQUEST["TxtidPre"];
     $Cantidad=$_REQUEST["TxtCantidad"];
     
-    $idProducto=$_REQUEST["CmbProducto"];
+    $idProducto=$_REQUEST["TxtIdItem"];
     $VectorItem["Fut"]=0;
     $obVenta->AgregarItemTraslado($idComprobante,$idProducto,$Cantidad,$VectorItem);
     

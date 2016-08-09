@@ -3711,7 +3711,7 @@ public function CalculePesoRemision($idCotizacion)
      
      //Funcion para Crear un nuevo traslado
      public function CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado){
-                 
+        $idBodega=   $VectorTraslado["idBodega"];      
         $sql="SELECT Identificacion FROM usuarios WHERE idUsuarios='$this->idUser'";
         $Consulta=$this->Query($sql);
         $DatosUsuario=$this->FetchArray($Consulta);
@@ -3720,7 +3720,7 @@ public function CalculePesoRemision($idCotizacion)
         $Consecutivo++;
         
         $tab="traslados_mercancia";
-        $NumRegistros=9; 
+        $NumRegistros=10; 
         $id=  $DatosSucursalActual["ID"]."-".$Consecutivo;
         $Columnas[0]="Fecha";               $Valores[0]=$fecha;
         $Columnas[1]="Descripcion";         $Valores[1]=$Concepto;
@@ -3731,6 +3731,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[6]="Destino";             $Valores[6]=$Destino;
         $Columnas[7]="Origen";              $Valores[7]=$DatosSucursalActual["ID"];
         $Columnas[8]="ConsecutivoInterno";  $Valores[8]=$Consecutivo;
+        $Columnas[9]="idBodega";            $Valores[9]=$idBodega;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
        return($id); 
@@ -3741,7 +3742,16 @@ public function CalculePesoRemision($idCotizacion)
      public function AgregarItemTraslado($idComprobante,$idProducto,$Cantidad,$VectorItem){
          
        $DatosTraslado=$this->DevuelveValores("traslados_mercancia", "ID", $idComprobante);
+       $idBodega=$DatosTraslado["idBodega"];
        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+       $PrecioVenta=$DatosProducto["PrecioVenta"];
+       $PrecioMayorista=$DatosProducto["PrecioMayorista"];
+       if($idBodega>1){
+            $DatosProductoBodega=$this->DevuelveValores("productosventa_bodega_$idBodega", "Referencia", $DatosProducto["Referencia"]);
+            $PrecioVenta=$DatosProductoBodega["PrecioVenta"];
+            $PrecioMayorista=$DatosProductoBodega["PrecioMayorista"];
+            
+       }
        $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
        $consulta=$this->Query($sql);
        $CodigoBarras=$this->FetchArray($consulta);
@@ -3754,8 +3764,8 @@ public function CalculePesoRemision($idCotizacion)
        $Columnas[2]="Referencia";		$Valores[2]=$DatosProducto["Referencia"];
        $Columnas[3]="Nombre";			$Valores[3]=$DatosProducto["Nombre"];
        $Columnas[4]="Cantidad";			$Valores[4]=$Cantidad;
-       $Columnas[5]="PrecioVenta";              $Valores[5]=$DatosProducto["PrecioVenta"];
-       $Columnas[6]="PrecioMayorista";		$Valores[6]=$DatosProducto["PrecioMayorista"];
+       $Columnas[5]="PrecioVenta";              $Valores[5]=$PrecioVenta;
+       $Columnas[6]="PrecioMayorista";		$Valores[6]=$PrecioMayorista;
        $Columnas[7]="CostoUnitario";		$Valores[7]=$DatosProducto["CostoUnitario"];
        $Columnas[8]="IVA";			$Valores[8]=$DatosProducto["IVA"];
        $Columnas[9]="Departamento";		$Valores[9]=$DatosProducto["Departamento"];
