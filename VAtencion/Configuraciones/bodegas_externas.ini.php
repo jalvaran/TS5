@@ -47,7 +47,7 @@ $Vector["NewText"]["Kit"]="TxtCantidad";
 //
 //
 $Vector["CodigoBarras"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["CodigoBarras"]["TablaVinculo"]="prod_codbarras";  //tabla de donde se vincula
+
 $Vector["CodigoBarras"]["IDTabla"]="ProductosVenta_idProductosVenta"; //id de la tabla que se vincula
 $Vector["CodigoBarras"]["Display"]="CodigoBarras";                    //Columna que quiero mostrar
 $Vector["CodigoBarras"]["Predeterminado"]="N";

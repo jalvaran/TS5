@@ -4661,7 +4661,8 @@ public function VerificaPermisos($VectorPermisos) {
       * Crear una Tabla de una sucursal 
       */
      public function CrearTablaBodegaSucursal($idBodega,$Vector){
-        $NombreTabla="productosventa_bodega_$idBodega"; 
+        $NombreTabla="productosventa_bodega_$idBodega";
+        $NombreTablaKardex="prod_codbarras_bodega_$idBodega";
         $sql="CREATE TABLE IF NOT EXISTS `$NombreTabla` (
             `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
             `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -4688,7 +4689,16 @@ public function VerificaPermisos($VectorPermisos) {
             `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             PRIMARY KEY (`idProductosVenta`),
             UNIQUE KEY `Referencia` (`Referencia`)
-          ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=0 ;";
+          ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1;";
+        $this->Query($sql);
+        $sql="CREATE TABLE IF NOT EXISTS `$NombreTablaKardex` (
+            `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
+            `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
+            `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+            `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+            PRIMARY KEY (`idCodBarras`)
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;";
         $this->Query($sql);
      }
      /*

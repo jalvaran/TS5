@@ -22,6 +22,7 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
 include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
 $TablaBodega="productosventa_bodega_1";
+
 if(isset($_REQUEST["CmbBodega"])){
    $TablaBodega=$_REQUEST["CmbBodega"];
    $myTabla=$TablaBodega;
@@ -62,11 +63,18 @@ $css->CrearDiv("principal", "container", "center",1,1);
     /////
     /////	
 $css->CrearImageLink("../VMenu/Menu.php", "../images/externas.png", "_self",200,200);
+$idBodega=substr($TablaBodega, 22, 3);
+$Vector["CodigoBarras"]["TablaVinculo"]="prod_codbarras_bodega_$idBodega";  //tabla de donde se vincula
 $css->CrearForm2("FrmSeleccionarBodega", $myPage, "post", "_self");
-$css->CrearSelect("CmbBodega", "");
+$css->CrearSelect("CmbBodega", "EnviaForm('FrmSeleccionarBodega')");
+
     $Datos=$obVenta->ConsultarTabla("bodega", "");
     while($DatosBodega=$obVenta->FetchArray($Datos)){
-        $css->CrearOptionSelect("productosventa_bodega_".$DatosBodega["idBodega"], $DatosBodega["Nombre"], 0);
+        $sel=0;
+        if($DatosBodega["idBodega"]==$idBodega){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("productosventa_bodega_".$DatosBodega["idBodega"], $DatosBodega["Nombre"], $sel);
     }
     
 $css->CerrarSelect();
@@ -90,6 +98,9 @@ if(isset($_REQUEST["BtnDescargarDatos"])){
         $VectorBackup["Tabla"]="productosventa";
         $VectorBackup["AutoIncrement"]=0; 
         $TablaDesc="productosventa_bodega_$idBodega";
+        $obVenta->DescargarDesdeServidor($TablaDesc,$DatosBodega["idServidor"] ,$VectorBackup);
+        $VectorBackup["Tabla"]="prod_codbarras";
+        $TablaDesc="prod_codbarras_bodega_$idBodega";
         $obVenta->DescargarDesdeServidor($TablaDesc,$DatosBodega["idServidor"] ,$VectorBackup);
         //$css->CrearNotificacionRoja("<pre>$Mensaje</pre>", 16);
     }else{
