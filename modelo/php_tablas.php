@@ -744,7 +744,7 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
         $this->css->FilaTabla(14);
         $excluir=0;
         
-        if(isset($VarInsert[$tbl][$NombreCol]["Excluir"])){
+        if(isset($VarInsert[$tbl][$NombreCol]["Excluir"]) or $NombreCol=="Updated" or $NombreCol=="Sync"){
             $excluir=1;
         }
         $TipoText="text";

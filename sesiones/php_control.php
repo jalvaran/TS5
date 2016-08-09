@@ -14,7 +14,7 @@ $VectorPermisos["Page"]=$myPage;
  * Aqui se revisan los permisos segun el tipo de usuario
  */
 $Permiso=$obVenta->VerificaPermisos($VectorPermisos);
-$Permiso=1;
+//$Permiso=1;
 if ($Permiso==0){
   exit("<a href='../index.php' ><img src='../images/401.png'>Iniciar Sesion </a>");
   

@@ -4575,7 +4575,9 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
 public function VerificaPermisos($VectorPermisos) {
     if($this->TipoUser<>"administrador"){
         $Page=$VectorPermisos["Page"];
-        $PaginasUser=  $this->DevuelveValores("paginas_bloques", "TipoUsuario", $this->TipoUser);
+        
+        $Consulta=  $this->ConsultarTabla("paginas_bloques", " WHERE Pagina='$Page' AND TipoUsuario='$this->TipoUser' AND Habilitado='SI'");
+        $PaginasUser=  $this->FetchArray($Consulta);
         if($PaginasUser["Pagina"]==$Page){
             return true;
         }

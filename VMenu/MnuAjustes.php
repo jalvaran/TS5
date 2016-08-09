@@ -54,8 +54,8 @@ include_once("../sesiones/php_control.php");
  
 	$css->IniciaMenu("Ajustes y Servicios del Sistema"); 
 	$css->MenuAlfaIni("Generales");
-		$css->SubMenuAlfa("Backups",2);
-		
+            $css->SubMenuAlfa("Backups",2);
+            $css->SubMenuAlfa("Politicas de Acceso",3);
                
 	$css->MenuAlfaFin();
 	
@@ -68,8 +68,11 @@ include_once("../sesiones/php_control.php");
 		$css->NuevaTabs(2);
                     $css->SubTabs("../VAtencion/AgregueParametros.php","_self","../images/database.png","Verificar Disponibilidad Local");
                     $css->SubTabs("../VAtencion/backups.php","_self","../images/backup.png","Crear Backup");
-                        
-                        
+                $css->FinTabs();          
+                $css->NuevaTabs(3);
+			
+                        $css->SubTabs("../VAtencion/paginas_bloques.php","_self","../images/seguridadinformatica.png","Agregar Paginas a Un Tipo de Usuario");
+		     
 		$css->FinTabs();
 		
 	$css->FinMenu(); 
