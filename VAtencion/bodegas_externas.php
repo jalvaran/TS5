@@ -29,9 +29,9 @@ if(isset($_REQUEST["CmbBodega"])){
 }else{
    $myTabla=$TablaBodega;
 }
-
+$idBodega=substr($TablaBodega, 22, 3);
 include_once("Configuraciones/bodegas_externas.ini.php");  //Clases de donde se escribirán las tablas
-include_once("procesadores/procesaProductosVenta.php");  //Clases de donde se escribirán las tablas
+include_once("procesadores/procesaBodegas_Externas.php");  //Clases de donde se escribirán las tablas
 
 $obTabla = new Tabla($db);
 $obVenta = new ProcesoVenta(1);
@@ -63,7 +63,7 @@ $css->CrearDiv("principal", "container", "center",1,1);
     /////
     /////	
 $css->CrearImageLink("../VMenu/Menu.php", "../images/externas.png", "_self",200,200);
-$idBodega=substr($TablaBodega, 22, 3);
+
 $Vector["CodigoBarras"]["TablaVinculo"]="prod_codbarras_bodega_$idBodega";  //tabla de donde se vincula
 $css->CrearForm2("FrmSeleccionarBodega", $myPage, "post", "_self");
 $css->CrearSelect("CmbBodega", "EnviaForm('FrmSeleccionarBodega')");

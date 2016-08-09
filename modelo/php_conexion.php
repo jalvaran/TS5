@@ -2520,10 +2520,15 @@ public function CalculePesoRemision($idCotizacion)
         if(($handle = @fopen("$Puerto", "w")) === FALSE){
             die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
         }
-        $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
-        $Consulta =  $this->Query($sql);
-        $DatosCodigo=  $this->FetchArray($Consulta);  
-        $Codigo=$DatosCodigo["CodigoBarras"];
+        if(!isset($DatosCB["CodigoBarras"])){
+            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+            $Consulta =  $this->Query($sql);
+            $DatosCodigo=  $this->FetchArray($Consulta);  
+            $Codigo=$DatosCodigo["CodigoBarras"]; 
+        }else{
+            $Codigo=$DatosCB["CodigoBarras"]; 
+        }
+        
         $Cantidad=$Cantidad/3;
         $Numpages=ceil($Cantidad);
         $idEmpresaPro=$DatosCB["EmpresaPro"];
