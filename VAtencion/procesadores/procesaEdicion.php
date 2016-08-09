@@ -30,6 +30,11 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     $sql=substr($sql, 0, -1);
     $sql.=" WHERE $NombresColumnas[0] ='$IDEdit'";
     $obVenta->Query($sql);
+    
+    $PageReturn=  substr($myPage, 0, 21);
+    if($PageReturn=="productosventa_bodega"){
+        $myPage="bodegas_externas";
+    }
     header("location:../$myPage.php");
 }
 
