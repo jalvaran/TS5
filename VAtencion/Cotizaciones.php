@@ -1,17 +1,9 @@
 <?php
-ob_start();
-session_start();
+$myPage="Cotizaciones.php";
+include_once("../sesiones/php_control.php");
 
-include_once("../modelo/php_tablas.php");
 include_once("css_construct.php");
 
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-
-$NombreUser=$_SESSION['nombre'];
 $idUser=$_SESSION['idUser'];	
 $idClientes="";
 
@@ -38,7 +30,7 @@ print("<html><head>");
 $css =  new CssIni("SoftConTech Cotizaciones");
 print("</head><body align='center'>");	
          
-	 $obVenta=new ProcesoVenta($idUser);
+	 
          $obTabla = new Tabla($db);
 	 $myPage="Cotizaciones.php";
 	 $css->CabeceraIni("SoftConTech Cotizaciones"); 
