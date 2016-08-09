@@ -54,9 +54,33 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
         if(empty($_REQUEST["Referencia"])){
             $obVenta->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
         }
+        //Buscamos si hay mas bodegas para insertar los valores en cada una
+        $SqlCB="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID'";
+        $DatosCodigo=$obVenta->Query($SqlCB);
+        $Datos=$obVenta->ConsultarTabla("bodega", "");
         
+        while($DatosBodegas=$obVenta->FetchArray($Datos)){
+            $tabBodegas="productosventa_bodega_$DatosBodegas[0]";
+            
+            $Vector["Tabla"]=$tabBodegas;
+            $ID=$obTabla->ObtengaAutoIncrement($Vector);
+            $ID=$ID;
+                        
+            if(empty($_REQUEST["Referencia"])){
+                $Valores[0]="REF".$ID;
+            }
+            
+            $obVenta->InsertarRegistro($tabBodegas,$i,$Columnas,$Valores);
+            
+            $obVenta->ActualizaRegistro($tabBodegas, "CodigoBarras", $ID, "idProductosVenta", $ID);
+            $tabBodegas="prod_codbarras_bodega_$DatosBodegas[0]";
+            $Columnas2[0]="ProductosVenta_idProductosVenta";    $Valores2[0]=$ID;
+            $Columnas2[1]="CodigoBarras";                       $Valores2[1]=$DatosCodigo["CodigoBarras"];
+            $obVenta->InsertarRegistro($tabBodegas, 2, $Columnas2, $Valores2);
+        }
         
     }
+    
     
     if($tab=="servicios"){
         
@@ -96,6 +120,6 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
       $obVenta->CrearTablaBodegaSucursal($ID, $VectorB);   
         
     }
-    header("location:../$tab.php");
+   header("location:../$tab.php");
 }
 ?>

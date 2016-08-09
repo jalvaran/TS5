@@ -32,7 +32,7 @@ print("<body>");
     $VectorTraslado["AutoIncrement"]=0;
     $VectorT["F"]="";
     $Datos=$obVenta->MostrarTablas($db, $VectorT);
-    set_time_limit(300);
+    set_time_limit(600);
     
     while($TablasBackup=$obVenta->FetchArray($Datos)){
         $Mensaje="";

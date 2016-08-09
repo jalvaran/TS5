@@ -15,7 +15,7 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
  */
  
 $Vector["ProductosVenta"]=1;
-
+$Vector["NuevoRegistro"]["Deshabilitado"]=1;   
 $Vector["VerRegistro"]["Deshabilitado"]=1;       
 
 
