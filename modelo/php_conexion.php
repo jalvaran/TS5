@@ -4593,13 +4593,13 @@ public function VerificaPermisos($VectorPermisos) {
         }
         $sql=$this->ArmeSqlReplace($Tabla, $db, $CondicionUpdate,$DatosServer["DataBase"],$FechaSinc, $VectorAS);
         $Existe=  $this->DevuelveValores("plataforma_tablas", "Nombre", $Tabla);
-        if(empty($Existe)){
+        if(empty($Existe["Nombre"])){
             $sqlCrearTabla=$this->ArmeSQLCopiarTabla($Tabla, $db, $DatosServer["DataBase"], $VectorAS);
                     
         }
         $VectorCon["Fut"]=0;               
         
-        if(empty($sql)){
+        if(empty($sql) AND !empty($Existe["Nombre"])){
             return("SA");
         }
         
@@ -4616,7 +4616,7 @@ public function VerificaPermisos($VectorPermisos) {
         $this->ConToServer($host, $user, $pw, $db, $VectorCon); 
         $sqlUp="UPDATE $Tabla SET Sync='$FechaSinc', Updated='$FechaSinc' $CondicionUpdate";
         $this->Query($sqlUp);
-        if(!empty($sqlCrearTabla)){
+        if(empty($Existe["Nombre"])){
             $sqlInsertTabla="INSERT INTO plataforma_tablas (Nombre) VALUES ('$Tabla')";
             $this->Query($sqlInsertTabla);
         }
