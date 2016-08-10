@@ -76,7 +76,8 @@ include_once("../sesiones/php_control.php");
                         $css->SubTabs("../VAtencion/config_tiketes_promocion.php","_self","../images/tiketes.png","Configurar Tikete de Promocion");
 		$css->FinTabs();
 		$css->NuevaTabs(2);
-			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar");
+			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar un Usuario");
+                        $css->SubTabs("../VAtencion/usuarios_tipo.php","_self","../images/usuariostipo.png","Crear/Editar un Tipo de Usuario");
                         $css->SubTabs("../VAtencion/HabilitarUser.php","_self","../images/autorizarcajas.png","Asignar usuarios a cajas");
                         
 		$css->FinTabs();
