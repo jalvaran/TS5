@@ -2534,8 +2534,8 @@ public function CalculePesoRemision($idCotizacion)
         $idEmpresaPro=$DatosCB["EmpresaPro"];
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
         $fecha=date("y-m-d");
-
-        $RazonSocial=substr($DatosEmpresa["RazonSocial"],0,17);
+        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,17);
         $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
        
         $Descripcion=substr($DatosProducto["Nombre"],0,16);
@@ -2546,7 +2546,7 @@ public function CalculePesoRemision($idCotizacion)
         $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
         $Costo=$Costo1."/".$Costo2;
         $enter="\r\n";
-        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        
         $L1=$DatosConfigCB["DistaciaEtiqueta1"];
         $L2=$DatosConfigCB["DistaciaEtiqueta2"];
         $L3=$DatosConfigCB["DistaciaEtiqueta3"];
