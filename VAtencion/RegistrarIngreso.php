@@ -1,21 +1,14 @@
 <?php 
-ob_start();
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="RegistrarIngreso.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
+
+
+//////Si recibo una factura
+if(!empty($_REQUEST['idFactura'])){
+
+        $idFactura=$_REQUEST['idFactura'];
 }
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
-$idRemision="";
-//////Si recibo un cliente
-	if(!empty($_REQUEST['idFactura'])){
-		
-		$idFactura=$_REQUEST['idFactura'];
-	}
 
 	
 print("<html>");
@@ -26,7 +19,7 @@ print("</head>");
 print("<body>");
     $obVenta = new ProcesoVenta($idUser);
     include_once("procesadores/procesaIngreso.php");
-    $myPage="RegistrarIngreso.php";
+    
     $css->CabeceraIni("Registrar Ingreso"); //Inicia la cabecera de la pagina
     
     //////////Creamos el formulario de busqueda de remisiones

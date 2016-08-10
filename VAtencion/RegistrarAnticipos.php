@@ -1,25 +1,17 @@
 <?php 
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="RegistrarAnticipos.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
 
-	
 print("<html>");
 print("<head>");
 $css =  new CssIni("Registrar Anticipo");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+   
     include_once("procesadores/procesaAnticipo.php");
-    $myPage="RegistrarAnticipos.php";
+    
     $css->CabeceraIni("Registrar Anticipo"); //Inicia la cabecera de la pagina
     
    

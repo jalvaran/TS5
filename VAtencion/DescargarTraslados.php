@@ -1,16 +1,7 @@
 <?php 
-ob_start();
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="traslados_mercancia.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];
-$obVenta = new ProcesoVenta($idUser);
 
 $sql="";
 $myPage="DescargarTraslados.php";

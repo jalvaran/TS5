@@ -1,21 +1,8 @@
 <?php 
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="ComprobantesIngreso.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
 
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
-$idRemision="";
 //////Si recibo un cliente
 	if(!empty($_REQUEST['TxtAsociarRemision'])){
 		
@@ -29,9 +16,9 @@ $css =  new CssIni("Comprobantes Ingreso");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+    
     include_once("procesadores/procesaCompIngreso.php");
-    $myPage="ComprobantesIngreso.php";
+    
     $css->CabeceraIni("Registrar Ingreso"); //Inicia la cabecera de la pagina
     
    

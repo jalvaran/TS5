@@ -1,32 +1,14 @@
 <?php 
-ob_start();
-session_start();
-
-include_once("../modelo/php_conexion.php");
+$myPage="HabilitarUser.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-
-if ($_SESSION['tipouser']=="operador")
-{
-  header("location:401.php");
-  
-}
-
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
-
-$myPage="HabilitarUser.php";
 $css =  new CssIni("Habilitar User");
 $css->CabeceraIni("Asignacion de Usuarios a Cajas"); 
 $css->CabeceraFin();
 
 $css->CrearDiv("principal", "container", "Center", 1, 1);
-$obVenta=new ProcesoVenta($idUser);
+
 if(!empty($_REQUEST['ImgCerrarCajas'])){
             
     $obVenta->VaciarTabla("vestasactivas");// vaciar ventas activas

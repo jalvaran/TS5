@@ -1,14 +1,8 @@
 <?php 
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="RegistrarTraslado.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+
 $idTraslado="";
 //////Si recibo un cliente
 	if(!empty($_REQUEST['idTraslado'])){
@@ -23,9 +17,9 @@ $css =  new CssIni("Registrar traslado");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+    
     include_once("procesadores/ProcesaTraslado.php");
-    $myPage="RegistrarTraslado.php";
+    
     $css->CabeceraIni("Registro de Traslados Recibidos"); //Inicia la cabecera de la pagina
     
    

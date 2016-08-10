@@ -1,15 +1,8 @@
 <?php 
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="AgregaItemsOC.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
-$idRemision="";
+
 //////Si recibo un cliente
 	if(!empty($_REQUEST['idOT'])){
 		
@@ -23,9 +16,9 @@ $css =  new CssIni("Agregar Items a una Orden de Compra");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+    
     include_once("procesadores/procesaOC.php");
-    $myPage="AgregaItemsOC.php";
+    
     $css->CabeceraIni("Agregar Items a una Orden de Compra"); //Inicia la cabecera de la pagina
        
     $css->CabeceraFin(); 

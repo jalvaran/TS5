@@ -1,11 +1,6 @@
 <?php
-ob_start();
-session_start();
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
+$myPage="productosventa.php";
+include_once("../sesiones/php_control.php");
 
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
@@ -20,11 +15,9 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
         
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
-include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
 include_once("Configuraciones/ProductosVenta.ini.php");  //Clases de donde se escribirán las tablas
 include_once("procesadores/procesaProductosVenta.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-$obVenta = new ProcesoVenta(1);
 
 $statement = $obTabla->CreeFiltro($Vector);
 //print($statement);

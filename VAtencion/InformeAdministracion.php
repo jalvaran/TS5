@@ -5,25 +5,12 @@
 
 <?php 
 
-session_start();
-
-include_once("../modelo/php_conexion.php");
+$myPage="InformeAdministracion.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
 $fecha=date("Y-m-d");
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+	
 
 ?>
  
@@ -41,11 +28,9 @@ $idUser=$_SESSION['idUser'];
 	<body>
    
 	 <?php 
-	 $myPage="InformeAdministracion.php";
+	 
 	 $css->CabeceraIni("SoftConTech Informe de Administracion"); 
 	 $css->CabeceraFin(); 
-	 
-	 $obVenta=new ProcesoVenta($idUser);
 	  
 	  
 	 ?>

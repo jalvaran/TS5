@@ -56,9 +56,12 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/VentasRapidas.php","_blank","../images/vender.png","Ventas Rapidas");
                     $css->SubTabs("../VAtencion/cajas_aperturas_cierres.php","_blank","../images/cierres_caja.jpg","Historial de Cierres");
                     $css->SubTabs("../VAtencion/separados.php","_blank","../images/separados.png","Historial de Separados");
+                    $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
                     $css->SubTabs("../VAtencion/Remisiones.php","_blank","../images/remision.png","Remisiones");
                     $css->SubTabs("../VAtencion/Devoluciones.php","_blank","../images/devolucion2.png","Ajuste Remision");
-                    //$css->SubTabs("../VAtencion/facturas_items.php","_blank","../images/buscar.png","Buscar Item");
+                    $css->SubTabs("../VAtencion/facturas.php","_blank","../images/facturas.png","Buscar Factura");
+                    $css->SubTabs("../VAtencion/facturas_items.php","_blank","../images/buscar.png","Buscar Item");
+                    
                     //$css->SubTabs("../VAtencion/cuentasfrecuentes.php","_blank","../images/devolucion.png","Devoluciones en Ventas");
                     //$css->SubTabs("../VAtencion/cuentasfrecuentes.php","_blank","../images/cerrarturno.png","Cerrar Turno");
 		$css->FinTabs();

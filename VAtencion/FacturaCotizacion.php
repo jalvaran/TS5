@@ -1,20 +1,8 @@
 <?php
-ob_start();
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="FacturaCotizacion.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+
 $idRemision="";
 //////Si recibo un cliente
 	if(!empty($_REQUEST['TxtAsociarCotizacion'])){
@@ -29,9 +17,9 @@ $css =  new CssIni("Asociar una cotizacion a una factura");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+    
     include_once("procesadores/procesaFacturarCoti.php");
-    $myPage="FacturaCotizacion.php";
+    
     $css->CabeceraIni("SoftConTech Facturar una Cotización"); //Inicia la cabecera de la pagina
        
     $css->CabeceraFin(); 

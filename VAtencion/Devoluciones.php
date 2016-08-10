@@ -1,20 +1,14 @@
 <?php 
-session_start();
-include_once("../modelo/php_conexion.php");
+$myPage="Devoluciones.php";
+include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+	
 $idRemision="";
 //////Si recibo un cliente
-	if(!empty($_REQUEST['TxtAsociarRemision'])){
-		
-		$idRemision=$_REQUEST['TxtAsociarRemision'];
-	}
+if(!empty($_REQUEST['TxtAsociarRemision'])){
+
+        $idRemision=$_REQUEST['TxtAsociarRemision'];
+}
 
 	
 print("<html>");
@@ -23,9 +17,9 @@ $css =  new CssIni("Ajuste Remision");
 
 print("</head>");
 print("<body>");
-    $obVenta = new ProcesoVenta($idUser);
+    
     include_once("procesaDevolucion.php");
-    $myPage="Devoluciones.php";
+    
     $css->CabeceraIni("SoftConTech Ajuste a Remision"); //Inicia la cabecera de la pagina
     
     //////////Creamos el formulario de busqueda de remisiones

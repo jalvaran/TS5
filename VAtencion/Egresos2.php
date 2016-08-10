@@ -1,26 +1,16 @@
 <?php
-session_start();
+$myPage="Egresos2.php";
+include_once("../sesiones/php_control.php");
 ?>
 <script src="../shortcuts.js" type="text/javascript">
 </script>
 <script src="js/funciones.js"></script>
 <?php 
 
-include_once("../modelo/php_conexion.php");
+
 include_once("css_construct.php");
 
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
-$NombreUser=$_SESSION['nombre'];
-$idUser=$_SESSION['idUser'];	
+
 $fecha=date("Y-m-d");
 $TipoEgresos="";
 //////Si recibo una preventa
@@ -45,8 +35,8 @@ include_once("procesaEgresos.php");
 	<body>
    
 	 <?php 
-	 $obVenta=new ProcesoVenta($idUser);
-	 $myPage="Egresos2.php";
+	 
+	 
 	 $css->CabeceraIni("SoftConTech Egresos"); 
 	 $DatosUsuarios=$obVenta->DevuelveValores("usuarios","idUsuarios", $idUser);
 	 

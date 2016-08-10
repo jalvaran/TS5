@@ -1,15 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION['username']))
-{
-  exit("No se ha iniciado una sesion <a href='../index.php' >Iniciar Sesion </a>");
-  
-}
-if ($_SESSION['tipouser']<>"administrador")
-	{
-	  exit("Usted No esta autorizado para ingresar a esta parte <a href='Menu.php' >Menu </a>");
-	  
-	}
+$myPage="AgregaItemsXCB.php";
+include_once("../sesiones/php_control.php");
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -18,11 +9,6 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 		
 /////////
 
-
-        
-include_once("../modelo/php_conexion.php");  //Clases de donde se escribirán las tablas
-
-$obVenta = new ProcesoVenta(1);
 $myTitulo="Agregar Items al Inventario desde CSV";
 $MyPage="AgregarItemsXCB.php";
 include_once("css_construct.php");
