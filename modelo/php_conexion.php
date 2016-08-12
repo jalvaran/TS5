@@ -4777,22 +4777,82 @@ public function VerificaPermisos($VectorPermisos) {
         $this->InserteKardex($DatosKardex);
         
         ///////////////////////Ajustamos el inventario
-        $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 3);//Espacio donde se encuentra alojada la cuenta para gasto por perdidas o bjas
-        $CuentaPUC=$DatosParametros["CuentaPUC"]; 
-        if(strlen($CuentaPUC)>4){
-            $TablaPUC="subcuentas";
-            $idPUC="PUC";
+        
+        if($TipoMovimiento=="BAJA"){
+            $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 3);//Espacio donde se encuentra alojada la cuenta para gasto por perdidas o bjas
+            $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+            if(strlen($CuentaPUC)>4){
+                $TablaPUC="subcuentas";
+                $idPUC="PUC";
+            }else{
+                $TablaPUC="cuentas";
+                $idPUC="idPUC";
+            }
+            $CuentaPUCMov1=$CuentaPUC;
+            $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
+            $NombreCuentaMov1=$DatosCuenta["Nombre"];
+            $DebitoMov1=$CostoTotal;
+            $CreditoMov1=0;
+            $NetoMov1=$CostoTotal;
+            $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 4);//Espacio donde se encuentra alojada la cuenta para inventarios mercancias no fabricadas
+            $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+
+            if(strlen($CuentaPUC)>4){
+                    $TablaPUC="subcuentas";
+                    $idPUC="PUC";
+            }else{
+                $TablaPUC="cuentas";
+                $idPUC="idPUC";
+            }
+            $CuentaPUCMov2=$CuentaPUC;
+            $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
+            $NombreCuentaMov2=$DatosCuenta["Nombre"];
+            $DebitoMov2=0;
+            $CreditoMov2=$CostoTotal;
+            $NetoMov2=$CostoTotal*(-1);
+            $TipoComprobante="COMPROBANTE DE BAJA";
+            $Detalle="Baja Mercancias no Fabricadas por la Empresa";
         }else{
-            $TablaPUC="cuentas";
-            $idPUC="idPUC";
+            $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 5);//Espacio donde se encuentra alojada la cuenta para gasto por perdidas o bjas
+            $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+            if(strlen($CuentaPUC)>4){
+                $TablaPUC="subcuentas";
+                $idPUC="PUC";
+            }else{
+                $TablaPUC="cuentas";
+                $idPUC="idPUC";
+            }
+            $CuentaPUCMov1=$CuentaPUC;
+            $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
+            $NombreCuentaMov1=$DatosCuenta["Nombre"];
+            $DebitoMov1=0;
+            $CreditoMov1=$CostoTotal;
+            $NetoMov1=$CostoTotal*(-1);
+            $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 4);//Espacio donde se encuentra alojada la cuenta para inventarios mercancias no fabricadas
+            $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+
+            if(strlen($CuentaPUC)>4){
+                    $TablaPUC="subcuentas";
+                    $idPUC="PUC";
+            }else{
+                $TablaPUC="cuentas";
+                $idPUC="idPUC";
+            }
+            $CuentaPUCMov2=$CuentaPUC;
+            $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
+            $NombreCuentaMov2=$DatosCuenta["Nombre"];
+            $DebitoMov2=$CostoTotal;
+            $CreditoMov2=0;
+            $NetoMov2=$CostoTotal;
+            $TipoComprobante="COMPROBANTE DE ALTA";
+            $Detalle="Alta Mercancias no Fabricadas por la Empresa";
         }
-        $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
-        $NombreCuenta=$DatosCuenta["Nombre"];
-                
+        
+                        
     $tab="librodiario";
     $NumRegistros=27;
     $Columnas[0]="Fecha";			$Valores[0]=$fecha;
-    $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="COMPROBANTE DE BAJA";
+    $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]=$TipoComprobante;
     $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idBaja;
     $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]="PROPIO";
     $Columnas[4]="Tercero_Identificacion";	$Valores[4]="";
@@ -4807,12 +4867,12 @@ public function VerificaPermisos($VectorPermisos) {
     $Columnas[13]="Tercero_Cod_Mcipio";         $Valores[13]="";
     $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]="";
 
-    $Columnas[15]="CuentaPUC";                  $Valores[15]=$CuentaPUC;
-    $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
-    $Columnas[17]="Detalle";                    $Valores[17]="Baja Mercancias no Fabricadas por la Empresa";
-    $Columnas[18]="Debito";			$Valores[18]=$CostoTotal;
-    $Columnas[19]="Credito";                    $Valores[19]="0";
-    $Columnas[20]="Neto";			$Valores[20]=$Valores[18];
+    $Columnas[15]="CuentaPUC";                  $Valores[15]=$CuentaPUCMov1;
+    $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuentaMov1;
+    $Columnas[17]="Detalle";                    $Valores[17]=$Detalle;
+    $Columnas[18]="Debito";			$Valores[18]=$DebitoMov1;
+    $Columnas[19]="Credito";                    $Valores[19]=$CreditoMov1;
+    $Columnas[20]="Neto";			$Valores[20]=$NetoMov1;
     $Columnas[21]="Mayor";			$Valores[21]="NO";
     $Columnas[22]="Esp";			$Valores[22]="NO";
     $Columnas[23]="Concepto";                   $Valores[23]=$Observaciones;
@@ -4823,24 +4883,11 @@ public function VerificaPermisos($VectorPermisos) {
     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);	
         
 
-    $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 4);//Espacio donde se encuentra alojada la cuenta para inventarios mercancias no fabricadas
-    $CuentaPUC=$DatosParametros["CuentaPUC"]; 
-
-    if(strlen($CuentaPUC)>4){
-            $TablaPUC="subcuentas";
-            $idPUC="PUC";
-    }else{
-        $TablaPUC="cuentas";
-        $idPUC="idPUC";
-    }
-    $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
-    $NombreCuenta=$DatosCuenta["Nombre"];
-
-    $Valores[15]=$CuentaPUC;
-    $Valores[16]=$NombreCuenta;
-    $Valores[18]=0;//Debito se escribe el costo de la mercancia vendida
-    $Valores[19]=$CostoTotal; 			
-    $Valores[20]=$CostoTotal*(-1);  	//para la sumatoria contemplar el balance
+    $Valores[15]=$CuentaPUCMov2;
+    $Valores[16]=$NombreCuentaMov2;
+    $Valores[18]=$DebitoMov2;//Debito se escribe el costo de la mercancia vendida
+    $Valores[19]=$CreditoMov2; 			
+    $Valores[20]=$NetoMov2;  	//para la sumatoria contemplar el balance
 
     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
           
