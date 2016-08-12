@@ -17,23 +17,7 @@
 	$COMPrinter=3;
 	$PrintCuenta="SI";
         $CuentaAnticipos=2705;
-        
-	
-class Consultar_Producto{
-	private $consulta;
-	private $fetch;
-        
-        
-	function __construct($codigo){
-		$this->consulta = mysql_query("SELECT * FROM productosventa WHERE Referencia='$codigo'");
-		$this->fetch = mysql_fetch_array($this->consulta);
-	}
-	
-	function consultar($campo){
-		return $this->fetch[$campo];
-	}
-}
-
+ 
 //////////////////////////////////////////////////////////////////////////
 ////////////Clase para guardar ventas ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -61,6 +45,7 @@ class ProcesoVenta{
 		$this->NombreUser = $this->fetch['Nombre'];
 		$this->idUser=$idUserR;
                 $this->TipoUser=$this->fetch['TipoUser'];
+                
                 //$this->VerificaPermisos($VectorPermisos);
 	}
 	
@@ -4758,9 +4743,10 @@ public function VerificaPermisos($VectorPermisos) {
       */
      public function DarDeBajaAltaProducto($TipoMovimiento,$fecha, $Observaciones,$RefProducto,$Cantidad,$VectorBA){
          $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $RefProducto);
+         $DatosSucursal=$this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
          $CostoTotal=$DatosProducto["CostoUnitario"]*$Cantidad;
-         $tab="prod_bajas";
-        $NumRegistros=8; 
+         $tab="prod_bajas_altas";
+        $NumRegistros=9; 
 
         $Columnas[0]="Fecha";		    $Valores[0]=$fecha;
         $Columnas[1]="Departamento";        $Valores[1]=$DatosProducto["Departamento"];
@@ -4769,27 +4755,38 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[4]="Cantidad";            $Valores[4]=$Cantidad;
         $Columnas[5]="CostoTotal";          $Valores[5]=$CostoTotal;
         $Columnas[6]="Observaciones";       $Valores[6]=$Observaciones;
-        $Columnas[7]="Usuarios_idUsuarios"; $Valores[7]=  $this->idUser;
+        $Columnas[7]="Usuarios_idUsuarios"; $Valores[7]=$this->idUser;
+        $Columnas[8]="Movimiento";          $Valores[8]=$TipoMovimiento;
         
-        
+        if($TipoMovimiento=="BAJA"){
+            $MovientoKardex="SALIDA";
+        }else{
+            $MovientoKardex="ENTRADA";
+        }
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-        $idBaja=$this->ObtenerMAX("prod_bajas", "ID", 1, "");
+        $idBaja=$this->ObtenerMAX("prod_bajas_altas", "ID", 1, "");
         
         $DatosKardex["Cantidad"]=$Cantidad;
         $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
         $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
         $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
-        $DatosKardex["Detalle"]="Baja";
+        $DatosKardex["Detalle"]=$TipoMovimiento;
         $DatosKardex["idDocumento"]=$idBaja;
         $DatosKardex["TotalCosto"]=$CostoTotal;
-        $DatosKardex["Movimiento"]="SALIDA";
+        $DatosKardex["Movimiento"]=$MovientoKardex;
         $this->InserteKardex($DatosKardex);
         
         ///////////////////////Ajustamos el inventario
-        /*
-        $CuentaPUC=$this->CuentaCostoMercancia; //6135   costo de mercancia vendida
-
-        $DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
+        $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 3);//Espacio donde se encuentra alojada la cuenta para gasto por perdidas o bjas
+        $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+        if(strlen($CuentaPUC)>4){
+            $TablaPUC="subcuentas";
+            $idPUC="PUC";
+        }else{
+            $TablaPUC="cuentas";
+            $idPUC="idPUC";
+        }
+        $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
         $NombreCuenta=$DatosCuenta["Nombre"];
                 
     $tab="librodiario";
@@ -4799,64 +4796,54 @@ public function VerificaPermisos($VectorPermisos) {
     $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idBaja;
     $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]="PROPIO";
     $Columnas[4]="Tercero_Identificacion";	$Valores[4]="";
-    $Columnas[5]="Tercero_DV";		$Valores[5]="0";
+    $Columnas[5]="Tercero_DV";                  $Valores[5]="0";
     $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]="";
-    $Columnas[7]="Tercero_Segundo_Apellido";$Valores[7]="";
+    $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]="";
     $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]="";
     $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]="";
     $Columnas[10]="Tercero_Razon_Social";	$Valores[10]="PROPIO";
-    $Columnas[11]="Tercero_Direccion";      $Valores[11]="";
-    $Columnas[12]="Tercero_Cod_Dpto";	$Valores[12]="";
-    $Columnas[13]="Tercero_Cod_Mcipio";	$Valores[13]="";
-    $Columnas[14]="Tercero_Pais_Domicilio"; $Valores[14]="";
+    $Columnas[11]="Tercero_Direccion";          $Valores[11]="";
+    $Columnas[12]="Tercero_Cod_Dpto";           $Valores[12]="";
+    $Columnas[13]="Tercero_Cod_Mcipio";         $Valores[13]="";
+    $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]="";
 
-    $Columnas[15]="CuentaPUC";		$Valores[15]=$CuentaPUC;
+    $Columnas[15]="CuentaPUC";                  $Valores[15]=$CuentaPUC;
     $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
-    $Columnas[17]="Detalle";		$Valores[17]="Baja Mercancias no Fabricadas por la Empresa";
-    $Columnas[18]="Debito";			$Valores[18]=$Total;
-    $Columnas[19]="Credito";		$Valores[19]="0";
+    $Columnas[17]="Detalle";                    $Valores[17]="Baja Mercancias no Fabricadas por la Empresa";
+    $Columnas[18]="Debito";			$Valores[18]=$CostoTotal;
+    $Columnas[19]="Credito";                    $Valores[19]="0";
     $Columnas[20]="Neto";			$Valores[20]=$Valores[18];
     $Columnas[21]="Mayor";			$Valores[21]="NO";
     $Columnas[22]="Esp";			$Valores[22]="NO";
-    $Columnas[23]="Concepto";		$Valores[23]=$Observaciones;
-    $Columnas[24]="idCentroCosto";	$Valores[24]=$CentroCostos;
-    $Columnas[25]="idEmpresa";		$Valores[25]=$EmpresaPro;
-    $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
+    $Columnas[23]="Concepto";                   $Valores[23]=$Observaciones;
+    $Columnas[24]="idCentroCosto";              $Valores[24]=1;
+    $Columnas[25]="idEmpresa";                  $Valores[25]=$DatosSucursal["idEmpresaPro"];
+    $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
                 
     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);	
-        if($DatosItems["TipoItem"]=="PR"){
-
-                $CuentaPUC=$this->CuentaCostoMercancia; //6135   costo de mercancia vendida
-
-                $DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-                $NombreCuenta=$DatosCuenta["Nombre"];
-
-                $Valores[15]=$CuentaPUC;
-                $Valores[16]=$NombreCuenta;
-                $Valores[18]=$TotalCostosM;//Debito se escribe el costo de la mercancia vendida
-                $Valores[19]="0"; 			
-                $Valores[20]=$TotalCostosM;  	//para la sumatoria contemplar el balance
-
-                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-
-                ///////////////////////Ajustamos el inventario
-
-                $CuentaPUC=$this->CuentaInventarios; //1435   Mercancias no fabricadas por la empresa
-
-                $DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-                $NombreCuenta=$DatosCuenta["Nombre"];
-
-                $Valores[15]=$CuentaPUC;
-                $Valores[16]=$NombreCuenta;
-                $Valores[18]="0";
-                $Valores[19]=$TotalCostosM;//Credito se escribe el costo de la mercancia vendida			
-                $Valores[20]=$TotalCostosM*(-1);  	//para la sumatoria contemplar el balance
-
-                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-
-        }
         
-        */
+
+    $DatosParametros=  $this->DevuelveValores("parametros_contables", "ID", 4);//Espacio donde se encuentra alojada la cuenta para inventarios mercancias no fabricadas
+    $CuentaPUC=$DatosParametros["CuentaPUC"]; 
+
+    if(strlen($CuentaPUC)>4){
+            $TablaPUC="subcuentas";
+            $idPUC="PUC";
+    }else{
+        $TablaPUC="cuentas";
+        $idPUC="idPUC";
+    }
+    $DatosCuenta=$this->DevuelveValores($TablaPUC,$idPUC,$CuentaPUC);
+    $NombreCuenta=$DatosCuenta["Nombre"];
+
+    $Valores[15]=$CuentaPUC;
+    $Valores[16]=$NombreCuenta;
+    $Valores[18]=0;//Debito se escribe el costo de la mercancia vendida
+    $Valores[19]=$CostoTotal; 			
+    $Valores[20]=$CostoTotal*(-1);  	//para la sumatoria contemplar el balance
+
+    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+          
         return ($idBaja);
      }
      

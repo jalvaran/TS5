@@ -10,8 +10,9 @@ $RefProducto=$_REQUEST["CmbProducto"];
 $fecha=$_REQUEST["TxtFecha"];
 $Observaciones=$_REQUEST["TxtConcepto"];
 $Cantidad=$_REQUEST["TxtCantidad"];
+$TipoMovimiento=$_REQUEST["CmbTipoMovimiento"];
 $VectorBA["f"]="";
-$idBaja=$obVenta->DarDeBajaAltaProducto("BAJA",$fecha, $Observaciones,$RefProducto,$Cantidad,$VectorBA);
+$idBaja=$obVenta->DarDeBajaAltaProducto($TipoMovimiento,$fecha, $Observaciones,$RefProducto,$Cantidad,$VectorBA);
 
 header("location:$myPage?TxtidComprobante=$idBaja");
         

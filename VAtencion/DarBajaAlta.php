@@ -1,5 +1,5 @@
 <?php 
-$myPage="DarBaja.php";
+$myPage="DarBajaAlta.php";
 include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 	
@@ -35,9 +35,9 @@ print("<body>");
     /////
     /////
     if(!empty($_REQUEST["TxtidComprobante"])){
-        $RutaPrintIngreso="../tcpdf/examples/notacredito.php?idComprobante=".$_REQUEST["TxtidComprobante"];			
+        $RutaPrintIngreso="../tcpdf/examples/comprobanteBaja.php?idComprobante=".$_REQUEST["TxtidComprobante"];			
         $css->CrearTabla();
-        $css->CrearFilaNotificacion("Nota Credito Creada Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Nota Credito No. $_REQUEST[TxtidComprobante]</a>",16);
+        $css->CrearFilaNotificacion("Comprobante Creado correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Baja No. $_REQUEST[TxtidComprobante]</a>",16);
         $css->CerrarTabla();
     }
     ///////////////Se crea el DIV que servirá de contenedor secundario
@@ -54,9 +54,20 @@ print("<body>");
         $css->CrearForm2("FrmRegistraBajaAlta", $myPage, "post", "_self");
         
         $css->CrearTabla();
-        $css->CrearNotificacionRoja("Datos Para Realizar la Baja", 16);
+        $css->CrearNotificacionRoja("Datos Para Realizar la Baja o Alta de un producto", 16);
         print("<td style='text-align:center'>");
         $css->CrearInputText("TxtFecha", "text", "Fecha de La Baja: <br>", date("Y-m-d"), "Fecha", "black", "", "", 100, 30, 0, 1);
+        print("<br>");
+        $VectorSel["Nombre"]="CmbTipoMovimiento";
+        $VectorSel["Evento"]="";
+        $VectorSel["Funcion"]="";
+        $VectorSel["Required"]=1;
+        $css->CrearSelect2($VectorSel);
+        $css->CrearOptionSelect("", "Escoja un Movimiento", 0);
+        $css->CrearOptionSelect("BAJA", "DAR DE BAJA", 0);
+        $css->CrearOptionSelect("ALTA", "DAR DE ALTA", 0);
+        $css->CerrarSelect();
+        print("<br>");
         print("<br>");
         $VarSelect["Ancho"]="200";
             $VarSelect["PlaceHolder"]="Seleccione el producto";
