@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-08-2016 a las 11:07:13
+-- Tiempo de generación: 12-08-2016 a las 17:45:45
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -1130,7 +1130,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idClientes`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=96 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=97 ;
 
 --
 -- Volcado de datos para la tabla `clientes`
@@ -1220,7 +1220,8 @@ INSERT INTO `clientes` (`idClientes`, `Tipo_Documento`, `Num_Identificacion`, `D
 (92, 13, '2313321321', 0, 'DSA', 'DSA', '', '', '  DSA DSA', 'DS', '5', '001', '169', 'DSA', 'MEDELLIN', '', '', 'DSA', 0, '2016-08-09 12:55:45', '2016-08-09 07:55:45'),
 (93, 31, '94999494', 0, 'REDIN', '', '', 'MARCELO', ' MARCELO REDIN ', 'SA', '76', '890', '169', '3212', 'YOTOCO', '', '', 'no', 0, '2016-08-09 12:55:45', '2016-08-09 07:55:45'),
 (94, 11, '340493204932', 2, '', '', '', '', 'SEBASTIAN', 'CARSS', 'selected', '040', '13', 'DSDS', 'BUGA', '', '', '', 3232, '2016-08-09 12:55:45', '2016-08-09 07:55:45'),
-(95, 13, '9323232', 2, '', '', '', '', 'CARE LOCO', 'CAS', '76', '109', '169', '321321', 'BUENAVENTURA', '', '', '', 0, '2016-08-10 03:18:18', '0000-00-00 00:00:00');
+(95, 13, '9323232', 2, '', '', '', '', 'CARE LOCO', 'CAS', '76', '109', '169', '321321', 'BUENAVENTURA', '', '', '', 0, '2016-08-10 03:18:18', '0000-00-00 00:00:00'),
+(96, 13, '321321321321321321', 0, '', '', '', '', 'prueba de ', 'ds', '11', '001', '169', 'ds', 'BOGOTA, D.C.', '', '', 'ds', 0, '2016-08-11 18:49:54', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3146,7 +3147,14 @@ CREATE TABLE IF NOT EXISTS `cotizacionesv5` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `cotizacionesv5`
+--
+
+INSERT INTO `cotizacionesv5` (`ID`, `Fecha`, `Clientes_idClientes`, `Usuarios_idUsuarios`, `Observaciones`, `NumSolicitud`, `NumOrden`, `Seguimiento`, `Updated`, `Sync`) VALUES
+(1, '2016-08-12', 2, 3, '', '', '', '', '2016-08-12 14:51:02', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3177,7 +3185,14 @@ CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `cot_itemscotizaciones`
+--
+
+INSERT INTO `cot_itemscotizaciones` (`ID`, `idCliente`, `NumCotizacion`, `Descripcion`, `Referencia`, `TablaOrigen`, `ValorUnitario`, `Cantidad`, `Multiplicador`, `Subtotal`, `IVA`, `Total`, `Descuento`, `ValorDescuento`, `PrecioCosto`, `SubtotalCosto`, `TipoItem`, `Devuelto`, `CuentaPUC`, `Updated`, `Sync`) VALUES
+(1, 2, 1, 'BOXER HOMBREMONTGREEN', 'MONT584', 'productosventa', '8900', '1', 1, '8900', '0', '8900', '', '', '6000', '6000', 'PR', '', '4135', '2016-08-12 14:51:02', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3765,7 +3780,7 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
 --
 
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`, `Updated`, `Sync`) VALUES
-(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2016-08-10 02:59:00', '2016-08-09 07:56:58'),
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2016-08-12 14:51:51', '2016-08-09 07:56:58'),
 (2, 'Facturas por POS', '1555431', '2016-03-27', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2016-08-09 12:56:58', '2016-08-09 07:56:58');
 
 -- --------------------------------------------------------
@@ -3841,6 +3856,14 @@ CREATE TABLE IF NOT EXISTS `facturas` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idFacturas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `facturas`
+--
+
+INSERT INTO `facturas` (`idFacturas`, `idResolucion`, `TipoFactura`, `Prefijo`, `NumeroFactura`, `Fecha`, `Hora`, `OCompra`, `OSalida`, `FormaPago`, `Subtotal`, `IVA`, `Descuentos`, `Total`, `SaldoFact`, `Cotizaciones_idCotizaciones`, `EmpresaPro_idEmpresaPro`, `CentroCosto`, `idSucursal`, `Usuarios_idUsuarios`, `Clientes_idClientes`, `TotalCostos`, `CerradoDiario`, `FechaCierreDiario`, `HoraCierreDiario`, `ObservacionesFact`, `Efectivo`, `Devuelve`, `Cheques`, `Otros`, `Tarjetas`, `idTarjetas`, `Updated`, `Sync`) VALUES
+('201608120951320.12333000 1471013492', 1, '02', 'A', 1, '2016-08-12', '09:51:32', '', '', 'Contado', '', '', '', '', '', '', 1, 1, 0, 3, 2, '', 0, '0000-00-00', '00:00:00', '', 0, 0, 0, 0, 0, 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+('201608120951510.61444500 1471013511', 1, '02', 'A', 2, '2016-08-12', '09:51:51', '', '', 'Contado', '8900', '0', '', '8900', '8900', '', 1, 1, 0, 3, 14, '6000', 0, '0000-00-00', '00:00:00', '', 0, 0, 0, 0, 0, 0, '2016-08-12 14:51:51', '0000-00-00 00:00:00');
 
 --
 -- Disparadores `facturas`
@@ -4228,7 +4251,15 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `facturas_items`
+--
+
+INSERT INTO `facturas_items` (`ID`, `FechaFactura`, `idFactura`, `TablaItems`, `Referencia`, `Nombre`, `Departamento`, `SubGrupo1`, `SubGrupo2`, `SubGrupo3`, `SubGrupo4`, `SubGrupo5`, `ValorUnitarioItem`, `Cantidad`, `Dias`, `SubtotalItem`, `IVAItem`, `TotalItem`, `PorcentajeIVA`, `PrecioCostoUnitario`, `SubtotalCosto`, `TipoItem`, `CuentaPUC`, `GeneradoDesde`, `NumeroIdentificador`, `idUsuarios`, `idCierre`, `Updated`, `Sync`) VALUES
+(1, '2016-08-12', '201608120951320.12333000 1471013492', 'servicios', 'REFSER44', 'transporte', 2, 0, 0, 0, 0, 0, 50000, '1', '1', '50000', '0', '50000', '0%', '25000', '25000', 'PR', 412060, 'cotizacionesv5', '', 3, 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+(2, '2016-08-12', '201608120951510.61444500 1471013511', 'productosventa', 'MONT584', 'BOXER HOMBREMONTGREEN', 1, 5, 38, 55, 0, 0, 8900, '1', '1', '8900', '0', '8900', '0%', '6000', '6000', 'PR', 4135, 'cotizacionesv5', '', 3, 0, '2016-08-12 14:51:51', '0000-00-00 00:00:00');
 
 --
 -- Disparadores `facturas_items`
@@ -4282,14 +4313,7 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `facturas_pre`
---
-
-INSERT INTO `facturas_pre` (`ID`, `FechaFactura`, `idFactura`, `TablaItems`, `Referencia`, `Nombre`, `Departamento`, `SubGrupo1`, `SubGrupo2`, `SubGrupo3`, `SubGrupo4`, `SubGrupo5`, `ValorUnitarioItem`, `Cantidad`, `Dias`, `SubtotalItem`, `IVAItem`, `TotalItem`, `PorcentajeIVA`, `PrecioCostoUnitario`, `SubtotalCosto`, `TipoItem`, `CuentaPUC`, `GeneradoDesde`, `NumeroIdentificador`, `idUsuarios`, `idCierre`, `Updated`, `Sync`) VALUES
-(3, '', '', 'servicios', 'REFSER44', 'transporte', 2, 0, 0, 0, 0, 0, 50000, '1', '1', '50000', '0', '50000', '0%', '25000', '25000', 'PR', 412060, 'cotizacionesv5', '2', 3, 0, '2016-08-10 00:37:09', '0000-00-00 00:00:00');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -4596,7 +4620,41 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idKardexMercancias`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=29 ;
+
+--
+-- Volcado de datos para la tabla `kardexmercancias`
+--
+
+INSERT INTO `kardexmercancias` (`idKardexMercancias`, `idBodega`, `Fecha`, `Movimiento`, `Detalle`, `idDocumento`, `Cantidad`, `ValorUnitario`, `ValorTotal`, `ProductosVenta_idProductosVenta`, `Updated`, `Sync`) VALUES
+(1, 1, '2016-08-12', 'SALIDA', 'Factura', '201608120951320.12333000 1471013492', '1', '', '25000', 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+(2, 1, '2016-08-12', 'SALDOS', 'Factura', '201608120951320.12333000 1471013492', '-1', '', '0', 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+(3, 1, '2016-08-12', 'SALIDA', 'Factura', '201608120951510.61444500 1471013511', '1', '6000', '6000', 801055, '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(4, 1, '2016-08-12', 'SALDOS', 'Factura', '201608120951510.61444500 1471013511', '-13', '6000', '-78000', 801055, '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(5, 1, '2016-08-12', 'SALIDA', 'Baja', '2', '10', '100000', '1000000', 809683, '2016-08-12 16:12:41', '0000-00-00 00:00:00'),
+(6, 1, '2016-08-12', 'SALDOS', 'Baja', '2', '-11', '100000', '-1100000', 809683, '2016-08-12 16:12:41', '0000-00-00 00:00:00'),
+(7, 1, '2016-08-12', 'SALIDA', 'Baja', '3', '3', '100000', '300000', 809683, '2016-08-12 21:19:48', '0000-00-00 00:00:00'),
+(8, 1, '2016-08-12', 'SALDOS', 'Baja', '3', '-14', '100000', '-1400000', 809683, '2016-08-12 21:19:48', '0000-00-00 00:00:00'),
+(9, 1, '2016-08-12', 'SALIDA', 'Baja', '4', '10', '6000', '60000', 801055, '2016-08-12 21:24:10', '0000-00-00 00:00:00'),
+(10, 1, '2016-08-12', 'SALDOS', 'Baja', '4', '-23', '6000', '-138000', 801055, '2016-08-12 21:24:10', '0000-00-00 00:00:00'),
+(11, 1, '2016-08-12', 'SALIDA', 'BAJA', '5', '10', '100000', '1000000', 809683, '2016-08-12 21:47:29', '0000-00-00 00:00:00'),
+(12, 1, '2016-08-12', 'SALDOS', 'BAJA', '5', '-24', '100000', '-2400000', 809683, '2016-08-12 21:47:29', '0000-00-00 00:00:00'),
+(13, 1, '2016-08-12', 'ENTRADA', 'ALTA', '6', '10', '100000', '1000000', 809683, '2016-08-12 22:00:13', '0000-00-00 00:00:00'),
+(14, 1, '2016-08-12', 'SALDOS', 'ALTA', '6', '-14', '100000', '-1400000', 809683, '2016-08-12 22:00:13', '0000-00-00 00:00:00'),
+(15, 1, '2016-08-12', 'SALIDA', 'BAJA', '7', '10', '100000', '1000000', 809683, '2016-08-12 22:23:34', '0000-00-00 00:00:00'),
+(16, 1, '2016-08-12', 'SALDOS', 'BAJA', '7', '-24', '100000', '-2400000', 809683, '2016-08-12 22:23:34', '0000-00-00 00:00:00'),
+(17, 1, '2016-08-12', 'SALIDA', 'BAJA', '8', '10', '0', '0', 800001, '2016-08-12 22:25:54', '0000-00-00 00:00:00'),
+(18, 1, '2016-08-12', 'SALDOS', 'BAJA', '8', '-1', '0', '0', 800001, '2016-08-12 22:25:54', '0000-00-00 00:00:00'),
+(19, 1, '2016-08-12', 'SALIDA', 'BAJA', '9', '10', '100000', '1000000', 809683, '2016-08-12 22:26:40', '0000-00-00 00:00:00'),
+(20, 1, '2016-08-12', 'SALDOS', 'BAJA', '9', '-34', '100000', '-3400000', 809683, '2016-08-12 22:26:40', '0000-00-00 00:00:00'),
+(21, 1, '2016-08-12', 'ENTRADA', 'ALTA', '10', '10', '100000', '1000000', 809683, '2016-08-12 22:27:37', '0000-00-00 00:00:00'),
+(22, 1, '2016-08-12', 'SALDOS', 'ALTA', '10', '-24', '100000', '-2400000', 809683, '2016-08-12 22:27:37', '0000-00-00 00:00:00'),
+(23, 1, '2016-08-12', 'SALIDA', 'BAJA', '11', '10', '100000', '1000000', 809683, '2016-08-12 22:28:27', '0000-00-00 00:00:00'),
+(24, 1, '2016-08-12', 'SALDOS', 'BAJA', '11', '-34', '100000', '-3400000', 809683, '2016-08-12 22:28:27', '0000-00-00 00:00:00'),
+(25, 1, '2016-08-12', 'ENTRADA', 'ALTA', '12', '34', '100000', '3400000', 809683, '2016-08-12 22:28:51', '0000-00-00 00:00:00'),
+(26, 1, '2016-08-12', 'SALDOS', 'ALTA', '12', '0', '100000', '0', 809683, '2016-08-12 22:28:51', '0000-00-00 00:00:00'),
+(27, 1, '2016-08-12', 'ENTRADA', 'ALTA', '13', '10', '9500', '95000', 800003, '2016-08-12 22:30:42', '0000-00-00 00:00:00'),
+(28, 1, '2016-08-12', 'SALDOS', 'ALTA', '13', '22', '9500', '209000', 800003, '2016-08-12 22:30:42', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -4669,7 +4727,39 @@ CREATE TABLE IF NOT EXISTS `librodiario` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idLibroDiario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=27 ;
+
+--
+-- Volcado de datos para la tabla `librodiario`
+--
+
+INSERT INTO `librodiario` (`idLibroDiario`, `Fecha`, `Tipo_Documento_Intero`, `Num_Documento_Interno`, `Tercero_Tipo_Documento`, `Tercero_Identificacion`, `Tercero_DV`, `Tercero_Primer_Apellido`, `Tercero_Segundo_Apellido`, `Tercero_Primer_Nombre`, `Tercero_Otros_Nombres`, `Tercero_Razon_Social`, `Tercero_Direccion`, `Tercero_Cod_Dpto`, `Tercero_Cod_Mcipio`, `Tercero_Pais_Domicilio`, `Concepto`, `CuentaPUC`, `NombreCuenta`, `Detalle`, `Debito`, `Credito`, `Neto`, `Mayor`, `Esp`, `idCentroCosto`, `idEmpresa`, `idSucursal`, `Estado`, `Updated`, `Sync`) VALUES
+(1, '2016-08-12', 'FACTURA', '201608120951510.61444500 1471013511', '31', '94471845', '9', '', '', '', '', 'Taller Industrial Servi Torno', 'Carrera 18 No. 9-38', '76', '111', '169', 'Ventas', '110505', 'CAJA GENERAL', 'Ventas', '8900', '0', '8900', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(2, '2016-08-12', 'FACTURA', '201608120951510.61444500 1471013511', '31', '94471845', '9', '', '', '', '', 'Taller Industrial Servi Torno', 'Carrera 18 No. 9-38', '76', '111', '169', 'Ventas', '4135', 'Comercio al por mayor y al por menor', 'Ventas', '0', '8900', '-8900', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(3, '2016-08-12', 'FACTURA', '201608120951510.61444500 1471013511', '31', '94471845', '9', '', '', '', '', 'Taller Industrial Servi Torno', 'Carrera 18 No. 9-38', '76', '111', '169', 'Ventas', '6135', 'Comercio al por mayor y al por menor', 'Ventas', '6000', '0', '6000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(4, '2016-08-12', 'FACTURA', '201608120951510.61444500 1471013511', '31', '94471845', '9', '', '', '', '', 'Taller Industrial Servi Torno', 'Carrera 18 No. 9-38', '76', '111', '169', 'Ventas', '1435', 'Mercanc?as no fabricadas por la empresa', 'Ventas', '0', '6000', '-6000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 14:51:51', '0000-00-00 00:00:00'),
+(5, '2016-08-12', 'COMPROBANTE DE BAJA', '3', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'proque asi es la vida', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '300000', '0', '300000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:19:49', '0000-00-00 00:00:00'),
+(6, '2016-08-12', 'COMPROBANTE DE BAJA', '3', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'proque asi es la vida', '143501', '', 'Baja Mercancias no Fabricadas por la Empresa', '0', '300000', '-300000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:19:49', '0000-00-00 00:00:00'),
+(7, '2016-08-12', 'COMPROBANTE DE BAJA', '4', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'porque le quedo grande', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '60000', '0', '60000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:24:10', '0000-00-00 00:00:00'),
+(8, '2016-08-12', 'COMPROBANTE DE BAJA', '4', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'porque le quedo grande', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '60000', '-60000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:24:10', '0000-00-00 00:00:00'),
+(9, '2016-08-12', 'COMPROBANTE DE BAJA', '5', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'peuba baja', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:47:29', '0000-00-00 00:00:00'),
+(10, '2016-08-12', 'COMPROBANTE DE BAJA', '5', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'peuba baja', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 21:47:29', '0000-00-00 00:00:00'),
+(11, '2016-08-12', 'COMPROBANTE DE BAJA', '6', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'prueba alta', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:00:13', '0000-00-00 00:00:00'),
+(12, '2016-08-12', 'COMPROBANTE DE BAJA', '6', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'prueba alta', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:00:13', '0000-00-00 00:00:00'),
+(13, '2016-08-12', 'COMPROBANTE DE BAJA', '7', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'prueba', '529915', '', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:23:34', '0000-00-00 00:00:00'),
+(14, '2016-08-12', 'COMPROBANTE DE BAJA', '7', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'prueba', '143501', '', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:23:34', '0000-00-00 00:00:00'),
+(15, '2016-08-12', 'COMPROBANTE DE BAJA', '8', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsds', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '0', '0', '0', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:25:54', '0000-00-00 00:00:00'),
+(16, '2016-08-12', 'COMPROBANTE DE BAJA', '8', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsds', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '0', '0', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:25:54', '0000-00-00 00:00:00'),
+(17, '2016-08-12', 'COMPROBANTE DE BAJA', '9', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:26:40', '0000-00-00 00:00:00'),
+(18, '2016-08-12', 'COMPROBANTE DE BAJA', '9', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:26:40', '0000-00-00 00:00:00'),
+(19, '2016-08-12', 'COMPROBANTE DE ALTA', '10', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dasdsa', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:27:37', '0000-00-00 00:00:00'),
+(20, '2016-08-12', 'COMPROBANTE DE ALTA', '10', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dasdsa', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:27:37', '0000-00-00 00:00:00'),
+(21, '2016-08-12', 'COMPROBANTE DE BAJA', '11', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '1000000', '0', '1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:28:27', '0000-00-00 00:00:00'),
+(22, '2016-08-12', 'COMPROBANTE DE BAJA', '11', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '0', '1000000', '-1000000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:28:27', '0000-00-00 00:00:00'),
+(23, '2016-08-12', 'COMPROBANTE DE ALTA', '12', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '529915', 'Inventarios', 'Baja Mercancias no Fabricadas por la Empresa', '0', '3400000', '-3400000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:28:51', '0000-00-00 00:00:00'),
+(24, '2016-08-12', 'COMPROBANTE DE ALTA', '12', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dsad', '143501', 'Mercancias no fabricadas por la empresa', 'Baja Mercancias no Fabricadas por la Empresa', '3400000', '0', '3400000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:28:51', '0000-00-00 00:00:00'),
+(25, '2016-08-12', 'COMPROBANTE DE ALTA', '13', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dadsa', '529915', 'Inventarios', 'Alta Mercancias no Fabricadas por la Empresa', '0', '95000', '-95000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:30:42', '0000-00-00 00:00:00'),
+(26, '2016-08-12', 'COMPROBANTE DE ALTA', '13', 'PROPIO', '', '0', '', '', '', '', 'PROPIO', '', '', '', '', 'dadsa', '143501', 'Mercancias no fabricadas por la empresa', 'Alta Mercancias no Fabricadas por la Empresa', '95000', '0', '95000', 'NO', 'NO', 1, 1, 2, '', '2016-08-12 22:30:42', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -4902,6 +4992,14 @@ CREATE TABLE IF NOT EXISTS `ori_facturas` (
   PRIMARY KEY (`idFacturas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
+--
+-- Volcado de datos para la tabla `ori_facturas`
+--
+
+INSERT INTO `ori_facturas` (`idFacturas`, `idResolucion`, `TipoFactura`, `Prefijo`, `NumeroFactura`, `Fecha`, `Hora`, `OCompra`, `OSalida`, `FormaPago`, `Subtotal`, `IVA`, `Descuentos`, `Total`, `SaldoFact`, `Cotizaciones_idCotizaciones`, `EmpresaPro_idEmpresaPro`, `CentroCosto`, `idSucursal`, `Usuarios_idUsuarios`, `Clientes_idClientes`, `TotalCostos`, `CerradoDiario`, `FechaCierreDiario`, `HoraCierreDiario`, `ObservacionesFact`, `Efectivo`, `Devuelve`, `Cheques`, `Otros`, `Tarjetas`, `idTarjetas`, `Updated`, `Sync`) VALUES
+('201608120951320.12333000 1471013492', 1, '02', 'A', 1, '2016-08-12', '09:51:32', '', '', 'Contado', '', '', '', '', '', '', 1, 1, 0, 3, 2, '', 0, '0000-00-00', '00:00:00', '', 0, 0, 0, 0, 0, 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+('201608120951510.61444500 1471013511', 1, '02', 'A', 2, '2016-08-12', '09:51:51', '', '', 'Contado', '8900', '0', '', '8900', '8900', '', 1, 1, 0, 3, 14, '6000', 0, '0000-00-00', '00:00:00', '', 0, 0, 0, 0, 0, 0, '2016-08-12 14:51:51', '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -4940,6 +5038,14 @@ CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
+--
+-- Volcado de datos para la tabla `ori_facturas_items`
+--
+
+INSERT INTO `ori_facturas_items` (`ID`, `FechaFactura`, `idFactura`, `TablaItems`, `Referencia`, `Nombre`, `Departamento`, `SubGrupo1`, `SubGrupo2`, `SubGrupo3`, `SubGrupo4`, `SubGrupo5`, `ValorUnitarioItem`, `Cantidad`, `Dias`, `SubtotalItem`, `IVAItem`, `TotalItem`, `PorcentajeIVA`, `PrecioCostoUnitario`, `SubtotalCosto`, `TipoItem`, `CuentaPUC`, `GeneradoDesde`, `NumeroIdentificador`, `idUsuarios`, `idCierre`, `Updated`, `Sync`) VALUES
+('1', '2016-08-12', '201608120951320.12333000 1471013492', 'servicios', 'REFSER44', 'transporte', 2, 0, 0, 0, 0, 0, 50000, '1', '1', '50000', '0', '50000', '0%', '25000', '25000', 'PR', 412060, 'cotizacionesv5', '', 3, 0, '2016-08-12 14:51:32', '0000-00-00 00:00:00'),
+('2', '2016-08-12', '201608120951510.61444500 1471013511', 'productosventa', 'MONT584', 'BOXER HOMBREMONTGREEN', 1, 5, 38, 55, 0, 0, 8900, '1', '1', '8900', '0', '8900', '0%', '6000', '6000', 'PR', 4135, 'cotizacionesv5', '', 3, 0, '2016-08-12 14:51:51', '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -4954,7 +5060,7 @@ CREATE TABLE IF NOT EXISTS `paginas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=94 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=96 ;
 
 --
 -- Volcado de datos para la tabla `paginas`
@@ -5053,7 +5159,9 @@ INSERT INTO `paginas` (`ID`, `Nombre`, `TipoPagina`, `Visible`, `Updated`, `Sync
 (90, 'bodegas_externas.php', 'Vista', 1, '2016-08-09 22:01:15', '2016-08-09 07:58:02'),
 (91, 'empresa_pro_sucursales.php', 'Vista', 1, '2016-08-08 12:58:02', '2016-08-09 07:58:02'),
 (92, 'AgregueParametros.php', 'Vista', 1, '2016-08-07 12:58:02', '2016-08-09 07:58:02'),
-(93, 'Menu.php', 'Menu', 1, '2016-08-18 12:58:02', '2016-08-09 07:58:02');
+(93, 'Menu.php', 'Menu', 1, '2016-08-18 12:58:02', '2016-08-09 07:58:02'),
+(94, 'DarBajaAlta.php', 'Vista', 1, '2016-08-12 22:35:37', '2016-08-09 07:58:02'),
+(95, 'prod_bajas_altas.php', 'Vista', 1, '2016-08-12 22:35:37', '2016-08-09 07:58:02');
 
 -- --------------------------------------------------------
 
@@ -5099,6 +5207,32 @@ INSERT INTO `paginas_bloques` (`ID`, `TipoUsuario`, `Pagina`, `Habilitado`, `Upd
 (22, 'comercial', 'clientes.php', 'SI', '2016-08-10 00:51:41', '0000-00-00 00:00:00'),
 (23, 'comercial', 'proveedores.php', 'SI', '2016-08-10 00:54:19', '0000-00-00 00:00:00'),
 (24, 'comercial', 'prod_codbarras.php', 'SI', '2016-08-10 01:09:19', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `parametros_contables`
+--
+
+CREATE TABLE IF NOT EXISTS `parametros_contables` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
+  `CuentaPUC` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=6 ;
+
+--
+-- Volcado de datos para la tabla `parametros_contables`
+--
+
+INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `Updated`, `Sync`) VALUES
+(1, 'Cuenta que se utiliza para el iva generado en las operaciones de venta ', 2408, '2016-08-12 22:33:33', '0000-00-00 00:00:00'),
+(2, 'Cuenta Costo de venta de la mercancia', 6135, '2016-08-12 22:33:33', '0000-00-00 00:00:00'),
+(3, 'Cuenta Gasto Para Bajas de Mercancias no fabricadas por la empresa', 529915, '2016-08-12 22:33:33', '0000-00-00 00:00:00'),
+(4, 'Cuenta donde se alojan los inventarios de las mercancias no fabricadas por la empresa', 143501, '2016-08-12 22:33:33', '0000-00-00 00:00:00'),
+(5, 'Cuenta para Realizar el Credito a las altas de un producto', 529915, '2016-08-12 22:33:33', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -5313,7 +5447,7 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -5414,9 +5548,9 @@ CREATE TABLE IF NOT EXISTS `productosventa` (
 --
 
 INSERT INTO `productosventa` (`idProductosVenta`, `CodigoBarras`, `Referencia`, `Nombre`, `Existencias`, `PrecioVenta`, `PrecioMayorista`, `CostoUnitario`, `CostoTotal`, `IVA`, `Bodega_idBodega`, `Departamento`, `Sub1`, `Sub2`, `Sub3`, `Sub4`, `Sub5`, `Kit`, `RutaImagen`, `Especial`, `CuentaPUC`, `Updated`, `Sync`) VALUES
-(800001, '800001', 'REF1', 'prueba sincronizado', 9, 0, '0', '0', '0', '0', 1, '1', '', '', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
+(800001, '800001', 'REF1', 'prueba sincronizado', -1, 0, '0', '0', '0', '0', 1, '1', '', '', '', '', '', 0, '0', NULL, '4135', '2016-08-12 22:25:54', '2016-08-09 07:59:37'),
 (800002, '800002', 'SSSS344', 'MEDIA STRAPS NINO', 12, 2500, '1956', '1630', '0', '0', 1, '1', '3', '27', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
-(800003, '800003', 'ECUA001', 'SUDADERA PERCHADA NINO TRES RAYAS', 12, 12900, '11400', '9500', '114000', '0', 1, '1', '3', '26', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
+(800003, '800003', 'ECUA001', 'SUDADERA PERCHADA NINO TRES RAYAS', 22, 12900, '11400', '9500', '209000', '0', 1, '1', '3', '26', '', '', '', 0, '0', NULL, '4135', '2016-08-12 22:30:42', '2016-08-09 07:59:37'),
 (800004, '800004', 'ECUA002', 'SUDADERA PERCHADA HOMBRE SOLOFONDO', 14, 16900, '14400', '12000', '0', '0', 1, '1', '5', '46', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (800005, '800005', 'SPORT843', 'PANTALONETA  SPORT NINO', 15, 5900, '5050', '4200', '63000', '0', 1, '1', '3', '25', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (800007, '800007', 'SPORT213', 'PANTALONETA SPORT NINO', 16, 8900, '7800', '6500', '0', '0', 1, '1', '3', '25', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
@@ -6419,7 +6553,7 @@ INSERT INTO `productosventa` (`idProductosVenta`, `CodigoBarras`, `Referencia`, 
 (801052, '801052', 'RACK981', 'BUSO MANGA LARGA RACKBALL', 0, 21900, '18799.2', '15666', '0', '0', 1, '1', '5', '39', '60', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (801053, '801053', 'DRYT003', 'CAMIBUSO DRY TIT', 0, 22900, '18000', '15000', '0', '0', 1, '1', '5', '39', '60', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (801054, '801054', 'LILI076', 'BLUSA BASICA NI A\n', 0, 5900, '4440', '3700', '0', '0', 1, '1', '2', '9', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
-(801055, '801055', 'MONT584', 'BOXER HOMBREMONTGREEN', -12, 8900, '7200', '6000', '-72000', '0', 1, '1', '5', '38', '55', '', '', 0, '0', NULL, '4135', '2016-08-10 02:06:49', '2016-08-09 07:59:37'),
+(801055, '801055', 'MONT584', 'BOXER HOMBREMONTGREEN', -23, 8900, '7200', '6000', '-138000', '0', 1, '1', '5', '38', '55', '', '', 0, '0', NULL, '4135', '2016-08-12 21:24:10', '2016-08-09 07:59:37'),
 (801056, '801056', 'SUNT245', 'BLUSA DAMA MARGARITA', 0, 11900, '10080', '8400', '0', '0', 1, '1', '4', '29', '39', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (801057, '801057', 'RACK677', 'BUSO DAMA RACKBALL', 0, 22900, '19400', '16166', '0', '0', 1, '1', '4', '29', '42', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
 (801058, '801058', 'LILI008', 'BLUSA BASICA TIRAS NI A\n', 0, 3900, '3000', '2500', '0', '0', 1, '1', '2', '9', '', '', '', 0, '0', NULL, '4135', '2016-08-09 12:59:37', '2016-08-09 07:59:37'),
@@ -14272,7 +14406,7 @@ INSERT INTO `productosventa` (`idProductosVenta`, `CodigoBarras`, `Referencia`, 
 (809680, '809680', 'REF809680', 'prueba insercion en las tablas de bodega', 0, 200000, '150000', '100000', NULL, '0.16', 1, '1', '2', '3', '4', '', '', 0, '', NULL, '4135', '2016-08-09 14:10:08', '0000-00-00 00:00:00'),
 (809681, '809681', 'PRUEBA3232', 'PRUEBA BODEGAS', 0, 200000, '150000', '100000', NULL, '0.16', 1, '1', '2', '3', '4', '', '', 0, '', NULL, '4135', '2016-08-09 14:11:44', '0000-00-00 00:00:00'),
 (809682, '809682', 'REF809682', 'prueba3', 0, 200000, '150000', '100000', NULL, '0', 1, '2', '', '', '', '', '', 0, '', NULL, '4135', '2016-08-09 14:23:11', '0000-00-00 00:00:00'),
-(809683, '809683', 'REF809683', 'PRUEBA 5', -1, 150000, '125000', '100000', '-100000', '0.16', 1, '3', '2', '1', '', '', '', 0, '', NULL, '4135', '2016-08-10 02:59:00', '0000-00-00 00:00:00');
+(809683, '809683', 'REF809683', 'PRUEBA 5', 0, 150000, '125000', '100000', '0', '0.16', 1, '3', '2', '1', '', '', '', 0, '', NULL, '4135', '2016-08-12 22:28:51', '0000-00-00 00:00:00');
 
 --
 -- Disparadores `productosventa`
@@ -14475,23 +14609,43 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_bajas`
+-- Estructura de tabla para la tabla `prod_bajas_altas`
 --
 
-CREATE TABLE IF NOT EXISTS `prod_bajas` (
-  `idProd_Bajas` int(16) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Departamento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Departamento` int(11) NOT NULL,
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `Cantidad` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `CostoTotal` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Observaciones` varchar(500) COLLATE utf8_spanish_ci NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish_ci NOT NULL,
   `Usuarios_idUsuarios` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idProd_Bajas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=14 ;
+
+--
+-- Volcado de datos para la tabla `prod_bajas_altas`
+--
+
+INSERT INTO `prod_bajas_altas` (`ID`, `Movimiento`, `Fecha`, `Departamento`, `Referencia`, `Nombre`, `Cantidad`, `CostoTotal`, `Observaciones`, `Usuarios_idUsuarios`, `Updated`, `Sync`) VALUES
+(1, 'BAJA', '2016-08-12', 1, 'SSSS344', 'MEDIA STRAPS NINO', '3', '4890', 'dsadsa', 3, '2016-08-12 21:30:33', '0000-00-00 00:00:00'),
+(2, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'PODSDS', 3, '2016-08-12 21:30:36', '0000-00-00 00:00:00'),
+(3, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '3', '300000', 'proque asi es la vida', 3, '2016-08-12 21:30:38', '0000-00-00 00:00:00'),
+(4, 'BAJA', '2016-08-12', 1, 'MONT584', 'BOXER HOMBREMONTGREEN', '10', '60000', 'porque le quedo grande', 3, '2016-08-12 21:30:40', '0000-00-00 00:00:00'),
+(5, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'peuba baja', 3, '2016-08-12 21:47:29', '0000-00-00 00:00:00'),
+(6, 'ALTA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'prueba alta', 3, '2016-08-12 22:00:13', '0000-00-00 00:00:00'),
+(7, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'prueba', 3, '2016-08-12 22:23:34', '0000-00-00 00:00:00'),
+(8, 'BAJA', '2016-08-12', 1, 'REF1', 'prueba sincronizado', '10', '0', 'dsds', 3, '2016-08-12 22:25:54', '0000-00-00 00:00:00'),
+(9, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'dsad', 3, '2016-08-12 22:26:40', '0000-00-00 00:00:00'),
+(10, 'ALTA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'dasdsa', 3, '2016-08-12 22:27:37', '0000-00-00 00:00:00'),
+(11, 'BAJA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '10', '1000000', 'dsad', 3, '2016-08-12 22:28:27', '0000-00-00 00:00:00'),
+(12, 'ALTA', '2016-08-12', 3, 'REF809683', 'PRUEBA 5', '34', '3400000', 'dsad', 3, '2016-08-12 22:28:51', '0000-00-00 00:00:00'),
+(13, 'ALTA', '2016-08-12', 1, 'ECUA001', 'SUDADERA PERCHADA NINO TRES RAYAS', '10', '95000', 'dadsa', 3, '2016-08-12 22:30:42', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -24427,6 +24581,7 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (135517, 'Impuesto a las Ventas Retenido', '0', '1355', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (135518, 'Impuesto de Industria y Comercio Retenido', '0', '1355', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (135595, 'Otros Autorretencion CREE', '0', '1355', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
+(143501, 'Mercancias no fabricadas por la empresa', NULL, '1435', '2016-08-12 21:21:30', '0000-00-00 00:00:00'),
 (152001, 'HERRAMIENTA DE DOTACION', '0', '1520', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (152405, 'Muebles y Enseres', '0', '1524', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (152410, 'Equipos', '0', '1524', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
@@ -24913,9 +25068,9 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (414020, 'Bares y cantinas', '0', '4140', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (414095, 'Actividades conexas', '0', '4140', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (414099, 'Ajustes por inflaci', '0', '4140', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
-(414505, 'Servicio de transporte por carretera', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
-(414510, 'Servicio de transporte por v?a f?rrea', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24');
+(414505, 'Servicio de transporte por carretera', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
+(414510, 'Servicio de transporte por v?a f?rrea', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (414515, 'Servicio de transporte por v?a acu?tica', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (414520, 'Servicio de transporte por v?a a?rea', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (414525, 'Servicio de transporte por tuber?as', '0', '4145', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
@@ -25456,9 +25611,9 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (522095, 'Otros', '0', '5220', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (522099, 'Ajustes por inflaci', '0', '5220', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (522505, 'Contribuciones', '0', '5225', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
-(522510, 'Afiliaciones y sostenimiento', '0', '5225', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
-(522599, 'Ajustes por inflaci', '0', '5225', '2016-08-09 13:12:24', '2016-08-09 08:12:24');
+(522510, 'Afiliaciones y sostenimiento', '0', '5225', '2016-08-09 13:12:24', '2016-08-09 08:12:24');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
+(522599, 'Ajustes por inflaci', '0', '5225', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (523005, 'Manejo', '0', '5230', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (523010, 'Cumplimiento', '0', '5230', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),
 (523015, 'Corriente d?bil', '0', '5230', '2016-08-09 13:12:24', '2016-08-09 08:12:24'),

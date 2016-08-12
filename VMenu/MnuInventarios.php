@@ -42,8 +42,11 @@ include_once("css_construct.php");
  
 	$css->IniciaMenu("Inventarios"); 
             $css->MenuAlfaIni("Inventarios");
+                
                 $css->SubMenuAlfa("Clasificacion de Inventarios",2);
                 $css->SubMenuAlfa("Bodegas",3);
+                $css->SubMenuAlfa("Movimientos",4);
+                
 	$css->MenuAlfaFin();
             
 	$css->IniciaTabs();
@@ -73,6 +76,12 @@ include_once("css_construct.php");
             $css->NuevaTabs(3);    
                 $css->SubTabs("../VAtencion/bodega.php","_blank","../images/bodega.png","Ver/Crear/Editar Bodega");  
                 $css->SubTabs("../VAtencion/bodegas_externas.php","_blank","../images/externas.png","Ver Bodegas Externas");  
+            $css->FinTabs();
+            
+            $css->NuevaTabs(4);
+                $css->SubTabs("../VAtencion/prod_bajas_altas.php","_blank","../images/historial.png","Ver el historial de las bajas y altas");  
+                $css->SubTabs("../VAtencion/DarBajaAlta.php","_blank","../images/baja.png","Dar de baja o alta a un producto");  
+                
             $css->FinTabs();
             
             
