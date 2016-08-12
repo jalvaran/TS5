@@ -182,7 +182,7 @@ include_once("procesaEgresos.php");
 						$Consulta = $obVenta->ConsultarTabla("cuentas","WHERE GupoCuentas_PUC = 24");
 						$idTabla="idPUC";
 					}else{
-						$Consulta = $obVenta->ConsultarTabla("subcuentas","WHERE Cuentas_idPUC = '$Egreso[Cuentas_idCuentas]'");
+						$Consulta = $obVenta->ConsultarTabla("subcuentas","WHERE Cuentas_idPUC LIKE '$Egreso[Cuentas_idCuentas]%'");
 						$idTabla="PUC";
 					}
 					while($CuentaDestino=mysql_fetch_array($Consulta)){

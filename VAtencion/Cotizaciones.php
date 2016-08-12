@@ -59,7 +59,7 @@ print("</head><body align='center'>");
          $VectorCDC["F"]=0;
          
          $obTabla->CrearCuadroClientes("DialCliente","Crear Cliente",$myPage,$VectorCDC);
-	 $VectorCDSer["servitorno"]=1;
+	 $VectorCDSer["servitorn"]=1;
          $obTabla->CrearCuadroCrearServicios("DialCrearItemServicios","Crear Nuevo Item Servicios",$myPage,$idClientes,$VectorCDSer); 
 	 
          if(isset($_REQUEST["TxtBusqueda"])){

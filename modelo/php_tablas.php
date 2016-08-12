@@ -15,8 +15,8 @@ class Tabla{
      * Se utilizará para seleccionar las columnas de la exportacion a excel
      */
     public $Campos = array("A","B","C","D","E","F","G","H","I","J","K","L",
-    "M","N","O","P","Q","R","S","T","C","V","W","X","Y","Z","AA","AB");
-    public $Condicionales = array(" ","=","*",">","<",">=","<=","<>");
+    "M","N","O","P","Q","R","S","T","C","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP");
+    public $Condicionales = array(" ","=","*",">","<",">=","<=","<>","#%");
     function __construct($db){
         $this->DataBase=$db;
         $this->obCon=new ProcesoVenta(1);
@@ -146,6 +146,9 @@ public function CreeFiltro($Vector){
                 case 7:
                     $Filtro.="<>'$Valor'";
                     break;
+				case 8:
+                    $Filtro.=" LIKE '$Valor%'";
+                    break;
             }
             $And=" AND ";
             
@@ -216,6 +219,9 @@ public function CreeFiltroCuentas($Vector){
                     break;
                 case 7:
                     $Filtro.="<>'$Valor'";
+                    break;
+				case 8:
+                    $Filtro.=" LIKE '$Valor%'";
                     break;
             }
             $And=" AND ";
@@ -290,6 +296,9 @@ public function CreeFiltroCobros($Vector){
                     break;
                 case 7:
                     $Filtro.="<>'$Valor'";
+                    break;
+				case 8:
+                    $Filtro.=" LIKE '$Valor%'";
                     break;
             }
             $And=" AND ";
@@ -383,7 +392,7 @@ public function DibujeTabla($Vector){
                 $this->css->CrearSelectPers($DatosSel);
                     $IndexCondicion="Cond_".$NombreCol; // Condicional para aplicacion del filtro
                     $Activo=0;
-                    for($h=1;$h<=7;$h++){
+                    for($h=1;$h<=8;$h++){
                         if(isset($_REQUEST[$IndexCondicion])){
                             if($_REQUEST[$IndexCondicion]==$h){
                                $Activo=1; 
@@ -1079,7 +1088,7 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
             $this->css->CrearInputNumber("TxtNumMaquinas","number","Maquinas:<br>",3,"Maquinas","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,1,"",1);
             $this->css->CrearInputNumber("TxtMargen","number","Margen:<br>","0.58825","Margen","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,0,"","any");
             $this->css->CrearInputNumber("TxtTiempoMaquinas","number","Tiempo Maquina:<br>",1,"Tiempo en Maquina","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,0,"","any");
-            
+            $this->css->CrearInputNumber("TxtValorMateriales","number","<br>Valor de Materiales:<br>","","Valor de Materiales","black","onkeyup","Servitorno_CalculePrecioVenta('$TotalCostos')",200,30,0,1,0,"","any");
         }
         print("</br>");
         

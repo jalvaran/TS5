@@ -1479,7 +1479,6 @@ public function CalculePesoRemision($idCotizacion)
         $str=str_replace("'", "", $string);
         $str=str_replace(";", ",", $str);
         //$str=filter_var($string, FILTER_SANITIZE_STRING);
-        
         return($str);
     }
     
@@ -2277,7 +2276,7 @@ public function CalculePesoRemision($idCotizacion)
      * Imprime una factura pos
      */
     public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias){
-
+		$Regimen="SIMPLIFICADO";
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -2290,7 +2289,7 @@ public function CalculePesoRemision($idCotizacion)
         $NIT=$DatosEmpresa["NIT"];
         $Direccion=$DatosEmpresa["Direccion"];
         $Ciudad=$DatosEmpresa["Ciudad"];
-        
+        $Regimen=$DatosEmpresa["Regimen"];
         $ResolucionDian1="RES DIAN: $DatosResolucion[NumResolucion] del $DatosResolucion[Fecha]";
         $ResolucionDian2="FACTURA AUT. $DatosResolucion[Prefijo] - $DatosResolucion[Desde] HASTA $DatosResolucion[Prefijo] - $DatosResolucion[Hasta]";
         $ResolucionDian3="Autoriza impresion en:  $DatosResolucion[Factura]";
@@ -2318,12 +2317,14 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$NIT);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+		if($Regimen<>"SIMPLIFICADO"){
         fwrite($handle,$ResolucionDian1);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$ResolucionDian2);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$ResolucionDian3);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+		}
         fwrite($handle,$Direccion);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$Ciudad);
@@ -2369,7 +2370,7 @@ public function CalculePesoRemision($idCotizacion)
 
             fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
 
-            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,26),20," ",STR_PAD_BOTH)."   ");
+            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,20),20," ",STR_PAD_BOTH)."   ");
 
             fwrite($handle,str_pad("$".number_format($SubTotalITem),10," ",STR_PAD_LEFT));
 

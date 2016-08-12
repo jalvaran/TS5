@@ -402,8 +402,10 @@ function Servitorno_CalculePrecioVenta(Costos){
     var CostosTotales;
     var ValorTotal;
     var CostoTotal;
+    var TotalMateriales;
         
     Cantidad=document.getElementById('TxtCantidadPiezas').value;
+    TotalMateriales=document.getElementById('TxtValorMateriales').value;
     if(Cantidad<=0){
         Cantidad=1;
     }
@@ -413,6 +415,7 @@ function Servitorno_CalculePrecioVenta(Costos){
     CostosTotales=Costos/Maquinas;
     
     ValorTotal=Math.round(((CostosTotales*TiempoMaquina)/Margen)/Cantidad);
+    ValorTotal=parseInt(ValorTotal)+parseInt(TotalMateriales);
     CostoTotal=Math.round(((CostosTotales*TiempoMaquina))/Cantidad);
     document.getElementById("TxtPrecioVenta").value = ValorTotal;
     document.getElementById("TxtCostoUnitario").value = CostoTotal;
