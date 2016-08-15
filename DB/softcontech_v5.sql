@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-08-2016 a las 17:45:45
+-- Tiempo de generación: 15-08-2016 a las 09:58:29
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -244,7 +244,16 @@ CREATE TABLE IF NOT EXISTS `cajas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `cajas`
+--
+
+INSERT INTO `cajas` (`ID`, `Nombre`, `Base`, `idUsuario`, `Estado`, `CuentaPUCEfectivo`, `CuentaPUCCheques`, `CuentaPUCOtros`, `CuentaPUCIVAEgresos`, `CentroCostos`, `idResolucionDian`, `Updated`, `Sync`) VALUES
+(1, 'CAJA 1', '200000', 9, 'ABIERTA', 11051001, 11100502, 11100503, 2408, 1, 1, '2016-08-14 16:56:12', '2016-08-14 11:56:50'),
+(2, 'CAJA 2', '200000', 4, 'ABIERTA', 11051002, 11100502, 11100503, 2408, 1, 2, '2016-08-14 16:56:12', '2016-08-14 11:56:50'),
+(3, 'CAJA 3', '150000', 3, 'ABIERTA', 11051002, 11100502, 11100503, 2408, 1, 1, '2016-08-14 16:56:12', '2016-08-14 11:56:50');
 
 -- --------------------------------------------------------
 
@@ -317,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `centrocosto` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
 
 --
 -- Volcado de datos para la tabla `centrocosto`
@@ -3740,7 +3749,7 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idEmpresaPro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
 
 --
 -- Volcado de datos para la tabla `empresapro`
@@ -4313,7 +4322,7 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5447,7 +5456,7 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -5474,7 +5483,14 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `preventa`
+--
+
+INSERT INTO `preventa` (`idPrecotizacion`, `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `idFacturas`, `ProductosVenta_idProductosVenta`, `TablaItem`, `ValorUnitario`, `Subtotal`, `ValorAcordado`, `Descuento`, `Impuestos`, `TotalVenta`, `TipoItem`, `Autorizado`, `Updated`, `Sync`) VALUES
+(1, '2016-08-15', '1', 1, '', 801055, 'productosventa', '8900', '8900', '8900', '', '0', '8900', 'PR', 0, '2016-08-15 12:51:04', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 

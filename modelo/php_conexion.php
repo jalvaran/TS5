@@ -39,7 +39,7 @@ class ProcesoVenta{
 	public  $CuentaInventarios=1435;
               
 	function __construct($idUserR){
-				
+		$idUserR=$this->normalizar($idUserR);		
 		$this->consulta =mysql_query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
 		$this->fetch = mysql_fetch_array($this->consulta);
 		$this->NombreUser = $this->fetch['Nombre'];
@@ -80,72 +80,15 @@ class ProcesoVenta{
 		return array($this->CotiUser,$this->NumVenta,$this->NumFactura);
 	}
 	
-	
-	/////////////////////RegistraVenta Desde Vista Admin
-	
-	function AdminRegVenta($Fecha,$Hora,$idMesa,$idMesero,$NumCotizacion,$NumVenta,$NumFactura,$Clientes_idClientes,$Usuarios_idUsuarios){
-		
-		$reg=mysql_query("select * from fechas_descuentos where Fecha = '$Fecha'") or die('no se pudo consultar los valores de fechas descuentos en AdminRegVenta: ' . mysql_error());
-		$reg=mysql_fetch_array($reg);
-		$Porcentaje=$reg["Porcentaje"];
-		$Departamento=$reg["Departamento"];
-		
-	$reg=mysql_query("select * from prod_comicalenias where Departamento_Comi = '$Departamento'") or die('no se pudo consultar los valores de prod_comicalenias en AgregaPreventa: ' . mysql_error());
-	$reg=mysql_fetch_array($reg);
-	
-	$TotalComisiones=$reg["FichasModelos"] + $reg["ShowsModelos"] + $reg["Administrador"];
-		
-		
-		$this->consulta=mysql_query("SELECT * FROM atencion_pedidos ap INNER JOIN productosventa pv ON ap.Prod_Referencia=pv.Referencia
-				INNER JOIN prod_comicalenias pc ON pc.Departamento_Comi=pv.Departamento
-				WHERE ap.Usuarios_idUsuarios='$idMesero' AND ap.Mesas_idMesas='$idMesa'") 
-				or die('problemas para consultar atencion_pedidos en php_conexion Clase AdminRegVenta: ' . mysql_error());
-		while($this->fetch=mysql_fetch_array($this->consulta)){
-			
-
-			$idProductosVenta=$this->fetch["idProductosVenta"];
-			$NombreP=$this->fetch["Nombre"];
-			$Prod_Referencia=$this->fetch["Prod_Referencia"];
-			$Prod_Cantidad=$this->fetch["Prod_Cantidad"];
-			$CostoUnitario=$this->fetch["CostoUnitario"];
-			
-			$impuesto=$this->fetch["IVA"];
-			$impuesto=$impuesto+1;
-			//$Departamento=$reg["Departamento"];
-			$ValorUnitario=ROUND($this->fetch["PrecioVenta"]/$impuesto);
-			
-			if($Porcentaje>0 and ($this->fetch["Departamento"]==$Departamento) or $Departamento=="TODO"){
-		
-				$Porcentaje=$Porcentaje/100;
-				$ValorUnitario=$ValorUnitario*$Porcentaje;
-				
-			}
-			
-			$Subtotal=$ValorUnitario*$this->fetch["Prod_Cantidad"];
-			$impuesto=round(($impuesto-1)*$Subtotal);
-			$Total=$Subtotal+$impuesto;
-			$TotalComisiones=($this->fetch["FichasModelos"] + $this->fetch["ShowsModelos"] + $this->fetch["Administrador"])*$this->fetch["Prod_Cantidad"];
-			$TotalCosto=$this->fetch['CostoUnitario']*$this->fetch["Prod_Cantidad"];
-			
-			mysql_query("INSERT INTO ventas (`NumVenta`,`Fecha`,`Productos_idProductos`, `Producto`,`Referencia`,`Cantidad`,
-						`ValorCostoUnitario`,`ValorVentaUnitario`,`Impuestos`, `Descuentos`,`TotalCosto`,`TotalVenta`,
-						`TipoVenta`,`Cotizaciones_idCotizaciones`,`Especial`, `Clientes_idClientes`,`Usuarios_idUsuarios`,`HoraVenta`,
-						`NoReclamacion`,`TotalComisiones`) 
-						VALUES('$NumVenta','$Fecha','$idProductosVenta','$NombreP','$Prod_Referencia','$Prod_Cantidad',
-						'$CostoUnitario','$ValorUnitario','$impuesto','0','$TotalCosto','$Total',
-						'Contado','$NumCotizacion','NO','$Clientes_idClientes','$Usuarios_idUsuarios','$Hora',
-						'$NumFactura','$TotalComisiones')") 
-						or die('problemas para insertar la venta de $this->fetch[Prod_Referencia] en $idMesa: ' . mysql_error());
-		}		
-		
-		
-	}
 		
 	/////Suma un valor en especifico de una tabla	
 		
 	function SumeColumna($Tabla,$NombreColumnaSuma, $NombreColumnaFiltro,$filtro){
 	
-	
+	$Tabla=$this->normalizar($Tabla);
+        $NombreColumnaSuma=$this->normalizar($NombreColumnaSuma);
+        $NombreColumnaFiltro=$this->normalizar($NombreColumnaFiltro);
+        $filtro=$this->normalizar($filtro);
 		
 	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla WHERE $NombreColumnaFiltro = '$filtro'";
 	
@@ -175,7 +118,7 @@ class ProcesoVenta{
 	
 	function ObtengaTotalesVenta($NumVenta){
   
-	
+	$NumVenta=$this->normalizar($NumVenta);
 		
 	$sql="SELECT SUM(TotalVenta) AS TotalVenta, SUM(Impuestos) AS Impuestos, SUM(TotalCosto) AS TotalCosto FROM ventas 
 	WHERE NumVenta = '$NumVenta'";
@@ -193,12 +136,14 @@ class ProcesoVenta{
 	
 	public function InsertarRegistro($tabla,$NumRegistros,$Columnas,$Valores){
   
-  	
+  	$tabla=$this->normalizar($tabla);
+        
+      
 	$sql="INSERT INTO $tabla (";
 	$fin=$NumRegistros-1;
 	for($i=0;$i<$NumRegistros;$i++){
 		$col=$Columnas[$i];
-		$reg=$Valores[$i];
+		$reg=$this->normalizar($Valores[$i]);
 		if($fin<>$i)
 			$sql=$sql."`$col`,";
 		else	
@@ -225,198 +170,201 @@ class ProcesoVenta{
 //////////////////////Funcion devuelve valores
 ///////////////////////////////////////////////////////////////////
 
-	public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
-	
-		$reg=mysql_query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . mysql_error());
-		$reg=mysql_fetch_array($reg);	
-		return ($reg);
-	}
+public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
+        $tabla=$this->normalizar($tabla);
+        $ColumnaFiltro=$this->normalizar($ColumnaFiltro);
+        $idItem=$this->normalizar($idItem);
+        $reg=mysql_query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . mysql_error());
+        $reg=mysql_fetch_array($reg);	
+        return ($reg);
+}
         
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion devuelve el valor de una columna
 ///////////////////////////////////////////////////////////////////
 
-	public function ValorActual($tabla,$Columnas,$Condicion){
-	
-		$reg=mysql_query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . mysql_error());
-		$reg=mysql_fetch_array($reg);	
-		return ($reg);
-	}
-	
+public function ValorActual($tabla,$Columnas,$Condicion){
+
+        $reg=mysql_query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . mysql_error());
+        $reg=mysql_fetch_array($reg);	
+        return ($reg);
+}
+
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion realiza asiento contable factura
 ///////////////////////////////////////////////////////////////////
 
-	public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$TablaCuentaIngreso,$CuentaIVAGen, $TablaIVAGen, $CuentaCostoMercancia,$CuentaInventarios,$AjustaInventario,$RegCREE){
-		
-				
-		$DatosFactura=$this->DevuelveValores("facturas","idFacturas",$NumFact);
-		$fecha=	$DatosFactura["Fecha"];	
-		$idFact=$DatosFactura["idFacturas"];
-		$TotalVenta=$DatosFactura["Total"];
-		$Subtotal=$DatosFactura["Subtotal"];
-		$Impuestos=$DatosFactura["IVA"];
-		$TotalCostosM=$DatosFactura["TotalCostos"];
-		
-		
-		$DatosCliente=$this->DevuelveValores("clientes","idClientes",$DatosFactura['Clientes_idClientes']);
-		$idCliente=$DatosFactura['Clientes_idClientes'];
-		$NIT=$DatosCliente["Num_Identificacion"];
-		$RazonSocialC=$DatosCliente["RazonSocial"];
-		
-		$tab="librodiario";
-		$NumRegistros=24;
-				
-		if($DatosFactura['FormaPago']=="Contado"){
-			$CuentaPUC=$CuentaDestino;
-			$DatosCuenta=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaPUC);
-			
-			$NombreCuenta=$DatosCuenta["Nombre"];
-		}else{	
-			$CuentaPUC="130505$idCliente";
-			$NombreCuenta="Clientes Nacionales $RazonSocialC NIT $NIT";
-		}
-		
-		
-		$Columnas[0]="Fecha";					$Valores[0]=$fecha;
-		$Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="FACTURA";
-		$Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idFact;
-		$Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
-		$Columnas[4]="Tercero_Identificacion";	$Valores[4]=$NIT;
-		$Columnas[5]="Tercero_DV";				$Valores[5]=$DatosCliente['DV'];
-		$Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
-		$Columnas[7]="Tercero_Segundo_Apellido";$Valores[7]=$DatosCliente['Segundo_Apellido'];
-		$Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
-		$Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
-		$Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$RazonSocialC;
-		$Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosCliente['Direccion'];
-		$Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosCliente['Cod_Dpto'];
-		$Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosCliente['Cod_Mcipio'];
-		$Columnas[14]="Tercero_Pais_Domicilio";  $Valores[14]=$DatosCliente['Pais_Domicilio'];
-		
-		$Columnas[15]="CuentaPUC";				$Valores[15]=$CuentaPUC;
-		$Columnas[16]="NombreCuenta";			$Valores[16]=$NombreCuenta;
-		$Columnas[17]="Detalle";				$Valores[17]="ventas";
-		$Columnas[18]="Debito";					$Valores[18]=$TotalVenta;
-		$Columnas[19]="Credito";				$Valores[19]="0";
-		$Columnas[20]="Neto";					$Valores[20]=$Valores[18];
-		$Columnas[21]="Mayor";					$Valores[21]="NO";
-		$Columnas[22]="Esp";					$Valores[22]="NO";
-		$Columnas[23]="Concepto";				$Valores[23]="Ventas Por Atn Admin";
-									
-		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		
-		///////////////////////Registramos ingresos
-		
-		$CuentaPUC=$CuentaIngresos; //4135   comercio al por menor y mayor
-		
-		$DatosCuenta=$this->DevuelveValores($TablaCuentaIngreso,"idPUC",$CuentaPUC);
-		$NombreCuenta=$DatosCuenta["Nombre"];
-		
-		$Valores[15]=$CuentaPUC;
-		$Valores[16]=$NombreCuenta;
-		$Valores[18]="0";
-		$Valores[19]=$Subtotal; 			//Credito se escribe el total de la venta menos los impuestos
-		$Valores[20]=$Valores[19]*(-1);  											//Credito se escribe el total de la venta menos los impuestos
-		
-		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		///////////////////////Registramos IVA Generado si aplica
-		
-		if($Impuestos<>0){
-		
-			$CuentaPUC=$CuentaIVAGen; //2408   IVA Generado
-			
-			$DatosCuenta=$this->DevuelveValores($TablaIVAGen,"idPUC",$CuentaPUC);
-			
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]="0";
-			$Valores[19]=round($Impuestos); 			//Credito se escribe el total de la venta
-			$Valores[20]=$Valores[19]*(-1);  	//para la sumatoria contemplar el balance
-			
-			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		}
-					
-					
-					///////////////////////////////////////////////////////////////
-		////////////Registramos Autoretencion
-		if($RegCREE=="SI"){
-			
-			$CREE=$this->DevuelveValores("impret","Nombre","CREE");
-			
-			$ValorCREE=round($Subtotal*$CREE['Valor']);
-			
-			$CuentaPUC=135595; //  Autorretenciones CREE
-			
-			$DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=$ValorCREE;     //Valor del CREE
-			$Valores[19]=0; 			
-			$Valores[20]=$ValorCREE;  	//para la sumatoria contemplar el balance
-			
-			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		///////////////////////////////////////////////////////////////
-		////////////contra partida de la Autoretencion
-		
-			$CuentaPUC=23657502; //  Cuentas por pagar Autorretenciones CREE
-			
-			$DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=0;     //Valor del CREE
-			$Valores[19]=$ValorCREE; 			
-			$Valores[20]=$ValorCREE*(-1);  	//para la sumatoria contemplar el balance
-			
-			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-			
-			}
-					
-			///////////////////////Ajustamos el inventario
-			
-			if($AjustaInventario=="SI"){
-				
-				$CuentaPUC=$CuentaCostoMercancia; //6135   costo de mercancia vendida
-				
-				$DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-				$NombreCuenta=$DatosCuenta["Nombre"];
-				
-				$Valores[15]=$CuentaPUC;
-				$Valores[16]=$NombreCuenta;
-				$Valores[18]=$TotalCostosM;//Debito se escribe el costo de la mercancia vendida
-				$Valores[19]="0"; 			
-				$Valores[20]=$TotalCostosM;  	//para la sumatoria contemplar el balance
-				
-				$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-				
-				///////////////////////Ajustamos el inventario
-				
-				$CuentaPUC=$CuentaInventarios; //1435   Mercancias no fabricadas por la empresa
-				
-				$DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-				$NombreCuenta=$DatosCuenta["Nombre"];
-				
-				$Valores[15]=$CuentaPUC;
-				$Valores[16]=$NombreCuenta;
-				$Valores[18]="0";
-				$Valores[19]=$TotalCostosM;//Credito se escribe el costo de la mercancia vendida			
-				$Valores[20]=$TotalCostosM*(-1);  	//para la sumatoria contemplar el balance
-				
-				$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-				
-			}
-	}	
-	
+public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$TablaCuentaIngreso,$CuentaIVAGen, $TablaIVAGen, $CuentaCostoMercancia,$CuentaInventarios,$AjustaInventario,$RegCREE){
+
+        
+
+        $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$NumFact);
+        $fecha=	$DatosFactura["Fecha"];	
+        $idFact=$DatosFactura["idFacturas"];
+        $TotalVenta=$DatosFactura["Total"];
+        $Subtotal=$DatosFactura["Subtotal"];
+        $Impuestos=$DatosFactura["IVA"];
+        $TotalCostosM=$DatosFactura["TotalCostos"];
+
+
+        $DatosCliente=$this->DevuelveValores("clientes","idClientes",$DatosFactura['Clientes_idClientes']);
+        $idCliente=$DatosFactura['Clientes_idClientes'];
+        $NIT=$DatosCliente["Num_Identificacion"];
+        $RazonSocialC=$DatosCliente["RazonSocial"];
+
+        $tab="librodiario";
+        $NumRegistros=24;
+
+        if($DatosFactura['FormaPago']=="Contado"){
+                $CuentaPUC=$CuentaDestino;
+                $DatosCuenta=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaPUC);
+
+                $NombreCuenta=$DatosCuenta["Nombre"];
+        }else{	
+                $CuentaPUC="130505";
+                $NombreCuenta="Clientes Nacionales $RazonSocialC NIT $NIT";
+        }
+
+
+        $Columnas[0]="Fecha";					$Valores[0]=$fecha;
+        $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="FACTURA";
+        $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idFact;
+        $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
+        $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$NIT;
+        $Columnas[5]="Tercero_DV";				$Valores[5]=$DatosCliente['DV'];
+        $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
+        $Columnas[7]="Tercero_Segundo_Apellido";$Valores[7]=$DatosCliente['Segundo_Apellido'];
+        $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
+        $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
+        $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$RazonSocialC;
+        $Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosCliente['Direccion'];
+        $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosCliente['Cod_Dpto'];
+        $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosCliente['Cod_Mcipio'];
+        $Columnas[14]="Tercero_Pais_Domicilio";  $Valores[14]=$DatosCliente['Pais_Domicilio'];
+
+        $Columnas[15]="CuentaPUC";				$Valores[15]=$CuentaPUC;
+        $Columnas[16]="NombreCuenta";			$Valores[16]=$NombreCuenta;
+        $Columnas[17]="Detalle";				$Valores[17]="ventas";
+        $Columnas[18]="Debito";					$Valores[18]=$TotalVenta;
+        $Columnas[19]="Credito";				$Valores[19]="0";
+        $Columnas[20]="Neto";					$Valores[20]=$Valores[18];
+        $Columnas[21]="Mayor";					$Valores[21]="NO";
+        $Columnas[22]="Esp";					$Valores[22]="NO";
+        $Columnas[23]="Concepto";				$Valores[23]="Ventas Por Atn Admin";
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+
+        ///////////////////////Registramos ingresos
+
+        $CuentaPUC=$CuentaIngresos; //4135   comercio al por menor y mayor
+
+        $DatosCuenta=$this->DevuelveValores($TablaCuentaIngreso,"idPUC",$CuentaPUC);
+        $NombreCuenta=$DatosCuenta["Nombre"];
+
+        $Valores[15]=$CuentaPUC;
+        $Valores[16]=$NombreCuenta;
+        $Valores[18]="0";
+        $Valores[19]=$Subtotal; 			//Credito se escribe el total de la venta menos los impuestos
+        $Valores[20]=$Valores[19]*(-1);  											//Credito se escribe el total de la venta menos los impuestos
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+        ///////////////////////Registramos IVA Generado si aplica
+
+        if($Impuestos<>0){
+
+                $CuentaPUC=$CuentaIVAGen; //2408   IVA Generado
+
+                $DatosCuenta=$this->DevuelveValores($TablaIVAGen,"idPUC",$CuentaPUC);
+
+                $NombreCuenta=$DatosCuenta["Nombre"];
+
+                $Valores[15]=$CuentaPUC;
+                $Valores[16]=$NombreCuenta;
+                $Valores[18]="0";
+                $Valores[19]=round($Impuestos); 			//Credito se escribe el total de la venta
+                $Valores[20]=$Valores[19]*(-1);  	//para la sumatoria contemplar el balance
+
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+        }
+
+
+                                ///////////////////////////////////////////////////////////////
+        ////////////Registramos Autoretencion
+        if($RegCREE=="SI"){
+
+                $CREE=$this->DevuelveValores("impret","Nombre","CREE");
+
+                $ValorCREE=round($Subtotal*$CREE['Valor']);
+
+                $CuentaPUC=135595; //  Autorretenciones CREE
+
+                $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+                $NombreCuenta=$DatosCuenta["Nombre"];
+
+                $Valores[15]=$CuentaPUC;
+                $Valores[16]=$NombreCuenta;
+                $Valores[18]=$ValorCREE;     //Valor del CREE
+                $Valores[19]=0; 			
+                $Valores[20]=$ValorCREE;  	//para la sumatoria contemplar el balance
+
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+        ///////////////////////////////////////////////////////////////
+        ////////////contra partida de la Autoretencion
+
+                $CuentaPUC=23657502; //  Cuentas por pagar Autorretenciones CREE
+
+                $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+                $NombreCuenta=$DatosCuenta["Nombre"];
+
+                $Valores[15]=$CuentaPUC;
+                $Valores[16]=$NombreCuenta;
+                $Valores[18]=0;     //Valor del CREE
+                $Valores[19]=$ValorCREE; 			
+                $Valores[20]=$ValorCREE*(-1);  	//para la sumatoria contemplar el balance
+
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                }
+
+                ///////////////////////Ajustamos el inventario
+
+                if($AjustaInventario=="SI"){
+
+                        $CuentaPUC=$CuentaCostoMercancia; //6135   costo de mercancia vendida
+
+                        $DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
+                        $NombreCuenta=$DatosCuenta["Nombre"];
+
+                        $Valores[15]=$CuentaPUC;
+                        $Valores[16]=$NombreCuenta;
+                        $Valores[18]=$TotalCostosM;//Debito se escribe el costo de la mercancia vendida
+                        $Valores[19]="0"; 			
+                        $Valores[20]=$TotalCostosM;  	//para la sumatoria contemplar el balance
+
+                        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                        ///////////////////////Ajustamos el inventario
+
+                        $CuentaPUC=$CuentaInventarios; //1435   Mercancias no fabricadas por la empresa
+
+                        $DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
+                        $NombreCuenta=$DatosCuenta["Nombre"];
+
+                        $Valores[15]=$CuentaPUC;
+                        $Valores[16]=$NombreCuenta;
+                        $Valores[18]="0";
+                        $Valores[19]=$TotalCostosM;//Credito se escribe el costo de la mercancia vendida			
+                        $Valores[20]=$TotalCostosM*(-1);  	//para la sumatoria contemplar el balance
+
+                        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                }
+}	
+
 
         
 /*
@@ -622,21 +570,14 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 }	
 
 ////////////////////////////////////////////////////////////////////
-//////////////////////Funcion borra pedido
-///////////////////////////////////////////////////////////////////
-
-	public function BorraPedido($idMesa,$idMesero){
-
-		mysql_query("DELETE FROM atencion_pedidos WHERE Usuarios_idUsuarios='$idMesero' AND Mesas_idMesas='$idMesa'");
-	}
-	
-////////////////////////////////////////////////////////////////////
 //////////////////////Funcion borra registro
 ///////////////////////////////////////////////////////////////////
 
 	public function BorraReg($Tabla,$Filtro,$idFiltro){
-
-		mysql_query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
+            $Tabla=  $this->normalizar($Tabla);
+            $Filtro=  $this->normalizar($Filtro);
+            $idFiltro=  $this->normalizar($idFiltro);
+            mysql_query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
 	}
 	
 	////////////////////////////////////////////////////////////////////
@@ -644,7 +585,7 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 ///////////////////////////////////////////////////////////////////
 
 	public function ReiniciarPreventa($idPreventa){
-
+                $idPreventa=  $this->normalizar($idPreventa);
 		$sql="UPDATE `vestasactivas` SET `Clientes_idClientes` = '1', `SaldoFavor` = '0' WHERE `idVestasActivas` = $idPreventa;";
 
 		mysql_query($sql) or die('no se pudo actualizar la Preventa: ' . mysql_error());	
@@ -655,7 +596,7 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 ///////////////////////////////////////////////////////////////////
 
 	public function CrearPreventa($idUser){
-
+            $idUser=  $this->normalizar($idUser);
 		
             $sql="INSERT INTO vestasactivas (`Nombre`,`Usuario_idUsuario`,`Clientes_idClientes` ) 
                                     VALUES('Venta por: $this->NombreUser','$this->idUser','1')";
@@ -672,6 +613,12 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 
 public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem)
   {
+        $fecha=$this->normalizar($fecha);
+        $Cantidad=$this->normalizar($Cantidad);
+        $idVentaActiva=$this->normalizar($idVentaActiva);
+        $idProducto=$this->normalizar($idProducto);
+        $TablaItem=$this->normalizar($TablaItem);
+        
 	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
@@ -733,7 +680,12 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 
 public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem)
   {		
-	
+	$tabla=$this->normalizar($tabla);
+        $campo=$this->normalizar($campo);
+        $value=$this->normalizar($value);
+        $filtro=$this->normalizar($filtro);
+        $idItem=$this->normalizar($idItem);
+        
 	$sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
 	
 	mysql_query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
@@ -754,65 +706,7 @@ public function update($tabla,$campo, $value, $condicion)
 		
 	}
 	
-	
-	/////////////////////RegistraVenta Desde Vista Admin
-	
-	function RegVenta($Fecha,$Hora,$idPreventa,$NumCotizacion,$NumVenta,$NumFactura,$TipoVenta,$Clientes_idClientes,$Usuarios_idUsuarios){
-		
-		$reg=mysql_query("select * from fechas_descuentos where Fecha = '$Fecha'") or die('no se pudo consultar los valores de fechas descuentos en RegVenta: ' . mysql_error());
-		$reg=mysql_fetch_array($reg);
-		$Porcentaje=$reg["Porcentaje"];
-		$Departamento=$reg["Departamento"];
-		
-		$reg=mysql_query("select * from vestasactivas where idVestasActivas = '$idPreventa'") or die('no se pudo consultar la tabla vestasactivas en RegVenta: ' . mysql_error());
-		$reg=mysql_fetch_array($reg);
-		$idCliente=$reg["Clientes_idClientes"];
-		
-		$this->consulta=mysql_query("SELECT *,pv.IVA as IVAPro FROM preventa ap INNER JOIN productosventa pv ON ap.ProductosVenta_idProductosVenta=pv.idProductosVenta
-				WHERE ap.VestasActivas_idVestasActivas='$idPreventa'") 
-				or die('problemas para consultar preventa en php_conexion Clase RegVenta: ' . mysql_error());
-				
-		while($this->fetch=mysql_fetch_array($this->consulta)){
-			
 
-			$idProductosVenta=$this->fetch["idProductosVenta"];
-			$NombreP=$this->fetch["Nombre"];
-			$Prod_Referencia=$this->fetch["Referencia"];
-			$Prod_Cantidad=$this->fetch["Cantidad"];
-			$CostoUnitario=$this->fetch["CostoUnitario"];
-			
-			$impuesto=$this->fetch["IVAPro"];
-			$impuesto=$impuesto+1;
-			//$Departamento=$reg["Departamento"];
-			$ValorUnitario=ROUND($this->fetch["PrecioVenta"]/$impuesto);
-			
-			if($Porcentaje>0 and ($this->fetch["Departamento"]==$Departamento) or $Departamento=="TODO"){
-		
-				$Porcentaje=$Porcentaje/100;
-				$ValorUnitario=$ValorUnitario*$Porcentaje;
-				
-			}
-			
-			$Subtotal=$ValorUnitario*$this->fetch["Cantidad"];
-			$impuesto=round(($impuesto-1)*$Subtotal);
-			$Total=$Subtotal+$impuesto;
-			
-			$TotalCosto=$this->fetch['CostoUnitario']*$this->fetch["Cantidad"];
-			
-			mysql_query("INSERT INTO ventas (`NumVenta`,`Fecha`,`Productos_idProductos`, `Producto`,`Referencia`,`Cantidad`,
-						`ValorCostoUnitario`,`ValorVentaUnitario`,`Impuestos`, `Descuentos`,`TotalCosto`,`TotalVenta`,
-						`TipoVenta`,`Cotizaciones_idCotizaciones`,`Especial`, `Clientes_idClientes`,`Usuarios_idUsuarios`,`HoraVenta`,
-						`NoReclamacion`) 
-						VALUES('$NumVenta','$Fecha','$idProductosVenta','$NombreP','$Prod_Referencia','$Prod_Cantidad',
-						'$CostoUnitario','$ValorUnitario','$impuesto','0','$TotalCosto','$Total',
-						'$TipoVenta','$NumCotizacion','NO','$Clientes_idClientes','$Usuarios_idUsuarios','$Hora',
-						'$NumFactura')") 
-						or die('problemas para insertar la venta de $this->fetch[Referencia]: ' . mysql_error());
-		}		
-		
-		
-	}
-	
 	
 	////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Obtener Ultimo ID de una Tabla
@@ -820,7 +714,11 @@ public function update($tabla,$campo, $value, $condicion)
 
 
 public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
-  {		
+  {	
+        $tabla=$this->normalizar($tabla);
+        $campo=$this->normalizar($campo);
+        $filtro=$this->normalizar($filtro);
+        $idItem=$this->normalizar($idItem);
 	if($filtro==1){
 		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla`";
 	}else{
@@ -837,7 +735,7 @@ public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
 ///////////////////////////////////////////////////////////////////
 public function VaciarTabla($tabla)
   {		
-	
+	$tabla=$this->normalizar($tabla);
 	$sql="TRUNCATE `$tabla`";
 	
 	mysql_query($sql) or die('no se pudo vaciar la tabla $tabla: ' . mysql_error());	
@@ -905,13 +803,13 @@ public function AsignarEspacioDisponible($idUser)
 ///////////////////////////////////////////////////////////////////
 public function ConsultarTabla($tabla,$Condicion)
   {		
-		$sql="SELECT * FROM $tabla $Condicion";
-		
-			
-		$Consul=mysql_query($sql) or die("no se pudo consultar la tabla $tabla en CosultarTabla php_conexion: " . mysql_error());
-		
-		return($Consul);
-	}	
+    $sql="SELECT * FROM $tabla $Condicion";
+
+
+    $Consul=mysql_query($sql) or die("no se pudo consultar la tabla $tabla en CosultarTabla php_conexion: " . mysql_error());
+
+    return($Consul);
+}	
 	
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion query mysql
@@ -1402,7 +1300,8 @@ public function FetchArray($Datos)
 //////////////////////Funcion calcular peso de una remision
 ///////////////////////////////////////////////////////////////////
 public function CalculePesoRemision($idCotizacion)
-  {		
+  {	
+    $idCotizacion=$this->normalizar($idCotizacion);
         $Peso=0;
         $Consulta=$this->ConsultarTabla("cot_itemscotizaciones", "WHERE NumCotizacion=$idCotizacion");
         while($DatosItems=  mysql_fetch_array($Consulta)){

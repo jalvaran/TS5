@@ -109,14 +109,16 @@ public function CreeFiltro($Vector){
         $IndexIDTabla="IDTabla_".$NombreCol;           // Id de la tabla vinculada
         $IndexDisplay="Display_".$NombreCol;           // Campo que se quiere ver
         if(!empty($_REQUEST[$IndexFiltro])){
-            $Valor=$_REQUEST[$IndexFiltro];
+            $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
             if(!empty($_REQUEST[$IndexTablaVinculo])){
+                
                 $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
                         . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
                 $DatosVinculados=$this->obCon->Query($sql);
                 $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
                 //print($sql);
                 $Valor=$DatosVinculados[$_REQUEST[$IndexIDTabla]];
+               
             }
             
             if($z==0){
