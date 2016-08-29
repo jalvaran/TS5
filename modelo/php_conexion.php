@@ -635,11 +635,11 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
             $this->Query($sql);
         }else{
-            $reg=mysql_query("select * from fechas_descuentos where Fecha = '$fecha'") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+            $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
             $reg=mysql_fetch_array($reg);
             $Porcentaje=$reg["Porcentaje"];
             $Departamento=$reg["Departamento"];
-
+            $FechaDescuento=$reg["Fecha"];
             
             $impuesto=$DatosProductoGeneral["IVA"];
             $impuesto=$impuesto+1;
@@ -650,7 +650,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
                 $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
                 
             }
-            if($Porcentaje>0 and ($DatosProductoGeneral["Departamento"]==$Departamento) or $Departamento=="TODO"){
+            if($Porcentaje>0 and $FechaDescuento==$fecha){
 
                     $Porcentaje=(100-$Porcentaje)/100;
                     $ValorUnitario=$ValorUnitario*$Porcentaje;
@@ -4179,12 +4179,12 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];
-        $sql="select * from fechas_descuentos where Fecha = '$fecha'";
-        $reg=$this->Query($sql);
+        $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1 ") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+        //$reg=$this->Query($sql);
         $reg=$this->FetchArray($reg);
         $Porcentaje=$reg["Porcentaje"];
         $Departamento=$reg["Departamento"];
-
+        $FechaDescuento=$reg["Fecha"];
 
         $impuesto=$DatosProductoGeneral["IVA"];
         $impuesto=$impuesto+1;
@@ -4195,7 +4195,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
             $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
 
         }
-        if($Porcentaje>0 and ($DatosProductoGeneral["Departamento"]==$Departamento) or $Departamento=="TODO"){
+        if($Porcentaje>0 and $FechaDescuento==$fecha){
 
                 $Porcentaje=(100-$Porcentaje)/100;
                 $ValorUnitario=$ValorUnitario*$Porcentaje;

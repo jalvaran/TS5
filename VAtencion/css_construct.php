@@ -101,9 +101,13 @@ class CssIni{
 		<link rel='stylesheet' href='chousen/docsupport/style.css'>
                 <link rel='stylesheet' href='chousen/docsupport/prism.css'>
                 <link rel='stylesheet' href='chousen/source/chosen.css'>
-                
+                <link rel='stylesheet' href='css/calendar.css'>   
+                <link rel='stylesheet' type='text/css' href='css/bootstrap.min.css' />
+                <link rel='stylesheet' type='text/css' href='css/DateTimePicker.css' />
 		");
-		
+		print('<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>	
+		<script type="text/javascript" src="js/DateTimePicker.js"></script>');
 	}
 	
 	/////////////////////Inicio una cabecera
@@ -696,6 +700,7 @@ class CssIni{
             <script src="chousen/source/jquery.min.js" type="text/javascript"></script>
             <script src="chousen/source/chosen.jquery.js" type="text/javascript"></script>
             <script src="chousen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+            <script src="js/calendar.js"></script>
             
             
              ');
@@ -853,6 +858,26 @@ function Footer(){
           
           print('<a href="'.$target.'" role="button"  data-toggle="modal" title="'.$Titulo.'" style="display:scroll; height:'.$Alto.'px; width: '.$Ancho.'px;'.$MasStilos.'">
 			<image src='.$RutaImage.' name='.$Nombre.' id='.$Nombre.' src='.$RutaImage.' '.$javascript.' ></a>');
+	} 
+        
+        /////////////////////Crear una imagen con una funcion javascrip
+	
+	function CrearInputFecha($Titulo,$Nombre,$Value,$Ancho,$Alto,$VectorFe){
+          
+          print("<strong>$Titulo </strong><input type='text' id='$Nombre' name='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em'>");
+          
+         
+	} 
+        
+        /////////////////////Crear una imagen con una funcion javascrip
+	
+	function IniFecha($Nombre){
+             
+          //print("<a href='$target' title='$Titulo'><image name='$Nombre' id='$Nombre' src='$RutaImage' $javascript style='display:scroll; position:".$posicion."; right:10px; height:".$Alto."px; width: ".$Ancho."px;'></a>");
+          
+          
+          print("<script>calendar.set('$Nombre');</script>");
+         
 	} 
         
         //////////////////////////////////FIN
