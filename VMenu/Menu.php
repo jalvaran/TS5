@@ -69,6 +69,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/CuentasXPagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
                     $css->SubTabs("MnuInventarios.php","_blank","../images/inventarios.png","Inventarios");
                     $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
+                    $css->SubTabs("../VAtencion/CronogramaProduccion.php","_blank","../images/produccion.png","Produccion");
                     $css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
                     $css->SubTabs("MnuAjustes.php","_blank","../images/ajustes.png","Ajustes y Servicios Generales");
                     $css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");

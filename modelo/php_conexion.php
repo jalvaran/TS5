@@ -2199,7 +2199,11 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$NIT);
+        $InfoRegimen="REGIMEN SIMPLIFICADO";
+        if($Regimen<>"SIMPLIFICADO"){
+            $InfoRegimen="IVA REGIMEN COMUN";
+        }
+        fwrite($handle,$NIT." ".$InfoRegimen);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 		if($Regimen<>"SIMPLIFICADO"){
         fwrite($handle,$ResolucionDian1);
@@ -2269,13 +2273,13 @@ public function CalculePesoRemision($idCotizacion)
     fwrite($handle,"_____________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+    if($Regimen<>"SIMPLIFICADO"){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
 
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
-
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
+    }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($TotalVenta),20," ",STR_PAD_LEFT));
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
@@ -3916,10 +3920,12 @@ public function CalculePesoRemision($idCotizacion)
         }
         $sql=substr($sql, 0, -1);
         $sql.=") VALUES (";
+        $ConsultaParcial=$sql;
         $consulta=$this->ConsultarTabla($TablaOrigen, $Condicion);
         if($this->NumRows($consulta)){
+            $z=0;
         while($Datos =  $this->FetchArray($consulta)){
-            
+            $z++;
             for ($i=0;$i<$Leng;$i++){
                 $DatoN=  $this->normalizar($Datos[$i]);
                 if($i==0 and $ai==1){
@@ -3936,7 +3942,12 @@ public function CalculePesoRemision($idCotizacion)
             }
             $sql=substr($sql, 0, -1);
             $sql.="),(";
-            
+            //if($z==500){
+            //    $sql=substr($sql, 0, -2);
+            //    $sql.="; ";
+            //    $sql.=$ConsultaParcial;
+            //    $z=0;
+            //}    
         }
         $sql=substr($sql, 0, -2);
         $sql.="; ";
