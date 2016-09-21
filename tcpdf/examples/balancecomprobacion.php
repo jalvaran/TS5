@@ -277,8 +277,8 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 
-$sel1=mysql_query("SELECT substring(CuentaPUC,1,4) as Cuenta, SUM(Debito) as SumDebito, SUM(Credito) as SumCredito FROM librodiario 
-$Condicion  AND  (substring(CuentaPUC,1,1) = 6) 
+$sel1=mysql_query("SELECT NombreCuenta, substring(CuentaPUC,1,4) as Cuenta, SUM(Debito) as SumDebito, SUM(Credito) as SumCredito FROM librodiario 
+$Condicion  AND  ((substring(CuentaPUC,1,1) = 6) or  (substring(CuentaPUC,1,1) = 7))
 GROUP BY substring(CuentaPUC,1,4)",$con) or die("problemas con la consulta".mysql_error());
 
 if(mysql_num_rows($sel1)){
@@ -299,14 +299,14 @@ if(mysql_num_rows($sel1)){
 		//$Creditos=number_format($DatosLibro["SumCredito"]);
 		
 		$Cuenta=$DatosLibro["Cuenta"];
-		$reg=mysql_query("SELECT Nombre FROM cuentas WHERE idPUC = '$Cuenta'")	or die("problemas con la consulta".mysql_error());
+		$reg=mysql_query("SELECT Nombre FROM subcuentas WHERE PUC = '$Cuenta'")	or die("problemas con la consulta".mysql_error());
 		$DatosCuentas=mysql_fetch_array($reg);
 		
 		$tbl = <<<EOD
 
 <table border="1" cellpadding="3" cellspacing="5" align="left">
  <tr style= "background-color:$back;">
-  <td>$DatosCuentas[Nombre]</td>
+  <td>$DatosLibro[NombreCuenta]</td>
   <td align="center">$NumberNeto</td><td> </td>
  </tr>
  

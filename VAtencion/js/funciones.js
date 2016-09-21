@@ -426,3 +426,9 @@ function MostrarDialogo() {
     document.getElementById('ShowItemsBusqueda').click();
 		
 }
+
+function MostrarDialogoID(id) {
+
+    document.getElementById(id).click();
+		
+}

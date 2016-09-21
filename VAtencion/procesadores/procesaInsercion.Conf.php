@@ -128,4 +128,24 @@ $TablaConfig="ordenesdecompra";
 $VarInsert[$TablaConfig]["Created"]["Excluir"]=1;
 $VarInsert[$TablaConfig]["UsuarioCreador"]["Excluir"]=1;
 
+/*
+ * Tabla produccion_ordenes_trabajo
+ * Columnas excluidas
+ */
+$TablaConfig="produccion_ordenes_trabajo";
+$VarInsert[$TablaConfig]["FechaTerminacion"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["TotalHorasPlaneadas"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["TotalHorasEmpleadas"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["Pausas_Operativas"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["Pausas_No_Operativas"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["Tiempo_Operacion"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["ValorSugerido"]["Excluir"]=1;
+
+$VarInsert[$TablaConfig]["ValorMateriales"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["ValorCotizado"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["ValorFacturado"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["Estado"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["Facturado"]["Excluir"]=1;
+$VarInsert[$TablaConfig]["NumFactura"]["Excluir"]=1;
+
 ?>

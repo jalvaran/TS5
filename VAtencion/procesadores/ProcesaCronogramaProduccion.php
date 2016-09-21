@@ -1,55 +1,55 @@
 <?php 
-if(!empty($_REQUEST['del'])){
-    $id=$_REQUEST['del'];
-    $Tabla=$_REQUEST['TxtTabla'];
-    $IdTabla=$_REQUEST['TxtIdTabla'];
-    $IdPre= $_REQUEST['TxtIdPre'];
-    $DatosItem=$obVenta->DevuelveValores($Tabla, $IdTabla, $id);
-    $obVenta->ActualizaRegistro("librodiario", "Estado", "", "idLibroDiario", $DatosItem["idLibroDiario"]);
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
-    
-    header("location:$MyPage?CmbTrasladoID=$IdPre");
-}
 
-if(!empty($_REQUEST["BtnCrearTraslado"])){
+if(!empty($_REQUEST["BtnCrearActividad"])){
     
     $obVenta=new ProcesoVenta($idUser);
     
-    $fecha=$_REQUEST["TxtFecha"];
-    $hora=$_REQUEST["TxtHora"];
-    $Concepto=$_REQUEST["TxtDescripcion"];
-    $Destino=$_REQUEST["CmbDestino"];
-    $VectorTraslado["idBodega"]=$_REQUEST["CmbBodega"];
-    $idComprobante=$obVenta->CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado);
+    $idOT=$_REQUEST["idOT"];
+    $idMaquina=$_REQUEST["idMaquina"];
+    $FechaInicioPlaneado=$_REQUEST["TxtFechaInicioP"];
+    $HoraInicioPlaneado=$_REQUEST["TxtHoraInicioP"];
+    $FechaFinPlaneado=$_REQUEST["TxtFechaFinP"];
+    $HoraFinPlaneado=$_REQUEST["CmbHoraFinP"];
+    $Descripcion=$_REQUEST["TxtDescripcion"];
+    $Observaciones=$_REQUEST["TxtObservaciones"];
+    
+    if(($HoraFinPlaneado==$HoraInicioPlaneado and $FechaInicioPlaneado==$FechaFinPlaneado) and $HoraFinPlaneado<>'23:59'){
+        $HoraInicial=strtotime($HoraFinPlaneado);
+        $HoraFinPlaneado=date("H:i",$HoraInicial+60*60);
         
+    }
+    
+    if($HoraFinPlaneado=="23:59"){
+        $HoraFinPlaneado="24:00";
+    }
+    $obVenta->AgregaActividadOT($idOT, $idMaquina, $FechaInicioPlaneado, $HoraInicioPlaneado, $FechaFinPlaneado, $HoraFinPlaneado, $Descripcion, $Observaciones, "");
+    
     //$obVenta->CerrarCon();
-    header("location:$myPage");
+    header("location:$myPage?idOT=$idOT&TxtFechaCronograma=$FechaInicioPlaneado");
 }
 
-		
-if(!empty($_REQUEST["BtnAgregarItem"])){
+if(!empty($_REQUEST["BtnEditarActividad"])){
     
-   
     $obVenta=new ProcesoVenta($idUser);
-        
-    $idComprobante=$_REQUEST["TxtidPre"];
-    $Cantidad=$_REQUEST["TxtCantidad"];
     
-    $idProducto=$_REQUEST["TxtIdItem"];
-    $VectorItem["Fut"]=0;
-    $obVenta->AgregarItemTraslado($idComprobante,$idProducto,$Cantidad,$VectorItem);
+    $IDEdit=$_REQUEST["idAct"];
     
-    //header("location:$myPage?idComprobante=$idComprobante");
+    $FechaInicioPlaneado=$obVenta->normalizar($_REQUEST["TxtFechaInicioP"]);
+    $HoraInicioPlaneado=$obVenta->normalizar($_REQUEST["TxtHoraInicioP"]);
+    $FechaFinPlaneado=$obVenta->normalizar($_REQUEST["TxtFechaFinP"]);
+    $HoraFinPlaneado=$obVenta->normalizar($_REQUEST["TxtHoraFinP"]);
+    $Descripcion=$obVenta->normalizar($_REQUEST["TxtDescripcion"]);
+    $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservaciones"]);
+    $idColaborador=$obVenta->normalizar($_REQUEST["CmbColaborador"]);
+    
+    $sql="UPDATE produccion_actividades SET Fecha_Planeada_Inicio='$FechaInicioPlaneado', Fecha_Planeada_Fin='$FechaFinPlaneado'"
+            . ", Hora_Planeada_Inicio='$HoraInicioPlaneado', Hora_Planeada_Fin='$HoraFinPlaneado', Fecha_Inicio='$FechaInicioPlaneado'"
+            . ", Fecha_Fin='$FechaInicioPlaneado', Hora_Inicio='$HoraInicioPlaneado', Hora_Fin='$HoraFinPlaneado'"
+            . ", Descripcion='$Descripcion', Observaciones='$Observaciones', idColaborador='$idColaborador'  WHERE ID='$IDEdit'";
+    $obVenta->Query($sql);
+    //$obVenta->CerrarCon();
+    header("location:$myPage?TxtFechaCronograma=$FechaInicioPlaneado");
 }
 
-// si se requiere guardar y cerrar
-if(!empty($_REQUEST["BtnGuardar"])){
-    
-    $idComprobante=$_REQUEST["TxtIdComprobante"];
-    $obVenta->GuardarTrasladoMercancia($idComprobante);
-        
-    header("location:$myPage?ImprimeCC=$idComprobante");
-    
-}
 ///////////////fin
 ?>

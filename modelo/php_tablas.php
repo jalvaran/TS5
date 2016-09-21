@@ -765,12 +765,16 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
             $TipoText=$VarInsert[$tbl][$NombreCol]["TipoText"];
         }
         if(!$excluir){  //Si la columna no está excluida
+           $DateBox=0;
            $lengCampo=preg_replace('/[^0-9]+/', '', $ColumnasInfo["Type"][$i]); //Determinamos la longitud del campo
            if($lengCampo<1){
                $lengCampo=45;
            }
            if($ColumnasInfo["Type"][$i]=="text"){
                $lengCampo=100;
+           }
+           if($ColumnasInfo["Type"][$i]=="date"){
+               $DateBox=1;
            }
            $Value=$ColumnasInfo["Default"][$i];
            $Required=0;
@@ -820,16 +824,21 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
                     }
                     $this->css->CerrarSelect(); 
                 }else{
-                  
-                    $this->css->CrearInputText("$NombreCol", $TipoText, "", "", "$NombreCol", "black", "", "", $lengCampo."0", 30, 1, $Required);
-                              
+                    
+                        $this->css->CrearInputText("$NombreCol", $TipoText, "", "", "$NombreCol", "black", "", "", $lengCampo."0", 30, 1, $Required);
+                        
                 }
             }else{
                 if($lengCampo<100){
                     if($NombreCol=="RutaImagen"){
                         $this->css->CrearUpload($NombreCol);
                     }else{
-                        $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);    
+                        if($DateBox==0){
+                            $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);    
+                        }
+                        if($DateBox==1){
+                            $this->css->CrearInputFecha("", $NombreCol, date("Y-m-d"), 100, 30, "");
+                        }
                     }
                 }else{
                     if($NombreCol=="RutaImagen"){

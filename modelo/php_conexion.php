@@ -4804,6 +4804,29 @@ public function VerificaPermisos($VectorPermisos) {
         return ($idBaja);
      }
      
+     //Funcion para Agregar una actividad a una OT
+     
+     public function AgregaActividadOT($idOT,$idMaquina,$FechaInicioPlaneado,$HoraInicioPlaneado,$FechaFinPlaneado,$HoraFinPlaneado,$Descripcion,$Observaciones,$VectorAOT) {
+        $tab="produccion_actividades";
+        $NumRegistros=14;
+        $Columnas[0]="idOrdenTrabajo";		$Valores[0]=$idOT;
+        $Columnas[1]="Fecha_Planeada_Inicio";	$Valores[1]=$FechaInicioPlaneado;
+        $Columnas[2]="Fecha_Planeada_Fin";	$Valores[2]=$FechaFinPlaneado;
+        $Columnas[3]="Hora_Planeada_Inicio";	$Valores[3]=$HoraInicioPlaneado;
+        $Columnas[4]="Hora_Planeada_Fin";	$Valores[4]=$HoraFinPlaneado;
+        $Columnas[5]="Fecha_Inicio";            $Valores[5]=$FechaInicioPlaneado;
+        $Columnas[6]="Fecha_Fin";               $Valores[6]=$FechaFinPlaneado;
+        $Columnas[7]="Hora_Inicio";             $Valores[7]=$HoraInicioPlaneado;
+        $Columnas[8]="Hora_Fin";                $Valores[8]=$HoraFinPlaneado;
+        $Columnas[9]="Descripcion";             $Valores[9]=$Descripcion;
+        $Columnas[10]="Observaciones";          $Valores[10]=$Observaciones;
+        $Columnas[11]="idMaquina";              $Valores[11]=$idMaquina;
+        $Columnas[12]="Estado";                 $Valores[12]="NO_INICIADA";
+        $Columnas[13]="idUsuario";              $Valores[13]=$this->idUser;
+       
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+     }
+     
 //////////////////////////////Fin	
 }
 	
