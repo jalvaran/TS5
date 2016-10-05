@@ -90,6 +90,22 @@
     
     print("<strong>+ Opciones </strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpciones');>");
     $css->CrearDiv("DivOtrasOpciones", "", "center", $Visible, 1);
+    
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Colaborador";
+    $VarSelect["Title"]="";
+    $css->CrearSelectChosen("TxtidColaborador", $VarSelect);
+    
+        $sql="SELECT Nombre, Identificacion FROM colaboradores";
+        $Consulta=$obVenta->Query($sql);
+        $css->CrearOptionSelect("", "Colaborador: " , 0);
+        while($DatosColaborador=$obVenta->FetchArray($Consulta)){
+            
+               $css->CrearOptionSelect("$DatosColaborador[Identificacion]", " $DatosColaborador[Nombre] $DatosColaborador[Identificacion]" , 0);
+           }
+    $css->CerrarSelect();
+    
+    
     $VarSelect["Ancho"]="200";
     $VarSelect["PlaceHolder"]="Busque un Cliente";
     $VarSelect["Title"]="";
@@ -125,6 +141,8 @@
     $css->ColTabla("DEVOLVER:",1);
     $css->ColTablaInputText("TxtDevuelta","text",0,"","Devuelta","","","",150,50,1,0);
     print("<td>");
+    
+        
     $VectorBoton["Fut"]=0;
     $css->CrearBotonEvento("BtnGuardar","Guardar",1,"onclick","EnviaFormVentasRapidas()","naranja",$VectorBoton);
     print("</td>");

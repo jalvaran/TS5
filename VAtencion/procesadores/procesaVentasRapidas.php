@@ -182,6 +182,7 @@
             $fecha=date("Y-m-d");
             $TotalVenta=$_REQUEST['TxtGranTotalH'];
             $idCliente=$_REQUEST["TxtCliente"];
+            $idColaborador=$_REQUEST["TxtidColaborador"];
             $idPreventa=$_REQUEST["CmbPreVentaAct"];
             $Efectivo=$_REQUEST["TxtPaga"];
             $Cheque=$_REQUEST["TxtPagaCheque"];
@@ -227,6 +228,10 @@
                     }
                     $obVenta->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
                 }
+            }
+            
+            if(!empty($idColaborador)){
+                $obVenta->AgregueVentaColaborador($NumFactura,$idColaborador);
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
 		

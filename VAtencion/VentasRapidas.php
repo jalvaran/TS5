@@ -210,6 +210,7 @@ $css->CerrarDiv();
 $css->AgregaJS(); //Agregamos javascripts
 $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
 $css->AnchoElemento("CmbClientes_chosen", 200);
+$css->AnchoElemento("TxtidColaborador_chosen", 200);
 $css->AnchoElemento("TxtCliente_chosen", 200);
 $css->AnchoElemento("TxtCuentaDestino_chosen", 200);
 $css->AnchoElemento("TxtTipoPago_chosen", 200);
