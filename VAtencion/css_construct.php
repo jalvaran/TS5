@@ -868,14 +868,14 @@ function Footer(){
           //print("<strong>$Titulo </strong><input type='text' id='$Nombre' name='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em'>");
           print("<strong>$Titulo </strong> <input type='text' size='12' name='$Nombre' id='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em'>");
          print('<script type="text/javascript">
-                window.onload = function(){
+                
                         new JsDatePick({
                                 useMode:2,
                                 target:"'.$Nombre.'",
                                 dateFormat:"%Y-%m-%d"
 
                         });
-                };
+                
         </script>');
 	} 
         

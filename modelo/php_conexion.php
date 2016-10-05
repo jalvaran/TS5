@@ -2203,7 +2203,7 @@ public function CalculePesoRemision($idCotizacion)
         if($Regimen<>"SIMPLIFICADO"){
             $InfoRegimen="IVA REGIMEN COMUN";
         }
-        fwrite($handle,$NIT." ".$InfoRegimen);
+        fwrite($handle,"NIT: ".$NIT." ".$InfoRegimen);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 		if($Regimen<>"SIMPLIFICADO"){
         fwrite($handle,$ResolucionDian1);
@@ -2213,11 +2213,10 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle,$ResolucionDian3);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 		}
-        fwrite($handle,$Direccion);
+        fwrite($handle,$Direccion." ".$Ciudad);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Ciudad);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Telefono);
+        
+        fwrite($handle,"TEL: ".$Telefono);
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 
         fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");

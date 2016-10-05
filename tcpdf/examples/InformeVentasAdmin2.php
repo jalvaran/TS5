@@ -372,7 +372,7 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
         $sql="SELECT Usuario_idUsuario as IdUsuarios, SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, SUM(Valor) as Total FROM egresos
-	WHERE $CondicionFecha2 AND Cuenta LIKE '110510%'
+	WHERE $CondicionFecha2 AND Cuenta='110510'
 	GROUP BY Usuario_idUsuario";
         $sel1=$obVenta->Query($sql);
 	
@@ -553,7 +553,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 $sql="SELECT Usuarios_idUsuarios as IdUsuarios, Fecha as Fecha, SUM(Total) as Total "
         . "  FROM $CondicionFacturas AND FormaPago='Contado' GROUP BY Usuarios_idUsuarios";
 
-
+$Datos=$obVenta->Query($sql);
 
 
 	$flagQuery=0;
@@ -562,7 +562,6 @@ $sql="SELECT Usuarios_idUsuarios as IdUsuarios, Fecha as Fecha, SUM(Total) as To
 	$TotalDevoluciones=0;
 	$TotalEgresos=0;
 	$TotalEntrega=0;
-	$Datos=$obVenta->Query($sql);
 	
 	while($DatosVentas=$obVenta->FetchArray($Datos)){
 		$flagQuery=1;	
@@ -584,9 +583,9 @@ $sql="SELECT Usuarios_idUsuarios as IdUsuarios, Fecha as Fecha, SUM(Total) as To
 		//////////////////////Consulto egresos del usuario
 		
 		$sql="SELECT SUM(Valor) as TotalEgresos FROM egresos
-		WHERE $CondicionFecha2 AND Cuenta LIKE '110510%' AND Usuario_idUsuario = '$idUser' ";
-		$DatosEgresos=$obVenta->Query($sql);
-        $DatosEgresos=$obVenta->FetchArray($DatosEgresos);
+		WHERE $CondicionFecha2 AND Cuenta LIKE '1105%' AND Usuario_idUsuario = '$idUser' ";
+		$Datos=$obVenta->Query($sql);
+                $DatosEgresos=$obVenta->FetchArray($Datos);
 		$TotalEgresosUser=number_format($DatosEgresos['TotalEgresos']);
 		$TotalEgresos=$TotalEgresos+$DatosEgresos['TotalEgresos'];
 		
@@ -644,7 +643,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 	
 }
 
-
+if($VerFacturas==1){
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////FACTURAS NUMERACION////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -658,9 +657,8 @@ $tbl = <<<EOD
 
 <table border="1" cellspacing="2" align="center" >
   <tr> 
-    <th><h3>Resolucion</h3></th>
     <th><h3>Factura Inicial</h3></th>
-    <th><h3>Factura Final</h3></th>
+	<th><h3>Factura Final</h3></th>
     <th><h3>Total Clientes</h3></th>
 	
   </tr >
@@ -672,16 +670,15 @@ EOD;
 
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
-$sql="SELECT idResolucion,MAX(NumeroFactura) as MaxFact, MIN(NumeroFactura) as MinFact FROM facturas
-	WHERE $CondicionFecha2 GROUP BY idResolucion";
-$sel1=$obVenta->Query($sql);
+
+$sel1=mysql_query("SELECT MAX(idFacturas) as MaxFact, MIN(idFacturas) as MinFact, COUNT(idFacturas) as TotalFacts FROM facturas
+	WHERE $CondicionFecha2",$con) or die("problemas con la consulta a numeracion de facturas".mysql_error());
 
 
-while($DatosNumFact=$obVenta->FetchArray($sel1)){
+while($DatosNumFact=mysql_fetch_array($sel1)){
 	$MinFact=$DatosNumFact["MinFact"];
 	$MaxFact=$DatosNumFact["MaxFact"];
-        $idResolucion=$DatosNumFact["idResolucion"];
-	$TotalFacts=$MaxFact-$MinFact+1;
+	$TotalFacts=$DatosNumFact["TotalFacts"];
 	
 	
 	
@@ -689,7 +686,6 @@ $tbl = <<<EOD
 
 <table border="1"  cellpadding="2" align="center">
  <tr>
-  <td>$idResolucion</td>
   <td>$MinFact</td>
   <td>$MaxFact</td>
   <td>$TotalFacts</td>
@@ -703,7 +699,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 }
 
 
-
+}
  
  
 //$pdf->writeHTML($tab, false, false, false, false, '');

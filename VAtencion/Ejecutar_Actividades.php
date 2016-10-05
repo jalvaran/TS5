@@ -15,12 +15,12 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 include_once("Configuraciones/Ejecutar_Actividades.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
 $obVenta = new ProcesoVenta($idUser);
-$statement = $obTabla->CreeFiltro($Vector);
+//$statement = $obTabla->CreeFiltro($Vector);
 //print($statement);
-$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
+//$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
-$obTabla->VerifiqueExport($Vector);
+//$obTabla->VerifiqueExport($Vector);
 
 include_once("css_construct.php");
 print("<html>");
@@ -32,6 +32,7 @@ print("<body>");
 //Cabecera
 $idActividad=0;
 $idMaquina=0;
+$idColaborador=0;
 if(isset($_REQUEST["idMaquina"])){
     $idMaquina=$_REQUEST["idMaquina"];
     
@@ -39,6 +40,11 @@ if(isset($_REQUEST["idMaquina"])){
 
 if(isset($_REQUEST["idActividad"])){
     $idActividad=$_REQUEST["idActividad"];
+    
+}
+
+if(isset($_REQUEST["idColaborador"])){
+    $idColaborador=$_REQUEST["idColaborador"];
     
 }
 
@@ -62,20 +68,73 @@ if($idMaquina<1){
     $css->CerrarSelect();
     $css->CerrarForm();
 }
+
+if($idColaborador<1 and $idMaquina>0){
+    $css->CrearNotificacionRoja("Seleccione una Colaborador", 18);
+    $css->CrearForm2("FrmColaborador", $myPage, "GET", "_self");
+    $css->CrearInputText("idMaquina","hidden","",$idMaquina,"","","","",0,0,0,0);
+    $css->CrearSelect("idColaborador", "EnviaForm('FrmColaborador')");
+    
+    $css->CrearOptionSelect("0", "Seleccione un Colaborador", 0);
+    $Datos=$obVenta->ConsultarTabla("usuarios", " WHERE idUsuarios >=3");
+    while($DatosMaquinas=$obVenta->FetchArray($Datos)){
+        $css->CrearOptionSelect($DatosMaquinas["Identificacion"],$DatosMaquinas["Nombre"]." ".$DatosMaquinas["Apellido"], 0);
+    }
+    $css->CerrarSelect();
+    $css->CerrarForm();
+}
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////
+
+
+
 if($idActividad>0){
     $css->CrearImageLink("../VMenu/Menu.php", "../images/facturas2.png", "_self",200,200);
 }
 
 ////Paginacion
 ////
-$Ruta="";
-print("<div style='height: 50px;'>");   //Dentro de un DIV para no hacerlo tan grande
-print(pagination($Ruta,$statement,$limit,$page));
-print("</div>");
+
+
+
+if($idColaborador>0 and $idMaquina>0){
+    
+    $statement=" produccion_actividades WHERE idMaquina='$idMaquina' AND Estado<>'TERMINADA'";
+    
+    $Ruta="idMaquina=$idMaquina&idColaborador=$idColaborador&";
+    print("<div style='height: 50px;'>");   //Dentro de un DIV para no hacerlo tan grande
+    print(pagination($Ruta,$statement,$limit,$page));
+    print("</div>");
+    $css->CrearTabla();
+    $css->FilaTabla(20);
+    $css->ColTabla("Actividades", "3");
+    $css->CierraFilaTabla();
+    
+    
+    $sql="SELECT * FROM $statement ORDER BY Fecha_Planeada_Inicio, Hora_Planeada_Inicio Desc LIMIT $startpoint,$limit ";
+    $Datos=$obVenta->Query($sql);
+    while($DatosActividades=$obVenta->FetchArray($Datos)){
+        $css->FilaTabla(20);
+        echo("<td>");
+        $link="$myPage?".$Ruta."idActividad=$DatosActividades[ID]";
+        $css->CrearLink($link, "_self", "Ver Act $DatosActividades[ID]");
+        echo("</td>");
+        echo("<td>");
+        echo("$DatosActividades[Descripcion]");
+        
+        echo("</td>");
+        $css->CierraFilaTabla();
+    }
+    
+    
+    $css->CerrarTabla();
+    
+    
+    
+    
+}
 
 $css->CerrarDiv();//Cerramos contenedor Principal
 $css->Footer();

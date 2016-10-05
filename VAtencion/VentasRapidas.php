@@ -87,6 +87,11 @@ if(!empty($_REQUEST["TxtIdEgreso"])){
     $css->CerrarTabla();
 }
 
+if(!empty($_REQUEST["CantidadCero"])){
+    
+    $css->CrearNotificacionRoja("No está permitido dejar cantidades en Cero", 18);
+}
+
 if(!empty($_REQUEST["NoAutorizado"])){
     $css->CrearNotificacionRoja("Clave Incorrecta !", 18);
 }

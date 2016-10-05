@@ -215,6 +215,7 @@ print("<body>");
     $css->CrearForm2("FrmFechaCrono", $myPage, "post", "_self");    
     $css->CrearInputText("idOT", "hidden", "", $idOT, "", "", "", "", "", "", 0, 0);
     $css->CrearInputFecha("<h3>Seleccione la Fecha: </h3>", "TxtFechaCronograma", "$FechaActual", "100", "30", "");
+	
     $css->CrearBotonNaranja("BtnBuscar", "Buscar");
     $css->CerrarForm();
     ///////////////Creamos el contenedor secundario

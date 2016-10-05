@@ -103,24 +103,30 @@
 		$Cantidad=$_REQUEST["TxtEditar$idItem"];
                 //echo " $Cantidad $idItem";
 		//$ValorAcordado=$_REQUEST['TxtValorUnitario'];
-                $DatosPreventa=$obVenta->DevuelveValores("preventa", "idPrecotizacion", $idItem);
-		$ValorAcordado=$DatosPreventa["ValorAcordado"];
-		$idProducto=$DatosPreventa["ProductosVenta_idProductosVenta"];
-		$Tabla=$DatosPreventa["TablaItem"];
-		$Subtotal=$ValorAcordado*$Cantidad;
-		$DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
-		$IVA=$Subtotal*$DatosProductos["IVA"];
-		$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
-		$Total=$Subtotal+$IVA;
-		$filtro="idPrecotizacion";
+                $VariableURL="";
+                if($Cantidad==0){
+                    $VariableURL="CantidadCero=1";
+                    
+                }
+                if($Cantidad<>0){
+                    $DatosPreventa=$obVenta->DevuelveValores("preventa", "idPrecotizacion", $idItem);
+                    $ValorAcordado=$DatosPreventa["ValorAcordado"];
+                    $idProducto=$DatosPreventa["ProductosVenta_idProductosVenta"];
+                    $Tabla=$DatosPreventa["TablaItem"];
+                    $Subtotal=$ValorAcordado*$Cantidad;
+                    $DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
+                    $IVA=$Subtotal*$DatosProductos["IVA"];
+                    $SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
+                    $Total=$Subtotal+$IVA;
+                    $filtro="idPrecotizacion";
+
+                    $obVenta->ActualizaRegistro("preventa","Subtotal", $Subtotal, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","Impuestos", $IVA, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","TotalVenta", $Total, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","Cantidad", $Cantidad, $filtro, $idItem);
+                }
 		
-		$obVenta->ActualizaRegistro("preventa","Subtotal", $Subtotal, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","Impuestos", $IVA, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","TotalVenta", $Total, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","Cantidad", $Cantidad, $filtro, $idItem);
-		
-		
-		header("location:$myPage?CmbPreVentaAct=$idPreventa");
+		header("location:$myPage?CmbPreVentaAct=$idPreventa&$VariableURL");
 			
 	}
         
