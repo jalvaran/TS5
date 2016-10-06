@@ -144,7 +144,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 	
         }
 
-
+/*
 ///////////////////////////////////////////////////////
 //////////////tabla con los datos de ventas//////////////////
 ////////////////////////////////////////////////////////
@@ -181,17 +181,7 @@ SUM(Total) as Total, SUM(TotalCostos) as TotalCostos"
 
 $Datos=$obVenta->Query($sql);
 
-/*
-	$sel1=mysql_query("SELECT f.Usuarios_idUsuarios as IdUsuarios, f.FormaPago as  TipoVenta, SUM(c.Subtotal) as Subtotal, SUM(c.IVA) as IVA, 
-SUM(c.Total) as Total,SUM(c.Descuento) as Descuentos, SUM(c.Cantidad) as Items 
-FROM facturas f INNER JOIN cotizaciones c ON f.Cotizaciones_idCotizaciones=c.NumCotizacion 
-INNER JOIN productosventa pr ON c.Referencia = pr.Referencia 
-INNER JOIN prod_departamentos dpt ON dpt.idDepartamentos = pr.Departamento
-WHERE f.Fecha >= '$FechaIni' AND f.Fecha <= '$FechaFinal' 
-	GROUP BY f.Usuarios_idUsuarios, f.FormaPago",$con) or die("problemas con la consulta a join ventas ".mysql_error());
 
-
-*/
 
 
 $Subtotal=0;
@@ -255,6 +245,100 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 
 
 }
+
+*/
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////FACTURAS NUMERACION////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+$tbl = <<<EOD
+
+
+<BR><BR><span style="color:RED;font-family:'Bookman Old Style';font-size:12px;"><strong><em>Informe de Numeracion Facturas:
+</em></strong></span><BR><BR>
+
+
+<table border="1" cellspacing="2" align="center" >
+  <tr> 
+    <th><h3>Resolucion</h3></th>
+    <th><h3>Factura Inicial</h3></th>
+    <th><h3>Factura Final</h3></th>
+    <th><h3>Total Clientes</h3></th>
+	
+  </tr >
+  
+</table>
+
+
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+
+$sql="SELECT idResolucion,MAX(NumeroFactura) as MaxFact, MIN(NumeroFactura) as MinFact FROM facturas
+	WHERE $CondicionFecha2 GROUP BY idResolucion";
+$sel1=$obVenta->Query($sql);
+
+
+while($DatosNumFact=$obVenta->FetchArray($sel1)){
+	$MinFact=$DatosNumFact["MinFact"];
+	$MaxFact=$DatosNumFact["MaxFact"];
+        $idResolucion=$DatosNumFact["idResolucion"];
+	$TotalFacts=$MaxFact-$MinFact+1;
+	
+	
+	
+$tbl = <<<EOD
+
+<table border="1"  cellpadding="2" align="center">
+ <tr>
+  <td>$idResolucion</td>
+  <td>$MinFact</td>
+  <td>$MaxFact</td>
+  <td>$TotalFacts</td>
+ 
+ </tr>
+ </table>
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+	
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////TIPO VENTAS////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+$tbl = <<<EOD
+
+
+<BR><BR><span style="color:RED;font-family:'Bookman Old Style';font-size:12px;"><strong><em>Tipo de Ventas:
+</em></strong></span><BR><BR>
+
+
+<table border="1" cellspacing="2" align="center" >
+  <tr> 
+    <th><h3>Efectivo</h3></th>
+    <th><h3>Ventas al Detal</h3></th>
+    <th><h3>Ventas al Por mayor</h3></th>
+    
+	
+  </tr >
+  <tr> 
+    <th><h3>$TotalVentas</h3></th>
+    <th><h3>$TotalVentas</h3></th>
+    <th><h3>0</h3></th>
+    
+	
+  </tr >
+</table>
+
+
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+
+
 
 /*
 ///////////////////////////////////////////////////////

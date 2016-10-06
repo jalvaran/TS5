@@ -702,6 +702,63 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 	
 }
 
+///////////////////////////////////////////////////////
+//////////////tabla con los datos de las ventas asignadas a colaboradores//////////////////
+////////////////////////////////////////////////////////
+
+
+$tbl = <<<EOD
+
+
+<BR><BR><span style="color:RED;font-family:'Bookman Old Style';font-size:12px;"><strong><em>Ventas de Colaboradores:
+</em></strong></span><BR><BR>
+
+
+<table border="1" cellspacing="2" align="center" >
+  <tr> 
+    <th><h3>Colaborador</h3></th>
+	<th><h3>Total</h3></th>
+    
+  </tr >
+  
+</table>
+
+
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+
+
+        $sql="SELECT idColaborador, SUM(Total) as Total FROM colaboradores_ventas
+	WHERE $CondicionFecha2
+	GROUP BY idColaborador";
+	$sel1=$obVenta->Query($sql);
+
+
+
+if($obVenta->NumRows($sel1)){
+		
+	while($DatosVentas=$obVenta->FetchArray($sel1)){
+			
+		$Total=  number_format($DatosVentas["Total"]);
+		$tbl = <<<EOD
+
+<table border="1"  cellpadding="2" align="center">
+ <tr>
+  <td>$DatosVentas[idColaborador]</td>
+  
+  <td>$Total</td>
+ 
+ </tr>
+ </table>
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+	}
+	
+	
+	
+}
 
 
  

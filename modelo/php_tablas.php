@@ -722,6 +722,47 @@ public function VerifiqueExport($Vector)  {
     }    
 }
 
+
+/*
+ * Verificamos si hay peticiones de exportacion
+ */
+    
+public function GenereInformeDepartamento($Mes,$Anio,$Vector)  {
+   $FechaIni=$Anio."-".$Mes."01";
+   $FechaFin=$Anio."-".$Mes."31";
+    require_once '../librerias/Excel/PHPExcel.php';
+   $objPHPExcel = new PHPExcel();    
+   $Consulta=  $this->obCon->ConsultarTabla("prod_departamentos", "");   
+   $i=0;
+   while($DatosDepartamentos=$this->obCon->FetchArray($Consulta)){
+       $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[$i]."1",$DatosDepartamentos["Nombre"]);
+       $i++;
+   }
+   
+   
+    
+   //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com")
+        ->setLastModifiedBy("www.technosoluciones.com")
+        ->setTitle("Exportar Informe  desde base de datos")
+        ->setSubject("Informe")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones")
+        ->setCategory("Informe Departamentos");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Informe_Departamentos".'.xls"');
+    header('Cache-Control: max-age=0');
+
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+   
+      
+}
 /*
  * 
  * Funcion para crear un formulario para crear un nuevo registro en una tabla

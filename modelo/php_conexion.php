@@ -1443,7 +1443,7 @@ public function CalculePesoRemision($idCotizacion)
             $NumRegistros=26;
             $Columnas[0]="ID";			$Valores[0]="";
             $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
-            $Columnas[2]="TablaItems";          $Valores[2]=$DatosDevolucion["Tabla"];
+            $Columnas[2]="TablaItems";          $Valores[2]=$DatosDevolucion["TablaOrigen"];
             $Columnas[3]="Referencia";          $Valores[3]=$DatosDevolucion["Referencia"];
             $Columnas[4]="Nombre";              $Valores[4]=$DatosProducto["Nombre"];
             $Columnas[5]="Departamento";	$Valores[5]=$DatosProducto["Departamento"];
@@ -4826,6 +4826,21 @@ public function VerificaPermisos($VectorPermisos) {
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
      }
      
+     //Agrega una venta a un colaborador
+     
+     
+     public function AgregueVentaColaborador($idFactura,$idColaborador) {
+        $DatosFactura=$this->DevuelveValores("Facturas", "idFacturas", $idFactura);
+        $tab="colaboradores_ventas";
+        $NumRegistros=4;
+        $Columnas[0]="Fecha";                   $Valores[0]=$DatosFactura["Fecha"];
+        $Columnas[1]="idFactura";               $Valores[1]=$idFactura;
+        $Columnas[2]="Total";                   $Valores[2]=$DatosFactura["Total"];
+        $Columnas[3]="idColaborador";           $Valores[3]=$idColaborador;
+                   
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+     }
+
 //////////////////////////////Fin	
 }
 	

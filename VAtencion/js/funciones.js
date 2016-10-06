@@ -136,7 +136,8 @@ function atajos()
 
 shortcut("Ctrl+Q",function()
 {
-document.getElementById("TxtPaga").focus();
+//document.getElementById("TxtPaga").focus();
+document.getElementById("TxtPaga").select();
 });
 shortcut("Ctrl+E",function()
 {

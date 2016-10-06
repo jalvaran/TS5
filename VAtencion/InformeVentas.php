@@ -1,7 +1,14 @@
 <?php 
 $myPage="InformeVentas.php";
 include_once("../sesiones/php_control.php");
+if(isset($_REQUEST["BtnInformeDepartamentos"])){
+   $obTabla = new Tabla($db);
+   $Mes=$_REQUEST["CmbMes"];
+   $Anio=$_REQUEST["CmbAnio"];
+   $obTabla->GenereInformeDepartamento($Mes, $Anio, "");
+}
 include_once("css_construct.php");
+
 
 
 function CrearFormularioInformes($VectorInformes) {
@@ -110,7 +117,99 @@ print("<body>");
     $VectorInformes["Target"]="_blank";
     $VectorInformes["Titulo"]="INFORME DE VENTAS";
     CrearFormularioInformes($VectorInformes);
-      
+     
+    $css->CrearForm2("FrmInformeDepartamentos", $myPage, "post", "_blank");
+    print("<br><br><br>");
+    $css->CrearTabla();
+    $css->CrearNotificacionNaranja("INFORME POR DEPARTAMENTOS", 16);
+    $css->FilaTabla(16);
+    print("<td>");
+    print("<strong>Seleccione el Mes: </strong><br>");
+    $css->CrearSelect("CmbMes", "");
+    $NumMes=date("m");
+        $sel=0;
+        if($NumMes=="01"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("01", "Enero", $sel);
+        $sel=0;
+        if($NumMes=="02"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("02", "Febrero", $sel);
+        $sel=0;
+        if($NumMes=="03"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("03", "Marzo", $sel);
+        $sel=0;
+        if($NumMes=="04"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("04", "Abril", $sel);
+        $sel=0;
+        if($NumMes=="05"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("05", "Mayo", $sel);
+        $sel=0;
+        if($NumMes=="06"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("06", "Junio", $sel);
+        $sel=0;
+        if($NumMes=="07"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("07", "Julio", $sel);
+        $sel=0;
+        if($NumMes=="08"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("08", "Agosto", $sel);
+        $sel=0;
+        if($NumMes=="09"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("09", "Septiembre", $sel);
+        $sel=0;
+        if($NumMes=="10"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("10", "Octubre", $sel);
+        $sel=0;
+        if($NumMes=="11"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("11", "Noviembre", $sel);
+        $sel=0;
+        if($NumMes=="12"){
+            $sel=1;
+        }
+        $css->CrearOptionSelect("12", "Diciembre", $sel);
+    $css->CerrarSelect();
+   
+    print("</td>");
+    print("<td>");
+     print("<strong>Seleccione el Año: </strong><br>");
+    $Anio=date("Y");
+    $css->CrearSelect("CmbAnio", "");
+    for($i=2000;$i<=2031;$i++){
+        $sel=0;
+        if($i==$Anio){
+           $sel=1; 
+        }
+        $css->CrearOptionSelect($i, $i, $sel);
+    }
+    $css->CerrarSelect();
+    print("</td>");
+    $css->FilaTabla(16);
+    print("<td colspan='2' style=' text-align:center'>");
+    $css->CrearBotonVerde("BtnInformeDepartamentos", "Generar Informe");
+    print("</td>");
+    $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    $css->CerrarForm();
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
