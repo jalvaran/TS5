@@ -372,7 +372,9 @@
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
             $Hora=date("H:i:s");
-            
+            $idSeparado=$_REQUEST['TxtIdSeparado'];
+            $idPreventa=$_REQUEST['CmbPreVentaAct'];
+            $Valor=$_REQUEST["TxtAbonoSeparado$idSeparado"];
             $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
             $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
             $CentroCosto=$DatosCaja["CentroCostos"];
@@ -380,9 +382,8 @@
             $VectorIngreso["fut"]="";
             $idIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
             
-            $idSeparado=$_REQUEST['TxtIdSeparado'];
-            $idPreventa=$_REQUEST['CmbPreVentaAct'];
-            $Valor=$_REQUEST["TxtAbonoSeparado$idSeparado"];
+            
+            
             $VectorSeparados["idCompIngreso"]=$idIngreso;
             $Saldo=$obVenta->RegistreAbonoSeparado($idSeparado,$Valor,$fecha,$Hora,$VectorSeparados);
             $idCliente=$_REQUEST['TxtIdClientes'];
@@ -488,6 +489,43 @@
                 }
 		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
 	}
+        
+        
+        /*
+         * Registra abonos de creditos 
+         */
+        
+              
+        if(!empty($_REQUEST['TxtIdCartera'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $Hora=date("H:i:s");
+            $idCartera=$_REQUEST['TxtIdCartera'];
+            $idFactura=$_REQUEST['TxtIdFactura'];
+            $idPreventa=$_REQUEST['CmbPreVentaAct'];
+            $Valor=$_REQUEST["TxtAbonoCredito$idCartera"];
+            $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
+            
+            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+            $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+            $CentroCosto=$DatosCaja["CentroCostos"];
+            $Concepto="ABONO A FACTURA No $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
+            $VectorIngreso["fut"]="";
+            $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+                                
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+                        
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obVenta->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
+                    
+            }
+            
+             
+             
+            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$idFactura");
+        }
+        
         ///////////////Fin
         
 	?>

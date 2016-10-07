@@ -2962,11 +2962,14 @@ public function CalculePesoRemision($idCotizacion)
         //Calculo los abonos de separados
         
         $TotalAbonos=$this->Sume("separados_abonos", "Valor", "WHERE idUsuarios='$idUser' AND idCierre=''");
+        //Calculo los abonos de Creditos
+        
+        $TotalAbonosCreditos=$this->Sume("facturas_abonos", "Valor", "WHERE Usuarios_idUsuarios='$idUser' AND idCierre=''");
         
         //Ingreso datos en tabla cierres
         
         $tab="cajas_aperturas_cierres";
-        $NumRegistros=19;
+        $NumRegistros=20;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
@@ -2978,14 +2981,15 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[8]="TotalVentasCredito";               $Valores[8]=$TotalVentasCredito;
         $Columnas[9]="TotalAbonos";                $Valores[9]=$TotalAbonos;
         $Columnas[10]="TotalDevoluciones";           $Valores[10]=$TotalDevoluciones;
-        $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalEfectivo+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos-$TotalEgresos-$TotalDevueltas;
-        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalEfectivo-$TotalDevueltas-$TotalEgresos+$TotalAbonos;
+        $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalEfectivo+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos-$TotalDevueltas;
+        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalEfectivo-$TotalDevueltas-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos;
         $Columnas[13]="TotalTarjetas";           $Valores[13]=$TotalTarjetas;
         $Columnas[14]="TotalCheques";            $Valores[14]=$TotalCheques;
         $Columnas[15]="TotalOtros";           $Valores[15]=$TotalOtros;
         $Columnas[16]="TotalEgresos";           $Valores[16]=$TotalEgresos;
         $Columnas[17]="Efectivo";           $Valores[17]=$TotalEfectivo;
         $Columnas[18]="Devueltas";           $Valores[18]=$TotalDevueltas;
+        $Columnas[19]="AbonosCreditos";           $Valores[19]=$TotalAbonosCreditos;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idCierre=$this->ObtenerMAX($tab, "ID", 1, "");
@@ -2995,6 +2999,7 @@ public function CalculePesoRemision($idCotizacion)
         $this->update("facturas", "CerradoDiario", $idCierre, "WHERE CerradoDiario='' AND Usuarios_idUsuarios='$idUser'");
         $this->update("egresos", "CerradoDiario", $idCierre, "WHERE CerradoDiario='' AND Usuario_idUsuario='$idUser'");
         $this->update("separados_abonos", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuarios='$idUser'");
+        $this->update("facturas_abonos", "idCierre", $idCierre, "WHERE idCierre='' AND Usuarios_idUsuarios='$idUser'");
         $this->update("facturas_items", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuarios='$idUser'");
          
          
@@ -4841,6 +4846,265 @@ public function VerificaPermisos($VectorPermisos) {
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
      }
 
+     
+ /*
+ * Funcion Abono a Cartera
+ */
+
+
+	public function RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Total,$CentroCosto,$Concepto,$idUser,$VectorIngreso){
+            
+            $DatosCentro=$this->DevuelveValores("centrocosto","ID",$CentroCosto);
+            $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$idFactura);
+            $idCliente=$DatosFactura["Clientes_idClientes"];
+            $DatosCliente=$this->DevuelveValores("clientes","idClientes",$idCliente);
+            $CuentaClientes=$this->DevuelveValores("parametros_contables","ID",6);
+            $DatosCuentasFrecuentes=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaDestino);
+            $NIT=$DatosCliente["Num_Identificacion"];
+            $RazonSocialC=$DatosCliente["RazonSocial"];
+            
+            //////Creo el comprobante de Ingreso
+            
+            $tab="comprobantes_ingreso";
+            $NumRegistros=6;
+
+            $Columnas[0]="Fecha";		$Valores[0]=$fecha;
+            $Columnas[1]="Clientes_idClientes"; $Valores[1]=$idCliente;
+            $Columnas[2]="Valor";               $Valores[2]=$Total;
+            $Columnas[3]="Tipo";		$Valores[3]="EFECTIVO";
+            $Columnas[4]="Concepto";		$Valores[4]=$Concepto;
+            $Columnas[5]="Usuarios_idUsuarios";	$Valores[5]=$idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
+            
+            ////Registro el anticipo en el libro diario
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
+            
+            $tab="librodiario";
+            $NumRegistros=27;
+            $CuentaPUC=$CuentaDestino;
+            $NombreCuenta=$DatosCuentasFrecuentes["Nombre"];
+            $CuentaPUCContraPartida=$CuentaClientes["CuentaPUC"];
+            $NombreCuentaContraPartida="Clientes Nacionales";
+            
+
+
+            $Columnas[0]="Fecha";			$Valores[0]=$fecha;
+            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="ComprobanteIngreso";
+            $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idIngreso;
+            $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
+            $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$NIT;
+            $Columnas[5]="Tercero_DV";			$Valores[5]=$DatosCliente['DV'];
+            $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
+            $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]=$DatosCliente['Segundo_Apellido'];
+            $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
+            $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
+            $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$RazonSocialC;
+            $Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosCliente['Direccion'];
+            $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosCliente['Cod_Dpto'];
+            $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosCliente['Cod_Mcipio'];
+            $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]=$DatosCliente['Pais_Domicilio'];
+            $Columnas[15]="CuentaPUC";			$Valores[15]=$CuentaPUC;
+            $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
+            $Columnas[17]="Detalle";			$Valores[17]="AbonoFacturaCredito";
+            $Columnas[18]="Debito";			$Valores[18]=$Total;
+            $Columnas[19]="Credito";			$Valores[19]=0;
+            $Columnas[20]="Neto";			$Valores[20]=$Valores[18];
+            $Columnas[21]="Mayor";			$Valores[21]="NO";
+            $Columnas[22]="Esp";			$Valores[22]="NO";
+            $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
+            $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
+            $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+
+            ///////////////////////Registramos contra partida del anticipo
+
+            $CuentaPUC=$CuentaPUCContraPartida; 
+            $NombreCuenta=$NombreCuentaContraPartida;
+
+            $Valores[15]=$CuentaPUC;
+            $Valores[16]=$NombreCuenta;
+            $Valores[18]=0;
+            $Valores[19]=$Total; 			//Credito se escribe el total de la venta menos los impuestos
+            $Valores[20]=$Valores[19]*(-1);  											//Credito se escribe el total de la venta menos los impuestos
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+		
+            $NuevoSaldo=$DatosFactura["SaldoFact"]-$Total;
+            $TotalAbonos=$DatosFactura["Total"]-$NuevoSaldo;
+            $this->ActualizaRegistro("facturas", "SaldoFact", $NuevoSaldo, "idFacturas", $idFactura);
+            if($NuevoSaldo<=0){
+                $this->BorraReg("cartera", "Facturas_idFacturas", $idFactura);
+            }else{
+                $this->ActualizaRegistro("cartera", "Saldo", $NuevoSaldo, "Facturas_idFacturas", $idFactura);
+                $this->ActualizaRegistro("cartera", "TotalAbonos", $TotalAbonos, "Facturas_idFacturas", $idFactura);
+            }
+            
+            //////Creo el comprobante de Ingreso
+            
+            $tab="facturas_abonos";
+            $NumRegistros=6;
+
+            $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
+            $Columnas[1]="Hora";                        $Valores[1]=$Hora;
+            $Columnas[2]="Valor";                       $Valores[2]=$Total;
+            $Columnas[3]="Usuarios_idUsuarios";		$Valores[3]=$idUser;
+            $Columnas[4]="Facturas_idFacturas";		$Valores[4]=$idFactura;
+            $Columnas[5]="idComprobanteIngreso";	$Valores[5]=$idIngreso;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
+            
+            
+            return($idComprobanteAbono);
+            
+            
+	}
+        
+        
+        
+        /*
+      * Imprime un Comprobante de Abono de Factura
+      */
+     
+     public function ImprimeComprobanteAbonoFactura($idComprobanteAbono,$COMPrinter,$Copias){
+
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosAbono=$this->DevuelveValores("facturas_abonos", "ID", $idComprobanteAbono);
+       $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $DatosAbono["Facturas_idFacturas"]);
+       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $DatosFactura["EmpresaPro_idEmpresaPro"]);
+       
+       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosAbono["Usuarios_idUsuarios"]);
+       $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+        $RazonSocial=$DatosEmpresa["RazonSocial"];
+        $NIT=$DatosEmpresa["NIT"];
+        $Direccion=$DatosEmpresa["Direccion"];
+        $Ciudad=$DatosEmpresa["Ciudad"];
+       
+        $Telefono=$DatosEmpresa["Telefono"];
+
+        $Total=$DatosFactura["Total"];
+        $Saldo=$DatosFactura["SaldoFact"];
+        
+        $Fecha=$DatosAbono["Fecha"];
+        $Hora=$DatosAbono["Hora"];
+        
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$NIT);
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Direccion);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Ciudad);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Telefono);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+
+        fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"Cliente: $DatosCliente[RazonSocial]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"NIT: $DatosCliente[Num_Identificacion]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+        fwrite($handle,"FECHA: $Fecha        Hora: $Hora");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"COMPROBANTE DE ABONO No $idComprobanteAbono");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"_____________________________________");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"FACTURA NUMERO: $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"_____________________________________");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    $TotalAbonos=$DatosFactura['Total']-$DatosFactura['SaldoFact'];
+
+    /////////////////////////////TOTALES
+
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL FACTURA        ".str_pad("$".number_format($DatosFactura['Total']),20," ",STR_PAD_LEFT));
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $idFactura=$DatosFactura["idFacturas"];
+    fwrite($handle,"ABONOS:          ");
+    $Consulta=$this->ConsultarTabla("facturas_abonos", " WHERE Facturas_idFacturas='$idFactura'");
+    $TotalAbonos=0;
+    while($DatosAbonosFactura=$this->FetchArray($Consulta)){
+        $TotalAbonos=$TotalAbonos+$DatosAbonosFactura["Valor"];
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"CI No: $DatosAbonosFactura[idComprobanteIngreso]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"Fecha:  $DatosAbonosFactura[Fecha]  Valor: ".str_pad("$".number_format($DatosAbonosFactura["Valor"]),10," ",STR_PAD_LEFT));
+               
+    }
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL ABONOS:    ".str_pad("$".number_format($TotalAbonos),20," ",STR_PAD_LEFT));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"SALDO           ".str_pad("$".number_format($DatosFactura['SaldoFact']),20," ",STR_PAD_LEFT));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
+    fwrite($handle,"***GRACIAS POR ELEGIRNOS***");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
+    //fwrite($handle, chr(27). chr(100). chr(0));
+    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
+    //fwrite($handle,"=================================");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    
+    }
 //////////////////////////////Fin	
 }
 	
