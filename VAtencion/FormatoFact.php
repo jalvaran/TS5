@@ -113,8 +113,8 @@ if(mysql_num_rows($reg)){//Si existen resultados
 	
    while($datosProducto=mysql_fetch_array($reg)){
 	   
-	   mysql_query("INSERT INTO relacioncompras ( Fecha, Documento, NumDocumento, Cantidad, ValorUnitarioAntesIVA, TotalAntesIva, ProductosVenta_idProductosVenta  )
-		VALUES ('$Fecha','$TipoCompra','$NumFact','$datosProducto[Cantidad]','$datosProducto[ValorUnitario]','$datosProducto[Subtotal]','$datosProducto[idProductosVenta]') ") 
+	   mysql_query("INSERT INTO relacioncompras ( Fecha, Documento, NumDocumento, Cantidad, ValorUnitarioAntesIVA, TotalAntesIva, ProductosVenta_idProductosVenta,idUsuario,idProveedor  )
+		VALUES ('$Fecha','$TipoCompra','$NumFact','$datosProducto[Cantidad]','$datosProducto[ValorUnitario]','$datosProducto[Subtotal]','$datosProducto[idProductosVenta]', $idUser,$DatosPrecompra[idProveedor]) ") 
 		or die("no se pudo alimentar el inventario ".mysql_error());
 
       mysql_query("UPDATE productosventa SET PrecioVenta='$datosProducto[PrecioVentaPre]' WHERE idProductosVenta='$datosProducto[idProductosVenta]'");	

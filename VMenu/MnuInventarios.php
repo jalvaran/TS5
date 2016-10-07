@@ -57,6 +57,7 @@ include_once("css_construct.php");
                 $css->SubTabs("../VAtencion/servicios.php","_self","../images/servicios.png","Servicios para la venta");
                 $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
                 $css->SubTabs("../VAtencion/kardexmercancias.php","_self","../images/kardex.png","Kardex");
+                $css->SubTabs("../VAtencion/relacioncompras.php","_self","../images/compras.png","Historial de Compras");
                 $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
                   
                 $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");

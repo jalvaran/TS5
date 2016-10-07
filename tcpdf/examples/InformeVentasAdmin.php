@@ -739,13 +739,13 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 if($obVenta->NumRows($sel1)){
 		
 	while($DatosVentas=$obVenta->FetchArray($sel1)){
-			
+		$DatosColaborador=$obVenta->DevuelveValores("colaboradores", "Identificacion", $DatosVentas["idColaborador"]);	
 		$Total=  number_format($DatosVentas["Total"]);
 		$tbl = <<<EOD
-
+                
 <table border="1"  cellpadding="2" align="center">
  <tr>
-  <td>$DatosVentas[idColaborador]</td>
+  <td>$DatosColaborador[Nombre]</td>
   
   <td>$Total</td>
  
