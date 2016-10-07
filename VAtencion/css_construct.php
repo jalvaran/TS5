@@ -162,7 +162,7 @@ class CssIni{
 	function CreaBotonAgregaPreventa($Page,$idUser)
   {
 		
-	print('	<a class="brand" href="'.$Page.'?BtnAgregarPreventa='.$idUser.'">Agregar Preventa</a>');
+	print('	<a class="brand" href="'.$Page.'?BtnAgregarPreventa='.$idUser.'">+ Preventa</a>');
 
 	}	
 	

@@ -1390,6 +1390,136 @@ public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
    
 }
 
+//Verifico si hay peticiones de busqueda de separados
+public function DibujaSeparado($myPage,$idPreventa,$Vector) {
+    $this->css=new CssIni("");
+    //Dibujo una busqueda de un separado
+if(!empty($_REQUEST["TxtBuscarSeparado"])){
+    $key=$this->obCon->normalizar($_REQUEST["TxtBuscarSeparado"]);
+    $sql="SELECT sp.ID, cl.RazonSocial, cl.Num_Identificacion, sp.Total, sp.Saldo, sp.idCliente FROM separados sp"
+            . " INNER JOIN clientes cl ON sp.idCliente = cl.idClientes "
+            . " WHERE (sp.Estado<>'Cerrado' AND sp.Saldo>0) AND (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 10";
+    $Datos=$this->obCon->Query($sql);
+    if($this->obCon->NumRows($Datos)){
+        $this->css->CrearTabla();
+        
+        while($DatosSeparado=$this->obCon->FetchArray($Datos)){
+            $this->css->FilaTabla(14);
+            $this->css->ColTabla("<strong>Separado No. $DatosSeparado[ID]<strong>", 6);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(14);
+            print("<td>");
+            $this->css->CrearForm2("FormAbonosSeparados$DatosSeparado[ID]", $myPage, "post", "_self");
+            $this->css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+            $this->css->CrearInputText("TxtIdSeparado","hidden","",$DatosSeparado["ID"],"","","","",0,0,0,0);
+            $this->css->CrearInputText("TxtIdClientes","hidden","",$DatosSeparado["idCliente"],"","","","",0,0,0,0);
+            $this->css->CrearInputNumber("TxtAbonoSeparado$DatosSeparado[ID]", "number", "Abonar: ", $DatosSeparado["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosSeparado["Saldo"], 1);
+            $this->css->CrearBotonConfirmado("BtnAbono$DatosSeparado[ID]", "Abonar");
+            $this->css->CerrarForm();
+            print("</td>");
+            $this->css->ColTabla($DatosSeparado["ID"], 1);
+            $this->css->ColTabla($DatosSeparado["RazonSocial"], 1);
+            $this->css->ColTabla($DatosSeparado["Num_Identificacion"], 1);
+            $this->css->ColTabla(number_format($DatosSeparado["Total"]), 1);
+            $this->css->ColTabla(number_format($DatosSeparado["Saldo"]), 1);
+            $this->css->CierraFilaTabla();
+            
+            $this->css->FilaTabla(16);
+            $this->css->ColTabla("ID Separado", 1);
+            $this->css->ColTabla("Referencia", 1);
+            $this->css->ColTabla("Nombre", 2);
+            $this->css->ColTabla("Cantidad", 1);
+            $this->css->ColTabla("TotalItem", 1);
+            $this->css->CierraFilaTabla();
+        
+            $ConsultaItems=$this->obCon->ConsultarTabla("separados_items", "WHERE idSeparado='$DatosSeparado[ID]'");
+            while($DatosItemsSeparados=$this->obCon->FetchArray($ConsultaItems)){
+                
+                $this->css->FilaTabla(14);
+                $this->css->ColTabla($DatosItemsSeparados["idSeparado"], 1);
+                $this->css->ColTabla($DatosItemsSeparados["Referencia"], 1);
+                $this->css->ColTabla($DatosItemsSeparados["Nombre"], 2);
+                $this->css->ColTabla($DatosItemsSeparados["Cantidad"], 1);
+                $this->css->ColTabla($DatosItemsSeparados["TotalItem"], 1);
+                $this->css->CierraFilaTabla();
+            }           
+            
+             
+            
+        }
+        $this->css->CerrarTabla();
+    }else{
+        $this->css->CrearNotificacionRoja("No se encontraron datos", 16);
+    }
+}
+}
+
+
+//Verifico si hay peticiones de busqueda de creditos
+
+public function DibujaCredito($myPage,$idPreventa,$Vector) {
+    $this->css=new CssIni("");
+    //Dibujo una busqueda de un separado
+if(!empty($_REQUEST["TxtBuscarCredito"])){
+    $key=$this->obCon->normalizar($_REQUEST["TxtBuscarCredito"]);
+    $sql="SELECT cart.idCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
+            . " INNER JOIN clientes cl ON cart.idCliente = cl.idClientes "
+            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 100";
+    $Datos=$this->obCon->Query($sql);
+    if($this->obCon->NumRows($Datos)){
+        $this->css->CrearTabla();
+        
+        while($DatosCredito=$this->obCon->FetchArray($Datos)){
+            $DatosFactura=$this->obCon->DevuelveValores("facturas", "idFacturas", $DatosCredito["Facturas_idFacturas"]);
+            $this->css->FilaTabla(14);
+            $this->css->ColTabla("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]."<strong>", 6);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(14);
+            print("<td>");
+            $this->css->CrearForm2("FormCartera$DatosCredito[idCartera]", $myPage, "post", "_self");
+            $this->css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+            $this->css->CrearInputText("TxtIdFactura","hidden","",$DatosCredito["Facturas_idFacturas"],"","","","",0,0,0,0);
+            $this->css->CrearInputText("TxtIdCartera","hidden","",$DatosCredito["idCartera"],"","","","",0,0,0,0);
+            $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Abonar: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);
+            $this->css->CrearBotonConfirmado("BtnAbono$DatosCredito[idCartera]", "Abonar a Credito");
+            $this->css->CerrarForm();
+            print("</td>");
+            $this->css->ColTabla($DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"], 1);
+            $this->css->ColTabla($DatosCredito["RazonSocial"], 1);
+            $this->css->ColTabla($DatosCredito["Num_Identificacion"], 1);
+            $this->css->ColTabla(number_format($DatosCredito["TotalFactura"]), 1);
+            $this->css->ColTabla(number_format($DatosCredito["Saldo"]), 1);
+            $this->css->CierraFilaTabla();
+            
+            $this->css->FilaTabla(16);
+            $this->css->ColTabla("Factura", 1);
+            $this->css->ColTabla("Referencia", 1);
+            $this->css->ColTabla("Nombre", 2);
+            $this->css->ColTabla("Cantidad", 1);
+            $this->css->ColTabla("TotalItem", 1);
+            $this->css->CierraFilaTabla();
+        
+            $ConsultaItems=$this->obCon->ConsultarTabla("facturas_items", "WHERE idFactura='$DatosCredito[Facturas_idFacturas]'");
+            while($DatosItemsFactura=$this->obCon->FetchArray($ConsultaItems)){
+                
+                $this->css->FilaTabla(14);
+                $this->css->ColTabla($DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"], 1);
+                $this->css->ColTabla($DatosItemsFactura["Referencia"], 1);
+                $this->css->ColTabla($DatosItemsFactura["Nombre"], 2);
+                $this->css->ColTabla($DatosItemsFactura["Cantidad"], 1);
+                $this->css->ColTabla($DatosItemsFactura["TotalItem"], 1);
+                $this->css->CierraFilaTabla();
+            }           
+            
+             
+            
+        }
+        $this->css->CerrarTabla();
+    }else{
+        $this->css->CrearNotificacionRoja("No se encontraron datos", 16);
+    }
+}
+}
 // FIN Clases	
 }
 
