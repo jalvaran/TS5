@@ -61,7 +61,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/Devoluciones.php","_blank","../images/devolucion2.png","Ajuste Remision");
                     $css->SubTabs("../VAtencion/facturas.php","_blank","../images/facturas.png","Buscar Factura");
                     $css->SubTabs("../VAtencion/facturas_items.php","_blank","../images/buscar.png","Buscar Item");
-                    
+                    $css->SubTabs("../VAtencion/facturas_abonos.php","_blank","../images/abonar.jpg","Historial  de Abonos a Facturas");
                     //$css->SubTabs("../VAtencion/cuentasfrecuentes.php","_blank","../images/devolucion.png","Devoluciones en Ventas");
                     //$css->SubTabs("../VAtencion/cuentasfrecuentes.php","_blank","../images/cerrarturno.png","Cerrar Turno");
 		$css->FinTabs();

@@ -191,7 +191,7 @@
             $PrecioAcordado=round($DatosPreventa['ValorAcordado']);
             
             $css->ColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","","","","150","30",$Autorizado,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa,"TxtPrecioMayor",$DatosProducto["PrecioMayorista"]);
-            $css->ColTabla(number_format($DatosPreventa['Subtotal']),1);
+            $css->ColTabla(number_format($DatosPreventa['TotalVenta']),1);
             //$css->ColTablaDel($myPage,"preventa","idPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
             print("<td>");
             $VectorDatosExtra["ID"]="LinkDel$DatosPreventa[idPrecotizacion]";

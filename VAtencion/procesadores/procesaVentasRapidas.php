@@ -390,7 +390,9 @@
             
             
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            $Impresiones=3;
             if($Saldo==0){
+		$Impresiones=1;
                 $VectorSeparados["Ft"]="";
                 $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
                 $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$idPreventa,$CuentaDestino,$VectorSeparados);
@@ -400,7 +402,7 @@
             }
             
                 if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 2);
+                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], $Impresiones);
                     
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
