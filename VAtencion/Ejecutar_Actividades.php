@@ -83,23 +83,14 @@ if($idColaborador<1 and $idMaquina>0){
     $css->CerrarSelect();
     $css->CerrarForm();
 }
-//print($statement);
-///////////////Creamos la imagen representativa de la pagina
-    /////
-    /////
 
 
-
-if($idActividad>0){
-    $css->CrearImageLink("../VMenu/Menu.php", "../images/facturas2.png", "_self",200,200);
-}
-
-////Paginacion
+////Se muestran las actividades
 ////
 
 
 
-if($idColaborador>0 and $idMaquina>0){
+if($idColaborador>0 and $idMaquina>0 and $idActividad==0){
     
     $statement=" produccion_actividades WHERE idMaquina='$idMaquina' AND Estado<>'TERMINADA'";
     
@@ -120,6 +111,7 @@ if($idColaborador>0 and $idMaquina>0){
         echo("<td>");
         $link="$myPage?".$Ruta."idActividad=$DatosActividades[ID]";
         $css->CrearLink($link, "_self", "Ver Act $DatosActividades[ID]");
+        print(" $DatosActividades[Fecha_Planeada_Inicio] $DatosActividades[Hora_Planeada_Inicio]");
         echo("</td>");
         echo("<td>");
         echo("$DatosActividades[Descripcion]");
@@ -134,6 +126,73 @@ if($idColaborador>0 and $idMaquina>0){
     
     
     
+}
+
+
+///////////////Se muestran las opciones para ejecutar
+    /////
+    /////
+
+
+
+if($idActividad>0){
+    
+    if(isset($_REQUEST["BtnEjecutar"])){
+        $idEjecucion=$obVenta->normalizar($_REQUEST["BtnEjecutar"]);
+        $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,"");
+    }
+    
+    $DatosActividad=$obVenta->DevuelveValores("produccion_actividades", "ID", $idActividad);
+    $css->CrearNotificacionRoja("Actividad: $DatosActividad[Descripcion], Observaciones: $DatosActividad[Observaciones]", 16);
+    switch ($DatosActividad["Estado"]){
+        case "NO_INICIADA":
+            $Image="../images/play.png";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=1";
+            break;
+        case "EJECUCION":
+            $Image="../images/process.gif";
+            $Link="#";
+            break;
+        case "PAUSA_OPERATIVA":
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=2";
+            break;
+        case "PAUSA_NO_OPERATIVA":
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=3";
+            break;
+        case "TERMINADA":
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=4";
+            break;
+        
+    }
+    $css->CrearImageLink($Link, $Image, "_self",80,80);
+    
+    if($DatosActividad["Estado"]=="EJECUCION"){
+        $css->CrearForm2("FrmPausas", $myPage, "get", "_self");
+        $css->CrearInputText("idMaquina", "hidden", "", $idMaquina, "", "", "", "", "", "", 0, 0);
+        $css->CrearInputText("idColaborador", "hidden", "", $idColaborador, "", "", "", "", "", "", 0, 0);
+        $css->CrearInputText("idActividad", "hidden", "", $idActividad, "", "", "", "", "", "", 0, 0);
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+        print("<td style='text-align:center'>");
+        print("<strong>Pausar</strong>");
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td style='text-align:center'>");
+            $css->CrearSelect("CmbPausa", "EnviaForm('FrmPausas')");
+            $css->CrearOptionSelect("", "Seleccione un causal", 0);
+            $Datos=$obVenta->ConsultarTabla("produccion_pausas_predefinidas", "");
+            while($DatosPausasPre=$obVenta->FetchArray($Datos)){
+                $css->CrearOptionSelect($DatosPausasPre["ID"], $DatosPausasPre["Nombre"], 0);
+            }
+            $css->CerrarSelect();
+        print("</td>");
+        $css->CierraFilaTabla();    
+        
+        $css->CerrarTabla();
+        $css->CerrarForm();
+        
+    }
 }
 
 $css->CerrarDiv();//Cerramos contenedor Principal

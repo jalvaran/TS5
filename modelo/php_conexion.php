@@ -5109,6 +5109,28 @@ public function VerificaPermisos($VectorPermisos) {
     $salida = shell_exec('lpr $COMPrinter');
     
     }
+    
+    ///procese ejecucion de trabajos
+    
+    public function ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,$idPausa,$Vector) {
+        
+        switch($idEjecucion){
+            case 1: 
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                break;
+            case 2: 
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                break;
+            case 3: 
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                break;
+            case 4: 
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                break;
+        }
+        
+    }
+    
 //////////////////////////////Fin	
 }
 	
