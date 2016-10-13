@@ -104,7 +104,7 @@ if($idColaborador>0 and $idMaquina>0 and $idActividad==0){
     $css->CierraFilaTabla();
     
     
-    $sql="SELECT * FROM $statement ORDER BY Fecha_Planeada_Inicio, Hora_Planeada_Inicio Desc LIMIT $startpoint,$limit ";
+    $sql="SELECT * FROM $statement ORDER BY Fecha_Planeada_Inicio, Hora_Planeada_Inicio Asc LIMIT $startpoint,$limit ";
     $Datos=$obVenta->Query($sql);
     while($DatosActividades=$obVenta->FetchArray($Datos)){
         $css->FilaTabla(20);
@@ -139,28 +139,36 @@ if($idActividad>0){
     
     if(isset($_REQUEST["BtnEjecutar"])){
         $idEjecucion=$obVenta->normalizar($_REQUEST["BtnEjecutar"]);
-        $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,"");
+        $idPausa=$obVenta->normalizar($_REQUEST["CmbPausa"]);
+        $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,$idPausa,"");
+    }
+    if(isset($_REQUEST["BtnTerminar"])){
+        
+        $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,4,$idPausa,"");
     }
     
     $DatosActividad=$obVenta->DevuelveValores("produccion_actividades", "ID", $idActividad);
-    $css->CrearNotificacionRoja("Actividad: $DatosActividad[Descripcion], Observaciones: $DatosActividad[Observaciones]", 16);
+    $css->CrearNotificacionRoja("Actividad: $idActividad $DatosActividad[Descripcion], Observaciones: $DatosActividad[Observaciones], Estado: $DatosActividad[Estado]", 16);
     switch ($DatosActividad["Estado"]){
         case "NO_INICIADA":
             $Image="../images/play.png";
-            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=1";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad&BtnEjecutar=1&CmbPausa=0";
             break;
         case "EJECUCION":
             $Image="../images/process.gif";
             $Link="#";
             break;
         case "PAUSA_OPERATIVA":
-            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=2";
+            $Image="../images/pause.png";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad&BtnEjecutar=3&CmbPausa=0";
             break;
         case "PAUSA_NO_OPERATIVA":
-            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=3";
+            $Image="../images/pause2.jpg";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad&BtnEjecutar=3&CmbPausa=0";
             break;
         case "TERMINADA":
-            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad?BtnEjecutar=4";
+            $Image="../images/terminado.png";
+            $Link="#";
             break;
         
     }
@@ -171,21 +179,34 @@ if($idActividad>0){
         $css->CrearInputText("idMaquina", "hidden", "", $idMaquina, "", "", "", "", "", "", 0, 0);
         $css->CrearInputText("idColaborador", "hidden", "", $idColaborador, "", "", "", "", "", "", 0, 0);
         $css->CrearInputText("idActividad", "hidden", "", $idActividad, "", "", "", "", "", "", 0, 0);
+        $css->CrearInputText("BtnEjecutar", "hidden", "", 2, "", "", "", "", "", "", 0, 0);
+        
         $css->CrearTabla();
         $css->FilaTabla(16);
         print("<td style='text-align:center'>");
         print("<strong>Pausar</strong>");
         print("</td>");
+        print("<td style='text-align:center'>");
+        print("<strong>Terminar</strong>");
+        print("</td>");
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
         print("<td style='text-align:center'>");
             $css->CrearSelect("CmbPausa", "EnviaForm('FrmPausas')");
-            $css->CrearOptionSelect("", "Seleccione un causal", 0);
+            $css->CrearOptionSelect("0", "Seleccione un causal", 1);
             $Datos=$obVenta->ConsultarTabla("produccion_pausas_predefinidas", "");
             while($DatosPausasPre=$obVenta->FetchArray($Datos)){
                 $css->CrearOptionSelect($DatosPausasPre["ID"], $DatosPausasPre["Nombre"], 0);
             }
             $css->CerrarSelect();
+        print("</td>");
+        
+        print("<td style='text-align:center'>");
+        $enabled=0;
+        if($DatosActividad["Estado"]=="EJECUCION"){
+            $enabled=1;
+        }
+        $css->CrearBotonConfirmado2("BtnTerminar", "Terminar", $enabled, "");
         print("</td>");
         $css->CierraFilaTabla();    
         

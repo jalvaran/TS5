@@ -2981,12 +2981,12 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[4]="Usuario";               $Valores[4]=$idUser;
         $Columnas[5]="idCaja";            $Valores[5]=$idCaja;
         $Columnas[6]="TotalVentas";           $Valores[6]=$TotalVentasContado+$TotalVentasCredito-$TotalDevoluciones;
-        $Columnas[7]="TotalVentasContado";                  $Valores[7]=$TotalVentasContado-$TotalDevoluciones;
+        $Columnas[7]="TotalVentasContado";                  $Valores[7]=$TotalVentasContado;
         $Columnas[8]="TotalVentasCredito";               $Valores[8]=$TotalVentasCredito;
         $Columnas[9]="TotalAbonos";                $Valores[9]=$TotalAbonos;
         $Columnas[10]="TotalDevoluciones";           $Valores[10]=$TotalDevoluciones;
-        $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalEfectivo+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos-$TotalDevueltas;
-        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalEfectivo-$TotalDevueltas-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos;
+        $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos;
+        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos;
         $Columnas[13]="TotalTarjetas";           $Valores[13]=$TotalTarjetas;
         $Columnas[14]="TotalCheques";            $Valores[14]=$TotalCheques;
         $Columnas[15]="TotalOtros";           $Valores[15]=$TotalOtros;
@@ -5113,22 +5113,81 @@ public function VerificaPermisos($VectorPermisos) {
     ///procese ejecucion de trabajos
     
     public function ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,$idPausa,$Vector) {
-        
+        $fecha=date("Y-m-d");
+        $hora=date("H:i:s");
+        $DatosActividad=$this->DevuelveValores("produccion_actividades", "ID", $idActividad);     
         switch($idEjecucion){
             case 1: 
+                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "EJECUCION", "NO", "");
                 $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_actividades", "Fecha_Inicio", $fecha, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_actividades", "Hora_Inicio", $hora, "ID", $idActividad);
                 break;
             case 2: 
-                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                
+                $DatosPausas=$this->DevuelveValores("produccion_pausas_predefinidas", "ID", $idPausa);
+                if($DatosPausas["Suma"]=="SI"){
+                    $Estado="PAUSA_OPERATIVA";
+                    $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, $Estado, "SI", "");
+                }else{
+                    $Estado="PAUSA_NO_OPERATIVA";
+                    $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, $Estado, "NO", "");
+                }
+                $this->ActualizaRegistro("produccion_actividades", "Estado", $Estado, "ID", $idActividad);
                 break;
             case 3: 
+                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "REANUDADA", "NO", "");
                 $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
                 break;
             case 4: 
-                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                $SoloHoraPlan=date("H",  strtotime($DatosActividad["Hora_Fin"]));
+                $SoloHora=date("H",strtotime($hora));
+                $Minutos=date("i:s",strtotime($hora));
+                if($DatosActividad["Fecha_Fin"]==$fecha and $SoloHora==$SoloHoraPlan){
+                    $hora=($SoloHora+1).":".$Minutos;
+                }
+                //print("<script>alert('$SoloHoraPlan  $SoloHora, $hora')</script>");
+                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "TERMINADA", "NO", "");
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "TERMINADA", "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_actividades", "Fecha_Fin", $fecha, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_actividades", "Hora_Fin", $hora, "ID", $idActividad);
                 break;
+            
         }
         
+    }
+    
+    //inserto los registros de tiempo de las actividades
+    
+    public function RegistreTiempoActividad($idActividad, $FechaHora, $Estado,$Suma, $Vector ) {
+        //////Inserto los valores en la tabla de registro de actividades
+            
+            $tab="produccion_registro_tiempos";
+            $NumRegistros=5;
+
+            $Columnas[0]="idActividad";         $Valores[0]=$idActividad;
+            $Columnas[1]="FechaHora";           $Valores[1]=$FechaHora;
+            $Columnas[2]="Estado";              $Valores[2]=$Estado;
+            $Columnas[3]="Suma";		$Valores[3]=$Suma;
+            $Columnas[4]="idUsuario";		$Valores[4]=$this->idUser;
+                        
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            $DatosActividad = $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
+            
+            
+    }
+    
+    //Suma o resta dos horas con fecha
+    
+    public function ObtenerTiempo($FechaInicial,$FechaFinal,$Operacion) {
+        if($Operacion=="-"){
+            $dif=date("Y-m-d H:i:s", strtotime($FechaFinal) - strtotime($FechaInicial) );
+        }
+        if($Operacion=="+"){
+            $dif=date("Y-m-d H:i:s", strtotime($FechaFinal) + strtotime($FechaInicial) );
+        }
+        return($dif);
     }
     
 //////////////////////////////Fin	
