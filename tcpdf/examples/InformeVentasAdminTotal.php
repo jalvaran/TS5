@@ -14,8 +14,8 @@ $CentroCostos=$_POST["CmbCentroCostos"];
 $EmpresaPro=$_POST["CmbEmpresaPro"];
 $TipoReporte=$_POST["CmbTipoReporte"];
 
-$Condicion=" ori_facturas_items WHERE ";
-$Condicion2=" ori_facturas WHERE ";
+$Condicion=" facturas_items WHERE ";
+$Condicion2=" facturas WHERE ";
 if($TipoReporte=="Corte"){
     $CondicionFecha1=" FechaFactura <= '$FechaFinal' ";
     $CondicionFecha2=" Fecha <= '$FechaFinal' ";

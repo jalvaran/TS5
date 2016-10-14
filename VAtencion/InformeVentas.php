@@ -9,7 +9,7 @@ if(isset($_REQUEST["BtnInformeDepartamentos"])){
 }
 include_once("css_construct.php");
 
-
+$obVenta = new ProcesoVenta($idUser);
 
 function CrearFormularioInformes($VectorInformes) {
    
@@ -18,7 +18,7 @@ function CrearFormularioInformes($VectorInformes) {
    $Metod=$VectorInformes["Metod"];
    $Target=$VectorInformes["Target"];
    $Titulo=$VectorInformes["Titulo"];
-   
+  
    $idUser=$_SESSION['idUser'];
    $obVenta = new ProcesoVenta($idUser);
    $css =  new CssIni("Balance de Comprobacion");
@@ -118,6 +118,11 @@ print("<body>");
     $VectorInformes["Titulo"]="INFORME DE VENTAS";
     CrearFormularioInformes($VectorInformes);
      
+    $sql="SELECT Role FROM usuarios WHERE idUsuarios='$idUser'";
+    $Datos=$obVenta->Query($sql);
+    $DatosUser=$obVenta->FetchArray($Datos);
+    if($DatosUser["Role"]=="SUPERVISOR"){
+        
     $css->CrearForm2("FrmInformeDepartamentos", $myPage, "post", "_blank");
     print("<br><br><br>");
     $css->CrearTabla();
@@ -210,6 +215,49 @@ print("<body>");
     $css->CierraFilaTabla();
     $css->CerrarTabla();
     $css->CerrarForm();
+    
+    
+        $css->CrearNotificacionRoja("GENERAR INFORME DE VENTAS 2", 16);
+        $css->CrearForm2("FormFiscal", "../tcpdf/examples/InformeVentasTotalPor.php", "post", "_blank");
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+            $css->ColTabla("<strong>Fecha Inicial</strong>", 1);
+            $css->ColTabla("<strong>Fecha Final</strong>", 1);
+            $css->ColTabla("<strong>%</strong>", 1);
+            $css->ColTabla("<strong>Vista Previa</strong>", 1);
+            $css->ColTabla("<strong>Accion</strong>", 1);
+        $css->CierraFilaTabla();
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaIniP", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaFinP", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            $css->CrearInputNumber("TxtPorcentaje", "number", "", 100, "porcentaje", "black", "", "", 100, 30, 0, 1, 0, 200, 1);
+            print("</td>");
+            print("<td>");
+            $css->CrearBotonVerde("BtnVistaPrevia", "Vista Previa");
+            print("</td>");
+            print("<td>");
+            $css->CrearBotonConfirmado("BtnAplicar", "Aplicar");
+            print("</td>");
+        $css->FilaTabla(16);
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
+        
+        print("<br>");
+        
+        $css->CrearNotificacionRoja("GENERAR INFORME DE VENTAS", 16);
+    
+        $VectorInformes["FormName"]="FrmInformeVentasR";
+        $VectorInformes["ActionForm"]="../tcpdf/examples/InformeVentasAdminTotal.php";
+        $VectorInformes["Metod"]="post";
+        $VectorInformes["Target"]="_blank";
+        $VectorInformes["Titulo"]="INFORME DE VENTAS TOTALES";
+        CrearFormularioInformes($VectorInformes);
+    }
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
