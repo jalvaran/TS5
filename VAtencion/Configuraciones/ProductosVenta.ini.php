@@ -1,5 +1,7 @@
 <?php
+$obVenta = new ProcesoVenta($idUser);
 
+$DatosEmpresa=$obVenta->DevuelveValores("empresapro", "idEmpresaPro", 1);
 $myTabla="productosventa";
 $myPage="productosventa.php";
 $myTitulo="Productos Venta";
@@ -100,5 +102,11 @@ $Vector["Sub5"]["TablaVinculo"]="prod_sub5";  //tabla de donde se vincula
 $Vector["Sub5"]["IDTabla"]="idSub5"; //id de la tabla que se vincula
 $Vector["Sub5"]["Display"]="NombreSub5";                    //Columna que quiero mostrar
 ///Filtros y orden
+if($DatosEmpresa["Regimen"]=="COMUN"){
+    $Vector["IVA"]["Predeterminado"]='0.16';
+}else{
+    $Vector["IVA"]["Predeterminado"]='0';
+}
+
 $Vector["Order"]=" idProductosVenta DESC ";   //Orden
 ?>

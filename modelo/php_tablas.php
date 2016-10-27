@@ -1285,9 +1285,6 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     if($this->obCon->NumRows($consulta)){
         while($DatosProducto=$this->obCon->FetchArray($consulta)){
             $this->css->FilaTabla(16);
-            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
-            $this->css->ColTabla($DatosProducto["Referencia"], 1);
-            $this->css->ColTabla($DatosProducto["Nombre"], 1);
             print("<td>Agregar");
             $Titulo="";
             $Nombre="Agregar";
@@ -1297,6 +1294,11 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
             $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
             $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
             print("</td>");
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioMayorista"], 1);
             $this->css->CierraFilaTabla();
         }
     }
@@ -1307,10 +1309,6 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     if($this->obCon->NumRows($consulta)){
         while($DatosProducto=$this->obCon->FetchArray($consulta)){
             $this->css->FilaTabla(16);
-            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
-            $this->css->ColTabla($DatosProducto["Referencia"], 1);
-            $this->css->ColTabla($DatosProducto["Nombre"], 1);
-            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
             print("<td>Agregar");
             $Titulo="";
             $Nombre="Agregar";
@@ -1320,6 +1318,12 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
             $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
             $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
             print("</td>");
+            $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
+            $this->css->ColTabla($DatosProducto["Referencia"], 1);
+            $this->css->ColTabla($DatosProducto["Nombre"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioVenta"], 1);
+            $this->css->ColTabla($DatosProducto["PrecioMayorista"], 1);
+            
             $this->css->CierraFilaTabla();
         }
     }

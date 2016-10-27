@@ -52,9 +52,10 @@
 			
 		</style>
 
-
+<link rel="stylesheet" href="css/cronometro.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="js/jsDatePick.min.1.3.js"></script>
+
 <?php
 	
 
@@ -683,6 +684,7 @@ class CssIni{
         /////////////////////Agrega los javascripts
 	
 	function AgregaJS(){
+            
             print('<script src="js/jquery.js"></script>
             <script src="js/bootstrap-transition.js"></script>
             <script src="js/bootstrap-alert.js"></script>
@@ -702,7 +704,7 @@ class CssIni{
             <script src="chousen/source/chosen.jquery.js" type="text/javascript"></script>
             <script src="chousen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
             <script src="js/calendar.js"></script>
-            
+            <script src="js/cronometro.js"></script>
             
              ');
             
@@ -879,6 +881,31 @@ function Footer(){
         </script>');
 	} 
         
+        /////////////////////Crear una imagen con una funcion javascrip
+	
+	function DibujeCronometro($Ancho){
+                    
+          print('<div id="crono" style="width: '.$Ancho.'%;">
+		<div class="reloj" id="Horas" style="display:none;">00</div>
+		<div class="reloj" id="Minutos">00</div>
+		<div class="reloj" id="Segundos">:00</div>
+		<div class="reloj" id="Centesimas" style="display:none;">:00</div>
+		
+	</div>');
+	} 
+        
+        /////////////////////Crear una imagen con una funcion javascrip
+	
+	function DibujeControlCronometro($Ancho){
+                    
+          print('<div id="crono" style="width: '.$Ancho.'%;">
+		
+		<input type="button" class="boton" id="inicio" value="Start &#9658;" onclick="inicio();">
+		<input type="button" class="boton" id="parar" value="Stop &#8718;" onclick="parar();" disabled>
+		<input type="button" class="boton" id="continuar" value="Resume &#8634;" onclick="inicio();" disabled>
+		<input type="button" class="boton" id="reinicio" value="Reset &#8635;" onclick="reinicio();" disabled>
+	</div>');
+	} 
                 
         //////////////////////////////////FIN
 }

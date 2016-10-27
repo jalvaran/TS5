@@ -74,12 +74,13 @@ if(document.getElementById(id).value > 1)
 }
 function cargar(){
 
-$("#contenido").load("contpedidos.php");
+$("#DivConsultas").load("consultas.php?Tipo=Cronometro");
 
 }
 
 function refresca(seg) {
-	setTimeout("cargar()",seg);
+    
+    setInterval("cargar()",1000);
 }
 
 
@@ -429,6 +430,12 @@ function MostrarDialogo() {
 }
 
 function MostrarDialogoID(id) {
+
+    document.getElementById(id).click();
+		
+}
+
+function ClickElement(id) {
 
     document.getElementById(id).click();
 		

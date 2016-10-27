@@ -36,7 +36,7 @@ if(!empty($_REQUEST['BtnCargar'])){
         
         $TipoArchivo=$_FILES['UplCsv']['type'];
         $NombreArchivo=$_FILES['UplCsv']['name'];
-        if($TipoArchivo=="text/csv"){
+        //if($TipoArchivo=="text/csv"){
             
             
             $handle = fopen($_FILES['UplCsv']['tmp_name'], "r");
@@ -86,9 +86,9 @@ if(!empty($_REQUEST['BtnCargar'])){
             $css->CerrarTabla();
             fclose($handle);
             
-        }else{
-            $css->CrearNotificacionRoja("El archivo seleccionado no es valido", 18);
-        }
+        //}else{
+          //  $css->CrearNotificacionRoja("El archivo seleccionado no es valido", 18);
+        //}
         
     }else{
         $css->CrearNotificacionRoja("No se selecciono ningun archivo", 18);

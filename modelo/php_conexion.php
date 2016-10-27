@@ -2160,7 +2160,7 @@ public function CalculePesoRemision($idCotizacion)
      * Imprime una factura pos
      */
     public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias){
-		$Regimen="SIMPLIFICADO";
+
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
