@@ -662,6 +662,9 @@ class CssIni{
            if($Color=="Verde"){
                $Class='class="btn btn-success"';
            }
+           if($Color=="Rojo"){
+               $Class='class=" btn btn-danger" ';
+           }
             if($vector["Enable"]==1){
                 
                 $enable='disabled="false"';
@@ -687,6 +690,7 @@ class CssIni{
             
             print('<script src="js/jquery.js"></script>
             <script src="js/bootstrap-transition.js"></script>
+            <script src="js/beeper.js"></script>
             <script src="js/bootstrap-alert.js"></script>
             <script src="js/bootstrap-modal.js"></script>
             <script src="js/bootstrap-dropdown.js"></script>

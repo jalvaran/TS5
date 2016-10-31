@@ -2986,7 +2986,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[9]="TotalAbonos";                $Valores[9]=$TotalAbonos;
         $Columnas[10]="TotalDevoluciones";           $Valores[10]=$TotalDevoluciones;
         $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos;
-        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos;
+        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos-$TotalTarjetas-$TotalCheques-$TotalOtros;
         $Columnas[13]="TotalTarjetas";           $Valores[13]=$TotalTarjetas;
         $Columnas[14]="TotalCheques";            $Valores[14]=$TotalCheques;
         $Columnas[15]="TotalOtros";           $Valores[15]=$TotalOtros;
@@ -5188,6 +5188,46 @@ public function VerificaPermisos($VectorPermisos) {
             $dif=date("Y-m-d H:i:s", strtotime($FechaFinal) + strtotime($FechaInicial) );
         }
         return($dif);
+    }
+    
+    //inserto los registros para la creacion de una sesion de concejo
+    
+    public function CrearSesionConsejo($FechaSesion,$TipoSesion,$NombreSesion, $Vector ) {
+        //////Inserto los valores en la tabla de registro de actividades
+            
+            $tab="concejo_sesiones";
+            $NumRegistros=3;
+
+            $Columnas[0]="Sesion";         $Valores[0]=$NombreSesion." TIPO ".$TipoSesion;
+            $Columnas[1]="Fecha";          $Valores[1]=$FechaSesion;
+            $Columnas[2]="idUsuario";      $Valores[2]=$this->idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                      
+            
+    }
+    
+    //otorgo la palabra
+    
+    public function OtorgarPalabraSesion($idSesionConcejo,$idConcejal,$idTiempo,$Vector) {
+        //////Inserto los valores en la tabla de registro de actividades
+            $Fecha=date("Y-m-d");
+            $HoraInicio=date("H:i:s");
+            $tab="concejales_intervenciones";
+            $NumRegistros=4;
+
+            $Columnas[0]="idConcejal";      $Valores[0]=$idConcejal;
+            $Columnas[1]="idSesionConcejo"; $Valores[1]=$idSesionConcejo;
+            $Columnas[2]="Fecha";           $Valores[2]=$Fecha;
+            $Columnas[3]="HoraInicio";      $Valores[3]=$HoraInicio;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $this->ActualizaRegistro("crono_controles", "Estado", "PLAY", "ID", 1);
+            $this->ActualizaRegistro("crono_controles", "idConcejal", $idConcejal, "ID", 1);
+            $HoraInicial=strtotime($HoraInicio);
+            $HoraFin=date("H:i:s",$HoraInicial+($idTiempo*60));
+            $this->ActualizaRegistro("crono_controles", "Fin", $HoraFin, "ID", 1);          
+            
     }
     
 //////////////////////////////Fin	

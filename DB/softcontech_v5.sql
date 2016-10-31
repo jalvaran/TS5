@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2016 a las 15:23:44
+-- Tiempo de generación: 31-10-2016 a las 06:13:13
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -2825,16 +2825,7 @@ CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
   `Total` float NOT NULL,
   `idColaborador` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `colaboradores_ventas`
---
-
-INSERT INTO `colaboradores_ventas` (`ID`, `Fecha`, `idFactura`, `Total`, `idColaborador`) VALUES
-(1, '2016-10-05', '201610050919090.17518100 1475677149', 8900, '94481747'),
-(2, '2016-10-05', '201610050919550.87785200 1475677195', 11800, '94481747'),
-(3, '2016-10-05', '201610050929020.33410800 1475677742', 8900, '31444333');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3123,6 +3114,156 @@ INSERT INTO `comprobantes_pre` (`ID`, `Fecha`, `Concepto`, `idComprobanteContabi
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `concejales`
+--
+
+CREATE TABLE IF NOT EXISTS `concejales` (
+  `ID` bigint(20) NOT NULL,
+  `Nombre` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
+  `Cargo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Fecha_Inicio` date NOT NULL,
+  `Fecha_Terminacion` date NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `concejales`
+--
+
+INSERT INTO `concejales` (`ID`, `Nombre`, `Cargo`, `Fecha_Inicio`, `Fecha_Terminacion`) VALUES
+(1, 'ALBA STELLA ANACONA ORTIZ', 'HONORABLE CONCEJAL', '2016-10-03', '2019-12-31'),
+(2, 'JOSE EDEMIR ANGEL CABRERA', 'HONORABLE CONCEJAL', '2016-10-10', '2019-12-31'),
+(3, 'MARIA LEONOR CRUZ RIVERA', 'HONORABLE CONCEJAL', '2016-10-10', '2019-12-31'),
+(4, 'JORGE IVAN ESCOBAR TEJADA', 'HONORABLE CONCEJAL', '2016-10-10', '2019-12-31'),
+(5, 'GABRIEL FONTAL GRISALES', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(6, 'GUSTAVO ADOLFO GALLEGO ARISTIZABAL', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(7, 'JAMES HERNAN GOMEZ SERRATO', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(8, 'JOSE ELNER GONZALEZ AZCARATE (2do VICEPRESIDENTE)', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(9, 'CARLOS ALBERTO LONDOÑO JIMENEZ (PRESIDENTE)', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(10, 'ALVARO DE JESUS MARIN ESPINAL', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(11, 'FERNANDO MARTINEZ PEREZ (1er VICEPRESIDENTE)', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(12, 'ANDRES FELIPE MONCAYO ZAPATA', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(13, 'JULIO CESAR MORENO LOZANO', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(14, 'JUAN PABLO RAMIREZ MOLINA', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(15, 'RAUL SALCEDO CARDONA', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(16, 'JAIBER SARRIA BECERRA', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(17, 'CARLOS ALFONSO WILCHEZ', 'HONORABLE CONCEJAL', '0000-00-00', '2019-12-31'),
+(18, 'LUIS CARLOS CHANTRE VARGAS', 'SECRETARIO GENERAL', '0000-00-00', '2019-12-31'),
+(19, 'INVITADO', 'INVITADO', '0000-00-00', '2100-12-31'),
+(20, 'PARTICIPACION CIUDADANA', 'PARTICIPANTE', '0000-00-00', '2100-12-31');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `concejales_intervenciones`
+--
+
+CREATE TABLE IF NOT EXISTS `concejales_intervenciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idConcejal` bigint(20) NOT NULL,
+  `idSesionConcejo` bigint(20) NOT NULL,
+  `Fecha` date NOT NULL,
+  `HoraInicio` time NOT NULL,
+  `HoraFin` time NOT NULL,
+  `Expresado` text COLLATE utf8_spanish2_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=41 ;
+
+--
+-- Volcado de datos para la tabla `concejales_intervenciones`
+--
+
+INSERT INTO `concejales_intervenciones` (`ID`, `idConcejal`, `idSesionConcejo`, `Fecha`, `HoraInicio`, `HoraFin`, `Expresado`) VALUES
+(1, 2, 3, '2016-10-30', '05:52:23', '00:00:00', ''),
+(2, 1, 3, '2016-10-30', '06:01:00', '00:00:00', ''),
+(3, 2, 3, '2016-10-30', '06:01:52', '00:00:00', ''),
+(4, 1, 3, '2016-10-30', '06:03:08', '00:00:00', ''),
+(5, 2, 3, '2016-10-30', '06:03:22', '00:00:00', ''),
+(6, 1, 3, '2016-10-30', '06:11:22', '00:00:00', ''),
+(7, 2, 3, '2016-10-30', '06:11:46', '00:00:00', ''),
+(8, 1, 3, '2016-10-30', '06:15:47', '00:00:00', ''),
+(9, 1, 3, '2016-10-30', '06:30:48', '00:00:00', ''),
+(10, 1, 3, '2016-10-30', '06:32:17', '00:00:00', ''),
+(11, 1, 3, '2016-10-30', '06:34:01', '00:00:00', ''),
+(12, 1, 3, '2016-10-30', '06:35:44', '00:00:00', ''),
+(13, 1, 3, '2016-10-30', '06:55:15', '00:00:00', ''),
+(14, 2, 3, '2016-10-30', '10:33:44', '00:00:00', ''),
+(15, 1, 3, '2016-10-30', '11:54:50', '00:00:00', ''),
+(16, 1, 3, '2016-10-30', '12:02:16', '00:00:00', ''),
+(17, 2, 3, '2016-10-30', '12:03:25', '00:00:00', ''),
+(18, 1, 3, '2016-10-30', '12:08:38', '00:00:00', ''),
+(19, 2, 3, '2016-10-30', '12:09:33', '00:00:00', ''),
+(20, 1, 3, '2016-10-30', '12:11:38', '00:00:00', ''),
+(21, 1, 3, '2016-10-30', '12:25:10', '00:00:00', ''),
+(22, 9, 3, '2016-10-30', '12:26:27', '00:00:00', ''),
+(23, 18, 3, '2016-10-30', '12:28:43', '00:00:00', ''),
+(24, 2, 3, '2016-10-30', '12:38:14', '00:00:00', ''),
+(25, 9, 3, '2016-10-30', '12:38:28', '00:00:00', ''),
+(26, 1, 3, '2016-10-30', '12:53:45', '00:00:00', ''),
+(27, 1, 3, '2016-10-30', '12:54:02', '00:00:00', ''),
+(28, 1, 3, '2016-10-30', '12:54:30', '00:00:00', ''),
+(29, 1, 3, '2016-10-30', '12:58:43', '00:00:00', ''),
+(30, 2, 3, '2016-10-30', '13:03:30', '00:00:00', ''),
+(31, 1, 3, '2016-10-30', '13:24:59', '00:00:00', ''),
+(32, 2, 3, '2016-10-30', '13:26:42', '00:00:00', ''),
+(33, 1, 3, '2016-10-30', '13:29:18', '00:00:00', ''),
+(34, 2, 3, '2016-10-30', '13:31:12', '00:00:00', ''),
+(35, 3, 3, '2016-10-30', '13:38:04', '00:00:00', ''),
+(36, 1, 3, '2016-10-31', '04:53:16', '00:00:00', ''),
+(37, 6, 4, '2016-10-31', '06:05:50', '00:00:00', ''),
+(38, 1, 4, '2016-10-31', '06:07:23', '00:00:00', ''),
+(39, 2, 4, '2016-10-31', '06:08:35', '00:00:00', ''),
+(40, 1, 4, '2016-10-31', '06:11:19', '00:00:00', '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `concejo_sesiones`
+--
+
+CREATE TABLE IF NOT EXISTS `concejo_sesiones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Sesion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Fecha` date NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `concejo_sesiones`
+--
+
+INSERT INTO `concejo_sesiones` (`ID`, `Sesion`, `Fecha`, `idUsuario`) VALUES
+(1, 'SESION NUMERO 1 TIPO ORDINARIA', '0000-00-00', 3),
+(2, 'SESION NUMERO 2 TIPO EXTRAORDINARIA', '2016-10-27', 3),
+(3, 'ESA TIPO PREPARATORIA', '2016-10-30', 3),
+(4, 'prueba TIPO PREPARATORIA', '2016-10-31', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `concejo_tipo_sesiones`
+--
+
+CREATE TABLE IF NOT EXISTS `concejo_tipo_sesiones` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `concejo_tipo_sesiones`
+--
+
+INSERT INTO `concejo_tipo_sesiones` (`ID`, `Tipo`) VALUES
+(1, 'PREPARATORIA'),
+(2, 'ORDINARIA'),
+(3, 'EXTRAORDINARIA'),
+(4, 'ESPECIAL');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `config_codigo_barras`
 --
 
@@ -3355,6 +3496,8 @@ INSERT INTO `cot_itemscotizaciones` (`ID`, `idCliente`, `NumCotizacion`, `Descri
 
 CREATE TABLE IF NOT EXISTS `crono_controles` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `idSesionConcejo` bigint(20) NOT NULL,
+  `idConcejal` bigint(20) NOT NULL,
   `Estado` varchar(25) COLLATE utf8_spanish2_ci NOT NULL,
   `Inicio` time NOT NULL,
   `Fin` time NOT NULL,
@@ -3365,8 +3508,8 @@ CREATE TABLE IF NOT EXISTS `crono_controles` (
 -- Volcado de datos para la tabla `crono_controles`
 --
 
-INSERT INTO `crono_controles` (`ID`, `Estado`, `Inicio`, `Fin`) VALUES
-(1, 'REINICIO', '08:59:00', '10:00:12');
+INSERT INTO `crono_controles` (`ID`, `idSesionConcejo`, `idConcejal`, `Estado`, `Inicio`, `Fin`) VALUES
+(1, 0, 1, 'REINICIO', '08:59:00', '06:12:19');
 
 -- --------------------------------------------------------
 
@@ -5663,7 +5806,7 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

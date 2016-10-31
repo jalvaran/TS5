@@ -1,7 +1,7 @@
 <?php
-$myPage="clientes.php";
+$myPage="crono.php";
 $myTitulo="Control de Sesiones";
-include_once("../sesiones/php_control.php");
+//include_once("../sesiones/php_control.php");
 
 include_once("css_construct.php");
 print("<html>");
@@ -19,7 +19,7 @@ $css->CabeceraFin();
     /////
 
 $css->CrearDiv("principal", "container", "left",1,1);
-print("<br><br><br><br>");
+
 $css->CrearDiv("DivCrono", "", "Center", 1, 1);
 include("RelojCronometro.php");
 $css->CerrarDiv();//Cerramos contenedor Principal
