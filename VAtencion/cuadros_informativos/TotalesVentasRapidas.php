@@ -132,6 +132,10 @@
                $css->CrearOptionSelect("$DatosTipoPago[DiasCartera]", " $DatosTipoPago[Etiqueta]" , 0);
            }
     $css->CerrarSelect();
+    
+    print("<br>");
+    $css->CrearTextArea("TxtObservacionesFactura","","","Observaciones Factura","black","","",200,60,0,0);
+    
     $css->CerrarDiv();
     print("</td>");
     

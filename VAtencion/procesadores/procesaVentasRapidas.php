@@ -192,7 +192,7 @@
             $Devuelta=$_REQUEST["TxtDevuelta"];
             $CuentaDestino=$_REQUEST["TxtCuentaDestino"];
             $TipoPago=$_REQUEST["TxtTipoPago"];
-            $Observaciones="";
+            $Observaciones=$_REQUEST["TxtObservacionesFactura"];
             $DatosVentaRapida["PagaCheque"]=$Cheque;
             $DatosVentaRapida["PagaTarjeta"]=$Tarjeta;
             $DatosVentaRapida["idTarjeta"]=$idTarjeta;
@@ -200,6 +200,7 @@
             $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
             $DatosVentaRapida["CentroCostos"]=$DatosCaja["CentroCostos"];
             $DatosVentaRapida["ResolucionDian"]=$DatosCaja["idResolucionDian"];
+            $DatosVentaRapida["Observaciones"]=$Observaciones;
             if($TipoPago<>"Contado" AND $idCliente<=1){
                 print("<script>alert('Debe seleccionar un Cliente para realizar una venta a credito')</script>");
                 exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
