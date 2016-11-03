@@ -1484,6 +1484,22 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             $this->css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdFactura","hidden","",$DatosCredito["Facturas_idFacturas"],"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdCartera","hidden","",$DatosCredito["idCartera"],"","","","",0,0,0,0);
+            if(isset($Vector["HabilitaCmbCuentaDestino"])){
+                $VectorCuentas["Nombre"]="CmbCuentaDestino";
+                $VectorCuentas["Evento"]="";
+                $VectorCuentas["Funcion"]="";
+                $VectorCuentas["Required"]=1;
+                print("<strong>Cuenta:</strong>");
+                $this->css->CrearSelect2($VectorCuentas);
+                $this->css->CrearOptionSelect("", "Seleccione una cuenta destino", 0);
+                $ConsultaCuentas=$this->obCon->ConsultarTabla("CuentasFrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
+                while($DatosCuentaFrecuentes=$this->obCon->FetchArray($ConsultaCuentas)){
+                    $this->css->CrearOptionSelect($DatosCuentaFrecuentes["CuentaPUC"], $DatosCuentaFrecuentes["Nombre"], 0);
+                }
+                $this->css->CerrarSelect();
+                print("<br>");
+            }
+            
             $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Abonar: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);
             $this->css->CrearBotonConfirmado("BtnAbono$DatosCredito[idCartera]", "Abonar a Credito");
             $this->css->CerrarForm();

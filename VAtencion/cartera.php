@@ -24,7 +24,7 @@ $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
 $obTabla->VerifiqueExport($Vector);
-
+include_once("procesadores/procesaCartera.php");  //Clases de donde se escribirán las tablas
 include_once("css_construct.php");
 print("<html>");
 print("<head>");
@@ -34,12 +34,26 @@ print("</head>");
 print("<body>");
 //Cabecera
 $css->CabeceraIni($myTitulo); //Inicia la cabecera de la pagina
+
+$css->CrearForm("FrmBuscarCreditos",$myPage,"post","_self");
+$css->CrearInputText("TxtBuscarCredito", "text", " ", "", "Buscar Credito", "white", "", "", 200, 30, 0, 1);
+$css->CerrarForm();
 $css->CabeceraFin(); 
 
 ///////////////Creamos el contenedor
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+if(!empty($_REQUEST["TxtidIngreso"])){
+        $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
+        $css->CrearTabla();
+        $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
+        $css->CerrarTabla();
+    }
+    
+$VectorCredito["HabilitaCmbCuentaDestino"]=1;
+$obTabla->DibujaCredito($myPage,0,$VectorCredito);
+
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
