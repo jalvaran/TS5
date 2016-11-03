@@ -136,16 +136,19 @@ if($idColaborador>0 and $idMaquina>0 and $idActividad==0){
 
 
 if($idActividad>0){
-    
-    if(isset($_REQUEST["BtnEjecutar"])){
-        $idEjecucion=$obVenta->normalizar($_REQUEST["BtnEjecutar"]);
-        $idPausa=$obVenta->normalizar($_REQUEST["CmbPausa"]);
-        $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,$idPausa,"");
-    }
+    $idPausa="";
     if(isset($_REQUEST["BtnTerminar"])){
-        
+        $idPausa="NO";
         $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,4,$idPausa,"");
     }
+    if($idPausa<>"NO"){
+        if(isset($_REQUEST["BtnEjecutar"])){
+            $idEjecucion=$obVenta->normalizar($_REQUEST["BtnEjecutar"]);
+            $idPausa=$obVenta->normalizar($_REQUEST["CmbPausa"]);
+            $obVenta->ProceseEjecucionActividad($idActividad, $idMaquina,$idColaborador,$idEjecucion,$idPausa,"");
+        }
+    }
+    
     
     $DatosActividad=$obVenta->DevuelveValores("produccion_actividades", "ID", $idActividad);
     $css->CrearNotificacionRoja("Actividad: $idActividad $DatosActividad[Descripcion], Observaciones: $DatosActividad[Observaciones], Estado: $DatosActividad[Estado]", 16);
@@ -164,11 +167,11 @@ if($idActividad>0){
             break;
         case "PAUSA_NO_OPERATIVA":
             $Image="../images/pause2.jpg";
-            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad&BtnEjecutar=3&CmbPausa=0";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador&idActividad=$idActividad&BtnEjecutar=5&CmbPausa=0";
             break;
         case "TERMINADA":
             $Image="../images/terminado.png";
-            $Link="#";
+            $Link="$myPage?idMaquina=$idMaquina&idColaborador=$idColaborador";
             break;
         
     }

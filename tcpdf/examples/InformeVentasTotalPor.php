@@ -301,6 +301,71 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 	
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////INFORMACION DE IVA////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+$tbl = <<<EOD
+
+
+<BR><BR><span style="color:RED;font-family:'Bookman Old Style';font-size:12px;"><strong><em>Informe con los Porcentajes de IVA en ventas:
+</em></strong></span><BR><BR>
+
+
+<table border="1" cellspacing="2" align="center" >
+  <tr> 
+	
+    <th><h3>  </h3></th>
+    <th><h3>Valor</h3></th>
+    
+	
+  </tr >
+  
+</table>
+
+
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+
+$sql="SELECT PorcentajeIVA,SUM(IVAItem) as IVA, SUM(SubtotalItem) as SubtotalItem FROM ori_facturas_items
+	WHERE $CondicionFecha1 GROUP BY PorcentajeIVA";
+$sel1=$obVenta->Query($sql);
+
+
+while($DatosIVA=$obVenta->FetchArray($sel1)){
+	$PorcentajeIVA=$DatosIVA["PorcentajeIVA"];
+	$IVA=number_format($DatosIVA["IVA"]);
+    $SubtotalItem=number_format($DatosIVA["SubtotalItem"]);
+	$Palabra=" Gravada ";
+	if($PorcentajeIVA==0){
+		$PorcentajeIVA="Excluida";
+		$Palabra="";
+	}
+	
+$tbl = <<<EOD
+
+<table border="1"  cellpadding="2" align="center">
+ <tr>
+  <td>Venta $Palabra $PorcentajeIVA </td>
+  <td>$SubtotalItem</td>
+  
+ 
+ </tr>
+ 
+ <tr>
+  <td>Valor IVA $PorcentajeIVA </td>
+  <td>$IVA</td>
+  
+ 
+ </tr>
+ </table>
+EOD;
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+	
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////TIPO VENTAS////////////////////////////

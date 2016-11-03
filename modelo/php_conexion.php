@@ -5122,6 +5122,7 @@ public function VerificaPermisos($VectorPermisos) {
                 $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
                 $this->ActualizaRegistro("produccion_actividades", "Fecha_Inicio", $fecha, "ID", $idActividad);
                 $this->ActualizaRegistro("produccion_actividades", "Hora_Inicio", $hora, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_actividades", "idColaborador", $idColaborador, "ID", $idActividad);
                 break;
             case 2: 
                 
@@ -5136,7 +5137,7 @@ public function VerificaPermisos($VectorPermisos) {
                 $this->ActualizaRegistro("produccion_actividades", "Estado", $Estado, "ID", $idActividad);
                 break;
             case 3: 
-                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "REANUDADA", "NO", "");
+                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "REINICIA_PAUSA_OPERATIVA", "SI", "");
                 $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
                 break;
             case 4: 
@@ -5152,7 +5153,10 @@ public function VerificaPermisos($VectorPermisos) {
                 $this->ActualizaRegistro("produccion_actividades", "Fecha_Fin", $fecha, "ID", $idActividad);
                 $this->ActualizaRegistro("produccion_actividades", "Hora_Fin", $hora, "ID", $idActividad);
                 break;
-            
+            case 5: 
+                $this->RegistreTiempoActividad($idActividad, $fecha." ".$hora, "REINICIA_PAUSA_NO_OPERATIVA", "NO", "");
+                $this->ActualizaRegistro("produccion_actividades", "Estado", "EJECUCION", "ID", $idActividad);
+                break;
         }
         
     }
@@ -5172,8 +5176,63 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[4]="idUsuario";		$Valores[4]=$this->idUser;
                         
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            if($Estado=="TERMINADA"){
+                $sql="SELECT FechaHora FROM produccion_registro_tiempos WHERE idActividad='$idActividad' AND "
+                        . " Estado = 'EJECUCION' ";
+                $Datos=$this->Query($sql);
+                $Actividad = $this->FetchArray($Datos);
+                $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
+                $FechaHoraFin = new DateTime($FechaHora);
+                $Diff=$FechaHoraFin->diff($FechaHoraInicio);
+                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
+                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
+                $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
+                $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
+                $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
+                $TiempoOperacion=$TotalHoras-$DatosActividad["Pausas_No_Operativas"];
+                $TiempoOperacionOT=$TiempoOperacion+$DatosOT["Tiempo_Operacion"];
+                $this->ActualizaRegistro("produccion_actividades", "Tiempo_Operacion", $TiempoOperacion, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_ordenes_trabajo", "Tiempo_Operacion", $TiempoOperacionOT, "ID", $DatosActividad["idOrdenTrabajo"]);               
+            }
+            if($Estado=="REINICIA_PAUSA_OPERATIVA"){
+                $sql="SELECT FechaHora FROM produccion_registro_tiempos WHERE idActividad='$idActividad' AND "
+                        . " Estado = 'PAUSA_OPERATIVA' ORDER BY `ID` DESC LIMIT 1";
+                $Datos=$this->Query($sql);
+                $Actividad = $this->FetchArray($Datos);
+                $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
+                $FechaHoraFin = new DateTime($FechaHora);
+                $Diff=$FechaHoraFin->diff($FechaHoraInicio);
+                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
+                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
+                $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
+                $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
+                $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
+                $TotalPausas=$TotalHoras+$DatosActividad["Pausas_Operativas"];
+                $TotalPausasOT=$TotalPausas+$DatosOT["Pausas_Operativas"];
+                
+                $this->ActualizaRegistro("produccion_actividades", "Pausas_Operativas", $TotalPausas, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_ordenes_trabajo", "Pausas_Operativas", $TotalPausasOT, "ID", $DatosActividad["idOrdenTrabajo"]);                
+            }
             
-            $DatosActividad = $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
+            if($Estado=="REINICIA_PAUSA_NO_OPERATIVA"){
+                $sql="SELECT FechaHora FROM produccion_registro_tiempos WHERE idActividad='$idActividad' AND "
+                        . " Estado = 'PAUSA_NO_OPERATIVA' ORDER BY `ID` DESC LIMIT 1";
+                $Datos=$this->Query($sql);
+                $Actividad = $this->FetchArray($Datos);
+                $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
+                $FechaHoraFin = new DateTime($FechaHora);
+                $Diff=$FechaHoraFin->diff($FechaHoraInicio);
+                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
+                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
+                $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
+                $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
+                $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
+                $TotalPausas=$TotalHoras+$DatosActividad["Pausas_No_Operativas"];
+                $TotalPausasOT=$TotalPausas+$DatosOT["Pausas_No_Operativas"];
+                $this->ActualizaRegistro("produccion_actividades", "Pausas_No_Operativas", $TotalPausas, "ID", $idActividad);
+                $this->ActualizaRegistro("produccion_ordenes_trabajo", "Pausas_No_Operativas", $TotalPausasOT, "ID", $DatosActividad["idOrdenTrabajo"]);                   
+            }
+            
             
             
     }
@@ -5230,6 +5289,10 @@ public function VerificaPermisos($VectorPermisos) {
             
     }
     
+    public function ConviertaHorasDecimal($Horas,$Minutos, $Vector) {
+        $HoraDecimal=$Horas+($Minutos/60);
+        return ($HoraDecimal);
+    }
 //////////////////////////////Fin	
 }
 	
