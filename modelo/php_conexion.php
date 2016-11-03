@@ -1887,12 +1887,13 @@ public function CalculePesoRemision($idCotizacion)
         $Tarjetas=$DatosVentaRapida["PagaTarjeta"];
         $idTarjetas=$DatosVentaRapida["idTarjeta"];
         $PagaOtros=$DatosVentaRapida["PagaOtros"];
+        $Observaciones=$DatosVentaRapida["Observaciones"];
         
         //$CuentaDestino=$_REQUEST["CmbCuentaDestino"];
         //$CuentaDestino=110510;
         $OrdenCompra="";
         $OrdenSalida="";
-        $ObservacionesFactura="";
+        $ObservacionesFactura=$Observaciones;
         $FechaFactura=date("Y-m-d");
         
         $Consulta=$this->DevuelveValores("centrocosto", "ID", $CentroCostos);
