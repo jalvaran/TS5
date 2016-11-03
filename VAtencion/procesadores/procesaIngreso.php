@@ -18,10 +18,11 @@ if(!empty($_REQUEST["BtnGuardarPago"])){
         $CuentaDestino=$_REQUEST["CmbCuentaDestino"];
         $ReteICA=$_REQUEST["TxtReteICA"];
         $ReteIVA=$_REQUEST["TxtReteIVA"];
+        $OtrosDescuentos=$_REQUEST["TxtOtrosDescuentos"];
         $Pago=$_REQUEST["TxtPagoH"];
         
-        $DatosFactura=$obVenta->DevuelveValores("facturas","idFacturas",$idFactura);
-        $idIngreso=$obVenta->RegistrePagoFactura($idFactura, $fecha, $Pago, $CuentaDestino, $ReteFuente, $ReteIVA, $ReteICA, $idUser, $DatosFactura);
+        $VectorIngresos["OtrosDescuentos"]=$OtrosDescuentos;
+        $idIngreso=$obVenta->RegistrePagoFactura($idFactura, $fecha, $Pago, $CuentaDestino, $ReteFuente, $ReteIVA, $ReteICA, $idUser, $VectorIngresos);
         $obVenta->BorraReg("cartera", "Facturas_idFacturas", $idFactura);
         header("location:RegistrarIngreso.php?TxtidIngreso=$idIngreso");
         

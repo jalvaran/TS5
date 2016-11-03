@@ -178,6 +178,8 @@ print("<body>");
             print("<br>");
             $css->CrearInputNumber("TxtReteIVA", "number", "ReteIVA:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
             print("<br>");
+            $css->CrearInputNumber("TxtOtrosDescuentos", "number", "Otros:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
+            print("<br>");
         $css->CerrarDiv();
         print("<br>");
         $css->CrearInputNumber("TxtPagoH", "hidden", "", $DatosCartera["Saldo"], "", "", "","", "", 30,1, 1, 1, 1, "", "any");

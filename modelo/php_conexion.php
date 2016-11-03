@@ -1178,7 +1178,11 @@ public function FetchArray($Datos)
         $NIT=$DatosCliente["Num_Identificacion"];
         $RazonSocialC=$DatosCliente["RazonSocial"];
         $Detalle="Pago de Factura $DatosFactura[Prefijo] $DatosFactura[NumeroFactura]";
-        $ValorIngreso=$Pago-$Retefuente-$ReteIVA-$ReteICA;
+        $OtrosDescuentos=0;
+        if(isset($Vector["OtrosDescuentos"])){
+            $OtrosDescuentos=$Vector["OtrosDescuentos"];
+        }
+        $ValorIngreso=$Pago-$Retefuente-$ReteIVA-$ReteICA-$OtrosDescuentos;
         //////Creo el comprobante de Ingreso
 
         $tab="comprobantes_ingreso";
@@ -1290,6 +1294,22 @@ public function FetchArray($Datos)
             $Valores[18]=$ReteICA;
             $Valores[19]=0; 						
             $Valores[20]=$ReteICA;  											//Credito se escribe el total de la venta menos los impuestos
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
+        }
+        //Si hay retefuente se registra
+        if($OtrosDescuentos>0){
+            
+            $DatosCuenta=$this->DevuelveValores("parametros_contables","ID",7);
+                                        
+            $NombreCuenta=$DatosCuenta["NombreCuenta"];
+            $CuentaPUC=$DatosCuenta["CuentaPUC"];
+
+            $Valores[15]=$CuentaPUC;
+            $Valores[16]=$NombreCuenta;
+            $Valores[18]=$OtrosDescuentos;
+            $Valores[19]=0; 						
+            $Valores[20]=$OtrosDescuentos;  											//Credito se escribe el total de la venta menos los impuestos
 
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
         }
