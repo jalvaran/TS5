@@ -5314,6 +5314,24 @@ public function VerificaPermisos($VectorPermisos) {
         $HoraDecimal=$Horas+($Minutos/60);
         return ($HoraDecimal);
     }
+     public function ActualizaFacturasFromItems($FechaIni,$FechaFinal,$Tabla,$Vector) {
+       
+        $sql="SELECT idFacturas FROM ori_facturas WHERE Fecha>='$FechaIni' AND Fecha<='$FechaFinal'";
+        $Datos=$this->Query($sql);
+        while($DatosFacturas=$this->FetchArray($Datos)){
+            $idFactura=$DatosFacturas["idFacturas"];
+            $sql="SELECT SUM(TotalItem) as TotalItem, SUM(SubtotalItem) as SubtotalItem,SUM(IVAItem) as IVAItem"
+                    . " FROM  ori_facturas_items WHERE idFactura='$idFactura'";
+            $Consulta=$this->Query($sql);
+            $DatosTotales=$this->FetchArray($Consulta);
+            $Subtotal=$DatosTotales["SubtotalItem"];
+            $Total=$DatosTotales["TotalItem"];
+            $IVA=$DatosTotales["IVAItem"];
+            $sql="UPDATE ori_facturas SET Total='$Total',Subtotal='$Subtotal', IVA='$IVA'";
+            $this->Query($sql);
+        }
+       
+    }
 //////////////////////////////Fin	
 }
 	
