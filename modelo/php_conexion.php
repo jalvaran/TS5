@@ -635,7 +635,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
             $this->Query($sql);
         }else{
-            $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+            $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
             $reg=mysql_fetch_array($reg);
             $Porcentaje=$reg["Porcentaje"];
             $Departamento=$reg["Departamento"];
@@ -4219,7 +4219,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$VectorPrec
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];
-        $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1 ") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+        $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0') ORDER BY idFechaDescuentos DESC LIMIT 1 ") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
         //$reg=$this->Query($sql);
         $reg=$this->FetchArray($reg);
         $Porcentaje=$reg["Porcentaje"];
@@ -5314,24 +5314,7 @@ public function VerificaPermisos($VectorPermisos) {
         $HoraDecimal=$Horas+($Minutos/60);
         return ($HoraDecimal);
     }
-     public function ActualizaFacturasFromItems($FechaIni,$FechaFinal,$Tabla,$Vector) {
-       
-        $sql="SELECT idFacturas FROM ori_facturas WHERE Fecha>='$FechaIni' AND Fecha<='$FechaFinal'";
-        $Datos=$this->Query($sql);
-        while($DatosFacturas=$this->FetchArray($Datos)){
-            $idFactura=$DatosFacturas["idFacturas"];
-            $sql="SELECT SUM(TotalItem) as TotalItem, SUM(SubtotalItem) as SubtotalItem,SUM(IVAItem) as IVAItem"
-                    . " FROM  ori_facturas_items WHERE idFactura='$idFactura'";
-            $Consulta=$this->Query($sql);
-            $DatosTotales=$this->FetchArray($Consulta);
-            $Subtotal=$DatosTotales["SubtotalItem"];
-            $Total=$DatosTotales["TotalItem"];
-            $IVA=$DatosTotales["IVAItem"];
-            $sql="UPDATE ori_facturas SET Total='$Total',Subtotal='$Subtotal', IVA='$IVA'";
-            $this->Query($sql);
-        }
-       
-    }
+     
 //////////////////////////////Fin	
 }
 	
