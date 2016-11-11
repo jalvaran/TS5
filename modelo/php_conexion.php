@@ -5204,10 +5204,12 @@ public function VerificaPermisos($VectorPermisos) {
                 $Actividad = $this->FetchArray($Datos);
                 $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
                 $FechaHoraFin = new DateTime($FechaHora);
-                $Diff=$FechaHoraFin->diff($FechaHoraInicio);
-                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
-                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
-                $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
+                $Diff= $FechaHoraFin->diff($FechaHoraInicio);
+                $TiempoEjecucion["Dias"]=$Diff->d;
+                $TiempoEjecucion["Horas"]=$Diff->h; 
+                $TiempoEjecucion["Minutos"]=$Diff->i; 
+                $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],$TiempoEjecucion);
+                //$TotalHoras=date("Y-m-d H:i:s", strtotime($FechaHora) - strtotime($Actividad["FechaHora"]) );
                 $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
                 $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
                 $TiempoOperacion=$TotalHoras-$DatosActividad["Pausas_No_Operativas"];
@@ -5223,8 +5225,9 @@ public function VerificaPermisos($VectorPermisos) {
                 $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
                 $FechaHoraFin = new DateTime($FechaHora);
                 $Diff=$FechaHoraFin->diff($FechaHoraInicio);
-                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
-                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
+                $TiempoEjecucion["Dias"]=$Diff->d;
+                $TiempoEjecucion["Horas"]=$Diff->h; 
+                $TiempoEjecucion["Minutos"]=$Diff->i; 
                 $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
                 $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
                 $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
@@ -5243,8 +5246,9 @@ public function VerificaPermisos($VectorPermisos) {
                 $FechaHoraInicio = new DateTime($Actividad["FechaHora"]);
                 $FechaHoraFin = new DateTime($FechaHora);
                 $Diff=$FechaHoraFin->diff($FechaHoraInicio);
-                $TiempoEjecucion["Horas"]=$Diff->format("%H"); 
-                $TiempoEjecucion["Minutos"]=$Diff->format("%I"); 
+                $TiempoEjecucion["Dias"]=$Diff->d;
+                $TiempoEjecucion["Horas"]=$Diff->h;
+                $TiempoEjecucion["Minutos"]=$Diff->i;
                 $TotalHoras=$this->ConviertaHorasDecimal($TiempoEjecucion["Horas"],$TiempoEjecucion["Minutos"],"");
                 $DatosActividad=  $this->DevuelveValores("produccion_actividades", "ID", $idActividad);
                 $DatosOT=  $this->DevuelveValores("produccion_ordenes_trabajo", "ID", $DatosActividad["idOrdenTrabajo"]);
@@ -5311,7 +5315,8 @@ public function VerificaPermisos($VectorPermisos) {
     }
     
     public function ConviertaHorasDecimal($Horas,$Minutos, $Vector) {
-        $HoraDecimal=$Horas+($Minutos/60);
+        $Dias=$Vector["Dias"];
+        $HoraDecimal=($Dias*24)+$Horas+($Minutos/60);
         return ($HoraDecimal);
     }
      
