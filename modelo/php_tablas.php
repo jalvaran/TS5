@@ -1540,6 +1540,206 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     }
 }
 }
+
+//Clase para dibujar el cronograma de Produccion por horas
+
+    public function DibujCronogramaProduccionHoras($Titulo,$FechaActual, $myPage,$idOT,$Vector) {
+        //Creamos la interfaz del Cronograma
+        
+    $ColorLibre="#FFFFFF";
+    $ColorPausaOperativa="red";
+    $ColorPausaNoOperativa="orange";
+    $ColorEjecucion="green";
+    $ColorTerminada="black";
+    $ColorNoIniciada="blue";
+
+    $this->css=new CssIni("");
+    
+    $this->css->CrearTabla();
+    //Agrego Titulo
+    $this->css->FilaTabla(14);
+    print("<td style='background-color:$ColorEjecucion'>");
+    $this->css->ColTabla("En Ejecucion", 1);
+    print("</td>");
+    
+    
+    print("<td style='background-color:$ColorPausaOperativa'>");
+    $this->css->ColTabla("Pausa Operativa", 1);
+    print("</td>");
+    print("<td style='background-color:$ColorPausaNoOperativa'>");
+    $this->css->ColTabla("Pausa NO Operativa", 1);
+    print("</td>");
+    print("<td style='background-color:$ColorTerminada'>");
+    $this->css->ColTabla("Terminada", 1);
+    print("</td>");
+    $this->css->CierraFilaTabla();
+    $this->css->CerrarTabla();
+    $this->css->CrearTabla();
+    //Agrego Titulo
+    $this->css->FilaTabla(18);
+    $this->css->ColTabla($Titulo, 5);
+    
+    $this->css->CierraColTabla();
+    $this->css->CierraFilaTabla();
+    //Agrego Horas
+    $this->css->FilaTabla(16);
+    $this->css->ColTabla("Maquina", 1);
+    $this->css->CierraColTabla();
+    $Datos=$this->obCon->ConsultarTabla("produccion_horas_cronograma", "");
+    while($HorasCronograma=$this->obCon->FetchArray($Datos)){
+        $this->css->ColTabla($HorasCronograma["Hora"], 1);
+        $this->css->CierraColTabla();
+    }
+    $this->css->CierraFilaTabla();
+    //Agrego las filas con cada maquina
+    
+    $Datos=$this->obCon->ConsultarTabla("maquinas", "");
+    
+    while($DatosMaquinas=$this->obCon->FetchArray($Datos)){
+        $this->css->FilaTabla(14);
+        echo("<td rowspan='2'>");
+        print($DatosMaquinas["Nombre"]);
+        echo("</td>");
+        
+        
+        $DatosHoras=$this->obCon->ConsultarTabla("produccion_horas_cronograma", "");
+        
+        while($HorasCronograma=$this->obCon->FetchArray($DatosHoras)){
+            print("<td>");
+            $Page=$myPage;
+            $Page.="?TxtFechaCronograma=$FechaActual&TxtHoraIni=$HorasCronograma[Hora]&idMaquina=$DatosMaquinas[ID]&idOT=$idOT";
+            $Color="";
+            $idActividad="";
+            $Condicion="WHERE Fecha_Planeada_Inicio='$FechaActual' AND (Hora_Planeada_Inicio <='$HorasCronograma[Hora]' AND Hora_Planeada_Fin >'$HorasCronograma[Hora]') AND idMaquina='$DatosMaquinas[ID]'";
+            $DatosActividades=$this->obCon->ConsultarTabla("produccion_actividades", $Condicion);
+                    
+            $DatosActividades=$this->obCon->FetchArray($DatosActividades);
+            
+            if($DatosActividades["ID"]>0){
+                $idActividad=$DatosActividades["ID"];
+                switch ($DatosActividades["Estado"]){
+                    case "NO_INICIADA":
+                        $ColorBG=$ColorNoIniciada;
+                        $VectorDatosExtra["Color"] = $ColorNoIniciada;
+                        break;
+                    case "EJECUCION":
+                        $ColorBG=$ColorEjecucion;
+                        $VectorDatosExtra["Color"] = $ColorEjecucion;
+                        break;
+                    case "PAUSA_OPERATIVA":
+                        $ColorBG=$ColorPausaOperativa;
+                        $VectorDatosExtra["Color"] = $ColorPausaOperativa;
+                        break;
+                    case "PAUSA_NO_OPERATIVA":
+                        $ColorBG=$ColorPausaNoOperativa;
+                        $VectorDatosExtra["Color"] = $ColorPausaNoOperativa;
+                        break;
+                    case "TERMINADA":
+                        $ColorBG=$ColorTerminada;
+                        $VectorDatosExtra["Color"] = $ColorTerminada;
+                        break;
+                }
+                $Color="background-color: $ColorBG";
+                
+                $Page.="&idEdit=$idActividad";
+                $VectorDatosExtra["ID"]="LinkP".$idActividad;
+                $this->css->CrearLinkID($Page, "_self", "$idActividad",$VectorDatosExtra);
+            }
+            
+            
+            if($Color=="" and $idOT>0){
+                $this->css->CrearLink($Page, "_self", "+...");
+                
+            }
+            
+            print("</td>");
+            
+            
+            
+        }
+        $this->css->CierraFilaTabla();
+        $this->css->FilaTabla(12);
+        
+        $DatosHoras=$this->obCon->ConsultarTabla("produccion_horas_cronograma", "");
+        
+        while($HorasCronograma=$this->obCon->FetchArray($DatosHoras)){
+            print("<td>");
+            
+            $Condicion="WHERE Fecha_Inicio<='$FechaActual'  AND idMaquina='$DatosMaquinas[ID]' AND Estado<>'NO_INICIADA' limit 100";
+            $ConsultaActividades=$this->obCon->ConsultarTabla("produccion_actividades", $Condicion);
+            
+            while($DatosActividades=$this->obCon->FetchArray($ConsultaActividades)){
+            $Page=$myPage;
+            $Page.="?TxtFechaCronograma=$FechaActual&TxtHoraIni=$HorasCronograma[Hora]&idMaquina=$DatosMaquinas[ID]&idOT=$idOT";
+            $Color="";
+            $idActividad="";
+            //$DatosActividades=$this->obCon->FetchArray($DatosActividades);
+            $FechaHoraCalendario=date("$FechaActual $HorasCronograma[Hora]:00");
+            $FechaTerminacion=date("Y-m-d H:i:00");
+            
+            if($DatosActividades["Estado"]=="TERMINADA"){
+                $FechaTerminacion="$DatosActividades[Fecha_Fin] $DatosActividades[Hora_Fin]";
+                    
+            }
+            
+            
+            $Hora1=strtotime($HorasCronograma["Hora"]);
+            $Hora2=strtotime(substr($DatosActividades["Hora_Inicio"],0,2)."00");
+            if($FechaActual==$DatosActividades["Fecha_Inicio"] AND $Hora1<$Hora2){
+                $FechaTerminacion="2000-01-01 00:00:00";
+            }
+            
+            $Fecha1=strtotime($FechaHoraCalendario);
+            $Fecha2=strtotime($FechaTerminacion);
+            
+            if($DatosActividades["ID"]>0 and $Fecha2>$Fecha1){
+                $idActividad=$DatosActividades["ID"];
+                switch ($DatosActividades["Estado"]){
+                    case "NO_INICIADA":
+                        $ColorBG=$ColorNoIniciada;
+                        $VectorDatosExtra["Color"] = $ColorNoIniciada;
+                        break;
+                    case "EJECUCION":
+                        $ColorBG=$ColorEjecucion;
+                        $VectorDatosExtra["Color"] = $ColorEjecucion;
+                        break;
+                    case "PAUSA_OPERATIVA":
+                        $ColorBG=$ColorPausaOperativa;
+                        $VectorDatosExtra["Color"] = $ColorPausaOperativa;
+                        break;
+                    case "PAUSA_NO_OPERATIVA":
+                        $ColorBG=$ColorPausaNoOperativa;
+                        $VectorDatosExtra["Color"] = $ColorPausaNoOperativa;
+                        break;
+                    case "TERMINADA":
+                        $ColorBG=$ColorTerminada;
+                        $VectorDatosExtra["Color"] = $ColorTerminada;
+                        break;
+                }
+                $Color="background-color: $ColorBG";
+            $VectorDatosExtra["ID"] = "Link".$idActividad;
+            
+            $Page.="&idEdit=$idActividad";
+            $this->css->CrearLinkID($Page, "_self", "$idActividad<br>",$VectorDatosExtra);
+            }
+            
+           // print("<td style='$Color'>");
+            
+            
+            
+            
+            }
+            print("</td>");
+        }
+        
+        $this->css->CierraFilaTabla();
+    }
+    
+    
+    $this->css->CerrarTabla();
+   
+    }
+
 // FIN Clases	
 }
 

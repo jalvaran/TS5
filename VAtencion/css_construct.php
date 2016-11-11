@@ -550,7 +550,7 @@ class CssIni{
 		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'" style="height:'.$Alto.'px; width:'.$Ancho.'px"></a>');
 	}
 	function CrearLink($link,$target,$Titulo){
-		print('<a href="'.$link.'" target="'.$target.'">'.$Titulo.'</a>');
+		print('<a href="'.$link.'" target="'.$target.'" >'.$Titulo.'</a>');
 	}
         function CrearLinkID($link,$target,$Titulo,$VectorDatosExtra){
             $ID=$VectorDatosExtra["ID"];
@@ -559,7 +559,11 @@ class CssIni{
             }else{
                 $JS="";
             }
-            print('<a id="'.$ID.'" href="'.$link.'" target="'.$target.'" '.$JS.' >'.$Titulo.'</a>');
+            $ColorLink="blue";
+            if(isset($VectorDatosExtra["Color"])){
+                $ColorLink=$VectorDatosExtra["Color"];
+            }
+            print('<a id="'.$ID.'" href="'.$link.'" target="'.$target.'" '.$JS.' style="color:'.$ColorLink.'">'.$Titulo.'</a>');
 	}
 	
 	/////////////////////Crear una fila para una tabla

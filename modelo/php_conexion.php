@@ -5315,6 +5315,11 @@ public function VerificaPermisos($VectorPermisos) {
         return ($HoraDecimal);
     }
      
+    //Fetch assoc
+   public function FetchAssoc($Consulta) {
+        $Results=mysql_fetch_assoc($Consulta);
+        return ($Results);
+    } 
 //////////////////////////////Fin	
 }
 	
