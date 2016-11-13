@@ -1,6 +1,0 @@
-2016-11-13
-MODULO DE PRODUCCION
-- Se acomoda el cronograma, tiempos y otras peticiones
-    *Se modifica gran parte de la carpeta VAtencion.
-    *Se modifica php_tablas.php
-    *Se modifica php_conexion.php

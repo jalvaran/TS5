@@ -1,0 +1,25 @@
+2016-11-13
+
+MODULO DE PRODUCCION
+- Se acomoda el cronograma, tiempos y otras peticiones
+    *Se modifica gran parte de la carpeta VAtencion.
+    *Se modifica php_tablas.php
+    *Se modifica php_conexion.php
+
+MODULO DE INFORMES DE COMPRAS
+
+- Se inicia con el informe de compras
+PHP
+    *Se incluye informeCompras.php VAtencion
+    *Se incluye informeComprasPDF.php TCPDF
+MYSQL
+    *En la tabla FormatosCalidad se agrega el registro 18 con el informe de compras
+
+MODULO DE VENTAS
+
+- Se inicia con el informe de ventas por rangosrangos
+PHP
+    *Se modifica InformeVentas.php VAtencion
+    *Se incluye InformeVentasRangos.php TCPDF
+MYSQL
+    *En la tabla facturas_items se cambia el tipo de variable de varchar a double en TotalItem

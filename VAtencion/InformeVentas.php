@@ -247,9 +247,11 @@ print("<body>");
         $css->CerrarTabla();
         $css->CerrarForm();
         
+        ////Informes de ventas Reales
+        
         print("<br>");
         
-        $css->CrearNotificacionRoja("GENERAR INFORME DE VENTAS", 16);
+        $css->CrearNotificacionAzul("GENERAR INFORME DE VENTAS EXACTAS", 16);
     
         $VectorInformes["FormName"]="FrmInformeVentasR";
         $VectorInformes["ActionForm"]="../tcpdf/examples/InformeVentasAdminTotal.php";
@@ -257,6 +259,54 @@ print("<body>");
         $VectorInformes["Target"]="_blank";
         $VectorInformes["Titulo"]="INFORME DE VENTAS TOTALES";
         CrearFormularioInformes($VectorInformes);
+        
+        ////Informes de ventas por rangos
+        
+        $css->CrearNotificacionAzul("GENERAR INFORME DE VENTAS POR RANGOS", 16);
+        $css->CrearForm2("FormVentasXRangos", "../tcpdf/examples/InformeVentasRangos.php", "post", "_blank");
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+            $css->ColTabla("<strong>Tipo de Reporte</strong>", 1);
+            $css->ColTabla("<strong>Fecha Inicial</strong>", 1);
+            $css->ColTabla("<strong>Fecha Final</strong>", 1);
+            $css->ColTabla("<strong>Niveles</strong>", 1);
+            $css->ColTabla("<strong>Generar</strong>", 1);
+            
+        $css->CierraFilaTabla();
+        print("<td>");
+                $css->CrearSelect("CmbTipoReporteRangos", "");
+                    $css->CrearOptionSelect("Corte", "Fecha de Corte", 1);
+                    $css->CrearOptionSelect("Rango", "Por Rango de Fechas", 0);
+                $css->CerrarSelect();
+                print("<br>");
+                $css->CrearInputText("TxtFechaCorteRangos", "date", "Fecha de Corte:<br>", date("Y-m-d"), "Fecha Corte", "black", "", "", 150, 30, 0, 1);
+                print("</td>");
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaIniRango", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaFinRango", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            
+            $css->CrearSelect("CmbNivel", "");
+                $css->CrearOptionSelect(1, "A nivel Departamentos", 1);
+                $css->CrearOptionSelect(2, "Hasta el SubGrupo 1", 0);
+                $css->CrearOptionSelect(3, "Hasta el SubGrupo 2", 0);
+                $css->CrearOptionSelect(4, "Hasta el SubGrupo 3", 0);
+                $css->CrearOptionSelect(5, "Hasta el SubGrupo 4", 0);
+                $css->CrearOptionSelect(6, "Hasta el SubGrupo 5", 0);
+            $css->CerrarSelect();
+            
+            print("</td>");
+            print("<td>");
+            $css->CrearBotonVerde("BtnGenerarInformeRangos", "Generar");
+            print("</td>");
+            
+        $css->FilaTabla(16);
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
     }
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal

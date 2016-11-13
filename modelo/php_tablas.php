@@ -1740,6 +1740,129 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
    
     }
 
+    ///Arme una tabla con los datos de ventas por rangos
+    
+    public function ArmeTablaVentaRangos($Titulo,$CondicionItems,$Vector) {
+             
+        $sql="SELECT MAX(`TotalItem`) as Mayor, MIN(`TotalItem`) as Menor, SUM(`Cantidad`) as TotalItems FROM `facturas_items` WHERE `TotalItem`>1 $CondicionItems";
+        
+        $Consulta=$this->obCon->Query($sql);
+        $Datos=$this->obCon->FetchArray($Consulta);
+        $Mayor=$Datos["Mayor"];
+        
+        if($Mayor>1){
+        
+        $Menor=$Datos["Menor"];
+        $TotalItems=$Datos["TotalItems"];
+        
+        $Rango=$Mayor-$Menor;
+        $NoIntervalos=4;
+        $Amplitud=$Rango/$NoIntervalos;
+        
+        $Intervalo[1]["LimiteInferior"]=$Menor;
+        $Intervalo[1]["LimiteSuperior"]=$Menor+$Amplitud;
+        $Intervalo[1]["Media"]=($Intervalo[1]["LimiteInferior"]+$Intervalo[1]["LimiteSuperior"])/2;
+        $LimiteInferior=$Intervalo[1]["LimiteInferior"];
+        $LimiteSuperior=$Intervalo[1]["LimiteSuperior"];
+        $sql="SELECT SUM(`Cantidad`) as Items FROM `facturas_items` WHERE `TotalItem`>='$LimiteInferior' AND `TotalItem`<='$LimiteSuperior' $CondicionItems";
+        $Consulta=$this->obCon->Query($sql);
+        $Datos=$this->obCon->FetchArray($Consulta);
+        $Intervalo[1]["FrecuenciaABS"]=$Datos["Items"];
+        $Intervalo[1]["FrecuenciaAcumulada"]=$Intervalo[1]["FrecuenciaABS"];
+        if($TotalItems>0){
+            $Intervalo[1]["FrecuenciaABSPorcentual"]=$Intervalo[1]["FrecuenciaABS"]/$TotalItems*100;
+        }else{
+            $Intervalo[1]["FrecuenciaABSPorcentual"]=0;
+        }
+        
+        $Intervalo[1]["FrecuenciaAcumuladaPorcentual"]=$Intervalo[1]["FrecuenciaABSPorcentual"];
+        
+        for($i=2;$i<=$NoIntervalos;$i++){
+            $Intervalo[$i]["LimiteInferior"]=$Intervalo[$i-1]["LimiteSuperior"];
+            $Intervalo[$i]["LimiteSuperior"]=$Intervalo[$i]["LimiteInferior"]+$Amplitud;
+            $Intervalo[$i]["Media"]=($Intervalo[$i]["LimiteInferior"]+$Intervalo[$i]["LimiteSuperior"])/2;
+            $LimiteInferior=$Intervalo[$i]["LimiteInferior"];
+            $LimiteSuperior=$Intervalo[$i]["LimiteSuperior"];
+            $sql="SELECT SUM(`Cantidad`) as Items FROM `facturas_items` WHERE `TotalItem`>='$LimiteInferior' AND `TotalItem`<='$LimiteSuperior' $CondicionItems";
+            $Consulta=$this->obCon->Query($sql);
+            $Datos=$this->obCon->FetchArray($Consulta);
+            $Intervalo[$i]["FrecuenciaABS"]=$Datos["Items"];
+            $Intervalo[$i]["FrecuenciaAcumulada"]=$Intervalo[$i-1]["FrecuenciaAcumulada"]+$Intervalo[$i]["FrecuenciaABS"];
+            $Intervalo[$i]["FrecuenciaABSPorcentual"]=$Intervalo[$i]["FrecuenciaABS"]/$TotalItems*100;
+            $Intervalo[$i]["FrecuenciaAcumuladaPorcentual"]=$Intervalo[$i-1]["FrecuenciaAcumuladaPorcentual"]+$Intervalo[$i]["FrecuenciaABSPorcentual"];
+        }
+        
+        
+        //$sql="SELECT SUM(`Cantidad`) as Items FROM `facturas_items` WHERE `TotalItem`>1 AND $CondicionItems";
+        $tbl ='  
+
+
+        <span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>'.$Titulo.':
+        </em></strong></span><BR><BR>
+
+
+        <table cellspacing="1" cellpadding="2" border="1"  align="center" >
+          <tr> 
+            <th><h3>MAYOR</h3></th>
+                <th><h3>MINIMO</h3></th>
+                <th><h3>RANGO</h3></th>
+            <th><h3>INTERVALOS</h3></th>
+                <th><h3>AMPLITUD</h3></th>
+
+          </tr >
+          <tr> 
+            <td>'.number_format($Mayor).'</td>
+            <td>'.number_format($Menor).'</td>
+            <td>'.number_format($Rango).'</td>
+            <td>'.number_format($NoIntervalos).'</td>
+            <td>'.number_format($Amplitud).'</td>
+
+          </tr >
+        </table>
+        <br><br>
+        <table cellspacing="1" cellpadding="2" border="0" align="center" >
+          <tr> 
+            <th><h3>No.</h3></th>
+            <th><h3>LIM INF</h3></th>
+            <th><h3>LIM SUP</h3></th>
+            <th><h3>MEDIA</h3></th>
+            <th><h3>fabs</h3></th>
+            <th><h3>Frec</h3></th>
+            <th><h3>fabs %</h3></th>
+            <th><h3>Frec %</h3></th>
+          </tr >
+
+        ';
+        $h=0;
+        for($i=1;$i<=$NoIntervalos;$i++){
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+            $tbl.='<tr align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+            <td >'.number_format($i).'</td>
+            <td>'.number_format($Intervalo[$i]["LimiteInferior"]).'</td>
+            <td>'.number_format($Intervalo[$i]["LimiteSuperior"]).'</td>
+            <td>'.number_format($Intervalo[$i]["Media"]).'</td>
+            <td>'.number_format($Intervalo[$i]["FrecuenciaABS"]).'</td>
+            <td>'.number_format($Intervalo[$i]["FrecuenciaAcumulada"]).'</td>
+            <td>'.round($Intervalo[$i]["FrecuenciaABSPorcentual"],2).'%</td>
+            <td>'.round($Intervalo[$i]["FrecuenciaAcumuladaPorcentual"],2).'%</td>
+          </tr >';
+        }
+
+        $tbl.="</table><br><br><br><br>";
+        }else{
+           $tbl=""; 
+        }
+        
+    return($tbl);
+}
+    
+    
 // FIN Clases	
 }
 

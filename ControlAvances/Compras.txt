@@ -1,9 +1,0 @@
-2016-11-13
-MODULO DE INFORMES DE COMPRAS
-
-- Se inicia con el informe de compras
-PHP
-    *Se incluye informeCompras.php VAtencion
-    *Se incluye informeComprasPDF.php TCPDF
-MYSQL
-    *En la tabla FormatosCalidad se agrega el registro 18 con el informe de compras

@@ -5325,6 +5325,8 @@ public function VerificaPermisos($VectorPermisos) {
         $Results=mysql_fetch_assoc($Consulta);
         return ($Results);
     } 
+    
+    
 //////////////////////////////Fin	
 }
 	
