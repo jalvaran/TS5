@@ -176,7 +176,7 @@ if($idActividad>0){
         
     }
     $css->CrearImageLink($Link, $Image, "_self",80,80);
-    
+    $css->CrearImageLink($myPage, "../images/home.png", "_self",80,80);
     if($DatosActividad["Estado"]=="EJECUCION"){
         $css->CrearForm2("FrmPausas", $myPage, "get", "_self");
         $css->CrearInputText("idMaquina", "hidden", "", $idMaquina, "", "", "", "", "", "", 0, 0);

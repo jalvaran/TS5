@@ -51,5 +51,16 @@ if(!empty($_REQUEST["BtnEditarActividad"])){
     header("location:$myPage?TxtFechaCronograma=$FechaInicioPlaneado");
 }
 
+if(!empty($_REQUEST["BtnEliminarActividad"])){
+    
+    $obVenta=new ProcesoVenta($idUser);
+    $FechaActual=$_REQUEST["TxtFechaActual"];
+    $IDAct=$obVenta->normalizar($_REQUEST["idActDel"]);
+    
+    $obVenta->BorraReg("produccion_actividades", "ID", $IDAct);
+    //$obVenta->CerrarCon();
+    header("location:$myPage?TxtFechaCronograma=$FechaActual");
+}
+
 ///////////////fin
 ?>

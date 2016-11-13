@@ -80,6 +80,7 @@ $Titulo="Crear Actividad";
                 if($DatosHorasCrono["Hora"]==$HoraInicioPlaneado+1){
                     $selected=1;
                 }
+                $Paro=0; //Se coloca para que muestre todas las horas
                 if($Paro==0){
                     $css->CrearOptionSelect($DatosHorasCrono["Hora"], $DatosHorasCrono["Hora"], $selected);
                 }
@@ -169,6 +170,14 @@ $Titulo="Crear Actividad";
         
         $css->CrearBotonConfirmado("BtnEditarActividad", "Editar Actividad");
         $css->CerrarForm();
-	 
+	
+        if($DatosActividad["Estado"]=="NO_INICIADA"){
+            $css->CrearForm2("FrmEliminarActividad",$myPage,"post","_self");
+            $css->CrearInputText("idActDel","hidden","",$idEdit,"","","","",0,0,0,0);
+            $css->CrearInputText("TxtFechaActual","hidden","",$FechaActual,"","","","",0,0,0,0);
+            $css->CrearBotonConfirmado("BtnEliminarActividad", "Eliminar Actividad");
+            $css->CerrarForm();
+        }
+        
 	 $css->CerrarCuadroDeDialogo(); 
     }
