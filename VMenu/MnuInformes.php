@@ -49,7 +49,7 @@ include_once("../sesiones/php_control.php");
 	$css->IniciaMenu("Informes"); 
 	$css->MenuAlfaIni("Financieros");
 		$css->SubMenuAlfa("Reporte de Ventas",2);
-		$css->SubMenuAlfa("Otros",3);
+		$css->SubMenuAlfa("Reporte de Compras",3);
 		
 	$css->MenuAlfaFin();
 	
@@ -63,7 +63,7 @@ include_once("../sesiones/php_control.php");
 			$css->SubTabs("../VAtencion/InformeVentas.php","_blank","../images/infventas.png","Informe de Ventas");
 		$css->FinTabs();
 		$css->NuevaTabs(3);
-			$css->SubTabs("../VAtencion/OtrosInformes.php","_blank","../images/otrosinformes.png","Otros Informes");
+			$css->SubTabs("../VAtencion/InformeCompras.php","_blank","../images/otrosinformes.png","Informe de Compras");
 		$css->FinTabs();
 		
 	$css->FinMenu(); 
