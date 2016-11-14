@@ -156,6 +156,9 @@ $Vector["TablaAbono"]="abonos_libro";
 $Vector["Procesador"]="procesadores/ProcesaCuentasXPagar.php";
 
 $obTabla->DibujeTabla($Vector);
+
+//$obTabla->DibujaCuentasXPagar($Vector);
+
 $css->CerrarDiv();//Cerramos contenedor para agregar items
 
 /*

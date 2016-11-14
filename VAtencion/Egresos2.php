@@ -19,7 +19,7 @@ $TipoEgresos="";
 		$TipoEgresos=$_REQUEST['TxtIdPre'];
 	}
 
-include_once("procesaEgresos.php");
+include_once("procesadores/procesaEgresos.php");
 	
 	
 ?>

@@ -1643,7 +1643,7 @@ public function CalculePesoRemision($idCotizacion)
             $Fecha=$DatosComprobante["Fecha"];
             
             $tab="librodiario";
-            $NumRegistros=27;
+            $NumRegistros=28;
             $CuentaPUC=$DatosComprobante["CuentaPUC"];
             $NombreCuenta=$DatosComprobante["NombreCuenta"];
             $DatosCliente=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosComprobante["Tercero"]);
@@ -1677,6 +1677,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[24]="idCentroCosto";		$Valores[24]=$DatosComprobante["CentroCostos"];
             $Columnas[25]="idEmpresa";                  $Valores[25]=$DatosCentro["EmpresaPro"];
             $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
+            $Columnas[27]="Num_Documento_Externo";      $Valores[27]=$DatosComprobante["NumDocSoporte"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             
@@ -3297,6 +3298,8 @@ public function CalculePesoRemision($idCotizacion)
                     $NumEgreso=$tabla->ObtenerMAX("notascontables","ID", 1, "");
                     $DocumentoSoporte="NotaContable";
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$NumEgreso";
+                    
+                    
                 }
                 
                 

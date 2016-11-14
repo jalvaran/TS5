@@ -21,5 +21,18 @@ MODULO DE VENTAS
 PHP
     *Se modifica InformeVentas.php VAtencion
     *Se incluye InformeVentasRangos.php TCPDF
+    *Se modifica php_tablas.php
+    *Se modifica MnuInformes.php
 MYSQL
     *En la tabla facturas_items se cambia el tipo de variable de varchar a double en TotalItem
+
+MODULO DE CUENTAS X PAGAR
+PHP
+    *Se modifica php_conexion.php clase: RegistreComprobanteContable(),  agregando el documento soporte externo al libro diario 
+    *Se modifica Egresos2.php
+    *Se Corta procesaEgresos.php de la carpera VAtencion y se pega en VAtencion/procesadores
+    *Se Modifica procesaEgresos.php en VAtencion/procesadores
+    *Se Modifica procesaCompras.php en VAtencion/procesadores
+MYSQL
+    *En la tabla librodiario se agrega columna Num_Documento_Externo var(45), alli se registrará el documento externo de una cuenta x pagar 
+ 

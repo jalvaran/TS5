@@ -165,7 +165,7 @@
 		
 		$tab="librodiario";
 		//$NumEgreso=$tabla->ObtenerMAX("egresos","idEgresos", 1, "");
-		$NumRegistros=26;
+		$NumRegistros=27;
 		$CuentaPUC=$CuentaDestino;  			 /////Servicios
 		
 		$DatosCuenta=$tabla->DevuelveValores("subcuentas","PUC",$CuentaPUC);
@@ -200,7 +200,8 @@
 		$Columnas[23]="Concepto";		$Valores[23]=$Concepto;
 		$Columnas[24]="idCentroCosto";		$Valores[24]=$idCentroCostos;
 		$Columnas[25]="idEmpresa";              $Valores[25]=$idEmpresa;
-							
+		$Columnas[26]="Num_Documento_Externo";  $Valores[26]=$NumFact;	
+                
 		$tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 		
 		/////////////////////////////////////////////////////////////////
@@ -215,7 +216,7 @@
 		}
 		if($_POST["TipoPago"]=="Programado"){
 			$CuentaPUC="2205";
-			$NombreCuenta="Proveedores Nacionales $RazonSocial $NIT";
+			$NombreCuenta="Proveedores Nacionales ";
 		}
 		
 		

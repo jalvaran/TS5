@@ -1042,10 +1042,10 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     
 public function DibujaCuentasXPagar($VarCuentas)  {
     $this->css=new CssIni("");
-    
-    $sql="SELECT (sum(`Debito`)-sum(`Credito`)) as Saldos, `Tercero_Identificacion` as Tercero, CuentaPUC, "
+    $TipoAbono=$VarCuentas["Abonos"];
+    $sql="SELECT `Neto` as Saldos, `Tercero_Identificacion` as Tercero, CuentaPUC, "
             . "`NombreCuenta`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`idLibroDiario`  FROM `librodiario` "
-            . "WHERE `CuentaPUC` like '2%' GROUP BY `CuentaPUC`, `Tercero_Identificacion` ";
+            . "WHERE `CuentaPUC` like '2%' AND `Estado`='' AND `Neto`<0 GROUP BY `CuentaPUC`, `Tercero_Identificacion` ";
     $Datos=$this->obCon->Query($sql);
     
     $this->css->CrearTabla();
@@ -1059,13 +1059,18 @@ public function DibujaCuentasXPagar($VarCuentas)  {
     echo "<td><strong>AGREGAR</strong></td>";
     
     while($DatosCuentas=$this->obCon->FetchArray($Datos)){
+        $idLibro=$DatosCuentas["idLibroDiario"];
+        $AbonosActuales=$this->obCon->Sume("abonos_libro", "Cantidad", "WHERE idLibroDiario='$idLibro' AND TipoAbono='$TipoAbono'");
+        
+        $SaldoTotal=($DatosCuentas["Saldos"]*(-1))-$AbonosActuales;
         $this->css->FilaTabla(12);
+        
         echo"<td>$DatosCuentas[CuentaPUC]</td>";
         echo"<td>$DatosCuentas[NombreCuenta]</td>";
         echo"<td>$DatosCuentas[Tipo_Documento_Intero]</td>";
         echo"<td>$DatosCuentas[Num_Documento_Interno]</td>";
         echo"<td>$DatosCuentas[Tercero]</td>";
-        echo"<td>$DatosCuentas[Saldos]</td>";
+        echo"<td>$SaldoTotal</td>";
         echo"<td>$DatosCuentas[idLibroDiario]</td>";
     }
     
