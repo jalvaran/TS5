@@ -121,6 +121,17 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
       $obVenta->CrearTablaBodegaSucursal($ID, $VectorB);   
         
     }
+    
+    /*
+     * Si se crea una promocion
+     */
+    if($tab=="titulos_promociones"){
+      $Vector["Tabla"]=$tab;
+      $ID=$obTabla->ObtengaAutoIncrement($Vector);
+      $ID=$ID-1;
+      $obVenta->CrearTablaListadoTitulos($ID, "");   
+        
+    }
    header("location:../$tab.php");
 }
 ?>

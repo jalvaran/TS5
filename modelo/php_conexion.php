@@ -5329,7 +5329,24 @@ public function VerificaPermisos($VectorPermisos) {
         return ($Results);
     } 
     
-    
+    /*
+      * Crear una Tabla de un listado de titulos 
+      */
+     public function CrearTablaListadoTitulos($idPromocion,$Vector){
+        $NombreTabla="titulos_listados_promocion_$idPromocion";
+        
+        $sql="CREATE TABLE IF NOT EXISTS `$NombreTabla` (
+            
+            `Mayor1` int(11) NOT NULL,
+            `Mayor2` int(11) NOT NULL,
+            `Adicional` int(11) NOT NULL,
+            `idColaborador` int(11) NOT NULL,
+            `idCliente` int(11) NOT NULL,
+            PRIMARY KEY (`Mayor1`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;";
+        $this->Query($sql);
+        
+     }
 //////////////////////////////Fin	
 }
 	

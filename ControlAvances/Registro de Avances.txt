@@ -47,4 +47,22 @@ PHP
 MYSQL
     *Se deben eliminar las tildes de la tabla subcuentas 
     UPDATE `subcuentas` SET `Nombre`=replace(`Nombre`,'á','a'), `Nombre`=replace(`Nombre`,'é','e'), `Nombre`=replace(`Nombre`,'í','i'), `Nombre`=replace(`Nombre`,'ó','o'), `Nombre`=replace(`Nombre`,'ú','u')
-    
+  
+2016-12-02
+
+TITULOS PARA RIFAS
+
+MYSQL
+    *Se agrega tabla titulos_promociones
+    *Se Agrega tabla titulos_listados_promocion_1
+
+PHP
+    *Se Agrega VAtencion/titulos_promociones.php
+    *Se Agrega VAtencion/Configuraciones/titulos_promociones.ini.php
+    *Se modifica Procesadores/procesaInsercion.php
+    *Se modifica Modelo/php_conexion.php, se agrega funcion CrearTablaListadoTitulos($idPromocion,$Vector) para crear las tablas de los listados,
+    Despues de insertar una nueva promocion
+    *Se Agrega VAtencion/listados_titulos.php
+    *Se Agrega VAtencion/Configuraciones/listados_titulos.ini.php
+    *Se Agrega VAtencion/Procesadores/procesalistados_Titulos.ini.php
+    *Se Modifica MnuTitulos.php
