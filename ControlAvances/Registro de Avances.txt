@@ -35,4 +35,16 @@ PHP
     *Se Modifica procesaCompras.php en VAtencion/procesadores
 MYSQL
     *En la tabla librodiario se agrega columna Num_Documento_Externo var(45), alli se registrará el documento externo de una cuenta x pagar 
- 
+
+2016-11-18 
+INFORMES CONTABLES
+    Objetivo: Mostrar de forma ordenada los informes contables
+
+PHP
+    *Se modifica php_tablas.php agregando ArmeTablaBalanceComprobacion();
+    *Se Modifica balancecomprobacion.php en TCPDF
+
+MYSQL
+    *Se deben eliminar las tildes de la tabla subcuentas 
+    UPDATE `subcuentas` SET `Nombre`=replace(`Nombre`,'á','a'), `Nombre`=replace(`Nombre`,'é','e'), `Nombre`=replace(`Nombre`,'í','i'), `Nombre`=replace(`Nombre`,'ó','o'), `Nombre`=replace(`Nombre`,'ú','u')
+    

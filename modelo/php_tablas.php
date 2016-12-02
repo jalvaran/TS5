@@ -1866,8 +1866,224 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
         
     return($tbl);
 }
+   
+///Arme una tabla con el balance de comprobacion 2016-11-18  JAAV
     
-    
+    public function ArmeTablaBalanceComprobacion($Titulo,$Condicion,$Condicion2,$Vector) {
+             
+        
+        
+        $tbl='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
+          <tr> 
+            <th><h3>CUENTA</h3></th>
+            <th><h3>NOMBRE</h3></th>
+            <th><h3>SALDO ANTERIOR</h3></th>
+            <th><h3>DEBITO</h3></th>
+            <th><h3>CREDITO</h3></th>
+            <th><h3>NUEVO SALDO</h3></th>
+
+          </tr >
+          </table>
+        ';
+        
+        //Guardo en un Vector los resultados de la consulta por Clase
+        
+        
+        $sql="SELECT SUBSTRING(`CuentaPUC`,1,1) AS Clase ,sum(`Debito`) as Debitos, sum(`Credito`) as Creditos, sum(`Neto`) as Neto, (SELECT SUM(`Neto`) as SaldoTotal FROM `librodiario` $Condicion2  SUBSTRING(`CuentaPUC`,1,1)=Clase) AS Total FROM `librodiario` $Condicion GROUP BY SUBSTRING(`CuentaPUC`,1,1)";
+        $Consulta=$this->obCon->Query($sql);
+        $i=0;
+        $TotalDebitos=0;
+        $TotalCreditos=0;
+        $Total=0;
+        while($ClaseCuenta=$this->obCon->FetchArray($Consulta)){
+            $TotalDebitos=$TotalDebitos+$ClaseCuenta["Debitos"];
+            $TotalCreditos=$TotalCreditos+$ClaseCuenta["Creditos"];
+            $Total=$Total+$ClaseCuenta["Total"];
+            $i++;
+            $Clase=$ClaseCuenta["Clase"];
+            $NoClasesCuentas[$i]=$ClaseCuenta["Clase"];
+            $DatosCuenta=  $this->obCon->DevuelveValores("clasecuenta", "PUC", $Clase);
+            $Balance["ClaseCuenta"][$Clase]["Nombre"]=$DatosCuenta["Clase"];
+            $Balance["ClaseCuenta"][$Clase]["Clases"]=$ClaseCuenta["Clase"];
+            $Balance["ClaseCuenta"][$Clase]["Debitos"]=$ClaseCuenta["Debitos"];
+            $Balance["ClaseCuenta"][$Clase]["Creditos"]=$ClaseCuenta["Creditos"];
+            $Balance["ClaseCuenta"][$Clase]["NuevoSaldo"]=$ClaseCuenta["Debitos"]-$ClaseCuenta["Creditos"]+$ClaseCuenta["Total"];
+            $Balance["ClaseCuenta"][$Clase]["SaldoAnterior"]=$ClaseCuenta["Total"];
+        }
+        $Diferencia=$TotalDebitos-$TotalCreditos;
+        //Guardo en un Vector los resultados de la consulta por Grupo
+        
+        $sql="SELECT SUBSTRING(`CuentaPUC`,1,2) AS Grupo ,sum(`Debito`) as Debitos, sum(`Credito`) as Creditos,(SELECT SUM(`Neto`) as SaldoTotal FROM `librodiario` $Condicion2  SUBSTRING(`CuentaPUC`,1,2)=Grupo) AS Total FROM `librodiario` $Condicion GROUP BY SUBSTRING(`CuentaPUC`,1,2)";
+        $Consulta=$this->obCon->Query($sql);
+        $i=0;
+        
+        while($ClaseCuentaGrupo=$this->obCon->FetchArray($Consulta)){
+            $i++;
+            $Grupo=$ClaseCuentaGrupo["Grupo"];
+            $NoGrupos[$i]=$ClaseCuentaGrupo["Grupo"];
+            $DatosCuenta=  $this->obCon->DevuelveValores("gupocuentas", "PUC", $Grupo);
+            $Balance["GrupoCuenta"][$Grupo]["Nombre"]=$DatosCuenta["Nombre"];
+            $Balance["GrupoCuenta"][$Grupo]["Grupos"]=$ClaseCuentaGrupo["Grupo"];
+            $Balance["GrupoCuenta"][$Grupo]["Debitos"]=$ClaseCuentaGrupo["Debitos"];
+            $Balance["GrupoCuenta"][$Grupo]["Creditos"]=$ClaseCuentaGrupo["Creditos"];
+            $Balance["GrupoCuenta"][$Grupo]["NuevoSaldo"]=$ClaseCuentaGrupo["Debitos"]-$ClaseCuentaGrupo["Creditos"]+$ClaseCuentaGrupo["Total"];
+            $Balance["GrupoCuenta"][$Grupo]["SaldoAnterior"]=$ClaseCuentaGrupo["Total"];
+        }
+        
+        //Guardo en un Vector los resultados de la consulta por Cuenta
+        
+        $sql="SELECT SUBSTRING(`CuentaPUC`,1,4) AS Cuenta ,sum(`Debito`) as Debitos, sum(`Credito`) as Creditos,(SELECT SUM(`Neto`) as SaldoTotal FROM `librodiario` $Condicion2  SUBSTRING(`CuentaPUC`,1,4)=Cuenta) as Total FROM `librodiario` $Condicion GROUP BY SUBSTRING(`CuentaPUC`,1,4)";
+        $Consulta=$this->obCon->Query($sql);
+        $i=0;
+        
+        while($ClaseCuentaCuenta=$this->obCon->FetchArray($Consulta)){
+            $i++;
+            $Cuenta=$ClaseCuentaCuenta["Cuenta"];
+            $NoCuentas[$i]=$ClaseCuentaCuenta["Cuenta"];
+            $DatosCuenta=  $this->obCon->DevuelveValores("cuentas", "idPUC", $Cuenta);
+            $Balance["Cuenta"][$Cuenta]["Nombre"]=$DatosCuenta["Nombre"];
+            $Balance["Cuenta"][$Cuenta]["Cuentas"]=$ClaseCuentaCuenta["Cuenta"];
+            $Balance["Cuenta"][$Cuenta]["Debitos"]=$ClaseCuentaCuenta["Debitos"];
+            $Balance["Cuenta"][$Cuenta]["Creditos"]=$ClaseCuentaCuenta["Creditos"];
+            $Balance["Cuenta"][$Cuenta]["NuevoSaldo"]=$ClaseCuentaCuenta["Debitos"]-$ClaseCuentaCuenta["Creditos"]+$ClaseCuentaCuenta["Total"];
+            $Balance["Cuenta"][$Cuenta]["SaldoAnterior"]=$ClaseCuentaCuenta["Total"];
+        }
+        
+        //Guardo en un Vector los resultados de la consulta por SubCuenta
+        
+        $sql="SELECT `CuentaPUC` AS Subcuenta , sum(`Debito`) as Debitos, sum(`Credito`) as Creditos, sum(`Neto`) as NuevoSaldo,(SELECT SUM(`Neto`) as SaldoTotal FROM `librodiario` $Condicion2  `CuentaPUC` = Subcuenta) as Total FROM `librodiario` $Condicion AND LENGTH(`CuentaPUC`)>=5 GROUP BY `CuentaPUC` ";
+        $Consulta=$this->obCon->Query($sql);
+        $i=0;
+        
+        while($ClaseCuentaSub=$this->obCon->FetchArray($Consulta)){
+            $i++;
+            $SubCuenta=$ClaseCuentaSub["Subcuenta"];
+            $NoSubCuentas[$i]=$ClaseCuentaSub["Subcuenta"];
+            $sql="SELECT Nombre FROM subcuentas WHERE PUC='$SubCuenta' LIMIT 1";
+            $Datos=  $this->obCon->Query($sql);
+            $DatosCuenta=$this->obCon->FetchArray($Datos);
+            //$DatosCuenta=  $this->obCon->DevuelveValores("subcuentas", "PUC", `$SubCuenta`);
+            $Balance["SubCuenta"][$SubCuenta]["Nombre"]=$DatosCuenta["Nombre"];
+            $Balance["SubCuenta"][$SubCuenta]["Subcuenta"]=$ClaseCuentaSub["Subcuenta"];
+            $Balance["SubCuenta"][$SubCuenta]["Debitos"]=$ClaseCuentaSub["Debitos"];
+            $Balance["SubCuenta"][$SubCuenta]["Creditos"]=$ClaseCuentaSub["Creditos"];
+            $Balance["SubCuenta"][$SubCuenta]["NuevoSaldo"]=$ClaseCuentaSub["Debitos"]-$ClaseCuentaSub["Creditos"]+$ClaseCuentaSub["Total"];
+            $Balance["SubCuenta"][$SubCuenta]["SaldoAnterior"]=$ClaseCuentaSub["Total"];
+        }
+        
+        $h=0;
+        $tbl.='<table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+        if(isset($NoClasesCuentas)){
+            foreach($NoClasesCuentas as $ClasesCuentas){
+                if($Balance["ClaseCuenta"][$ClasesCuentas]["Creditos"]>0 or $Balance["ClaseCuenta"][$ClasesCuentas]["Debitos"]>0){
+                    if($h==0){
+                    $Back="#f2f2f2";
+                        $h=1;
+                    }else{
+                        $Back="white";
+                        $h=0;
+                    }
+                    $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+                    <td align="left"><strong><h1>'.$Balance["ClaseCuenta"][$ClasesCuentas]["Clases"].'</h1></strong></td>
+                    <td align="center"><strong><h1>'.$Balance["ClaseCuenta"][$ClasesCuentas]["Nombre"].'</h1></strong></td>    
+                    <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["SaldoAnterior"]).'</h1></strong></td>  
+                    <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["Debitos"]).'</h1></strong></td>
+                    <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["Creditos"]).'</h1></strong></td>
+                    <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["NuevoSaldo"]).'</h1></strong></td>
+
+                    </tr >';
+
+
+                
+               //Consulto los valores dentro del Grupo
+                        
+               foreach($NoGrupos as $GruposCuentas){
+                   if(substr($Balance["GrupoCuenta"][$GruposCuentas]["Grupos"], 0, 1)==$Balance["ClaseCuenta"][$ClasesCuentas]["Clases"]){
+                       if($h==0){
+                            $Back="#f2f2f2";
+                            $h=1;
+                        }else{
+                            $Back="white";
+                            $h=0;
+                        }
+                        $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+                        <td align="left"><h2>'.$Balance["GrupoCuenta"][$GruposCuentas]["Grupos"].'</h2></td>
+                        <td align="center"><strong>'.$Balance["GrupoCuenta"][$GruposCuentas]["Nombre"].'</strong></td>
+                        <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["SaldoAnterior"]).'</h2></td>
+                        <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["Debitos"]).'</h2></td>
+                        <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["Creditos"]).'</h2></td>
+                        <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["NuevoSaldo"]).'</h2></td>
+
+                        </tr >';
+                   
+                   
+                   //Consulto los valores dentro de la Cuenta
+                   
+                   foreach($NoCuentas as $Cuentas){
+                    if(substr($Balance["Cuenta"][$Cuentas]["Cuentas"], 0, 2)==$Balance["GrupoCuenta"][$GruposCuentas]["Grupos"]){
+                        if($h==0){
+                             $Back="#f2f2f2";
+                             $h=1;
+                         }else{
+                             $Back="white";
+                             $h=0;
+                         }
+                         $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+                         <td align="left"><h3>'.$Balance["Cuenta"][$Cuentas]["Cuentas"].'</h3></td>
+                         <td align="center"><strong>'.$Balance["Cuenta"][$Cuentas]["Nombre"].'</strong></td>
+                         <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["SaldoAnterior"]).'</h3></td> 
+                         <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["Debitos"]).'</h3></td>
+                         <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["Creditos"]).'</h3></td>
+                         <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["NuevoSaldo"]).'</h3></td>
+
+                         </tr >';
+                         
+                         //Consulto los valores dentro de la Cuenta
+                   
+                   foreach($NoSubCuentas as $SubCuentas){
+                    if(substr($Balance["SubCuenta"][$SubCuentas]["Subcuenta"], 0, 4)==$Balance["Cuenta"][$Cuentas]["Cuentas"]){
+                        if($h==0){
+                             $Back="#f2f2f2";
+                             $h=1;
+                         }else{
+                             $Back="white";
+                             $h=0;
+                         }
+                         $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+                         <td align="left">'.$Balance["SubCuenta"][$SubCuentas]["Subcuenta"].'</td>
+                         <td align="center"><strong>'.$Balance["SubCuenta"][$SubCuentas]["Nombre"].'</strong></td>
+                         <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["SaldoAnterior"]).'</td>
+                         <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["Debitos"]).'</td>
+                         <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["Creditos"]).'</td>
+                         <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["NuevoSaldo"]).'</td>
+
+                         </tr >';
+                    }
+                   }
+                         
+                    }
+                   }
+                   }
+               } 
+            }
+            }
+        }
+        $tbl.="</table>";
+        $tbl.='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
+          <tr> 
+            <th colspan="3"><h3>TOTALES:</h3></th>
+            
+            <th align="rigth"><h3>'.number_format($TotalDebitos).'</h3></th>
+            <th align="rigth"><h3>'.number_format($TotalCreditos).'</h3></th>
+            <th align="rigth"><h3>'.number_format($Diferencia).'</h3></th>
+
+          </tr >
+          </table>
+        ';
+    return($tbl);
+}
+   
+
 // FIN Clases	
 }
 
