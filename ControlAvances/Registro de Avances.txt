@@ -55,14 +55,21 @@ TITULOS PARA RIFAS
 MYSQL
     *Se agrega tabla titulos_promociones
     *Se Agrega tabla titulos_listados_promocion_1
+    *Se Modifica la tabla colaboradores
+    *Se Crea Tabla titulos_asignaciones
 
 PHP
     *Se Agrega VAtencion/titulos_promociones.php
     *Se Agrega VAtencion/Configuraciones/titulos_promociones.ini.php
     *Se modifica Procesadores/procesaInsercion.php
-    *Se modifica Modelo/php_conexion.php, se agrega funcion CrearTablaListadoTitulos($idPromocion,$Vector) para crear las tablas de los listados,
-    Despues de insertar una nueva promocion
+    *Se modifica Modelo/php_conexion.php, se agrega funcion 
+    CrearTablaListadoTitulos($idPromocion,$Vector) 
+    AsignarTitulosColaborador();
     *Se Agrega VAtencion/listados_titulos.php
     *Se Agrega VAtencion/Configuraciones/listados_titulos.ini.php
     *Se Agrega VAtencion/Procesadores/procesalistados_Titulos.ini.php
     *Se Modifica MnuTitulos.php
+    *Se Agrega tcpdf/examples/ImprimaAsignacionTitulos.php
+    *Se Agrega VMenu/MnuTitulos.php
+    *Se Agrega VAtencion/titulos_asignaciones.php
+    *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php

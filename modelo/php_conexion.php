@@ -5341,12 +5341,50 @@ public function VerificaPermisos($VectorPermisos) {
             `Mayor2` int(11) NOT NULL,
             `Adicional` int(11) NOT NULL,
             `idColaborador` int(11) NOT NULL,
+            `NombreColaborador` varchar(60) COLLATE utf8_spanish2_ci NOT NULL,
+            `FechaEntregaColaborador` date NOT NULL,
+            `idActa` bigint(20) NOT NULL,
+            `TotalPagoComisiones` bigint(20) NOT NULL,
             `idCliente` int(11) NOT NULL,
+            `NombreCliente` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
+            `FechaVenta` date NOT NULL,
+            `TotalAbonos` bigint(20) NOT NULL,
+            `Saldo` bigint(20) NOT NULL,
+            `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             PRIMARY KEY (`Mayor1`)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;";
         $this->Query($sql);
         
      }
+     
+     
+     //Asignar Titulos a un Colaborador
+   public function AsignarTitulosColaborador($TablaTitulos,$Fecha,$Desde,$Hasta,$idPromocion,$idColaborador,$Observaciones,$VectorTitulos) {
+        $DatosColaborador=$this->DevuelveValores("colaboradores", "Identificacion", $idColaborador);
+        $NombreColaborador=$DatosColaborador["Nombre"];
+                
+        $tab="titulos_asignaciones";
+        $NumRegistros=7;
+
+        $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
+        $Columnas[1]="Promocion";           $Valores[1]=$idPromocion;
+        $Columnas[2]="Desde";               $Valores[2]=$Desde;
+        $Columnas[3]="Hasta";               $Valores[3]=$Hasta;
+        $Columnas[4]="idColaborador";       $Valores[4]=$idColaborador;
+        $Columnas[5]="NombreColaborador";   $Valores[5]=$NombreColaborador;
+        $Columnas[6]="Observaciones";       $Valores[6]=$Observaciones;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idAsignacion=$this->ObtenerMAX($tab, "ID", 1, "");
+        
+        $sql="UPDATE $TablaTitulos SET FechaEntregaColaborador='$Fecha', idColaborador='$idColaborador',"
+                . " NombreColaborador='$NombreColaborador', idActa='$idAsignacion' "
+                . "WHERE Mayor1 >='$Desde' AND Mayor1 <='$Hasta'";
+        $this->Query($sql);
+        
+        return($idAsignacion);
+    } 
 //////////////////////////////Fin	
 }
 	
