@@ -5385,6 +5385,51 @@ public function VerificaPermisos($VectorPermisos) {
         
         return($idAsignacion);
     } 
+    
+    //Realizar la venta de un titulo
+   public function RegistreVentaTitulo($Fecha,$idPromocion,$Mayor,$idColaborador,$idCliente,$VectorTitulos) {
+       $Consulta=  $this->ConsultarTabla("titulos_ventas"," WHERE Mayor1='$Mayor' AND Promocion='$idPromocion'");
+       $DatosVenta=  $this->FetchArray($Consulta);
+       if($DatosVenta["Mayor1"]==""){
+       $TablaTitulos="titulos_listados_promocion_$idPromocion";
+        $DatosTitulo=$this->DevuelveValores($TablaTitulos, "Mayor1", $Mayor);
+        $DatosColaborador=$this->DevuelveValores("colaboradores", "Identificacion", $idColaborador);
+        $DatosCliente=$this->DevuelveValores("clientes", "Num_Identificacion", $idCliente);
+        $NombreColaborador=$DatosColaborador["Nombre"];
+        $DatosPromocion=$this->DevuelveValores("titulos_promociones", "ID", $idPromocion);
+        
+        $tab="titulos_ventas";
+        $NumRegistros=13;
+
+        $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
+        $Columnas[1]="Promocion";           $Valores[1]=$idPromocion;
+        $Columnas[2]="Mayor1";              $Valores[2]=$Mayor;
+        $Columnas[3]="Mayor2";              $Valores[3]=$DatosTitulo["Mayor2"];
+        $Columnas[4]="Adicional";           $Valores[4]=$DatosTitulo["Adicional"];
+        $Columnas[5]="Valor";               $Valores[5]=$DatosPromocion["Valor"];
+        $Columnas[6]="TotalAbonos";         $Valores[6]=0;
+        $Columnas[7]="Saldo";               $Valores[7]=$DatosPromocion["Valor"];
+        $Columnas[8]="idCliente";           $Valores[8]=$idCliente;
+        $Columnas[9]="NombreCliente";       $Valores[9]=$DatosCliente["RazonSocial"];
+        $Columnas[10]="idColaborador";      $Valores[10]=$idColaborador;
+        $Columnas[11]="NombreColaborador";  $Valores[11]=$NombreColaborador;
+        $Columnas[12]="idUsuario";          $Valores[12]=  $this->idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idVenta=$this->ObtenerMAX($tab, "ID", 1, "");
+        
+        $sql="UPDATE $TablaTitulos SET FechaVenta='$Fecha', idColaborador='$idColaborador',"
+                . " NombreColaborador='$NombreColaborador', idCliente='$idCliente', NombreCliente='$DatosCliente[RazonSocial]',"
+                . " Saldo=$DatosPromocion[Valor] "
+                . "WHERE Mayor1 ='$Mayor'";
+        $this->Query($sql);
+        
+        return($idVenta);
+       }else{
+         $idVenta="E";
+        return($idVenta); 
+       }
+    } 
 //////////////////////////////Fin	
 }
 	

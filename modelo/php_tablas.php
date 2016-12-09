@@ -2083,6 +2083,195 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     return($tbl);
 }
    
+//Clase para dibujar una caja de texto para verificar si un titulo ya fue vendido
+//
+
+//Funcion para Dibujar un item buscado en las tablas de ventas
+
+public function DibujeVerificacionTitulo($myPage,$Vector){
+    $this->css=new CssIni("");
+    $this->css->CrearDiv("DivBusquedaTitulo", "", "center", 1, 1);
+    $this->css->CrearForm2("FrmVerDisponibilidadTitulo", $myPage, "post", "_self");
+    $this->css->CrearTabla();
+    $this->css->FilaTabla(16);
+    $this->css->ColTabla("<strong>Verificar un Titulo</strong>", 3);
+    $this->css->CierraFilaTabla();
+    $this->css->FilaTabla(16);
+    print("<td>");
+    $VectorSelect["Nombre"]="CmbPromocion";
+    $VectorSelect["Evento"]="";
+    $VectorSelect["Funcion"]="";
+    $VectorSelect["Required"]=1;
+    $this->css->CrearSelect2($VectorSelect);
+    $this->css->CrearOptionSelect("", "Seleccione una promocion", 0);
+        $Datos=$this->obCon->ConsultarTabla("titulos_promociones", " WHERE Activo='SI'");
+        while($DatosPromociones=$this->obCon->FetchArray($Datos)){
+            $javascript="onclick='CambiarMaxMin(`TxtMayor`,`$DatosPromociones[MayorInicial]`,`$DatosPromociones[MayorFinal]`);'";
+            $this->css->CrearOptionSelect2($DatosPromociones["ID"],$DatosPromociones["ID"]." ".$DatosPromociones["Nombre"],$javascript, 0);
+        }
+    print("</td>");
+    print("<td>");
+    $this->css->CrearInputNumber("TxtMayor", "number", "", "", "Titulo", "Black", "", "", 100, 30, 0, 1, 0, 9999, 1); 
+    print("</td>");
+    print("<td>");
+    $this->css->CrearBotonVerde("BtnVerificarTitulo", "Verificar");
+    print("</td>");
+    $this->css->CierraFilaTabla();
+    $this->css->CerrarTabla();
+    $this->css->CerrarForm();
+    
+    if(isset($_REQUEST["TxtMayor"])) {
+        $Mayor=$this->obCon->normalizar($_REQUEST["TxtMayor"]);
+        $Promocion=$this->obCon->normalizar($_REQUEST["CmbPromocion"]);
+        
+    $tab="titulos_ventas";
+    $Condicion=" WHERE Mayor1='$Mayor' AND Promocion='$Promocion'";
+    $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+    if($this->obCon->NumRows($consulta)){
+        $this->css->CrearNotificacionRoja("Este Titulo no esta disponible", 16);
+        $this->css->CrearTabla();
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>ID Venta</strong>", 1);
+        $this->css->ColTabla("<strong>Fecha</strong>", 1);
+            $this->css->ColTabla("<strong>Promocion</strong>", 1);
+            $this->css->ColTabla("<strong>Mayor1</strong>", 1);
+            $this->css->ColTabla("<strong>Mayor2</strong>", 1);
+            $this->css->ColTabla("<strong>Adicional</strong>", 1);
+            $this->css->ColTabla("<strong>IdCliente</strong>", 1);
+            $this->css->ColTabla("<strong>Nombre Cliente</strong>", 1);
+            $this->css->ColTabla("<strong>IdColaborador</strong>", 1);
+            $this->css->ColTabla("<strong>Nombre Colaborador</strong>", 1);
+            $this->css->CierraFilaTabla();
+        while($DatosVentas=$this->obCon->FetchArray($consulta)){
+            $this->css->FilaTabla(16);
+            
+            $this->css->ColTabla($DatosVentas["ID"], 1);
+            $this->css->ColTabla($DatosVentas["Fecha"], 1);
+            $this->css->ColTabla($DatosVentas["Promocion"], 1);
+            $this->css->ColTabla($DatosVentas["Mayor1"], 1);
+            $this->css->ColTabla($DatosVentas["Mayor2"], 1);
+            $this->css->ColTabla($DatosVentas["Adicional"], 1);
+            $this->css->ColTabla($DatosVentas["idCliente"], 1);
+            $this->css->ColTabla($DatosVentas["NombreCliente"], 1);
+            $this->css->ColTabla($DatosVentas["idColaborador"], 1);
+            $this->css->ColTabla($DatosVentas["NombreColaborador"], 1);
+                       
+            $this->css->CierraFilaTabla();
+        }
+        $this->css->CerrarTabla();
+    }else{
+        $this->css->CrearNotificacionVerde("Este Titulo esta disponible", 16);
+    }
+    
+    
+    
+    
+    }   
+   
+    
+    $this->css->CerrarDiv();
+      
+}
+
+//Funcion para Dibujar el area de ventas de un titulo
+
+public function DibujeAreaVentasTitulos($myPage,$Vector){
+    $this->css=new CssIni("");
+    $this->css->CrearDiv("DivVentasTitulos", "", "center", 1, 1);
+    $this->css->CrearNotificacionVerde("Vender un Titulo", 16);
+    $this->css->CrearForm2("FrmVentasTitulos", $myPage, "post", "_self");
+    $this->css->CrearTabla();
+    $this->css->FilaTabla(16);
+    $this->css->ColTabla("<strong>Vender un Titulo</strong>", 3);
+    $this->css->CierraFilaTabla();
+    
+    $this->css->FilaTabla(16);
+    $this->css->ColTabla("<strong>Fecha</strong>", 1);
+    $this->css->ColTabla("<strong>Cliente</strong>", 1);
+    $this->css->ColTabla("<strong>Vendedor</strong>", 1);
+    $this->css->ColTabla("<strong>Promocion</strong>", 1);
+    //$this->css->ColTabla("<strong>Titulo</strong>", 1);
+    //$this->css->ColTabla("<strong>Abono a Titulo</strong>", 1);
+    //$this->css->ColTabla("<strong>Ciclo de Pago</strong>", 1);
+    $this->css->CierraFilaTabla();
+    
+    $this->css->FilaTabla(16);
+    print("<td>");
+    $this->css->CrearInputFecha("", "TxtFechaVenta", date("Y-m-d"), 100, 30, "");
+    print("</td>");
+    print("<td>");
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Busque un Cliente";
+    $VarSelect["Required"]=1;
+    $this->css->CrearSelectChosen("TxtCliente", $VarSelect);
+    $this->css->CrearOptionSelect("", "Seleccione un Cliente" , 0);
+        $sql="SELECT * FROM clientes";
+        $Consulta=$this->obCon->Query($sql);
+        while($DatosCliente=$this->obCon->FetchArray($Consulta)){
+               
+               $this->css->CrearOptionSelect("$DatosCliente[Num_Identificacion]", "$DatosCliente[Num_Identificacion] / $DatosCliente[RazonSocial] / $DatosCliente[Telefono]" , 0);
+           }
+           
+    $this->css->CerrarSelect();
+    print("</td>");
+    print("<td>");
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Busque un Colaborador";
+    $VarSelect["Required"]=1;
+    $this->css->CrearSelectChosen("TxtColaborador", $VarSelect);
+    $this->css->CrearOptionSelect("", "Seleccione un Colaborador" , 0);
+        $sql="SELECT * FROM colaboradores";
+        $Consulta=$this->obCon->Query($sql);
+        while($DatosColaborador=$this->obCon->FetchArray($Consulta)){
+               
+               $this->css->CrearOptionSelect("$DatosColaborador[Identificacion]", "$DatosColaborador[Identificacion] / $DatosColaborador[Nombre]" , 0);
+           }
+           
+    $this->css->CerrarSelect();
+    print("</td>");
+    print("<td>");
+    $VectorSelect["Nombre"]="CmbPromocion";
+    $VectorSelect["Evento"]="";
+    $VectorSelect["Funcion"]="";
+    $VectorSelect["Required"]=1;
+    $this->css->CrearSelect2($VectorSelect);
+    $this->css->CrearOptionSelect("", "Seleccione una promocion", 0);
+        $Datos=$this->obCon->ConsultarTabla("titulos_promociones", " WHERE Activo='SI'");
+        
+        while($DatosPromociones=$this->obCon->FetchArray($Datos)){
+            $javascript="onclick='CambiarMaxMin(`TxtTitulo`,`$DatosPromociones[MayorInicial]`,`$DatosPromociones[MayorFinal]`);CambiarMaxMin(`TxtAbonoTitulo`,`0`,`$DatosPromociones[Valor]`);'";
+                    
+            $this->css->CrearOptionSelect2($DatosPromociones["ID"],$DatosPromociones["ID"]." ".$DatosPromociones["Nombre"],$javascript, 0);
+        }
+    $this->css->CerrarSelect();    
+    print("</td>");
+    print("<tr>"); 
+    print("<td>");
+    $this->css->CrearInputNumber("TxtTitulo", "number", "", "", "Titulo", "Black", "", "", 100, 30, 0, 1, 0, 9999, 1); 
+    print("</td>");
+    print("<td>");
+    $this->css->CrearInputNumber("TxtAbonoTitulo", "number", "", "", "Abono", "Black", "", "", 100, 30, 0, 1, 0, 1000000, 1); 
+    print("</td>");
+    print("<td>");
+    $this->css->CrearSelect("CmbCicloPago", "");
+        $this->css->CrearOptionSelect("", "Seleccione un ciclo de pago", 0);
+        $this->css->CrearOptionSelect(7, "Semanal", 0);
+        $this->css->CrearOptionSelect(15, "Quincenal", 0);
+        $this->css->CrearOptionSelect(30, "Mensual", 0);
+    $this->css->CerrarSelect();    
+    print("</td>");
+    //print("<tr>");
+    print("<td style='text-align:center'>");
+    $this->css->CrearBotonConfirmado("BtnVenderTitulo", "Vender");
+    print("</td>");
+    print("</tr>");
+    $this->css->CierraFilaTabla();
+    $this->css->CerrarTabla();
+    $this->css->CerrarForm();
+       
+    $this->css->CerrarDiv();
+      
+}
 
 // FIN Clases	
 }

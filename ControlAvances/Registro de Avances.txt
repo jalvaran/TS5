@@ -57,6 +57,8 @@ MYSQL
     *Se Agrega tabla titulos_listados_promocion_1
     *Se Modifica la tabla colaboradores
     *Se Crea Tabla titulos_asignaciones
+    *Se Agrega la Columna Lugar_Expedicion_Documento en clientes y proveedores
+    *Se Crea titulos_ventas
 
 PHP
     *Se Agrega VAtencion/titulos_promociones.php
@@ -73,3 +75,8 @@ PHP
     *Se Agrega VMenu/MnuTitulos.php
     *Se Agrega VAtencion/titulos_asignaciones.php
     *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php
+    *Se modifica funciones.js
+    *Se modifica ccs_construct.php
+    *Se agrega VentasTitulos.php
+    *Se agrega procesaVentasTitulos.php
+    *Se modifica php_tablas.php

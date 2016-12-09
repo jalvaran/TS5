@@ -248,6 +248,17 @@ class CssIni{
 			print('<option value='.$value.'>'.$label.'</option>');
 		
 	}
+        
+        /////////////////////Crea un Option Select
+	
+	function CrearOptionSelect2($value,$label,$javascript,$selected){
+		
+		if($selected==1)
+			print('<option value='.$value.'  selected '.$javascript.'>'.$label.'</option>');
+		else
+			print('<option value='.$value.' '.$javascript.'>'.$label.' </option>');
+		
+	}
 	
 	
 	/////////////////////Crea un Cuadro de texto input
