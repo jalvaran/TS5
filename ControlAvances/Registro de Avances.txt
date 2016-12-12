@@ -80,3 +80,5 @@ PHP
     *Se agrega VentasTitulos.php
     *Se agrega procesaVentasTitulos.php
     *Se modifica php_tablas.php
+    *Se Agrega Consultas/DatosTitulos.php
+    *Se Agrega cuadros_dialogo/CrearTercero.php

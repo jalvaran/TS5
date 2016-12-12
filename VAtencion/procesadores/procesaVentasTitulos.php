@@ -65,25 +65,26 @@
 			}
 		
 			$tab="clientes";
-			$NumRegistros=15;  
+			$NumRegistros=16;  
 								
 			
-			$Columnas[0]="Tipo_Documento";						$Valores[0]=$_REQUEST['CmbTipoDocumento'];
-			$Columnas[1]="Num_Identificacion";					$Valores[1]=$_REQUEST['TxtNIT'];
+			$Columnas[0]="Tipo_Documento";						$Valores[0]=$obVenta->normalizar($_REQUEST['CmbTipoDocumento']);
+			$Columnas[1]="Num_Identificacion";					$Valores[1]=$obVenta->normalizar($_REQUEST['TxtNIT']);
 			$Columnas[2]="DV";							$Valores[2]=$DV;
-			$Columnas[3]="Primer_Apellido";						$Valores[3]=$_REQUEST['TxtPA'];
-			$Columnas[4]="Segundo_Apellido";					$Valores[4]=$_REQUEST['TxtSA'];
-			$Columnas[5]="Primer_Nombre";						$Valores[5]=$_REQUEST['TxtPN'];
-			$Columnas[6]="Otros_Nombres";						$Valores[6]=$_REQUEST['TxtON'];
-			$Columnas[7]="RazonSocial";						$Valores[7]=$_REQUEST['TxtRazonSocial'];
-			$Columnas[8]="Direccion";						$Valores[8]=$_REQUEST['TxtDireccion'];
-			$Columnas[9]="Cod_Dpto";						$Valores[9]=$DatosMunicipios["Cod_Dpto"];
-			$Columnas[10]="Cod_Mcipio";						$Valores[10]=$DatosMunicipios["Cod_mcipio"];
+			$Columnas[3]="Primer_Apellido";						$Valores[3]=$obVenta->normalizar($_REQUEST['TxtPA']);
+			$Columnas[4]="Segundo_Apellido";					$Valores[4]=$obVenta->normalizar($_REQUEST['TxtSA']);
+			$Columnas[5]="Primer_Nombre";						$Valores[5]=$obVenta->normalizar($_REQUEST['TxtPN']);
+			$Columnas[6]="Otros_Nombres";						$Valores[6]=$obVenta->normalizar($_REQUEST['TxtON']);
+			$Columnas[7]="RazonSocial";						$Valores[7]=$obVenta->normalizar($_REQUEST['TxtRazonSocial']);
+			$Columnas[8]="Direccion";						$Valores[8]=$obVenta->normalizar($_REQUEST['TxtDireccion']);
+			$Columnas[9]="Cod_Dpto";						$Valores[9]=$obVenta->normalizar($DatosMunicipios["Cod_Dpto"]);
+			$Columnas[10]="Cod_Mcipio";						$Valores[10]=$obVenta->normalizar($DatosMunicipios["Cod_mcipio"]);
 			$Columnas[11]="Pais_Domicilio";						$Valores[11]=169;
-			$Columnas[12]="Telefono";			    			$Valores[12]=$_REQUEST['TxtTelefono'];
-			$Columnas[13]="Ciudad";			    				$Valores[13]=$DatosMunicipios["Ciudad"];
-			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
-			
+			$Columnas[12]="Telefono";			    			$Valores[12]=$obVenta->normalizar($_REQUEST['TxtTelefono']);
+			$Columnas[13]="Ciudad";			    				$Valores[13]=$obVenta->normalizar($DatosMunicipios["Ciudad"]);
+			$Columnas[14]="Email";			    				$Valores[14]=$obVenta->normalizar($_REQUEST['TxtEmail']);
+			$Columnas[15]="Lugar_Expedicion_Documento";    				$Valores[15]=$obVenta->normalizar($_REQUEST['TxtLugarExpedicion']);
+                        
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                         $tab="proveedores";
                         $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);

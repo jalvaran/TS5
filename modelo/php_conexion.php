@@ -5391,7 +5391,7 @@ public function VerificaPermisos($VectorPermisos) {
        $Consulta=  $this->ConsultarTabla("titulos_ventas"," WHERE Mayor1='$Mayor' AND Promocion='$idPromocion'");
        $DatosVenta=  $this->FetchArray($Consulta);
        if($DatosVenta["Mayor1"]==""){
-       $TablaTitulos="titulos_listados_promocion_$idPromocion";
+        $TablaTitulos="titulos_listados_promocion_$idPromocion";
         $DatosTitulo=$this->DevuelveValores($TablaTitulos, "Mayor1", $Mayor);
         $DatosColaborador=$this->DevuelveValores("colaboradores", "Identificacion", $idColaborador);
         $DatosCliente=$this->DevuelveValores("clientes", "Num_Identificacion", $idCliente);
@@ -5413,14 +5413,14 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[9]="NombreCliente";       $Valores[9]=$DatosCliente["RazonSocial"];
         $Columnas[10]="idColaborador";      $Valores[10]=$idColaborador;
         $Columnas[11]="NombreColaborador";  $Valores[11]=$NombreColaborador;
-        $Columnas[12]="idUsuario";          $Valores[12]=  $this->idUser;
+        $Columnas[12]="idUsuario";          $Valores[12]=$this->idUser;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idVenta=$this->ObtenerMAX($tab, "ID", 1, "");
         
         $sql="UPDATE $TablaTitulos SET FechaVenta='$Fecha', idColaborador='$idColaborador',"
                 . " NombreColaborador='$NombreColaborador', idCliente='$idCliente', NombreCliente='$DatosCliente[RazonSocial]',"
-                . " Saldo=$DatosPromocion[Valor] "
+                . " Saldo='$DatosPromocion[Valor]' "
                 . "WHERE Mayor1 ='$Mayor'";
         $this->Query($sql);
         
@@ -5430,6 +5430,8 @@ public function VerificaPermisos($VectorPermisos) {
         return($idVenta); 
        }
     } 
+    
+    
 //////////////////////////////Fin	
 }
 	

@@ -200,7 +200,7 @@ class CssIni{
 	/////////////////////Crea un Select
 	
 	function CrearSelect($nombre,$evento){
-		print('<select required name="'.$nombre.'" onchange="'.$evento.'" >');
+		print('<select id="'.$nombre.'" required name="'.$nombre.'" onchange="'.$evento.'" >');
 		
 	}
         
@@ -215,7 +215,7 @@ class CssIni{
             }else{
                 $R="";
             }
-            print("<select $R name='$nombre' $evento='$funcion'>");
+            print("<select id='$nombre' $R name='$nombre' $evento='$funcion'>");
 		
 	}
         
