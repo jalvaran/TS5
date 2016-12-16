@@ -5425,6 +5425,7 @@ public function VerificaPermisos($VectorPermisos) {
         $this->Query($sql);
         
         return($idVenta);
+        
        }else{
          $idVenta="E";
         return($idVenta); 
@@ -5432,6 +5433,101 @@ public function VerificaPermisos($VectorPermisos) {
     } 
     
     
+    //Registre venta en libro diario
+    
+    public function registreVentaTituloToLibroDiario($idVenta,$Vector){
+        
+        $DatosVenta =  $this->DevuelveValores("titulos_ventas","ID" , $idVenta);
+        $DatosPromocion=$this->DevuelveValores("titulos_promociones","ID" , $DatosVenta["Promocion"]);
+        $DatosCliente=$this->DevuelveValores("clientes","Num_Identificacion" , $DatosVenta["idCliente"]);
+        $Concepto="Venta de Titulo $DatosVenta[Mayor1] de la Promocion $DatosVenta[Promocion]";
+        $tab="librodiario";
+        $NumRegistros=27;
+        $CuentaPUC=$DatosPromocion["CuentaPUC"];
+        $NombreCuenta="Venta de loterias, rifas, chance, apuestas y similares";
+        $CuentaPUCContraPartida=1305;
+        $NombreCuentaContraPartida="Clientes Nacionales";
+        $Total=$DatosVenta["Valor"];
+
+
+        $Columnas[0]="Fecha";			$Valores[0]=$DatosVenta["Fecha"];
+        $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="VentaTitulo";
+        $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idVenta;
+        $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
+        $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$DatosCliente['Num_Identificacion'];
+        $Columnas[5]="Tercero_DV";			$Valores[5]=$DatosCliente['DV'];
+        $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
+        $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]=$DatosCliente['Segundo_Apellido'];
+        $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
+        $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
+        $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$DatosCliente['RazonSocial'];
+        $Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosCliente['Direccion'];
+        $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosCliente['Cod_Dpto'];
+        $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosCliente['Cod_Mcipio'];
+        $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]=$DatosCliente['Pais_Domicilio'];
+        $Columnas[15]="CuentaPUC";			$Valores[15]=$CuentaPUC;
+        $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
+        $Columnas[17]="Detalle";			$Valores[17]="Venta de Titulo";
+        $Columnas[18]="Debito";			$Valores[18]=0;
+        $Columnas[19]="Credito";			$Valores[19]=$Total;
+        $Columnas[20]="Neto";			$Valores[20]=$Total*(-1);
+        $Columnas[21]="Mayor";			$Valores[21]="NO";
+        $Columnas[22]="Esp";			$Valores[22]="NO";
+        $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
+        $Columnas[24]="idCentroCosto";		$Valores[24]=1;
+        $Columnas[25]="idEmpresa";			$Valores[25]=1;
+        $Columnas[26]="idSucursal";                 $Valores[26]=1;
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+
+        ///////////////////////Registramos contra partida del anticipo
+
+        $CuentaPUC=$CuentaPUCContraPartida; 
+        $NombreCuenta=$NombreCuentaContraPartida;
+
+        $Valores[15]=$CuentaPUC;
+        $Valores[16]=$NombreCuenta;
+        $Valores[18]=$Total;
+        $Valores[19]=0; 			//Credito se escribe el total de la venta menos los impuestos
+        $Valores[20]=$Total;  											//Credito se escribe el total de la venta menos los impuestos
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+    }
+            
+    //Registre cuenta x cobrar
+   
+    
+    public function registreCuentaxCobrar($FechaIngreso,$Origen,$idVenta,$CicloPago,$Vector){
+        $DatosVenta=  $this->DevuelveValores("titulos_ventas", "ID", $idVenta);
+        $DatosCliente=$this->DevuelveValores("clientes", "Num_Identificacion", $DatosVenta["idCliente"]);
+                          
+        $tab="titulos_cuentasxcobrar";
+        $NumRegistros=17;
+
+        $Columnas[0]="FechaIngreso";			$Valores[0]=$FechaIngreso;
+        $Columnas[1]="Origen";                          $Valores[1]=$Origen;
+        $Columnas[2]="idDocumento";                     $Valores[2]=$idVenta;
+        $Columnas[3]="idTercero";                       $Valores[3]=$DatosCliente['Num_Identificacion'];
+        $Columnas[4]="RazonSocial";                     $Valores[4]=$DatosCliente['RazonSocial'];
+        $Columnas[5]="Direccion";			$Valores[5]=$DatosCliente['Direccion'];
+        $Columnas[6]="Telefono";                        $Valores[6]=$DatosCliente['Telefono'];
+        $Columnas[7]="Valor";                           $Valores[7]=$DatosVenta["Valor"];
+        $Columnas[8]="TotalAbonos";                     $Valores[8]=$DatosVenta["TotalAbonos"];
+        $Columnas[9]="Saldo";                           $Valores[9]=$DatosVenta["Saldo"];
+        $Columnas[10]="CicloPagos";                     $Valores[10]=$CicloPago;
+        $Columnas[11]="UltimoPago";                     $Valores[11]="";
+        
+        $Columnas[12]="idColaborador";                  $Valores[12]=$DatosVenta['idColaborador'];
+        $Columnas[13]="NombreColaborador";              $Valores[13]=$DatosVenta['NombreColaborador'];
+        $Columnas[14]="Mayor";                          $Valores[14]=$DatosVenta["Mayor1"];
+        $Columnas[15]="Promocion";                      $Valores[15]=$DatosVenta["Promocion"];
+        $Columnas[16]="Ciudad";                         $Valores[16]=$DatosCliente["Ciudad"];
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    }
+    
+  
 //////////////////////////////Fin	
 }
 	

@@ -59,6 +59,7 @@ MYSQL
     *Se Crea Tabla titulos_asignaciones
     *Se Agrega la Columna Lugar_Expedicion_Documento en clientes y proveedores
     *Se Crea titulos_ventas
+    *Se Crea cuentasxpagar
 
 PHP
     *Se Agrega VAtencion/titulos_promociones.php
@@ -82,3 +83,7 @@ PHP
     *Se modifica php_tablas.php
     *Se Agrega Consultas/DatosTitulos.php
     *Se Agrega cuadros_dialogo/CrearTercero.php
+    *Se Agrega VAtencion/titulos_cuentasxcobrar.php
+    *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php
+    *Se Agrega VAtencion/Consultas/DatosCuentaXPagar.php
+    *Se Agrega VAtencion/Consultas/DatosTitulos.php

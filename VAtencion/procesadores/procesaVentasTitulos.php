@@ -117,6 +117,9 @@
             if($idVenta=="E"){
                 $css->CrearNotificacionRoja("ERROR! El Titulo $Mayor de la promocion $idPromocion, ya fue vendido",16);
             }else{
+                $obVenta->registreVentaTituloToLibroDiario($idVenta,"");
+                $Origen="titulos_ventas";
+                $obVenta->registreCuentaxCobrar($Fecha,$Origen,$idVenta,$CicloPago,"");
                 $css->CrearNotificacionVerde("Venta registrada con exito del Titulo $Mayor de la promocion $idPromocion",16);
             }
             

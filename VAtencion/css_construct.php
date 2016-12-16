@@ -925,6 +925,52 @@ function Footer(){
 		<input type="button" class="boton" id="reinicio" value="Reset &#8635;" onclick="reinicio();" disabled>
 	</div>');
 	} 
+        
+        /////////////////////Dibujar un boton de busqueda
+	
+	function BotonBuscar($Alto,$Ancho,$Vector){
+                    
+          print('<button type="submit" class="btn btn-info" > <img src="../images/busqueda.png" class="img-rounded" alt="Cinque Terre" width="'.$Ancho.'" height="'.$Alto.'"></button>');
+	} 
+        
+        /////////////////////Dibujar un boton de busqueda
+	
+	function DibujeCuadroBusqueda($Nombre,$pageConsulta,$OtrasVariables,$DivTarget,$Evento,$Alto,$Ancho,$Vector){
+            
+            ?>
+            <script>
+            function Busqueda<?php echo"$Nombre"?>() {
+                var Promocion;
+                str=document.getElementById("<?php echo"$Nombre"?>").value;
+                
+                if (str == "") {
+                    document.getElementById("<?php echo"$DivTarget"?>").innerHTML = "";
+                    return;
+                } else {
+                    if (window.XMLHttpRequest) {
+                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        // code for IE6, IE5
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xmlhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("<?php echo"$DivTarget"?>").innerHTML = this.responseText;
+                        }
+                    };
+                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>="+str+"&<?php echo"$OtrasVariables"?>",true);
+                    xmlhttp.send();
+                }
+            }
+            </script>
+            <?php 
+            
+            $this->CrearInputText($Nombre, "text", "", "", "Buscar", "Black", $Evento, "Busqueda".$Nombre."()", $Ancho, $Alto, 0, 0);
+            $this->BotonBuscar(20, 20, "");
+            
+            
+	} 
                 
         //////////////////////////////////FIN
 }
