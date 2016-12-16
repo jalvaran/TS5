@@ -5527,7 +5527,129 @@ public function VerificaPermisos($VectorPermisos) {
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     
-  
+  /*
+ * Funcion Abono a Titulo
+ */
+
+
+	public function RegistreAbonoTitulo($fecha, $IDCuenta, $Abono, $Observaciones,$CentroCosto,$idColaborador,$idUser, $Vector){
+            
+            $DatosCentro=$this->DevuelveValores("centrocosto","ID",$CentroCosto);
+            $DatosCuentaXCobrar=$this->DevuelveValores("titulos_cuentasxcobrar","ID",$IDCuenta);
+            $DatosColaborador=$this->DevuelveValores("colaboradores","Identificacion",$idColaborador);
+            $idCliente=$DatosCuentaXCobrar["idTercero"];
+            $DatosCliente=$this->DevuelveValores("clientes","Num_Identificacion",$idCliente);
+            $CuentaClientes=$this->DevuelveValores("parametros_contables","ID",6);
+            
+            //$DatosCuentasFrecuentes=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaDestino);
+            $CuentaDestino="110505";
+            $NombreCuenta="CAJA GENERAL";
+            $NIT=$DatosCliente["Num_Identificacion"];
+            $RazonSocialC=$DatosCliente["RazonSocial"];
+            $NuevoSaldo=$DatosCuentaXCobrar["Saldo"]-$Abono;
+            $TotalAbonos=$DatosCuentaXCobrar["TotalAbonos"]+$Abono;
+            $Concepto="ABONO AL TITULO $DatosCuentaXCobrar[Mayor] DE LA PROMOCION $DatosCuentaXCobrar[Promocion] Nuevo Saldo ".number_format($NuevoSaldo);
+            //////Creo el comprobante de Ingreso
+            
+            $tab="comprobantes_ingreso";
+            $NumRegistros=6;
+
+            $Columnas[0]="Fecha";		$Valores[0]=$fecha;
+            $Columnas[1]="Clientes_idClientes"; $Valores[1]=$DatosCliente["idClientes"];
+            $Columnas[2]="Valor";               $Valores[2]=$Abono;
+            $Columnas[3]="Tipo";		$Valores[3]="EFECTIVO";
+            $Columnas[4]="Concepto";		$Valores[4]=$Concepto;
+            $Columnas[5]="Usuarios_idUsuarios";	$Valores[5]= $idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
+            
+            ////Registro el anticipo en el libro diario
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
+            
+            $tab="librodiario";
+            $NumRegistros=27;
+            $CuentaPUC=$CuentaDestino;
+            //$NombreCuenta=$NombreCuenta;
+            $CuentaPUCContraPartida=$CuentaClientes["CuentaPUC"];
+            $NombreCuentaContraPartida="Clientes Nacionales";
+            
+
+
+            $Columnas[0]="Fecha";			$Valores[0]=$fecha;
+            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="ComprobanteIngreso";
+            $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idIngreso;
+            $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
+            $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$NIT;
+            $Columnas[5]="Tercero_DV";			$Valores[5]=$DatosCliente['DV'];
+            $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
+            $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]=$DatosCliente['Segundo_Apellido'];
+            $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
+            $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
+            $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$RazonSocialC;
+            $Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosCliente['Direccion'];
+            $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosCliente['Cod_Dpto'];
+            $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosCliente['Cod_Mcipio'];
+            $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]=$DatosCliente['Pais_Domicilio'];
+            $Columnas[15]="CuentaPUC";			$Valores[15]=$CuentaPUC;
+            $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
+            $Columnas[17]="Detalle";			$Valores[17]="AbonoVentaTitulo";
+            $Columnas[18]="Debito";			$Valores[18]=$Abono;
+            $Columnas[19]="Credito";			$Valores[19]=0;
+            $Columnas[20]="Neto";			$Valores[20]=$Abono;
+            $Columnas[21]="Mayor";			$Valores[21]="NO";
+            $Columnas[22]="Esp";			$Valores[22]="NO";
+            $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
+            $Columnas[24]="idCentroCosto";		$Valores[24]=$CentroCosto;
+            $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
+            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+
+            ///////////////////////Registramos contra partida del anticipo
+
+            $CuentaPUC=$CuentaPUCContraPartida; 
+            $NombreCuenta=$NombreCuentaContraPartida;
+
+            $Valores[15]=$CuentaPUC;
+            $Valores[16]=$NombreCuenta;
+            $Valores[18]=0;
+            $Valores[19]=$Abono; 			//Credito se escribe el total de la venta menos los impuestos
+            $Valores[20]=$Valores[19]*(-1);  											//Credito se escribe el total de la venta menos los impuestos
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+		
+            
+            $sql="UPDATE titulos_cuentasxcobrar SET TotalAbonos='$TotalAbonos', Saldo='$NuevoSaldo', UltimoPago='$fecha' WHERE ID='$IDCuenta'";
+            $this->Query($sql);
+            $sql="UPDATE titulos_ventas SET TotalAbonos='$TotalAbonos', Saldo='$NuevoSaldo' WHERE ID='$DatosCuentaXCobrar[idDocumento]'";
+            $this->Query($sql);
+            $sql="UPDATE titulos_listados_promocion_$DatosCuentaXCobrar[Promocion] SET TotalAbonos='$TotalAbonos', Saldo='$NuevoSaldo' WHERE Mayor1='$DatosCuentaXCobrar[Mayor]'";
+            $this->Query($sql);
+            
+            //////Agrego a la tabla abonos
+            
+            $tab="titulos_abonos";
+            $NumRegistros=8;
+
+            $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
+            $Columnas[1]="idVenta";                     $Valores[1]=$DatosCuentaXCobrar["idDocumento"];
+            $Columnas[2]="Monto";                       $Valores[2]=$Abono;
+            $Columnas[3]="idColaborador";		$Valores[3]=$idColaborador;
+            $Columnas[4]="NombreColaborador";		$Valores[4]=$DatosColaborador["Nombre"];
+            $Columnas[5]="idComprobanteIngreso";	$Valores[5]=$idIngreso;
+            $Columnas[6]="Observaciones";               $Valores[6]=$Observaciones;
+            $Columnas[7]="Hora";                        $Valores[7]=date("H:i:s");
+            
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
+                        
+            return($idIngreso);
+            
+            
+	}
 //////////////////////////////Fin	
 }
 	

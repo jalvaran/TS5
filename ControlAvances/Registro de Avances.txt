@@ -60,6 +60,8 @@ MYSQL
     *Se Agrega la Columna Lugar_Expedicion_Documento en clientes y proveedores
     *Se Crea titulos_ventas
     *Se Crea cuentasxpagar
+    *Se agrega parametros_contables
+    *Se Agrega Registro a formatos de calidad
 
 PHP
     *Se Agrega VAtencion/titulos_promociones.php

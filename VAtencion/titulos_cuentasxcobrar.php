@@ -16,6 +16,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
 include_once("Configuraciones/titulos_cuentasxcobrar.ini.php");  //Clases de donde se escribirán las tablas
+
 $obTabla = new Tabla($db);
 
 $statement = $obTabla->CreeFiltro($Vector);
@@ -24,7 +25,7 @@ $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
 $obTabla->VerifiqueExport($Vector);
-include_once("procesadores/procesaCartera.php");  //Clases de donde se escribirán las tablas
+
 include_once("css_construct.php");
 print("<html>");
 print("<head>");
@@ -41,12 +42,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-if(!empty($_REQUEST["TxtidIngreso"])){
-        $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
-        $css->CrearTabla();
-        $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
-        $css->CerrarTabla();
-    }
+include_once("procesadores/procesaTitulosCuentasXCobrar.php");  //Clases de donde se escribirán las tablas
     
 $css->DibujeCuadroBusqueda("BuscarCuentaXPagar","Consultas/DatosCuentaXPagar.php?key","idPromocion=7","DivBusqueda","onChange",30,100,"");
 ///////////////Creamos la imagen representativa de la pagina
