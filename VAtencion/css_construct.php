@@ -937,12 +937,21 @@ function Footer(){
 	
 	function DibujeCuadroBusqueda($Nombre,$pageConsulta,$OtrasVariables,$DivTarget,$Evento,$Alto,$Ancho,$Vector){
             
+                            
             ?>
             <script>
             function Busqueda<?php echo"$Nombre"?>() {
-                var Promocion;
-                str=document.getElementById("<?php echo"$Nombre"?>").value;
                 
+                str=document.getElementById("<?php echo"$Nombre"?>").value;
+                <?php
+                if(isset($Vector["Variable"][0])){
+                    $idObjeto=$Vector["Variable"][0];
+                    print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    //print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    $OtrasVariables.='"+'.$idObjeto.'+"';
+                    //$VariableJS='"+document.getElementById(`'.$idObjeto.'`).value';
+                }
+                ?>
                 if (str == "") {
                     document.getElementById("<?php echo"$DivTarget"?>").innerHTML = "";
                     return;
@@ -959,7 +968,7 @@ function Footer(){
                             document.getElementById("<?php echo"$DivTarget"?>").innerHTML = this.responseText;
                         }
                     };
-                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>="+str+"&<?php echo"$OtrasVariables"?>",true);
+                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>="+str+"&<?php print($OtrasVariables);?>",true);
                     xmlhttp.send();
                 }
             }

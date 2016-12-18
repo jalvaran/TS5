@@ -15,6 +15,7 @@ include_once("../css_construct.php");
 $css =  new CssIni("");
 $obVenta = new ProcesoVenta(1);
 $Promocion=$obVenta->normalizar($_GET['idPromocion']);
+
 if($Promocion>1){
     $TablaTitulos="titulos_listados_promocion_".$Promocion;
     $DatosTitulo=$obVenta->DevuelveValores($TablaTitulos,"Mayor1",$Titulo);

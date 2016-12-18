@@ -2247,7 +2247,9 @@ public function DibujeAreaVentasTitulos($myPage,$Vector){
     print("</td>");
     print("<tr>"); 
     print("<td>");
-    $this->css->CrearInputNumber("TxtTitulo", "number", "", "", "Titulo", "Black", "onKeyup", "CargueValoresAdicionalesTitulo();", 100, 30, 0, 1, 0, 9999, 1); 
+    $VectorCuadro["Variable"][0]="CmbPromocion";
+    $this->css->DibujeCuadroBusqueda("TxtTituloVenta", "Consultas/DatosTitulos.php?Titulo", "idPromocion=", "DivInfoTitulo", "onKeyup", 30, 100, $VectorCuadro);
+    //$this->css->CrearInputNumber("TxtTitulo", "number", "", "", "Titulo", "Black", "onKeyup", "CargueValoresAdicionalesTitulo();", 100, 30, 0, 1, 0, 9999, 1); 
     
     print("</td>");
     print("<td>");

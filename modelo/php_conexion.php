@@ -5399,7 +5399,7 @@ public function VerificaPermisos($VectorPermisos) {
         $DatosPromocion=$this->DevuelveValores("titulos_promociones", "ID", $idPromocion);
         
         $tab="titulos_ventas";
-        $NumRegistros=13;
+        $NumRegistros=15;
 
         $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
         $Columnas[1]="Promocion";           $Valores[1]=$idPromocion;
@@ -5414,6 +5414,8 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[10]="idColaborador";      $Valores[10]=$idColaborador;
         $Columnas[11]="NombreColaborador";  $Valores[11]=$NombreColaborador;
         $Columnas[12]="idUsuario";          $Valores[12]=$this->idUser;
+        $Columnas[13]="ComisionAPagar";     $Valores[13]=$DatosPromocion["ComisionAPagar"];
+        $Columnas[14]="SaldoComision";      $Valores[14]=$DatosPromocion["ComisionAPagar"];
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idVenta=$this->ObtenerMAX($tab, "ID", 1, "");
