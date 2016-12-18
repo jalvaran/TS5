@@ -22,7 +22,10 @@ if($key<>""){
     
     $Resultados=$obVenta->ConsultarTabla("titulos_cuentasxcobrar"," WHERE (idTercero = '$key'  OR Mayor = '$key' OR RazonSocial LIKE '%$key%') AND Saldo>0 LIMIT 50");
     if($obVenta->NumRows($Resultados)>0){
-        $css->CrearTabla();    
+        
+        
+        while($DatosCuentasXCobrar=$obVenta->FetchArray($Resultados)){
+            $css->CrearTabla();    
         $css->FilaTabla(16);
         $css->ColTabla('<strong>Abonar</strong>', 1);
         $css->ColTabla('<strong>RazonSocial</strong>', 1);
@@ -33,9 +36,6 @@ if($key<>""){
         $css->ColTabla('<strong>UltimoPago</strong>', 1);
         $css->ColTabla('<strong>Mayor</strong>', 1);
         $css->CierraFilaTabla();
-        
-        while($DatosCuentasXCobrar=$obVenta->FetchArray($Resultados)){
-
 
         $css->FilaTabla(16);
         print("<td>");

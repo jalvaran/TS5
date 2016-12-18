@@ -3204,7 +3204,27 @@ public function CalculePesoRemision($idCotizacion)
     ///Creo un Egreso
     //
     public function CrearEgreso($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$VectorEgreso) {
-      
+        
+        if(isset($VectorEgreso["Origen"])){
+            if($VectorEgreso["Origen"]=="comisionestitulos"){
+                $DatosColaborador=  $this->DevuelveValores("colaboradores", "Identificacion", $idProveedor);
+                $DatosProveedor["RazonSocial"]=$DatosColaborador["Nombre"];
+		$DatosProveedor["Num_Identificacion"]=$idProveedor;
+		$DatosProveedor["Tipo_Documento"]=13;
+                $DatosProveedor["DV"]=00;
+                $DatosProveedor["Primer_Apellido"]="";
+                $DatosProveedor["Segundo_Apellido"]="";
+                $DatosProveedor["Primer_Nombre"]="";
+                $DatosProveedor["Otros_Nombres"]="";
+                $DatosProveedor["Direccion"]=$DatosColaborador["Direccion"];
+                $DatosProveedor["Cod_Dpto"]=76;
+                $DatosProveedor["Cod_Mcipio"]=111;
+                $DatosProveedor["Pais_Domicilio"]=169;
+                $DatosProveedor["Ciudad"]="BUGA";
+            }
+        }else{
+            $DatosProveedor=$this->DevuelveValores("proveedores","idProveedores",$idProveedor);
+        }
         if($TipoEgreso==3){
 			
 			
@@ -3229,7 +3249,7 @@ public function CalculePesoRemision($idCotizacion)
 		//////registramos en egresos
 		
 				
-		$DatosProveedor=$this->DevuelveValores("proveedores","idProveedores",$idProveedor);
+		
 		$DatosCentroCosto=$this->DevuelveValores("centrocosto","ID",$CentroCostos);
                 $NombreTipoEgreso="";
                 if($TipoEgreso=="VentasRapidas"){
@@ -5649,6 +5669,53 @@ public function VerificaPermisos($VectorPermisos) {
             //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
                         
             return($idIngreso);
+            
+            
+	}
+        
+        
+        /*
+ * Funcion Pagar Comision de un titulo
+ */
+
+
+	public function RegistrePagoComisionTitulo($fecha, $IDVenta, $Pago, $Observaciones,$CuentaOrigen,$CentroCosto,$idUser, $Vector){
+            
+            $DatosCentro=$this->DevuelveValores("centrocosto","ID",$CentroCosto);
+            $DatosVenta=$this->DevuelveValores("titulos_ventas","ID",$IDVenta);
+            $CuentaDestino=  $this->DevuelveValores("parametros_contables", "ID", 8);
+            
+            $Concepto="Pago de comision por Venta de Titulo $DatosVenta[Mayor1] de la promocion $DatosVenta[Promocion] al Sr. $DatosVenta[NombreColaborador] con CC $DatosVenta[idColaborador]";
+            $idProveedor=$DatosVenta["idColaborador"];
+            $VectorEgreso["Origen"]="comisionestitulos";
+            $idEgreso=$this->CrearEgreso($fecha, $fecha, $idUser, $CentroCosto, "Contado", $CuentaOrigen, $CuentaDestino["CuentaPUC"], 0, $idProveedor, $Concepto, $DatosVenta["ID"], "", 1, $Pago, 0, $Pago, 0, 0, 0, 0, 0, 0, $VectorEgreso);
+            //////Agrego a la tabla abonos
+            
+            $tab="titulos_comisiones";
+            $NumRegistros=9;
+
+            $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
+            $Columnas[1]="idVenta";                     $Valores[1]=$IDVenta;
+            $Columnas[2]="Monto";                       $Valores[2]=$Pago;
+            $Columnas[3]="idColaborador";		$Valores[3]=$DatosVenta["idColaborador"];
+            $Columnas[4]="NombreColaborador";		$Valores[4]=$DatosVenta["NombreColaborador"];
+            $Columnas[5]="idEgreso";                    $Valores[5]=$idEgreso;
+            $Columnas[6]="Observaciones";               $Valores[6]=$Observaciones;
+            $Columnas[7]="Hora";                        $Valores[7]=date("H:i:s");
+            $Columnas[8]="idUsuario";                   $Valores[8]=  $this->idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            $SaldoComision=$DatosVenta["SaldoComision"]-$Pago;
+            $TotalPagos=$DatosVenta["ComisionAPagar"]-$SaldoComision;
+            
+            $sql="UPDATE titulos_ventas SET SaldoComision='$SaldoComision' WHERE ID='$IDVenta'";
+            $this->Query($sql);
+            $sql="UPDATE titulos_listados_promocion_$DatosVenta[Promocion] SET TotalPagoComisiones='$TotalPagos' WHERE Mayor1='$DatosVenta[Mayor1]'";
+            $this->Query($sql);
+            //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
+                        
+            return($idEgreso);
             
             
 	}

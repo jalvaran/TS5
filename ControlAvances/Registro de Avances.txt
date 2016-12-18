@@ -94,3 +94,16 @@ PHP
 ////Ventas Rapidas Descuentos
 
     *Se modifica VentasRapidas, procesaVentasRapidas, css_construct
+
+2016-12-18  
+
+TITULOS
+MYSQL
+    * Se agrega titulos_comisiones
+    * Se Agrega Columna ComisionAPagar a titulos_promociones
+    * Se Agregan Columnas ComisionAPagar y SaldoComision a titulos_ventas
+
+PHP
+    *Se modifica ccs_construct.php
+    *VentasTitulos.php
+    *php_tablas

@@ -29,6 +29,7 @@ if($Promocion>1){
     $css->ColTabla('<strong>NombreColaborador</strong>', 1);
     $css->ColTabla('<strong>FechaEntregaColaborador</strong>', 1);
     $css->ColTabla('<strong>NombreCliente</strong>', 1);
+    $css->ColTabla('<strong>idVenta</strong>', 1);
     $css->ColTabla('<strong>FechaVenta</strong>', 1);
     $css->ColTabla('<strong>Saldo</strong>', 1);
     
@@ -41,6 +42,9 @@ if($Promocion>1){
     $css->ColTabla($DatosTitulo['NombreColaborador'], 1);
     $css->ColTabla($DatosTitulo['FechaEntregaColaborador'], 1);
     $css->ColTabla($DatosTitulo['NombreCliente'], 1);
+    $Consulta=$obVenta->ConsultarTabla("titulos_ventas", " WHERE Promocion='$Promocion' AND Mayor1='$DatosTitulo[Mayor1]'");
+    $DatosVenta=$obVenta->FetchArray($Consulta);
+    $css->ColTabla($DatosVenta['ID'], 1);
     $css->ColTabla($DatosTitulo['FechaVenta'], 1);
     $css->ColTabla($DatosTitulo['Saldo'], 1);
 
