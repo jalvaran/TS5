@@ -107,3 +107,13 @@ PHP
     *Se modifica ccs_construct.php
     *VentasTitulos.php
     *php_tablas
+    *php_conexion
+    *procesa_TitulosComisiones
+    *titulos_comisiones
+    DatosComisiones
+    titulos_ventas
+    titulos_ventas.ini
+    Mnu_Titulos
+    Consultas/DatosTitulos
+    Consultas/DatosCuentasXPagar
+    

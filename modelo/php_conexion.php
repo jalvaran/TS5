@@ -5547,6 +5547,8 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[16]="Ciudad";                         $Valores[16]=$DatosCliente["Ciudad"];
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idCuenta=$this->ObtenerMAX($tab,"ID", 1,"");
+        return($idCuenta);
     }
     
   /*

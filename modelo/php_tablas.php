@@ -2254,7 +2254,8 @@ public function DibujeAreaVentasTitulos($myPage,$Vector){
     
     print("</td>");
     print("<td>");
-    $this->css->CrearInputNumber("TxtAbonoTitulo", "number", "", "", "Abono", "Black", "", "", 100, 30, 0, 1, 0, 1000000, 1); 
+    $this->css->CrearInputNumber("TxtAbonoTitulo", "number", "", "", "Abono", "Black", "", "", 100, 30, 0, 1, 0, 1000000, 1);
+    $this->css->CrearTextArea("TxtObservaciones", "<br>", "", "Observaciones", "", "", "", 100, 60, 0, 0);
     print("</td>");
     print("<td>");
     $this->css->CrearSelect("CmbCicloPago", "");
