@@ -22,7 +22,7 @@ if($key<>""){
 
     $css->CrearNotificacionAzul("Datos del Titulo", 16);
     
-    $Resultados=$obVenta->ConsultarTabla("titulos_ventas"," WHERE (idColaborador = '$key'  OR Mayor1 = '$key' OR NombreColaborador LIKE '%$key%') AND SaldoComision>0 LIMIT 50");
+    $Resultados=$obVenta->ConsultarTabla("titulos_ventas"," WHERE (idColaborador = '$key'  OR Mayor1 = '$key' OR NombreColaborador LIKE '%$key%') AND SaldoComision>0 AND Estado=''  LIMIT 50");
     if($obVenta->NumRows($Resultados)>0){
         
         

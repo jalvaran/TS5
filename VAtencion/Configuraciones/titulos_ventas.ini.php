@@ -31,6 +31,16 @@ $Ruta="../tcpdf/examples/comprobantecontable.php?idComprobante=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="idComprobanteContable";
 
+
+
+// Nueva Accion
+$Ruta="DevolverVenta.php?idVenta=";
+$Vector["NuevaAccionLink"][0]="Asociar";
+$Vector["NuevaAccion"]["Asociar"]["Titulo"]=" Devolver ";
+$Vector["NuevaAccion"]["Asociar"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Asociar"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Asociar"]["Target"]="_self";
+
 /*
  * Datos vinculados
  * 

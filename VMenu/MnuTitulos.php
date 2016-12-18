@@ -66,6 +66,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/titulos_asignaciones.php","_self","../images/acta.png","Historial de Actas de Entrega");
                     $css->SubTabs("../VAtencion/VentasTitulos.php","_blank","../images/ventastitulos.png","Venta de Titulos");
                     $css->SubTabs("../VAtencion/titulos_ventas.php","_self","../images/historial.png","Historial de Venta de Titulos");
+                    $css->SubTabs("../VAtencion/titulos_devoluciones.php","_self","../images/historial2.png","Historial de Titulos Devueltos");
                     $css->SubTabs("../VAtencion/titulos_cuentasxcobrar.php","_self","../images/cuentasxcobrar.png","Cuentas X Cobrar");
                     $css->SubTabs("../VAtencion/titulos_comisiones.php","_self","../images/comisiones.png","Comisiones");
                 $css->FinTabs();

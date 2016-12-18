@@ -120,17 +120,20 @@
                 $obVenta->registreVentaTituloToLibroDiario($idVenta,"");
                 $Origen="titulos_ventas";
                 $idCuenta=$obVenta->registreCuentaxCobrar($Fecha,$Origen,$idVenta,$CicloPago,"");
+                
+                if($Abono>0){
+                
+                    $idComprobante=$obVenta->RegistreAbonoTitulo($Fecha, $idCuenta, $Abono, $Observaciones,1,$idColaborador,$idUser, "");
+                    $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$idComprobante;			
+
+                    $css->CrearNotificacionVerde("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $idComprobante</a>",16);
+
+                }
+            
                 $css->CrearNotificacionVerde("Venta registrada con exito del Titulo $Mayor de la promocion $idPromocion",16);
             }
             
-            if($Abono>0){
-                
-                $idComprobante=$obVenta->RegistreAbonoTitulo($Fecha, $idCuenta, $Abono, $Observaciones,1,$idColaborador,$idUser, "");
-                $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$idComprobante;			
-               
-                $css->CrearNotificacionVerde("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $idComprobante</a>",16);
-                
-            }
+            
             
         }
         ///////////////Fin
