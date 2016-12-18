@@ -7,6 +7,7 @@ include_once("css_construct.php");
 
 $ConsultaCajas=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
 $DatosCaja=$obVenta->FetchArray($ConsultaCajas);
+
 if($DatosCaja["ID"]<=0){
     
    header("location:401.php");
@@ -19,10 +20,10 @@ if(!empty($_REQUEST['CmbPreVentaAct'])){
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
 
-  
+
 $myPage="VentasRapidas.php";
 $css =  new CssIni("TS5 Ventas");
-  
+$obVenta=new ProcesoVenta($idUser);  
 $css->CabeceraIni("TS5 Ventas"); 
     $css->CreaBotonAgregaPreventa($myPage,$idUser);
     $css->CreaBotonDesplegable("DialCliente","Tercero");
@@ -107,6 +108,46 @@ if($idPreventa>0){
 }
 $css->CrearDiv("Principal", "container", "center", $Visible, 1);
 
+$sql="SELECT Autorizado FROM preventa WHERE Autorizado>=1 AND VestasActivas_idVestasActivas='$idPreventa' LIMIT 1";
+$ConsultaPreventa=$obVenta->Query($sql);
+$Autorizado=$obVenta->FetchArray($ConsultaPreventa); 
+
+if($Autorizado>=1){
+    
+    $e=0;
+}else{
+    $e=1;
+}
+$css->CrearBotonOcultaDiv("Opciones: ", "DivDescuentos", 20, 20,$e, "");
+$css->CrearDiv("DivDescuentos", "container", "center", 0, 1);
+$css->CrearTabla();
+$css->FilaTabla(16);
+$css->ColTabla("<strong>DESCUENTO GENERAL POR PORCENTAJE</strong>", 1);
+//$css->ColTabla("<strong>DESCUENTO GENERAL AL POR MAYOR</strong>", 1);
+$css->CierraFilaTabla();
+$css->FilaTabla(16);
+print("<td style='text-align:center;'>");
+$css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
+$css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+$css->CrearInputNumber("TxtDescuento", "number", "", "", "Descuento", "", "", "", 100,30, 0, 1, 1, 30, 1);
+print("<br>");
+$css->CrearBotonConfirmado("BtnDescuentoGeneral", "Descuento %");
+
+$css->CerrarForm();
+print("</td>");
+/*
+print("<td style='text-align:center;'>");
+$css->CrearForm2("FrmDescuentoPorMayor", $myPage, "post", "_self");
+$css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+$css->CrearBotonConfirmado("BtnDescuentoMayorGeneral", "Descuento Mayorista");
+
+$css->CerrarForm();
+print("</td>");
+*/
+ 
+$css->CierraFilaTabla();
+$css->CerrarTabla();
+$css->CerrarDiv();
 //////Espacio para dibujar busquedas
 //Verifico si hay peticiones para buscar separados
 $obTabla->DibujaSeparado($myPage,$idPreventa,"");

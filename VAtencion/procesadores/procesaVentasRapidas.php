@@ -480,15 +480,20 @@
         
         if(!empty($_REQUEST['TxtAutorizacion'])){
 		
-		$key=$_POST['TxtAutorizacion'];
+		
 		$obVenta=new ProcesoVenta($idUser);
-                $Pass=$obVenta->DevuelveValores("autorizaciones_generales","ID",1);
-                $Clave=$Pass["Clave"];
+                $Clave=$obVenta->normalizar($_POST['TxtAutorizacion']);
+                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' ";
+                $Datos=$obVenta->Query($sql);
+                $DatosAutorizacion=$obVenta->FetchArray($Datos);
+                
                 $NoAutorizado="";
-                if($key==$Clave){
-                    $obVenta->ActualizaRegistro("preventa", "Autorizado", 1, "VestasActivas_idVestasActivas", $idPreventa);
+                if($DatosAutorizacion["Identificacion"]>0){
+                    
+                    $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
                 }else{
                     $NoAutorizado="NoAutorizado=1";
+                    
                 }
 		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
 	}
@@ -527,6 +532,26 @@
              
              
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$idFactura");
+        }
+        
+        
+        /*
+         * Registra abonos de creditos 
+         */
+        
+              
+        if(!empty($_REQUEST['BtnDescuentoGeneral'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $Hora=date("H:i:s");
+            $Descuento=(100-$obVenta->normalizar($_REQUEST['TxtDescuento']))/100;
+            $idPreventa=$obVenta->normalizar($_REQUEST['TxtidPreventa']);
+            $sql="UPDATE preventa SET Subtotal=round(Subtotal*$Descuento), Impuestos=round(Impuestos*$Descuento),"
+                    . " TotalVenta=round(TotalVenta*$Descuento), ValorAcordado=round(ValorAcordado*$Descuento) "
+                    . " WHERE VestasActivas_idVestasActivas='$idPreventa'";
+            $obVenta->Query($sql);
+            header("location:$myPage?CmbPreVentaAct=$idPreventa");
         }
         
         ///////////////Fin

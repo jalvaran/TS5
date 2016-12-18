@@ -89,3 +89,8 @@ PHP
     *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php
     *Se Agrega VAtencion/Consultas/DatosCuentaXPagar.php
     *Se Agrega VAtencion/Consultas/DatosTitulos.php
+
+
+////Ventas Rapidas Descuentos
+
+    *Se modifica VentasRapidas, procesaVentasRapidas, css_construct

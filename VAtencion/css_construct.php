@@ -971,7 +971,19 @@ function Footer(){
             
             
 	} 
+        
+/////////////////////Dibujar un icono que muestra y oculta un div
+	
+	function CrearBotonOcultaDiv($Titulo,$Div,$Ancho,$Alto,$Enable,$Vector){
+          if($Enable==0){
+                $e='';
                 
+            }else{
+                $e='disabled="false"';
+                
+            }          
+          print("<button type='submit' $e class='btn btn-default' onclick=MuestraOculta('$Div');>$Titulo <image width='$Ancho' height='$Alto' name='imgHidde' id='imgHidde' src='../images/hidde.png' ></button>");
+	}         
         //////////////////////////////////FIN
 }
 	
