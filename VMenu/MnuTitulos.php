@@ -69,6 +69,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/titulos_devoluciones.php","_self","../images/historial2.png","Historial de Titulos Devueltos");
                     $css->SubTabs("../VAtencion/titulos_cuentasxcobrar.php","_self","../images/cuentasxcobrar.png","Cuentas X Cobrar");
                     $css->SubTabs("../VAtencion/titulos_comisiones.php","_self","../images/comisiones.png","Comisiones");
+                    $css->SubTabs("../VAtencion/InformeTitulos.php","_self","../images/informes.png","Informes");
                 $css->FinTabs();
 			
 	$css->FinMenu(); 
