@@ -2,10 +2,19 @@
 $myPage="InformeCompras.php";
 include_once("../sesiones/php_control.php");
 
-include_once("css_construct.php");
-
 $obVenta = new ProcesoVenta($idUser);
+$obTabla = new Tabla($db);
+if(isset($_REQUEST["BtnVerInforme"])){
+    
+    $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIni"]);
+    $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinal"]);
+    $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorte"]);
+    $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporte"]);
+    
+    $obTabla->GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,"");
+}
 
+include_once("css_construct.php");
 function CrearFormularioInformes($VectorInformes) {
    
    $FormName=$VectorInformes["FormName"];
@@ -16,7 +25,7 @@ function CrearFormularioInformes($VectorInformes) {
   
    $idUser=$_SESSION['idUser'];
    $obVenta = new ProcesoVenta($idUser);
-   $css =  new CssIni("Balance de Comprobacion");
+   $css =  new CssIni("Informe de Compras");
    
    $css->CrearForm2($FormName, $ActionForm, $Metod, $Target);
         $css->CrearTabla();
@@ -95,6 +104,15 @@ print("<body>");
     $VectorInformes["Metod"]="post";
     $VectorInformes["Target"]="_blank";
     $VectorInformes["Titulo"]="INFORME DE COMPRAS";
+    CrearFormularioInformes($VectorInformes);
+    
+    $css->CrearNotificacionVerde("GENERAR INFORME COMPARATIVO", 16);
+    
+    $VectorInformes["FormName"]="FrmInformeComprasComparativo";
+    $VectorInformes["ActionForm"]=$myPage;
+    $VectorInformes["Metod"]="post";
+    $VectorInformes["Target"]="_self";
+    $VectorInformes["Titulo"]="INFORME DE COMPRAS COMPARATIVO";
     CrearFormularioInformes($VectorInformes);
      
     

@@ -102,6 +102,7 @@ MYSQL
     * Se agrega titulos_comisiones
     * Se Agrega Columna ComisionAPagar a titulos_promociones
     * Se Agregan Columnas ComisionAPagar y SaldoComision a titulos_ventas
+    * Se agrega titulos_devoluciones
 
 PHP
     *Se modifica ccs_construct.php
@@ -116,4 +117,10 @@ PHP
     Mnu_Titulos
     Consultas/DatosTitulos
     Consultas/DatosCuentasXPagar
-    
+
+2016-12-20
+
+INFORMES
+
+    *Se modifica php_tablas
+    *Se modifica InformeCompras

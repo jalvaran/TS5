@@ -679,7 +679,9 @@ public function VerifiqueExport($Vector)  {
  $i=0;
  $a=0;
  $c=2;
- $sql="SELECT * FROM $statement ";
+
+    $sql="SELECT * FROM $statement ";
+ 
         $Consulta=  $this->obCon->Query($sql);
         while($DatosTabla=mysql_fetch_object($Consulta)){
             foreach($Columnas as $NombreCol){
@@ -2275,6 +2277,126 @@ public function DibujeAreaVentasTitulos($myPage,$Vector){
     $this->css->CerrarForm();
        
     $this->css->CerrarDiv();
+      
+}
+
+
+/*
+ * Genera informe de compras comparativo con las ventas
+ */
+    
+public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$Vector)  {
+   
+    require_once '../librerias/Excel/PHPExcel.php';
+   $objPHPExcel = new PHPExcel();    
+   
+   if($TipoReporte=="Corte"){
+      $sql="SELECT Movimiento, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
+              . " `kardexmercancias`.`ProductosVenta_idProductosVenta`=`productosventa`.`idProductosventa` "
+              . " WHERE `Fecha`<='$FechaCorte' GROUP BY Movimiento, idProductosventa";
+      
+      $TituloInforme="Informe Comparativo a $FechaCorte";
+   }else{
+       
+      $sql="SELECT Movimiento, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
+              . " `kardexmercancias`.`ProductosVenta_idProductosVenta`=`productosventa`.`idProductosventa` "
+              . " WHERE `Fecha`>='$FechaInicial' AND `Fecha`<='$FechaFinal' GROUP BY Movimiento, idProductosventa"; 
+      $TituloInforme="Informe Comparativo de $FechaInicial a $FechaFinal";
+   }
+   
+   $Consulta=  $this->obCon->Query($sql);
+   
+   $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0]."1","idProductosVenta")
+            ->setCellValue($this->Campos[1]."1","Referencia")
+            ->setCellValue($this->Campos[2]."1","Nombre")
+            ->setCellValue($this->Campos[3]."1","Entradas")
+            ->setCellValue($this->Campos[4]."1","Salidas")
+            ->setCellValue($this->Campos[5]."1","Saldo")
+            ->setCellValue($this->Campos[6]."1","Departamento")
+            ->setCellValue($this->Campos[7]."1","Sub1")
+            ->setCellValue($this->Campos[8]."1","Sub2")
+            ->setCellValue($this->Campos[9]."1","Sub3")
+            ->setCellValue($this->Campos[10]."1","Sub4")
+            ->setCellValue($this->Campos[11]."1","Sub5")
+            ->setCellValue($this->Campos[12]."1",$TituloInforme);
+            
+   
+   while($DatosKardex=$this->obCon->FetchArray($Consulta)){
+       if($DatosKardex["Movimiento"]=="ENTRADA" OR $DatosKardex["Movimiento"]=="SALIDA"){
+        $id=$DatosKardex["idProductosVenta"];
+        $Movimiento=$DatosKardex["Movimiento"];
+        $idProductos[$id]=$DatosKardex["idProductosVenta"];
+        $Producto[$id]["Referencia"]=$DatosKardex["Referencia"];
+        $Producto[$id]["Nombre"]=$DatosKardex["Nombre"];
+        $Producto[$id][$Movimiento]["Cantidad"]=$DatosKardex["Cantidad"];
+        $Producto[$id]["Departamento"]=$DatosKardex["Departamento"];
+        $Producto[$id]["Sub1"]=$DatosKardex["Sub1"];
+        $Producto[$id]["Sub2"]=$DatosKardex["Sub2"];
+        $Producto[$id]["Sub3"]=$DatosKardex["Sub3"];
+        $Producto[$id]["Sub4"]=$DatosKardex["Sub4"];
+        $Producto[$id]["Sub5"]=$DatosKardex["Sub5"];
+       }
+   }
+   
+   $i=2;
+   foreach($idProductos as $id){
+       $Entradas=0;
+       $Salidas=0;
+       $Saldos=0;
+              
+       if(isset($Producto[$id]["ENTRADA"]["Cantidad"])){
+           $Entradas=$Producto[$id]["ENTRADA"]["Cantidad"];
+       }
+       if(isset($Producto[$id]["SALIDA"]["Cantidad"])){
+           $Salidas=$Producto[$id]["SALIDA"]["Cantidad"];
+       }
+       $Saldos=$Entradas-$Salidas;
+       $Departamentos=  $this->obCon->DevuelveValores("prod_departamentos", "idDepartamentos", $Producto[$id]["Departamento"]);
+       $Sub1=  $this->obCon->DevuelveValores("prod_sub1", "idSub1", $Producto[$id]["Sub1"]);
+       $Sub2=  $this->obCon->DevuelveValores("prod_sub2", "idSub2", $Producto[$id]["Sub2"]);
+       $Sub3=  $this->obCon->DevuelveValores("prod_sub3", "idSub3", $Producto[$id]["Sub3"]);
+       $Sub4=  $this->obCon->DevuelveValores("prod_sub4", "idSub4", $Producto[$id]["Sub4"]);
+       $Sub5=  $this->obCon->DevuelveValores("prod_sub5", "idSub5", $Producto[$id]["Sub5"]);
+       if($Entradas<>0 OR $Salidas<>0){
+       $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$i,$id)
+            ->setCellValue($this->Campos[1].$i,$Producto[$id]["Referencia"])
+            ->setCellValue($this->Campos[2].$i,$Producto[$id]["Nombre"])
+            ->setCellValue($this->Campos[3].$i,$Entradas)
+            ->setCellValue($this->Campos[4].$i,$Salidas)
+            ->setCellValue($this->Campos[5].$i,$Saldos)
+            ->setCellValue($this->Campos[6].$i,$Departamentos["Nombre"])
+            ->setCellValue($this->Campos[7].$i,$Sub1["NombreSub1"])
+            ->setCellValue($this->Campos[8].$i,$Sub2["NombreSub2"])
+            ->setCellValue($this->Campos[9].$i,$Sub3["NombreSub3"])
+            ->setCellValue($this->Campos[10].$i,$Sub4["NombreSub4"])
+            ->setCellValue($this->Campos[11].$i,$Sub5["NombreSub5"]);
+       $i++; 
+       }     
+      
+   }
+   
+    
+   //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com")
+        ->setLastModifiedBy("www.technosoluciones.com")
+        ->setTitle("Exportar Informe  desde base de datos")
+        ->setSubject("Informe")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones")
+        ->setCategory("Informe Departamentos");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Informe_Comparativo".'.xls"');
+    header('Cache-Control: max-age=0');
+
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+   
       
 }
 
