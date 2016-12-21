@@ -263,16 +263,22 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
             $css->ColTabla($Debito, 1);
             $css->ColTabla($Credito, 1);
             $css->ColTablaDel($myPage, "conceptos_movimientos", "ID", $DatosMovimientos["ID"], $idConcepto);
+            
             $css->CierraFilaTabla();
         }
-        
+        $css->FilaTabla(14);
+        print("<td style='text-align:center'; colspan=6>");
+        $css->CrearBotonConfirmado("BtnCerrarConcepto", "Cerrar y Activar este Concepto");
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
         }else{
             $css->CrearNotificacionRoja("No hay movimientos", 16);
         }    
         
         
-        $css->CerrarTabla();
-        $css->CerrarForm();
+        
     }
     
     

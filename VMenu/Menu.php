@@ -65,6 +65,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("MnuIngresos.php","_blank","../images/ingresos.png","Ingresos");
                     $css->SubTabs("MnuEgresos.php","_blank","../images/egresos.png","Egresos");
                     $css->SubTabs("../VAtencion/CreaComprobanteCont.php","_blank","../images/egresoitems.png","Comprobantes Contables");
+                    $css->SubTabs("../VAtencion/ConceptosContablesUtilidad.php","_blank","../images/conceptos.png","Conceptos Contables");
                     $css->SubTabs("../VAtencion/clientes.php","_blank","../images/clientes.png","Clientes");
                     $css->SubTabs("../VAtencion/proveedores.php","_blank","../images/proveedores.png","Proveedores");
                     //$css->SubTabs("../VAtencion/CuentasXCobrar.php","_blank","../images/cuentasxcobrar.png","Cuentas Por Cobrar");
