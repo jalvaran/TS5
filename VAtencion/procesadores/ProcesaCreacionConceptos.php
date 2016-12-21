@@ -14,8 +14,8 @@ if(!empty($_REQUEST["BtnCrearConcepto"])){
         
     $NombreConcepto=$obVenta->normalizar($_REQUEST["TxtNombreNuevoConcepto"]);
     $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesNuevoConcepto"]);
-   
-    $obVenta->CrearConceptoContable($NombreConcepto, $Observaciones,"");
+    $Genera=$obVenta->normalizar($_REQUEST["CmbDocumentoGenerado"]);
+    $obVenta->CrearConceptoContable($NombreConcepto, $Observaciones,$Genera,"");
    
     header("location:$myPage");
 }

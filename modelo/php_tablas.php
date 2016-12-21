@@ -2406,11 +2406,50 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $this->css=new CssIni("");
         $DatosConcepto=$this->obCon->DevuelveValores("conceptos", "ID", $idConcepto);
         $consulta=  $this->obCon->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+        $idSumatoria="";
         while($DatosMontos=$this->obCon->FetchArray($consulta)){
-            $this->css->CrearInputNumber("Monto$DatosMontos[ID]", "number", "", "",$DatosMontos["NombreMonto"] , "", "", "", 100, 30, 0, 1, 0, "", "any");
-            print("<br>");
-            
+            $idMonto=$DatosMontos["ID"];
+            $idMontoDependiente=$DatosMontos["Depende"];
+            $Montos[$idMonto]["Dependencia"] = $DatosMontos["Depende"];
+            $Montos[$idMonto]["Operacion"] = $DatosMontos["Operacion"];
+            $Montos[$idMonto]["ValorDependencia"] = $DatosMontos["ValorDependencia"];
+            $Montos[$idMonto]["NombreObjeto"]="Monto$idMonto";
+            if($idMontoDependiente>0){
+                $Operacion=$DatosMontos["Operacion"];
+                $ValorDependencia=$DatosMontos["ValorDependencia"];
+                $Montos[$idMontoDependiente]["FuncionJS"]="CalculeValorDependencia('Monto$idMontoDependiente','Monto$idMonto','$Operacion','Dependencia$idMonto')";
+                                
+            }
+            if($DatosMontos["Operacion"]=="S"){
+                $idSumatoria="Monto$idMonto";
+            }
         }
+        
+        $consulta=  $this->obCon->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+        $this->css->CrearDiv("DivMontos", "", "center", 1, 1);
+        while($DatosMontos=$this->obCon->FetchArray($consulta)){
+            $disabled=0;
+            $idMonto=$DatosMontos["ID"];
+            $EventoJS="onKeyup";
+            $FuncionJS="";
+            $idObjetos[$idMonto]=$idMonto;
+            if(isset($Montos[$idMonto]["FuncionJS"])){
+                
+                $FuncionJS=$Montos[$idMonto]["FuncionJS"];
+            }
+            $FuncionJS.=";CalculeSumatoria('$idSumatoria')";
+            if($Montos[$idMonto]["Operacion"]=="S"){
+                $disabled=1;
+            }
+            
+            $this->css->CrearInputNumber("Monto$DatosMontos[ID]", "number", "", "",$DatosMontos["NombreMonto"] , "", $EventoJS, $FuncionJS, 100, 30, $disabled, 1, 0, "", "any");
+            if($Montos[$idMonto]["Dependencia"]>0 and $Montos[$idMonto]["Operacion"]<>"" and $Montos[$idMonto]["ValorDependencia"]>0){
+                print("<-->");
+                $this->css->CrearInputNumber("Dependencia$DatosMontos[ID]", "number", "", $Montos[$idMonto]["ValorDependencia"],"" , "", "", "", 100, 30, 0, 1, 0, "", "any");
+            }
+            print("<br>");            
+        }
+        $this->css->CerrarDiv();
     }
 
 // FIN Clases	

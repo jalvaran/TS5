@@ -124,3 +124,9 @@ INFORMES
 
     *Se modifica php_tablas
     *Se modifica InformeCompras
+
+
+CONCEPTOS
+
+    *Se agrega las tablas iniciadas por conceptos
+    *Se Agrega las Columnas idUsuario a LibroDiario

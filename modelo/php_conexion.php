@@ -5819,10 +5819,10 @@ public function VerificaPermisos($VectorPermisos) {
 	}
         
         // Clase para Crear un Concepto Contable
-        public function CrearConceptoContable($Nombre, $Observaciones,$Vector){
+        public function CrearConceptoContable($Nombre, $Observaciones,$Genera,$Vector){
             $FechaHora=date("Y-m-d H:i:s");
             $tab="conceptos";
-            $NumRegistros=6; 
+            $NumRegistros=7; 
 
             $Columnas[0]="FechaHoraCreacion";     $Valores[0]=$FechaHora;
             $Columnas[1]="Nombre";                $Valores[1]=$Nombre;
@@ -5830,7 +5830,7 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[3]="idUsuario";             $Valores[3]=$this->idUser;
             $Columnas[4]="Completo";              $Valores[4]="NO";
             $Columnas[5]="Activo";                $Valores[5]="NO";
-    
+            $Columnas[6]="Genera";                $Valores[6]=$Genera;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             $idConcepto=$this->ObtenerMAX($tab,"ID", 1,"");
             $this->CrearMontoConcepto($idConcepto,"Subtotal", "NO","NO","","");
@@ -5873,6 +5873,88 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[4]="TipoMovimiento";  $Valores[4]=$TipoMovimiento;
             $Columnas[5]="idUsuario";       $Valores[5]= $this->idUser;
             
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+        
+        // Clase para Ejecutar un Concepto Contable
+        public function EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$Vector){
+            $DatosConcepto=$this->DevuelveValores("conceptos", "ID", $idConcepto);
+            $TipoDocInterno=$DatosConcepto["Genera"];
+            if($TipoDocInterno=="CE"){
+                $TipoDocInterno="CompEgreso";
+                $DocumentoInterno=1;
+            }
+            if($TipoDocInterno=="CC"){
+                $TipoDocInterno="COMPROBANTE CONTABLE";
+                $DocumentoInterno=2;
+            }
+            $Detalle=$DatosConcepto["Observaciones"];
+            
+            $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+            while($DatosMonto=  $this->FetchArray($Consulta)){
+                $idMonto=$DatosMonto["ID"];
+                $Monto[$idMonto]=$this->normalizar($_REQUEST["Monto$idMonto"]);
+            }
+            $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");
+            while($DatosMovimientos=$this->FetchArray($Consulta)){
+                $CuentaPUC=$DatosMovimientos["CuentaPUC"];
+                $idMonto=$DatosMovimientos["idMonto"];
+                $NombreCuenta=$DatosMovimientos["NombreCuentaPUC"];
+                $Valor=$Monto[$idMonto];
+                $TipoMovimiento=$DatosMovimientos["TipoMovimiento"];
+                $this->IngreseMovimientoLibroDiario($Fecha,$TipoDocInterno,$DocumentoInterno,$NumFactura,$Tercero,$CuentaPUC,$NombreCuenta,$Detalle,$TipoMovimiento,$Valor,$Observaciones,$CentroCosto,$Sede,"");
+            }
+        }
+        
+        // Clase para Agregar un movimiento al libro diario
+        
+        public function IngreseMovimientoLibroDiario($Fecha,$TipoDocInterno,$DocumentoInterno,$DocumentoExterno,$idTercero,$CuentaPUC,$NombreCuenta,$Detalle,$TipoMovimiento,$Valor,$Concepto,$idCentroCostos,$idSede,$Vector) {
+            if($TipoMovimiento=="DB"){
+                $Debito=$Valor;
+                $Credito=0;
+                $Neto=$Valor;
+            }else{
+                $Debito=0;
+                $Credito=$Valor;
+                $Neto=$Valor*(-1);
+            }
+            $DatosTercero=$this->DevuelveValores("proveedores", "Num_Identificacion", $idTercero);
+            if($DatosTercero['Num_Identificacion']==''){
+                $DatosTercero=$this->DevuelveValores("clientes", "Num_Identificacion", $idTercero);
+            }
+            $DatosCentro=$this->DevuelveValores("centrocosto", "ID", $idCentroCostos);
+            $tab="librodiario";
+            $NumRegistros=29;
+            
+            $Columnas[0]="Fecha";			$Valores[0]=$Fecha;
+            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]=$TipoDocInterno;
+            $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$DocumentoInterno;
+            $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosTercero['Tipo_Documento'];
+            $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$DatosTercero['Num_Identificacion'];
+            $Columnas[5]="Tercero_DV";			$Valores[5]=$DatosTercero['DV'];
+            $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosTercero['Primer_Apellido'];
+            $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]=$DatosTercero['Segundo_Apellido'];
+            $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosTercero['Primer_Nombre'];
+            $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosTercero['Otros_Nombres'];
+            $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$DatosTercero['RazonSocial'];;
+            $Columnas[11]="Tercero_Direccion";		$Valores[11]=$DatosTercero['Direccion'];
+            $Columnas[12]="Tercero_Cod_Dpto";		$Valores[12]=$DatosTercero['Cod_Dpto'];
+            $Columnas[13]="Tercero_Cod_Mcipio";		$Valores[13]=$DatosTercero['Cod_Mcipio'];
+            $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]=$DatosTercero['Pais_Domicilio'];
+            $Columnas[15]="CuentaPUC";			$Valores[15]=$CuentaPUC;
+            $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
+            $Columnas[17]="Detalle";			$Valores[17]=$Detalle;
+            $Columnas[18]="Debito";			$Valores[18]=$Debito;
+            $Columnas[19]="Credito";			$Valores[19]=$Credito;
+            $Columnas[20]="Neto";			$Valores[20]=$Neto;
+            $Columnas[21]="Mayor";			$Valores[21]="NO";
+            $Columnas[22]="Esp";			$Valores[22]="NO";
+            $Columnas[23]="Concepto";			$Valores[23]=$Concepto;
+            $Columnas[24]="idCentroCosto";		$Valores[24]=$idCentroCostos;
+            $Columnas[25]="idEmpresa";			$Valores[25]=$DatosCentro["EmpresaPro"];
+            $Columnas[26]="idSucursal";                 $Valores[26]=$idSede;
+            $Columnas[27]="Num_Documento_Externo";      $Valores[27]=$DocumentoExterno;
+            $Columnas[28]="idUsuario";                  $Valores[28]=$this->idUser;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }
 //////////////////////////////Fin	

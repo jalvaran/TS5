@@ -24,13 +24,14 @@ $css->CabeceraFin();
 
 //Cuadros de Dialogo
 
- /////////////////Cuadro de dialogo de Clientes create
+ /////////////////Cuadro de dialogo de Concepto
 $css->CrearCuadroDeDialogo("CrearConcepto","Crear un Concepto"); 
     $css->CrearForm2("FrmCreaConcepto", $myPage, "post", "_self");
     $css->CrearTabla();
     $css->FilaTabla(16);
         $css->ColTabla("<strong>Nombre</strong>", 1);
         $css->ColTabla("<strong>Observaciones</strong>", 1);
+        $css->ColTabla("<strong>Documento que Genera</strong>", 1);
         $css->ColTabla("<strong>Crear</strong>", 1);
     $css->CierraFilaTabla();
     $css->FilaTabla(16);
@@ -43,6 +44,13 @@ $css->CrearCuadroDeDialogo("CrearConcepto","Crear un Concepto");
     print("<td>");
     $css->CrearTextArea("TxtObservacionesNuevoConcepto","","","Observaciones","black","","",200,100,0,1);
     print("</td>");
+    print("<td>");
+    $css->CrearSelect("CmbDocumentoGenerado", "");
+    $css->CrearOptionSelect("", "Seleccione", 0);
+    $css->CrearOptionSelect("CE", "Comprobante de Egreso", 0);
+    $css->CrearOptionSelect("CC", "Comprobante Contable", 0);
+    $css->CerrarSelect();
+    print("</td>"); 
     print("<td>");
     $css->CrearBotonConfirmado("BtnCrearConcepto", "Crear");
     print("</td>");   

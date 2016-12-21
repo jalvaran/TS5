@@ -110,7 +110,7 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
            
                    
         $css->CrearSelect("CmbCentroCostos", "");
-        //$css->CrearOptionSelect("", "Centro de Costos", 0);
+        
         $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
         while($DatosCentro=$obVenta->FetchArray($Consulta)){
             $css->CrearOptionSelect($DatosCentro["ID"],$DatosCentro["Nombre"] , 0);

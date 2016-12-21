@@ -459,3 +459,41 @@ function CambiarMaxMin(idCaja,Min,Max){
     
 }
 
+//Funcion calcule valor con respecto a una caja de texto
+function CalculeValorDependencia(idDependencia,idCambiar,Operacion,idValor) {
+    	
+	       
+	ValorDependencia = document.getElementById(idDependencia).value;
+        Valor=document.getElementById(idValor).value;
+        if(Operacion=='P'){
+            Resultado=(ValorDependencia*Valor)/100;
+        }
+        
+        if(Operacion=='M'){
+            Resultado=(ValorDependencia*Valor);
+        }
+	
+	document.getElementById(idCambiar).value = Resultado;
+
+}
+
+//Funcion calcule la sumatoria de los montos y escribalo en una caja de texto
+function CalculeSumatoria(idCambiar) {
+    	
+	var Total;
+        var idMonto;
+        Total=0;
+        document.getElementById(idCambiar).value = 0;
+        //Total=parseInt(document.getElementById('Monto2').value)+parseInt(document.getElementById('Monto3').value);
+        
+        for(i=1;i<=10000; i++){
+            if(document.getElementById('Monto'+i)){
+                //Total=Total+document.getElementById('Monto'+i).value;
+                //alert(parseInt(document.getElementById('Monto'+i).value));
+                Total=Total+parseFloat(document.getElementById('Monto'+i).value);
+            }
+        }
+        //alert(valor);
+	document.getElementById(idCambiar).value = Total;
+
+}
