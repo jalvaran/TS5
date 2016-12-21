@@ -5817,6 +5817,22 @@ public function VerificaPermisos($VectorPermisos) {
             
             
 	}
+        
+        // Clase para Crear un Concepto Contable
+        public function CrearConceptoContable($Nombre, $Observaciones,$Vector){
+            $FechaHora=date("Y-m-d H:i:s");
+            $tab="conceptos";
+            $NumRegistros=6; 
+
+            $Columnas[0]="FechaHoraCreacion";     $Valores[0]=$FechaHora;
+            $Columnas[1]="Nombre";                $Valores[1]=$Nombre;
+            $Columnas[2]="Observaciones";         $Valores[2]=$Observaciones;
+            $Columnas[3]="idUsuario";             $Valores[3]=$this->idUser;
+            $Columnas[4]="Completo";              $Valores[4]="NO";
+            $Columnas[5]="Activo";                $Valores[5]="NO";
+    
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
 //////////////////////////////Fin	
 }
 	

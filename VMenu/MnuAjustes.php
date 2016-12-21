@@ -56,7 +56,7 @@ include_once("../sesiones/php_control.php");
 	$css->MenuAlfaIni("Generales");
             $css->SubMenuAlfa("Backups",2);
             $css->SubMenuAlfa("Politicas de Acceso",3);
-               
+            $css->SubMenuAlfa("Parametrizacion",4);   
 	$css->MenuAlfaFin();
 	
 	$css->IniciaTabs();
@@ -74,6 +74,12 @@ include_once("../sesiones/php_control.php");
                         $css->SubTabs("../VAtencion/paginas_bloques.php","_self","../images/seguridadinformatica.png","Agregar Paginas a Un Tipo de Usuario");
 		     
 		$css->FinTabs();
+                $css->NuevaTabs(4);
+			
+                        $css->SubTabs("../VAtencion/parametros_contables.php","_self","../images/parametros.png","Parametros Contables");
+                        $css->SubTabs("../VAtencion/CreacionConceptos.php","_self","../images/conceptos.png","Crear Conceptos Contables");
+		
+                $css->FinTabs();
 		
 	$css->FinMenu(); 
 	
