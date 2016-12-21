@@ -78,6 +78,80 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
         $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
         $css->CrearTabla();
         $css->FilaTabla(16);
+        $css->ColTabla("<strong>Datos Generales</strong>", 1);
+        
+        $css->CierraFilaTabla();
+        $css->FilaTabla(14);
+        $css->ColTabla("<strong>Fecha</strong>", 1);
+        $css->ColTabla("<strong>Tercero</strong>", 1);
+        $css->ColTabla("<strong>Centro de Costos</strong>", 1);
+        $css->ColTabla("<strong>Sede</strong>", 1);
+        
+        $css->CierraFilaTabla();
+        $css->FilaTabla(14);
+        print("<td>");
+        $css->CrearInputFecha("", "TxtFecha", date("Y-m-d"), 100, 30, "");
+        print("</td>");
+        print("<td>");
+        $VarSelect["Ancho"]=300;
+        $VarSelect["PlaceHolder"]="Seleccione el Tercero";
+        $VarSelect["Required"]=1;
+        //$VarSelect["Title"]="Tercero";   
+                      
+        $css->CrearSelectChosen("CmbTercero", $VarSelect);
+        $css->CrearOptionSelect("", "Seleccione un Tercero", 0);
+        $Consulta=$obVenta->ConsultarTabla("proveedores", "");
+        while($DatosProveedor=$obVenta->FetchArray($Consulta)){
+            $css->CrearOptionSelect($DatosProveedor["Num_Identificacion"],$DatosProveedor["RazonSocial"]." ".$DatosProveedor["Num_Identificacion"] , 0);
+        }
+        $css->CerrarSelect();
+        print("</td>");
+        print("<td>");
+           
+                   
+        $css->CrearSelect("CmbCentroCostos", "");
+        //$css->CrearOptionSelect("", "Centro de Costos", 0);
+        $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
+        while($DatosCentro=$obVenta->FetchArray($Consulta)){
+            $css->CrearOptionSelect($DatosCentro["ID"],$DatosCentro["Nombre"] , 0);
+        }
+        $css->CerrarSelect();
+        print("</td>");
+        print("<td>");
+           
+                   
+        $css->CrearSelect("CmbSede", "");
+        $css->CrearOptionSelect("", "Sede", 0);
+        $Consulta=$obVenta->ConsultarTabla("empresa_pro_sucursales", "");
+        while($DatosSucursal=$obVenta->FetchArray($Consulta)){
+            $sel=0;
+            if($DatosSucursal["Actual"]==1){
+                $sel=1;
+            }
+            $css->CrearOptionSelect($DatosSucursal["ID"],$DatosSucursal["Nombre"] , $sel);
+        }
+        $css->CerrarSelect();
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->FilaTabla(14);
+        print("<td colspan=2>");
+        $css->CrearTextArea("TxtObservacionesConcepto", "", "", "Observaciones", "", "", "", 420, 60, 0, 1);
+        print("</td>");
+        print("<td colspan=2>");
+        $css->CrearInputText("TxtNumFactura","text",'',"","Numero de Comprobante","black","","",300,30,0,1);
+        echo"<br>";
+        $css->CrearUpload("foto");
+        
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>Valores:</strong>", 4);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td colspan=4 style='text-align:center'>");
+        $obTabla->CrearInputsMontos($idConcepto,"");
+        
+        $css->CrearBotonConfirmado("BtnGuardar", "Guardar");
         $css->CierraFilaTabla();
         $css->CerrarTabla();
         $css->CerrarForm();

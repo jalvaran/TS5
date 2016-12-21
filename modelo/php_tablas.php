@@ -2400,6 +2400,19 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
       
 }
 
+//Crea los inputs para un concepto
+
+    public function CrearInputsMontos($idConcepto,$Vector) {
+        $this->css=new CssIni("");
+        $DatosConcepto=$this->obCon->DevuelveValores("conceptos", "ID", $idConcepto);
+        $consulta=  $this->obCon->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+        while($DatosMontos=$this->obCon->FetchArray($consulta)){
+            $this->css->CrearInputNumber("Monto$DatosMontos[ID]", "number", "", "",$DatosMontos["NombreMonto"] , "", "", "", 100, 30, 0, 1, 0, "", "any");
+            print("<br>");
+            
+        }
+    }
+
 // FIN Clases	
 }
 
