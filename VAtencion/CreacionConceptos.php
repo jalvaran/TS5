@@ -124,7 +124,7 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
             $css->CrearOptionSelect("NO", "Sin Dependencia", 1);
             $Consulta=$obVenta->ConsultarTabla("conceptos_montos", "WHERE idConcepto='$idConcepto'");
             while($DatosMontos=$obVenta->FetchArray($Consulta)){
-                $css->CrearOptionSelect($DatosMontos["ID"], $DatosMontos["NombreMonto"], 1);
+                $css->CrearOptionSelect($DatosMontos["ID"], $DatosMontos["NombreMonto"], 0);
             }        
             
         $css->CerrarSelect();
@@ -145,6 +145,132 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
         $css->CrearBotonConfirmado("BtnCrearMonto", "Agregar");
         print("</td>");
         $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
+        
+        ///Agregamos un Movimiento
+        
+        $css->CrearForm2("FrmAgregaMovimiento", $myPage, "post", "_self");
+        $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>Agregar un Movimiento</strong>", 5);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>Monto</strong>", 1);
+        $css->ColTabla("<strong>CuentaPUC</strong>", 1);
+        $css->ColTabla("<strong>Tipo de Movimiento</strong>", 1);
+        $css->ColTabla("<strong>Agregar</strong>", 1);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        
+        print("<td>");
+        $css->CrearSelect("CmbMonto", "");
+            $css->CrearOptionSelect("", "Elija un Monto", 0);
+            $Consulta=$obVenta->ConsultarTabla("conceptos_montos", "WHERE idConcepto='$idConcepto'");
+            while($DatosMontos=$obVenta->FetchArray($Consulta)){
+                $css->CrearOptionSelect($DatosMontos["ID"], $DatosMontos["NombreMonto"], 0);
+            }        
+            
+        $css->CerrarSelect();
+        print("</td>");
+        print("<td>");
+            $VarSelect["Ancho"]="200";
+            $VarSelect["PlaceHolder"]="Seleccione la cuenta";
+            $css->CrearSelectChosen("CmbCuentaMovimiento", $VarSelect);
+            $css->CrearOptionSelect("", "Seleccione la cuenta del movimiento" , 0);
+            
+            //Solo para cuando el PUC no está todo en subcuentas
+            $sql="SELECT * FROM cuentas";
+            $Consulta=$obVenta->Query($sql);
+            
+               while($DatosProveedores=$obVenta->FetchArray($Consulta)){
+                   $Sel=0;
+                   $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
+                   $css->CrearOptionSelect($DatosProveedores['idPUC'].';'.$NombreCuenta, "$DatosProveedores[idPUC] $DatosProveedores[Nombre]" , $Sel);
+               }
+            
+            //En subcuentas se debera cargar todo el PUC
+            $sql="SELECT * FROM subcuentas";
+            $Consulta=$obVenta->Query($sql);
+            
+               while($DatosProveedores=$obVenta->FetchArray($Consulta)){
+                   $Sel=0;
+                   $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
+                   $css->CrearOptionSelect($DatosProveedores['PUC'].';'.$NombreCuenta, "$DatosProveedores[PUC] $DatosProveedores[Nombre]" , $Sel);
+               }
+               
+            //En subcuentas se debera cargar todo el PUC
+            $sql="SELECT * FROM cuentasfrecuentes";
+            $Consulta=$obVenta->Query($sql);
+            
+               while($DatosProveedores=$obVenta->FetchArray($Consulta)){
+                   $Sel=0;
+                   $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
+                   $css->CrearOptionSelect($DatosProveedores['CuentaPUC'].';'.$NombreCuenta, "$DatosProveedores[CuentaPUC] $DatosProveedores[Nombre]" , $Sel);
+               }   
+            
+            $css->CerrarSelect();
+        print("</td>");
+        print("<td>");
+        $css->CrearSelect("CmbTipoMovimiento", "");
+            $css->CrearOptionSelect("", "Seleccione", 0);
+            $css->CrearOptionSelect("DB", "Debito", 0);
+            $css->CrearOptionSelect("CR", "Credito", 0);
+                        
+        $css->CerrarSelect();
+        print("</td>");
+        print("<td>");
+        $css->CrearBotonConfirmado("BtnCrearMovimiento", "Crear Movimiento");
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
+        
+        ///Visualizamos los movimientos que tenemos creados
+        
+        $css->CrearNotificacionAzul("Movimientos creados al Concepto $idConcepto $DatosConcepto[Nombre]", 16);
+        $css->CrearForm2("FrmEditaMovimientos", $myPage, "post", "_self");
+        $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+                       
+        $Consulta=$obVenta->ConsultarTabla("conceptos_movimientos", "WHERE idConcepto='$idConcepto'");
+        if($obVenta->NumRows($Consulta)){
+            $css->CrearTabla();
+            $css->FilaTabla(16);
+            $css->ColTabla("<strong>Movimientos de este Concepto</strong>", 5);
+            $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+            $css->ColTabla("<strong>Monto</strong>", 1);
+            $css->ColTabla("<strong>Cuenta</strong>", 1);
+            $css->ColTabla("<strong>NombreCuenta</strong>", 1);
+            $css->ColTabla("<strong>Debito</strong>", 1);
+            $css->ColTabla("<strong>Credito</strong>", 1);
+            $css->ColTabla("<strong>Borrar</strong>", 1);
+            $css->CierraFilaTabla();
+        while($DatosMovimientos=$obVenta->FetchArray($Consulta)){
+            $css->FilaTabla(14);
+            $Montos=$obVenta->DevuelveValores("conceptos_montos", "ID", $DatosMovimientos["idMonto"]);
+            if($DatosMovimientos["TipoMovimiento"]=="CR"){
+                $Credito="X";
+                $Debito="";
+            }else{
+                $Credito="";
+                $Debito="X";
+            }
+            $css->ColTabla("$Montos[NombreMonto]", 1);
+            $css->ColTabla("$DatosMovimientos[CuentaPUC]", 1);
+            $css->ColTabla("$DatosMovimientos[NombreCuentaPUC]", 1);
+            $css->ColTabla($Debito, 1);
+            $css->ColTabla($Credito, 1);
+            $css->ColTablaDel($myPage, "conceptos_movimientos", "ID", $DatosMovimientos["ID"], $idConcepto);
+            $css->CierraFilaTabla();
+        }
+        
+        }else{
+            $css->CrearNotificacionRoja("No hay movimientos", 16);
+        }    
+        
+        
         $css->CerrarTabla();
         $css->CerrarForm();
     }

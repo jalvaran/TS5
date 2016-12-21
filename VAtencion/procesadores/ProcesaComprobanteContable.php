@@ -74,7 +74,7 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
     $DatosCuentaDestino=$_REQUEST["CmbCuentaDestino"];
     $DatosCuentaDestino=explode(";",$DatosCuentaDestino);
     $CuentaPUC=$DatosCuentaDestino[0];
-    $NombreCuenta=$NombreCuenta=str_replace("_"," ",$DatosCuentaDestino[1]);
+    $NombreCuenta=str_replace("_"," ",$DatosCuentaDestino[1]);
     
     $Valor=$_REQUEST["TxtValorItem"];
     $DC=$_REQUEST["CmbDebitoCredito"];

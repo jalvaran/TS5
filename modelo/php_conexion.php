@@ -5832,6 +5832,48 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[5]="Activo";                $Valores[5]="NO";
     
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $idConcepto=$this->ObtenerMAX($tab,"ID", 1,"");
+            $this->CrearMontoConcepto($idConcepto,"Subtotal", "NO","NO","","");
+        }
+        
+        // Clase para Crear un Concepto Contable
+        public function CrearMontoConcepto($idConcepto,$Nombre, $Dependencia,$Operacion,$ValorDependencia,$Vector){
+            
+            if($Dependencia=="NO"){
+                $Dependencia="";
+                $Operacion="";
+                $ValorDependencia="";
+            }
+            if($Operacion=="NO"){
+                $ValorDependencia="";
+            }
+            $tab="conceptos_montos";
+            $NumRegistros=6; 
+
+            $Columnas[0]="idConcepto";      $Valores[0]=$idConcepto;
+            $Columnas[1]="NombreMonto";     $Valores[1]=$Nombre;
+            $Columnas[2]="Depende";         $Valores[2]=$Dependencia;
+            $Columnas[3]="Operacion";       $Valores[3]=$Operacion;
+            $Columnas[4]="ValorDependencia";$Valores[4]=$ValorDependencia;
+            $Columnas[5]="idUsuario";       $Valores[5]= $this->idUser;
+    
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+        
+        // Clase para Crear un movimiento de un concepto
+        public function CrearMovimientoConcepto($idConcepto,$idMonto, $CuentaPUC,$NombreCuentaPUC,$TipoMovimiento,$Vector){
+            
+            $tab="conceptos_movimientos";
+            $NumRegistros=6; 
+
+            $Columnas[0]="idConcepto";      $Valores[0]=$idConcepto;
+            $Columnas[1]="idMonto";         $Valores[1]=$idMonto;
+            $Columnas[2]="CuentaPUC";       $Valores[2]=$CuentaPUC;
+            $Columnas[3]="NombreCuentaPUC"; $Valores[3]=$NombreCuentaPUC;
+            $Columnas[4]="TipoMovimiento";  $Valores[4]=$TipoMovimiento;
+            $Columnas[5]="idUsuario";       $Valores[5]= $this->idUser;
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }
 //////////////////////////////Fin	
 }
