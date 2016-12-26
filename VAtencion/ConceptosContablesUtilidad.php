@@ -28,7 +28,10 @@ $css->CabeceraFin();
 /////
 /////
 $css->CrearDiv("principal", "container", "center",1,1);
-
+if(isset($_REQUEST["RutaPrint"])){
+    $Ruta=base64_decode($_REQUEST["RutaPrint"]);
+    $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$Ruta' target='_blank'> Imprimir Comprobante</a>", 16);
+}
 //Select con la seleccion del Concepto
 
 $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");

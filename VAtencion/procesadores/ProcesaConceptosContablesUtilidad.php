@@ -23,8 +23,10 @@ if(!empty($_REQUEST["BtnGuardar"])){
     $NumFactura=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
     
     $DatosRetorno=$obVenta->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
+    $Ruta= base64_encode($DatosRetorno["Ruta"]);
+    header("location:$myPage?RutaPrint=$Ruta");
     $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$DatosRetorno[Ruta]' target='_blank'> Imprimir Comprobante</a>", 16);
-    
+    //print("<script>history.go(1);</script>");
 }
 
 
