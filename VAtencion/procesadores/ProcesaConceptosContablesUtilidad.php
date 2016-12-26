@@ -1,10 +1,11 @@
 <?php 
+
 $obVenta=new ProcesoVenta($idUser);
 
 if(!empty($_REQUEST["BtnGuardar"])){
     
      $destino="";
-    
+    $css= new CssIni("");
     if(!empty($_FILES['foto']['name'])){
         
         $carpeta="../SoportesEgresos/";
@@ -21,9 +22,9 @@ if(!empty($_REQUEST["BtnGuardar"])){
     $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesConcepto"]);
     $NumFactura=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
     
-    $obVenta->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
-   
-    header("location:$myPage");
+    $DatosRetorno=$obVenta->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
+    $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$DatosRetorno[Ruta]' target='_blank'> Imprimir Comprobante</a>", 16);
+    
 }
 
 

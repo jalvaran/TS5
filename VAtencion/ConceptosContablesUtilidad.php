@@ -12,6 +12,7 @@ include_once("css_construct.php");
 
 print("<html>");
 print("<head>");
+
 $css =  new CssIni("Conceptos Contables");
 
 print("</head>");

@@ -37,7 +37,9 @@ $tbl = <<<EOD
         <td><strong>Fecha:</strong> $DatosNota[Fecha]</td>
         <td><strong>No.:</strong> $idComprobante</td>
     </tr>
-    
+    <tr>
+        <th colspan="3"><strong>Tercero:</strong> $DatosProveedor[RazonSocial] $DatosProveedor[Num_Identificacion] $DatosProveedor[Ciudad]</th>
+    </tr> 
     <tr>
         <th colspan="3"><strong>Por concepto de:</strong> $DatosNota[Detalle]</th>
     </tr> 
@@ -56,8 +58,9 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 $tbl = <<<EOD
 <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
     <tr align="center">
-        <td><strong>Codigo PUC</strong></td>
-        <td><strong>Cuenta</strong></td>
+        <td><strong>Documento</strong></td>
+        <td><strong>Cuenta PUC</strong></td>
+        <td><strong>Nombre Cuenta</strong></td>
         <td><strong>Débitos</strong></td>
         <td><strong>Créditos</strong></td>
     </tr>
@@ -86,6 +89,7 @@ while($DatosLibro=  mysql_fetch_array($Consulta)){
 $tbl = <<<EOD
 <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
     <tr align="left">
+        <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[Num_Documento_Externo]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[CuentaPUC]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[NombreCuenta]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$Debito</td>

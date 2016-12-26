@@ -3308,21 +3308,21 @@ public function CalculePesoRemision($idCotizacion)
                     $Columnas[5]="Total";               $Valores[5]=$Valor;
                     $Columnas[6]="Soporte";		$Valores[6]=$destino;
                     $Columnas[7]="NumFactura";		$Valores[7]=$NumFact;
-                    $Columnas[8]="Usuario_idUsuario";	$Valores[8]=$idUsuario;
+                    $Columnas[8]="Usuario_idUsuario";	$Valores[8]=$idUser;
                     $Columnas[9]="CentroCostos";	$Valores[9]=$idCentroCostos;
                     $Columnas[10]="EmpresaPro";		$Valores[10]=$idEmpresa;
                     $Columnas[11]="FechaProgramada";	$Valores[11]=$FechaProgramada;
                     
                     $this->InsertarRegistro("notascontables",$NumRegistros,$Columnas,$Valores);
                     
-                    $NumEgreso=$tabla->ObtenerMAX("notascontables","ID", 1, "");
+                    $NumEgreso=$this->ObtenerMAX("notascontables","ID", 1, "");
                     $DocumentoSoporte="NotaContable";
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$NumEgreso";
                     
                     
                 }
                 
-                
+                if($CuentaDestino>0){ //Con CuentaDestino en 0 deshabilitamos el ingreso al libro diario
 		/////////////////////////////////////////////////////////////////
 		//////registramos en libro diario
 		$DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
@@ -3479,7 +3479,7 @@ public function CalculePesoRemision($idCotizacion)
 
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
                 }
-                
+                }
         return ($NumEgreso);
     }
     
@@ -5880,21 +5880,37 @@ public function VerificaPermisos($VectorPermisos) {
         public function EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$Vector){
             $DatosConcepto=$this->DevuelveValores("conceptos", "ID", $idConcepto);
             $TipoDocInterno=$DatosConcepto["Genera"];
+            $DatosProveedor=$this->DevuelveValores("proveedores", "Num_Identificacion", $Tercero);
+            $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+            $Subtotal=0;
+            $IVA=0;
+            while($DatosMonto=  $this->FetchArray($Consulta)){
+                $idMonto=$DatosMonto["ID"];
+                $Monto[$idMonto]=round($this->normalizar($_REQUEST["Monto$idMonto"]));
+                if($DatosMonto["NombreMonto"]=="Subtotal"){
+                    $Subtotal=$Monto[$idMonto];
+                }
+                
+                if($DatosMonto["NombreMonto"]=="IVA"){
+                    $IVA=$Monto[$idMonto];
+                }
+            }
+            $Total=$Subtotal+$IVA;
             if($TipoDocInterno=="CE"){
                 $TipoDocInterno="CompEgreso";
-                $DocumentoInterno=1;
+                       
+                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $this->idUser, $CentroCosto, "Contado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
+                $DatosRetorno["Ruta"]="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$DocumentoInterno";
+                
             }
             if($TipoDocInterno=="CC"){
-                $TipoDocInterno="COMPROBANTE CONTABLE";
-                $DocumentoInterno=2;
+                $TipoDocInterno="NotaContable";
+                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $this->idUser, $CentroCosto, "Programado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
+                $DatosRetorno["Ruta"]="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$DocumentoInterno";
             }
             $Detalle=$DatosConcepto["Observaciones"];
             
-            $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
-            while($DatosMonto=  $this->FetchArray($Consulta)){
-                $idMonto=$DatosMonto["ID"];
-                $Monto[$idMonto]=$this->normalizar($_REQUEST["Monto$idMonto"]);
-            }
+            
             $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");
             while($DatosMovimientos=$this->FetchArray($Consulta)){
                 $CuentaPUC=$DatosMovimientos["CuentaPUC"];
@@ -5904,11 +5920,13 @@ public function VerificaPermisos($VectorPermisos) {
                 $TipoMovimiento=$DatosMovimientos["TipoMovimiento"];
                 $this->IngreseMovimientoLibroDiario($Fecha,$TipoDocInterno,$DocumentoInterno,$NumFactura,$Tercero,$CuentaPUC,$NombreCuenta,$Detalle,$TipoMovimiento,$Valor,$Observaciones,$CentroCosto,$Sede,"");
             }
+            return($DatosRetorno);
         }
         
         // Clase para Agregar un movimiento al libro diario
         
         public function IngreseMovimientoLibroDiario($Fecha,$TipoDocInterno,$DocumentoInterno,$DocumentoExterno,$idTercero,$CuentaPUC,$NombreCuenta,$Detalle,$TipoMovimiento,$Valor,$Concepto,$idCentroCostos,$idSede,$Vector) {
+            if($Valor<>0){
             if($TipoMovimiento=="DB"){
                 $Debito=$Valor;
                 $Credito=0;
@@ -5956,6 +5974,7 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[27]="Num_Documento_Externo";      $Valores[27]=$DocumentoExterno;
             $Columnas[28]="idUsuario";                  $Valores[28]=$this->idUser;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            }
         }
 //////////////////////////////Fin	
 }
