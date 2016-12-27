@@ -48,8 +48,9 @@ include_once("../sesiones/php_control.php");
  
 	$css->IniciaMenu("Informes"); 
 	$css->MenuAlfaIni("Financieros");
-		$css->SubMenuAlfa("Reporte de Ventas",2);
-		$css->SubMenuAlfa("Reporte de Compras",3);
+        $css->SubMenuAlfa("Auxiliares",2);
+		$css->SubMenuAlfa("Reporte de Ventas",3);
+		$css->SubMenuAlfa("Reporte de Compras",4);
 		
 	$css->MenuAlfaFin();
 	
@@ -60,9 +61,12 @@ include_once("../sesiones/php_control.php");
                         //$css->SubTabs("../VAtencion/BalanceGeneral.php","_blank","../images/resultados.png","Balance General y Estado de Resultados");
 		$css->FinTabs();
 		$css->NuevaTabs(2);
+			$css->SubTabs("../VAtencion/Auxiliares.php","_blank","../images/auxiliar.png","Cuentas Auxiliares");
+		$css->FinTabs();
+                $css->NuevaTabs(3);
 			$css->SubTabs("../VAtencion/InformeVentas.php","_blank","../images/infventas.png","Informe de Ventas");
 		$css->FinTabs();
-		$css->NuevaTabs(3);
+		$css->NuevaTabs(4);
 			$css->SubTabs("../VAtencion/InformeCompras.php","_blank","../images/otrosinformes.png","Informe de Compras");
 		$css->FinTabs();
 		

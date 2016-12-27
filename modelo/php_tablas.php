@@ -2452,6 +2452,86 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $this->css->CerrarDiv();
     }
 
+    
+    ///Arme una tabla con un auxiliar 2016-12-27  JAAV
+    
+    public function ArmeTablaAuxiliarDetallado($Titulo,$Condicion,$Condicion2,$Vector) {
+             
+        
+        
+        $tbl='
+            
+<table cellspacing="1" cellpadding="2" border="1"  align="center" >
+          <tr> 
+            <th><h3>TERCERO</h3></th>
+            <th><h3>FECHA</h3></th>
+            <th><h3>CUENTA</h3></th>
+            <th><h3>TIPO DOC</h3></th>
+            <th><h3>#DOC</h3></th>
+            <th><h3>SOPORTE</h3></th>
+            
+            <th><h3>DETALLE</h3></th>
+            <th><h3>DEBITO</h3></th>
+            <th><h3>CREDITO</h3></th>
+            <th><h3>SALDO</h3></th>
+
+          </tr >
+          </table>
+        ';
+        
+        //Guardo en un Vector los resultados de la consulta por Clase
+        
+        
+        $sql="SELECT * FROM `librodiario` $Condicion ORDER BY `Fecha`";
+        $Consulta=$this->obCon->Query($sql);
+        $i=0;
+        $TotalDebitos=0;
+        $TotalCreditos=0;
+        $Total=0;
+        $h=0;
+        
+        $tbl.='<table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+        while($DatosLibro=$this->obCon->FetchArray($Consulta)){
+            
+            $TotalDebitos=$TotalDebitos+$DatosLibro["Debito"];
+            $TotalCreditos=$TotalCreditos+$DatosLibro["Credito"];
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+            $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
+            <td align="center">'.$DatosLibro["Tercero_Identificacion"].'</td>
+            <td align="center">'.$DatosLibro["Fecha"].'</td>
+            <td align="center"><strong>'.$DatosLibro["CuentaPUC"].'</strong></td>
+            <td align="left">'.$DatosLibro["Tipo_Documento_Intero"].'</td>
+            <td align="center">'.$DatosLibro["Num_Documento_Interno"].'</td>
+            <td align="center">'.$DatosLibro["Num_Documento_Externo"].'</td>
+            <td align="center">'.$DatosLibro["Concepto"].'</td>
+            <td align="center">'.$DatosLibro["Debito"].'</td>
+            <td align="center">'.$DatosLibro["Credito"].'</td>
+            <td align="center"> Saldo</td>
+            </tr >';
+        }
+        $Diferencia=$TotalDebitos-$TotalCreditos;
+        $tbl.="</table>";
+                
+        $tbl.='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
+          <tr> 
+            <th colspan="3"><h3>TOTALES:</h3></th>
+            
+            <th align="rigth"><h3>'.number_format($TotalDebitos).'</h3></th>
+            <th align="rigth"><h3>'.number_format($TotalCreditos).'</h3></th>
+            <th align="rigth"><h3>'.number_format($Diferencia).'</h3></th>
+
+          </tr >
+          </table>
+        ';
+    return($tbl);
+}
+    
 // FIN Clases	
 }
 
