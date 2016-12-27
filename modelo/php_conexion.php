@@ -5858,6 +5858,8 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[5]="idUsuario";       $Valores[5]= $this->idUser;
     
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $idMonto=$this->ObtenerMAX($tab,"ID", 1,"");
+            return($idMonto);
         }
         
         // Clase para Crear un movimiento de un concepto
@@ -5975,6 +5977,38 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[28]="idUsuario";                  $Valores[28]=$this->idUser;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             }
+        }
+        
+        //Copiar un concepto Contable
+        
+        public function CopiarConceptoContable($idConcepto,$Vector) {
+            $DatosConcepto=$this->DevuelveValores("conceptos", "ID", $idConcepto);
+            $FechaHora=date("Y-m-d H:i:s");
+            $tab="conceptos";
+            $NumRegistros=7; 
+
+            $Columnas[0]="FechaHoraCreacion";     $Valores[0]=$FechaHora;
+            $Columnas[1]="Nombre";                $Valores[1]="Copia ".$DatosConcepto["Nombre"];
+            $Columnas[2]="Observaciones";         $Valores[2]=$DatosConcepto["Observaciones"];
+            $Columnas[3]="idUsuario";             $Valores[3]=$this->idUser;
+            $Columnas[4]="Completo";              $Valores[4]="NO";
+            $Columnas[5]="Activo";                $Valores[5]="NO";
+            $Columnas[6]="Genera";                $Valores[6]=$DatosConcepto["Genera"];
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $idConceptoNEW=$this->ObtenerMAX($tab,"ID", 1,"");
+            
+            $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
+            while($DatosMontos=$this->FetchArray($Consulta)){
+                $idMonto=$DatosMontos["ID"];
+                $idMontoNEW=$this->CrearMontoConcepto($idConceptoNEW, $DatosMontos["NombreMonto"], "", "", "", "");
+                $ConsultaMovimientos=$this->ConsultarTabla("conceptos_movimientos", " WHERE idMonto='$idMonto'");
+                while($DatosMovimientos=$this->FetchArray($ConsultaMovimientos)){
+                    $this->CrearMovimientoConcepto($idConceptoNEW, $idMontoNEW, $DatosMovimientos["CuentaPUC"], $DatosMovimientos["NombreCuentaPUC"], $DatosMovimientos["TipoMovimiento"], "");
+                }
+                
+            }
+            
+            return($idConceptoNEW);
         }
 //////////////////////////////Fin	
 }

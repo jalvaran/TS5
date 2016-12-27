@@ -77,6 +77,7 @@ include_once("../sesiones/php_control.php");
                 $css->NuevaTabs(4);
 			
                         $css->SubTabs("../VAtencion/parametros_contables.php","_self","../images/parametros.png","Parametros Contables");
+                        $css->SubTabs("../VAtencion/conceptos.php","_self","../images/listado.png","Lista de Conceptos Contables");
                         $css->SubTabs("../VAtencion/CreacionConceptos.php","_self","../images/conceptos.png","Crear Conceptos Contables");
 		
                 $css->FinTabs();

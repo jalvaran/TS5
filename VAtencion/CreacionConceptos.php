@@ -8,6 +8,11 @@ $idConcepto=0;
 if(isset($_REQUEST["CmbConcepto"])){
     $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
 }
+if(isset($_REQUEST["BtnCopiarConcepto"])){
+    
+    $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
+    $idConcepto=$obVenta->CopiarConceptoContable($idConcepto,"");
+}
 include_once("css_construct.php");
 
 print("<html>");
@@ -109,9 +114,50 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
     
     if($idConcepto>0){
         $DatosConcepto=$obVenta->DevuelveValores("conceptos", "ID", $idConcepto);
-        $css->CrearNotificacionAzul("Agregue Montos al Concepto $idConcepto $DatosConcepto[Nombre]", 16);
+        
+        $css->CrearForm2("FrmEditaConcepto", $myPage, "post", "_self");
+        $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+        $css->CrearTabla();
+        
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>Nombre</strong>", 1);
+        $css->ColTabla("<strong>Observaciones</strong>", 1);
+        $css->ColTabla("<strong>Documento que genera</strong>", 1);
+        $css->ColTabla("<strong>Editar</strong>", 1);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td>");
+        $css->CrearInputText("TxtNombreConceptoEdit", "text", "", $DatosConcepto["Nombre"], "Nombre", "", "", "", 200, 30, 0, 1);
+        
+        print("</td>");
+        print("<td>");
+        $css->CrearTextArea("TxtObservacionesConceptoEdit", "", $DatosConcepto["Observaciones"], "Observaciones", "", "", "", 200, 60, 0, 1);
+        print("</td>");
+        
+         print("<td>");
+        $css->CrearSelect("CmbDocumentoGeneradoEdit", "");
+        $Sel=0;
+        
+        if($DatosConcepto["Genera"]=="CE"){
+            $Sel=1;
+        }
+        $css->CrearOptionSelect("CE", "Comprobante de Egreso", $Sel);
+        $Sel=0;
+        if($DatosConcepto["Genera"]=="CC"){
+            $Sel=1;
+        }
+        $css->CrearOptionSelect("CC", "Comprobante Contable", $Sel);
+        $css->CerrarSelect();
+        print("</td>"); 
+        print("<td>"); 
+        $css->CrearBotonConfirmado("BtnEditarConcepto", "Editar");
+        print("</td>");
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
         $css->CrearForm2("FrmAgregaMonto", $myPage, "post", "_self");
         $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+        $css->CrearNotificacionAzul("Agregue Montos al Concepto $idConcepto $DatosConcepto[Nombre]", 16);
         $css->CrearTabla();
         $css->FilaTabla(16);
         $css->ColTabla("<strong>Agregar un Monto</strong>", 5);
@@ -156,6 +202,98 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
         $css->CerrarTabla();
         $css->CerrarForm();
         
+        ///Visualizamos los montos creados
+        
+        //Se miran los montos del concepto
+                       
+        $Consulta=$obVenta->ConsultarTabla("conceptos_montos", "WHERE idConcepto='$idConcepto'");
+        if($obVenta->NumRows($Consulta)){
+            $css->CrearTabla();
+            $css->FilaTabla(16);
+            $css->ColTabla("<strong>Montos de este Concepto</strong>", 5);
+            $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+            $css->ColTabla("<strong>Monto</strong>", 1);
+            $css->ColTabla("<strong>Dependencia</strong>", 1);
+            $css->ColTabla("<strong>Operacion</strong>", 1);
+            $css->ColTabla("<strong>ValorDepencia</strong>", 1);
+            $css->ColTabla("<strong>Eliminar</strong>", 1);
+            
+            $css->CierraFilaTabla();
+        while($DatosMontos=$obVenta->FetchArray($Consulta)){
+            $css->FilaTabla(14);
+            
+            $css->ColTabla("$DatosMontos[NombreMonto]", 1);
+            print("<td>");
+            $css->CrearForm2("FrmEditaMontos", $myPage, "post", "_self");
+            $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+            $css->CrearInputText("idMonto", "hidden", "", $DatosMontos["ID"], "", "", "", "", "", "", "", "");
+            
+            $css->CrearSelect("CmbDependenciaMontoEdit", "");
+            $css->CrearOptionSelect("NO", "Sin Dependencia", 1);
+            $ConsultaMontosExistentes=$obVenta->ConsultarTabla("conceptos_montos", "WHERE idConcepto='$idConcepto'");
+            while($DatosMontosExistentes=$obVenta->FetchArray($ConsultaMontosExistentes)){
+                $sel=0;
+                if($DatosMontosExistentes["Depende"]==$DatosMontos["ID"]){
+                    $sel=1;
+                }
+                           
+                $css->CrearOptionSelect($DatosMontosExistentes["ID"], $DatosMontosExistentes["NombreMonto"], $sel);
+            }        
+            
+            $css->CerrarSelect();
+            
+            $css->CrearBotonVerde("BtnEditarMonto", "E");
+            $css->CerrarForm();
+            print("</td>");
+            print("<td>");
+            $css->CrearForm2("FrmEditaMontosOperacion", $myPage, "post", "_self");
+            $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+            $css->CrearInputText("idMonto", "hidden", "", $DatosMontos["ID"], "", "", "", "", "", "", "", "");
+            
+            $css->CrearSelect("CmbOperacionEdit", "");
+            $css->CrearOptionSelect("NO", "Sin Operacion", 1);
+            $sel=0;
+            if($DatosMontos["Operacion"]=="P"){
+                $sel=1;
+            }
+            $css->CrearOptionSelect("P", "Porcentaje", $sel);
+            $sel=0;
+            if($DatosMontos["Operacion"]=="S"){
+                $sel=1;
+            }
+            $css->CrearOptionSelect("S", "Suma", $sel);
+            $sel=0;
+            if($DatosMontos["Operacion"]=="R"){
+                $sel=1;
+            }
+            $css->CrearOptionSelect("R", "Resta", $sel);
+            $css->CerrarSelect();
+            
+            $css->CrearBotonVerde("BtnEditarMonto", "E");
+            $css->CerrarForm();
+            print("</td>");
+            
+             print("<td>");
+            $css->CrearForm2("FrmEditaValorDependencia", $myPage, "post", "_self");
+            $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+            $css->CrearInputText("idMonto", "hidden", "", $DatosMontos["ID"], "", "", "", "", "", "", "", "");
+            
+            $css->CrearInputNumber("TxtValorDependenciaEdt", "number", "", $DatosMontos["ValorDependencia"], "Valor", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            
+            $css->CrearBotonVerde("BtnEditarValorDependencia", "E");
+            $css->CerrarForm();
+            print("</td>");
+            
+            $css->ColTablaDel($myPage, "conceptos_montos", "ID", $DatosMontos["ID"], $idConcepto);
+            
+            $css->CierraFilaTabla();
+        }
+        $css->CerrarTabla();
+        }
+        ///Visualizamos los movimientos que tenemos creados
+        
+        $css->CrearNotificacionAzul("Movimientos creados al Concepto $idConcepto $DatosConcepto[Nombre]", 16);
         ///Agregamos un Movimiento
         
         $css->CrearForm2("FrmAgregaMovimiento", $myPage, "post", "_self");
@@ -235,11 +373,8 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
         $css->CerrarTabla();
         $css->CerrarForm();
         
-        ///Visualizamos los movimientos que tenemos creados
         
-        $css->CrearNotificacionAzul("Movimientos creados al Concepto $idConcepto $DatosConcepto[Nombre]", 16);
-        $css->CrearForm2("FrmEditaMovimientos", $myPage, "post", "_self");
-        $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+        //Se miran los movimimientos del concepto
                        
         $Consulta=$obVenta->ConsultarTabla("conceptos_movimientos", "WHERE idConcepto='$idConcepto'");
         if($obVenta->NumRows($Consulta)){
@@ -266,8 +401,34 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
                 $Debito="X";
             }
             $css->ColTabla("$Montos[NombreMonto]", 1);
-            $css->ColTabla("$DatosMovimientos[CuentaPUC]", 1);
-            $css->ColTabla("$DatosMovimientos[NombreCuentaPUC]", 1);
+            print("<td>");
+            $css->CrearForm2("FrmEditaCuentaPUC", $myPage, "post", "_self");
+            $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+            $css->CrearInputText("idMovimiento", "hidden", "", $DatosMovimientos["ID"], "", "", "", "", "", "", "", "");
+            $css->CrearInputNumber("TxtCuentaPUCEdit", "number", "", $DatosMovimientos["CuentaPUC"], "CuentaPUC", "", "", "", 100, 30, 0, 1, 0, "", 1);
+            $css->CrearBotonVerde("BtnEditarCuentaPUC", "E");
+            $css->CerrarForm();
+            print("</td>");
+            print("<td>");
+            $css->CrearForm2("FrmEditaNombreCuentaPUC", $myPage, "post", "_self");
+            $css->CrearInputText("idMovimiento", "hidden", "", $DatosMovimientos["ID"], "", "", "", "", "", "", "", "");
+            $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
+            $css->CrearInputText("TxtNombreCuentaEdit", "text", "", $DatosMovimientos["NombreCuentaPUC"], "Nombre de la Cuenta", "", "", "", 200, 30, 0, 1);
+            $css->CrearSelect("CmbTipoMovimiento", "");
+            $selDB=0;
+            $selCR=0;
+            if($DatosMovimientos["TipoMovimiento"]=="DB"){
+               $selDB=1;
+            }
+            if($DatosMovimientos["TipoMovimiento"]=="CR"){
+               $selCR=1;
+            }
+            $css->CrearOptionSelect("DB", "Debito", $selDB);
+            $css->CrearOptionSelect("CR", "Credito", $selCR);
+            $css->CerrarSelect();
+            $css->CrearBotonVerde("BtnEditarNombreCuentaPUC", "E");
+            $css->CerrarForm();
+            print("</td>");
             $css->ColTabla($Debito, 1);
             $css->ColTabla($Credito, 1);
             $css->ColTablaDel($myPage, "conceptos_movimientos", "ID", $DatosMovimientos["ID"], $idConcepto);
@@ -276,11 +437,14 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
         }
         $css->FilaTabla(14);
         print("<td style='text-align:center'; colspan=6>");
+        $css->CrearForm2("FrmEditaMovimientos", $myPage, "post", "_self");
+        $css->CrearInputText("CmbConcepto", "hidden", "", $idConcepto, "", "", "", "", "", "", "", "");
         $css->CrearBotonConfirmado("BtnCerrarConcepto", "Cerrar y Activar este Concepto");
+        $css->CerrarForm();
         print("</td>");
         $css->CierraFilaTabla();
         $css->CerrarTabla();
-        $css->CerrarForm();
+        
         }else{
             $css->CrearNotificacionRoja("No hay movimientos", 16);
         }    

@@ -61,5 +61,45 @@ if(!empty($_REQUEST["BtnCerrarConcepto"])){
     header("location:$myPage");
     
 }
+
+
+/// Si se recibe la edicion de una cuenta
+if(!empty($_REQUEST["BtnEditarCuentaPUC"])){
+    
+    $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
+    $idMovimiento=$obVenta->normalizar($_REQUEST["idMovimiento"]);
+    $CuentaPUC=$obVenta->normalizar($_REQUEST["TxtCuentaPUCEdit"]);
+    $obVenta->ActualizaRegistro("conceptos_movimientos", "CuentaPUC",$CuentaPUC , "ID", $idMovimiento);
+    header("location:$myPage?CmbConcepto=$idConcepto");
+    
+}
+
+/// Si se recibe la edicion de un nombre de una cuenta
+if(!empty($_REQUEST["BtnEditarNombreCuentaPUC"])){
+    
+    $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
+    $idMovimiento=$obVenta->normalizar($_REQUEST["idMovimiento"]);
+    $CuentaPUC=$obVenta->normalizar($_REQUEST["TxtNombreCuentaEdit"]);
+    $TipoMovimiento=$obVenta->normalizar($_REQUEST["CmbTipoMovimiento"]);
+    $obVenta->ActualizaRegistro("conceptos_movimientos", "NombreCuentaPUC",$CuentaPUC , "ID", $idMovimiento);
+    $obVenta->ActualizaRegistro("conceptos_movimientos", "TipoMovimiento",$TipoMovimiento , "ID", $idMovimiento);
+    header("location:$myPage?CmbConcepto=$idConcepto");
+    
+}
+
+/// Si se recibe la edicion de un concepto
+if(!empty($_REQUEST["BtnEditarConcepto"])){
+    
+    $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
+    $Nombre=$obVenta->normalizar($_REQUEST["TxtNombreConceptoEdit"]);
+    $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesConceptoEdit"]);
+    $DocumentoGenerado=$obVenta->normalizar($_REQUEST["CmbDocumentoGeneradoEdit"]);
+    $obVenta->ActualizaRegistro("conceptos", "Nombre",$Nombre , "ID", $idConcepto);
+    $obVenta->ActualizaRegistro("conceptos", "Observaciones",$Observaciones , "ID", $idConcepto);
+    $obVenta->ActualizaRegistro("conceptos", "Genera",$DocumentoGenerado , "ID", $idConcepto);
+    header("location:$myPage?CmbConcepto=$idConcepto");
+    
+}
+
 ///////////////fin
 ?>

@@ -29,6 +29,5 @@ if(!empty($_REQUEST["BtnGuardar"])){
     //print("<script>history.go(1);</script>");
 }
 
-
 ///////////////fin
 ?>
