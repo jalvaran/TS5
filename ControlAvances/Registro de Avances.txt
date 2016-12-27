@@ -130,3 +130,5 @@ CONCEPTOS
 
     *Se agrega las tablas iniciadas por conceptos
     *Se Agrega las Columnas idUsuario a LibroDiario
+
+Cambiar a double debito credito y neto en libro diario

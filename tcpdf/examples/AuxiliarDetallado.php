@@ -62,7 +62,7 @@ $nombre_file=$fecha."_AuxiliarDetallado";
 //print("$Condicion");
 $pdf->SetFont('helvetica', '', 6);
 $Titulo="";
-$tbl=$obTabla->ArmeTablaAuxiliarDetallado($Titulo,$Condicion,$Condicion2,"");
+$tbl=$obTabla->ArmeTablaAuxiliarDetallado($Titulo,$Condicion,$TipoReporte,$FechaIni,"");
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 //Close and output PDF document

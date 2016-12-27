@@ -2455,7 +2455,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     
     ///Arme una tabla con un auxiliar 2016-12-27  JAAV
     
-    public function ArmeTablaAuxiliarDetallado($Titulo,$Condicion,$Condicion2,$Vector) {
+    public function ArmeTablaAuxiliarDetallado($Titulo,$Condicion,$TipoReporte,$FechaIni,$Vector) {
              
         
         
@@ -2487,14 +2487,28 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $i=0;
         $TotalDebitos=0;
         $TotalCreditos=0;
-        $Total=0;
+        $TotalSaldos=0;
         $h=0;
         
         $tbl.='<table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+        $Saldo=0;
         while($DatosLibro=$this->obCon->FetchArray($Consulta)){
-            
+            if($TipoReporte=="Corte"){
+                $Saldo=0;
+            }else{
+                $idTercero=$DatosLibro["Tercero_Identificacion"];
+                $Cuenta=$DatosLibro["CuentaPUC"];
+                $FechaMovimiento=$DatosLibro["Fecha"];
+                $sql="SELECT SUM(Neto) as Neto FROM librodiario WHERE Tercero_Identificacion='$idTercero' AND Fecha<'$FechaMovimiento' "
+                        . " AND CuentaPUC='$Cuenta'";
+                $Datos=$this->obCon->Query($sql);
+                $Resultado=$this->obCon->FetchArray($Datos);
+                $Saldo=$Resultado["Neto"];
+            }
+                        
             $TotalDebitos=$TotalDebitos+$DatosLibro["Debito"];
             $TotalCreditos=$TotalCreditos+$DatosLibro["Credito"];
+            $TotalSaldos=$TotalSaldos+$Saldo;
             if($h==0){
                 $Back="#f2f2f2";
                 $h=1;
@@ -2503,28 +2517,28 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 $h=0;
             }
             $tbl.='<tr align="rigth" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> 
-            <td align="center">'.$DatosLibro["Tercero_Identificacion"].'</td>
+            <td align="center">'.$DatosLibro["Tercero_Identificacion"].'<br>'.$DatosLibro["Tercero_Razon_Social"].'</td>
             <td align="center">'.$DatosLibro["Fecha"].'</td>
             <td align="center"><strong>'.$DatosLibro["CuentaPUC"].'</strong></td>
             <td align="left">'.$DatosLibro["Tipo_Documento_Intero"].'</td>
             <td align="center">'.$DatosLibro["Num_Documento_Interno"].'</td>
             <td align="center">'.$DatosLibro["Num_Documento_Externo"].'</td>
             <td align="center">'.$DatosLibro["Concepto"].'</td>
-            <td align="center">'.$DatosLibro["Debito"].'</td>
-            <td align="center">'.$DatosLibro["Credito"].'</td>
-            <td align="center"> Saldo</td>
+            <td align="center">'.number_format($DatosLibro["Debito"]).'</td>
+            <td align="center">'.number_format($DatosLibro["Credito"]).'</td>
+            <td align="center">'.number_format($Saldo).'</td>
             </tr >';
         }
-        $Diferencia=$TotalDebitos-$TotalCreditos;
+        
         $tbl.="</table>";
                 
         $tbl.='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
           <tr> 
-            <th colspan="3"><h3>TOTALES:</h3></th>
+            <th colspan="7"><h3>TOTALES:</h3></th>
             
             <th align="rigth"><h3>'.number_format($TotalDebitos).'</h3></th>
             <th align="rigth"><h3>'.number_format($TotalCreditos).'</h3></th>
-            <th align="rigth"><h3>'.number_format($Diferencia).'</h3></th>
+            <th align="rigth"><h3>'.number_format($TotalSaldos).'</h3></th>
 
           </tr >
           </table>
