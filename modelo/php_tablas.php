@@ -15,7 +15,7 @@ class Tabla{
      * Se utilizará para seleccionar las columnas de la exportacion a excel
      */
     public $Campos = array("A","B","C","D","E","F","G","H","I","J","K","L",
-    "M","N","O","P","Q","R","S","T","C","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP");
+    "M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP");
     public $Condicionales = array(" ","=","*",">","<",">=","<=","<>","#%");
     function __construct($db){
         $this->DataBase=$db;
@@ -1894,10 +1894,14 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
         $sql="SELECT SUBSTRING(`CuentaPUC`,1,1) AS Clase ,sum(`Debito`) as Debitos, sum(`Credito`) as Creditos, sum(`Neto`) as Neto, (SELECT SUM(`Neto`) as SaldoTotal FROM `librodiario` $Condicion2  SUBSTRING(`CuentaPUC`,1,1)=Clase) AS Total FROM `librodiario` $Condicion GROUP BY SUBSTRING(`CuentaPUC`,1,1)";
         $Consulta=$this->obCon->Query($sql);
         $i=0;
+        $DebitosGeneral=0;
+        $CreditosGeneral=0;
         $TotalDebitos=0;
         $TotalCreditos=0;
         $Total=0;
         while($ClaseCuenta=$this->obCon->FetchArray($Consulta)){
+            $DebitosGeneral=$DebitosGeneral+$ClaseCuenta["Debitos"];
+            $CreditosGeneral=$CreditosGeneral+$ClaseCuenta["Creditos"];
             $TotalDebitos=$TotalDebitos+$ClaseCuenta["Debitos"];
             $TotalCreditos=$TotalCreditos+$ClaseCuenta["Creditos"];
             $Total=$Total+$ClaseCuenta["Total"];
@@ -2070,18 +2074,11 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             }
             }
         }
-        $tbl.="</table>";
-        $tbl.='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
-          <tr> 
-            <th colspan="3"><h3>TOTALES:</h3></th>
-            
-            <th align="rigth"><h3>'.number_format($TotalDebitos).'</h3></th>
-            <th align="rigth"><h3>'.number_format($TotalCreditos).'</h3></th>
-            <th align="rigth"><h3>'.number_format($Diferencia).'</h3></th>
-
-          </tr >
-          </table>
-        ';
+       $tbl.='<tr >  <td colspan="3" align="rigth"><h2>TOTALES:</h2></td>'
+               . '<td align="rigth"><h2>'.  number_format($DebitosGeneral)."</h2> </td>"
+               . '<td align="rigth"><h2>'.  number_format($CreditosGeneral)."</h2> </td>"
+               . "<td>NA</td>"
+               . "</tr ></table>";
     return($tbl);
 }
    
@@ -2531,7 +2528,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         }
         
         $tbl.="</table>";
-                
+             
         $tbl.='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
           <tr> 
             <th colspan="7"><h3>TOTALES:</h3></th>
@@ -2541,11 +2538,198 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             <th align="rigth"><h3>'.number_format($TotalSaldos).'</h3></th>
 
           </tr >
-          </table>
+          </table>   
         ';
     return($tbl);
 }
+   
+//Arme Balance General
+//
+
+    public function ArmeTablaBalanceGeneral($Titulo,$Condicion,$Vector) {
+        
+        
+        $tbl='<table cellspacing="1" cellpadding="2" border="1"  align="center" >
+            <tr> 
+            <th colspan="3"><h3>ACTIVOS</h3></th>
+            <th colspan="3"><h3>PASIVOS Y PATRIMONIO</h3></th>
+            </tr> 
+            <tr> 
+            <th><h3>Cuenta</h3></th>
+            <th><h3>Nombre</h3></th>
+            <th><h3>Valor</h3></th>
+            <th><h3>Cuenta</h3></th>
+            <th><h3>Nombre</h3></th>
+            <th><h3>Valor</h3></th>
+            
+          </tr >
+          
+        ';
+        
+        $sql="SELECT SUBSTRING(`CuentaPUC`,1,4) AS Cuenta ,sum(`Debito`) as Debitos, sum(`Credito`) as Creditos FROM `librodiario` $Condicion AND SUBSTRING(`CuentaPUC`,1,4) LIKE '1%' GROUP BY SUBSTRING(`CuentaPUC`,1,4)";
+        $Consulta=$this->obCon->Query($sql);
+        $h=0;
+        while($DatosCuenta=$this->obCon->FetchArray($Consulta)){
+            $Debitos=$DatosCuenta["Debitos"];
+            $Creditos=$DatosCuenta["Creditos"];
+            $Valor=$Debitos-$Creditos;
+            
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+            $DatosSubcuentas=  $this->obCon->DevuelveValores("cuentas", "idPUC", $DatosCuenta["Cuenta"]);
+            $tbl.='</table><table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+            $tbl.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">' ;
+            $tbl.="
+            <th>$DatosCuenta[Cuenta]</th>
+            <th>$DatosSubcuentas[Nombre]</th>
+            <th>".number_format($Valor)."</th>
+            <th>0</th>
+            <th>0</th>
+            <th><h3>0</h3></th>
+            
+          </tr >";
+        }
+        $tbl.="</table>";
+        return($tbl);
+        
+    }
+    //Funcion para generar una interface de ingresos (TECNOAGRO)
+    public function GenereInterfaceIngresos($FechaIni,$FechaFin,$Vector) {
+        require_once '../librerias/Excel/PHPExcel.php';
+   $objPHPExcel = new PHPExcel();    
+   $objPHPExcel->getActiveSheet()->getStyle('H:I')->getNumberFormat()->setFormatCode('#');
+   $objPHPExcel->getActiveSheet()->getStyle("A:AL")->getFont()->setSize(8);
+   $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0]."1","empresa")
+            ->setCellValue($this->Campos[1]."1","clase")
+            ->setCellValue($this->Campos[2]."1","vinkey")
+            ->setCellValue($this->Campos[3]."1","tipodoc")
+            ->setCellValue($this->Campos[4]."1","numedoc")
+            ->setCellValue($this->Campos[5]."1","reg")
+            ->setCellValue($this->Campos[6]."1","fecha")
+            ->setCellValue($this->Campos[7]."1","cuenta")
+            ->setCellValue($this->Campos[8]."1","vinculado")
+            ->setCellValue($this->Campos[9]."1","sucvin")
+            ->setCellValue($this->Campos[10]."1","sucurs")
+            ->setCellValue($this->Campos[11]."1","ccosto")
+            ->setCellValue($this->Campos[12]."1","destino")
+           ->setCellValue($this->Campos[13]."1","vende")
+            ->setCellValue($this->Campos[14]."1","cobra")
+            ->setCellValue($this->Campos[15]."1","zona")
+            ->setCellValue($this->Campos[16]."1","bodega")
+            ->setCellValue($this->Campos[17]."1","producto")
+            ->setCellValue($this->Campos[18]."1","unimed")
+            ->setCellValue($this->Campos[19]."1","lotepro")
+            ->setCellValue($this->Campos[20]."1","cantidad")
+            ->setCellValue($this->Campos[21]."1","claseinv")
+            ->setCellValue($this->Campos[22]."1","clacru1")
+            ->setCellValue($this->Campos[23]."1","tipcru1")
+            ->setCellValue($this->Campos[24]."1","numcru1")
+            ->setCellValue($this->Campos[25]."1","cuocru1")
+           ->setCellValue($this->Campos[26]."1","fecini")
+            ->setCellValue($this->Campos[27]."1","plazo")
+            ->setCellValue($this->Campos[28]."1","clacru2")
+            ->setCellValue($this->Campos[29]."1","tipcru2")
+            ->setCellValue($this->Campos[30]."1","numcru2")
+            ->setCellValue($this->Campos[31]."1","cuocru2")
+            ->setCellValue($this->Campos[32]."1","valdebi")
+            ->setCellValue($this->Campos[33]."1","valcred")
+            ->setCellValue($this->Campos[34]."1","parci_o")
+            ->setCellValue($this->Campos[35]."1","tpreg")
+            ->setCellValue($this->Campos[36]."1","detalle")
+            ->setCellValue($this->Campos[37]."1","serial")
+            ;
+            
+   $sql="SELECT * FROM librodiario WHERE CuentaPUC LIKE '41%' AND Fecha>='$FechaIni' AND Fecha<='$FechaFin' ORDER BY Fecha";
+   $Consulta=  $this->obCon->Query($sql);
+   $i=2;
+   $TipoDocumentoOLD="";
+   $Num_DocumentoOLD="";
+   while($DatosIngreso=$this->obCon->FetchArray($Consulta)){
+       
+       $FechaVacia=str_replace("-", "", $DatosIngreso["Fecha"]);
+     
+       $TipoDocumento=$DatosIngreso["Tipo_Documento_Intero"];
+       $Num_Documento=$DatosIngreso["Num_Documento_Interno"];
+       if($TipoDocumento<>$TipoDocumentoOLD OR $Num_DocumentoOLD<>$Num_Documento){
+       $TipoDocumentoOLD=$TipoDocumento;
+       $Num_DocumentoOLD=$Num_Documento;
+       $CuentaPUC=$DatosIngreso["CuentaPUC"];
+       $Consulta2=$this->obCon->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='$TipoDocumento' AND Num_Documento_Interno='$Num_Documento' ");
+       while($DatosMovimiento=$this->obCon->FetchArray($Consulta2)){
+           $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$i,"101")
+            ->setCellValue($this->Campos[1].$i," 0000 ")
+            ->setCellValue($this->Campos[2].$i,".")
+            ->setCellValue($this->Campos[3].$i,"CIP")
+            ->setCellValue($this->Campos[4].$i,"$FechaVacia")
+            ->setCellValue($this->Campos[5].$i,$i-1)
+            ->setCellValue($this->Campos[6].$i,$DatosMovimiento["Fecha"])
+            ->setCellValue($this->Campos[7].$i,$DatosMovimiento["CuentaPUC"])
+            ->setCellValue($this->Campos[8].$i,$DatosMovimiento["Tercero_Identificacion"])
+            ->setCellValue($this->Campos[9].$i,".")
+            ->setCellValue($this->Campos[10].$i,".")
+            ->setCellValue($this->Campos[11].$i,".")
+            ->setCellValue($this->Campos[12].$i,".")
+            ->setCellValue($this->Campos[13].$i,".")
+            ->setCellValue($this->Campos[14].$i,".")
+            ->setCellValue($this->Campos[15].$i,".")
+            ->setCellValue($this->Campos[16].$i,".")
+            ->setCellValue($this->Campos[17].$i,".")
+            ->setCellValue($this->Campos[18].$i,".")
+            ->setCellValue($this->Campos[19].$i,".")
+            ->setCellValue($this->Campos[20].$i,"0")
+            ->setCellValue($this->Campos[21].$i,"E")
+            ->setCellValue($this->Campos[22].$i,".")
+            ->setCellValue($this->Campos[23].$i,".")
+            ->setCellValue($this->Campos[24].$i,"0")
+            ->setCellValue($this->Campos[25].$i,"0")
+            ->setCellValue($this->Campos[26].$i,$DatosMovimiento["Fecha"])
+            ->setCellValue($this->Campos[27].$i,"0")
+            ->setCellValue($this->Campos[28].$i,".")
+            ->setCellValue($this->Campos[29].$i,".")
+            ->setCellValue($this->Campos[30].$i,"0")
+            ->setCellValue($this->Campos[31].$i,"0")
+            ->setCellValue($this->Campos[32].$i,$DatosMovimiento["Debito"])
+            ->setCellValue($this->Campos[33].$i,$DatosMovimiento["Credito"])
+            ->setCellValue($this->Campos[34].$i,"0")
+            ->setCellValue($this->Campos[35].$i,"1")
+            ->setCellValue($this->Campos[36].$i,".")
+            ->setCellValue($this->Campos[37].$i,".")
+               ;
+           $i++;
+       }
+       }
+   }
+   
+   
     
+   //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com")
+        ->setLastModifiedBy("www.technosoluciones.com")
+        ->setTitle("Exportar Ingresos")
+        ->setSubject("Informe")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones sas")
+        ->setCategory("Informe Ingresos");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Interface_Ingresos".'.xls"');
+    header('Cache-Control: max-age=0');
+
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+   
+      
+    }
 // FIN Clases	
 }
 

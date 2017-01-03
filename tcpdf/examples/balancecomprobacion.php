@@ -45,7 +45,7 @@ if($EmpresaPro<>"ALL"){
         $Condicion2.="  AND idEmpresa='$EmpresaPro' AND ";
 }
 
-$idFormatoCalidad=15;
+$idFormatoCalidad=20;
 
 $Documento="<strong>BALANCE DE COMPROBACION $Rango</strong>";
 require_once('Encabezado.php');
@@ -59,6 +59,7 @@ $nombre_file=$fecha."_BalanceComprobacion";
 $Titulo="";
 
 $tbl=$obTabla->ArmeTablaBalanceComprobacion($Titulo,$Condicion,$Condicion2,"");
+//print($tbl);
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 //$pdf->writeHTML($tab, false, false, false, false, '');
