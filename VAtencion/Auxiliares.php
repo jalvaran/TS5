@@ -10,8 +10,10 @@ if(isset($_REQUEST["BtnVerInforme"])){
     $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinal"]);
     $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorte"]);
     $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporte"]);
-    
-    $obTabla->GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,"");
+    $CuentaPUC=$obVenta->normalizar($_REQUEST["TxtCuentaPUC"]);
+    $TipoFiltro=$obVenta->normalizar($_REQUEST["CmbFiltro"]);
+    $Tercero=$obVenta->normalizar($_REQUEST["TxtTercero"]);
+    $obTabla->ExcelAuxiliarDetallado($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$CuentaPUC,$TipoFiltro,$Tercero,"");
 }
 
 include_once("css_construct.php");
@@ -63,7 +65,7 @@ function CrearFormularioInformes($VectorInformes) {
                     $css->CrearOptionSelect("Inicia", "Empieza por", 0);
                 $css->CerrarSelect();
                 print("<br>");
-                $css->CrearInputNumber("TxtCuentaPUC", "number", "", "", "Cuenta", "", "", "", 100, 30, 0, 1, 1, "", 1);
+                $css->CrearInputNumber("TxtCuentaPUC", "number", "", "", "Cuenta", "", "", "", 100, 30, 0, 0, 0, "", 1);
                 print("<br>");
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Busque un Tercero";
@@ -127,9 +129,9 @@ print("<body>");
     $css->CrearNotificacionNaranja("GENERAR UN AUXILIAR", 16);
     
     $VectorInformes["FormName"]="FrmInformeAuxiliar";
-    $VectorInformes["ActionForm"]="../tcpdf/examples/AuxiliarDetallado.php";
+    $VectorInformes["ActionForm"]=$myPage;
     $VectorInformes["Metod"]="post";
-    $VectorInformes["Target"]="_blank";
+    $VectorInformes["Target"]="_self";
     $VectorInformes["Titulo"]="Auxiliar Detallado";
     CrearFormularioInformes($VectorInformes);
      

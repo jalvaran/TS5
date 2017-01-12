@@ -1,6 +1,19 @@
 <?php 
 $myPage="BalanceComprobacion.php";
 include_once("../sesiones/php_control.php");
+include_once("../modelo/php_tablas.php");
+$obTabla = new Tabla($db);
+$obVenta = new ProcesoVenta($idUser);
+if(isset($_REQUEST["BtnVerInforme"])){
+    $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIni"]);
+    $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinal"]);
+    $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorte"]);
+    $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporte"]);
+    $idEmpresa=$obVenta->normalizar($_REQUEST["CmbEmpresaPro"]);
+    $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCostos"]);
+    $obTabla->GenerarBalanceComprobacionExcel($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$idEmpresa,$CentroCosto,"");
+}
+
 include_once("css_construct.php");
 
 function CrearFormularioInformes($VectorInformes) {
@@ -163,10 +176,10 @@ print("<body>");
     
     $css->CrearNotificacionAzul("GENERAR BALANCE DE COMPROBACION", 16);
     
-    $VectorInformes["FormName"]="FormBalanceGeneral";
-    $VectorInformes["ActionForm"]="../tcpdf/examples/balancecomprobacion.php";
+    $VectorInformes["FormName"]="FormBalanceComprobacion";
+    $VectorInformes["ActionForm"]=$myPage;
     $VectorInformes["Metod"]="post";
-    $VectorInformes["Target"]="_blank";
+    $VectorInformes["Target"]="_self";
     $VectorInformes["Titulo"]="BALANCE GENERAL";
     CrearFormularioInformes($VectorInformes);
     
