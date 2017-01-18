@@ -2297,45 +2297,50 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
    $objPHPExcel = new PHPExcel();    
    
    if($TipoReporte=="Corte"){
-      $sql="SELECT Movimiento, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
+      $sql="SELECT Movimiento, Detalle, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
               . " `kardexmercancias`.`ProductosVenta_idProductosVenta`=`productosventa`.`idProductosventa` "
-              . " WHERE `Fecha`<='$FechaCorte' GROUP BY Movimiento, idProductosventa";
+              . " WHERE `Fecha`<='$FechaCorte' GROUP BY Movimiento,Detalle, idProductosventa ORDER BY idProductosventa";
       
       $TituloInforme="Informe Comparativo a $FechaCorte";
    }else{
        
-      $sql="SELECT Movimiento, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
+      $sql="SELECT Movimiento, Detalle, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
               . " `kardexmercancias`.`ProductosVenta_idProductosVenta`=`productosventa`.`idProductosventa` "
-              . " WHERE `Fecha`>='$FechaInicial' AND `Fecha`<='$FechaFinal' GROUP BY Movimiento, idProductosventa"; 
+              . " WHERE `Fecha`>='$FechaInicial' AND `Fecha`<='$FechaFinal' GROUP BY Movimiento,Detalle, idProductosventa ORDER BY idProductosventa"; 
       $TituloInforme="Informe Comparativo de $FechaInicial a $FechaFinal";
    }
    
    $Consulta=  $this->obCon->Query($sql);
-   
+   $f=0;
    $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue($this->Campos[0]."1","idProductosVenta")
-            ->setCellValue($this->Campos[1]."1","Referencia")
-            ->setCellValue($this->Campos[2]."1","Nombre")
-            ->setCellValue($this->Campos[3]."1","Entradas")
-            ->setCellValue($this->Campos[4]."1","Salidas")
-            ->setCellValue($this->Campos[5]."1","Saldo")
-            ->setCellValue($this->Campos[6]."1","Departamento")
-            ->setCellValue($this->Campos[7]."1","Sub1")
-            ->setCellValue($this->Campos[8]."1","Sub2")
-            ->setCellValue($this->Campos[9]."1","Sub3")
-            ->setCellValue($this->Campos[10]."1","Sub4")
-            ->setCellValue($this->Campos[11]."1","Sub5")
-            ->setCellValue($this->Campos[12]."1",$TituloInforme);
+            ->setCellValue($this->Campos[$f++]."1","idProductosVenta")
+            ->setCellValue($this->Campos[$f++]."1","Referencia")
+            ->setCellValue($this->Campos[$f++]."1","Nombre")
+            ->setCellValue($this->Campos[$f++]."1","Entradas por Compras")
+            ->setCellValue($this->Campos[$f++]."1","Entradas por Traslados")
+            ->setCellValue($this->Campos[$f++]."1","Entradas por Altas")
+            ->setCellValue($this->Campos[$f++]."1","Salidas por Ventas")
+            ->setCellValue($this->Campos[$f++]."1","Salidas por Traslados")
+            ->setCellValue($this->Campos[$f++]."1","Salidas por Bajas")
+            ->setCellValue($this->Campos[$f++]."1","Saldo")
+            ->setCellValue($this->Campos[$f++]."1","Departamento")
+            ->setCellValue($this->Campos[$f++]."1","Sub1")
+            ->setCellValue($this->Campos[$f++]."1","Sub2")
+            ->setCellValue($this->Campos[$f++]."1","Sub3")
+            ->setCellValue($this->Campos[$f++]."1","Sub4")
+            ->setCellValue($this->Campos[$f++]."1","Sub5")
+            ->setCellValue($this->Campos[$f++]."1",$TituloInforme);
             
    
    while($DatosKardex=$this->obCon->FetchArray($Consulta)){
        if($DatosKardex["Movimiento"]=="ENTRADA" OR $DatosKardex["Movimiento"]=="SALIDA"){
         $id=$DatosKardex["idProductosVenta"];
         $Movimiento=$DatosKardex["Movimiento"];
+        $Detalle=$DatosKardex["Detalle"];
         $idProductos[$id]=$DatosKardex["idProductosVenta"];
         $Producto[$id]["Referencia"]=$DatosKardex["Referencia"];
         $Producto[$id]["Nombre"]=$DatosKardex["Nombre"];
-        $Producto[$id][$Movimiento]["Cantidad"]=$DatosKardex["Cantidad"];
+        $Producto[$id][$Movimiento][$Detalle]["Cantidad"]=$DatosKardex["Cantidad"];
         $Producto[$id]["Departamento"]=$DatosKardex["Departamento"];
         $Producto[$id]["Sub1"]=$DatosKardex["Sub1"];
         $Producto[$id]["Sub2"]=$DatosKardex["Sub2"];
@@ -2348,36 +2353,57 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
    $i=2;
    foreach($idProductos as $id){
        $Entradas=0;
+       $EntradasXTraslados=0;
+       $EntradasXAltas=0;
+       $SalidasXTraslados=0;
+       $SalidasXBajas=0;
        $Salidas=0;
        $Saldos=0;
               
-       if(isset($Producto[$id]["ENTRADA"]["Cantidad"])){
-           $Entradas=$Producto[$id]["ENTRADA"]["Cantidad"];
+       if(isset($Producto[$id]["ENTRADA"]["FACTURA"]["Cantidad"])){
+           $Entradas=$Producto[$id]["ENTRADA"]["FACTURA"]["Cantidad"];
        }
-       if(isset($Producto[$id]["SALIDA"]["Cantidad"])){
-           $Salidas=$Producto[$id]["SALIDA"]["Cantidad"];
+       if(isset($Producto[$id]["ENTRADA"]["Traslado"]["Cantidad"])){
+           $EntradasXTraslados=$Producto[$id]["ENTRADA"]["Traslado"]["Cantidad"];
        }
-       $Saldos=$Entradas-$Salidas;
+       if(isset($Producto[$id]["ENTRADA"]["ALTA"]["Cantidad"])){
+           $EntradasXAltas=$Producto[$id]["ENTRADA"]["ALTA"]["Cantidad"];
+       }
+       if(isset($Producto[$id]["SALIDA"]["Factura"]["Cantidad"])){
+           $Salidas=$Producto[$id]["SALIDA"]["Factura"]["Cantidad"];
+       }
+       if(isset($Producto[$id]["SALIDA"]["Traslado"]["Cantidad"])){
+           $SalidasXTraslados=$Producto[$id]["SALIDA"]["Traslado"]["Cantidad"];
+       }
+       if(isset($Producto[$id]["SALIDA"]["BAJA"]["Cantidad"])){
+           $SalidasXBajas=$Producto[$id]["SALIDA"]["BAJA"]["Cantidad"];
+       }
+       $Saldos=$Entradas+$EntradasXTraslados+$EntradasXAltas-$Salidas-$SalidasXTraslados-$SalidasXBajas;
        $Departamentos=  $this->obCon->DevuelveValores("prod_departamentos", "idDepartamentos", $Producto[$id]["Departamento"]);
        $Sub1=  $this->obCon->DevuelveValores("prod_sub1", "idSub1", $Producto[$id]["Sub1"]);
        $Sub2=  $this->obCon->DevuelveValores("prod_sub2", "idSub2", $Producto[$id]["Sub2"]);
        $Sub3=  $this->obCon->DevuelveValores("prod_sub3", "idSub3", $Producto[$id]["Sub3"]);
        $Sub4=  $this->obCon->DevuelveValores("prod_sub4", "idSub4", $Producto[$id]["Sub4"]);
        $Sub5=  $this->obCon->DevuelveValores("prod_sub5", "idSub5", $Producto[$id]["Sub5"]);
-       if($Entradas<>0 OR $Salidas<>0){
-       $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue($this->Campos[0].$i,$id)
-            ->setCellValue($this->Campos[1].$i,$Producto[$id]["Referencia"])
-            ->setCellValue($this->Campos[2].$i,$Producto[$id]["Nombre"])
-            ->setCellValue($this->Campos[3].$i,$Entradas)
-            ->setCellValue($this->Campos[4].$i,$Salidas)
-            ->setCellValue($this->Campos[5].$i,$Saldos)
-            ->setCellValue($this->Campos[6].$i,$Departamentos["Nombre"])
-            ->setCellValue($this->Campos[7].$i,$Sub1["NombreSub1"])
-            ->setCellValue($this->Campos[8].$i,$Sub2["NombreSub2"])
-            ->setCellValue($this->Campos[9].$i,$Sub3["NombreSub3"])
-            ->setCellValue($this->Campos[10].$i,$Sub4["NombreSub4"])
-            ->setCellValue($this->Campos[11].$i,$Sub5["NombreSub5"]);
+       if($Entradas<>0 OR $EntradasXTraslados<>0 OR $EntradasXAltas<>0 OR $Salidas<>0 OR $SalidasXTraslados<>0 OR $SalidasXBajas<>0){
+       $f=0;
+           $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[$f++].$i,$id)
+            ->setCellValue($this->Campos[$f++].$i,$Producto[$id]["Referencia"])
+            ->setCellValue($this->Campos[$f++].$i,$Producto[$id]["Nombre"])
+            ->setCellValue($this->Campos[$f++].$i,$Entradas)
+            ->setCellValue($this->Campos[$f++].$i,$EntradasXTraslados)
+            ->setCellValue($this->Campos[$f++].$i,$EntradasXAltas)
+            ->setCellValue($this->Campos[$f++].$i,$Salidas)
+            ->setCellValue($this->Campos[$f++].$i,$SalidasXTraslados)
+            ->setCellValue($this->Campos[$f++].$i,$SalidasXBajas)
+            ->setCellValue($this->Campos[$f++].$i,$Saldos)
+            ->setCellValue($this->Campos[$f++].$i,$Departamentos["Nombre"])
+            ->setCellValue($this->Campos[$f++].$i,$Sub1["NombreSub1"])
+            ->setCellValue($this->Campos[$f++].$i,$Sub2["NombreSub2"])
+            ->setCellValue($this->Campos[$f++].$i,$Sub3["NombreSub3"])
+            ->setCellValue($this->Campos[$f++].$i,$Sub4["NombreSub4"])
+            ->setCellValue($this->Campos[$f++].$i,$Sub5["NombreSub5"]);
        $i++; 
        }     
       
