@@ -17,8 +17,14 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
 include_once("Configuraciones/proveedores.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-
-$statement = $obTabla->CreeFiltro($Vector);
+if(isset($_REQUEST["TxtStament"])){
+    $statement= base64_decode($_REQUEST["TxtStament"]);
+    //print("$statement");
+}else{
+    $statement = $obTabla->CreeFiltro($Vector);
+    //print("<script>alert('pasa por crear filtro $statement')</script>");
+}
+//$statement = $obTabla->CreeFiltro($Vector);
 //print($statement);
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 

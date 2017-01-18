@@ -34,7 +34,7 @@ $obTabla = new Tabla($db);
 
 if(isset($_REQUEST["TxtStament"])){
     $statement= base64_decode($_REQUEST["TxtStament"]);
-    //print("<script>alert('$statement')</script>");
+    //print("$statement");
 }else{
     $statement = $obTabla->CreeFiltro($Vector);
     //print("<script>alert('pasa por crear filtro $statement')</script>");
@@ -46,7 +46,7 @@ $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
 $obTabla->VerifiqueExport($Vector);
-
+//$obTabla->VerifiqueExportPDF($Vector);
 include_once("css_construct.php");
 print("<html>");
 print("<head>");

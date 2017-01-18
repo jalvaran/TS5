@@ -365,6 +365,13 @@ public function DibujeTabla($Vector){
     $this->css->CrearBotonVerde("BtnFiltrar", "Filtrar");
     
     $this->css->CrearBoton("BtnExportarExcel", "Exportar a Excel");
+    //$this->css->CrearBotonNaranja("BtnVerPDF", "Exportar a PDF");
+    $imagerute="../images/pdf2.png";
+    $TxtSt=base64_encode($statement);
+    
+    $TxtTabla=  base64_encode($Tabla["Tabla"]);
+    $this->css->CrearImageLink("CreePDFFromTabla.php?BtnVerPDF=1&TxtT=$TxtTabla&TxtL=$TxtSt", $imagerute, "_blank",50,50);
+   
     print("</td>");
     $this->css->CierraFilaTabla();
     
@@ -722,6 +729,8 @@ public function VerifiqueExport($Vector)  {
     exit; 
    
     }    
+     
+    
 }
 
 
@@ -3077,6 +3086,123 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     $objWriter->save('php://output');
     exit; 
     }
+        
+    //Inicia la creacion de un pdf
+
+    public function PDF_Ini($TituloFormato,$FontSize,$VectorPDF) {
+        
+        require_once('../tcpdf/examples/config/tcpdf_config_alt.php');
+        $tcpdf_include_dirs = array(realpath('../tcpdf/tcpdf.php'), '/usr/share/php/tcpdf/tcpdf.php', '/usr/share/tcpdf/tcpdf.php', '/usr/share/php-tcpdf/tcpdf.php', '/var/www/tcpdf/tcpdf.php', '/var/www/html/tcpdf/tcpdf.php', '/usr/local/apache2/htdocs/tcpdf/tcpdf.php');
+        foreach ($tcpdf_include_dirs as $tcpdf_include_path) {
+                if (@file_exists($tcpdf_include_path)) {
+                        require_once($tcpdf_include_path);
+                        break;
+                }
+        }
+        // create new PDF document
+        $this->PDF = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // set document information
+        $this->PDF->SetCreator(PDF_CREATOR);
+        $this->PDF->SetAuthor('Techno Soluciones');
+        $this->PDF->SetTitle($TituloFormato);
+        $this->PDF->SetSubject($TituloFormato);
+        $this->PDF->SetKeywords('Techno Soluciones, PDF, '.$TituloFormato.' , CCTV, Alarmas, Computadores, Software');
+        // set default header data
+        //$pdf->SetHeaderData(PDF_HEADER_LOGO, 60, PDF_HEADER_TITLE.'', "");
+
+        // set header and footer fonts
+        $this->PDF->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $this->PDF->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        $this->PDF->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $this->PDF->SetMargins(10, 10, PDF_MARGIN_RIGHT);
+        $this->PDF->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $this->PDF->SetFooterMargin(10);
+
+        // set auto page breaks
+        $this->PDF->SetAutoPageBreak(TRUE, 10);
+
+        // set image scale factor
+        $this->PDF->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/spa.php')) {
+                require_once(dirname(__FILE__).'/lang/spa.php');
+                $this->PDF->setLanguageArray($l);
+        }
+        
+        // ---------------------------------------------------------
+        // set font
+        //$pdf->SetFont('helvetica', 'B', 6);
+        // add a page
+        $this->PDF->AddPage();
+        $this->PDF->SetFont('helvetica', '', $FontSize);
+        
+}
+
+//encabezado de un  formato de calidad en un pdf
+
+    public function PDF_Encabezado($idEmpresa,$idFormatoCalidad,$VectorEncabezado) {
+        $DatosEmpresaPro=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresa);
+        $DatosFormatoCalidad=$this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
+        
+        $RutaLogo="../$DatosEmpresaPro[RutaImagen]";
+///////////////////////////////////////////////////////
+//////////////encabezado//////////////////
+////////////////////////////////////////////////////////
+//////
+//////
+$tbl = <<<EOD
+<table cellspacing="0" cellpadding="1" border="1">
+    <tr border="1">
+        <td rowspan="3" border="1" style="text-align: center;"><img src="$RutaLogo" style="width:110px;height:60px;"></td>
+        
+        <td rowspan="3" width="290px" style="text-align: center; vertical-align: center;"><h2><br>$DatosFormatoCalidad[Nombre]</h2></td>
+        <td width="70px" style="text-align: center;">Versión<br></td>
+        <td width="130px"> $DatosFormatoCalidad[Version]</td>
+    </tr>
+    <tr>
+    	
+    	<td style="text-align: center;" >Código<br></td>
+        <td> $DatosFormatoCalidad[Codigo]</td>
+        
+    </tr>
+    <tr>
+       <td style="text-align: center;" >Fecha<br></td>
+       <td> $DatosFormatoCalidad[Fecha]</td> 
+    </tr>
+
+</table>
+EOD;
+
+$this->PDF->writeHTML($tbl, true, false, false, false, '');
+
+
+$this->PDF->SetFillColor(255, 255, 255);
+
+$txt="<h3>".$DatosEmpresaPro["RazonSocial"]."<br>NIT ".$DatosEmpresaPro["NIT"]."</h3>";
+$this->PDF->MultiCell(60, 5, $txt, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+$txt=$DatosEmpresaPro["Direccion"]."<br>".$DatosEmpresaPro["Telefono"]."<br>".$DatosEmpresaPro["Ciudad"]."<br>".$DatosEmpresaPro["WEB"];
+$this->PDF->MultiCell(60, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
+
+$Documento="<br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
+$this->PDF->MultiCell(60, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
+$this->PDF->writeHTML("<br>", true, false, false, false, '');
+//Close and output PDF document
+
+    }
+//Crear el documento PDF
+
+    public function PDF_Write($html) {
+        $this->PDF->writeHTML($html, true, false, false, false, '');
+    } 
+//Crear el documento PDF
+
+    public function PDF_Output($NombreArchivo) {
+        $this->PDF->Output("$NombreArchivo".".pdf", 'I');
+    }    
 // FIN Clases	
 }
 
