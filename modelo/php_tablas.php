@@ -3224,6 +3224,11 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
     public function PDF_Write($html) {
         $this->PDF->writeHTML($html, true, false, false, false, '');
     } 
+//Agregar pagina en PDF
+
+    public function PDF_Add() {
+        $this->PDF->AddPage();
+    }     
 //Crear el documento PDF
 
     public function PDF_Output($NombreArchivo) {
@@ -3277,7 +3282,9 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $TotalClases[5]=$GastosOperativos;
         $TotalClases[6]=$CostosVentas;
         $TotalClases[7]=$CostosProduccion;
-        $TotalClases["RE"]=$TotalClases[1]-$TotalClases[2]-$TotalClases[3];
+        $TotalClases["RE"]=$TotalClases[1]-$TotalClases[2]-$TotalClases[3];//resultado del ejercicio
+        $TotalClases["UB"]=$TotalClases[4]-$TotalClases[6]-$TotalClases[7];//Utilidad Bruta
+        $TotalClases["UO"]=$TotalClases["UB"]-$TotalClases[5]; //Utilidad de la Operacion
         return($TotalClases);
     }
     
@@ -3386,17 +3393,153 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         return($html);
     }
     
+    //Armar el html para el estado de resultados
+    public function ArmeHTMLEstadoResultados($TotalClases,$FechaCorte) {
+        $Back="#CEE3F6";
+        $html='<table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+        $html.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
+        $html.='<td colspan="3"><strong>Estado del Resultado Integral <br>A '.$FechaCorte.'</strong></td></tr>'; 
+        $html.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
+        $html.='<td colspan="3"><strong>INGRESOS</strong></td></tr>';
+        
+        ///Se dibujan los ingresos
+        $h=1;     
+        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", " WHERE Clase=4");
+              
+        while($DatosMayor=$this->obCon->FetchArray($Consulta)){
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+           $Valor=  number_format($DatosMayor["Neto"]*(-1));
+           $html.='<tr align="left" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+           $html.='<td>'.$DatosMayor["CuentaPUC"].'</td><td>'.$DatosMayor["NombreCuenta"].'</td><td align="right">'.$Valor.'</td>'; 
+           $html.='</tr>'; 
+        }
+        
+        $TotalIngresos=0;
+        if($TotalClases[4]<>""){
+            $TotalIngresos=  number_format($TotalClases[4]);
+        }
+        $Back="#f9e79f";
+        $html.='<tr align="right" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+        $html.='<td colspan="2"><strong>Total de Ingresos:</strong></td><td><strong>'.$TotalIngresos.'</strong></td>'; 
+        $html.='</tr>'; 
+        
+         ///Se dibujan los costos de venta y produccion
+        $Back="#CEE3F6";
+        $html.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
+        $html.='<td colspan="3"><strong>COSTOS DE VENTA Y/O PRODUCCION</strong></td></tr>';
+        $h=1; 
+        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", " WHERE Clase=6 OR Clase=7");
+              
+        while($DatosMayor=$this->obCon->FetchArray($Consulta)){
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+           $Valor=  number_format($DatosMayor["Neto"]);
+           $html.='<tr align="left" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+           $html.='<td>'.$DatosMayor["CuentaPUC"].'</td><td>'.$DatosMayor["NombreCuenta"].'</td><td align="right">'.$Valor.'</td>'; 
+           $html.='</tr>'; 
+        }
+        
+        
+        $TotalCostos=$TotalClases[6]+$TotalClases[7];
+        $TotalCostosN=0;
+        if($TotalCostos<>""){
+            $TotalCostosN=  number_format($TotalCostos);
+        }
+        $Back="#fef9e7";
+        $html.='<tr align="right" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+        $html.='<td colspan="2"><strong>Total Costos de Venta y/o Produccion:</strong></td><td><strong>'.$TotalCostosN.'</strong></td>'; 
+        $html.='</tr>'; 
+        
+        ///Dibujamos Utilidad Bruta
+        
+        
+        if($TotalClases["UB"]<>""){
+            $UtilidadBruta=  number_format($TotalClases["UB"]);
+        }
+        $Back="#f9e79f";
+        $html.='<tr align="right" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+        $html.='<td colspan="2"><strong>Utilidad Bruta:</strong></td><td><strong>'.$UtilidadBruta.'</strong></td>'; 
+        $html.='</tr>'; 
+        
+        
+        ///Se dibujan los gastos y utilidad de la operacion
+        $Back="#CEE3F6";
+        $html.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
+        $html.='<td colspan="3"><strong>GASTOS</strong></td></tr>';
+        $h=1; 
+        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", " WHERE Clase=5");
+              
+        while($DatosMayor=$this->obCon->FetchArray($Consulta)){
+            if($h==0){
+                $Back="#f2f2f2";
+                $h=1;
+            }else{
+                $Back="white";
+                $h=0;
+            }
+           $Valor=  number_format($DatosMayor["Neto"]);
+           $html.='<tr align="left" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+           $html.='<td>'.$DatosMayor["CuentaPUC"].'</td><td>'.$DatosMayor["NombreCuenta"].'</td><td align="right">'.$Valor.'</td>'; 
+           $html.='</tr>'; 
+        }
+        
+        
+        if($TotalClases[5]<>""){
+            $TotalGastos=  number_format($TotalClases[5]);
+        }
+        $Back="#fef9e7";
+        $html.='<tr align="right" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+        $html.='<td colspan="2"><strong>Total Gastos:</strong></td><td><strong>'.$TotalGastos.'</strong></td>'; 
+        $html.='</tr>'; 
+        
+        ///Dibujamos Utilidad Bruta
+        
+        
+        if($TotalClases["UO"]<>""){
+            $UtilidadOperacional=  number_format($TotalClases["UO"]);
+        }
+        $Back="#f9e79f";
+        $html.='<tr align="right" border="0" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';"> ';
+        $html.='<td colspan="2"><strong>Utilidad de la Operacion:</strong></td><td><strong>'.$UtilidadOperacional.'</strong></td>'; 
+        $html.='</tr>'; 
+        
+        $html.="</table>";
+        return($html);
+    }
+    
  //Crear Estados Financieros en PDF
  
     public function GenereEstadosFinancierosPDF($FechaCorte,$CentroCostos,$EmpresaPro,$Vector){
         $TotalClases=$this->ArmeTemporalMayor($FechaCorte, $CentroCostos, $EmpresaPro, $Vector);
-        $html=$this->ArmeHTMLBalanceGeneral($TotalClases,$FechaCorte);
+        $htmlBG=$this->ArmeHTMLBalanceGeneral($TotalClases,$FechaCorte);
+        $htmlER=$this->ArmeHTMLEstadoResultados($TotalClases,$FechaCorte);
+        $Back="#f2f2f2";
+        $htmlFirmas='<table cellspacing="1" cellpadding="1" border="0"  align="center" >';
+        $htmlFirmas.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
+        $htmlFirmas.='<td height="60"><strong>Gerente</strong></td><td height="60"><strong>Contador</strong></td></tr>'; 
+        $htmlFirmas.='</table>';      
         $this->PDF_Ini("Estados Financieros", 8, "");
         if($EmpresaPro=="ALL"){
             $EmpresaPro=1;
         }
+        //print($htmlER);
         $this->PDF_Encabezado($EmpresaPro, 15, "");
-        $this->PDF_Write("<br><br>".$html);
+        $this->PDF_Write("<br><br>".$htmlBG);
+        $this->PDF_Write($htmlFirmas);
+        $this->PDF_Add();
+        $this->PDF_Write("<br><br>".$htmlER);
+        $this->PDF_Write($htmlFirmas);
         $this->PDF_Output("Estados_Financieros_$FechaCorte");
     }
 // FIN Clases	
