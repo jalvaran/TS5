@@ -41,6 +41,11 @@ $Concepto="Anulacion de Factura $DatosFactura[Prefijo] - $DatosFactura[NumeroFac
         $NumRegistros=27;
         $CuentaPUC=$DatosLibroDiario["CuentaPUC"];
         $NombreCuenta=$DatosLibroDiario["NombreCuenta"];
+        if( substr($CuentaPUC, 0, 1)==4){
+            $DatosCuentaDevolucion=$obVenta->DevuelveValores("parametros_contables", "ID", 9);
+            $CuentaPUC=$DatosCuentaDevolucion["CuentaPUC"];
+            $NombreCuenta=$DatosCuentaDevolucion["NombreCuenta"];
+        }
         $Debito=$DatosLibroDiario["Credito"];
         $Credito=$DatosLibroDiario["Debito"];
         $Neto=$DatosLibroDiario["Neto"]*(-1);

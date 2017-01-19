@@ -3521,6 +3521,9 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
  //Crear Estados Financieros en PDF
  
     public function GenereEstadosFinancierosPDF($FechaCorte,$CentroCostos,$EmpresaPro,$Vector){
+        if($EmpresaPro=="ALL"){
+            $EmpresaPro=1;
+        }
         $TotalClases=$this->ArmeTemporalMayor($FechaCorte, $CentroCostos, $EmpresaPro, $Vector);
         $htmlBG=$this->ArmeHTMLBalanceGeneral($TotalClases,$FechaCorte);
         $htmlER=$this->ArmeHTMLEstadoResultados($TotalClases,$FechaCorte);
@@ -3530,10 +3533,7 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $htmlFirmas.='<td height="60"><strong>Gerente</strong></td><td height="60"><strong>Contador</strong></td></tr>'; 
         $htmlFirmas.='</table>';      
         $this->PDF_Ini("Estados Financieros", 8, "");
-        if($EmpresaPro=="ALL"){
-            $EmpresaPro=1;
-        }
-        //print($htmlER);
+        
         $this->PDF_Encabezado($EmpresaPro, 15, "");
         $this->PDF_Write("<br><br>".$htmlBG);
         $this->PDF_Write($htmlFirmas);
