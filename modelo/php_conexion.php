@@ -113,6 +113,7 @@ class ProcesoVenta{
 	return($reg["suma"]);
 
 	}	
+        
 	
 	///Totaliza una venta
 	
@@ -6010,6 +6011,21 @@ public function VerificaPermisos($VectorPermisos) {
             
             return($idConceptoNEW);
         }
+        
+        /////Cuente una columna
+		
+	public function Count($Tabla,$NombreColumna, $Condicion){
+	
+		
+	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
+	
+	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . mysql_error());
+	$reg=$this->FetchArray($reg);
+	
+	return($reg["Cuenta"]);
+
+	}	
+        
 //////////////////////////////Fin	
 }
 	

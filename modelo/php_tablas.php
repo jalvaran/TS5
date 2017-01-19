@@ -3228,7 +3228,123 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
 
     public function PDF_Output($NombreArchivo) {
         $this->PDF->Output("$NombreArchivo".".pdf", 'I');
-    }    
+    } 
+    
+    //Crear Estados Financieros en PDF
+ 
+    public function ArmeTemporalMayor($FechaCorte,$CentroCostos,$EmpresaPro,$Vector){
+        //obtener activos
+        $Condicion=" WHERE Fecha<='$FechaCorte'";
+        if($CentroCostos<>"ALL"){
+            $Condicion.=" AND idCentroCosto='$CentroCostos'";
+        }
+        if($EmpresaPro<>"ALL"){
+            $Condicion.=" AND idEmpresa='$EmpresaPro'";
+        }
+        $Clase=0;
+        $this->obCon->VaciarTabla("estadosfinancieros_mayor_temporal");
+        $sql="SELECT SUBSTRING(`CuentaPUC`,1,4) AS Cuenta ,sum(`Neto`) as TotalCuenta FROM `librodiario` $Condicion GROUP BY SUBSTRING(`CuentaPUC`,1,4) ORDER BY SUBSTRING(`CuentaPUC`,1,4)";
+        $Consulta=$this->obCon->Query($sql);
+        
+        while($DatosMayor=$this->obCon->FetchArray($Consulta)){
+            if($DatosMayor["Cuenta"]>0){
+                $Clase=substr($DatosMayor["Cuenta"], 0, 1);
+                $DatosCuenta=$this->obCon->DevuelveValores("cuentas", "idPUC", $DatosMayor["Cuenta"]);
+                $tab="estadosfinancieros_mayor_temporal";
+                $NumRegistros=5;
+                $Columnas[0]="FechaCorte";        $Valores[0]=$FechaCorte;
+                $Columnas[1]="Clase";             $Valores[1]=$Clase;
+                $Columnas[2]="CuentaPUC";         $Valores[2]=$DatosMayor["Cuenta"];
+                $Columnas[3]="NombreCuenta";      $Valores[3]=$DatosCuenta["Nombre"];
+                $Columnas[4]="Neto";              $Valores[4]=$DatosMayor["TotalCuenta"];
+
+                $this->obCon->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            }
+        }
+        
+        $Activos=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='1'");
+        $Pasivos=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='2'");
+        $Patrimonio=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='3'");
+        $Ingresos=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='4'");
+        $GastosOperativos=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='5'");
+        $CostosVentas=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='6'");
+        $CostosProduccion=$this->obCon->Sume("estadosfinancieros_mayor_temporal", "Neto", "WHERE Clase='7'");
+        
+        $TotalClases[1]=$Activos;
+        $TotalClases[2]=$Pasivos*(-1);    //Es naturaleza credito por lo tanto debe multiplicarse por -1
+        $TotalClases[3]=$Patrimonio*(-1);
+        $TotalClases[4]=$Ingresos*(-1);
+        $TotalClases[5]=$GastosOperativos;
+        $TotalClases[6]=$CostosVentas;
+        $TotalClases[7]=$CostosProduccion;
+        $TotalClases["RE"]=$TotalClases[1]-$TotalClases[2]-$TotalClases[3];
+        return($TotalClases);
+    }
+    
+    //Armar el html para los estados financieros
+    public function ArmeHTMLEstadosFinancieros($TotalClases,$FechaCorte) {
+        
+        $html='<table cellspacing="1" cellpadding="2" border="0"  align="center" >';
+        $html.='<tr><td colspan="6"> Estado de Situacion Financiera A '.$FechaCorte.'<td></tr>';    
+        $html.='<tr><td colspan="3"><strong>ACTIVOS</strong></td><td colspan="3"><strong>PASIVOS</strong></td></tr>';
+        $html.='<tr><td><strong>Código</strong></td><td><strong>Cuenta</strong></td><td><strong>Valor</strong></td>';
+        $html.='<td><strong>Código</strong></td><td><strong>Cuenta</strong></td><td><strong>Valor</strong></td></tr>';
+        //Calculo el total de filas que necesitare
+        $FilasActivo=$this->obCon->Count("estadosfinancieros_mayor_temporal", "Clase", " WHERE Clase=1");
+        $FilasPasivoPatrimonio=$this->obCon->Count("estadosfinancieros_mayor_temporal", "Clase", " WHERE Clase=2 OR Clase=3");
+        $FilasPasivoPatrimonio++;
+        if($FilasActivo>=$FilasPasivoPatrimonio){
+            $TotalFilas=$FilasActivo;
+        }else{
+            $TotalFilas=$FilasPasivoPatrimonio;
+        }
+        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", "");
+        while($DatosMayor=$this->obCon->FetchArray($Consulta)){
+            
+            $f=0;
+            if($DatosMayor["Clase"]==1){
+                $f++;
+                $Fila[$f]["CodigoA"]=$DatosMayor["CuentaPUC"];
+                $Fila[$f]["CuentaA"]=$DatosMayor["NombreCuenta"];
+                $Fila[$f]["ValorA"]=$DatosMayor["Neto"];
+            }
+            $f=0;
+            if($DatosMayor["Clase"]==2 OR $DatosMayor["Clase"]==3){
+                $f++;
+                $Fila[$f]["CodigoPP"]=$DatosMayor["CuentaPUC"];
+                $Fila[$f]["CuentaPP"]=$DatosMayor["NombreCuenta"];
+                $Fila[$f]["ValorPP"]=$DatosMayor["Neto"];
+            }
+            $f++;
+            $Filas["Total"][$f]=$f;
+            
+        }
+        $i=0;
+        foreach ($Filas["Total"] as $TotalFilas){
+           $i++;
+           $html.="<tr>";
+           if(isset($Fila[$i]["CodigoA"])){
+               $PUCA=$Fila[$i]["CodigoA"];
+               $NombreA=$Fila[$i]["CuentaA"];
+               $ValorA=$Fila[$i]["ValorA"];
+           }
+           if(isset($Fila[$i]["CodigoPP"])){
+               $PUCPP=$Fila[$i]["CodigoPP"];
+               $NombrePP=$Fila[$i]["CuentaPP"];
+               $ValorPP=$Fila[$i]["ValorPP"];
+           }
+           
+           $html.="</tr>";
+        }
+        
+    }
+    
+ //Crear Estados Financieros en PDF
+ 
+    public function GenereEstadosFinancierosPDF($FechaCorte,$CentroCostos,$EmpresaPro,$Vector){
+        $TotalClases=$this->ArmeTemporalMayor($FechaCorte, $CentroCostos, $EmpresaPro, $Vector);
+        $html=$this->ArmeHTMLEstadosFinancieros($TotalClases,$FechaCorte);     
+    }
 // FIN Clases	
 }
 

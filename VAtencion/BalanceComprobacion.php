@@ -192,13 +192,13 @@ print("<body>");
     $VectorInformes["Titulo"]="INTERFACE DE INGRESOS";
     CrearFormularioInformes($VectorInformes);
    
-    $css->CrearNotificacionVerde("GENERAR BALANCE GENERAL", 16);
+    $css->CrearNotificacionVerde("GENERAR ESTADOS FINANCIEROS", 16);
     
     $VectorInformes["FormName"]="FormBalanceGeneral";
-    $VectorInformes["ActionForm"]="../tcpdf/examples/balancegeneral.php";
+    $VectorInformes["ActionForm"]="EstadosFinancieros.php";
     $VectorInformes["Metod"]="post";
     $VectorInformes["Target"]="_blank";
-    $VectorInformes["Titulo"]="BALANCE DE COMPROBACION";
+    $VectorInformes["Titulo"]="ESTADOS FINANCIEROS";
     CrearFormularioBalance($VectorInformes);
    
     $css->CerrarDiv();//Cerramos contenedor Secundario
