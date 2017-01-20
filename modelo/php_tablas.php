@@ -1508,7 +1508,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 print("<strong>Cuenta:</strong>");
                 $this->css->CrearSelect2($VectorCuentas);
                 $this->css->CrearOptionSelect("", "Seleccione una cuenta destino", 0);
-                $ConsultaCuentas=$this->obCon->ConsultarTabla("CuentasFrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
+                $ConsultaCuentas=$this->obCon->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
                 while($DatosCuentaFrecuentes=$this->obCon->FetchArray($ConsultaCuentas)){
                     $this->css->CrearOptionSelect($DatosCuentaFrecuentes["CuentaPUC"], $DatosCuentaFrecuentes["Nombre"], 0);
                 }
@@ -3282,9 +3282,27 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $TotalClases[5]=$GastosOperativos;
         $TotalClases[6]=$CostosVentas;
         $TotalClases[7]=$CostosProduccion;
-        $TotalClases["RE"]=$TotalClases[1]-$TotalClases[2]-$TotalClases[3];//resultado del ejercicio
+        $TotalClases["RE"]=($TotalClases[1]-$TotalClases[2]-$TotalClases[3])*(-1);//resultado del ejercicio
         $TotalClases["UB"]=$TotalClases[4]-$TotalClases[6]-$TotalClases[7];//Utilidad Bruta
         $TotalClases["UO"]=$TotalClases["UB"]-$TotalClases[5]; //Utilidad de la Operacion
+        
+        if($TotalClases["RE"]>=0){
+            $DatosCuentaRE=  $this->obCon->DevuelveValores("parametros_contables", "ID", 12);
+            
+        }else{
+            $DatosCuentaRE=  $this->obCon->DevuelveValores("parametros_contables", "ID", 11);
+            
+        }
+        $tab="estadosfinancieros_mayor_temporal";
+        $NumRegistros=5;
+        $Columnas[0]="FechaCorte";        $Valores[0]=$FechaCorte;
+        $Columnas[1]="Clase";             $Valores[1]=3;
+        $Columnas[2]="CuentaPUC";         $Valores[2]=$DatosCuentaRE["CuentaPUC"];
+        $Columnas[3]="NombreCuenta";      $Valores[3]=$DatosCuentaRE["NombreCuenta"];
+        $Columnas[4]="Neto";              $Valores[4]=$TotalClases["RE"];
+
+        $this->obCon->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
         return($TotalClases);
     }
     
@@ -3306,10 +3324,12 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $FilasPasivoPatrimonio;
         if($FilasActivo>=$FilasPasivoPatrimonio){
             $TotalFilas=$FilasActivo;
+            $M=1;
         }else{
             $TotalFilas=$FilasPasivoPatrimonio;
+            $M=0;
         }
-        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", "");
+        $Consulta=$this->obCon->ConsultarTabla("estadosfinancieros_mayor_temporal", " ORDER BY CuentaPUC");
         $f=0;
         $flag=0;
         while($DatosMayor=$this->obCon->FetchArray($Consulta)){
@@ -3342,8 +3362,9 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $ResultadoEjercicio["CodigoPP"]= $DatosParametros["CuentaPUC"] ;
         $ResultadoEjercicio["CuentaPP"]=$DatosParametros["NombreCuenta"] ;
         $ResultadoEjercicio["ValorPP"]=$TotalClases["RE"];
+        
         $h=1;
-        for($i=0;$i<$TotalFilas;$i++){
+        for($i=0;$i<=$TotalFilas;$i++){
            
            $PUCA="";
            $NombreA="";
@@ -3365,15 +3386,11 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
                $ValorA=$Fila[$i]["ValorA"];
            }
            if(isset($Fila[$i]["CodigoPP"])){
-               if($Fila[$i]["CodigoPP"]=="3605" or $Fila[$i]["CodigoPP"]=="3610"){
-                    $PUCPP=$ResultadoEjercicio["CodigoPP"];
-                    $NombrePP=$ResultadoEjercicio["CuentaPP"];
-                    $ValorPP=$ResultadoEjercicio["ValorPP"];
-               }else{
-                   $PUCPP=$Fila[$i]["CodigoPP"];
-                   $NombrePP=$Fila[$i]["CuentaPP"];
-                   $ValorPP=$Fila[$i]["ValorPP"];
-               }
+               
+                $PUCPP=$Fila[$i]["CodigoPP"];
+                $NombrePP=$Fila[$i]["CuentaPP"];
+                $ValorPP=$Fila[$i]["ValorPP"];
+               
            }
            if($ValorA<>""){
                $ValorA=number_format($ValorA);
@@ -3388,7 +3405,7 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $Back="#CEE3F6";
         $html.='<tr style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">';
         $html.='<td colspan="2"><strong>Total Activos</strong></td><td align="right"><strong>'.number_format($TotalClases[1]).'</strong></td>';
-        $html.='<td colspan="2"><strong>Total Pasivo y Patrimonio</strong></td><td align="right"><strong>'.number_format($TotalClases[2]+$TotalClases[3]+$TotalClases["RE"]).'</strong></td></tr>';
+        $html.='<td colspan="2"><strong>Total Pasivo y Patrimonio</strong></td><td align="right"><strong>'.number_format($TotalClases[2]+$TotalClases[3]-$TotalClases["RE"]).'</strong></td></tr>';
         $html.="</table>";
         return($html);
     }
@@ -3525,6 +3542,10 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
             $EmpresaPro=1;
         }
         $TotalClases=$this->ArmeTemporalMayor($FechaCorte, $CentroCostos, $EmpresaPro, $Vector);
+        //print("<pre>");
+        //print_r($TotalClases);
+        //print("</pre>");
+        
         $htmlBG=$this->ArmeHTMLBalanceGeneral($TotalClases,$FechaCorte);
         $htmlER=$this->ArmeHTMLEstadoResultados($TotalClases,$FechaCorte);
         $Back="#f2f2f2";
@@ -3541,6 +3562,7 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $this->PDF_Write("<br><br>".$htmlER);
         $this->PDF_Write($htmlFirmas);
         $this->PDF_Output("Estados_Financieros_$FechaCorte");
+         
     }
 // FIN Clases	
 }

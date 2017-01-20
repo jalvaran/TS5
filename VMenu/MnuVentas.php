@@ -52,6 +52,7 @@ include_once("../sesiones/php_control.php");
 
 		$css->NuevaTabs(1);
                     $css->SubTabs("../VAtencion/cotizacionesv5.php","_blank","../images/historial.png","Historial Cotizaciones");
+                    $css->SubTabs("../VAtencion/cot_itemscotizaciones.php","_blank","../images/historial2.png","Historial Cotizaciones Detallado");
                     $css->SubTabs("../VAtencion/Cotizaciones.php","_blank","../images/cotizacion.png","Cotizar");
                     $css->SubTabs("../VAtencion/VentasRapidas.php","_blank","../images/vender.png","Ventas Rapidas");
                     $css->SubTabs("../VAtencion/cajas_aperturas_cierres.php","_blank","../images/cierres_caja.jpg","Historial de Cierres");
