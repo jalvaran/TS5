@@ -25,11 +25,19 @@ $Vector["NuevoRegistro"]["Deshabilitado"]=1;
 
 // Nueva Accion
 $Ruta="RegistrarIngreso.php?idFactura=";
-$Vector["NuevaAccionLink"][0]="AsociarCoti";
+$Vector["NuevaAccionLink"][1]="AsociarCoti";
 $Vector["NuevaAccion"]["AsociarCoti"]["Titulo"]="Registrar Pago";
 $Vector["NuevaAccion"]["AsociarCoti"]["Link"]=$Ruta;
 $Vector["NuevaAccion"]["AsociarCoti"]["ColumnaLink"]="Facturas_idFacturas";
 $Vector["NuevaAccion"]["AsociarCoti"]["Target"]="_self";
+
+// Nueva Accion
+$Ruta="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=";
+$Vector["NuevaAccionLink"][0]="VerFactura";
+$Vector["NuevaAccion"]["VerFactura"]["Titulo"]="Ver Factura";
+$Vector["NuevaAccion"]["VerFactura"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["VerFactura"]["ColumnaLink"]="Facturas_idFacturas";
+$Vector["NuevaAccion"]["VerFactura"]["Target"]="_blank";
 //Selecciono las Columnas que tendran valores de otras tablas
 //
 //

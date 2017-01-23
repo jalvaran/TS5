@@ -23,7 +23,7 @@ $css->CrearDiv("Principal", "container", "center", 1, 1);
 
 //////Espacio para verificar si un titulo ya esta vendido       
 
-//$obTabla->DibujeVerificacionTitulo($myPage, "");
+$obTabla->DibujeVerificacionTitulo($myPage, "");
 
 $obTabla->DibujeAreaVentasTitulos($myPage, "");
 

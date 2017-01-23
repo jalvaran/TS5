@@ -3564,6 +3564,44 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $this->PDF_Output("Estados_Financieros_$FechaCorte");
          
     }
+    
+    //Genera el pdf de un traslado de un titulo
+    //
+    public function GenerePDFTrasladoTitulo($idTraslado,$Vector) {
+        $DatosTraslado=  $this->obCon->DevuelveValores("titulos_traslados", "ID", $idTraslado);
+        $DatosPromocion=$this->obCon->DevuelveValores("titulos_promociones", "ID", $DatosTraslado["Promocion"]);
+        $this->PDF_Ini("Traslado Titulo", 9, "");
+        $html="<pre>$DatosTraslado[Fecha]
+		
+		
+		
+		
+		
+ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
+
+
+
+
+
+";
+        $html.=' El dia '.$DatosTraslado["Fecha"].' se realiza el traslado del titulo '.$DatosTraslado["Mayor1"].' de la promocion '
+                . ' '.$DatosPromocion["Nombre"].' que estaba en poder del Sr. '.$DatosTraslado["NombreColaboradorAnterior"].' Identificado '
+                . ' Con CC No. '.$DatosTraslado["idColaboradorAnterior"].' y ahora pasa al Sr. '.$DatosTraslado["NombreColaboradorAsignado"].' Identificado '
+                . ' Con CC No. '.$DatosTraslado["idColaboradorAsignado"].', Por motivo de '.$DatosTraslado["Observaciones"];
+        $html.="</pre><pre>
+         
+
+		 
+		 
+		 
+		 
+		 
+
+  Entrega: _____________________________          Recibe:_____________________________</pre>";
+        $this->PDF_Encabezado(1, 22, "");
+        $this->PDF_Write("<br><br>".$html);
+        $this->PDF_Output("TrasladoTitulo_".$DatosTraslado["Mayor1"].'_'.$DatosTraslado["Fecha"]);
+    }
 // FIN Clases	
 }
 

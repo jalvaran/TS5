@@ -20,7 +20,13 @@ $Vector["MyPage"]="listados_titulos.php?CmbListado=$myTabla";
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;   
 $Vector["VerRegistro"]["Deshabilitado"]=1;       
 
-
+// Nueva Accion
+$Ruta="trasladar_titulo.php?CmbListado=$myTabla&Mayor=";
+$Vector["NuevaAccionLink"][1]="Traslado";
+$Vector["NuevaAccion"]["Traslado"]["Titulo"]=" Trasladar ";
+$Vector["NuevaAccion"]["Traslado"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Traslado"]["ColumnaLink"]="Mayor1";
+$Vector["NuevaAccion"]["Traslado"]["Target"]="_blank";
               
 ///Filtros y orden
 $Vector["Order"]=" Mayor1 DESC ";   //Orden

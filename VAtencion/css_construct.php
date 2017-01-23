@@ -770,6 +770,25 @@ class CssIni{
         
         /////////////////////Crear un DIV
 	
+	function CrearDiv2($ID, $Class, $Alineacion,$Visible, $Habilitado, $Ancho, $Alto,$top,$left,$posicion,$Vector){
+            if($Visible==1)
+                $V="block";
+            else if($Visible==2)
+                $V="scroll";
+            else{
+                $V="none";
+            }
+            if($Habilitado==1) ///pensado a futuro, aun no esta en uso
+                $H="true";
+            else
+                $H="false";
+                        
+            print(' <div id="'.$ID.'" class="'.$Class.'" align="'.$Alineacion.'" style="display:'.$V.';width: '.$Ancho.';height:'.$Alto.';top:'.$top.';margin-left:'.$left.';position:'.$posicion.'" > ');
+		
+	}
+        
+        /////////////////////Crear un DIV
+	
 	function CerrarDiv(){
             print("</div>");
 		
@@ -933,7 +952,7 @@ function Footer(){
           print('<button type="submit" class="btn btn-info" > <img src="../images/busqueda.png" class="img-rounded" alt="Cinque Terre" width="'.$Ancho.'" height="'.$Alto.'"></button>');
 	} 
         
-        /////////////////////Dibujar un boton de busqueda
+        /////////////////////Dibujar un cuadro de busqueda
 	
 	function DibujeCuadroBusqueda($Nombre,$pageConsulta,$OtrasVariables,$DivTarget,$Evento,$Alto,$Ancho,$Vector){
             
@@ -976,6 +995,7 @@ function Footer(){
             <?php 
             
             $this->CrearInputText($Nombre, "text", "", "", "Buscar", "Black", $Evento, "Busqueda".$Nombre."()", $Ancho, $Alto, 0, 0);
+            
             $this->BotonBuscar(20, 20, "");
             
             
@@ -992,7 +1012,55 @@ function Footer(){
                 
             }          
           print("<button type='submit' $e class='btn btn-default' onclick=MuestraOculta('$Div');>$Titulo <image width='$Ancho' height='$Alto' name='imgHidde' id='imgHidde' src='../images/hidde.png' ></button>");
-	}         
+	}    
+        
+        /////////////////////Dibujar un cuadro de busqueda
+	
+	function DivPage($Nombre,$pageConsulta,$OtrasVariables,$DivTarget,$Evento,$Alto,$Ancho,$Vector){
+            
+                            
+            ?>
+            <script>
+            function Busqueda<?php echo"$Nombre"?>() {
+                
+                str=document.getElementById("<?php echo"$Nombre"?>").value;
+                <?php
+                if(isset($Vector["Variable"][0])){
+                    $idObjeto=$Vector["Variable"][0];
+                    print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    //print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    $OtrasVariables.='"+'.$idObjeto.'+"';
+                    //$VariableJS='"+document.getElementById(`'.$idObjeto.'`).value';
+                }
+                ?>
+                if (str == "") {
+                    document.getElementById("<?php echo"$DivTarget"?>").innerHTML = "";
+                    return;
+                } else {
+                    if (window.XMLHttpRequest) {
+                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        // code for IE6, IE5
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xmlhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("<?php echo"$DivTarget"?>").innerHTML = this.responseText;
+                        }
+                    };
+                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>",true);
+                    xmlhttp.send();
+                }
+            }
+            </script>
+            <?php 
+            $this->CrearBotonEvento($Nombre, "Iniciar", 1, $Evento, "Busqueda".$Nombre."()", "verde", "");
+            $this->CrearInputText($Nombre, "hidden", "", "", "", "Black", "", "", "", "", 0, 0);
+            
+            //$this->BotonBuscar(20, 20, "");
+                 
+	} 
         //////////////////////////////////FIN
 }
 	

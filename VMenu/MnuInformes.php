@@ -51,7 +51,7 @@ include_once("../sesiones/php_control.php");
         $css->SubMenuAlfa("Auxiliares",2);
 		$css->SubMenuAlfa("Reporte de Ventas",3);
 		$css->SubMenuAlfa("Reporte de Compras",4);
-		
+		$css->SubMenuAlfa("Auditoria",5);
 	$css->MenuAlfaFin();
 	
 	$css->IniciaTabs();
@@ -68,6 +68,9 @@ include_once("../sesiones/php_control.php");
 		$css->FinTabs();
 		$css->NuevaTabs(4);
 			$css->SubTabs("../VAtencion/InformeCompras.php","_blank","../images/otrosinformes.png","Informe de Compras");
+		$css->FinTabs();
+                $css->NuevaTabs(5);
+			$css->SubTabs("../VAtencion/AuditoriaDocumentos.php","_blank","../images/auditoria.png","Auditoria de Documentos");
 		$css->FinTabs();
 		
 	$css->FinMenu(); 
