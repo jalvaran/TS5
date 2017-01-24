@@ -33,14 +33,15 @@ if($Valida==1){
         $css->CierraFilaTabla();
         
         while($DatosDocumento=$obVenta->FetchArray($consulta)){
-            if($DatosDocumento["Total"]<>0){
+            if($DatosDocumento["Total"]>(0.01) or $DatosDocumento["Total"]<(-0.01)){
+                
                 $css->FilaTabla(16);
                 $css->ColTabla($DatosDocumento["Tipo_Documento_Intero"], 1);
                 $css->ColTabla($DatosDocumento["Num_Documento_Interno"], 1);
                 $css->ColTabla($DatosDocumento["Total"], 1);
                 print("<td>");
                 $link="CorregirLibro.php?TipoDoc=$DatosDocumento[Tipo_Documento_Intero]&NumDoc=$DatosDocumento[Num_Documento_Interno]";
-                $css->CrearLink($link, "_self", "Corregir");
+                $css->CrearLink($link, "_blank", "Corregir");
                 print("</td>");
                 $css->CierraFilaTabla();
             }
@@ -48,7 +49,7 @@ if($Valida==1){
         $css->CerrarTabla();
         
     }else{
-        $css->CrearNotificacionRoja("No se encontraron datos", 16);
+        $css->CrearNotificacionVerde("No hay documentos sin balance", 16);
     }
     
 }else{
