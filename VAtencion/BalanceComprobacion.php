@@ -141,6 +141,68 @@ function CrearFormularioBalance($VectorInformes) {
         $css->CerrarTabla();
     $css->CerrarForm(); 
 }
+
+function CrearFormularioInterface($VectorInformes) {
+   
+   $FormName=$VectorInformes["FormName"];
+   $ActionForm=$VectorInformes["ActionForm"];
+   $Metod=$VectorInformes["Metod"];
+   $Target=$VectorInformes["Target"];
+   $Titulo=$VectorInformes["Titulo"];
+   $Tipo=$VectorInformes["Tipo"];
+   $idUser=$_SESSION['idUser'];
+   $obVenta = new ProcesoVenta($idUser);
+   $css =  new CssIni("Balance de Comprobacion");
+   
+   $css->CrearForm2($FormName, $ActionForm, $Metod, $Target);
+   $css->CrearInputText("TxtTipoInforme", "hidden", "", $Tipo, "", "", "", "", "", "", 0, 0);
+        $css->CrearTabla();
+            $css->FilaTabla(14);
+            $css->ColTabla("<strong>$Titulo</strong>", 5);
+
+                $css->CierraFilaTabla();
+            $css->FilaTabla(14);
+                
+                $css->ColTabla("<strong>FECHA INICIAL:</strong>", 1);
+                $css->ColTabla("<strong>FECHA FINAL:</strong>", 1);
+                $css->ColTabla("<strong>EMPRESA:</strong>", 1);
+                $css->ColTabla("<strong>CENTRO DE COSTOS:</strong>", 1);  
+            $css->CierraFilaTabla();
+            $css->FilaTabla(14);
+                
+                print("<td>");
+                $css->CrearInputText("TxtFechaIni", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
+                print("</td>");   
+                print("<td>");
+                $css->CrearInputText("TxtFechaFinal", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
+                print("</td>"); 
+                print("<td>");
+                $css->CrearSelect("CmbEmpresaPro", "");
+                $css->CrearOptionSelect("ALL", "COMPLETO", 0);                  
+                $consulta=$obVenta->ConsultarTabla("empresapro", "");
+              
+                while($DatosEmpresa=$obVenta->FetchArray($consulta)){
+                    $css->CrearOptionSelect($DatosEmpresa["idEmpresaPro"], $DatosEmpresa["RazonSocial"], 0);
+                }
+                $css->CerrarSelect();
+                print("</td>"); 
+                print("<td>");
+                $css->CrearSelect("CmbCentroCostos", "");                
+                $consulta=$obVenta->ConsultarTabla("centrocosto", "");
+                $css->CrearOptionSelect("ALL", "COMPLETO", 0);                
+                while($DatosEmpresa=$obVenta->FetchArray($consulta)){
+                    $css->CrearOptionSelect($DatosEmpresa["ID"], $DatosEmpresa["Nombre"], 0);
+                }
+                $css->CerrarSelect();
+                print("</td>"); 
+            $css->FilaTabla(16);
+            print("<td colspan='5' style='text-align:center'>");
+            $css->CrearBotonVerde("BtnVerInterfaz", "Generar Informe");
+            print("</td>");
+            $css->CierraFilaTabla();
+        $css->CerrarTabla();
+    $css->CerrarForm(); 
+}
 print("<html>");
 print("<head>");
 $css =  new CssIni("Balance de Comprobacion");
@@ -182,16 +244,7 @@ print("<body>");
     $VectorInformes["Target"]="_self";
     $VectorInformes["Titulo"]="BALANCE GENERAL";
     CrearFormularioInformes($VectorInformes);
-    
-    $css->CrearNotificacionAzul("GENERAR INTERFACE INGRESOS", 16);
-    
-    $VectorInformes["FormName"]="FormInterfaceIngresos";
-    $VectorInformes["ActionForm"]="GenereInterfaceIngresos.php";
-    $VectorInformes["Metod"]="post";
-    $VectorInformes["Target"]="_blank";
-    $VectorInformes["Titulo"]="INTERFACE DE INGRESOS";
-    CrearFormularioInformes($VectorInformes);
-   
+      
     $css->CrearNotificacionVerde("GENERAR ESTADOS FINANCIEROS", 16);
     
     $VectorInformes["FormName"]="FormBalanceGeneral";
@@ -201,6 +254,26 @@ print("<body>");
     $VectorInformes["Titulo"]="ESTADOS FINANCIEROS";
     CrearFormularioBalance($VectorInformes);
    
+    $css->CrearNotificacionAzul("GENERAR INTERFACE INGRESOS", 16);
+    
+    $VectorInformes["FormName"]="FormInterfaceIngresos";
+    $VectorInformes["ActionForm"]="GenereInterfaceIngresos.php";
+    $VectorInformes["Metod"]="post";
+    $VectorInformes["Target"]="_blank";
+    $VectorInformes["Tipo"]="I";
+    $VectorInformes["Titulo"]="INTERFACE DE INGRESOS";
+    CrearFormularioInterface($VectorInformes);
+    
+    $css->CrearNotificacionNaranja("GENERAR INTERFACE EGRESOS", 16);
+    
+    $VectorInformes["FormName"]="FormInterfaceEgresos";
+    $VectorInformes["ActionForm"]="GenereInterfaceIngresos.php";
+    $VectorInformes["Metod"]="post";
+    $VectorInformes["Target"]="_blank";
+    $VectorInformes["Tipo"]="E";
+    $VectorInformes["Titulo"]="INTERFACE DE EGRESOS";
+    CrearFormularioInterface($VectorInformes);
+    
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts

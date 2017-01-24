@@ -2637,7 +2637,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         
     }
     //Funcion para generar una interface de ingresos (TECNOAGRO)
-    public function GenereInterfaceIngresos($FechaIni,$FechaFin,$Vector) {
+    public function GenereInterfaceIngresosEgresos($Tipo,$FechaIni,$FechaFin,$Vector) {
         require_once '../librerias/Excel/PHPExcel.php';
    $objPHPExcel = new PHPExcel();    
    $objPHPExcel->getActiveSheet()->getStyle('H:I')->getNumberFormat()->setFormatCode('#');
@@ -2682,8 +2682,15 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ->setCellValue($this->Campos[36]."1","detalle")
             ->setCellValue($this->Campos[37]."1","serial")
             ;
-            
-   $sql="SELECT * FROM librodiario WHERE CuentaPUC LIKE '41%' AND Fecha>='$FechaIni' AND Fecha<='$FechaFin' ORDER BY Fecha";
+   if($Tipo=="I"){
+       $Filtro=" CuentaPUC LIKE '41%' OR CuentaPUC LIKE '42%' ";
+   }
+   if($Tipo=="E"){
+       $Filtro=" CuentaPUC LIKE '51%' OR CuentaPUC LIKE '52%' ";
+   }
+   
+   $sql="SELECT * FROM librodiario WHERE ($Filtro) AND (Fecha>='$FechaIni' AND Fecha<='$FechaFin') ORDER BY Fecha";
+   //print($sql);
    $Consulta=  $this->obCon->Query($sql);
    $i=2;
    $TipoDocumentoOLD="";
