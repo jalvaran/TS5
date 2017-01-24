@@ -2,11 +2,12 @@
 
  
    function pagination($Ruta,$query, $per_page = 10,$page = 1, $url = "?"){        
-    	$query = "SELECT COUNT(*) as `num` FROM {$query}";
+    	$statementEnc=  base64_encode($query);
+       $query = "SELECT COUNT(*) as `num` FROM {$query}";
     	$row = mysql_fetch_array(mysql_query($query));
     	$total = $row['num'];
         $adjacents = "2"; 
-		$url.=$Ruta;
+		$url.=$Ruta."st=".$statementEnc."&";
     	$page = ($page == 0 ? 1 : $page);  
     	$start = ($page - 1) * $per_page;								
 		
@@ -86,7 +87,7 @@
     		$pagination.= "</ul>";		
     	}
     
-    
+        
         return $pagination;
     } 
 ?>

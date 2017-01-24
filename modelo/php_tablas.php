@@ -95,73 +95,76 @@ public function ObtengaID(){
  */
     
 public function CreeFiltro($Vector){
-       
-    $Columnas=$this->Columnas($Vector);
-    $Tabla=$Vector["Tabla"];
-    $Filtro=" $Tabla";
-    $z=0;
-    
-    $NumCols=count($Columnas);
-    foreach($Columnas as $NombreCol){
-        $IndexFiltro="Filtro_".$NombreCol;  //Campo que trae el valor del filtro a aplicar
-        $IndexCondicion="Cond_".$NombreCol; // Condicional para aplicacion del filtro
-        $IndexTablaVinculo="TablaVinculo_".$NombreCol; // Si hay campos vinculados se encontra la tabla vinculada aqui 
-        $IndexIDTabla="IDTabla_".$NombreCol;           // Id de la tabla vinculada
-        $IndexDisplay="Display_".$NombreCol;           // Campo que se quiere ver
-        if(!empty($_REQUEST[$IndexFiltro])){
-            $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
-            if(!empty($_REQUEST[$IndexTablaVinculo])){
-                
-                $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
-                        . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
-                $DatosVinculados=$this->obCon->Query($sql);
-                $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
-                //print($sql);
-                $Valor=$DatosVinculados[$_REQUEST[$IndexIDTabla]];
-               
+    if(!isset($_REQUEST["st"])){   
+        $Columnas=$this->Columnas($Vector);
+        $Tabla=$Vector["Tabla"];
+        $Filtro=" $Tabla";
+        $z=0;
+
+        $NumCols=count($Columnas);
+        foreach($Columnas as $NombreCol){
+            $IndexFiltro="Filtro_".$NombreCol;  //Campo que trae el valor del filtro a aplicar
+            $IndexCondicion="Cond_".$NombreCol; // Condicional para aplicacion del filtro
+            $IndexTablaVinculo="TablaVinculo_".$NombreCol; // Si hay campos vinculados se encontra la tabla vinculada aqui 
+            $IndexIDTabla="IDTabla_".$NombreCol;           // Id de la tabla vinculada
+            $IndexDisplay="Display_".$NombreCol;           // Campo que se quiere ver
+            if(!empty($_REQUEST[$IndexFiltro])){
+                $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
+                if(!empty($_REQUEST[$IndexTablaVinculo])){
+
+                    $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
+                            . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
+                    $DatosVinculados=$this->obCon->Query($sql);
+                    $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
+                    //print($sql);
+                    $Valor=$DatosVinculados[$_REQUEST[$IndexIDTabla]];
+
+                }
+
+                if($z==0){
+                    $Filtro.=" WHERE ";
+                    $z=1;
+                }
+                $Filtro.=$NombreCol;
+                switch ($_REQUEST[$IndexCondicion]){
+                    case 1:
+                        $Filtro.="='$Valor'";
+                        break;
+                    case 2:
+                        $Filtro.=" LIKE '%$Valor%'";
+                        break;
+                    case 3:
+                        $Filtro.=">'$Valor'";
+                        break;
+                    case 4:
+                        $Filtro.="<'$Valor'";
+                        break;
+                    case 5:
+                        $Filtro.=">='$Valor'";
+                        break;
+                    case 6:
+                        $Filtro.="<='$Valor'";
+                        break;
+                    case 7:
+                        $Filtro.="<>'$Valor'";
+                        break;
+                                    case 8:
+                        $Filtro.=" LIKE '$Valor%'";
+                        break;
+                }
+                $And=" AND ";
+
+
+                $Filtro.=$And;
+
             }
-            
-            if($z==0){
-                $Filtro.=" WHERE ";
-                $z=1;
-            }
-            $Filtro.=$NombreCol;
-            switch ($_REQUEST[$IndexCondicion]){
-                case 1:
-                    $Filtro.="='$Valor'";
-                    break;
-                case 2:
-                    $Filtro.=" LIKE '%$Valor%'";
-                    break;
-                case 3:
-                    $Filtro.=">'$Valor'";
-                    break;
-                case 4:
-                    $Filtro.="<'$Valor'";
-                    break;
-                case 5:
-                    $Filtro.=">='$Valor'";
-                    break;
-                case 6:
-                    $Filtro.="<='$Valor'";
-                    break;
-                case 7:
-                    $Filtro.="<>'$Valor'";
-                    break;
-				case 8:
-                    $Filtro.=" LIKE '$Valor%'";
-                    break;
-            }
-            $And=" AND ";
-            
-            
-            $Filtro.=$And;
-           
+
         }
-       
-    }
-    if($z>0){
-        $Filtro=substr($Filtro, 0, -4);
+        if($z>0){
+            $Filtro=substr($Filtro, 0, -4);
+        }
+    }else{
+        $Filtro=  base64_decode($_REQUEST["st"]);
     }
     return($Filtro);
 }
@@ -361,7 +364,7 @@ public function DibujeTabla($Vector){
     print("<td ><strong>$Titulo </strong>");
     print("</td>");
     print("<td style='text-align: left' colspan=$ColFiltro>");
-    $this->css->CrearLink("","_self","Limpiar ");
+    $this->css->CrearLink("$myPage","_self","Limpiar ");
     $this->css->CrearBotonVerde("BtnFiltrar", "Filtrar");
     
     $this->css->CrearBoton("BtnExportarExcel", "Exportar a Excel");
