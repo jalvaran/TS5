@@ -22,8 +22,13 @@ if(!empty($_REQUEST["BtnGuardarRegistro"])){
                 //echo "<script>alert ('entra a las columnas $NombreCol')</script>"; 
 		if(!empty($_FILES['RutaImagen']['name'])){
                     //echo "<script>alert ('entra foto')</script>";
-                        $dir= "../../"; 
-			$carpeta="LogosEmpresas/";
+                        $dir= "../../";
+                        if($tab=="productosventa"){
+                            
+                            $carpeta="ImagenesProductos/";
+                        }else{
+                            $carpeta="LogosEmpresas/";
+                        }
 			opendir($dir.$carpeta);
                         $Name=str_replace(' ','_',$_FILES['RutaImagen']['name']);  
 			$destino=$carpeta.$Name;

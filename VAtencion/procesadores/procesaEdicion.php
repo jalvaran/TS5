@@ -19,6 +19,22 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     //$NumCols=Count($NombresColumnas);
     $i=1;
     foreach($NombresColumnas as $NombreCol){
+        if(!empty($_FILES[$NombreCol]['name'])){
+            $dir= "../../";
+            if($tab=="productosventa"){
+                $carpeta="ImagenesProductos/";
+            }else if($tab=="empresapro"){
+                $carpeta="LogosEmpresas/";
+            
+            }else if($tab=="egresos"){
+                $carpeta="SoportesEgresos/";
+            }
+            opendir($dir.$carpeta);
+            $Name=str_replace(' ','_',$_FILES[$NombreCol]['name']);  
+            $destino=$carpeta.$Name;
+            move_uploaded_file($_FILES[$NombreCol]['tmp_name'],$dir.$destino);
+            $obVenta->ActualizaRegistro($tab, $NombreCol, $destino, $NombresColumnas[0], $IDEdit);
+        }
         $NumCar=strlen($_REQUEST[$NombreCol]);
         if(isset($_REQUEST[$NombreCol]) && $NumCar>0){
 

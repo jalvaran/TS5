@@ -566,7 +566,7 @@ public function DibujeTabla($Vector){
                         print("<td>");
                         if(isset($Colink[$i])){
                             
-                            $this->css->CrearLink($DatosProducto[$i], "_blank", $DatosProducto[$i]);
+                            $this->css->CrearLink("../".$DatosProducto[$i], "_blank", $DatosProducto[$i]);
                         }else{
                             if(isset($NewLink[$i]["Link"])){
                                 $Page=$Vector["Kit"]["Page"];
@@ -604,7 +604,7 @@ public function DibujeTabla($Vector){
                         print("<td>");
                         if(isset($Colink[$i])){
                             
-                            $this->css->CrearLink($DatosVinculo[$ColDisplay], "_blank", $DatosVinculo[$ColDisplay]);
+                            $this->css->CrearLink("../".$DatosVinculo[$ColDisplay], "_blank", $DatosVinculo[$ColDisplay]);
                         }else{
                             
                             print("$DatosVinculo[$ColDisplay]");
@@ -1024,11 +1024,16 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
                 $this->css->CerrarSelect(); 
                 
             }else{
-                if($lengCampo<100){
-
-                    $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);
+                if($NombreCol=="RutaImagen" or $NombreCol=="Soporte"){
+                    $this->css->CrearUpload($NombreCol);
                 }else{
-                    $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
+                    if($lengCampo<100){
+
+                        $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);
+
+                    }else{
+                        $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
+                    }
                 }
             }
                 print("<td></tr>");    
