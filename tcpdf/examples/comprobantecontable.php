@@ -56,6 +56,8 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 $tbl = <<<EOD
 <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
     <tr align="center">
+        <td><strong>Tercero</strong></td>
+        <td><strong>Documento</strong></td>
         <td><strong>Codigo PUC</strong></td>
         <td><strong>Cuenta</strong></td>
         <td><strong>Débitos</strong></td>
@@ -89,6 +91,8 @@ while($DatosLibro=  mysql_fetch_array($Consulta)){
 $tbl = <<<EOD
 <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
     <tr align="left">
+        <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[Tercero_Identificacion]<br>$DatosLibro[Tercero_Razon_Social]</td>
+        <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[Num_Documento_Externo]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[CuentaPUC]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[NombreCuenta]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$Debito</td>

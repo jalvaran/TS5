@@ -24,7 +24,7 @@ $css =  new CssIni("Comprobantes contabilidad");
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/ProcesaComprobanteContable.php");
+    
     $myPage="CreaComprobanteCont.php";
     $css->CabeceraIni("Comprobantes de Contabilidad"); //Inicia la cabecera de la pagina
     $css->CreaBotonDesplegable("CrearComprobante","Nuevo");  
@@ -42,7 +42,7 @@ print("<body>");
     $css->CrearDiv("principal", "container", "center",1,1);
     ////Menu de historial
     
-    
+    include_once("procesadores/ProcesaComprobanteContable.php");
          
          
     if($ImprimeCC>0){
@@ -107,7 +107,16 @@ print("<body>");
     $css->CierraFilaTabla();
     $css->CerrarTabla();
     $css->CerrarForm();
-    
+    $css->CrearForm2("FrmImportarMovimientos", $myPage, "post", "_self");
+    $css->CrearInputText("idComprobante", "hidden", "", $idComprobante, "", "", "", "", 0, 0, 1, 1);
+    $css->CrearTabla();
+    print("<td style='text-align:center;'>");
+    print("<strong>Importar Movimientos </strong>");
+    $css->CrearUpload("UpMovimientos");
+    $css->CrearBotonConfirmado("BtnImportarMov", "Enviar");
+    print("</td>");
+    $css->CerrarTabla();
+    $css->CerrarForm();
     $css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
     $Visible=0;
     if($idComprobante>0){
