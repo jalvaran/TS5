@@ -560,6 +560,9 @@ class CssIni{
 	function CrearImageLink($page,$imagerute,$target,$Alto,$Ancho){
 		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'" style="height:'.$Alto.'px; width:'.$Ancho.'px"></a>');
 	}
+        function CrearImage($Nombre,$imagerute,$Alterno,$Alto,$Ancho){
+		print('<img id="'.$Nombre.'"  nombre="'.$Nombre.'"  src="'.$imagerute.'" onerror="this.src=`'.$Alterno.'`;" style="height:'.$Alto.'px; width:'.$Ancho.'px">');
+	}
 	function CrearLink($link,$target,$Titulo){
 		print('<a href="'.$link.'" target="'.$target.'" >'.$Titulo.'</a>');
 	}

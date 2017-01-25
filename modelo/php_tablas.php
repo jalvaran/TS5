@@ -3619,7 +3619,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     }
     
     //Crear total de una 
-    public function CrearSubtotalCuentaRestaurante($idMesa,$Vector) {
+    public function CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$myPage,$Vector) {
         $this->css=new CssIni("");
         $Titulo="Ver Esta Mesa";
         $Nombre="ImgShowMesa";
@@ -3628,6 +3628,14 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $VectorBim["f"]=0;
         $target="#DialVerMesa";
         $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","left:10px;top:50",$VectorBim);
+        $Titulo="Buscar";
+        $Nombre="ImgBuscar";
+        $RutaImage="../images/buscar.png";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialBuscar";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","right:10px;top:50",$VectorBim);
+        
         $this->css->CrearCuadroDeDialogo("DialVerMesa", "Esta Cuenta:");
         $this->css->CrearTabla();
         $this->css->FilaTabla(16);
@@ -3637,6 +3645,17 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->css->CierraFilaTabla();
         
         $this->css->CerrarTabla();
+        $this->css->CerrarCuadroDeDialogo();
+        
+        $this->css->CrearCuadroDeDialogo("DialBuscar", "Buscar un producto:");
+        $this->css->CrearForm2("FrmBuscar", $myPage, "post", "_self");
+        $this->css->CrearInputText("idMesa", "hidden", "", $idMesa, "", "", "", "", "", "", "", "");
+        $this->css->CrearInputText("idDepartamento", "hidden", "", $idDepartamento, "", "", "", "", "", "", "", "");
+        $this->css->CrearInputText("TxtBusqueda", "text", "", "", "Buscar", "", "", "", 200, 30, 0, 1);
+        print("<br>");
+        $this->css->CrearBoton("BtnBuscar", "Buscar");
+        
+        $this->css->CerrarForm();
         $this->css->CerrarCuadroDeDialogo();
     }
 // FIN Clases	
