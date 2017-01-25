@@ -3617,6 +3617,28 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->PDF_Write("<br><br>".$html);
         $this->PDF_Output("TrasladoTitulo_".$DatosTraslado["Mayor1"].'_'.$DatosTraslado["Fecha"]);
     }
+    
+    //Crear total de una 
+    public function CrearSubtotalCuentaRestaurante($idMesa,$Vector) {
+        $this->css=new CssIni("");
+        $Titulo="Ver Esta Mesa";
+        $Nombre="ImgShowMesa";
+        $RutaImage="../images/cuentasxcobrar.png";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialVerMesa";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","left:10px;top:50",$VectorBim);
+        $this->css->CrearCuadroDeDialogo("DialVerMesa", "Esta Cuenta:");
+        $this->css->CrearTabla();
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>Subtotal</strong>", 1);
+        $this->css->ColTabla("<strong>IVA</strong>", 1);
+        $this->css->ColTabla("<strong>Total</strong>", 1);
+        $this->css->CierraFilaTabla();
+        
+        $this->css->CerrarTabla();
+        $this->css->CerrarCuadroDeDialogo();
+    }
 // FIN Clases	
 }
 

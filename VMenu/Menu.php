@@ -60,6 +60,7 @@ include_once("../sesiones/php_control.php");
                     //$css->SubTabs("../VAtencion/crono.php","_blank","../images/crono.png","Visualizar Tiempo");
                     $css->SubTabs("Admin.php","_blank","../images/admin.png","Administrar");
                     $css->SubTabs("MnuVentas.php","_blank","../images/comercial.png","Gestion Comercial");
+                    
                     $css->SubTabs("MnuFacturacion.php","_blank","../images/factura.png","Facturación");
                     $css->SubTabs("../VAtencion/cartera.php","_blank","../images/cartera.png","Cartera");
                     $css->SubTabs("MnuIngresos.php","_blank","../images/ingresos.png","Ingresos");
@@ -74,6 +75,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
                     $css->SubTabs("../VAtencion/CronogramaProduccion.php","_blank","../images/produccion.png","Produccion");
                     $css->SubTabs("MnuTitulos.php","_blank","../images/titulos.jpg","Titulos");
+                    $css->SubTabs("MnuRestaurante.php","_blank","../images/restaurante.png","Restaurante");
                     $css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
                     $css->SubTabs("MnuAjustes.php","_blank","../images/ajustes.png","Ajustes y Servicios Generales");
                     $css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");
