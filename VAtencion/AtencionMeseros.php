@@ -111,11 +111,11 @@ print("<body>");
         $css->ColTabla("<strong>Imagen</strong>", 1);
         $css->ColTabla("<strong>Agregar</strong>", 1);
         $css->CierraFilaTabla();
-        $sql=" SELECT Nombre, idProductosVenta,Referencia,RutaImagen FROM $statement ORDER BY Nombre LIMIT $startpoint,$limit";
+        $sql=" SELECT Nombre, idProductosVenta,Referencia,RutaImagen,PrecioVenta FROM $statement ORDER BY Nombre LIMIT $startpoint,$limit";
         $consulta=$obVenta->Query($sql);
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
-            $css->ColTabla("$DatosProducto[Referencia]<br>$DatosProducto[Nombre]", 1);
+            $css->ColTabla("$DatosProducto[Referencia]<br>$DatosProducto[Nombre]<br><h2><strong>$".number_format($DatosProducto["PrecioVenta"])."</h2></strong>", 1);
             print("<td>");
             
             $RutaImage="../$DatosProducto[RutaImagen]";

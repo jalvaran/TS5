@@ -56,7 +56,7 @@ include_once("../sesiones/php_control.php");
 
             $css->NuevaTabs(1);
                 $css->SubTabs("../VAtencion/AtencionMeseros.php","_blank","../images/mesero.png","Atencion");
-                $css->SubTabs("../VAtencion/Restaurante_Pedidos.php","_blank","../images/pedidos.png","Pedidos");
+                $css->SubTabs("../VAtencion/Restaurante_Admin.php","_blank","../images/pedidos.png","Pedidos");
                 
             $css->FinTabs();
             $css->NuevaTabs(2);

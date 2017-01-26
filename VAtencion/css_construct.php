@@ -427,8 +427,17 @@ class CssIni{
 	
 	/////////////////////Crear una columna para una tabla
 	
-	function ColTabla($Contenido,$ColSpan){
-		print('<td colspan="'.$ColSpan.'">'.$Contenido.'</td>');
+	function ColTabla($Contenido,$ColSpan,$align="L"){
+            if($align=="L"){
+              $align="left";  
+            }
+            if($align=="R"){
+              $align="right";  
+            }
+            if($align=="C"){
+              $align="center";  
+            }
+            print('<td colspan="'.$ColSpan.' " style="text-align:'.$align.'"   >'.$Contenido.'</td>');
 		
 	}
 	
@@ -1058,7 +1067,7 @@ function Footer(){
             }
             </script>
             <?php 
-            $this->CrearBotonEvento($Nombre, "Iniciar", 1, $Evento, "Busqueda".$Nombre."()", "verde", "");
+            $this->CrearBotonEvento($Nombre, "Cargar", 1, $Evento, "Busqueda".$Nombre."()", "verde", "");
             $this->CrearInputText($Nombre, "hidden", "", "", "", "Black", "", "", "", "", 0, 0);
             
             //$this->BotonBuscar(20, 20, "");
