@@ -2259,6 +2259,8 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"FACTURA DE VENTA No $NumFact");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"TIPO DE FACTURA: $DatosFactura[FormaPago]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"_____________________________________");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
@@ -2316,17 +2318,26 @@ public function CalculePesoRemision($idCotizacion)
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
 
     fwrite($handle,"Formas de Pago");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"       Efectivo ----> $".str_pad(number_format($DatosFactura["Efectivo"]),10," ",STR_PAD_LEFT));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"       Tarjetas ----> $".str_pad(number_format($DatosFactura["Tarjetas"]),10," ",STR_PAD_LEFT));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"       Cheques  ----> $".str_pad(number_format($DatosFactura["Cheques"]),10," ",STR_PAD_LEFT));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"       Otros    ----> $".str_pad(number_format($DatosFactura["Otros"]),10," ",STR_PAD_LEFT));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"       Cambio   ----> $".str_pad(number_format($DatosFactura["Devuelve"]),10," ",STR_PAD_LEFT));
-
+    if($DatosFactura["Efectivo"]>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"       Efectivo ----> $".str_pad(number_format($DatosFactura["Efectivo"]),10," ",STR_PAD_LEFT));
+    }
+    if($DatosFactura["Tarjetas"]>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"       Tarjetas ----> $".str_pad(number_format($DatosFactura["Tarjetas"]),10," ",STR_PAD_LEFT));
+    }
+    if($DatosFactura["Cheques"]>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"       Cheques  ----> $".str_pad(number_format($DatosFactura["Cheques"]),10," ",STR_PAD_LEFT));
+    }
+    if($DatosFactura["Otros"]>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"       Otros    ----> $".str_pad(number_format($DatosFactura["Otros"]),10," ",STR_PAD_LEFT));
+    }
+    if($DatosFactura["Devuelve"]>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"       Cambio   ----> $".str_pad(number_format($DatosFactura["Devuelve"]),10," ",STR_PAD_LEFT));
+    }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
     fwrite($handle,"_____________________________________");
@@ -6024,7 +6035,50 @@ public function VerificaPermisos($VectorPermisos) {
 	
 	return($reg["Cuenta"]);
 
-	}	
+	}
+        
+        //Agregar un Producto a un pedido
+        
+        public function AgregueProductoAPedido($idMesa,$fecha,$hora,$Cantidad,$idProducto,$Observaciones,$Vector) {
+            $idUser=$this->idUser;
+            $FechaHora=$fecha." ".$hora;
+            $sql="SELECT ID FROM restaurante_pedidos WHERE idMesa='$idMesa' AND idUsuario='$idUser' AND Estado='AB'";
+            $Consulta=$this->Query($sql);
+            if($this->NumRows($Consulta)){
+                $DatosPedido=$this->FetchArray($Consulta);
+                $idPedido=$DatosPedido["ID"];
+            }else{
+                $tab="restaurante_pedidos";
+                $NumRegistros=6; 
+
+                $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+                $Columnas[1]="Hora";                $Valores[1]=$hora;
+                $Columnas[2]="idUsuario";           $Valores[2]=$idUser;
+                $Columnas[3]="idMesa";              $Valores[3]=$idMesa;
+                $Columnas[4]="Estado";              $Valores[4]="AB";
+                $Columnas[5]="FechaCreacion";       $Valores[5]=$FechaHora;
+               
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                $idPedido=$this->ObtenerMAX($tab,"ID", 1,"");
+            }
+            $DatosProductos=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+            $tab="restaurante_pedidos_items";
+            $NumRegistros=9; 
+
+            $Columnas[0]="idProducto";          $Valores[0]=$idProducto;
+            $Columnas[1]="NombreProducto";      $Valores[1]=$DatosProductos["Nombre"];
+            $Columnas[2]="Cantidad";            $Valores[2]=$Cantidad;
+            $Columnas[3]="ValorUnitario";       $Valores[3]=$DatosProductos["PrecioVenta"];
+            $Columnas[4]="Subtotal";            $Valores[4]=$DatosProductos["PrecioVenta"]*$Cantidad;
+            $Columnas[5]="IVA";                 $Valores[5]=round($Valores[4]*$DatosProductos["IVA"]);
+            $Columnas[6]="Total";               $Valores[6]=$Valores[4]+$Valores[5];
+            $Columnas[7]="Observaciones";       $Valores[7]=$Observaciones;
+            $Columnas[8]="idPedido";            $Valores[8]=$idPedido;
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            return($idPedido);
+        }
         
 //////////////////////////////Fin	
 }

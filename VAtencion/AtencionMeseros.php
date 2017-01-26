@@ -45,7 +45,8 @@ print("<body>");
     ///////////////Creamos el contenedor
     /////
     /////
-    $css->CrearDiv("principal", "container", "center",1,1);    
+    $css->CrearDiv("principal", "container", "center",1,1);   
+    include_once("procesadores/procesaAtencionMeseros.php");
     $css->CrearForm2("FrmSelMesa", $myPage, "post", "_self");
     $css->CrearTabla();
     $css->FilaTabla(16);
@@ -73,14 +74,15 @@ print("<body>");
     $css->CrearDiv("secundario", "", "center",1,1);
     
     if($idMesa>0){
-        $obTabla->CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$myPage,"");
+        $obTabla->CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$idUser,$myPage,"");
         $css->CrearNotificacionNaranja("Lista de Productos", 16);
         ////Paginacion
         ////
         $Ruta="";
-        print("<div style='height: 50px;'>");   //Dentro de un DIV para no hacerlo tan grande
+        //$css->CrearDiv("DivPage", "", "left", 1, 1);
+        //print("<div style='height: 50px;'>");   //Dentro de un DIV para no hacerlo tan grande
         print(pagination($Ruta,$statement,$limit,$page,$url));
-        print("</div>");
+        //print("</div>");
         $css->CrearTabla();
         
         $css->FilaTabla(16);

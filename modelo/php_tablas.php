@@ -736,6 +736,102 @@ public function VerifiqueExport($Vector)  {
     
 }
 
+/*
+ * Verificamos si hay peticiones de exportacion para el kardex
+ */
+    
+public function VerifiqueExportKardex($Vector)  {
+    
+    if(isset($_REQUEST["BtnExportarExcel"])){
+       $statement=$_REQUEST["TxtSql"];
+    require_once '../librerias/Excel/PHPExcel.php';
+   $objPHPExcel = new PHPExcel();    
+        
+   $Tabla["Tabla"]=$Vector["Tabla"];
+    $tbl=$Tabla["Tabla"];
+    $Titulo=$Vector["Titulo"];
+    $VerDesde=$Vector["VerDesde"];
+    $Limit=$Vector["Limit"];
+    $Order=$Vector["Order"];
+    
+    $tbl=$Vector["Tabla"];
+    $Columnas=$this->Columnas($Tabla); //Se debe disenar la base de datos colocando siempre la llave primaria de primera
+   
+    $i=0;
+ $a=0;
+ 
+ $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[$a]."1","Fecha")
+            ->setCellValue($this->Campos[$a++]."1","Movimiento")
+            ->setCellValue($this->Campos[$a++]."1","Detalle")
+            ->setCellValue($this->Campos[$a++]."1","idDocumento")
+            ->setCellValue($this->Campos[$a++]."1","Cantidad")    
+            ->setCellValue($this->Campos[$a++]."1","ValorUnitario")
+            ->setCellValue($this->Campos[$a++]."1","ValorTotal")
+            ->setCellValue($this->Campos[$a++]."1","idProductosVenta")    
+            ->setCellValue($this->Campos[$a++]."1","Referencia")
+          ->setCellValue($this->Campos[$a++]."1","Nombre")
+         ->setCellValue($this->Campos[$a++]."1","Departamento")
+         ->setCellValue($this->Campos[$a++]."1","Sub1")
+         ->setCellValue($this->Campos[$a++]."1","Sub2")
+         ->setCellValue($this->Campos[$a++]."1","Sub3")
+         ->setCellValue($this->Campos[$a++]."1","Sub4")
+         ->setCellValue($this->Campos[$a++]."1","Sub5");
+    
+    
+   //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com")
+        ->setLastModifiedBy("www.technosoluciones.com")
+        ->setTitle("Exportar $tbl  desde base de datos")
+        ->setSubject("$tbl")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones")
+        ->setCategory("$tbl");    
+  
+ $i=1;
+ $a=0;
+ $c=2;
+    $statement=str_replace("kardexmercancias", " ", $statement);
+    $sql="SELECT * FROM kardexmercancias INNER JOIN productosventa ON  kardexmercancias.ProductosVenta_idProductosVenta=productosventa.idProductosVenta $statement";
+ 
+    $Consulta=  $this->obCon->Query($sql);
+    while($DatosKardex=  $this->obCon->FetchArray($Consulta)){
+        
+        $i++;
+        $a=0;
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[$a].$i,$DatosKardex["Fecha"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Movimiento"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Detalle"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["idDocumento"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Cantidad"])    
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["ValorUnitario"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["ValorTotal"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["idProductosVenta"])    
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Referencia"])
+            ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Nombre"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Departamento"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Sub1"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Sub2"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Sub3"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Sub4"])
+         ->setCellValue($this->Campos[$a++].$i,$DatosKardex["Sub5"]);
+    }
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'.$tbl.'.xls"');
+    header('Cache-Control: max-age=0');
+
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+   
+    }    
+     
+    
+}
+
 
 /*
  * Verificamos si hay peticiones de exportacion
@@ -3619,7 +3715,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     }
     
     //Crear total de una 
-    public function CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$myPage,$Vector) {
+    public function CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$idUser,$myPage,$Vector) {
         $this->css=new CssIni("");
         $Titulo="Ver Esta Mesa";
         $Nombre="ImgShowMesa";
@@ -3641,9 +3737,39 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->css->FilaTabla(16);
         $this->css->ColTabla("<strong>Subtotal</strong>", 1);
         $this->css->ColTabla("<strong>IVA</strong>", 1);
-        $this->css->ColTabla("<strong>Total</strong>", 1);
+        $this->css->ColTabla("<strong>Total</strong>", 2);
         $this->css->CierraFilaTabla();
         
+        $sql="SELECT ID FROM restaurante_pedidos WHERE idUsuario='$idUser' AND idMesa='$idMesa' AND Estado='AB'";
+        $consulta=  $this->obCon->Query($sql);
+        $htmlItems="";
+        $Subtotal=0;
+        $IVA=0;
+        $Total=0;
+        if($this->obCon->NumRows($consulta)){
+            $DatosPedido=$this->obCon->FetchArray($consulta);
+            $idPedido=$DatosPedido["ID"];
+            $htmlItems="<tr><td colspan=4><strong>ITEMS EN PEDIDO $idPedido DE LA MESA $idMesa</strong></td></tr>";
+            $htmlItems.="<tr><td><strong>Producto</strong></td><td><strong>Cantidad</strong></td>"
+                    . "<td><strong>Total</strong></td><td><strong>Borrar</strong></td></tr>";
+            
+            $consulta2=  $this->obCon->ConsultarTabla("restaurante_pedidos_items", " WHERE idPedido='$idPedido'");
+            
+            while($DatosItems=$this->obCon->FetchArray($consulta2)){
+                $htmlItems.="<tr><td>$DatosItems[NombreProducto]<br>$DatosItems[Observaciones]</td><td>$DatosItems[Cantidad]</td><td>$DatosItems[Total]</td>";
+                $htmlItems.="<td><a href='$myPage?idMesa=$idMesa&idDepartamento=$idDepartamento&idDel=$DatosItems[ID]'>X</td>";
+                $htmlItems.="</tr>";
+                $Subtotal=$Subtotal+$DatosItems["Subtotal"];
+                $IVA=$IVA+$DatosItems["IVA"];
+                $Total=$Total+$DatosItems["Total"];
+            }
+        }
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla(number_format($Subtotal), 1);
+        $this->css->ColTabla(number_format($IVA), 1);
+        $this->css->ColTabla(number_format($Total), 2);
+        $this->css->CierraFilaTabla();
+        print($htmlItems);
         $this->css->CerrarTabla();
         $this->css->CerrarCuadroDeDialogo();
         

@@ -23,7 +23,7 @@ $statement = $obTabla->CreeFiltro($Vector);
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
-$obTabla->VerifiqueExport($Vector);
+$obTabla->VerifiqueExportKardex($Vector);
 
 include_once("css_construct.php");
 print("<html>");

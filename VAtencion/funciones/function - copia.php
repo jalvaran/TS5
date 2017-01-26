@@ -19,7 +19,7 @@
     	$pagination = "";
     	if($lastpage > 1)
     	{	
-    		$pagination .= "<ul class='pagination' style='height: 70px;'>";
+    		$pagination .= "<ul class='pagination'>";
                     $pagination .= "<li class='details'>Página $page de $lastpage</li>";
     		if ($lastpage < 7 + ($adjacents * 2))
     		{	
