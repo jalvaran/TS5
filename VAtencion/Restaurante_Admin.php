@@ -19,6 +19,27 @@ print("<body>");
     /////
     $css->CrearDiv("principal", "container", "center",1,1);
     include_once("procesadores/procesa_Restaurante_Admin.php");
+    //////Creo una factura a partir de un pedido
+    if(isset($_REQUEST['BtnFacturarPedido'])){
+        $idPedido=$obVenta->normalizar($_REQUEST['BtnFacturarPedido']);
+        $obTabla->DibujeAreaFacturacionRestaurante($idPedido,$myPage,"");
+         
+    }
+    if(isset($_REQUEST["TxtidFactura"])){
+            
+        $idFactura=$_REQUEST["TxtidFactura"];
+        if($idFactura<>""){
+            $RutaPrint="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=".$idFactura;
+            $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
+            $css->CrearTabla();
+            $css->CrearFilaNotificacion("Factura Creada Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Factura No. $DatosFactura[NumeroFactura]</a>",16);
+            $css->CerrarTabla();
+        }else{
+
+           $css->AlertaJS("No se pudo crear la factura porque no hay resoluciones disponibles", 1, "", ""); 
+        }
+            
+    }
     $css->DivPage("Pedidos", "Consultas/DatosPedidos.php?Valida=1", "", "DivBusqueda", "onClick", 30, 30, "");
     
     print("<br>");
@@ -37,8 +58,19 @@ print("<body>");
     
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
+    $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
+    $css->AnchoElemento("CmbClientes_chosen", 200);
+    $css->AnchoElemento("TxtidColaborador_chosen", 200);
+    $css->AnchoElemento("TxtCliente_chosen", 200);
+    $css->AnchoElemento("TxtCuentaDestino_chosen", 200);
+    $css->AnchoElemento("TxtTipoPago_chosen", 200);
+    $css->AnchoElemento("CmbCuentaDestino_chosen", 300);
+    $css->AnchoElemento("CmbProveedores_chosen", 300);
     $css->AgregaSubir();
     print("<script>setInterval('BusquedaPedidos()',4000);ClickElement('Pedidos');</script>");
+    if(isset($_REQUEST['BtnFacturarPedido'])){
+        print("<script>document.getElementById('TxtPaga').select();</script> ");
+    }
     $css->Footer();
     
     

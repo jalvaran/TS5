@@ -3784,6 +3784,146 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->css->CerrarForm();
         $this->css->CerrarCuadroDeDialogo();
     }
+    
+    //Dibujo el area de facturacion de un pedido
+    //
+    public function DibujeAreaFacturacionRestaurante($idPedido,$myPage,$Vector) {
+        $this->css=new CssIni("");
+        /////////////////////////////////////Se muestra el Cuadro con los valores de la preventa actual
+    
+    //$obVenta=new ProcesoVenta($idUser);
+    
+    $Subtotal=$this->obCon->SumeColumna("restaurante_pedidos_items","Subtotal", "idPedido",$idPedido);
+    $IVA=$this->obCon->SumeColumna("restaurante_pedidos_items","IVA", "idPedido",$idPedido);
+    $SaldoFavor=0;
+    $Total=$Subtotal+$IVA;
+    $GranTotal=$Total;
+    $this->css->CrearForm2("FrmGuarda",$myPage,"post","_self");
+    $this->css->CrearInputText("idPedido","hidden","",$idPedido,"","","","",150,30,0,0);
+    $this->css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
+    $this->css->ColTablaInputText("TxtTotalH","hidden",$Total,"","","","","",150,30,0,0);
+    $this->css->ColTablaInputText("TxtCuentaDestino","hidden",11051001,"","","","","",150,30,0,0);
+    $this->css->ColTablaInputText("TxtGranTotalH","hidden",$GranTotal,"","","","","",150,30,0,0);
+    $this->css->CrearTabla();
+    $this->css->FilaTabla(14);
+    $this->css->ColTabla("Esta Venta:",3);
+    $this->css->CierraFilaTabla();
+    $this->css->FilaTabla(18);
+    $this->css->ColTabla("SUBTOTAL:",1);
+    $this->css->ColTabla(number_format($Subtotal),2);
+    $this->css->CierraFilaTabla();
+    $this->css->FilaTabla(18);
+    $this->css->ColTabla("IMPUESTOS:",1);
+    $this->css->ColTabla(number_format($IVA),2);
+    $this->css->CierraFilaTabla();
+    
+    $this->css->FilaTabla(40);
+    $this->css->ColTabla("TOTAL:",1);
+    $this->css->ColTabla(number_format($Total),2);
+    $this->css->CierraFilaTabla();
+    
+    $this->css->FilaTabla(18);
+    $this->css->ColTabla("PAGA:",1);
+    $Visible=0;
+    print("<td>");
+    //$css->ColTablaInputText("TxtPaga","number","","","Paga","","onkeyup","CalculeDevuelta()",150,30,0,0); 
+    $this->css->CrearInputNumber("TxtPaga","number","Efectivo: <br>",round($Total),"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
+    print("<strong>+</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpcionesPago');>");
+    $this->css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
+    //print("<br>");
+    $this->css->CrearInputNumber("TxtPagaTarjeta","number","Tarjeta: <br>",0,"Tarjeta","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
+    
+    $VectorSelect["Nombre"]="CmbIdTarjeta";
+    $VectorSelect["Evento"]="";
+    $VectorSelect["Funcion"]="";
+    $VectorSelect["Required"]=0;
+    $this->css->CrearSelect2($VectorSelect);
+    
+        $sql="SELECT * FROM tarjetas_forma_pago";
+        $Consulta=$this->obCon->Query($sql);
+        //$css->CrearOptionSelect("", "Seleccione una tarjeta" , 0);
+        while($DatosCuenta=$this->obCon->FetchArray($Consulta)){
+                        
+            $this->css->CrearOptionSelect("$DatosCuenta[ID]", "$DatosCuenta[Tipo] / $DatosCuenta[Nombre]" , 0);
+           }
+    $this->css->CerrarSelect();
+    print("<br>");
+    
+    $this->css->CrearInputNumber("TxtPagaCheque","number","Cheque: <br>",0,"Cheque","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
+    print("<br>");
+    $this->css->CrearInputNumber("TxtPagaOtros","number","Otros: <br>",0,"Otros","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
+    $this->css->CerrarDiv();
+    print("</td>");
+    print("<td>");
+    
+    print("<strong>+ Opciones </strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpciones');>");
+    $this->css->CrearDiv("DivOtrasOpciones", "", "center", $Visible, 1);
+    
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Colaborador";
+    $VarSelect["Title"]="";
+    $this->css->CrearSelectChosen("TxtidColaborador", $VarSelect);
+    
+        $sql="SELECT Nombre, Identificacion FROM colaboradores";
+        $Consulta=$this->obCon->Query($sql);
+        $this->css->CrearOptionSelect("", "Colaborador: " , 0);
+        while($DatosColaborador=$this->obCon->FetchArray($Consulta)){
+            
+               $this->css->CrearOptionSelect("$DatosColaborador[Identificacion]", " $DatosColaborador[Nombre] $DatosColaborador[Identificacion]" , 0);
+           }
+    $this->css->CerrarSelect();
+    
+    
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Busque un Cliente";
+    $VarSelect["Title"]="";
+    $this->css->CrearSelectChosen("TxtCliente", $VarSelect);
+    
+        $sql="SELECT * FROM clientes";
+        $Consulta=$this->obCon->Query($sql);
+        while($DatosCliente=$this->obCon->FetchArray($Consulta)){
+               
+               $this->css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[Num_Identificacion] / $DatosCliente[RazonSocial] / $DatosCliente[Telefono]" , 0);
+           }
+           
+    $this->css->CerrarSelect();
+    
+    $VarSelect["Ancho"]="200";
+    $VarSelect["PlaceHolder"]="Forma de Pago";
+    $VarSelect["Title"]="";
+    $this->css->CrearSelectChosen("TxtTipoPago", $VarSelect);
+    
+        $sql="SELECT * FROM repuestas_forma_pago";
+        $Consulta=$this->obCon->Query($sql);
+        while($DatosTipoPago=$this->obCon->FetchArray($Consulta)){
+            
+               $this->css->CrearOptionSelect("$DatosTipoPago[DiasCartera]", " $DatosTipoPago[Etiqueta]" , 0);
+           }
+    $this->css->CerrarSelect();
+    
+    print("<br>");
+    $this->css->CrearTextArea("TxtObservacionesFactura","","","Observaciones Factura","black","","",200,60,0,0);
+    
+    $this->css->CerrarDiv();
+    print("</td>");
+    
+    $this->css->CierraFilaTabla();
+
+    $this->css->FilaTabla(18);
+    $this->css->ColTabla("DEVOLVER:",1);
+    $this->css->ColTablaInputText("TxtDevuelta","text",0,"","Devuelta","","","",150,50,1,0);
+    print("<td>");
+    
+        
+    $VectorBoton["Fut"]=0;
+    $this->css->CrearBotonEvento("BtnGuardarVenta","Guardar",1,"onclick","EnviaFormVentasRapidas()","naranja",$VectorBoton);
+    print("</td>");
+    //$css->ColTablaBoton("BtnGuardar","Guardar");
+    $this->css->CierraFilaTabla();
+
+    $this->css->CerrarTabla(); 
+    $this->css->CerrarForm();
+    }
 // FIN Clases	
 }
 

@@ -17,8 +17,9 @@ if($Valida==1){
     if($obVenta->NumRows($consulta)){
                
         while($DatosPedido=$obVenta->FetchArray($consulta)){
+            $DatosMesa=$obVenta->DevuelveValores("restaurante_mesas", "ID", $DatosPedido["idMesa"]);
             $idPedido=$DatosPedido["ID"];
-            $css->CrearNotificacionNaranja("Orden de Pedido No: $idPedido", 16);
+            $css->CrearNotificacionVerde("Orden de Pedido No: $idPedido, para $DatosMesa[Nombre]", 16);
             $css->CrearTabla();
             $css->FilaTabla(16);
             $css->ColTabla('<strong>Fecha</strong>', 1);
@@ -29,7 +30,7 @@ if($Valida==1){
             $css->ColTabla('<strong>Precuenta</strong>', 1);
             $css->ColTabla('<strong>Facturar</strong>', 1);
             $css->CierraFilaTabla();
-                $DatosMesa=$obVenta->DevuelveValores("restaurante_mesas", "ID", $DatosPedido["idMesa"]);
+                
                 $idUsuarioPedido=$DatosPedido["idUsuario"];
                 
                 $sql="SELECT Nombre, Apellido FROM usuarios WHERE idUsuarios='$idUsuarioPedido'";

@@ -497,3 +497,7 @@ function CalculeSumatoria(idCambiar) {
 	document.getElementById(idCambiar).value = Total;
 
 }
+
+function SeleccioneID(id){
+    document.getElementById(id).select();
+}

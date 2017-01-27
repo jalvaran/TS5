@@ -1,5 +1,6 @@
 <?php 
 $obVenta=new ProcesoVenta($idUser);
+$obTabla = new Tabla($db);
 ////////////////////////////////////(///////////////////////////////
 //////////////////////FUNCIONES CALCULAR DIGITO DE VERIFICACION/////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -39,51 +40,14 @@ $obVenta=new ProcesoVenta($idUser);
         $obVenta->BorraReg("restaurante_pedidos_items", "ID", $id);
         header("location:$myPage");
     }
-    //////Creo una Preventa
+    //////Se descarta un Pedido
     if(isset($_REQUEST['BtnDescartarPedido'])){
         $idPedido=$obVenta->normalizar($_REQUEST['BtnDescartarPedido']);
         $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DE", "ID", $idPedido);
         header("location:$myPage");
     }
-	
-	if(!empty($_REQUEST['TxtCodigoBarras'])){
-		
-		$CodBar=$_POST['TxtCodigoBarras'];
-		$obVenta=new ProcesoVenta($idUser);
-                $TablaItem="productosventa";
-		$DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
-		//$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
-		
-		if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
-			$fecha=date("Y-m-d");
-			$Cantidad=1;
-			$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
-		}else{
-			
-			print('<script language="JavaScript">alert("Este producto no esta en la base de datos por favor no lo entregue")</script>');
-			
-		}
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa");	
-	}
-	
-		
-	if(!empty($_REQUEST['TxtAgregarItemPreventa'])){
-		
-		$idItem=$_REQUEST['TxtAgregarItemPreventa'];
-		$TablaItem=$_REQUEST['TxtTablaItem'];
-                
-                $fecha=date("Y-m-d");
-                
-
-                $obVenta=new ProcesoVenta($idUser);
-
-                $Cantidad=1;
-                $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
-                
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa");
-			
-	}
-	
+    
+   	
 	////Se recibe edicion
 	
 	if(!empty($_REQUEST['BtnEditarCantidad'])){
@@ -121,70 +85,36 @@ $obVenta=new ProcesoVenta($idUser);
 		header("location:$myPage?CmbPreVentaAct=$idPreventa&$VariableURL");
 			
 	}
+        //Si se recibe la impresion de un pedido
         
-        ////Se recibe edicion
+        ////Se guarda la Venta
 	
-	if(!empty($_REQUEST['BtnEditar']) or isset($_REQUEST['BtnMayorista'])){
-		$obVenta=new ProcesoVenta($idUser);
-		$idItem=$_REQUEST['TxtPrecotizacion'];
-		//$idClientes=$_REQUEST['TxtIdCliente'];
-                $idPreventa=$_REQUEST['CmbPreVentaAct'];
-		
-		$ValorAcordado=$_REQUEST["TxtEditarPrecio$idItem"];
-                //echo "<script>alert('Item $idItem VA $ValorAcordado')</script>";
-		//$ValorAcordado=$_REQUEST['TxtValorUnitario'];
-                $DatosPreventa=$obVenta->DevuelveValores("preventa", "idPrecotizacion", $idItem);
-		$Cantidad=$DatosPreventa["Cantidad"];
-		$idProducto=$DatosPreventa["ProductosVenta_idProductosVenta"];
-                
-		$Tabla=$DatosPreventa["TablaItem"];
-                $DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
-                if(isset($_REQUEST['BtnMayorista'])){
-                    $ValorAcordado=$DatosProductos["PrecioMayorista"];
-                }
-                $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $Tabla);
-                if($DatosTablaItem["IVAIncluido"]=="SI"){
-                    
-                    $ValorAcordado=$ValorAcordado/($DatosProductos["IVA"]+1);
-                    
-                }
-		$Subtotal=$ValorAcordado*$Cantidad;
-		
-                
-		$IVA=$Subtotal*$DatosProductos["IVA"];
-		//$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
-		$Total=$Subtotal+$IVA;
-		$filtro="idPrecotizacion";
-		
-		$obVenta->ActualizaRegistro("preventa","Subtotal", $Subtotal, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","Impuestos", $IVA, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","TotalVenta", $Total, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("preventa","ValorAcordado", $ValorAcordado, $filtro, $idItem);
-		
-		
-		header("location:$myPage?CmbPreVentaAct=$idPreventa");
-			
-	}
-	
+	if(isset($_REQUEST['BtnImprimirPedido'])){
+            $idPedido=$obVenta->normalizar($_REQUEST['BtnImprimirPedido']);
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obVenta->ImprimePedidoRestaurante($idPedido,$DatosImpresora["Puerto"],1,"");
+            }
+        }
+        
 	////Se guarda la Venta
 	
-	if(isset($_REQUEST['TxtGranTotalH'])){
-            //print("<script>alert('Entra 2')</script>");
-            $obVenta=new ProcesoVenta($idUser);
+	if(isset($_REQUEST['TxtTotalH'])){
+            
             $fecha=date("Y-m-d");
-            $TotalVenta=$_REQUEST['TxtGranTotalH'];
-            $idCliente=$_REQUEST["TxtCliente"];
-            $idColaborador=$_REQUEST["TxtidColaborador"];
-            $idPreventa=$_REQUEST["CmbPreVentaAct"];
-            $Efectivo=$_REQUEST["TxtPaga"];
-            $Cheque=$_REQUEST["TxtPagaCheque"];
-            $Tarjeta=$_REQUEST["TxtPagaTarjeta"];
-            $idTarjeta=$_REQUEST["CmbIdTarjeta"];
-            $OtrosPaga=$_REQUEST["TxtPagaOtros"];
-            $Devuelta=$_REQUEST["TxtDevuelta"];
-            $CuentaDestino=$_REQUEST["TxtCuentaDestino"];
-            $TipoPago=$_REQUEST["TxtTipoPago"];
-            $Observaciones=$_REQUEST["TxtObservacionesFactura"];
+            $TotalVenta=$obVenta->normalizar($_REQUEST['TxtGranTotalH']);
+            $idCliente=$obVenta->normalizar($_REQUEST["TxtCliente"]);
+            $idColaborador=$obVenta->normalizar($_REQUEST["TxtidColaborador"]);
+            $idPedido=$obVenta->normalizar($_REQUEST["idPedido"]);
+            $Efectivo=$obVenta->normalizar($_REQUEST["TxtPaga"]);
+            $Cheque=$obVenta->normalizar($_REQUEST["TxtPagaCheque"]);
+            $Tarjeta=$obVenta->normalizar($_REQUEST["TxtPagaTarjeta"]);
+            $idTarjeta=$obVenta->normalizar($_REQUEST["CmbIdTarjeta"]);
+            $OtrosPaga=$obVenta->normalizar($_REQUEST["TxtPagaOtros"]);
+            $Devuelta=$obVenta->normalizar($_REQUEST["TxtDevuelta"]);
+            $CuentaDestino=$obVenta->normalizar($_REQUEST["TxtCuentaDestino"]);
+            $TipoPago=$obVenta->normalizar($_REQUEST["TxtTipoPago"]);
+            $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesFactura"]);
             $DatosVentaRapida["PagaCheque"]=$Cheque;
             $DatosVentaRapida["PagaTarjeta"]=$Tarjeta;
             $DatosVentaRapida["idTarjeta"]=$idTarjeta;
@@ -195,7 +125,7 @@ $obVenta=new ProcesoVenta($idUser);
             $DatosVentaRapida["Observaciones"]=$Observaciones;
             if($TipoPago<>"Contado" AND $idCliente<=1){
                 print("<script>alert('Debe seleccionar un Cliente para realizar una venta a credito')</script>");
-                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+                exit("<a href='$myPage' ><h1>Volver</h1></a>");
             }
             if($TipoPago<>"Contado"){
                 $Efectivo=0;
@@ -204,11 +134,11 @@ $obVenta=new ProcesoVenta($idUser);
                 $DatosVentaRapida["idTarjeta"]=0;
                 $DatosVentaRapida["PagaOtros"]=0;
             }
-            //print("<script>alert('Entra 1')</script>");
-            $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
-            //print("<script>alert('Entra 2')</script>");
-            $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
-            $obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
+            ///Ojo Modificar esta parte
+            $NumFactura=$obVenta->RegistreVentaRestaurante($idPedido, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
+           
+            $obVenta->ActualizaRegistro("restaurante_pedidos","Estado", "FA", "ID", $idPedido);
+            $obVenta->ActualizaRegistro("restaurante_pedidos_items","Estado", "FA", "idPedido", $idPedido);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
@@ -226,49 +156,14 @@ $obVenta=new ProcesoVenta($idUser);
             if(!empty($idColaborador)){
                 $obVenta->AgregueVentaColaborador($NumFactura,$idColaborador);
             }
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
+            header("location:$myPage?TxtidFactura=$NumFactura");
 		
 		
 		
 			
 	}
 	
-	////Se guarda un separado
-	
-	if(isset($_REQUEST['BtnCrearSeparado'])){
-		$fecha=date("Y-m-d");
-		$Hora=date("H:i:s");
 		
-		$idPreventa=$_REQUEST['CmbPreVentaAct'];
-                $idCliente=$_REQUEST['CmbClientes'];
-                $Abono=$_REQUEST['TxtAbono'];
-                if($idCliente<=1){
-                    print("<script>alert('Debe seleccionar un Cliente para poder ejecutar esta accion')</script>");
-                    exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
-                }
-		        
-		$obVenta=new ProcesoVenta($idUser);
-                
-                $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-                $CentroCosto=$DatosCaja["CentroCostos"];
-                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
-                $VectorIngreso["fut"]="";
-                $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-                
-		$DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
-		$idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
-                $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-                if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
-                }
-                
-             
-                header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidSeparado=$idSeparado");
-				
-	}
-	
-	
 	////Se Crea un Cliente
 	
 	if(!empty($_REQUEST['BtnCrearCliente'])){
@@ -355,52 +250,7 @@ $obVenta=new ProcesoVenta($idUser);
         }
         
         
-        /*
-         * Registra abonos de separados 
-         */
-        
-              
-        if(!empty($_REQUEST['TxtIdSeparado'])){
-            
-            $obVenta=new ProcesoVenta($idUser);
-            $fecha=date("Y-m-d");
-            $Hora=date("H:i:s");
-            $idSeparado=$_REQUEST['TxtIdSeparado'];
-            $idPreventa=$_REQUEST['CmbPreVentaAct'];
-            $Valor=$_REQUEST["TxtAbonoSeparado$idSeparado"];
-            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-            $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-            $CentroCosto=$DatosCaja["CentroCostos"];
-            $Concepto="ABONO A SEPARADO No $idSeparado";
-            $VectorIngreso["fut"]="";
-            $idIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-            
-            
-            
-            $VectorSeparados["idCompIngreso"]=$idIngreso;
-            $Saldo=$obVenta->RegistreAbonoSeparado($idSeparado,$Valor,$fecha,$Hora,$VectorSeparados);
-            $idCliente=$_REQUEST['TxtIdClientes'];
-            
-            
-            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-            $Impresiones=3;
-            if($Saldo==0){
-		$Impresiones=1;
-                $VectorSeparados["Ft"]="";
-                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$idPreventa,$CuentaDestino,$VectorSeparados);
-               if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
-               }
-            }
-            
-                if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], $Impresiones);
-                    
-            }
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
-        }
-        
+       
          /*
          * Registra egresos 
          */
@@ -468,82 +318,6 @@ $obVenta=new ProcesoVenta($idUser);
                     
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
-        }
-        
-        if(!empty($_REQUEST['TxtAutorizacion'])){
-		
-		
-		$obVenta=new ProcesoVenta($idUser);
-                $Clave=$obVenta->normalizar($_POST['TxtAutorizacion']);
-                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' ";
-                $Datos=$obVenta->Query($sql);
-                $DatosAutorizacion=$obVenta->FetchArray($Datos);
-                
-                $NoAutorizado="";
-                if($DatosAutorizacion["Identificacion"]>0){
-                    
-                    $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
-                }else{
-                    $NoAutorizado="NoAutorizado=1";
-                    
-                }
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
-	}
-        
-        
-        /*
-         * Registra abonos de creditos 
-         */
-        
-              
-        if(!empty($_REQUEST['TxtIdCartera'])){
-            
-            $obVenta=new ProcesoVenta($idUser);
-            $fecha=date("Y-m-d");
-            $Hora=date("H:i:s");
-            $idCartera=$_REQUEST['TxtIdCartera'];
-            $idFactura=$_REQUEST['TxtIdFactura'];
-            $idPreventa=$_REQUEST['CmbPreVentaAct'];
-            $Valor=$_REQUEST["TxtAbonoCredito$idCartera"];
-            $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
-            
-            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-            $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-            $CentroCosto=$DatosCaja["CentroCostos"];
-            $Concepto="ABONO A FACTURA No $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
-            $VectorIngreso["fut"]="";
-            $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-                                
-            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-                        
-            if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
-                    
-            }
-            
-             
-             
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$idFactura");
-        }
-        
-        
-        /*
-         * Registra abonos de creditos 
-         */
-        
-              
-        if(!empty($_REQUEST['BtnDescuentoGeneral'])){
-            
-            $obVenta=new ProcesoVenta($idUser);
-            $fecha=date("Y-m-d");
-            $Hora=date("H:i:s");
-            $Descuento=(100-$obVenta->normalizar($_REQUEST['TxtDescuento']))/100;
-            $idPreventa=$obVenta->normalizar($_REQUEST['TxtidPreventa']);
-            $sql="UPDATE preventa SET Subtotal=round(Subtotal*$Descuento), Impuestos=round(Impuestos*$Descuento),"
-                    . " TotalVenta=round(TotalVenta*$Descuento), ValorAcordado=round(ValorAcordado*$Descuento) "
-                    . " WHERE VestasActivas_idVestasActivas='$idPreventa'";
-            $obVenta->Query($sql);
-            header("location:$myPage?CmbPreVentaAct=$idPreventa");
         }
         
         ///////////////Fin
