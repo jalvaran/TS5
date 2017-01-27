@@ -86,14 +86,22 @@ $obTabla = new Tabla($db);
 			
 	}
         //Si se recibe la impresion de un pedido
-        
-        ////Se guarda la Venta
-	
+       
 	if(isset($_REQUEST['BtnImprimirPedido'])){
             $idPedido=$obVenta->normalizar($_REQUEST['BtnImprimirPedido']);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimePedidoRestaurante($idPedido,$DatosImpresora["Puerto"],1,"");
+            }
+        }
+        
+         //Si se recibe la impresion de una precuenta
+       
+	if(isset($_REQUEST['BtnImprimirPrecuenta'])){
+            $idPedido=$obVenta->normalizar($_REQUEST['BtnImprimirPrecuenta']);
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obVenta->ImprimePrecuentaRestaurante($idPedido,$DatosImpresora["Puerto"],1);
             }
         }
         
