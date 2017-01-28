@@ -349,7 +349,7 @@ class CssIni{
        
           	
             <div class="modal-header">
-	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
     	        <h3 id="myModalLabel">'.$title.'</h3>
             </div>
             <div class="modal-body">
@@ -390,7 +390,30 @@ class CssIni{
         ');
 		
 	}
+	
+        /////////////////////Crea un Cuadro de Dialogo
+	
+	function CrearCuadroDeDialogoAmplio($id,$title){
 		
+		print(' <div id="'.$id.'" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style=" width: 95%;left:23%;">
+       
+          	
+            <div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+    	        <h3 id="myModalLabel">'.$title.'</h3>
+            </div>
+            <div class="modal-body">
+           	                       	
+		
+        ');
+		
+	}
+        
+        /////////////////////Cierra un Cuadro de Dialogo
+	
+	function CerrarCuadroDeDialogoAmplio(){
+		print(' </div></div>');
+        }
 	/////////////////////Cierra un Cuadro de Dialogo
 	
 	function CerrarCuadroDeDialogo(){

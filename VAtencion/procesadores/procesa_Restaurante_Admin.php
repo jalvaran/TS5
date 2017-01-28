@@ -47,7 +47,12 @@ $obTabla = new Tabla($db);
         header("location:$myPage");
     }
     
-   	
+   //////Se descarta un Pedido
+    if(isset($_REQUEST['BtnDescartarDomicilio'])){
+        $idPedido=$obVenta->normalizar($_REQUEST['BtnDescartarDomicilio']);
+        $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DEDO", "ID", $idPedido);
+        header("location:$myPage");
+    }	
 	////Se recibe edicion
 	
 	if(!empty($_REQUEST['BtnEditarCantidad'])){
@@ -95,6 +100,16 @@ $obTabla = new Tabla($db);
             }
         }
         
+        //Si se recibe la impresion de un pedido
+       
+	if(isset($_REQUEST['BtnImprimirDomicilio'])){
+            $idPedido=$obVenta->normalizar($_REQUEST['BtnImprimirDomicilio']);
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obVenta->ImprimeDomicilioRestaurante($idPedido,$DatosImpresora["Puerto"],1,"");
+            }
+        }
+        
          //Si se recibe la impresion de una precuenta
        
 	if(isset($_REQUEST['BtnImprimirPrecuenta'])){
@@ -123,6 +138,7 @@ $obTabla = new Tabla($db);
             $CuentaDestino=$obVenta->normalizar($_REQUEST["TxtCuentaDestino"]);
             $TipoPago=$obVenta->normalizar($_REQUEST["TxtTipoPago"]);
             $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesFactura"]);
+            $Domicilio=$obVenta->normalizar($_REQUEST["TxtDomicilio"]);
             $DatosVentaRapida["PagaCheque"]=$Cheque;
             $DatosVentaRapida["PagaTarjeta"]=$Tarjeta;
             $DatosVentaRapida["idTarjeta"]=$idTarjeta;
@@ -145,8 +161,15 @@ $obTabla = new Tabla($db);
             ///Ojo Modificar esta parte
             $NumFactura=$obVenta->RegistreVentaRestaurante($idPedido, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
            
-            $obVenta->ActualizaRegistro("restaurante_pedidos","Estado", "FA", "ID", $idPedido);
-            $obVenta->ActualizaRegistro("restaurante_pedidos_items","Estado", "FA", "idPedido", $idPedido);
+            
+            if($Domicilio==0){ //Con esto le decimos que es una factura producida por un pedido
+                $Marca="FAPE";
+            }
+            if($Domicilio==1){ //Con esto le decimos que es una factura producida por un domicilio
+                $Marca="FADO";
+            }
+            $obVenta->ActualizaRegistro("restaurante_pedidos","Estado", $Marca, "ID", $idPedido);
+            $obVenta->ActualizaRegistro("restaurante_pedidos_items","Estado", $Marca, "idPedido", $idPedido);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
@@ -178,8 +201,8 @@ $obTabla = new Tabla($db);
 		
 		
 		//$idPreventa=$_REQUEST['CmbPreVentaAct'];
-		$NIT=$_REQUEST['TxtNIT'];
-                $idMun=$_REQUEST['CmbCodMunicipio'];
+		$NIT=$obVenta->normalizar($_REQUEST['TxtNIT']);
+                $idMun=$obVenta->normalizar($_REQUEST['CmbCodMunicipio']);
 		$obVenta=new ProcesoVenta($idUser);
 		$DatosClientes=$obVenta->DevuelveValores('clientes',"Num_Identificacion",$NIT);
                 
@@ -201,21 +224,21 @@ $obTabla = new Tabla($db);
 			$NumRegistros=15;  
 								
 			
-			$Columnas[0]="Tipo_Documento";						$Valores[0]=$_REQUEST['CmbTipoDocumento'];
-			$Columnas[1]="Num_Identificacion";					$Valores[1]=$_REQUEST['TxtNIT'];
+			$Columnas[0]="Tipo_Documento";						$Valores[0]=$obVenta->normalizar($_REQUEST['CmbTipoDocumento']);
+			$Columnas[1]="Num_Identificacion";					$Valores[1]=$obVenta->normalizar($_REQUEST['TxtNIT']);
 			$Columnas[2]="DV";							$Valores[2]=$DV;
-			$Columnas[3]="Primer_Apellido";						$Valores[3]=$_REQUEST['TxtPA'];
-			$Columnas[4]="Segundo_Apellido";					$Valores[4]=$_REQUEST['TxtSA'];
-			$Columnas[5]="Primer_Nombre";						$Valores[5]=$_REQUEST['TxtPN'];
-			$Columnas[6]="Otros_Nombres";						$Valores[6]=$_REQUEST['TxtON'];
-			$Columnas[7]="RazonSocial";						$Valores[7]=$_REQUEST['TxtRazonSocial'];
-			$Columnas[8]="Direccion";						$Valores[8]=$_REQUEST['TxtDireccion'];
+			$Columnas[3]="Primer_Apellido";						$Valores[3]=$obVenta->normalizar($_REQUEST['TxtPA']);
+			$Columnas[4]="Segundo_Apellido";					$Valores[4]=$obVenta->normalizar($_REQUEST['TxtSA']);
+			$Columnas[5]="Primer_Nombre";						$Valores[5]=$obVenta->normalizar($_REQUEST['TxtPN']);
+			$Columnas[6]="Otros_Nombres";						$Valores[6]=$obVenta->normalizar($_REQUEST['TxtON']);
+			$Columnas[7]="RazonSocial";						$Valores[7]=$obVenta->normalizar($_REQUEST['TxtRazonSocial']);
+			$Columnas[8]="Direccion";						$Valores[8]=$obVenta->normalizar($_REQUEST['TxtDireccion']);
 			$Columnas[9]="Cod_Dpto";						$Valores[9]=$DatosMunicipios["Cod_Dpto"];
 			$Columnas[10]="Cod_Mcipio";						$Valores[10]=$DatosMunicipios["Cod_mcipio"];
 			$Columnas[11]="Pais_Domicilio";						$Valores[11]=169;
-			$Columnas[12]="Telefono";			    			$Valores[12]=$_REQUEST['TxtTelefono'];
+			$Columnas[12]="Telefono";			    			$Valores[12]=$obVenta->normalizar($_REQUEST['TxtTelefono']);
 			$Columnas[13]="Ciudad";			    				$Valores[13]=$DatosMunicipios["Ciudad"];
-			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
+			$Columnas[14]="Email";			    				$Valores[14]=$obVenta->normalizar($_REQUEST['TxtEmail']);
 			
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                         $tab="proveedores";
@@ -269,22 +292,22 @@ $obTabla = new Tabla($db);
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
             $FechaProgramada=$fecha;
-            $CuentaDestino=$_REQUEST['CmbCuentaDestino'];
-            $NumFact=$_REQUEST["TxtNumFactura"];
-            $Concepto=$_REQUEST["TxtConcepto"];
-            $idProveedor=$_REQUEST["CmbProveedores"];
-            $Subtotal=$_REQUEST["TxtSubtotalEgreso"];
-            $IVA=$_REQUEST["TxtIVAEgreso"];
-            $Total=$_REQUEST["TxtValorEgreso"];
+            $CuentaDestino=$obVenta->normalizar($_REQUEST['CmbCuentaDestino']);
+            $NumFact=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
+            $Concepto=$obVenta->normalizar($_REQUEST["TxtConcepto"]);
+            $idProveedor=$obVenta->normalizar($_REQUEST["CmbProveedores"]);
+            $Subtotal=$obVenta->normalizar($_REQUEST["TxtSubtotalEgreso"]);
+            $IVA=$obVenta->normalizar($_REQUEST["TxtIVAEgreso"]);
+            $Total=$obVenta->normalizar($_REQUEST["TxtValorEgreso"]);
             
             if($idProveedor<=0){
                 print("<script>alert('Debe seleccionar un Proveedor para poder ejecutar esta accion')</script>");
-                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+                exit("<a href='$myPage' ><h1>Volver</h1></a>");
             }
             
             if($CuentaDestino<=0){
                 print("<script>alert('Debe seleccionar un egreso para poder ejecutar esta accion')</script>");
-                exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+                exit("<a href='$myPage' ><h1>Volver</h1></a>");
             }
             $destino="";
             if(!empty($_FILES['foto']['name'])){
@@ -325,9 +348,23 @@ $obTabla = new Tabla($db);
                 $obVenta->ImprimeEgresoPOS($idEgreso,$VectorEgresos,$DatosImpresora["Puerto"],1);
                     
             }
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
+            header("location:$myPage?TxtIdEgreso=$idEgreso");
         }
         
+        //Si se Agrega Un Item a un Domicilio
+        if(isset($_REQUEST['BtnAgregar'])){
+        $fecha=date("Y-m-d");
+        $hora=date("H:i:s");
+        
+        $Cantidad=$obVenta->normalizar($_REQUEST["TxtCantidad"]);
+        $idMesa=$obVenta->normalizar($_REQUEST["idMesa"]);
+        $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservaciones"]);
+        $idProducto=$obVenta->normalizar($_REQUEST["idProducto"]);
+        //$idDepartamento=$obVenta->normalizar($_REQUEST["idDepartamento"]);
+        
+        $idPedido=$obVenta->AgregueProductoAPedido($idMesa,$fecha,$hora,$Cantidad,$idProducto,$Observaciones,"");
+        $css->CrearNotificacionNaranja("Producto agregado al pedido $idPedido", 16);
+}
         ///////////////Fin
         
 	?>

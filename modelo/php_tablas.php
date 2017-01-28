@@ -3790,7 +3790,10 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     public function DibujeAreaFacturacionRestaurante($idPedido,$myPage,$Vector) {
         $this->css=new CssIni("");
         /////////////////////////////////////Se muestra el Cuadro con los valores de la preventa actual
-    
+        $Domicilio=0;
+        if(isset($Vector["Domicilio"])){
+            $Domicilio=1;
+        }
     //$obVenta=new ProcesoVenta($idUser);
     
     $Subtotal=$this->obCon->SumeColumna("restaurante_pedidos_items","Subtotal", "idPedido",$idPedido);
@@ -3801,6 +3804,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     $this->css->CrearForm2("FrmGuarda",$myPage,"post","_self");
     $this->css->CrearInputText("idPedido","hidden","",$idPedido,"","","","",150,30,0,0);
     $this->css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
+    $this->css->CrearInputText("TxtDomicilio","hidden","",$Domicilio,"","","","",150,30,0,0);
     $this->css->ColTablaInputText("TxtTotalH","hidden",$Total,"","","","","",150,30,0,0);
     $this->css->ColTablaInputText("TxtCuentaDestino","hidden",11051001,"","","","","",150,30,0,0);
     $this->css->ColTablaInputText("TxtGranTotalH","hidden",$GranTotal,"","","","","",150,30,0,0);
@@ -3924,7 +3928,28 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     $this->css->CerrarTabla(); 
     $this->css->CerrarForm();
     }
-// FIN Clases	
+    
+    
+    //Crear Area de visualizacion de Domicilios
+    public function DialVerDomicilios($Vector) {
+        $this->css=new CssIni("");
+        $Titulo="Ver Domicilios";
+        $Nombre="ImgShowDomicilios";
+        $RutaImage="../images/domicilio.png";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialVerDomicilio";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","right:10px;top:50",$VectorBim);
+        $this->css->CrearCuadroDeDialogoAmplio("DialVerDomicilio", "Ver Domicilios");
+        
+        print("<div id='DivDomicilios'>");
+        print("</div>");
+        //$css->CrearDiv("DivDomicilios", "", "center",1,1);
+        //$css->CerrarDiv();//Cerramos contenedor Secundario
+        $this->css->CerrarCuadroDeDialogoAmplio();
+        
+    }
+    // FIN Clases	
 }
 
 ?>
