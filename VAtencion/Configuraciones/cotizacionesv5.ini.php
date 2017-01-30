@@ -26,7 +26,7 @@ $Vector["NuevoRegistro"]["Deshabilitado"]=1;
 //$Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
 //Link para la accion ver
-$Ruta="../tcpdf/examples/imprimircoti.php?ImgPrintCoti=";
+$Ruta="ImprimirPDFCotizacion.php?ImgPrintCoti=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="ID";
 /*

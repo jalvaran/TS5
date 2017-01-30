@@ -1,12 +1,9 @@
 <?php
-
 include_once("php_conexion.php");
-
 /*
  * Esta clase contiene los datos necesarios para tratar y dibujar las tablas
  * 
  */
-
 class Tabla{
     public $DataBase;
     public $obCon;
@@ -64,8 +61,6 @@ public function ColumnasInfo($Vector){
     }
     return($Nombres);
 }
-
-
 /*
  *Funcion devolver el ultimo autoincremento
  */
@@ -78,8 +73,6 @@ public function ObtengaAutoIncrement($Vector){
     $Results=$this->obCon->FetchArray($Results);
     return($Results["AUTO_INCREMENT"]);
 }
-
-
 /*
  *Funcion devolver un ID Unico
  */
@@ -89,7 +82,6 @@ public function ObtengaID(){
     $ID=date("YmdHis").microtime(false);
     return($ID);
 }
-
 /*
  * Funcion arme filtros
  */
@@ -100,7 +92,6 @@ public function CreeFiltro($Vector){
         $Tabla=$Vector["Tabla"];
         $Filtro=" $Tabla";
         $z=0;
-
         $NumCols=count($Columnas);
         foreach($Columnas as $NombreCol){
             $IndexFiltro="Filtro_".$NombreCol;  //Campo que trae el valor del filtro a aplicar
@@ -111,16 +102,13 @@ public function CreeFiltro($Vector){
             if(!empty($_REQUEST[$IndexFiltro])){
                 $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
                 if(!empty($_REQUEST[$IndexTablaVinculo])){
-
                     $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
                             . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
                     $DatosVinculados=$this->obCon->Query($sql);
                     $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
                     //print($sql);
                     $Valor=$DatosVinculados[$_REQUEST[$IndexIDTabla]];
-
                 }
-
                 if($z==0){
                     $Filtro.=" WHERE ";
                     $z=1;
@@ -153,12 +141,8 @@ public function CreeFiltro($Vector){
                         break;
                 }
                 $And=" AND ";
-
-
                 $Filtro.=$And;
-
             }
-
         }
         if($z>0){
             $Filtro=substr($Filtro, 0, -4);
@@ -168,7 +152,6 @@ public function CreeFiltro($Vector){
     }
     return($Filtro);
 }
-
 /*
  * Funcion arme filtros
  */
@@ -246,7 +229,6 @@ public function CreeFiltroCuentas($Vector){
     //$Filtro.=" GROUP BY `CuentaPUC`, `Tercero_Identificacion`";
     return($Filtro);
 }
-
 /*
  * Cuentas por cobrar
  * 
@@ -383,7 +365,6 @@ public function DibujeTabla($Vector){
         $this->css->ColTabla("<strong>Acciones</strong>","");
         if(isset($Vector["ProductosVenta"])){
            $this->css->ColTabla("<strong>Imprimir</strong>","");
-
         }
         if(isset($Vector["Abonos"])){
             $this->css->ColTabla("<strong>Abonar</strong>","");
@@ -689,7 +670,6 @@ public function VerifiqueExport($Vector)  {
  $i=0;
  $a=0;
  $c=2;
-
     $sql="SELECT * FROM $statement ";
  
         $Consulta=  $this->obCon->Query($sql);
@@ -726,7 +706,6 @@ public function VerifiqueExport($Vector)  {
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'.$tbl.'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
@@ -735,7 +714,6 @@ public function VerifiqueExport($Vector)  {
      
     
 }
-
 /*
  * Verificamos si hay peticiones de exportacion para el kardex
  */
@@ -822,7 +800,6 @@ public function VerifiqueExportKardex($Vector)  {
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'.$tbl.'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
@@ -831,8 +808,6 @@ public function VerifiqueExportKardex($Vector)  {
      
     
 }
-
-
 /*
  * Verificamos si hay peticiones de exportacion
  */
@@ -866,7 +841,6 @@ public function GenereInformeDepartamento($Mes,$Anio,$Vector)  {
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Informe_Departamentos".'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
@@ -878,7 +852,6 @@ public function GenereInformeDepartamento($Mes,$Anio,$Vector)  {
  * Funcion para crear un formulario para crear un nuevo registro en una tabla
  * 
  */
-
     
 public function FormularioInsertRegistro($Parametros,$VarInsert)  {
     //print_r($Vector);
@@ -1001,9 +974,7 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
                 }
             }
                 print("<td></tr>");    
-
         }
-
         $i++;
     }
     $this->css->FilaTabla(18);
@@ -1015,13 +986,11 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
     $this->css->CerrarForm();    
     //return($sql);
 }
-
 /*
  * 
  * Funcion para crear un formulario de edicion de un registro
  * 
  */
-
     
 public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     //print_r($Vector);
@@ -1102,7 +1071,6 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
                 $TablaVinculo=$VarEdit[$tbl][$NombreCol]["TablaVinculo"];
                 
                 $sql="SELECT * FROM $TablaVinculo";
-
                 $Consulta=$this->obCon->Query($sql);
                 $VectorSel["Nombre"]="$NombreCol";
                 $VectorSel["Evento"]="";
@@ -1124,18 +1092,14 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
                     $this->css->CrearUpload($NombreCol);
                 }else{
                     if($lengCampo<100){
-
                         $this->css->CrearInputText("$NombreCol", $TipoText, "", $Value, "$NombreCol", "black", "", "", $lengCampo."0", 30, $ReadOnly, $Required);
-
                     }else{
                         $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
                     }
                 }
             }
                 print("<td></tr>");    
-
         }
-
         $i++;
     }
     $this->css->FilaTabla(18);
@@ -1147,13 +1111,11 @@ public function FormularioEditarRegistro($Parametros,$VarEdit,$TablaEdit)  {
     $this->css->CerrarForm();    
     //return($sql);
 }
-
 /*
  * 
  * Funcion para dibujar las cuentas por pagar
  * 
  */
-
     
 public function DibujaCuentasXPagar($VarCuentas)  {
     $this->css=new CssIni("");
@@ -1191,9 +1153,7 @@ public function DibujaCuentasXPagar($VarCuentas)  {
     
     $this->css->CerrarTabla();
 }
-
 ///Esta funcion permite dibujar un cuadro de dialogo para crear un cliente
-
 public function CrearCuadroClientes ($id,$titulo,$myPage,$VectorCDC){
         $this->css=new CssIni("");
     /////////////////Cuadro de dialogo de Clientes create
@@ -1213,13 +1173,10 @@ public function CrearCuadroClientes ($id,$titulo,$myPage,$VectorCDC){
         $this->css->CrearInputText("TxtRazonSocial","text","","","Razon Social","black","","",200,30,0,1);
         $this->css->CrearInputText("TxtDireccion","text","","","Direccion","black","","",200,30,0,1);
         $this->css->CrearInputText("TxtTelefono","text","","","Telefono","black","","",200,30,0,1);
-
         $this->css->CrearInputText("TxtEmail","text","","","Email","black","","",200,30,0,1);
-
         $VarSelect["Ancho"]="200";
         $VarSelect["PlaceHolder"]="Seleccione el municipio";
         $this->css->CrearSelectChosen("CmbCodMunicipio", $VarSelect);
-
         $sql="SELECT * FROM cod_municipios_dptos";
         $Consulta=$this->obCon->Query($sql);
            while($DatosMunicipios=$this->obCon->FetchArray($Consulta)){
@@ -1233,12 +1190,9 @@ public function CrearCuadroClientes ($id,$titulo,$myPage,$VectorCDC){
         echo '<br><br>';
         $this->css->CrearBoton("BtnCrearCliente", "Crear Cliente");
         $this->css->CerrarForm();
-
 	$this->css->CerrarCuadroDeDialogo(); 
 }
-
 //Funcion para Crear un Cuadro de dialogo que permita crear un servicio nuevo
-
 public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$VectorCDSer){
         $this->css=new CssIni("");
         $DatosTabla=$this->obCon->DevuelveValores("tablas_ventas", "NombreTabla", "servicios");
@@ -1276,7 +1230,6 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
         $VarSelect["PlaceHolder"]="Seleccione el Departamento";
         $VarSelect["Required"]=1;
         $this->css->CrearSelectChosen("CmbDepartamento", $VarSelect);
-
         $sql="SELECT * FROM prod_departamentos";
         $Consulta=$this->obCon->Query($sql);
         $this->css->CrearOptionSelect("", "Seleccione un Departamento", 0);
@@ -1290,7 +1243,6 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
         $VarSelect["PlaceHolder"]="Seleccione la cuenta contable";
         $VarSelect["Required"]=1;
         $this->css->CrearSelectChosen("TxtCuentaPUC", $VarSelect);
-
         $sql="SELECT * FROM subcuentas WHERE PUC LIKE '41%'";
         $Consulta=$this->obCon->Query($sql);
         $this->css->CrearOptionSelect("", "Seleccione una cuenta contable", 0);
@@ -1315,7 +1267,6 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
         $VarSelect["PlaceHolder"]="Seleccione el IVA";
         $VarSelect["Required"]=1;
         $this->css->CrearSelectChosen("CmbIVA", $VarSelect);
-
         $sql="SELECT * FROM porcentajes_iva";
         $Consulta=$this->obCon->Query($sql);
         $this->css->CrearOptionSelect("", "Seleccione el IVA", 0);
@@ -1330,25 +1281,19 @@ public function CrearCuadroCrearServicios($id,$titulo,$myPage,$idClientes,$Vecto
                
         $this->css->CrearBoton("BtnCrearServicios", "Crear Servicio");
         $this->css->CerrarForm();
-
 	$this->css->CerrarCuadroDeDialogo(); 
 }
-
 //Funcion para Crear un Cuadro de dialogo que permita crear un servicio nuevo
-
 public function CrearCuadroBusqueda($myPage,$Hidden1,$ValHiden1,$Hidden2,$ValHiden2,$VectorCuaBus){
     $this->css=new CssIni("");
     $this->css->CrearForm2("FrmBuscarItem","$myPage","post","_self");
             
     $this->css->CrearInputText($Hidden1,"hidden","",$ValHiden1,"","","","",0,0,0,0);
     $this->css->CrearInputText($Hidden2,"hidden","",$ValHiden2,"","","","",0,0,0,0);
-
     $this->css->CrearInputText("TxtBusqueda", "text", "", "", "Buscar Item", "black", "", "", 200, 30, 0, 0);
     $this->css->CerrarForm();
 }
-
 //Funcion para Dibujar un item buscado en las tablas de ventas
-
 public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     $this->css=new CssIni("");
     
@@ -1453,9 +1398,7 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
     $this->css->CerrarCuadroDeDialogo();
    
 }
-
 //Funcion para Dibujar un item buscado en las tablas de ventas
-
 public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
     $this->css=new CssIni("");
     $idPre=$Variable["idPre"];
@@ -1513,7 +1456,6 @@ public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
     $this->css->CerrarCuadroDeDialogo();
    
 }
-
 //Verifico si hay peticiones de busqueda de separados
 public function DibujaSeparado($myPage,$idPreventa,$Vector) {
     $this->css=new CssIni("");
@@ -1577,10 +1519,7 @@ if(!empty($_REQUEST["TxtBuscarSeparado"])){
     }
 }
 }
-
-
 //Verifico si hay peticiones de busqueda de creditos
-
 public function DibujaCredito($myPage,$idPreventa,$Vector) {
     $this->css=new CssIni("");
     //Dibujo una busqueda de un separado
@@ -1660,9 +1599,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     }
 }
 }
-
 //Clase para dibujar el cronograma de Produccion por horas
-
     public function DibujCronogramaProduccionHoras($Titulo,$FechaActual, $myPage,$idOT,$Vector) {
         //Creamos la interfaz del Cronograma
         
@@ -1672,7 +1609,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     $ColorEjecucion="green";
     $ColorTerminada="black";
     $ColorNoIniciada="blue";
-
     $this->css=new CssIni("");
     
     $this->css->CrearTabla();
@@ -1859,7 +1795,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     $this->css->CerrarTabla();
    
     }
-
     ///Arme una tabla con los datos de ventas por rangos
     
     public function ArmeTablaVentaRangos($Titulo,$CondicionItems,$Vector) {
@@ -1915,12 +1850,8 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
         
         //$sql="SELECT SUM(`Cantidad`) as Items FROM `facturas_items` WHERE `TotalItem`>1 AND $CondicionItems";
         $tbl ='  
-
-
         <span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>'.$Titulo.':
         </em></strong></span><BR><BR>
-
-
         <table cellspacing="1" cellpadding="2" border="1"  align="center" >
           <tr> 
             <th><h3>MAYOR</h3></th>
@@ -1928,7 +1859,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 <th><h3>RANGO</h3></th>
             <th><h3>INTERVALOS</h3></th>
                 <th><h3>AMPLITUD</h3></th>
-
           </tr >
           <tr> 
             <td>'.number_format($Mayor).'</td>
@@ -1936,7 +1866,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             <td>'.number_format($Rango).'</td>
             <td>'.number_format($NoIntervalos).'</td>
             <td>'.number_format($Amplitud).'</td>
-
           </tr >
         </table>
         <br><br>
@@ -1951,7 +1880,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             <th><h3>fabs %</h3></th>
             <th><h3>Frec %</h3></th>
           </tr >
-
         ';
         $h=0;
         for($i=1;$i<=$NoIntervalos;$i++){
@@ -1973,7 +1901,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             <td>'.round($Intervalo[$i]["FrecuenciaAcumuladaPorcentual"],2).'%</td>
           </tr >';
         }
-
         $tbl.="</table><br><br><br><br>";
         }else{
            $tbl=""; 
@@ -1996,7 +1923,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             <th><h3>DEBITO</h3></th>
             <th><h3>CREDITO</h3></th>
             <th><h3>NUEVO SALDO</h3></th>
-
           </tr >
           </table>
         ';
@@ -2109,10 +2035,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                     <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["Debitos"]).'</h1></strong></td>
                     <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["Creditos"]).'</h1></strong></td>
                     <td><strong><h1>'.number_format($Balance["ClaseCuenta"][$ClasesCuentas]["NuevoSaldo"]).'</h1></strong></td>
-
                     </tr >';
-
-
                 
                //Consulto los valores dentro del Grupo
                         
@@ -2132,7 +2055,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                         <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["Debitos"]).'</h2></td>
                         <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["Creditos"]).'</h2></td>
                         <td><h2>'.number_format($Balance["GrupoCuenta"][$GruposCuentas]["NuevoSaldo"]).'</h2></td>
-
                         </tr >';
                    
                    
@@ -2154,7 +2076,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                          <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["Debitos"]).'</h3></td>
                          <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["Creditos"]).'</h3></td>
                          <td><h3>'.number_format($Balance["Cuenta"][$Cuentas]["NuevoSaldo"]).'</h3></td>
-
                          </tr >';
                          
                          //Consulto los valores dentro de la Cuenta
@@ -2175,7 +2096,6 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                          <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["Debitos"]).'</td>
                          <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["Creditos"]).'</td>
                          <td>'.number_format($Balance["SubCuenta"][$SubCuentas]["NuevoSaldo"]).'</td>
-
                          </tr >';
                     }
                    }
@@ -2197,9 +2117,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
    
 //Clase para dibujar una caja de texto para verificar si un titulo ya fue vendido
 //
-
 //Funcion para Dibujar un item buscado en las tablas de ventas
-
 public function DibujeVerificacionTitulo($myPage,$Vector){
     $this->css=new CssIni("");
     $this->css->CrearDiv("DivBusquedaTitulo", "", "center", 1, 1);
@@ -2284,9 +2202,7 @@ public function DibujeVerificacionTitulo($myPage,$Vector){
     $this->css->CerrarDiv();
       
 }
-
 //Funcion para Dibujar el area de ventas de un titulo
-
 public function DibujeAreaVentasTitulos($myPage,$Vector){
     $this->css=new CssIni("");
     $this->css->CrearDiv("DivVentasTitulos", "", "center", 1, 1);
@@ -2389,8 +2305,6 @@ public function DibujeAreaVentasTitulos($myPage,$Vector){
     $this->css->CerrarDiv();
       
 }
-
-
 /*
  * Genera informe de compras comparativo con las ventas
  */
@@ -2528,16 +2442,13 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Informe_Comparativo".'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
    
       
 }
-
 //Crea los inputs para un concepto
-
     public function CrearInputsMontos($idConcepto,$Vector) {
         $this->css=new CssIni("");
         $DatosConcepto=$this->obCon->DevuelveValores("conceptos", "ID", $idConcepto);
@@ -2587,7 +2498,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         }
         $this->css->CerrarDiv();
     }
-
     
     ///Arme una tabla con un auxiliar 2016-12-27  JAAV
     
@@ -2610,7 +2520,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             <th><h3>DEBITO</h3></th>
             <th><h3>CREDITO</h3></th>
             <th><h3>SALDO</h3></th>
-
           </tr >
           </table>
         ';
@@ -2675,7 +2584,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             <th align="rigth"><h3>'.number_format($TotalDebitos).'</h3></th>
             <th align="rigth"><h3>'.number_format($TotalCreditos).'</h3></th>
             <th align="rigth"><h3>'.number_format($TotalSaldos).'</h3></th>
-
           </tr >
           </table>   
         ';
@@ -2684,7 +2592,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
    
 //Arme Balance General
 //
-
     public function ArmeTablaBalanceGeneral($Titulo,$Condicion,$Vector) {
         
         
@@ -2869,7 +2776,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Interface_Ingresos".'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
@@ -2884,7 +2790,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $Condicion=" WHERE ";
         $Condicion2=" WHERE ";
         if($TipoReporte=="Corte"){
-
             $Condicion.=" Fecha <= '$FechaCorte' ";
             $Condicion2.=" Fecha > '5000-01-01' AND  ";
             $Rango="Corte a $FechaCorte";
@@ -2897,12 +2802,10 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 $Condicion.="  AND idCentroCosto='$CentroCosto' ";
                 $Condicion2.="  AND idCentroCosto='$CentroCosto' AND ";
         }
-
         if($idEmpresa<>"ALL"){
                 $Condicion.="  AND idEmpresa='$idEmpresa' ";
                 $Condicion2.="  AND idEmpresa='$idEmpresa' AND ";
         }
-
         $objPHPExcel = new PHPExcel();  
         
         $objPHPExcel->getActiveSheet()->getStyle('A')->getNumberFormat()->setFormatCode('#');
@@ -3024,7 +2927,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 ->setCellValue($this->Campos[3].$f,$Balance["ClaseCuenta"][$Clase]["Debitos"])
                 ->setCellValue($this->Campos[4].$f,$Balance["ClaseCuenta"][$Clase]["Creditos"])
                 ->setCellValue($this->Campos[5].$f,$Balance["ClaseCuenta"][$Clase]["NuevoSaldo"])
-
                 ;
             
            foreach($NoGrupos as $GruposCuentas){
@@ -3041,7 +2943,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                     ->setCellValue($this->Campos[3].$f,$Balance["GrupoCuenta"][$GruposCuentas]["Debitos"])
                     ->setCellValue($this->Campos[4].$f,$Balance["GrupoCuenta"][$GruposCuentas]["Creditos"])
                     ->setCellValue($this->Campos[5].$f,$Balance["GrupoCuenta"][$GruposCuentas]["NuevoSaldo"])
-
                     ;                      
                    
                    //Consulto los valores dentro de la Cuenta
@@ -3057,7 +2958,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                             ->setCellValue($this->Campos[3].$f,$Balance["Cuenta"][$Cuentas]["Debitos"])
                             ->setCellValue($this->Campos[4].$f,$Balance["Cuenta"][$Cuentas]["Creditos"])
                             ->setCellValue($this->Campos[5].$f,$Balance["Cuenta"][$Cuentas]["NuevoSaldo"])
-
                             ;    
                          //Consulto los valores dentro de la Cuenta
                    
@@ -3072,7 +2972,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                             ->setCellValue($this->Campos[3].$f,$Balance["SubCuenta"][$SubCuentas]["Debitos"])
                             ->setCellValue($this->Campos[4].$f,$Balance["SubCuenta"][$SubCuentas]["Creditos"])
                             ->setCellValue($this->Campos[5].$f,$Balance["SubCuenta"][$SubCuentas]["NuevoSaldo"])
-
                             ;  
                     }
                   }
@@ -3106,7 +3005,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Interface_Ingresos".'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
@@ -3118,7 +3016,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $Condicion=" WHERE ";
         $Condicion2=" WHERE ";
         if($TipoReporte=="Corte"){
-
             $Condicion.=" Fecha <= '$FechaCorte' ";
             $Condicion2.=" Fecha > '5000-01-01' AND  ";
             $Rango="Corte a $FechaCorte";
@@ -3131,7 +3028,6 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 $Condicion.="  AND Tercero_Identificacion='$Tercero' ";
                 $Condicion2.="  AND Tercero_Identificacion='$Tercero' ";
         }
-
         if($CuentaPUC<>"" AND $TipoFiltro=="Igual"){
                 $Condicion.="  AND CuentaPUC='$CuentaPUC' ";
                 $Condicion2.="  AND CuentaPUC='$CuentaPUC' ";
@@ -3218,14 +3114,12 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Interface_Ingresos".'.xls"');
     header('Cache-Control: max-age=0');
-
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
     exit; 
     }
         
     //Inicia la creacion de un pdf
-
     public function PDF_Ini($TituloFormato,$FontSize,$VectorPDF) {
         
         require_once('../tcpdf/examples/config/tcpdf_config_alt.php');
@@ -3246,22 +3140,17 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $this->PDF->SetKeywords('Techno Soluciones, PDF, '.$TituloFormato.' , CCTV, Alarmas, Computadores, Software');
         // set default header data
         //$pdf->SetHeaderData(PDF_HEADER_LOGO, 60, PDF_HEADER_TITLE.'', "");
-
         // set header and footer fonts
         $this->PDF->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $this->PDF->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
         // set default monospaced font
         $this->PDF->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
         // set margins
         $this->PDF->SetMargins(10, 10, PDF_MARGIN_RIGHT);
         $this->PDF->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->PDF->SetFooterMargin(10);
-
         // set auto page breaks
         $this->PDF->SetAutoPageBreak(TRUE, 10);
-
         // set image scale factor
         $this->PDF->setImageScale(PDF_IMAGE_SCALE_RATIO);
         // set some language-dependent strings (optional)
@@ -3278,9 +3167,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $this->PDF->SetFont('helvetica', '', $FontSize);
         
 }
-
 //encabezado de un  formato de calidad en un pdf
-
     public function PDF_Encabezado($idEmpresa,$idFormatoCalidad,$VectorEncabezado) {
         $DatosEmpresaPro=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresa);
         $DatosFormatoCalidad=$this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
@@ -3310,38 +3197,28 @@ $tbl = <<<EOD
        <td style="text-align: center;" >Fecha<br></td>
        <td> $DatosFormatoCalidad[Fecha]</td> 
     </tr>
-
 </table>
 EOD;
-
 $this->PDF->writeHTML($tbl, true, false, false, false, '');
-
-
 $this->PDF->SetFillColor(255, 255, 255);
-
 $txt="<h3>".$DatosEmpresaPro["RazonSocial"]."<br>NIT ".$DatosEmpresaPro["NIT"]."</h3>";
 $this->PDF->MultiCell(60, 5, $txt, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
 $txt=$DatosEmpresaPro["Direccion"]."<br>".$DatosEmpresaPro["Telefono"]."<br>".$DatosEmpresaPro["Ciudad"]."<br>".$DatosEmpresaPro["WEB"];
 $this->PDF->MultiCell(60, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
-
 $Documento="<br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
 $this->PDF->MultiCell(60, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
 $this->PDF->writeHTML("<br>", true, false, false, false, '');
 //Close and output PDF document
-
     }
 //Crear el documento PDF
-
     public function PDF_Write($html) {
         $this->PDF->writeHTML($html, true, false, false, false, '');
     } 
 //Agregar pagina en PDF
-
     public function PDF_Add() {
         $this->PDF->AddPage();
     }     
 //Crear el documento PDF
-
     public function PDF_Output($NombreArchivo) {
         $this->PDF->Output("$NombreArchivo".".pdf", 'I');
     } 
@@ -3373,7 +3250,6 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
                 $Columnas[2]="CuentaPUC";         $Valores[2]=$DatosMayor["Cuenta"];
                 $Columnas[3]="NombreCuenta";      $Valores[3]=$DatosCuenta["Nombre"];
                 $Columnas[4]="Neto";              $Valores[4]=$DatosMayor["TotalCuenta"];
-
                 $this->obCon->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             }
         }
@@ -3411,7 +3287,6 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $Columnas[2]="CuentaPUC";         $Valores[2]=$DatosCuentaRE["CuentaPUC"];
         $Columnas[3]="NombreCuenta";      $Valores[3]=$DatosCuentaRE["NombreCuenta"];
         $Columnas[4]="Neto";              $Valores[4]=$TotalClases["RE"];
-
         $this->obCon->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
         return($TotalClases);
@@ -3689,11 +3564,6 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
 		
 		
 ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
-
-
-
-
-
 ";
         $html.=' El dia '.$DatosTraslado["Fecha"].' se realiza el traslado del titulo '.$DatosTraslado["Mayor1"].' de la promocion '
                 . ' '.$DatosPromocion["Nombre"].' que estaba en poder del Sr. '.$DatosTraslado["NombreColaboradorAnterior"].' Identificado '
@@ -3701,13 +3571,11 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
                 . ' Con CC No. '.$DatosTraslado["idColaboradorAsignado"].', Por motivo de '.$DatosTraslado["Observaciones"];
         $html.="</pre><pre>
          
-
 		 
 		 
 		 
 		 
 		 
-
   Entrega: _____________________________          Recibe:_____________________________</pre>";
         $this->PDF_Encabezado(1, 22, "");
         $this->PDF_Write("<br><br>".$html);
@@ -3986,7 +3854,6 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     print("</td>");
     
     $this->css->CierraFilaTabla();
-
     $this->css->FilaTabla(18);
     $this->css->ColTabla("DEVOLVER:",1);
     $this->css->ColTablaInputText("TxtDevuelta","text",0,"","Devuelta","","","",150,50,1,0);
@@ -3998,7 +3865,6 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     print("</td>");
     //$css->ColTablaBoton("BtnGuardar","Guardar");
     $this->css->CierraFilaTabla();
-
     $this->css->CerrarTabla(); 
     $this->css->CerrarForm();
     }
@@ -4025,5 +3891,4 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     }
     // FIN Clases	
 }
-
 ?>
