@@ -75,7 +75,7 @@ print("<body>");
     
     if($idMesa>0){
         $obTabla->CrearSubtotalCuentaRestaurante($idMesa,$idDepartamento,$idUser,$myPage,"");
-        $css->CrearNotificacionNaranja("Lista de Productos", 16);
+        $css->CrearNotificacionVerde("Lista de Productos", 16);
         ////Paginacion
         ////
         $Ruta="";

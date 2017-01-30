@@ -6085,7 +6085,7 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosProductos=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
             $ValoresProducto=$this->CalculeValoresItem($fecha, $idProducto, "productosventa", $Cantidad, "");
             $tab="restaurante_pedidos_items";
-            $NumRegistros=10; 
+            $NumRegistros=12; 
 
             $Columnas[0]="idProducto";          $Valores[0]=$idProducto;
             $Columnas[1]="NombreProducto";      $Valores[1]=$DatosProductos["Nombre"];
@@ -6097,12 +6097,41 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[7]="Observaciones";       $Valores[7]=$Observaciones;
             $Columnas[8]="idPedido";            $Valores[8]=$idPedido;
             $Columnas[9]="idUsuario";           $Valores[9]=  $this->idUser;
+            $Columnas[10]="Fecha";              $Valores[10]=$fecha;
+            $Columnas[11]="Hora";               $Valores[11]= $hora;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             return($idPedido);
         }
         
+       //Agregar un Producto a un domicilio
         
+        public function AgregueProductoADomicilio($idDomicilio,$fecha,$hora,$Cantidad,$idProducto,$Observaciones,$Vector) {
+            $idUser=$this->idUser;
+            $FechaHora=$fecha." ".$hora;
+            
+            $DatosProductos=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+            $ValoresProducto=$this->CalculeValoresItem($fecha, $idProducto, "productosventa", $Cantidad, "");
+            $tab="restaurante_pedidos_items";
+            $NumRegistros=12; 
+
+            $Columnas[0]="idProducto";          $Valores[0]=$idProducto;
+            $Columnas[1]="NombreProducto";      $Valores[1]=$DatosProductos["Nombre"];
+            $Columnas[2]="Cantidad";            $Valores[2]=$Cantidad;
+            $Columnas[3]="ValorUnitario";       $Valores[3]=$ValoresProducto["ValorUnitario"];
+            $Columnas[4]="Subtotal";            $Valores[4]=$ValoresProducto["Subtotal"];
+            $Columnas[5]="IVA";                 $Valores[5]=$ValoresProducto["IVA"];
+            $Columnas[6]="Total";               $Valores[6]=$ValoresProducto["Total"];
+            $Columnas[7]="Observaciones";       $Valores[7]=$Observaciones;
+            $Columnas[8]="idPedido";            $Valores[8]=$idDomicilio;
+            $Columnas[9]="idUsuario";           $Valores[9]= $this->idUser;
+            $Columnas[10]="Fecha";              $Valores[10]=$fecha;
+            $Columnas[11]="Hora";               $Valores[11]= $hora;
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+            
+        }
+         
             /*
      * Registra una Venta Por Restaurante
      * 
@@ -6640,7 +6669,36 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     $salida = shell_exec('lpr $COMPrinter');
     
     }
-    
+    //Crear un Domicilio
+    //
+    public function CreeDomicilio($fecha,$hora,$idCliente,$DireccionEnvio, $TelefonoConfimacion,$Observaciones,$Vector) {
+        $FechaHora=$fecha." ".$hora;
+        $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $idCliente);
+        if($DireccionEnvio==""){
+            $DireccionEnvio=$DatosCliente["Direccion"];
+        }
+        if($TelefonoConfimacion==""){
+            $TelefonoConfimacion=$DatosCliente["Telefono"];
+        }
+        $tab="restaurante_pedidos";
+        $NumRegistros=11; 
+        
+        $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+        $Columnas[1]="Hora";                $Valores[1]=$hora;
+        $Columnas[2]="idUsuario";           $Valores[2]=$this->idUser;
+        $Columnas[3]="idMesa";              $Valores[3]="";
+        $Columnas[4]="Estado";              $Valores[4]="DO";
+        $Columnas[5]="FechaCreacion";       $Valores[5]=$FechaHora;
+        $Columnas[6]="NombreCliente";       $Valores[6]=$DatosCliente["RazonSocial"];
+        $Columnas[7]="DireccionEnvio";      $Valores[7]=$DireccionEnvio;
+        $Columnas[8]="TelefonoConfirmacion";$Valores[8]=$TelefonoConfimacion;
+        $Columnas[9]="Observaciones";       $Valores[9]=$Observaciones;
+        $Columnas[10]="idCliente";          $Valores[10]=$idCliente;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idPedido=$this->ObtenerMAX($tab,"ID", 1,"");
+        return($idPedido);
+    }
 //////////////////////////////Fin	
 }
 	

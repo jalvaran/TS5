@@ -47,12 +47,7 @@ $obTabla = new Tabla($db);
         header("location:$myPage");
     }
     
-   //////Se descarta un Pedido
-    if(isset($_REQUEST['BtnDescartarDomicilio'])){
-        $idPedido=$obVenta->normalizar($_REQUEST['BtnDescartarDomicilio']);
-        $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DEDO", "ID", $idPedido);
-        header("location:$myPage");
-    }	
+   
 	////Se recibe edicion
 	
 	if(!empty($_REQUEST['BtnEditarCantidad'])){
@@ -100,15 +95,6 @@ $obTabla = new Tabla($db);
             }
         }
         
-        //Si se recibe la impresion de un pedido
-       
-	if(isset($_REQUEST['BtnImprimirDomicilio'])){
-            $idPedido=$obVenta->normalizar($_REQUEST['BtnImprimirDomicilio']);
-            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-            if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeDomicilioRestaurante($idPedido,$DatosImpresora["Puerto"],1,"");
-            }
-        }
         
          //Si se recibe la impresion de una precuenta
        
@@ -251,7 +237,7 @@ $obTabla = new Tabla($db);
 			print("<script language='JavaScript'>alert('El cliente con Identificacion: $NIT, ya existe y no se puede crear nuevamente')</script>");
 		}	
 
-		//header("location:VentaFacil.php?CmbPreVentaAct=$idPreventa");
+	header("location:$myPage");
 		
 			
 	}
@@ -351,20 +337,8 @@ $obTabla = new Tabla($db);
             header("location:$myPage?TxtIdEgreso=$idEgreso");
         }
         
-        //Si se Agrega Un Item a un Domicilio
-        if(isset($_REQUEST['BtnAgregar'])){
-        $fecha=date("Y-m-d");
-        $hora=date("H:i:s");
+       
         
-        $Cantidad=$obVenta->normalizar($_REQUEST["TxtCantidad"]);
-        $idMesa=$obVenta->normalizar($_REQUEST["idMesa"]);
-        $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservaciones"]);
-        $idProducto=$obVenta->normalizar($_REQUEST["idProducto"]);
-        //$idDepartamento=$obVenta->normalizar($_REQUEST["idDepartamento"]);
-        
-        $idPedido=$obVenta->AgregueProductoAPedido($idMesa,$fecha,$hora,$Cantidad,$idProducto,$Observaciones,"");
-        $css->CrearNotificacionNaranja("Producto agregado al pedido $idPedido", 16);
-}
         ///////////////Fin
         
 	?>

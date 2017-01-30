@@ -2,7 +2,7 @@
 $Valida = intval($_GET['Valida']);
 session_start();
 $idUser=$_SESSION["idUser"];
-$myPage="Restaurante_Admin.php";
+$myPage="AtencionDomicilios.php";
 include_once("../../modelo/php_conexion.php");
 include_once("../../modelo/php_tablas.php");
 include_once("../css_construct.php");

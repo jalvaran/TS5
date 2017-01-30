@@ -3785,6 +3785,77 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->css->CerrarCuadroDeDialogo();
     }
     
+    //Crear total de una 
+    public function CrearSubtotalCuentaDomicilio($idDomicilio,$idDepartamento,$idUser,$myPage,$Vector) {
+        $this->css=new CssIni("");
+        $Titulo="Ver Este Domicilio";
+        $Nombre="ImgShowDomicilio";
+        $RutaImage="../images/cuentasxcobrar.png";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialVerDomicilio";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","left:10px;top:50",$VectorBim);
+        $Titulo="Buscar";
+        $Nombre="ImgBuscarItemDomicilio";
+        $RutaImage="../images/buscar.png";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialBuscarItemDomicilio";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","right:10px;top:50",$VectorBim);
+        
+        $this->css->CrearCuadroDeDialogo("DialVerDomicilio", "Este Domicilio:");
+        $this->css->CrearTabla();
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>Subtotal</strong>", 1);
+        $this->css->ColTabla("<strong>IVA</strong>", 1);
+        $this->css->ColTabla("<strong>Total</strong>", 2);
+        $this->css->CierraFilaTabla();
+        
+        
+        $htmlItems="";
+        $Subtotal=0;
+        $IVA=0;
+        $Total=0;
+        
+            
+            $idPedido=$idDomicilio;
+            $DatosDomicilio=  $this->obCon->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
+            $htmlItems="<tr><td colspan=4><strong>ITEMS EN DOMICILIO $idPedido para el Sr(a)$DatosDomicilio[NombreCliente]</strong></td></tr>";
+            $htmlItems.="<tr><td><strong>Producto</strong></td><td><strong>Cantidad</strong></td>"
+                    . "<td><strong>Total</strong></td><td><strong>Borrar</strong></td></tr>";
+            
+            $consulta2=  $this->obCon->ConsultarTabla("restaurante_pedidos_items", " WHERE idPedido='$idPedido'");
+            
+            while($DatosItems=$this->obCon->FetchArray($consulta2)){
+                $htmlItems.="<tr><td>$DatosItems[NombreProducto]<br>$DatosItems[Observaciones]</td><td>$DatosItems[Cantidad]</td><td>$DatosItems[Total]</td>";
+                $htmlItems.="<td><a href='$myPage?idDomicilio=$idDomicilio&idDepartamento=$idDepartamento&idDel=$DatosItems[ID]'>X</td>";
+                $htmlItems.="</tr>";
+                $Subtotal=$Subtotal+$DatosItems["Subtotal"];
+                $IVA=$IVA+$DatosItems["IVA"];
+                $Total=$Total+$DatosItems["Total"];
+            }
+        
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla(number_format($Subtotal), 1);
+        $this->css->ColTabla(number_format($IVA), 1);
+        $this->css->ColTabla(number_format($Total), 2);
+        $this->css->CierraFilaTabla();
+        print($htmlItems);
+        $this->css->CerrarTabla();
+        $this->css->CerrarCuadroDeDialogo();
+        
+        $this->css->CrearCuadroDeDialogo("DialBuscarItemDomicilio", "Buscar un producto:");
+        $this->css->CrearForm2("FrmBuscar", $myPage, "post", "_self");
+        $this->css->CrearInputText("idDomicilio", "hidden", "", $idDomicilio, "", "", "", "", "", "", "", "");
+        $this->css->CrearInputText("idDepartamento", "hidden", "", $idDepartamento, "", "", "", "", "", "", "", "");
+        $this->css->CrearInputText("TxtBusqueda", "text", "", "", "Buscar", "", "", "", 200, 30, 0, 1);
+        print("<br>");
+        $this->css->CrearBoton("BtnBuscar", "Buscar");
+        
+        $this->css->CerrarForm();
+        $this->css->CerrarCuadroDeDialogo();
+    }
+    
     //Dibujo el area de facturacion de un pedido
     //
     public function DibujeAreaFacturacionRestaurante($idPedido,$myPage,$Vector) {
@@ -3795,7 +3866,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
             $Domicilio=1;
         }
     //$obVenta=new ProcesoVenta($idUser);
-    
+    $DatosPedido=$this->obCon->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
     $Subtotal=$this->obCon->SumeColumna("restaurante_pedidos_items","Subtotal", "idPedido",$idPedido);
     $IVA=$this->obCon->SumeColumna("restaurante_pedidos_items","IVA", "idPedido",$idPedido);
     $SaldoFavor=0;
@@ -3886,8 +3957,11 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $sql="SELECT * FROM clientes";
         $Consulta=$this->obCon->Query($sql);
         while($DatosCliente=$this->obCon->FetchArray($Consulta)){
-               
-               $this->css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[Num_Identificacion] / $DatosCliente[RazonSocial] / $DatosCliente[Telefono]" , 0);
+            $sel=0;
+            if($DatosPedido["idCliente"]==$DatosCliente["idClientes"]){
+               $sel=1; 
+            }
+            $this->css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[Num_Identificacion] / $DatosCliente[RazonSocial] / $DatosCliente[Telefono]" , $sel);
            }
            
     $this->css->CerrarSelect();
