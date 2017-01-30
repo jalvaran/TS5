@@ -1,0 +1,117 @@
+2. revisar descuadre en facturas
+3. revisar descuadre en egresos
+4. Cuentas X Pagar
+6. depreciacion de activos
+7. Alertas
+Revisar por qué la 135595 no sumó el subnivel
+152405 tampoco está agrupando bien
+Ordenes de salida
+Revisar la asignacion de iva si esta includo
+
+Agrupación del 3er nivel
+
+Si una cuenta tiene dependencias no que no sea mostrada en la captura de informacion
+
+En los cierres de pagos a terceros preguntar que cuentas desea poner en 0 y a que cuenta llevarlas
+
+Advertir que no deje grabar una factura que ya se haya digitado en gastos no deje ingresar
+
+Preguntar si es documento cruce para llevar a cuentas por pagar o cuentas x cobrar
+
+La interface de ingresos incluir la 42
+
+Y los egresos lo mismo que la interfaz pero con la 51 y 52
+
+Abreviaturas para los tipo de documentos 
+Ordenar por tercero en los auxiliares
+
+Opcion de Agrupar por tercero y por cuenta, resumido o detallado
+Subtotalizar por tercero en auxiliares
+Quitar empieza por
+
+Indicadores de compras gravadas Segun modelo
+
+Opcional en el balance de comprobación de mostrar cuentas con movimiento o sin movimiento con cuentas en 0
+
+Modelos que envíen 
+
+Informes fiscales
+
+Opción de limitar la facturación si no hay existencias
+
+Anexos para cotizaciones                        
+Exportar ingresos de acuerdo al modelo enviado
+Presentación del balance de acuerdo al modelo entregado impreso
+Auxiliares de acuerdo al modelo entregado
+Registrar las ediciones
+Cierres contables
+
+Certificados de retención 
+Auditoría de registros y auditoría de documentos 
+Indicadores o presupuestos
+Mirar utilidad del proyecto
+Mostrar el terceros países  y el número de factura(documento fuente) en la nota contable 
+Calcular automáticamente la base y retenciones por cuentas 
+En la exportación a Excel sumatoria de los devotos y creditos                        
+Presentación del cierre 
+Ventas brutas
+Ventas netas
+
+Que el comprobante de pago de créditos muestre el total de deuda del cliente 
+
+Comprobar que se registre la caja en el cierre
+
+Mostrar sólo las formas de pago mayores a 0
+
+Relación de mantenimiento 
+Informe de protocolos de Seguridad del sistema                        
+Revisar por qué la 135595 no sumó el subnivel
+152405 tampoco está agrupando bien
+
+
+Agrupación del 3er nivel
+
+Si una cuenta tiene dependencias no que no sea mostrada en la captura de informacion
+
+En los cierres de pagos a terceros preguntar que cuentas desea poner en 0 y a que cuenta llevarlas
+
+Advertir que no deje grabar una factura que ya se haya digitado en gastos no deje ingresar
+
+Preguntar si es documento cruce para llevar a cuentas por pagar o cuentas x cobrar
+
+La interface de ingresos incluir la 42
+
+Y los egresos lo mismo que la interfaz pero con la 51 y 52
+
+Abreviaturas para los tipo de documentos 
+Ordenar por tercero en los auxiliares
+
+Opcion de Agrupar por tercero y por cuenta, resumido o detallado
+Subtotalizar por tercero en auxiliares
+Quitar empieza por
+
+Indicadores de compras gravadas Segun modelo
+
+Opcional en el balance de comprobación de mostrar cuentas con movimiento o sin movimiento con cuentas en 0
+
+Modelos que envíen 
+
+Informes fiscales
+
+Opción de limitar la facturación si no hay existencias
+
+Anexos para cotizaciones                        
+En cuentas por pagar y cobrar no aparezca retenciones
+Y mostrar el saldo está mostrando el total
+Cuentas por pagar o cobrar poder meterlos tanto abonos como completos
+Tener el histórico de los comprobante de ingresó 
+Retención en la fuente de los comprobante de ingresó en las cuentas por pagar y cobrar un sólo comprobante por proveedor
+Auxiliares
+Informe por edades de cuentas por pagar y cobrar
+Revisar la anulación de facturas
+Comprobates de contabilidad mostrar el documento que se pagó 
+
+En las cuentas por cobrar mostrar todo lo que se debe y colocar los abonos allí a cuales por un sólo nit
+Certificados de retención 
+
+Balances y Estados de resultados con firmas
