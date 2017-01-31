@@ -6704,6 +6704,43 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $idPedido=$this->ObtenerMAX($tab,"ID", 1,"");
         return($idPedido);
     }
+    //cerrar el turno en restaurante
+    public function CierreTurnoRestaurante($Vector) {
+        $fecha="Y-m-d";
+        $hora="H:i:s";
+        $tab="restaurante_cierres";
+        $NumRegistros=3; 
+        
+        $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+        $Columnas[1]="Hora";                $Valores[1]=$hora;
+        $Columnas[2]="idUsuario";           $Valores[2]=$this->idUser;
+                
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idCierre=$this->ObtenerMAX($tab,"ID", 1,"");
+        $this->update("restaurante_pedidos", "idCierre", $idCierre, " WHERE idCierre=0 AND Estado<>'AB'");
+        $this->update("restaurante_pedidos_items", "idCierre", $idCierre, " WHERE idCierre=0 AND Estado<>''");
+        
+        return($idCierre);
+    }
+    
+    //imprime un cierre de restaurante
+    public function ImprimirCierreRestaurante($Vector) {
+        $fecha="Y-m-d";
+        $hora="H:i:s";
+        $tab="restaurante_cierres";
+        $NumRegistros=3; 
+        
+        $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+        $Columnas[1]="Hora";                $Valores[1]=$hora;
+        $Columnas[2]="idUsuario";           $Valores[2]=$this->idUser;
+                
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idCierre=$this->ObtenerMAX($tab,"ID", 1,"");
+        $this->update("restaurante_pedidos", "idCierre", $idCierre, " WHERE idCierre=0 AND Estado<>'AB'");
+        $this->update("restaurante_pedidos_items", "idCierre", $idCierre, " WHERE idCierre=0 AND Estado<>''");
+        
+        return($idCierre);
+    }
 //////////////////////////////Fin	
 }
 	

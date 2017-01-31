@@ -43,8 +43,20 @@ $obTabla = new Tabla($db);
     //////Se descarta un Pedido
     if(isset($_REQUEST['BtnDescartarPedido'])){
         $idPedido=$obVenta->normalizar($_REQUEST['BtnDescartarPedido']);
-        $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DE", "ID", $idPedido);
+        $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DEPE", "ID", $idPedido);
+        $obVenta->ActualizaRegistro("restaurante_pedidos_items", "Estado", "DEPE", "idPedido", $idPedido);
         header("location:$myPage");
+    }
+    
+    //////Se descarta un Pedido
+    if(isset($_REQUEST['BtnCerrarTurnoRestaurante'])){
+        
+        $idCierre=$obVenta->CierreTurnoRestaurante("");
+        $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+        if($DatosImpresora["Habilitado"]=="SI"){
+            $obVenta->ImprimirCierreRestaurante($idCierre,$DatosImpresora["Puerto"],1,"");
+        }
+        header("location:$myPage?idCierre=$idCierre");
     }
     
    

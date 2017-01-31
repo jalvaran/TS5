@@ -221,7 +221,7 @@ function ConfirmarFormNegativo(id){
 
 function ConfirmarLink(id){
 	
-    if (confirm('¿Estas seguro que deseas registrar este abono?')){ 
+    if (confirm('¿Estas seguro que deseas realizar esta accion?')){ 
      
       document.location.href= document.getElementById(id).value;
     } 

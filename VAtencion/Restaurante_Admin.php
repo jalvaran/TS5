@@ -23,6 +23,11 @@ print("<body>");
     $css->CabeceraIni("Admin Restaurante"); //Inicia la cabecera de la pagina
         $css->CreaBotonDesplegable("DialCliente","Tercero");
         $css->CreaBotonDesplegable("DialEgreso","Egreso");
+        print(" Cerrar Turno  ------------->>>");
+        $css->CrearForm("FrmCerrarTurno", $myPage, "post", "_self");
+        $css->CrearBotonConfirmado("BtnCerrarTurnoRestaurante", "Cerrar Turno");
+        $css->CerrarForm();
+        //print("</li>");
     $css->CabeceraFin(); 
     
     ///////////////Creamos el contenedor

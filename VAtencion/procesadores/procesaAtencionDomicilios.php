@@ -51,6 +51,8 @@ if(isset($_REQUEST['del'])){
     if(isset($_REQUEST['BtnDescartarDomicilio'])){
         $idPedido=$obVenta->normalizar($_REQUEST['BtnDescartarDomicilio']);
         $obVenta->ActualizaRegistro("restaurante_pedidos", "Estado", "DEDO", "ID", $idPedido);
+        $obVenta->ActualizaRegistro("restaurante_pedidos_items", "Estado", "DEDO", "idPedido", $idPedido);
+        
         header("location:$myPage");
     }	
     
