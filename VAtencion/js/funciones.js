@@ -501,3 +501,18 @@ function CalculeSumatoria(idCambiar) {
 function SeleccioneID(id){
     document.getElementById(id).select();
 }
+
+
+function CompareFechaCierre(idFechaCierre,idFechaText,FechaActual){
+    //alert("Entra");
+   var fech1 = document.getElementById(idFechaText).value;
+   var fech2 = document.getElementById(idFechaCierre).value;
+   alert(fech1+" "+fech2+" "+idFechaText);
+   if((Date.parse(fech1)) <= (Date.parse(fech2))){
+    alert("Esta Fecha ya esta cerrada");
+    document.getElementById(idFechaText).value=FechaActual;
+    }else{
+    alert("Pasa");	
+    }
+    
+}

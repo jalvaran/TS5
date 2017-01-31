@@ -5063,6 +5063,7 @@ public function VerificaPermisos($VectorPermisos) {
        
        $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosAbono["Usuarios_idUsuarios"]);
        $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+       $SaldoTotal=$this->SumeColumna("cartera", "Saldo", "idCliente", $DatosFactura["Clientes_idClientes"]);
         $RazonSocial=$DatosEmpresa["RazonSocial"];
         $NIT=$DatosEmpresa["NIT"];
         $Direccion=$DatosEmpresa["Direccion"];
@@ -5152,12 +5153,16 @@ public function VerificaPermisos($VectorPermisos) {
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"_____________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"SALDO           ".str_pad("$".number_format($DatosFactura['SaldoFact']),20," ",STR_PAD_LEFT));
+    fwrite($handle,"SALDO DE ESTA FACTURA: ".str_pad("$".number_format($DatosFactura['SaldoFact']),20," ",STR_PAD_LEFT));
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
     fwrite($handle,"_____________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    fwrite($handle,"SALDOS ANTERIORES:     ".str_pad("$".number_format($SaldoTotal),20," ",STR_PAD_LEFT));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
+    fwrite($handle,"_____________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea

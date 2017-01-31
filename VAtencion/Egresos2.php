@@ -163,8 +163,8 @@ include_once("procesadores/procesaEgresos.php");
 						
 					
 					print("<td>");
-					//$css->CrearInputText("TxtFecha","text",'Fecha:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
-                                        $css->CrearInputDate("TxtFecha", "TxtFecha", 30, 100, $fecha);
+					$css->CrearInputText("TxtFecha","date",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
+                                        //$css->CrearInputDate("TxtFecha", "TxtFecha", 30, 100, $fecha);
 					print("</td>");
 					print("<td>");
 					$css->CrearSelect("CmbCuentaOrigen"," Cuenta Origen:<br>","black","",1);
@@ -220,8 +220,8 @@ include_once("procesadores/procesaEgresos.php");
 					
 					///// Text Fecha Programada
 					print("<td>");
-					//$css->CrearInputText("TxtFechaProgram","text",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
-					$css->CrearInputDate("TxtFechaProgram", "TxtFechaProgram", 30, 100, $fecha);
+					$css->CrearInputText("TxtFechaProgram","text",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
+					//$css->CrearInputDate("TxtFechaProgram", "TxtFechaProgram", 30, 100, $fecha);
                                         print("</td>");
 					
 					$css->CierraFilaTabla();
@@ -361,8 +361,7 @@ include_once("procesadores/procesaEgresos.php");
 <?php 
 $css->AgregaJS();
 $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
-$css->IniDatePicker("TxtFecha");
-$css->IniDatePicker("TxtFechaProgram");
+
 ?>
  
   </body>
