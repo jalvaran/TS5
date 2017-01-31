@@ -164,6 +164,7 @@ include_once("procesadores/procesaEgresos.php");
 					
 					print("<td>");
 					$css->CrearInputText("TxtFecha","text",'Fecha:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
+                                        $css->CrearInputDate2();
 					print("</td>");
 					print("<td>");
 					$css->CrearSelect("CmbCuentaOrigen"," Cuenta Origen:<br>","black","",1);
@@ -359,11 +360,8 @@ include_once("procesadores/procesaEgresos.php");
 <?php 
 $css->AgregaJS();
 $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
+$css->IniDatePicker();
 ?>
-
-<a style="display:scroll; position:fixed; bottom:10px; right:10px;" href="#" title="Volver arriba"><img src="../images/up1_amarillo.png" /></a>
-
-	
  
   </body>
   

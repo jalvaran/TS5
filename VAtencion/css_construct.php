@@ -78,6 +78,7 @@ class CssIni{
 
 		<!-- Le styles -->
 		<link href='css/bootstrap.css' rel='stylesheet'>
+                <link href='css/datepicker.css' rel='stylesheet'>
 		<link href='css/pagination.css' rel='stylesheet' type='text/css' />
 		<link href='css/B_blue.css' rel='stylesheet' type='text/css' />
 		<style type='text/css'>
@@ -738,7 +739,7 @@ class CssIni{
 	
 	function AgregaJS(){
             
-            print('<script src="js/jquery.js"></script>
+            print('
             <script src="js/bootstrap-transition.js"></script>
             <script src="js/beeper.js"></script>
             <script src="js/bootstrap-alert.js"></script>
@@ -759,7 +760,9 @@ class CssIni{
             <script src="chousen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
             <script src="js/calendar.js"></script>
             <script src="js/cronometro.js"></script>
-            
+            <script src="js/jquery.js"></script>
+            <script src="js/bootstrap-datepicker.js"></script>
+            <script>$(function(){ });</script>
              ');
             
             ?>
@@ -1096,6 +1099,21 @@ function Footer(){
             //$this->BotonBuscar(20, 20, "");
                  
 	} 
+        
+        public function CrearInputDate2() {
+            print('<div class="input-append date" id="dp3" data-date="2017-01-23" data-date-format="yyyy-mm-dd">
+				<input class="" name="TxtFecha" size="16" type="text" value="2017-01-23" readonly>
+				<span class="add-on"><i class="icon-calendar"></i></span>
+                </div>');
+            
+        }
+        public function IniDatePicker() {
+           print(" <script> $('#dp3').datepicker({
+				format: 'yyyy-mm-dd'
+			});
+                        </script>");
+            
+        }
         //////////////////////////////////FIN
 }
 	
