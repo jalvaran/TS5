@@ -1099,19 +1099,19 @@ function Footer(){
             //$this->BotonBuscar(20, 20, "");
                  
 	} 
-        
-        public function CrearInputDate2() {
-            print('<div class="input-append date" id="dp3" data-date="2017-01-23" data-date-format="yyyy-mm-dd">
-				<input class="" name="TxtFecha" size="16" type="text" value="2017-01-23" readonly>
-				<span class="add-on"><i class="icon-calendar"></i></span>
+       //Crea un campo de texto tipo fecha
+        public function CrearInputDate($id,$Nombre,$Alto,$Ancho,$Value) {
+            print('<div class="input-append date" id="'.$id.'" data-date="'.$Value.'" data-date-format="yyyy-mm-dd">
+				<input name="'.$Nombre.'" size="16" type="text" value="'.$Value.'" style="height:'.$Alto.'px;width:'.$Ancho.'px;" readonly>
+				<span class="add-on" style="background-image: url(ico/calendar.svg);background-repeat: no-repeat;"><i class="icon-calendar"></i></span>
                 </div>');
             
         }
-        public function IniDatePicker() {
-           print(" <script> $('#dp3').datepicker({
-				format: 'yyyy-mm-dd'
-			});
-                        </script>");
+        //inicia el date
+        public function IniDatePicker($id) {
+           print(" <script>
+                   $('#".$id."').datepicker({format: 'yyyy-mm-dd'});           
+                </script>");
             
         }
         //////////////////////////////////FIN
