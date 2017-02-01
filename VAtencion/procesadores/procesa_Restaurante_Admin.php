@@ -52,6 +52,7 @@ $obTabla = new Tabla($db);
     if(isset($_REQUEST['BtnCerrarTurnoRestaurante'])){
         
         $idCierre=$obVenta->CierreTurnoRestaurante("");
+        
         $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
         if($DatosImpresora["Habilitado"]=="SI"){
             $obVenta->ImprimirCierreRestaurante($idCierre,$DatosImpresora["Puerto"],1,"");

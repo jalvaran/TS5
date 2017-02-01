@@ -6706,8 +6706,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     }
     //cerrar el turno en restaurante
     public function CierreTurnoRestaurante($Vector) {
-        $fecha="Y-m-d";
-        $hora="H:i:s";
+        $fecha=date("Y-m-d");
+        $hora=date("H:i:s");
         $tab="restaurante_cierres";
         $NumRegistros=3; 
         
@@ -6760,6 +6760,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,"FECHA: $Fecha      HORA: $Hora");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         foreach($Usuarios as $idUser){
             $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $idUser);
             fwrite($handle,"USUARIO $DatosUsuario[Nombre] $DatosUsuario[Apellido]:");
@@ -6776,15 +6777,18 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                 fwrite($handle,"DOMICILIOS FACTURADOS: ".number_format($TotalesPedidos[$idUser]["FADO"]));
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
             }
-            if(isset($TotalesPedidos[$idUser]["FAPE"])){
-                fwrite($handle,"PEDIDOS FACTURADOS: ".number_format($TotalesPedidos[$idUser]["FAPE"]));
+            if(isset($TotalesPedidos[$idUser]["DEDO"])){
+                fwrite($handle,"DOMICILIOS DESCARTADOS: ".number_format($TotalesPedidos[$idUser]["DEDO"]));
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
             }
-            if(isset($TotalesPedidos[$idUser]["FAPE"])){
-                fwrite($handle,"PEDIDOS FACTURADOS: ".number_format($TotalesPedidos[$idUser]["FAPE"]));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            }
+            
         }
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
     }
     fclose($handle); // cierra el fichero PRN
