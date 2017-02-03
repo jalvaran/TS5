@@ -107,6 +107,6 @@ if($DatosEmpresa["Regimen"]=="COMUN"){
 }else{
     $Vector["IVA"]["Predeterminado"]='0';
 }
-$Vector["RutaImagen"]["Link"]=1;   //Indico que esta columna tendra un vinculo
+//$Vector["RutaImagen"]["Link"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["Order"]=" idProductosVenta DESC ";   //Orden
 ?>

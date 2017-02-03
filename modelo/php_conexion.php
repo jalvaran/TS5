@@ -6090,7 +6090,7 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosProductos=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
             $ValoresProducto=$this->CalculeValoresItem($fecha, $idProducto, "productosventa", $Cantidad, "");
             $tab="restaurante_pedidos_items";
-            $NumRegistros=12; 
+            $NumRegistros=19; 
 
             $Columnas[0]="idProducto";          $Valores[0]=$idProducto;
             $Columnas[1]="NombreProducto";      $Valores[1]=$DatosProductos["Nombre"];
@@ -6104,6 +6104,13 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[9]="idUsuario";           $Valores[9]=  $this->idUser;
             $Columnas[10]="Fecha";              $Valores[10]=$fecha;
             $Columnas[11]="Hora";               $Valores[11]= $hora;
+            $Columnas[12]="ProcentajeIVA";      $Valores[12]=($DatosProductos["IVA"]*100)."%";
+            $Columnas[13]="Departamento";       $Valores[13]=$DatosProductos["Departamento"];
+            $Columnas[14]="Sub1";               $Valores[14]=$DatosProductos["Sub1"];
+            $Columnas[15]="Sub2";               $Valores[15]= $DatosProductos["Sub2"];
+            $Columnas[16]="Sub3";               $Valores[16]= $DatosProductos["Sub3"];
+            $Columnas[17]="Sub4";               $Valores[17]= $DatosProductos["Sub4"];
+            $Columnas[18]="Sub5";               $Valores[18]= $DatosProductos["Sub5"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             return($idPedido);
@@ -6118,7 +6125,7 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosProductos=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
             $ValoresProducto=$this->CalculeValoresItem($fecha, $idProducto, "productosventa", $Cantidad, "");
             $tab="restaurante_pedidos_items";
-            $NumRegistros=12; 
+            $NumRegistros=19; 
 
             $Columnas[0]="idProducto";          $Valores[0]=$idProducto;
             $Columnas[1]="NombreProducto";      $Valores[1]=$DatosProductos["Nombre"];
@@ -6132,6 +6139,13 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[9]="idUsuario";           $Valores[9]= $this->idUser;
             $Columnas[10]="Fecha";              $Valores[10]=$fecha;
             $Columnas[11]="Hora";               $Valores[11]= $hora;
+            $Columnas[12]="ProcentajeIVA";      $Valores[12]=($DatosProductos["IVA"]*100)."%";
+            $Columnas[13]="Departamento";       $Valores[13]=$DatosProductos["Departamento"];
+            $Columnas[14]="Sub1";               $Valores[14]=$DatosProductos["Sub1"];
+            $Columnas[15]="Sub2";               $Valores[15]= $DatosProductos["Sub2"];
+            $Columnas[16]="Sub3";               $Valores[16]= $DatosProductos["Sub3"];
+            $Columnas[17]="Sub4";               $Valores[17]= $DatosProductos["Sub4"];
+            $Columnas[18]="Sub5";               $Valores[18]= $DatosProductos["Sub5"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             
