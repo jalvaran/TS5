@@ -348,13 +348,14 @@ public function DibujeTabla($Vector){
     print("<td style='text-align: left' colspan=$ColFiltro>");
     $this->css->CrearLink("$myPage","_self","Limpiar ");
     $this->css->CrearBotonVerde("BtnFiltrar", "Filtrar");
-    
-    $this->css->CrearBoton("BtnExportarExcel", "Exportar a Excel");
+    $TxtSt=base64_encode($statement);
+    $TxtTabla=  base64_encode($Tabla["Tabla"]);
+    $imagerute="../images/excel.png";    
+    $this->css->CrearImageLink("$myPage?BtnExportarExcel=1&TxtT=$TxtTabla&TxtL=$TxtSt", $imagerute, "_blank",50,50);
+    //$this->css->CrearBoton("BtnExportarExcel", "Exportar a Excel");
     //$this->css->CrearBotonNaranja("BtnVerPDF", "Exportar a PDF");
     $imagerute="../images/pdf2.png";
-    $TxtSt=base64_encode($statement);
     
-    $TxtTabla=  base64_encode($Tabla["Tabla"]);
     $this->css->CrearImageLink("CreePDFFromTabla.php?BtnVerPDF=1&TxtT=$TxtTabla&TxtL=$TxtSt", $imagerute, "_blank",50,50);
    
     print("</td>");
@@ -613,7 +614,7 @@ public function DibujeTabla($Vector){
 public function VerifiqueExport($Vector)  {
     
     if(isset($_REQUEST["BtnExportarExcel"])){
-       $statement=$_REQUEST["TxtSql"];
+       $statement= base64_decode($_REQUEST["TxtL"]);
     require_once '../librerias/Excel/PHPExcel.php';
    $objPHPExcel = new PHPExcel();    
         
@@ -721,7 +722,7 @@ public function VerifiqueExport($Vector)  {
 public function VerifiqueExportKardex($Vector)  {
     
     if(isset($_REQUEST["BtnExportarExcel"])){
-       $statement=$_REQUEST["TxtSql"];
+       $statement= base64_decode($_REQUEST["TxtL"]);
     require_once '../librerias/Excel/PHPExcel.php';
    $objPHPExcel = new PHPExcel();    
         
