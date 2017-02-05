@@ -4064,10 +4064,16 @@ EOD;
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
         $this->PDF_Write("<br>");
+        
         $this->PDF->MultiCell(184, 182, $html, 1, 'C', 1, 0, '', '67', true,1, true, true, 10, 'M');   
+        $NumLines=$this->PDF->getNumLines($html);
+        $NumPages=floor($NumLines/24101);
+        for($i=1;$i<=$NumPages;$i++){
+            $this->PDF_Add();
+        }
         $html= $this->ArmeHTMLTotalesCotizacion($idCotizacion);
         $this->PDF_Write("<br>");
-        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
+        $this->PDF->MultiCell(184, 30, $NumLines.$html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
         
         $Datos=$this->obCon->ConsultarTabla("cotizaciones_anexos", " WHERE NumCotizacion='$idCotizacion'");
         $this->PDF->SetMargins(20, 20, 30);

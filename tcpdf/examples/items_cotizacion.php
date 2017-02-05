@@ -76,6 +76,7 @@ $Total=number_format($SubtotalFinal+$IVAFinal);
 
 $NumPages=$pdf->getNumPages();
 
+
 //$TotalLetras=numtoletras($TotalFactura, "PESOS COLOMBIANOS");
 if($NumPages<>1){
    
