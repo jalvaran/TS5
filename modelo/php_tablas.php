@@ -3132,7 +3132,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 }
         }
         // create new PDF document
-        $this->PDF = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $this->PDF = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'ISO 8859-1', false);
         // set document information
         $this->PDF->SetCreator(PDF_CREATOR);
         $this->PDF->SetAuthor('Techno Soluciones');
@@ -4015,7 +4015,7 @@ EOD;
     
     public function ArmeHTMLTotalesCotizacion($idCotizacion) {
         $DatosCotizacion= $this->obCon->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
-        $Observaciones=$DatosCotizacion["Observaciones"];
+        $Observaciones= $this->obCon->QuitarAcentos($DatosCotizacion["Observaciones"]);
         $sql="SELECT SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, SUM(Total) as Total FROM cot_itemscotizaciones "
                 . " WHERE NumCotizacion='$idCotizacion'";
         $Datos=$this->obCon->Query($sql);
@@ -4027,7 +4027,7 @@ EOD;
         
 <table  cellpadding="2" border="0">
     <tr>
-        <td rowspan="3" colspan="4" style="border-bottom: 1px solid #ddd;background-color: white;">Observaciones: $Observaciones</td> 
+        <td rowspan="3" colspan="4" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Observaciones:</strong> $Observaciones</td> 
         
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>SUBTOTAL:</h3></td>
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $Subtotal</h3></td>
@@ -4044,7 +4044,12 @@ EOD;
     </tr>
      
 </table>
-
+<table  cellpadding="2" border="1">
+  <tr>
+        <td height="35" align="left" style="border-bottom: 1px solid #ddd;background-color: white;">REALIZA:</td>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: white;">APRUEBA:</td>
+  </tr>              
+</table>                
         
 EOD;
         return($html);
@@ -4059,10 +4064,20 @@ EOD;
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
         $this->PDF_Write("<br>");
-        $this->PDF->MultiCell(184, 170, $html, 1, 'C', 1, 0, '', '', true,1, true, true, 10, 'M');   
+        $this->PDF->MultiCell(184, 182, $html, 1, 'C', 1, 0, '', '67', true,1, true, true, 10, 'M');   
         $html= $this->ArmeHTMLTotalesCotizacion($idCotizacion);
         $this->PDF_Write("<br>");
-        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '250', true,0, true, true, 10, 'M');
+        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
+        
+        $Datos=$this->obCon->ConsultarTabla("cotizaciones_anexos", " WHERE NumCotizacion='$idCotizacion'");
+        $this->PDF->SetMargins(20, 20, 30);
+        
+        $this->PDF->SetHeaderMargin(20);
+        
+        while ($DatosAnexos=$this->obCon->FetchArray($Datos)){
+            $this->PDF_Add();
+            $this->PDF_Write($DatosAnexos["Anexo"]);
+        }
         $this->PDF_Output("Cotizacion_$idCotizacion");
     }
     
