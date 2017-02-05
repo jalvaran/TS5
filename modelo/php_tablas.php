@@ -3169,7 +3169,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         
 }
 //encabezado de un  formato de calidad en un pdf
-    public function PDF_Encabezado($idEmpresa,$idFormatoCalidad,$VectorEncabezado) {
+    public function PDF_Encabezado($idEmpresa,$idFormatoCalidad,$VectorEncabezado,$NumeracionDocumento="") {
         $DatosEmpresaPro=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresa);
         $DatosFormatoCalidad=$this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
         
@@ -3203,11 +3203,11 @@ EOD;
 $this->PDF->writeHTML($tbl, true, false, false, false, '');
 $this->PDF->SetFillColor(255, 255, 255);
 $txt="<h3>".$DatosEmpresaPro["RazonSocial"]."<br>NIT ".$DatosEmpresaPro["NIT"]."</h3>";
-$this->PDF->MultiCell(60, 5, $txt, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+$this->PDF->MultiCell(62, 5, $txt, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
 $txt=$DatosEmpresaPro["Direccion"]."<br>".$DatosEmpresaPro["Telefono"]."<br>".$DatosEmpresaPro["Ciudad"]."<br>".$DatosEmpresaPro["WEB"];
-$this->PDF->MultiCell(60, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
-$Documento="<br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
-$this->PDF->MultiCell(60, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
+$this->PDF->MultiCell(62, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
+$Documento="<strong>$NumeracionDocumento</strong><br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
+$this->PDF->MultiCell(62, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
 $this->PDF->writeHTML("<br>", true, false, false, false, '');
 //Close and output PDF document
     }
@@ -3889,6 +3889,181 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         //$css->CerrarDiv();//Cerramos contenedor Secundario
         $this->css->CerrarCuadroDeDialogoAmplio();
         
+    }
+    //Encabezado Cotizacion
+    public function PDF_Encabezado_Cotizacion($idCotizacion) {
+        $DatosCotizacion=$this->obCon->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
+        $Usuarios_idUsuarios=$DatosCotizacion["Usuarios_idUsuarios"];
+        $DatosUsuario=$this->obCon->DevuelveValores("usuarios","idUsuarios",$Usuarios_idUsuarios);
+        $nombreUsuario=$DatosUsuario["Nombre"];
+        $ApellidoUsuario=$DatosUsuario["Apellido"];
+        $DatosEmpresa=$this->obCon->DevuelveValores("empresapro","idEmpresaPro",1);
+        $Vendedor=$nombreUsuario." ".$ApellidoUsuario;
+        $DatosCliente=$this->obCon->DevuelveValores("clientes","idClientes",$DatosCotizacion["Clientes_idClientes"]);
+    
+$tbl = <<<EOD
+      
+<table cellpadding="1" border="1">
+    <tr>
+        <td><strong>Cliente:</strong></td>
+        <td colspan="3">$DatosCliente[RazonSocial]</td>
+        
+    </tr>
+    <tr>
+    	<td><strong>NIT:</strong></td>
+        <td colspan="3">$DatosCliente[Num_Identificacion] - $DatosCliente[DV]</td>
+    </tr>
+    <tr>
+        <td colspan="2"><strong>Dirección:</strong></td>
+        <td><strong>Ciudad:</strong></td>
+        <td><strong>Teléfono:</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2">$DatosCliente[Direccion]</td>
+        <td>$DatosCliente[Ciudad]</td>
+        <td>$DatosCliente[Telefono]</td>
+    </tr>
+    <tr>
+        <td colspan="2"><strong>Fecha: </strong></td>
+        <td colspan="2">$DatosCotizacion[Fecha]</td>
+    </tr>
+    
+</table>       
+EOD;
+
+$this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+
+$tbl = <<<EOD
+      
+<table cellpadding="1" border="1">
+    <tr>
+        <td colspan="3"><strong>General:</strong></td>
+        
+        
+    </tr>
+    <tr>
+    	<td colspan="3" height="36">$DatosEmpresa[DatosBancarios]</td>
+        
+    </tr>
+    <tr>
+        <td colspan="3"><strong>Vendedor:</strong> $Vendedor</td>
+        
+    </tr>
+    
+    
+</table>       
+EOD;
+
+$this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+        
+    }
+    
+    //Armar HTML de los items de la cotizacion
+    
+    public function ArmeHTMLItemsCotizacion($idCotizacion) {
+        $html = ' 
+        <table cellspacing="1" cellpadding="2" border="0">
+            <tr>
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Referencia</strong></td>
+                <td align="center" colspan="3" style="border-bottom: 2px solid #ddd;"><strong>Producto o Servicio</strong></td>
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td>
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Cantidad</strong></td>
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Valor Total</strong></td>
+            </tr>';
+
+        $sql="SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
+        $Consulta=$this->obCon->Query($sql);
+        $h=1;  
+        $SubtotalFinal=0;
+        $IVAFinal=0;
+        $TotalFinal=0;
+        while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+            $SubtotalFinal=$SubtotalFinal+$DatosItemFactura["Subtotal"];
+            $IVAFinal=$IVAFinal+$DatosItemFactura["IVA"];
+            $ValorUnitario=  number_format($DatosItemFactura["ValorUnitario"]);
+            $SubTotalItem=  number_format($DatosItemFactura["Subtotal"]);
+            $Multiplicador=$DatosItemFactura["Cantidad"];
+    if($DatosItemFactura["Multiplicador"]>1){
+        $Multiplicador="$DatosItemFactura[Cantidad] X $DatosItemFactura[Multiplicador]";
+    }
+    if($h==0){
+        $Back="#f2f2f2";
+        $h=1;
+    }else{
+        $Back="white";
+        $h=0;
+    }
+    $html.= <<<EOD
+    
+<tr>
+    <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
+    <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Descripcion]</td>
+    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
+    <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Multiplicador</td>
+    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
+</tr>
+          
+EOD;
+    
+    }
+
+    $html.= "</table>";
+    return($html);
+    }
+    
+    //Arme html de los totales de la cotizacion
+    
+    public function ArmeHTMLTotalesCotizacion($idCotizacion) {
+        $DatosCotizacion= $this->obCon->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
+        $Observaciones=$DatosCotizacion["Observaciones"];
+        $sql="SELECT SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, SUM(Total) as Total FROM cot_itemscotizaciones "
+                . " WHERE NumCotizacion='$idCotizacion'";
+        $Datos=$this->obCon->Query($sql);
+        $TotalesCotizacion= $this->obCon->FetchArray($Datos);
+        $Subtotal= number_format($TotalesCotizacion["Subtotal"]);
+        $IVA= number_format($TotalesCotizacion["IVA"]);
+        $Total= number_format($TotalesCotizacion["Total"]);
+        $html = <<<EOD
+        
+<table  cellpadding="2" border="0">
+    <tr>
+        <td rowspan="3" colspan="4" style="border-bottom: 1px solid #ddd;background-color: white;">Observaciones: $Observaciones</td> 
+        
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>SUBTOTAL:</h3></td>
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $Subtotal</h3></td>
+    </tr>
+    <tr>
+        
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>IVA:</h3></td>
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $IVA</h3></td>
+    </tr>
+    <tr>
+        
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>TOTAL:</h3></td>
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $Total</h3><br><br><br></td>
+    </tr>
+     
+</table>
+
+        
+EOD;
+        return($html);
+    }
+    
+    //Crear un PDF de una cotizacion
+    public function PDF_Cotizacion($idCotizacion,$Vector) {
+        
+        $NumeracionDocumento="COTIZACION No. $idCotizacion";
+        $this->PDF_Ini("Cotizacion_$idCotizacion", 8, "");
+        $this->PDF_Encabezado(1, 1, "",$NumeracionDocumento);
+        $this->PDF_Encabezado_Cotizacion($idCotizacion);
+        $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
+        $this->PDF_Write("<br>");
+        $this->PDF->MultiCell(184, 170, $html, 1, 'C', 1, 0, '', '', true,1, true, true, 10, 'M');   
+        $html= $this->ArmeHTMLTotalesCotizacion($idCotizacion);
+        $this->PDF_Write("<br>");
+        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '250', true,0, true, true, 10, 'M');
+        $this->PDF_Output("Cotizacion_$idCotizacion");
     }
     
         // FIN Clases	

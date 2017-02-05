@@ -7,6 +7,6 @@ if(isset($_REQUEST["ImgPrintCoti"])){
     $obVenta = new ProcesoVenta($idUser);
     $obTabla = new Tabla($db);
     $idCotizacion=$obVenta->normalizar($_REQUEST["ImgPrintCoti"]);
-    $obTabla->ImprimirCotizacionPDF($idCotizacion, "");
+    $obTabla->PDF_Cotizacion($idCotizacion, "");
 }
 ?>
