@@ -12,7 +12,7 @@ $idClientes="";
 //////Si recibo un cliente
 	if(!empty($_REQUEST['TxtIdCliente'])){
 		
-		$idClientes=$_REQUEST['TxtIdCliente'];
+            $idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
 	}
 
 	////////// Paginacion
@@ -30,7 +30,7 @@ print("<html><head>");
 $css =  new CssIni("SoftConTech Cotizaciones");
 print("</head><body align='center'>");	
          
-	 
+	 $obVenta=new ProcesoVenta($idUser);
          $obTabla = new Tabla($db);
 	 $myPage="Cotizaciones.php";
 	 $css->CabeceraIni("SoftConTech Cotizaciones"); 
@@ -62,7 +62,7 @@ print("</head><body align='center'>");
          $obTabla->CrearCuadroCrearServicios("DialCrearItemServicios","Crear Nuevo Item Servicios",$myPage,$idClientes,$VectorCDSer); 
 	 
          if(isset($_REQUEST["TxtBusqueda"])){
-                $key=$_REQUEST["TxtBusqueda"];
+                $key=$obVenta->normalizar($_REQUEST["TxtBusqueda"]);
                 $PageReturn=$_REQUEST["TxtPageReturn"]."?TxtAgregarItemPreventa=";
                 
                 $obTabla->DibujeItemsBuscadosVentas($key,$PageReturn,$idClientes);
@@ -71,7 +71,8 @@ print("</head><body align='center'>");
         
 	//$css->CrearImageLink("../VMenu/MnuVentas.php", "../images/cotizacion.png", "_self",200,200);
 	if(!empty($_REQUEST["TxtIdCotizacion"])){
-		$RutaPrintCot="../tcpdf/examples/imprimircoti.php?ImgPrintCoti=".$_REQUEST["TxtIdCotizacion"];			
+            $idCotizacion=$obVenta->normalizar($_REQUEST["TxtIdCotizacion"]);
+		$RutaPrintCot="ImprimirPDFCotizacion.php?ImgPrintCoti=".$idCotizacion;			
 		$css->CrearTabla();
 		$css->CrearFilaNotificacion("Cotizacion almacenada Correctamente <a href='$RutaPrintCot' target='_blank'>Imprimir Cotizacion No. $_REQUEST[TxtIdCotizacion]</a>",16);
 		$css->CerrarTabla();
@@ -81,21 +82,21 @@ print("</head><body align='center'>");
 	
 	if(!empty($_REQUEST["TxtBuscarCliente"])){
 		
-		$Key=$_REQUEST["TxtBuscarCliente"];
-		$pa=mysql_query("SELECT * FROM clientes	WHERE RazonSocial LIKE '%$Key%' OR Num_Identificacion = '$Key' LIMIT 10") or die(mysql_error());
-		if(mysql_num_rows($pa)){
+		$Key=$obVenta->normalizar($_REQUEST["TxtBuscarCliente"]);
+		$pa=$obVenta->Query("SELECT * FROM clientes WHERE RazonSocial LIKE '%$Key%' OR Num_Identificacion = '$Key' LIMIT 30");
+		if($obVenta->NumRows($pa)){
 			print("<br>");
 			$css->CrearTabla();
 			$css->FilaTabla(18);
 			$css->ColTabla("Clientes Encontrados para Asociar:",4);
 			$css->CierraFilaTabla();
 			
-			while($DatosCliente=mysql_fetch_array($pa)){
+			while($DatosCliente=$obVenta->FetchArray($pa)){
 				$css->FilaTabla(14);
 				$css->ColTabla($DatosCliente['RazonSocial'],1);
 				$css->ColTabla($DatosCliente['Num_Identificacion'],1);
 				$css->ColTabla($DatosCliente['Contacto'],1);
-				$css->ColTablaVar($myPage,"TxtAsociarCliente",$DatosCliente['idClientes'],"","Asociar Cliente");
+				$css->ColTablaVar($myPage,"TxtIdCliente",$DatosCliente['idClientes'],"","Asociar Cliente");
 				$css->CierraFilaTabla();
 			}
 			
