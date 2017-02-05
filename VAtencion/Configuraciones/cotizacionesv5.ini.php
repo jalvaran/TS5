@@ -29,6 +29,14 @@ $Vector["NuevoRegistro"]["Deshabilitado"]=1;
 $Ruta="../tcpdf/examples/imprimircoti.php?ImgPrintCoti=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="ID";
+
+// Nueva Accion
+$Ruta="AgregarAnexosCotizacion.php?idCotizacion=";
+$Vector["NuevaAccionLink"][1]="Anexos";
+$Vector["NuevaAccion"]["Anexos"]["Titulo"]=" Anexos ";
+$Vector["NuevaAccion"]["Anexos"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Anexos"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Anexos"]["Target"]="_blank";
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas

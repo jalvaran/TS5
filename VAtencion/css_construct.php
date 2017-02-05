@@ -109,7 +109,10 @@ class CssIni{
 		");
 		print('<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>	
-		<script type="text/javascript" src="js/DateTimePicker.js"></script>');
+		<script type="text/javascript" src="js/DateTimePicker.js"></script>
+                <script src="../plugins/ckeditor/ckeditor.js"></script>
+                <script src="../plugins/ckeditor/js/sample.js"></script>
+');
 	}
 	
 	/////////////////////Inicio una cabecera
@@ -1096,6 +1099,26 @@ function Footer(){
             //$this->BotonBuscar(20, 20, "");
                  
 	} 
+        public function CrearTextAreaEnriquecida($nombre,$label,$value,$placeh,$color,$TxtEvento,$TxtFuncion,$Ancho,$Alto,$ReadOnly,$Required,$Vector) {
+            if($ReadOnly==1)
+			$ReadOnly="readonly";
+		else
+			$ReadOnly="";
+		
+		if($Required==1){
+			print("<strong style= 'color:$color'>$label<textarea name='$nombre' id='editor' placeholder='$placeh' $TxtEvento = '$TxtFuncion'" 
+			." $ReadOnly autocomplete='off' style='width: ".$Ancho."px; height: ".$Alto."px;' required>".$value."</textarea></strong>");
+                }else{
+			print("<strong style= 'color:$color'>$label<textarea name='$nombre' id='editor' placeholder='$placeh' $TxtEvento = '$TxtFuncion'" 
+			." $ReadOnly autocomplete='off' style='width: ".$Ancho."px; height: ".$Alto."px;' >".$value."</textarea></strong>");
+                }
+        }
+        //Iniciamos el texto enriquecido
+        public function IniTextoEnriquecido() {
+            print("<script>
+                initSample();
+                </script>");
+        }
         //////////////////////////////////FIN
 }
 	

@@ -3890,6 +3890,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
         $this->css->CerrarCuadroDeDialogoAmplio();
         
     }
-    // FIN Clases	
+    
+        // FIN Clases	
 }
 ?>

@@ -47,8 +47,6 @@ print("</head><body align='center'>");
          //Espacio para Crear Botonos y Cuadros de dialogo
          $css->CrearDiv("principal", "container", "center", 1, 1);
          
-         
-         
          $Titulo="Crear Item En servicios";
          $Nombre="ImgShowMenu";
          $RutaImage="../images/pop_servicios.png";
@@ -56,6 +54,7 @@ print("</head><body align='center'>");
          $VectorBim["f"]=0;
          $target="#DialCrearItemServicios";
          $css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","left:10px;top:50",$VectorBim);
+         
          $VectorCDC["F"]=0;
          
          $obTabla->CrearCuadroClientes("DialCliente","Crear Cliente",$myPage,$VectorCDC);
@@ -200,8 +199,10 @@ print("</head><body align='center'>");
 
                 $css->CrearInputText("TxtNumSolicitud","text","","","Numero de Solicitud","black","","",150,30,0,0);
                 print("<br>");
-                $css->CrearTextArea("TxtObservaciones","","","Observaciones para esta Cotizaciones","black","","",300,100,0,0);
+                $css->CrearTextArea("TxtObservaciones","","","Observaciones para esta Cotizacion","black","","",300,100,0,0);
+                
                 print("<br>");
+               
                 $css->CrearBotonConfirmado("BtnGuardar","Guardar");
                 print("</td>");
                 $css->CierraFilaTabla();
@@ -227,6 +228,7 @@ $css->Footer();
 if(isset($_REQUEST["TxtBusqueda"])){
     print("<script>MostrarDialogo();</script>");
 }
+
 print("</body></html>");
 
 ob_end_flush();

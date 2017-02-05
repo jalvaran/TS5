@@ -1381,8 +1381,17 @@ public function CalculePesoRemision($idCotizacion)
  */
 
     public function normalizar($string){		
-        $str=str_replace("'", "", $string);
-        $str=str_replace(";", ",", $str);
+        $str=str_ireplace("'", "", $string);
+        
+        $str=str_ireplace("CREATE", "ISQL", $str);
+        $str=str_ireplace("DROP", "ISQL", $str);
+        $str=str_ireplace("ALTER", "ISQL", $str);
+        $str=str_ireplace("SELECT", "ISQL", $str);
+        $str=str_ireplace("INSERT", "ISQL", $str);
+        $str=str_ireplace("UPDATE", "ISQL", $str);
+        $str=str_ireplace("DELETE", "ISQL", $str);
+        $str=str_ireplace("REPLACE", "ISQL", $str);
+        $str=str_ireplace("TRUNCATE", "ISQL", $str);
         //$str=filter_var($string, FILTER_SANITIZE_STRING);
         return($str);
     }
