@@ -3961,9 +3961,11 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
     //Armar HTML de los items de la cotizacion
     
     public function ArmeHTMLItemsCotizacion($idCotizacion) {
+        
         $html = ' 
         <table cellspacing="1" cellpadding="2" border="0">
             <tr>
+                
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Referencia</strong></td>
                 <td align="center" colspan="3" style="border-bottom: 2px solid #ddd;"><strong>Producto o Servicio</strong></td>
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td>
@@ -3977,7 +3979,9 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
         $SubtotalFinal=0;
         $IVAFinal=0;
         $TotalFinal=0;
+        $i=0;
         while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+            $i++;
             $SubtotalFinal=$SubtotalFinal+$DatosItemFactura["Subtotal"];
             $IVAFinal=$IVAFinal+$DatosItemFactura["IVA"];
             $ValorUnitario=  number_format($DatosItemFactura["ValorUnitario"]);
@@ -3996,6 +4000,7 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
     $html.= <<<EOD
     
 <tr>
+    
     <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
     <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Descripcion]</td>
     <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
@@ -4005,6 +4010,7 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
           
 EOD;
     
+   
     }
 
     $html.= "</table>";
@@ -4057,23 +4063,24 @@ EOD;
     
     //Crear un PDF de una cotizacion
     public function PDF_Cotizacion($idCotizacion,$Vector) {
-        
+        //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'ISO 8859-1', false);
+        //$pdf->GetY();
         $NumeracionDocumento="COTIZACION No. $idCotizacion";
         $this->PDF_Ini("Cotizacion_$idCotizacion", 8, "");
+        
         $this->PDF_Encabezado(1, 1, "",$NumeracionDocumento);
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
-        $this->PDF_Write("<br>");
+        $this->PDF_Write("<br><br><br><br><br><br><br><br><br>$html");
         
-        $this->PDF->MultiCell(184, 182, $html, 1, 'C', 1, 0, '', '67', true,1, true, true, 10, 'M');   
-        $NumLines=$this->PDF->getNumLines($html);
-        $NumPages=floor($NumLines/24101);
-        for($i=1;$i<=$NumPages;$i++){
-            $this->PDF_Add();
+        $Position=$this->PDF->GetY();
+        if($Position>256){
+          $this->PDF_Add();
         }
+        
         $html= $this->ArmeHTMLTotalesCotizacion($idCotizacion);
         $this->PDF_Write("<br>");
-        $this->PDF->MultiCell(184, 30, $NumLines.$html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
+        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
         
         $Datos=$this->obCon->ConsultarTabla("cotizaciones_anexos", " WHERE NumCotizacion='$idCotizacion'");
         $this->PDF->SetMargins(20, 20, 30);
