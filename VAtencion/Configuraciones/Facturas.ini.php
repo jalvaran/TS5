@@ -26,7 +26,7 @@ $Vector["NuevoRegistro"]["Deshabilitado"]=1;
 //$Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
 //Link para la accion ver
-$Ruta="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=";
+$Ruta="PDF_Factura.php?ImgPrintFactura=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="idFacturas";
 /*
@@ -37,7 +37,7 @@ $Vector["VerRegistro"]["ColumnaLink"]="idFacturas";
 
 
 // Nueva Accion
-$Ruta="../tcpdf/examples/imprimirFactura.php?TipoFactura=COPIA&ImgPrintFactura=";
+$Ruta="PDF_Factura.php?TipoFactura=COPIA&ImgPrintFactura=";
 $Vector["NuevaAccionLink"][2]="Copia";
 $Vector["NuevaAccion"]["Copia"]["Titulo"]=" Copia ";
 $Vector["NuevaAccion"]["Copia"]["Link"]=$Ruta;
@@ -45,7 +45,7 @@ $Vector["NuevaAccion"]["Copia"]["ColumnaLink"]="idFacturas";
 $Vector["NuevaAccion"]["Copia"]["Target"]="_blank";
 
 // Nueva Accion
-$Ruta="../tcpdf/examples/imprimirFactura.php?TipoFactura=CONTABILIDAD&ImgPrintFactura=";
+$Ruta="PDF_Factura.php?TipoFactura=CONTABILIDAD&ImgPrintFactura=";
 $Vector["NuevaAccionLink"][1]="Contabilidad";
 $Vector["NuevaAccion"]["Contabilidad"]["Titulo"]=" Contabilidad ";
 $Vector["NuevaAccion"]["Contabilidad"]["Link"]=$Ruta;
