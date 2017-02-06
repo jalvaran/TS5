@@ -14,5 +14,10 @@ if(isset($_REQUEST["ImgPrintFactura"])){
     //$html=$obTabla->HTML_Totales_Factura($idFactura, "", "");
     //print($html);
     $obTabla->PDF_Factura($idFactura,$TipoFactura, "");
+    
+    $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+    if($DatosImpresora["Habilitado"]=="SI"){
+        $obVenta->ImprimeFacturaPOS($idFactura,$DatosImpresora["Puerto"],1);
+    }
 }
 ?>
