@@ -109,10 +109,19 @@ print("</head><body align='center'>");
 	if($idClientes>0){
             $DatosClientes=$obVenta->DevuelveValores("clientes","idClientes",$idClientes);
             $css->CrearNotificacionAzul("Precotizacion para el cliente $idClientes $DatosClientes[RazonSocial]<br>", 16);
-            
+            $css->CrearTabla();
+            $css->FilaTabla(16);
+            print("<td style='text-align:center'>");
             $VectorCuaBus["F"]=0;
             $obTabla->CrearCuadroBusqueda($myPage,"TxtIdCliente",$idClientes,"TxtPageReturn",$myPage,$VectorCuaBus);
-            
+            print("</td>");
+            print("<td style='text-align:center'>");
+            $css->CrearForm2("FrmAgregarItemsToCotiza", $myPage, "post", "_self");
+            $css->CrearInputText("TxtIdCliente", "hidden", "", $idClientes, "", "", "", "", "", "", 0, 1);
+            $css->CrearInputNumber("TxtIdCotizacionAdd", "number", "", "", "Asociar cotizacion", "", "", "", 200, 30, 0, 1, 1, "", 1);
+            $css->CerrarForm();
+            print("</td>");
+            $css->CerrarTabla();
 	}
         $css->CrearDiv("Productos Agregados", "container", "center", 1, 1);
 	

@@ -269,4 +269,16 @@ $obVenta=new ProcesoVenta($idUser);
 			
 	}
         
+        //Agregar los items de otra cotizacion
+        
+       if(isset($_REQUEST["TxtIdCotizacionAdd"])){
+           $idCliente=$obVenta->normalizar($_REQUEST["TxtIdCliente"]);
+           $idCotizacion=$obVenta->normalizar($_REQUEST["TxtIdCotizacionAdd"]);
+           $obVenta->AgregueItemsDesdeCotizacionAPrecotizacion($idCotizacion,"");
+           header("location:Cotizaciones.php?TxtIdCliente=$idCliente");
+           
+       }
+
+
+        
 	?>

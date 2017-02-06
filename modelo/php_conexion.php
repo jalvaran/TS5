@@ -6826,6 +6826,33 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         return $texto;
         
     }
+    
+    //Agregar Items desde una cotizacion existente a una precotizacion
+    
+    public function AgregueItemsDesdeCotizacionAPrecotizacion($idCotizacion,$Vector){
+        
+        $Datos=$this->ConsultarTabla("cot_itemscotizaciones", "WHERE NumCotizacion='$idCotizacion'");
+        while($DatosCotizacion=$this->FetchArray($Datos)){
+            $tab="precotizacion";
+            $NumRegistros=13;  
+            
+            $Columnas[0]="Cantidad";			$Valores[0]=$DatosCotizacion["Cantidad"];
+            $Columnas[1]="Referencia";			$Valores[1]=$DatosCotizacion["Referencia"];
+            $Columnas[2]="ValorUnitario";		$Valores[2]=$DatosCotizacion["ValorUnitario"];
+            $Columnas[3]="SubTotal";			$Valores[3]=$DatosCotizacion["Subtotal"];
+            $Columnas[4]="Descripcion";			$Valores[4]=$DatosCotizacion["Descripcion"];
+            $Columnas[5]="IVA";				$Valores[5]=$DatosCotizacion["IVA"];
+            $Columnas[6]="PrecioCosto";			$Valores[6]=$DatosCotizacion["PrecioCosto"];
+            $Columnas[7]="SubtotalCosto";		$Valores[7]=$DatosCotizacion["SubtotalCosto"];
+            $Columnas[8]="Total";			$Valores[8]=$DatosCotizacion["Total"];
+            $Columnas[9]="TipoItem";			$Valores[9]=$DatosCotizacion["TipoItem"];
+            $Columnas[10]="idUsuario";			$Valores[10]=$this->idUser;
+            $Columnas[11]="CuentaPUC";			$Valores[11]=$DatosCotizacion["CuentaPUC"];
+            $Columnas[12]="Tabla";                      $Valores[12]=$DatosCotizacion["TablaOrigen"];
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+    }
 //////////////////////////////Fin	
 }
 	
