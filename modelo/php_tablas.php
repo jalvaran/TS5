@@ -4166,7 +4166,7 @@ EOD;
         $DatosUsuario=$this->obCon->DevuelveValores("usuarios", "idUsuarios", $DatosFactura["Usuarios_idUsuarios"]);
         $Vendedor=$DatosUsuario["Nombre"]." ".$DatosUsuario["Apellido"];
         $tbl = <<<EOD
-<table cellspacing="1" cellpadding="2" border="1">
+<table cellspacing="0" cellpadding="2" border="1">
     <tr>
         <td><strong>Cliente:</strong></td>
         <td colspan="3">$DatosCliente[RazonSocial]</td>
@@ -4208,14 +4208,14 @@ $this->PDF->MultiCell(93, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
 ////
 
 $tbl = <<<EOD
-<table cellspacing="1" cellpadding="2" border="1">
+<table cellspacing="0" cellpadding="2" border="1">
     <tr>
         <td height="53" align="center" >$DatosEmpresaPro[ResolucionDian], RES DIAN: $DatosResolucion[NumResolucion] del $DatosResolucion[Fecha]
              FACTURA AUT. $DatosResolucion[Prefijo]-$DatosResolucion[Desde] A $DatosResolucion[Prefijo]-$DatosResolucion[Hasta] Autoriza impresion en: $DatosResolucion[Factura]</td> 
     </tr>
      
 </table>
-<table cellspacing="1" cellpadding="2" border="1">
+<table cellspacing="0" cellpadding="2" border="1">
     <tr>
         <td align="center" ><strong>Vendedor</strong></td>
         <td align="center" ><strong>Forma de Pago</strong></td>
@@ -4385,7 +4385,7 @@ EOD;
         }
         
         $html= $this->HTML_Totales_Factura($idFactura, $DatosFactura["ObservacionesFact"], $DatosEmpresaPro["ObservacionesLegales"]);
-        $Position=$this->PDF->SetY(246);
+        $this->PDF->SetY(246);
         $this->PDF_Write($html);
         
         $this->PDF_Output("Factura_$CodigoFactura");
