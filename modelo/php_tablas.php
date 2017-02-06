@@ -4088,7 +4088,7 @@ EOD;
         $Total= number_format($TotalesCotizacion["Total"]);
         $html = <<<EOD
         
-<table  cellpadding="2" border="0">
+<table  cellpadding="2" border="1">
     <tr>
         <td rowspan="3" colspan="4" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Observaciones:</strong> $Observaciones</td> 
         
@@ -4128,16 +4128,19 @@ EOD;
         $this->PDF_Encabezado(1, 1, "",$NumeracionDocumento);
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
-        $this->PDF_Write("<br><br><br><br><br><br><br><br><br>$html");
+        $Position=$this->PDF->SetY(67);
+        $this->PDF_Write($html);
         
         $Position=$this->PDF->GetY();
-        if($Position>256){
+        if($Position>253){
           $this->PDF_Add();
         }
         
         $html= $this->ArmeHTMLTotalesCotizacion($idCotizacion);
-        $this->PDF_Write("<br>");
-        $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
+        $Position=$this->PDF->SetY(254);
+        $this->PDF_Write($html);
+        
+       // $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
         
         $Datos=$this->obCon->ConsultarTabla("cotizaciones_anexos", " WHERE NumCotizacion='$idCotizacion'");
         $this->PDF->SetMargins(20, 20, 30);
