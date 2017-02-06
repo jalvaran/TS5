@@ -102,8 +102,36 @@ public function CreeFiltro($Vector){
             if(!empty($_REQUEST[$IndexFiltro])){
                 $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
                 if(!empty($_REQUEST[$IndexTablaVinculo])){
+                    
+                    switch ($_REQUEST[$IndexCondicion]){
+                case 1:
+                    $FiltroVinculo="='$Valor'";
+                    break;
+                case 2:
+                    $FiltroVinculo=" LIKE '%$Valor%'";
+                    break;
+                case 3:
+                    $FiltroVinculo=">'$Valor'";
+                    break;
+                case 4:
+                    $FiltroVinculo="<'$Valor'";
+                    break;
+                case 5:
+                    $FiltroVinculo=">='$Valor'";
+                    break;
+                case 6:
+                    $FiltroVinculo="<='$Valor'";
+                    break;
+                case 7:
+                    $FiltroVinculo="<>'$Valor'";
+                    break;
+                case 8:
+                    $FiltroVinculo=" LIKE '$Valor%'";
+                    break;
+            }
+            
                     $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
-                            . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
+                            . "WHERE $_REQUEST[$IndexDisplay] $FiltroVinculo";
                     $DatosVinculados=$this->obCon->Query($sql);
                     $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
                     //print($sql);
@@ -251,8 +279,36 @@ public function CreeFiltroCobros($Vector){
             
             $Valor=$this->obCon->normalizar($_REQUEST[$IndexFiltro]);
             if(!empty($_REQUEST[$IndexTablaVinculo])){
+                
+                switch ($_REQUEST[$IndexCondicion]){
+                case 1:
+                    $FiltroVinculo="='$Valor'";
+                    break;
+                case 2:
+                    $FiltroVinculo=" LIKE '%$Valor%'";
+                    break;
+                case 3:
+                    $FiltroVinculo=">'$Valor'";
+                    break;
+                case 4:
+                    $FiltroVinculo="<'$Valor'";
+                    break;
+                case 5:
+                    $FiltroVinculo=">='$Valor'";
+                    break;
+                case 6:
+                    $FiltroVinculo="<='$Valor'";
+                    break;
+                case 7:
+                    $FiltroVinculo="<>'$Valor'";
+                    break;
+                case 8:
+                    $FiltroVinculo=" LIKE '$Valor%'";
+                    break;
+            }
+                
                 $sql="SELECT $_REQUEST[$IndexIDTabla] FROM $_REQUEST[$IndexTablaVinculo] "
-                        . "WHERE $_REQUEST[$IndexDisplay] = '$Valor'";
+                        . "WHERE $_REQUEST[$IndexDisplay] $FiltroVinculo";
                 $DatosVinculados=$this->obCon->Query($sql);
                 $DatosVinculados=$this->obCon->FetchArray($DatosVinculados);
                 //print($sql);
@@ -286,7 +342,7 @@ public function CreeFiltroCobros($Vector){
                 case 7:
                     $Filtro.="<>'$Valor'";
                     break;
-				case 8:
+                case 8:
                     $Filtro.=" LIKE '$Valor%'";
                     break;
             }
@@ -304,6 +360,7 @@ public function CreeFiltroCobros($Vector){
     }
     
     //$Filtro.=" GROUP BY `CuentaPUC`, `Tercero_Identificacion`";
+    //print("<pre>$Filtro</pre>");
     return($Filtro);
 }
 /*
