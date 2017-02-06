@@ -46,7 +46,7 @@ print("<body>");
             
             $idFactura=$_REQUEST["TxtidFactura"];
             if($idFactura<>""){
-                $RutaPrint="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=".$idFactura;
+                $RutaPrint="PDF_Factura.php?ImgPrintFactura=".$idFactura;
                 $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Factura Creada Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Factura No. $DatosFactura[NumeroFactura]</a>",16);

@@ -4318,10 +4318,10 @@ EOD;
     $tbl = '
         <table cellspacing="1" cellpadding="2" border="1">
         <tr>
-            <td height="25" width="435">Observaciones: '.$ObservacionesFactura.'</td> 
+            <td height="25" width="435" style="border-bottom: 1px solid #ddd;background-color: white;">Observaciones: '.$ObservacionesFactura.'</td> 
 
             
-            <td align="rigth" width="217"><strong>SUBTOTAL: $ '.number_format($SubtotalFactura).'</strong></td>
+            <td align="rigth" width="217" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>SUBTOTAL: $ '.number_format($SubtotalFactura).'</strong></td>
         </tr>
         </table> 
         ';
@@ -4334,7 +4334,7 @@ EOD;
             foreach($TiposIVA as $PorcentajeIVA){
                 if($PorcentajeIVA<>'0%'){
 
-                   $tbl.='<td align="rigth"><strong>IVA '.$PorcentajeIVA.': $ '.number_format($IVA[$PorcentajeIVA]["Valor"]).'</strong></td>';
+                   $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>IVA '.$PorcentajeIVA.': $ '.number_format($IVA[$PorcentajeIVA]["Valor"]).'</strong></td>';
 
                 }  
             }
@@ -4347,16 +4347,16 @@ EOD;
     $tbl.= '
         <table cellspacing="1" cellpadding="2" border="1">
         <tr>
-            <td height="25" width="435">'.$ObservacionesLegales.'</td> 
-            <td align="rigth" width="217"><strong>'.$ReferenciaIVA.': $ '.number_format($TotalIVAFactura).'</strong></td>
+            <td height="25" width="435" style="border-bottom: 1px solid #ddd;background-color: white;">'.$ObservacionesLegales.'</td> 
+            <td align="rigth" width="217" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.$ReferenciaIVA.': $ '.number_format($TotalIVAFactura).'</strong></td>
         </tr>
         </table> 
         ';
     $tbl.='<table cellspacing="1" cellpadding="2" border="1"> <tr>
-        <td  height="50" align="center"><br/><br/><br/><br/><br/>Firma Autorizada</td> 
-        <td  height="50" align="center"><br/><br/><br/><br/><br/>Firma Recibido</td> 
+        <td  height="50" align="center" style="border-bottom: 1px solid #ddd;background-color: white;"><br/><br/><br/><br/><br/>Firma Autorizada</td> 
+        <td  height="50" align="center" style="border-bottom: 1px solid #ddd;background-color: white;"><br/><br/><br/><br/><br/>Firma Recibido</td> 
         
-        <td align="rigth"><strong>TOTAL: $ '.number_format($TotalFactura).'</strong></td>
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTAL: $ '.number_format($TotalFactura).'</strong></td>
     </tr>
      
 </table>';
@@ -4380,27 +4380,14 @@ EOD;
         $this->PDF_Write($html);
         
         $Position=$this->PDF->GetY();
-        if($Position>253){
+        if($Position>246){
           $this->PDF_Add();
         }
         
         $html= $this->HTML_Totales_Factura($idFactura, $DatosFactura["ObservacionesFact"], $DatosEmpresaPro["ObservacionesLegales"]);
-        $Position=$this->PDF->SetY(248);
+        $Position=$this->PDF->SetY(246);
         $this->PDF_Write($html);
         
-       // $this->PDF->MultiCell(184, 30, $html, 1, 'L', 1, 0, '', '254', true,0, true, true, 10, 'M');
-        /*
-        $Datos=$this->obCon->ConsultarTabla("cotizaciones_anexos", " WHERE NumCotizacion='$idCotizacion'");
-        $this->PDF->SetMargins(20, 20, 30);
-        
-        $this->PDF->SetHeaderMargin(20);
-        
-        while ($DatosAnexos=$this->obCon->FetchArray($Datos)){
-            $this->PDF_Add();
-            $this->PDF_Write($DatosAnexos["Anexo"]);
-        }
-         * 
-         */
         $this->PDF_Output("Factura_$CodigoFactura");
     }
     
