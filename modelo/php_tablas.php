@@ -2382,7 +2382,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
        
       $sql="SELECT Movimiento, Detalle, idProductosVenta, Referencia, Nombre, Departamento, Sub1, Sub2,Sub3,Sub4,Sub5, SUM(Cantidad) as Cantidad FROM `kardexmercancias` INNER JOIN `productosventa` ON "
               . " `kardexmercancias`.`ProductosVenta_idProductosVenta`=`productosventa`.`idProductosventa` "
-              . " WHERE `Fecha`>='$FechaInicial' AND `Fecha`<='$FechaFinal' GROUP BY Movimiento,Detalle, idProductosventa ORDER BY idProductosventa"; 
+              . " WHERE `Fecha`>='$FechaInicial' AND `Fecha`<='$FechaFinal'  GROUP BY Movimiento,Detalle, idProductosventa ORDER BY idProductosventa"; 
       $TituloInforme="Informe Comparativo de $FechaInicial a $FechaFinal";
    }
    
@@ -2392,6 +2392,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ->setCellValue($this->Campos[$f++]."1","idProductosVenta")
             ->setCellValue($this->Campos[$f++]."1","Referencia")
             ->setCellValue($this->Campos[$f++]."1","Nombre")
+            ->setCellValue($this->Campos[$f++]."1","Saldo Inicial")
             ->setCellValue($this->Campos[$f++]."1","Entradas por Compras")
             ->setCellValue($this->Campos[$f++]."1","Entradas por Traslados")
             ->setCellValue($this->Campos[$f++]."1","Entradas por Altas")
@@ -2399,6 +2400,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ->setCellValue($this->Campos[$f++]."1","Salidas por Traslados")
             ->setCellValue($this->Campos[$f++]."1","Salidas por Bajas")
             ->setCellValue($this->Campos[$f++]."1","Saldo")
+            ->setCellValue($this->Campos[$f++]."1","Saldo Final")
             ->setCellValue($this->Campos[$f++]."1","Departamento")
             ->setCellValue($this->Campos[$f++]."1","Sub1")
             ->setCellValue($this->Campos[$f++]."1","Sub2")
@@ -2409,7 +2411,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             
    
    while($DatosKardex=$this->obCon->FetchArray($Consulta)){
-       if($DatosKardex["Movimiento"]=="ENTRADA" OR $DatosKardex["Movimiento"]=="SALIDA"){
+      if($DatosKardex["Movimiento"]=='ENTRADA' or $DatosKardex["Movimiento"]=='SALIDA') {
         $id=$DatosKardex["idProductosVenta"];
         $Movimiento=$DatosKardex["Movimiento"];
         $Detalle=$DatosKardex["Detalle"];
@@ -2423,7 +2425,11 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $Producto[$id]["Sub3"]=$DatosKardex["Sub3"];
         $Producto[$id]["Sub4"]=$DatosKardex["Sub4"];
         $Producto[$id]["Sub5"]=$DatosKardex["Sub5"];
-       }
+      }  
+      if($DatosKardex["Movimiento"]=='SALDOS'){
+        $Producto[$id]["SaldoFinal"]=$DatosKardex["Cantidad"];  
+        
+      }
    }
    
    $i=2;
@@ -2435,7 +2441,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
        $SalidasXBajas=0;
        $Salidas=0;
        $Saldos=0;
-              
+       $SaldoInicial=0;
        if(isset($Producto[$id]["ENTRADA"]["FACTURA"]["Cantidad"])){
            $Entradas=$Producto[$id]["ENTRADA"]["FACTURA"]["Cantidad"];
        }
@@ -2455,6 +2461,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
            $SalidasXBajas=$Producto[$id]["SALIDA"]["BAJA"]["Cantidad"];
        }
        $Saldos=$Entradas+$EntradasXTraslados+$EntradasXAltas-$Salidas-$SalidasXTraslados-$SalidasXBajas;
+       $SaldoInicial=$Producto[$id]["SaldoFinal"]-$Saldos;
        $Departamentos=  $this->obCon->DevuelveValores("prod_departamentos", "idDepartamentos", $Producto[$id]["Departamento"]);
        $Sub1=  $this->obCon->DevuelveValores("prod_sub1", "idSub1", $Producto[$id]["Sub1"]);
        $Sub2=  $this->obCon->DevuelveValores("prod_sub2", "idSub2", $Producto[$id]["Sub2"]);
@@ -2462,11 +2469,13 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
        $Sub4=  $this->obCon->DevuelveValores("prod_sub4", "idSub4", $Producto[$id]["Sub4"]);
        $Sub5=  $this->obCon->DevuelveValores("prod_sub5", "idSub5", $Producto[$id]["Sub5"]);
        if($Entradas<>0 OR $EntradasXTraslados<>0 OR $EntradasXAltas<>0 OR $Salidas<>0 OR $SalidasXTraslados<>0 OR $SalidasXBajas<>0){
-       $f=0;
+       
+           $f=0;
            $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue($this->Campos[$f++].$i,$id)
             ->setCellValue($this->Campos[$f++].$i,$Producto[$id]["Referencia"])
             ->setCellValue($this->Campos[$f++].$i,$Producto[$id]["Nombre"])
+            ->setCellValue($this->Campos[$f++].$i,$SaldoInicial)       
             ->setCellValue($this->Campos[$f++].$i,$Entradas)
             ->setCellValue($this->Campos[$f++].$i,$EntradasXTraslados)
             ->setCellValue($this->Campos[$f++].$i,$EntradasXAltas)
@@ -2474,6 +2483,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ->setCellValue($this->Campos[$f++].$i,$SalidasXTraslados)
             ->setCellValue($this->Campos[$f++].$i,$SalidasXBajas)
             ->setCellValue($this->Campos[$f++].$i,$Saldos)
+            ->setCellValue($this->Campos[$f++].$i,$Producto[$id]["SaldoFinal"])
             ->setCellValue($this->Campos[$f++].$i,$Departamentos["Nombre"])
             ->setCellValue($this->Campos[$f++].$i,$Sub1["NombreSub1"])
             ->setCellValue($this->Campos[$f++].$i,$Sub2["NombreSub2"])

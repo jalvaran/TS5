@@ -331,7 +331,7 @@ class CssIni{
 	/////////////////////Crea un Boton Submit
 	
 	function CrearBoton($nombre,$value){
-		print('<input type="submit" id="'.$nombre.'"  name="'.$nombre.'" value="'.$value.'" class="btn btn-primary">');
+		print('<input type="submit" id="'.$nombre.'"  name="'.$nombre.'" value="'.$value.'" class="btn btn-info"></input>');
 		
 	}
         
