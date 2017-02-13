@@ -942,10 +942,14 @@ function Footer(){
         /////////////////////Crear una imagen con una funcion javascrip
 	
 	function CrearInputFecha($Titulo,$Nombre,$Value,$Ancho,$Alto,$VectorFe){
-          
-          //print("<strong>$Titulo </strong><input type='text' id='$Nombre' name='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em'>");
-          print("<strong>$Titulo </strong> <input type='text' size='12' name='$Nombre' id='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em'>");
-         print('<script type="text/javascript">
+            include_once '../modelo/php_conexion.php';
+            $obVenta=new ProcesoVenta(1);
+            $DatosFechaCierre=$obVenta->DevuelveValores("cierres_contables", "ID", 1);
+            $FechaCierre=$DatosFechaCierre["Fecha"];
+          print("<div onmouseout=ValidarFecha('$FechaCierre','$Nombre');>");
+          print("<strong>$Titulo </strong> <input type='text' size='12' name='$Nombre' id='$Nombre' value='$Value' autocomplete='off' style='width: ".$Ancho."px;height: ".$Alto."px; font-size: 1em' onchange=ValidarFecha('$FechaCierre','$Nombre');>");
+          print("</div>");
+          print('<script type="text/javascript">
                 
                         new JsDatePick({
                                 useMode:2,

@@ -502,17 +502,58 @@ function SeleccioneID(id){
     document.getElementById(id).select();
 }
 
+//Verifique que la fecha no esté cerrada
 
-function CompareFechaCierre(idFechaCierre,idFechaText,FechaActual){
-    //alert("Entra");
-   var fech1 = document.getElementById(idFechaText).value;
-   var fech2 = document.getElementById(idFechaCierre).value;
-   alert(fech1+" "+fech2+" "+idFechaText);
-   if((Date.parse(fech1)) <= (Date.parse(fech2))){
-    alert("Esta Fecha ya esta cerrada");
-    document.getElementById(idFechaText).value=FechaActual;
+function CompareFechaCierre(FechaCierre,idFecha){
+    FechaActual=new Date();
+    Year=FechaActual.getFullYear();
+    Mes=FechaActual.getMonth()+1;
+    Dia=FechaActual.getDate();
+    if(Mes<10){
+        Mes="0"+Mes;
+    }
+    if(Dia<10){
+        Dia="0"+Dia;
+    }
+    Fecha=Year+"-"+Mes+"-"+Dia;
+    var FechaIn = document.getElementById(idFecha).value;
+    valuesStart=FechaCierre.split("-");
+    valuesEnd=FechaIn.split("-");
+    var dateStart=new Date(valuesStart[0],(valuesStart[1]-1),valuesStart[2]);
+    var dateEnd=new Date(valuesEnd[0],(valuesEnd[1]-1),valuesEnd[2]);
+    if(dateStart>=dateEnd){
+        alert("Esta fecha ya fue cerrada");
+        document.getElementById(idFecha).value=Fecha;
     }else{
-    alert("Pasa");	
+        //alert("La Fecha Introducida es mayor a la fecha de cierre");
     }
     
+}
+
+//Validar si el formato de fecha es real
+function ValidarFecha(FechaCierre,idFecha){
+ var fecha = document.getElementById(idFecha).value;
+ var fechaArr = fecha.split('-');
+ var aho = fechaArr[0];
+ var mes = fechaArr[1];
+ var dia = fechaArr[2];
+ 
+ var plantilla = new Date(aho, mes - 1, dia);//mes empieza de cero Enero = 0
+
+ if(!plantilla || plantilla.getFullYear() == aho && plantilla.getMonth() == mes -1 && plantilla.getDate() == dia){
+    CompareFechaCierre(FechaCierre,idFecha);
+ }else{
+    alert('Formato de fecha Incorrecto');
+    FechaActual=new Date();
+    Year=FechaActual.getFullYear();
+    Mes=FechaActual.getMonth()+1;
+    Dia=FechaActual.getDate();
+    if(Mes<10){
+        Mes="0"+Mes;
+    }
+    if(Dia<10){
+        Dia="0"+Dia;
+    }
+    document.getElementById(idFecha).value=Year+"-"+Mes+"-"+Dia;
+ }
 }

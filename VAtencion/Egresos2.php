@@ -163,8 +163,8 @@ include_once("procesadores/procesaEgresos.php");
 						
 					
 					print("<td>");
-					$css->CrearInputText("TxtFecha","date",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
-                                        //$css->CrearInputDate("TxtFecha", "TxtFecha", 30, 100, $fecha);
+					//$css->CrearInputText("TxtFecha","date",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","onChange","ValidarFecha('2017-02-13','TxtFecha')",150,30,0,1);
+                                        $css->CrearInputFecha("", "TxtFecha", date("Y-m-d"), 100, 30, "");
 					print("</td>");
 					print("<td>");
 					$css->CrearSelect("CmbCuentaOrigen"," Cuenta Origen:<br>","black","",1);
@@ -219,9 +219,10 @@ include_once("procesadores/procesaEgresos.php");
 					print("</td>");
 					
 					///// Text Fecha Programada
-					print("<td>");
-					$css->CrearInputText("TxtFechaProgram","text",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
+					print("<td onmouseout=ValidarFecha('2015-01-01','TxtFechaProgram');>");
+					//$css->CrearInputText("TxtFechaProgram","text",'Fecha Programada:<br>',$fecha,"Fecha Factura","black","","",150,30,0,1);
 					//$css->CrearInputDate("TxtFechaProgram", "TxtFechaProgram", 30, 100, $fecha);
+                                        $css->CrearInputFecha("", "TxtFechaProgram", date("Y-m-d"), 100, 30, "");
                                         print("</td>");
 					
 					$css->CierraFilaTabla();
