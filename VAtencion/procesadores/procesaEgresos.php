@@ -47,271 +47,61 @@
 			$destino=$carpeta.$Name;
 			move_uploaded_file($_FILES['foto']['tmp_name'],$destino);
 		}
-             	$tabla=new ProcesoVenta($idUser);
-		$CuentaOrigen=$_POST["CmbCuentaOrigen"];
-		$CuentaDestino=$_POST["CmbCuentaDestino"];
-		$idProveedor=$_POST["CmbProveedor"];
-		$Concepto=$_POST["TxtConcepto"];
-		$TipoEgreso=$_REQUEST['TxtTipoEgreso'];
-                $Retefuente=$_REQUEST['TxtRetefuente'];
-                $ReteIVA=$_REQUEST['TxtReteIVA'];
-                $ReteICA=$_REQUEST['TxtReteICA'];
-                $Retenciones=$Retefuente+$ReteIVA+$ReteICA;
-                $fecha=$_REQUEST['TxtFecha'];
+             	$obVenta=new ProcesoVenta($idUser);
+		$CuentaOrigen=$obVenta->normalizar($_REQUEST["CmbCuentaOrigen"]);
+		$CuentaDestino=$obVenta->normalizar($_REQUEST["CmbCuentaDestino"]);
+		$idProveedor=$obVenta->normalizar($_REQUEST["CmbProveedor"]);
+		$Concepto=$obVenta->normalizar($_REQUEST["TxtConcepto"]);
+		$TipoEgreso=$obVenta->normalizar($_REQUEST['TxtTipoEgreso']);
+                $ReteFuente=$obVenta->normalizar($_REQUEST['TxtRetefuente']);
+                $ReteIVA=$obVenta->normalizar($_REQUEST['TxtReteIVA']);
+                $ReteICA=$obVenta->normalizar($_REQUEST['TxtReteICA']);
+                $Total=$obVenta->normalizar($_REQUEST["TxtTotal"]);
+                $fecha=$obVenta->normalizar($_REQUEST['TxtFecha']);
+                $FechaProgramada=$obVenta->normalizar($_REQUEST['TxtFechaProgram']);
+                $CentroCostos=$obVenta->normalizar($_REQUEST["CmbCentroCosto"]);
+                $idSucursal=$obVenta->normalizar($_REQUEST['CmbSucursal']);
+                $TipoPago=$obVenta->normalizar($_REQUEST["TipoPago"]);
+                $CuentaPUCIVA=2408;
 		$idUsuario=$idUser;
 		$IVA=0;
+                $Sanciones=0;
+                $Intereses=0;
+                $TotalSanciones=0;
+                $Impuestos=0;
 		if($TipoEgreso==3){
 			
-			$Sanciones=$_POST["TxtSancion"];
-			$Intereses=$_POST["TxtIntereses"];
+			$Sanciones=$obVenta->normalizar($_REQUEST["TxtSancion"]);
+			$Intereses=$obVenta->normalizar($_REQUEST["TxtIntereses"]);
 			$TotalSanciones=$Sanciones+$Intereses;
-			$Impuestos=$_POST["TxtImpuesto"];
+			$Impuestos=$obVenta->normalizar($_REQUEST["TxtImpuesto"]);
 			$Subtotal=$Impuestos;
 			
 								
 		}elseif($TipoEgreso==1){
-			$Subtotal=$_POST["TxtTotal"];
+			$Subtotal=$obVenta->normalizar($_REQUEST["TxtTotal"]);
 				
 		
 		}else{
-			$Subtotal=$_POST["TxtSubtotal"];
-			$IVA=$_POST["TxtIVA"];
+			$Subtotal=$obVenta->normalizar($_REQUEST["TxtSubtotal"]);
+			$IVA=$obVenta->normalizar($_REQUEST["TxtIVA"]);
 			
 		}
+                
                 //$Subtotal=$Subtotal;   //Se le restan las retenciones
-		$Total=$_POST["TxtTotal"]-$ReteICA-$ReteIVA-$Retefuente; 
-		$Valor=$_POST["TxtTotal"];
-		$NumFact=$_POST["TxtNumFactura"];		
+		
+		$NumFact=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);		
 		//////registramos en egresos
+		$idComprobante=$obVenta->RegistrarGasto($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$idSucursal,"");
 		
-		
-		
-		$DatosProveedor=$tabla->DevuelveValores("proveedores","idProveedores",$idProveedor);
-		$CentroCostos=$tabla->DevuelveValores("centrocosto","ID",$_REQUEST["CmbCentroCosto"]);
-		$DatosTipoEgreso=$tabla->DevuelveValores("egresos_tipo","id",$TipoEgreso);
-		$RazonSocial=$DatosProveedor["RazonSocial"];
-		$NIT=$DatosProveedor["Num_Identificacion"];
-		$idEmpresa=$CentroCostos["EmpresaPro"];
-		$idCentroCostos=$CentroCostos["ID"];
-                $TipoPago=$_POST["TipoPago"];
-                
-                if($TipoPago=="Contado"){
-                
-                    $NumRegistros=20;
-
-                    $Columnas[0]="Fecha";				$Valores[0]=$fecha;
-                    $Columnas[1]="Beneficiario";		$Valores[1]=$RazonSocial;
-                    $Columnas[2]="NIT";					$Valores[2]=$NIT;
-                    $Columnas[3]="Concepto";			$Valores[3]=$Concepto;
-                    $Columnas[4]="Valor";				$Valores[4]=$Valor;
-                    $Columnas[5]="Usuario_idUsuario";	$Valores[5]=$idUsuario;
-                    $Columnas[6]="PagoProg";			$Valores[6]=$_POST["TipoPago"];
-                    $Columnas[7]="FechaPagoPro";		$Valores[7]=$_POST["TxtFechaProgram"];
-                    $Columnas[8]="TipoEgreso";			$Valores[8]=$DatosTipoEgreso["Nombre"];
-                    $Columnas[9]="Direccion";			$Valores[9]=$DatosProveedor["Direccion"];
-                    $Columnas[10]="Ciudad";				$Valores[10]=$DatosProveedor["Ciudad"];
-                    $Columnas[11]="Subtotal";			$Valores[11]=$Subtotal;
-                    $Columnas[12]="IVA";				$Valores[12]=$IVA;
-                    $Columnas[13]="NumFactura";			$Valores[13]=$NumFact;
-                    $Columnas[14]="idProveedor";		$Valores[14]=$idProveedor;
-                    $Columnas[15]="Cuenta";				$Valores[15]=$CuentaOrigen;
-                    $Columnas[16]="CentroCostos";			$Valores[16]=$idCentroCostos;	
-                    $Columnas[17]="EmpresaPro";		$Valores[17]= $idEmpresa;	
-                    $Columnas[18]="Soporte";		$Valores[18]= $destino;
-                    $Columnas[19]="Retenciones";	$Valores[19]= $Retenciones;
-
-                    $tabla->InsertarRegistro("egresos",$NumRegistros,$Columnas,$Valores);
-                    
-                    $NumEgreso=$tabla->ObtenerMAX("egresos","idEgresos", 1, "");
-                    $DocumentoSoporte="CompEgreso";
-                    $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$NumEgreso";
+		if($TipoPago=="Contado"){
+                    $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idComprobante";
+                }else{
+                    $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$idComprobante";
                 }
-                
-                if($TipoPago=="Programado"){
-                
-                    $NumRegistros=12;
-
-                    $Columnas[0]="Fecha";		$Valores[0]=$fecha;
-                    $Columnas[1]="Detalle";		$Valores[1]=$Concepto;
-                    $Columnas[2]="idProveedor";		$Valores[2]=$idProveedor;
-                    $Columnas[3]="Subtotal";		$Valores[3]=$Subtotal;
-                    $Columnas[4]="IVA";			$Valores[4]=$IVA;
-                    $Columnas[5]="Total";               $Valores[5]=$Valor;
-                    $Columnas[6]="Soporte";		$Valores[6]=$destino;
-                    $Columnas[7]="NumFactura";		$Valores[7]=$NumFact;
-                    $Columnas[8]="Usuario_idUsuario";	$Valores[8]=$idUsuario;
-                    $Columnas[9]="CentroCostos";	$Valores[9]=$idCentroCostos;
-                    $Columnas[10]="EmpresaPro";		$Valores[10]=$idEmpresa;
-                    $Columnas[11]="FechaProgramada";	$Valores[11]=$_POST["TxtFechaProgram"];
-                    
-                    $tabla->InsertarRegistro("notascontables",$NumRegistros,$Columnas,$Valores);
-                    
-                    $NumEgreso=$tabla->ObtenerMAX("notascontables","ID", 1, "");
-                    $DocumentoSoporte="NotaContable";
-                    $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$NumEgreso";
-                }
-                
-                
-		/////////////////////////////////////////////////////////////////
-		//////registramos en libro diario
-		
-		$tab="librodiario";
-		
-		$NumRegistros=27;
-		$CuentaPUC=$CuentaDestino;  			 
-		if($TipoEgreso==3) //Si es pago de impuestos
-			$DatosCuenta=$tabla->DevuelveValores("cuentas","idPUC",$CuentaPUC);	
-		else
-			$DatosCuenta=$tabla->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-		
-		$NombreCuenta=$DatosCuenta["Nombre"];
-		
-		
-		
-		$Columnas[0]="Fecha";                   $Valores[0]=$fecha;
-		$Columnas[1]="Tipo_Documento_Intero";	$Valores[1]=$DocumentoSoporte;
-		$Columnas[2]="Num_Documento_Interno";	$Valores[2]=$NumEgreso;
-		$Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosProveedor['Tipo_Documento'];
-		$Columnas[4]="Tercero_Identificacion";	$Valores[4]=$NIT;
-		$Columnas[5]="Tercero_DV";		$Valores[5]=$DatosProveedor['DV'];
-		$Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosProveedor['Primer_Apellido'];
-		$Columnas[7]="Tercero_Segundo_Apellido";$Valores[7]=$DatosProveedor['Segundo_Apellido'];
-		$Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosProveedor['Primer_Nombre'];
-		$Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosProveedor['Otros_Nombres'];
-		$Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$RazonSocial;
-		$Columnas[11]="Tercero_Direccion";	$Valores[11]=$DatosProveedor['Direccion'];
-		$Columnas[12]="Tercero_Cod_Dpto";	$Valores[12]=$DatosProveedor['Cod_Dpto'];
-		$Columnas[13]="Tercero_Cod_Mcipio";	$Valores[13]=$DatosProveedor['Cod_Mcipio'];
-		$Columnas[14]="Tercero_Pais_Domicilio"; $Valores[14]=$DatosProveedor['Pais_Domicilio'];
-		$Columnas[15]="CuentaPUC";		$Valores[15]=$CuentaPUC;
-		$Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
-		$Columnas[17]="Detalle";		$Valores[17]="egresos";		
-		$Columnas[18]="Debito";			$Valores[18]=$Subtotal;
-		$Columnas[19]="Credito";		$Valores[19]="0";
-		$Columnas[20]="Neto";			$Valores[20]=$Subtotal;
-		$Columnas[21]="Mayor";			$Valores[21]="NO";
-		$Columnas[22]="Esp";			$Valores[22]="NO";
-		$Columnas[23]="Concepto";		$Valores[23]=$Concepto;
-		$Columnas[24]="idCentroCosto";		$Valores[24]=$idCentroCostos;
-		$Columnas[25]="idEmpresa";              $Valores[25]=$idEmpresa;
-		$Columnas[26]="Num_Documento_Externo";  $Valores[26]=$NumFact;	
-                
-		$tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		/////////////////////////////////////////////////////////////////
-		//////contra partida
-		if($_POST["TipoPago"]=="Contado"){
-			
-			
-			$CuentaPUC=$CuentaOrigen; //cuenta de donde sacaremos el valor del egreso
-			
-			$DatosCuenta=$tabla->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-		}
-		if($_POST["TipoPago"]=="Programado"){
-			$CuentaPUC="2205";
-			$NombreCuenta="Proveedores Nacionales";
-		}
-		
-		
-		$Valores[15]=$CuentaPUC;
-		$Valores[16]=$NombreCuenta;
-		$Valores[18]="0";
-		$Valores[19]=$Total; 						//Credito se escribe el total de la venta menos los impuestos
-		$Valores[20]=$Total*(-1);  											//Credito se escribe el total de la venta menos los impuestos
-		
-		$tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		/////////////////////////////////////////////////////////////////
-		//////Si hay IVA
-		if($IVA<>0){
-			$CuentaPUC=$_POST["CmbIVADes"]; //cuenta de donde sacaremos el valor del egreso
-			if($CuentaPUC>2408)
-				$DatosCuenta=$tabla->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			else
-				$DatosCuenta=$tabla->DevuelveValores("cuentas","idPUC",$CuentaPUC);
-			
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=$IVA;
-			$Valores[19]=0; 						
-			$Valores[20]=$IVA;  											//Credito se escribe el total de la venta menos los impuestos
-			
-			$tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		}
-		
-		//////Si hay IVA
-		if(!empty($TotalSanciones)){
-		
-			$CuentaPUC=539520; //Multas, sanciones y litigios
-			
-			$DatosCuenta=$tabla->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=$TotalSanciones;
-			$Valores[19]=0; 						
-			$Valores[20]=$TotalSanciones;  											//Credito se escribe el total de la venta menos los impuestos
-			
-			$tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		}
-                
-                if(!empty($Retefuente)){   //Si hay retencion en la fuente se registra
-                    
-			
-                    $DatosCuenta=$tabla->DevuelveValores("tiposretenciones","ID",1);
-                                        
-                    $NombreCuenta=$DatosCuenta["NombreCuentaPasivo"];
-                    $CuentaPUC=$DatosCuenta["CuentaPasivo"];
-                    
-                    $Valores[15]=$CuentaPUC;
-                    $Valores[16]=$NombreCuenta;
-                    $Valores[18]=0;
-                    $Valores[19]=$Retefuente; 						
-                    $Valores[20]=$Retefuente*(-1);  											//Credito se escribe el total de la venta menos los impuestos
-
-                    $tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
-                }
-                
-                if(!empty($ReteIVA)){   //Si hay retencion de IVA se registra
-                    
-			
-                    $DatosCuenta=$tabla->DevuelveValores("tiposretenciones","ID",2);
-                                        
-                    $NombreCuenta=$DatosCuenta["NombreCuentaPasivo"];
-                    $CuentaPUC=$DatosCuenta["CuentaPasivo"];
-                    
-                    $Valores[15]=$CuentaPUC;
-                    $Valores[16]=$NombreCuenta;
-                    $Valores[18]=0;
-                    $Valores[19]=$ReteIVA; 						
-                    $Valores[20]=$ReteIVA*(-1);  											//Credito se escribe el total de la venta menos los impuestos
-
-                    $tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
-                }
-		
-                
-                if(!empty($ReteICA)){   //Si hay retencion de ICA se registra
-                    
-			
-                    $DatosCuenta=$tabla->DevuelveValores("tiposretenciones","ID",3);
-                                        
-                    $NombreCuenta=$DatosCuenta["NombreCuentaPasivo"];
-                    $CuentaPUC=$DatosCuenta["CuentaPasivo"];
-                    
-                    $Valores[15]=$CuentaPUC;
-                    $Valores[16]=$NombreCuenta;
-                    $Valores[18]=0;
-                    $Valores[19]=$ReteICA; 						
-                    $Valores[20]=$ReteICA*(-1);  											//Credito se escribe el total de la venta menos los impuestos
-
-                    $tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
-                }
-		//print("<script>window.open('$RutaPrintComp','_blank');</script>");
-		
+                $css->CrearTabla();
+                $css->CrearFilaNotificacion("Egreso registrado Correctamente <a href='$RutaPrintComp' target='_blank'>Imprimir Comprobante</a>",16);
+                $css->CerrarTabla();
 	}
 	
 ////Se Crea un Proveedor

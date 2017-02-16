@@ -942,7 +942,7 @@ function Footer(){
         /////////////////////Crear una imagen con una funcion javascrip
 	
 	function CrearInputFecha($Titulo,$Nombre,$Value,$Ancho,$Alto,$VectorFe){
-            include_once '../modelo/php_conexion.php';
+            //include_once '../modelo/php_conexion.php';
             $obVenta=new ProcesoVenta(1);
             $DatosFechaCierre=$obVenta->DevuelveValores("cierres_contables", "ID", 1);
             $FechaCierre=$DatosFechaCierre["Fecha"];
