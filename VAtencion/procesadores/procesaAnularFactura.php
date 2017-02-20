@@ -33,7 +33,8 @@ $Concepto="Anulacion de Factura $DatosFactura[Prefijo] - $DatosFactura[NumeroFac
     
     $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     $idComprobante=$obVenta->ObtenerMAX($tab, "ID", 1, "");
-    
+    $obVenta->AnularMovimientoLibroDiario("FACTURA", $idFactura, "");
+    /*
     $Consulta=$obVenta->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='FACTURA' AND Num_Documento_Interno='$idFactura'");
     while($DatosLibroDiario=$obVenta->FetchArray($Consulta)){
         
@@ -81,6 +82,8 @@ $Concepto="Anulacion de Factura $DatosFactura[Prefijo] - $DatosFactura[NumeroFac
         
         $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
+     * 
+     */
     //Elimino de cartera en caso de que esté ahi
     $obVenta->BorraReg("cartera", "Facturas_idFacturas",$idFactura);
     //Alimento el inventario
