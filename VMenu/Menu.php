@@ -70,7 +70,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/clientes.php","_blank","../images/clientes.png","Clientes");
                     $css->SubTabs("../VAtencion/proveedores.php","_blank","../images/proveedores.png","Proveedores");
                     //$css->SubTabs("../VAtencion/CuentasXCobrar.php","_blank","../images/cuentasxcobrar.png","Cuentas Por Cobrar");
-                    $css->SubTabs("../VAtencion/CuentasXPagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
+                    $css->SubTabs("../VAtencion/cuentasxpagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
                     $css->SubTabs("MnuInventarios.php","_blank","../images/inventarios.png","Inventarios");
                     $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
                     $css->SubTabs("../VAtencion/CronogramaProduccion.php","_blank","../images/produccion.png","Produccion");

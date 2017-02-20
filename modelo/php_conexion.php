@@ -7012,7 +7012,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                 $Valores[19]=0; 						
                 $Valores[20]=$IVA;  											//Credito se escribe el total de la venta menos los impuestos
 
-                $tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }
 
         //////Si hay IVA
@@ -7114,6 +7114,63 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         return $idAnulacion;
     }
     
+    //REgistre cuenta por pagar
+    
+    public function RegistrarCuentaXPagar($Fecha,$DocumentoReferencia,$FechaProgramada,$Origen,$DocumentoCruce,$Subtotal,$IVA,$Total,$ReteFuente,$ReteIVA,$ReteICA,$idProveedor,$Vector) {
+        $Retenciones=$ReteFuente+$ReteIVA+$ReteICA;
+        $Total=$Total-$Retenciones;
+        $DatosProveedor= $this->DevuelveValores("proveedores", "idProveedores", $idProveedor);
+        
+        $tab="cuentasxpagar";
+        $NumRegistros=22;
+        
+        $Columnas[0]="Fecha";                   $Valores[0]=$Fecha;
+        $Columnas[1]="DocumentoReferencia";	$Valores[1]=$DocumentoReferencia;
+        $Columnas[2]="FechaProgramada";         $Valores[2]=$FechaProgramada;
+        $Columnas[3]="Origen";                  $Valores[3]=$Origen;
+        $Columnas[4]="DocumentoCruce";          $Valores[4]=$DocumentoCruce;
+        $Columnas[5]="Subtotal";		$Valores[5]=$Subtotal;
+        $Columnas[6]="IVA";                     $Valores[6]=$IVA;
+        $Columnas[7]="Total";                   $Valores[7]=$Total;
+        $Columnas[8]="Abonos";                  $Valores[8]=0;
+        $Columnas[9]="Saldo";                   $Valores[9]=$Total;
+        $Columnas[10]="idProveedor";            $Valores[10]=$idProveedor;
+        $Columnas[11]="RazonSocial";            $Valores[11]=$DatosProveedor['RazonSocial'];
+        $Columnas[12]="Direccion";              $Valores[12]=$DatosProveedor['Direccion'];
+        $Columnas[13]="Ciudad";                 $Valores[13]=$DatosProveedor['Ciudad'];
+        $Columnas[14]="Telefono";               $Valores[14]=$DatosProveedor['Telefono'];
+        $Columnas[15]="CuentaBancaria";		$Valores[15]=$DatosProveedor['CuentaBancaria'];;
+        $Columnas[16]="A_Nombre_De";		$Valores[16]=$DatosProveedor['A_Nombre_De'];;
+        $Columnas[17]="TipoCuenta";		$Valores[17]=$DatosProveedor['TipoCuenta'];;		
+        $Columnas[18]="EntidadBancaria";        $Valores[18]=$DatosProveedor['EntidadBancaria'];;
+        $Columnas[19]="Dias";                   $Valores[19]=0;
+        $Columnas[20]="idUsuario";              $Valores[20]=$this->idUser;
+        $Columnas[21]="Retenciones";            $Valores[21]=$Retenciones;    
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    }
+    
+    /*
+ * 
+ * Funcion actualizar los dias de cartera en cuentas x pagar
+ */
+
+    public function ActualiceDiasCuentasXPagar(){		
+        $FechaActual=date("Y-m-d");
+        //$FechaActual='2016-05-10';
+        $sql="UPDATE `cuentasxpagar` SET `Dias`= DATEDIFF('$FechaActual', `FechaProgramada`)";
+        $this->Query($sql);
+        $SumatoriaDias=$this->Sume("cuentasxpagar", 'Dias', '');
+        $sql="SELECT COUNT(ID) as NumRegistros FROM cuentasxpagar";
+        $Consulta=$this->Query($sql);
+        $DatosCartera=$this->FetchArray($Consulta);
+        $NumRegistros=$DatosCartera["NumRegistros"];
+        if($NumRegistros>0){
+            $Promedio=$SumatoriaDias/$NumRegistros;
+        }else{
+            $Promedio="";
+        }
+        return($Promedio);
+    }    
 //////////////////////////////Fin	
 }
 	

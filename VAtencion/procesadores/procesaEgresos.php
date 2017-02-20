@@ -98,6 +98,7 @@
                     $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idComprobante";
                 }else{
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$idComprobante";
+                    $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $idProveedor, "");
                 }
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Egreso registrado Correctamente <a href='$RutaPrintComp' target='_blank'>Imprimir Comprobante</a>",16);
