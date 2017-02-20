@@ -62,6 +62,8 @@
                 $CentroCostos=$obVenta->normalizar($_REQUEST["CmbCentroCosto"]);
                 $idSucursal=$obVenta->normalizar($_REQUEST['CmbSucursal']);
                 $TipoPago=$obVenta->normalizar($_REQUEST["TipoPago"]);
+                $DatosProveedores=$obVenta->DevuelveValores("proveedores", "idProveedores", $idProveedor);
+                $NIT_Proveedor=$DatosProveedores["Num_Identificacion"];
                 $CuentaPUCIVA=2408;
 		$idUsuario=$idUser;
 		$IVA=0;
@@ -98,7 +100,7 @@
                     $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idComprobante";
                 }else{
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$idComprobante";
-                    $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $idProveedor, "");
+                    $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $NIT_Proveedor,$idSucursal,$CentroCostos, "");
                 }
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Egreso registrado Correctamente <a href='$RutaPrintComp' target='_blank'>Imprimir Comprobante</a>",16);

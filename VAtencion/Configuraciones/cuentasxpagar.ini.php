@@ -23,7 +23,13 @@ $Vector["VerRegistro"]["Deshabilitado"]=1;
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;                                 
 $Vector["EditarRegistro"]["Deshabilitado"]=1;
 
-
+// Nueva Accion
+$Ruta="$myPage?idCuentaXPagar=";
+$Vector["NuevaAccionLink"][0]="AgregarPreEgreso";
+$Vector["NuevaAccion"]["AgregarPreEgreso"]["Titulo"]="Agregar a PreEgreso";
+$Vector["NuevaAccion"]["AgregarPreEgreso"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["AgregarPreEgreso"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["AgregarPreEgreso"]["Target"]="_self";
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>

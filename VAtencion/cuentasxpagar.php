@@ -24,7 +24,7 @@ $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
 $obTabla->VerifiqueExport($Vector);
-include_once("procesadores/procesaCartera.php");  //Clases de donde se escribirán las tablas
+
 include_once("css_construct.php");
 print("<html>");
 print("<head>");
@@ -35,30 +35,26 @@ print("<body>");
 //Cabecera
 $css->CabeceraIni($myTitulo); //Inicia la cabecera de la pagina
 
-$css->CrearForm("FrmBuscarCreditos",$myPage,"post","_self");
-$css->CrearInputText("TxtBuscarCredito", "text", " ", "", "Buscar Cuenta X Pagar", "white", "", "", 200, 30, 0, 1);
-$css->CerrarForm();
 $css->CabeceraFin(); 
 
 ///////////////Creamos el contenedor
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+//$css->CrearImageLink($myPage, "../images/cuentasxpagar2.png", "_self",50,50);
+include_once("procesadores/procesaCuentasXPagar2.php");  //Clases de donde se escribirán las tablas
 if(!empty($_REQUEST["TxtidIngreso"])){
         $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
         $css->CrearTabla();
         $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
         $css->CerrarTabla();
     }
-    
-$VectorCredito["HabilitaCmbCuentaDestino"]=1;
-$obTabla->DibujaCredito($myPage,0,$VectorCredito);
 
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-$css->CrearImageLink($myPage, "../images/cuentasxpagar2.png", "_self",200,200);
+
 
 $PromedioDias=$obVenta->ActualiceDiasCuentasXPagar();
 $TotalCuentas=  number_format($obVenta->Sume("cuentasxpagar", "Saldo",""));
@@ -66,9 +62,9 @@ $TotalCuentas=  number_format($obVenta->Sume("cuentasxpagar", "Saldo",""));
 $css->CrearNotificacionAzul("Total Cuentas X Pagar: $ $TotalCuentas", 16);
 
 if($PromedioDias>30){
-    $css->CrearNotificacionRoja("Rotacion de Cartera: $PromedioDias", 16);
+    $css->CrearNotificacionRoja("Promedio de Dias : $PromedioDias", 16);
 }else{
-    $css->CrearNotificacionVerde("Rotacion de Cartera: $PromedioDias", 16);
+    $css->CrearNotificacionVerde("Promedio de Dias : $PromedioDias", 16);
 }
 
 ////Paginacion
@@ -83,6 +79,9 @@ print("</div>");
 ///
 
 $obTabla->DibujeTabla($Vector);
+$css->CerrarDiv();//Cerramos contenedor Principal
+$css->CrearDiv("DivPreEgreso","container", "left", 1, 1);
+include_once 'Consultas/DatosPreEgresos.php';
 $css->CerrarDiv();//Cerramos contenedor Principal
 $css->Footer();
 $css->AgregaJS(); //Agregamos javascripts

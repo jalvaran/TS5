@@ -7116,13 +7116,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     
     //REgistre cuenta por pagar
     
-    public function RegistrarCuentaXPagar($Fecha,$DocumentoReferencia,$FechaProgramada,$Origen,$DocumentoCruce,$Subtotal,$IVA,$Total,$ReteFuente,$ReteIVA,$ReteICA,$idProveedor,$Vector) {
+    public function RegistrarCuentaXPagar($Fecha,$DocumentoReferencia,$FechaProgramada,$Origen,$DocumentoCruce,$Subtotal,$IVA,$Total,$ReteFuente,$ReteIVA,$ReteICA,$NIT_Proveedor,$idSucursal,$CentroCostos,$Vector) {
         $Retenciones=$ReteFuente+$ReteIVA+$ReteICA;
         $Total=$Total-$Retenciones;
-        $DatosProveedor= $this->DevuelveValores("proveedores", "idProveedores", $idProveedor);
+        $DatosProveedor= $this->DevuelveValores("proveedores", "Num_Identificacion", $NIT_Proveedor);
         
         $tab="cuentasxpagar";
-        $NumRegistros=22;
+        $NumRegistros=24;
         
         $Columnas[0]="Fecha";                   $Valores[0]=$Fecha;
         $Columnas[1]="DocumentoReferencia";	$Valores[1]=$DocumentoReferencia;
@@ -7134,7 +7134,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Columnas[7]="Total";                   $Valores[7]=$Total;
         $Columnas[8]="Abonos";                  $Valores[8]=0;
         $Columnas[9]="Saldo";                   $Valores[9]=$Total;
-        $Columnas[10]="idProveedor";            $Valores[10]=$idProveedor;
+        $Columnas[10]="idProveedor";            $Valores[10]=$NIT_Proveedor;
         $Columnas[11]="RazonSocial";            $Valores[11]=$DatosProveedor['RazonSocial'];
         $Columnas[12]="Direccion";              $Valores[12]=$DatosProveedor['Direccion'];
         $Columnas[13]="Ciudad";                 $Valores[13]=$DatosProveedor['Ciudad'];
@@ -7145,7 +7145,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Columnas[18]="EntidadBancaria";        $Valores[18]=$DatosProveedor['EntidadBancaria'];;
         $Columnas[19]="Dias";                   $Valores[19]=0;
         $Columnas[20]="idUsuario";              $Valores[20]=$this->idUser;
-        $Columnas[21]="Retenciones";            $Valores[21]=$Retenciones;    
+        $Columnas[21]="Retenciones";            $Valores[21]=$Retenciones; 
+        $Columnas[22]="idSucursal";             $Valores[22]=$idSucursal; 
+        $Columnas[23]="idCentroCostos";         $Valores[23]=$idSucursal;  
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     
