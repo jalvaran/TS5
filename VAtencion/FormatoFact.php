@@ -1,4 +1,3 @@
-
 <?php 
 $accion="";
 
@@ -248,8 +247,9 @@ if(mysql_num_rows($reg)){//Si existen resultados
 									<option value="0.05">5%</option>
 									<option value="0.08">8%</option>
 									<option value="0.16">16%</option>  
+                                                                        <option value="0.19">19%</option>  
 								</select><br>
-								 <button type="submit" name="BtnAgregarItem" class="btn btn-primary">
+								 <button type="submit" name="BtnAgregarItem" class="btn btn-warning">
                                     <i class="icon-shopping-cart"></i> <strong>Agregar</strong>
                                 </button>
                             </form>
@@ -348,7 +348,7 @@ if(mysql_num_rows($reg)){//Si existen resultados
 				<?php if($in==1){
 					
 					print('<form >
-					<input type="submit" name="BtnGuardar" id="BtnGuardar" style="width:134px;height:136px;z-index:10;"   value="Guardar" class="btn btn-primary" onclick="Confirmar();return false">');
+					<input type="submit" name="BtnGuardar" id="BtnGuardar" style="width:134px;height:136px;z-index:10;"   value="Guardar" class="btn btn-info" onclick="Confirmar();return false">');
 					
 				} ?>
 	  
