@@ -1,25 +1,25 @@
 <?php 
-$myPage="AnularFactura.php";
+$myPage="AnularAbonoTitulo.php";
 include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 $obVenta = new ProcesoVenta($idUser);
 //////Si recibo un cliente
-if(!empty($_REQUEST['idFactura'])){
-
-        $idFactura=$obVenta->normalizar($_REQUEST['idFactura']);
-}
+	if(!empty($_REQUEST['idAbono'])){
+		
+		$idAbono=$obVenta->normalizar($_REQUEST['idAbono']);
+	}
 
 	
 print("<html>");
 print("<head>");
-$css =  new CssIni("Anular Factura");
+$css =  new CssIni("Anular Abono a Titulo");
 
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/procesaAnularFactura.php");
+    include_once("procesadores/procesaAnularAbonoTitulo.php");
     
-    $css->CabeceraIni("Anular Factura"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("Anular Abono a Titulo"); //Inicia la cabecera de la pagina
     
     //////////Creamos el formulario de busqueda de remisiones
     /////
@@ -36,15 +36,14 @@ print("<body>");
     ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-    $css->CrearImageLink("facturas.php", "../images/anular.png", "_self",200,200);
+    $css->CrearImageLink("titulos_abonos.php", "../images/anular.png", "_self",200,200);
     
     ///////////////Si se crea una devolucion o una factura
     /////
     /////
     if(!empty($_REQUEST["TxtidComprobante"])){
-        $RutaPrintIngreso="../tcpdf/examples/notacredito.php?idComprobante=".$_REQUEST["TxtidComprobante"];			
         $css->CrearTabla();
-        $css->CrearFilaNotificacion("Nota Credito Creada Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Nota Credito No. $_REQUEST[TxtidComprobante]</a>",16);
+        $css->CrearFilaNotificacion("Se ha registrado la anulacion de este abono en el registro con ID No. $_REQUEST[TxtidComprobante]</a>",16);
         $css->CerrarTabla();
     }
     ///////////////Se crea el DIV que servirá de contenedor secundario
@@ -56,47 +55,48 @@ print("<body>");
     //////////////////////////Se dibujan los campos para la anulacion de la factura
     /////
     /////
-    if(!empty($idFactura)){
+    if(!empty($idAbono)){
         
         $css->CrearTabla();
             
-            $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
-            $DatosCliente=$obVenta->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
-                if($DatosFactura["FormaPago"]=="ANULADA"){
-                    $css->CrearNotificacionRoja("Error esta factura ya fue anulada", 16);
+            $DatosAbono=$obVenta->DevuelveValores("titulos_abonos", "ID", $idAbono);
+            //$DatosCliente=$obVenta->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+                if($DatosAbono["Estado"]=="ANULADO"){
+                    $css->CrearNotificacionRoja("Error este abono ya fue anulado", 16);
                     exit();
                 }
-            $css->CrearNotificacionAzul("Datos de la Factura", 18);
+            $css->CrearNotificacionAzul("Datos del abono", 18);
             $css->FilaTabla(14);
             
-            $css->ColTabla("<strong>Cliente</strong>", 1);
-            $css->ColTabla("<strong>Factura</strong>", 1);
+            $css->ColTabla("<strong>idVenta</strong>", 1);
+            $css->ColTabla("<strong>Colaborador</strong>", 1);
             $css->ColTabla("<strong>Fecha</strong>", 1);
            
-            $css->ColTabla("<strong>Total Factura</strong>", 1);
+            $css->ColTabla("<strong>Total Abono</strong>", 1);
             
             
             $css->CierraFilaTabla();
             
             $css->FilaTabla(14);
             
-            $css->ColTabla($DatosCliente["RazonSocial"], 1);
-            $css->ColTabla($DatosFactura["Prefijo"].$DatosFactura["NumeroFactura"], 1);
-            $css->ColTabla($DatosFactura["Fecha"], 1);
+            $css->ColTabla($DatosAbono["idVenta"], 1);
+            $css->ColTabla($DatosAbono["NombreColaborador"]." ".$DatosAbono["idColaborador"], 1);
+            $css->ColTabla($DatosAbono["Fecha"], 1);
             
-            $css->ColTabla($DatosFactura["Total"], 1);
+            $css->ColTabla($DatosAbono["Monto"], 1);
                         
             $css->CierraFilaTabla();
             
         $css->CerrarTabla();
         $css->CrearForm2("FrmRegistraAnulacion", $myPage, "post", "_self");
-        $css->CrearInputText("TxtIdFactura", "hidden", "", $DatosFactura["idFacturas"], "", "", "", "", "", "", "", "");
+        $css->CrearInputText("idAbono", "hidden", "", $idAbono, "", "", "", "", "", "", "", "");
         $css->CrearTabla();
         $css->CrearNotificacionNaranja("Datos Para Realizar la Anulacion", 16);
         print("<td style='text-align:center'>");
-        $css->CrearInputText("TxtFechaAnulacion", "text", "Fecha de Anulacion: <br>", date("Y-m-d"), "Fecha", "black", "", "", 100, 30, 0, 1);
+        $css->CrearInputFecha("Fecha:<br>", "TxtFechaAnulacion", date("Y-m-d"), 100, 30, "");
+        //$css->CrearInputText("TxtFechaAnulacion", "text", "Fecha de Anulacion: <br>", date("Y-m-d"), "Fecha", "black", "", "", 100, 30, 0, 1);
         print("<br>");
-        $css->CrearTextArea("TxtConceptoAnulacion", "", "", "Escriba el por qué se anulará la factura", "black", "", "", 200, 100, 0, 1);
+        $css->CrearTextArea("TxtConceptoAnulacion", "", "", "Escriba el por qué se anulará el abono", "black", "", "", 200, 100, 0, 1);
         print("<br>");
         $css->CrearBotonConfirmado("BtnAnular","Anular");	
             
@@ -108,7 +108,7 @@ print("<body>");
         
     }else{
         $css->CrearTabla();
-        $css->CrearFilaNotificacion("Por favor busque y asocie una factura",16);
+        $css->CrearFilaNotificacion("Por favor busque y asocie un abono",16);
         $css->CerrarTabla();
     }
     $css->CerrarDiv();//Cerramos contenedor Secundario

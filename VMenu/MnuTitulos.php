@@ -71,6 +71,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("../VAtencion/titulos_cuentasxcobrar.php","_self","../images/cuentasxcobrar.png","Cuentas X Cobrar");
                     $css->SubTabs("../VAtencion/titulos_comisiones.php","_self","../images/comisiones.png","Comisiones");
                     $css->SubTabs("../VAtencion/titulos_traslados.php","_self","../images/traslado.png","Historial de Traslados");
+                    $css->SubTabs("../VAtencion/comprobantes_ingreso_anulaciones.php","_self","../images/historial3.png","Historial de Anulacion de Abonos");
                     $css->SubTabs("../VAtencion/InformeTitulos.php","_self","../images/informes.png","Informes");
                 $css->FinTabs();
 			

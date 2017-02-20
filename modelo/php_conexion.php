@@ -7087,6 +7087,33 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         return($NumEgreso);
     }
     
+    //anula un movimiento en el libro diario
+    public function AnularMovimientoLibroDiario($DocumentoInterno,$NumDocumentoInterno,$Vector) {
+        $sql="UPDATE librodiario SET Debito=0,Credito=0,Neto=0,Estado='ANULADO' WHERE Tipo_Documento_Intero='$DocumentoInterno' AND Num_Documento_Interno='$NumDocumentoInterno'";
+        $this->Query($sql);
+    }
+    
+    //Anula un abono a un titulo
+    
+    public function RegistraAnulacionComprobanteIngreso($Fecha,$Concepto,$idComprobante,$Monto) {
+        $hora=date("H:i:s");
+        $tab="comprobantes_ingreso_anulaciones";
+        $NumRegistros=6;
+        $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
+        $Columnas[1]="Hora";                $Valores[1]=$hora;
+        $Columnas[2]="Observaciones";       $Valores[2]=$Concepto;
+        $Columnas[3]="idComprobanteIngreso";$Valores[3]=$idComprobante;
+        $Columnas[4]="idUsuario";           $Valores[4]=$this->idUser;
+        $Columnas[5]="Monto";               $Valores[5]=$Monto;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+        $idAnulacion=$this->ObtenerMAX($tab,"ID", 1, "");
+        $DocumentoInterno="ComprobanteIngreso";
+        $this->AnularMovimientoLibroDiario($DocumentoInterno, $idComprobante, "");
+        return $idAnulacion;
+    }
+    
 //////////////////////////////Fin	
 }
 	

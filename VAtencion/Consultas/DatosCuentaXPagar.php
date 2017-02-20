@@ -77,7 +77,7 @@ if($key<>""){
         $css->CerrarTabla();
         $css->CrearTabla(); 
         ///Mostramos abonos
-        $ConsultaAbonos=$obVenta->ConsultarTabla("titulos_abonos"," WHERE idVenta=$DatosCuentasXCobrar[idDocumento] ORDER BY ID DESC");
+        $ConsultaAbonos=$obVenta->ConsultarTabla("titulos_abonos"," WHERE idVenta=$DatosCuentasXCobrar[idDocumento] AND Estado<>'ANULADO' ORDER BY ID DESC");
         $css->CrearNotificacionAzul("Historial de Abonos de este Titulo", 14);
         $css->FilaTabla(16);
             $css->ColTabla('<strong>ID</strong>', 1);
