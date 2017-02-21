@@ -7173,6 +7173,46 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
         return($Promedio);
     }    
+    
+    //Crear un egreso desde la tabla egresos pre
+    public function EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,$Vector){
+        
+        $sql="SELECT ep.ID as idPre, cp.ID, ep.Abono, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
+        . " INNER JOIN cuentasxpagar cp ON ep.idCuentaXPagar=cp.ID AND ep.idUsuario='$idUser'";
+        $Consulta=$this->Query($sql);
+            
+        while($DatosEgresos=$this->FetchArray($Datos)){
+            
+       
+        $NumRegistros=21;
+        $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
+        $Columnas[1]="Beneficiario";		$Valores[1]=$RazonSocial;
+        $Columnas[2]="NIT";				$Valores[2]=$NIT;
+        $Columnas[3]="Concepto";			$Valores[3]=$Concepto;
+        $Columnas[4]="Valor";			$Valores[4]=$Valor;
+        $Columnas[5]="Usuario_idUsuario";           $Valores[5]=$idUser;
+        $Columnas[6]="PagoProg";			$Valores[6]=$TipoPago;
+        $Columnas[7]="FechaPagoPro";		$Valores[7]=$FechaProgramada;
+        $Columnas[8]="TipoEgreso";			$Valores[8]=$DatosTipoEgreso["Nombre"];
+        $Columnas[9]="Direccion";			$Valores[9]=$DatosProveedor["Direccion"];
+        $Columnas[10]="Ciudad";			$Valores[10]=$DatosProveedor["Ciudad"];
+        $Columnas[11]="Subtotal";			$Valores[11]=$Subtotal;
+        $Columnas[12]="IVA";			$Valores[12]=$IVA;
+        $Columnas[13]="NumFactura";			$Valores[13]=$NumFact;
+        $Columnas[14]="idProveedor";		$Valores[14]=$idProveedor;
+        $Columnas[15]="Cuenta";			$Valores[15]=$CuentaOrigen;
+        $Columnas[16]="CentroCostos";		$Valores[16]=$idCentroCostos;	
+        $Columnas[17]="EmpresaPro";                 $Valores[17]= $idEmpresa;	
+        $Columnas[18]="Soporte";                    $Valores[18]= $destino;
+        $Columnas[19]="Retenciones";                $Valores[19]= $Retenciones;
+        $Columnas[20]="idSucursal";                 $Valores[20]= $idSucursal;
+
+        $this->InsertarRegistro("egresos",$NumRegistros,$Columnas,$Valores);
+
+        $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, ""); 
+       $this->IngreseMovimientoLibroDiario($Fecha, $TipoDocInterno, $DocumentoInterno, $DocumentoExterno, $idTercero, $CuentaPUC, $NombreCuenta, $Detalle, $TipoMovimiento, $Valor, $Concepto, $idCentroCostos, $idSede, "");
+         }
+    }
 //////////////////////////////Fin	
 }
 	

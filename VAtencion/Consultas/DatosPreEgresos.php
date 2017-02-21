@@ -48,6 +48,39 @@ if($obVenta->NumRows($Consulta)){
         $css->CierraFilaTabla();
     }
     $css->CerrarTabla();
+    $css->CrearForm2("FrmGuardar", $myPage, "post", "_self");
+    $css->CrearTabla();    
+    $css->FilaTabla(16);
+    $css->ColTabla("<strong>Fecha</strong>", 1);
+    $css->ColTabla("<strong>Total</strong>", 1);
+    $css->ColTabla("<strong>Cuenta Origen</strong>", 6);
+    $css->ColTabla("<strong>Generar</strong>", 2);
+    $css->CierraFilaTabla();
+    $css->FilaTabla(16);
+    print("<td >");
+    $css->CrearInputFecha("", "TxtFecha", date("Y-m-d"), 100, 30, "");
+    print("</td>");
+    print("<td>");
+    $TotalAbono=$obVenta->Sume("egresos_pre", "Abono", " WHERE idUsuario='$idUser'");
+    print(number_format($TotalAbono));
+    print("</td>");
+    print("<td colspan='6'>");
+    $VarSelect["Ancho"]=300;
+    $VarSelect["PlaceHolder"]="Cuenta Origen";
+    $VarSelect["Required"]=1;
+    $css->CrearSelectChosen("CmbCuentaOrigen", $VarSelect);
+    $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
+        while($DatosCuentas=$obVenta->FetchArray($Consulta)){
+            $css->CrearOptionSelect($DatosCuentas["CuentaPUC"], $DatosCuentas["Nombre"]." (".$DatosCuentas["CuentaPUC"].")", 0);
+        }
+    print("</td>");
+    print("<td colspan='2'>");
+    $css->CrearBotonConfirmado("BtnGuardar", "Guardar");
+    print("</td>");
+    
+    $css->CierraFilaTabla(); 
+    $css->CerrarTabla();
+    $css->CerrarForm();  
 
 }
 ?>

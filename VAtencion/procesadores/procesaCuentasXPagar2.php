@@ -35,6 +35,14 @@ if(isset($_REQUEST['del'])){
     $idDel=$obVenta->normalizar($_REQUEST['del']);
     $obVenta->BorraReg("egresos_pre", "ID", $idDel);
 }
+
+// se elimina un abono
+if(isset($_REQUEST['BtnGuardar'])){
+    $Fecha=$obVenta->normalizar($_REQUEST['TxtFecha']);
+    $CuentaOrigen=$obVenta->normalizar($_REQUEST['CmbCuentaOrigen']);
+    $obVenta->EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,"");
+    //$obVenta->BorraReg("egresos_pre", "idUsuario", $idUser);
+}
 ///////////////Fin
 
 ?>
