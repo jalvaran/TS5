@@ -6856,6 +6856,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     
     public function RegistrarGasto($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$idSucursal,$VectorEgreso) {
         $TotalSanciones=$Sanciones+$Intereses;
+        if($Impuestos<>""){
+            $Subtotal=$Impuestos;
+        }
         $Retenciones=$ReteFuente+$ReteIVA+$ReteICA;
         $DatosProveedor=$this->DevuelveValores("proveedores","idProveedores",$idProveedor);
         $CentroCostos=$this->DevuelveValores("centrocosto","ID",$CentroCostos);
