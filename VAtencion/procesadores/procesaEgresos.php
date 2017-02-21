@@ -41,7 +41,7 @@
                 //echo "<script>alert ('entra')</script>";
 		if(!empty($_FILES['foto']['name'])){
                     //echo "<script>alert ('entra foto')</script>";
-			$carpeta="SoportesEgresos/";
+			$carpeta="../SoportesEgresos/";
 			opendir($carpeta);
                         $Name=str_replace(' ','_',$_FILES['foto']['name']);  
 			$destino=$carpeta.$Name;
@@ -100,7 +100,7 @@
                     $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idComprobante";
                 }else{
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$idComprobante";
-                    $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $NIT_Proveedor,$idSucursal,$CentroCostos, "");
+                    $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $NIT_Proveedor,$idSucursal,$CentroCostos,$Concepto,$destino, "");
                 }
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Egreso registrado Correctamente <a href='$RutaPrintComp' target='_blank'>Imprimir Comprobante</a>",16);

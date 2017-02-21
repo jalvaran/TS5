@@ -40,8 +40,12 @@ if(isset($_REQUEST['del'])){
 if(isset($_REQUEST['BtnGuardar'])){
     $Fecha=$obVenta->normalizar($_REQUEST['TxtFecha']);
     $CuentaOrigen=$obVenta->normalizar($_REQUEST['CmbCuentaOrigen']);
-    $obVenta->EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,"");
-    //$obVenta->BorraReg("egresos_pre", "idUsuario", $idUser);
+    $Egresos=$obVenta->EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,"");
+    $obVenta->BorraReg("egresos_pre", "idUsuario", $idUser);
+    foreach ($Egresos as $idEgreso) {
+        $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idEgreso";
+        $css->CrearNotificacionVerde("Se ha creado el egreso No. $idEgreso <a href='$RutaPrintComp' target='_blank'>Imprimir</a>",16);
+    }
 }
 ///////////////Fin
 
