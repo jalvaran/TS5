@@ -41,11 +41,12 @@
                 //echo "<script>alert ('entra')</script>";
 		if(!empty($_FILES['foto']['name'])){
                     //echo "<script>alert ('entra foto')</script>";
-			$carpeta="../SoportesEgresos/";
-			opendir($carpeta);
+			$Atras="../";
+                        $carpeta="SoportesEgresos/";
+			opendir($Atras.$carpeta);
                         $Name=str_replace(' ','_',$_FILES['foto']['name']);  
 			$destino=$carpeta.$Name;
-			move_uploaded_file($_FILES['foto']['tmp_name'],$destino);
+			move_uploaded_file($_FILES['foto']['tmp_name'],$Atras.$destino);
 		}
              	$obVenta=new ProcesoVenta($idUser);
 		$CuentaOrigen=$obVenta->normalizar($_REQUEST["CmbCuentaOrigen"]);

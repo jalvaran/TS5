@@ -279,9 +279,9 @@ function CalculeTotal() {
 	var IVA;
 	var Total;
 	
-	Subtotal = parseInt(document.getElementById("TxtSubtotal").value);
-	IVA = parseInt(document.getElementById("TxtIVA").value);
-	Total= parseInt(Subtotal) + parseInt(IVA);
+	Subtotal = parseFloat(document.getElementById("TxtSubtotal").value);
+	IVA = parseFloat(document.getElementById("TxtIVA").value);
+	Total= parseFloat(Subtotal) + parseFloat(IVA);
 	
 	document.getElementById("TxtTotal").value=Total;
 

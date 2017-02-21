@@ -105,25 +105,25 @@ public function CreeFiltro($Vector){
                     
                     switch ($_REQUEST[$IndexCondicion]){
                 case 1:
-                    $FiltroVinculo="='$Valor'";
+                    $FiltroVinculo=" = '$Valor'";
                     break;
                 case 2:
                     $FiltroVinculo=" LIKE '%$Valor%'";
                     break;
                 case 3:
-                    $FiltroVinculo=">'$Valor'";
+                    $FiltroVinculo=" > '$Valor'";
                     break;
                 case 4:
-                    $FiltroVinculo="<'$Valor'";
+                    $FiltroVinculo=" < '$Valor'";
                     break;
                 case 5:
-                    $FiltroVinculo=">='$Valor'";
+                    $FiltroVinculo=" >= '$Valor'";
                     break;
                 case 6:
-                    $FiltroVinculo="<='$Valor'";
+                    $FiltroVinculo=" <= '$Valor'";
                     break;
                 case 7:
-                    $FiltroVinculo="<>'$Valor'";
+                    $FiltroVinculo=" <> '$Valor'";
                     break;
                 case 8:
                     $FiltroVinculo=" LIKE '$Valor%'";
@@ -144,25 +144,25 @@ public function CreeFiltro($Vector){
                 $Filtro.=$NombreCol;
                 switch ($_REQUEST[$IndexCondicion]){
                     case 1:
-                        $Filtro.="='$Valor'";
+                        $Filtro.=" = '$Valor'";
                         break;
                     case 2:
                         $Filtro.=" LIKE '%$Valor%'";
                         break;
                     case 3:
-                        $Filtro.=">'$Valor'";
+                        $Filtro.=" > '$Valor'";
                         break;
                     case 4:
-                        $Filtro.="<'$Valor'";
+                        $Filtro.=" < '$Valor'";
                         break;
                     case 5:
-                        $Filtro.=">='$Valor'";
+                        $Filtro.=" >= '$Valor'";
                         break;
                     case 6:
-                        $Filtro.="<='$Valor'";
+                        $Filtro.=" <= '$Valor'";
                         break;
                     case 7:
-                        $Filtro.="<>'$Valor'";
+                        $Filtro.=" <> '$Valor'";
                         break;
                                     case 8:
                         $Filtro.=" LIKE '$Valor%'";

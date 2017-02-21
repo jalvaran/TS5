@@ -17,14 +17,19 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
 include_once("Configuraciones/cuentasxpagar.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-
+$Tabla=$Vector["Tabla"];
 $statement = $obTabla->CreeFiltro($Vector);
-//print($statement);
+if($statement==" $Tabla"){
+    $statement.=" WHERE Saldo > 0 ";
+    
+}else{
+    $statement.=" AND Saldo > 0 ";
+}
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 
 $obTabla->VerifiqueExport($Vector);
-
+//print("<pre>$statement</pre>");
 include_once("css_construct.php");
 print("<html>");
 print("<head>");

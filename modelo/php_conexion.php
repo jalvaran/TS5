@@ -1382,7 +1382,7 @@ public function CalculePesoRemision($idCotizacion)
 
     public function normalizar($string){		
         $str=str_ireplace("'", "", $string);
-        
+        //$str=$string;
         $str=str_ireplace("CREATE", "ISQL", $str);
         $str=str_ireplace("DROP", "ISQL", $str);
         $str=str_ireplace("ALTER", "ISQL", $str);
@@ -6855,7 +6855,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     }
     
     public function RegistrarGasto($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$idSucursal,$VectorEgreso) {
-        
+        $TotalSanciones=$Sanciones+$Intereses;
         $Retenciones=$ReteFuente+$ReteIVA+$ReteICA;
         $DatosProveedor=$this->DevuelveValores("proveedores","idProveedores",$idProveedor);
         $CentroCostos=$this->DevuelveValores("centrocosto","ID",$CentroCostos);
@@ -7029,7 +7029,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                 $Valores[19]=0; 						
                 $Valores[20]=$TotalSanciones;  											//Credito se escribe el total de la venta menos los impuestos
 
-                $tabla->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }
 
         if(!empty($ReteFuente)){   //Si hay retencion en la fuente se registra
