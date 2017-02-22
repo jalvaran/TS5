@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>SoftConTech</title>
+<title>TS5</title>
 <link href="images/technoIco.ico" rel="shortcut icon" type="image/x-icon">
 <style type="text/css">
 html, body

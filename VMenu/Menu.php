@@ -5,7 +5,7 @@ include_once("../sesiones/php_control.php");
 <!DOCTYPE html>
 <html lang="es">
      <head>
-	 <title>SoftContech</title>
+	 <title>TS5</title>
      <meta charset="utf-8">
 	 <?php
 	 

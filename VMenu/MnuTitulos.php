@@ -6,7 +6,7 @@ include_once("../sesiones/php_control.php");
 <script src="js/funciones.js"></script>
 <html lang="es">
      <head>
-	 <title>SoftContech</title>
+	 <title>TS5</title>
      <meta charset="utf-8">
 	 
 	 

@@ -73,7 +73,7 @@ class CssIni{
 		<meta charset='utf-8'>
 		<title>$Titulo</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
-		<meta name='description' content='Software de Techno Soluciones Ordenes Activos'>
+		<meta name='description' content='Software de Techno Soluciones'>
 		<meta name='author' content='Techno Soluciones SAS'>
 
 		<!-- Le styles -->
