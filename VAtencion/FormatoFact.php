@@ -168,7 +168,7 @@ if(mysql_num_rows($reg)){//Si existen resultados
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="CompraMercancias.php">Volver</a>
+          <a class="brand" href="Egresos2.php">Volver</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               

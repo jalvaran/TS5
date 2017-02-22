@@ -63,6 +63,7 @@
                 $CentroCostos=$obVenta->normalizar($_REQUEST["CmbCentroCosto"]);
                 $idSucursal=$obVenta->normalizar($_REQUEST['CmbSucursal']);
                 $TipoPago=$obVenta->normalizar($_REQUEST["TipoPago"]);
+                $NumFact=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
                 $DatosProveedores=$obVenta->DevuelveValores("proveedores", "idProveedores", $idProveedor);
                 $NIT_Proveedor=$DatosProveedores["Num_Identificacion"];
                 $CuentaPUCIVA=2408;
@@ -91,18 +92,41 @@
 			
 		}
                 
-                //$Subtotal=$Subtotal;   //Se le restan las retenciones
-		
-		$NumFact=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);		
 		//////registramos en egresos
 		$idComprobante=$obVenta->RegistrarGasto($fecha,$FechaProgramada,$idUser,$CentroCostos,$TipoPago,$CuentaOrigen,$CuentaDestino,$CuentaPUCIVA,$idProveedor, $Concepto,$NumFact,$destino,$TipoEgreso,$Subtotal,$IVA,$Total,$Sanciones,$Intereses,$Impuestos,$ReteFuente,$ReteIVA,$ReteICA,$idSucursal,"");
 		
 		if($TipoPago=="Contado"){
                     $RutaPrintComp="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$idComprobante";
+                    $DocumentoGenerado="CompEgreso";
                 }else{
                     $RutaPrintComp="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$idComprobante";
                     $obVenta->RegistrarCuentaXPagar($fecha, $NumFact, $FechaProgramada, "notascontables", $idComprobante, $Subtotal, $IVA, $Total,$ReteFuente,$ReteIVA,$ReteICA, $NIT_Proveedor,$idSucursal,$CentroCostos,$Concepto,$destino, "");
+                    $DocumentoGenerado="NotaContable";
                 }
+                
+                ////////////////////////Ingresamos a Compras Activas para Alimentar el inventario
+		
+		if($TipoEgreso==50){
+                    
+                    $NumRegistros=12;
+                    $tab="compras_activas";
+
+                    $Columnas[0]="idProveedor";			$Valores[0]=$idProveedor;
+                    $Columnas[1]="Usuarios_idUsuarios";		$Valores[1]=$idUsuario;
+                    $Columnas[2]="Factura";				$Valores[2]=$NumFact;
+                    $Columnas[3]="FormaPago";			$Valores[3]=$TipoPago;
+                    $Columnas[4]="NombrePro";			$Valores[4]=$DatosProveedores["RazonSocial"];
+                    $Columnas[5]="Fecha";				$Valores[5]=$fecha;
+                    $Columnas[6]="FechaProg";			$Valores[6]=$FechaProgramada;
+                    $Columnas[7]="CuentaOrigen";			$Valores[7]=$CuentaOrigen;
+                    $Columnas[8]="Tipo";				$Valores[8]="FACTURA";
+                    $Columnas[9]="TotalCompra";			$Valores[9]=$Total;
+                    $Columnas[10]="DocumentoGenerado";		$Valores[10]=$DocumentoGenerado;
+                    $Columnas[11]="NumComprobante";		$Valores[11]=$idComprobante;
+
+                    $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+			
+		}
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Egreso registrado Correctamente <a href='$RutaPrintComp' target='_blank'>Imprimir Comprobante</a>",16);
                 $css->CerrarTabla();
@@ -149,7 +173,7 @@
 			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
 			
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-			
+			$obVenta->InsertarRegistro("clientes",$NumRegistros,$Columnas,$Valores);
 			print("<script language='JavaScript'>alert('Se ha creado el Proveedor $_REQUEST[TxtRazonSocial]')</script>");
 			
 		}else{

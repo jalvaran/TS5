@@ -327,6 +327,23 @@ $css->CrearDiv("TipoEgresos", "container", "center", 1, 1);
     
     $css->CerrarDiv();
     $css->CerrarDiv();
+    $css->CrearDiv("DivAlimentaInventarios", "container", "center", 1, 1);
+    //////Seleccion para alimentar inventarios
+    $css->CrearForm2("FrmComprasActivas",$myPage,"post","_self");
+    $css->CrearSelect("CbComprasActivas", "EnviaForm('FrmComprasActivas')");
+
+    $css->CrearOptionSelect("","Seleccionar Compra para alimentar inventarios",0);
+
+    $Consulta = $obVenta->ConsultarTabla("compras_activas","");
+    while($CentroCosto=$obVenta->FetchArray($Consulta)){
+                    $css->CrearOptionSelect($CentroCosto['idComprasActivas'],$CentroCosto['Tipo'].' '.$CentroCosto['Factura'].' '.$CentroCosto['NombrePro'].' POR: '.$CentroCosto['TotalCompra'],0);							
+    }
+    $css->CerrarSelect();
+    $css->CerrarForm();
+
+
+    include_once("FormatoFact.php");
+    $css->CerrarDiv();
     $css->AgregaJS();
     $css->AnchoElemento("CmbCodMunicipio_chosen", 200);
     $css->Footer();
