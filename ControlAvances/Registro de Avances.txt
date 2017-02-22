@@ -132,3 +132,18 @@ CONCEPTOS
     *Se Agrega las Columnas idUsuario a LibroDiario
 
 Cambiar a double debito credito y neto en libro diario
+
+
+cambiar Items en Egresos por idSucursal
+cierres_contables
+
+comprobantes_ingreso_anulaciones
+agregar estado a tabla titulos_abonos
+cuentasxpagar
+cuentasxpagar_abonos
+egresos_pre
+se agregan registros a egresos_tipo
+se agregan columnas DocumentoGenerado y NumComprobante a compras_activas
+quitar tildes en cuentas y ?
+eliminar las tildes de la tabla cuentas
+UPDATE `cuentas` SET `Nombre`=replace(`Nombre`,'á','a'),`Nombre`=replace(`Nombre`,'é','e'),`Nombre`=replace(`Nombre`,'í','i'),`Nombre`=replace(`Nombre`,'ó','o'),`Nombre`=replace(`Nombre`,'ú','u')

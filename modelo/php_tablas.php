@@ -3236,7 +3236,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         
 }
 //encabezado de un  formato de calidad en un pdf
-    public function PDF_Encabezado($idEmpresa,$idFormatoCalidad,$VectorEncabezado,$NumeracionDocumento="") {
+    public function PDF_Encabezado($Fecha,$idEmpresa,$idFormatoCalidad,$VectorEncabezado,$NumeracionDocumento="") {
         $DatosEmpresaPro=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresa);
         $DatosFormatoCalidad=$this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
         
@@ -3263,7 +3263,7 @@ $tbl = <<<EOD
     </tr>
     <tr>
        <td style="text-align: center;" >Fecha<br></td>
-       <td> $DatosFormatoCalidad[Fecha]</td> 
+       <td> $Fecha</td> 
     </tr>
 </table>
 EOD;
@@ -3608,8 +3608,9 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         $htmlFirmas.='<td height="60"><strong>Gerente</strong></td><td height="60"><strong>Contador</strong></td></tr>'; 
         $htmlFirmas.='</table>';      
         $this->PDF_Ini("Estados Financieros", 8, "");
-        
-        $this->PDF_Encabezado($EmpresaPro, 15, "");
+        //print($htmlBG);
+        //print($htmlER);
+        $this->PDF_Encabezado($FechaCorte,$EmpresaPro, 15, "");
         $this->PDF_Write("<br><br>".$htmlBG);
         $this->PDF_Write($htmlFirmas);
         $this->PDF_Add();
@@ -3645,7 +3646,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
 		 
 		 
   Entrega: _____________________________          Recibe:_____________________________</pre>";
-        $this->PDF_Encabezado(1, 22, "");
+        $this->PDF_Encabezado($DatosTraslado["Fecha"],1, 22, "");
         $this->PDF_Write("<br><br>".$html);
         $this->PDF_Output("TrasladoTitulo_".$DatosTraslado["Mayor1"].'_'.$DatosTraslado["Fecha"]);
     }
@@ -4132,10 +4133,11 @@ EOD;
     public function PDF_Cotizacion($idCotizacion,$Vector) {
         //$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'ISO 8859-1', false);
         //$pdf->GetY();
+        $DatosCotizacion= $this->obCon->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
         $NumeracionDocumento="COTIZACION No. $idCotizacion";
         $this->PDF_Ini("Cotizacion_$idCotizacion", 8, "");
         
-        $this->PDF_Encabezado(1, 1, "",$NumeracionDocumento);
+        $this->PDF_Encabezado($DatosCotizacion["Fecha"],1, 1, "",$NumeracionDocumento);
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
         $Position=$this->PDF->SetY(67);
@@ -4382,7 +4384,7 @@ EOD;
         
         $this->PDF_Ini("Factura_$CodigoFactura", 8, "");
         $idFormato=2;
-        $this->PDF_Encabezado(1, $idFormato, "",$Documento);
+        $this->PDF_Encabezado($DatosFactura["Fecha"],1, $idFormato, "",$Documento);
         $DatosEmpresaPro=$this->PDF_Encabezado_Facturas($idFactura);
         
         $html= $this->HTML_Items_Factura($idFactura);
