@@ -12,6 +12,9 @@
     $IVA=$obVenta->SumeColumna("preventa","Impuestos", "VestasActivas_idVestasActivas",$idPreventa);
     $DatosPreventa=$obVenta->DevuelveValores("vestasactivas","idVestasActivas", $idPreventa);
     $SaldoFavor=$DatosPreventa["SaldoFavor"];
+    $sql="SELECT Devuelve FROM facturas WHERE Usuarios_idUsuarios='$idUser' ORDER BY idFacturas DESC LIMIT 1";
+    $consulta=$obVenta->Query($sql);
+    $DatosDevuelta=$obVenta->FetchArray($consulta);
     if($SaldoFavor>0)
             $SaldoFavor=$SaldoFavor;
     else
@@ -27,7 +30,8 @@
     $css->ColTablaInputText("TxtGranTotalH","hidden",$GranTotal,"","","","","",150,30,0,0);
     $css->CrearTabla();
     $css->FilaTabla(14);
-    $css->ColTabla("Esta Venta:",3);
+    $css->ColTabla("Esta Venta:",2);
+    $css->ColTabla("<h3>Ultima Devuelta : ". number_format($DatosDevuelta["Devuelve"])."</h3>",1);
     $css->CierraFilaTabla();
     $css->FilaTabla(18);
     $css->ColTabla("SUBTOTAL:",1);

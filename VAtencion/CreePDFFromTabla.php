@@ -4,7 +4,7 @@ include_once("../sesiones/php_control.php");
 include_once("procesadores/ExportarToPDF.Conf.php");
 $obVenta = new ProcesoVenta($idUser);
 $obTabla = new Tabla($db);
-
+$Fecha="Y-m-d";
 if(isset($_REQUEST["BtnVerPDF"])){
     $statement=  base64_decode($_REQUEST["TxtL"]);
     $Tabla=base64_decode($_REQUEST["TxtT"]);
@@ -74,7 +74,7 @@ Por medio del presente documento se realiza la entrega de los títulos que se re
     $html.="</table>";
     //print($html);
     $obTabla->PDF_Ini("Export",7,"");
-    $obTabla->PDF_Encabezado(1,21,"");
+    $obTabla->PDF_Encabezado($Fecha,1,21,"");
     $obTabla->PDF_Write("<br><br>");
     if($TituloActa==""){
         $obTabla->PDF_Write("<div><h2>Datos de $Tabla</h2></div>");

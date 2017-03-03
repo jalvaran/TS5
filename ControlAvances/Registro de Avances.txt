@@ -136,7 +136,6 @@ Cambiar a double debito credito y neto en libro diario
 
 cambiar Items en Egresos por idSucursal
 cierres_contables
-
 comprobantes_ingreso_anulaciones
 agregar estado a tabla titulos_abonos
 cuentasxpagar

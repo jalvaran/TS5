@@ -3044,8 +3044,8 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[4]="Usuario";               $Valores[4]=$idUser;
         $Columnas[5]="idCaja";            $Valores[5]=$idCaja;
         $Columnas[6]="TotalVentas";           $Valores[6]=$TotalVentasContado+$TotalVentasCredito-$TotalDevoluciones;
-        $Columnas[7]="TotalVentasContado";                  $Valores[7]=$TotalVentasContado;
-        $Columnas[8]="TotalVentasCredito";               $Valores[8]=$TotalVentasCredito;
+        $Columnas[7]="TotalVentasContado";    $Valores[7]=$TotalVentasContado;
+        $Columnas[8]="TotalVentasCredito";    $Valores[8]=$TotalVentasCredito;
         $Columnas[9]="TotalAbonos";                $Valores[9]=$TotalAbonos;
         $Columnas[10]="TotalDevoluciones";           $Valores[10]=$TotalDevoluciones;
         $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos;

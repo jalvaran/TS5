@@ -14,7 +14,7 @@ if(isset($_REQUEST['idCuentaXPagar'])){
         $tab="egresos_pre";
         $NumRegistros=3;
         $Columnas[0]="idCuentaXPagar";      $Valores[0]=$idCuentaXPagar;
-        $Columnas[1]="Abono";               $Valores[1]=$DatosCuentaXPagar["Saldo"];
+        $Columnas[1]="Abono";               $Valores[1]=0;
         $Columnas[2]="idUsuario";           $Valores[2]=$idUser;
 
         $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);

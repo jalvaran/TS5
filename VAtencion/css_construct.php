@@ -506,8 +506,8 @@ class CssIni{
 		$this->CrearForm2($FormName,$Action,$Method,$Target);
 		$this->CrearInputText($TxtHide,"hidden","",$ValueHide,"","","","","","","","");
 		$this->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-                
-		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
+                $this->CrearInputNumber($TxtName, $TxtType, $TxtLabel, $TxtValue, $TxtPlaceh, $TxtColor, "", "", $TxtAncho, $TxtAlto, $ReadOnly, $Required, "", "", "any");
+		//$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
 		
                 print("<input type='submit' id='BtnCantidad$TxtName' name='BtnEditarCantidad' value='E' style='width: 30px;height: 30px;' $TxtEvento='$TxtFuncion' >");
 		$this->CerrarForm();
@@ -526,7 +526,7 @@ class CssIni{
 		$this->CrearInputText($TxtHide,"hidden","",$ValueHide,"","","","","","","","");
                 $this->CrearInputText($TxtPrecioMayor,"hidden","",$ValueMayor,"","","","","","","","");
 		$this->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-                
+                //$this->CrearInputNumber($TxtName, $TxtType, $TxtLabel, $TxtValue, $TxtPlaceh, $TxtColor, "", "", $TxtAncho, $TxtAlto, $ReadOnly, $Required, "", "", "any")
 		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
                 
 		//print("<input type='submit' id='BtnEditar$TxtName' name='BtnEditar' value='E' style='width: 30px;height: 30px;' onClick='$TxtFuncion'>");

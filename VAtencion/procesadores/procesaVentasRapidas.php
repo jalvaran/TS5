@@ -53,13 +53,16 @@
                 $TablaItem="productosventa";
 		$DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
 		//$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
-		
+		$fecha=date("Y-m-d");
+		$Cantidad=1;
 		if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
-			$fecha=date("Y-m-d");
-			$Cantidad=1;
+			
 			$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
 		}else{
-			
+                        $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);
+                        if($DatosProducto["idProductosVenta"]){
+                            $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
+                        }
 			print('<script language="JavaScript">alert("Este producto no esta en la base de datos por favor no lo entregue")</script>');
 			
 		}
@@ -483,7 +486,7 @@
 		
 		$obVenta=new ProcesoVenta($idUser);
                 $Clave=$obVenta->normalizar($_POST['TxtAutorizacion']);
-                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' ";
+                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND Role='ADMINISTRADOR'";
                 $Datos=$obVenta->Query($sql);
                 $DatosAutorizacion=$obVenta->FetchArray($Datos);
                 
