@@ -61,7 +61,7 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 if(isset($_POST["BtnAplicar"])){
-$sql="UPDATE ori_facturas_items SET TotalItem = ROUND((TotalItem * $Porcentaje) , -2), SubtotalItem=TotalItem/1.16, IVAItem=SubtotalItem*0.16 "
+$sql="UPDATE ori_facturas_items SET TotalItem = ROUND((TotalItem * $Porcentaje) , -2), SubtotalItem=TotalItem/1.19, IVAItem=SubtotalItem*0.19 "
         . "  WHERE $CondicionFecha1";
 $obVenta->Query($sql);
 
@@ -73,7 +73,7 @@ $obVenta->Query($sql);
 }
 
 if(isset($_POST["BtnVistaPrevia"])){
-$sql="SELECT Departamento as idDepartamento, ROUND((SUM(TotalItem)*$Porcentaje),-2) as Total, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.16) as Subtotal, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.16)*0.16 as IVA,  SUM(Cantidad) as Items"
+$sql="SELECT Departamento as idDepartamento, ROUND((SUM(TotalItem)*$Porcentaje),-2) as Total, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.19) as Subtotal, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.19)*0.19 as IVA,  SUM(Cantidad) as Items"
         . "  FROM $CondicionItems GROUP BY Departamento";
 
 
@@ -244,7 +244,7 @@ EOD;
 
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
-$TotalVentasIVA16=  number_format($BaseIVA-$TotalExluidos);
+$TotalVentasIVA19=  number_format($BaseIVA-$TotalExluidos);
 $TotalExluidos=number_format($TotalExluidos);
 $tbl = <<<EOD
 
@@ -257,15 +257,15 @@ $tbl = <<<EOD
  </tr>
  
  <tr>
-  <td>Valor IVA 16% </td>
+  <td>Valor IVA 19% </td>
   <td>$TotalIVA</td>
   
  
  </tr>
         
   <tr>
-  <td>Base 16% </td>
-  <td>$TotalVentasIVA16</td>
+  <td>Base 19% </td>
+  <td>$TotalVentasIVA19</td>
   
  
  </tr>
@@ -313,7 +313,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 if(isset($_POST["BtnAplicar"])){
     
     $PromedioSubtotal=round($BaseIVA/$TotalFacts);
-    $PromedioIVA=$PromedioSubtotal*0.16;
+    $PromedioIVA=$PromedioSubtotal*0.19;
     $PromedioTotal=$PromedioSubtotal+$PromedioIVA;
 
     $sql="UPDATE ori_facturas SET Total='$PromedioTotal',Subtotal='$PromedioSubtotal', IVA='$PromedioIVA' WHERE $CondicionFecha2";

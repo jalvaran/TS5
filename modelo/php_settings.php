@@ -6,7 +6,7 @@
 $host="localhost";
 $user="root";
 $pw="pirlo1985";
-$db="softcontech_v5";
+$db="puntomoda";
 $con = mysql_connect($host,$user,$pw);
 mysql_select_db($db,$con) or die(mysql_error());
 date_default_timezone_set("America/Bogota");

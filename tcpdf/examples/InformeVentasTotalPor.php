@@ -47,8 +47,10 @@ $tbl = <<<EOD
   <tr> 
     <th><h3>Departamento</h3></th>
 	<th><h3>Nombre</h3></th>
+        <th><h3>Impuesto</h3></th>
 	<th><h3>Total Items</h3></th>
     <th><h3>SubTotal</h3></th>
+        
 	<th><h3>IVA</h3></th>
 	<th><h3>Total</h3></th>
   </tr >
@@ -73,13 +75,14 @@ $obVenta->Query($sql);
 }
 
 if(isset($_POST["BtnVistaPrevia"])){
-$sql="SELECT Departamento as idDepartamento, ROUND((SUM(TotalItem)*$Porcentaje),-2) as Total, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.19) as Subtotal, (ROUND((SUM(TotalItem)*$Porcentaje),-2)/1.19)*0.19 as IVA,  SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems GROUP BY Departamento";
+    
+$sql="SELECT Departamento as idDepartamento, `PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
+        . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
 
 
 }else{
-   $sql="SELECT Departamento as idDepartamento, SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems GROUP BY Departamento"; 
+   $sql="SELECT Departamento as idDepartamento, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
+        . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
 }
 
 
@@ -90,38 +93,57 @@ $TotalIVA=0;
 $TotalVentas=0;
 $TotalItems=0;
 $flagQuery=0;   //para indicar si hay resultados
-$i=0;
+$i=-1;
 $TotalExluidos=0;
+$DatosIVA["0%"]["Valor"]=0;
+$DatosIVA["16%"]["Valor"]=0;
+$DatosIVA["5%"]["Valor"]=0;
+$DatosIVA["8%"]["Valor"]=0;
+$DatosIVA["19%"]["Valor"]=0;
+$DatosIVA["0%"]["Base"]=0;
+$DatosIVA["16%"]["Base"]=0;
+$DatosIVA["5%"]["Base"]=0;
+$DatosIVA["8%"]["Base"]=0;
+$DatosIVA["19%"]["Base"]=0;
 while($DatosVentas=$obVenta->FetchArray($Datos)){
-        $flagQuery=1;	
+    $i++;
+        $flagQuery=1;
+        $TipoIva=$DatosVentas["PorcentajeIVA"];
+        if($DatosVentas["idDepartamento"]==7){
+            $PIVA=0;
+            $TipoIva="0%";
+        }else{
+            $PIVA= str_replace("%", "", $TipoIva);
+            $PIVA=$PIVA/100;
+            
+        }
+        
         $SubtotalUser=number_format($DatosVentas["Subtotal"]);
-        $IVA=number_format($DatosVentas["IVA"]);
-        $Total=number_format($DatosVentas["Total"]);
+        $IVA=$DatosVentas["Subtotal"]*$PIVA;
+        $Total=$DatosVentas["Subtotal"]+$IVA;
         $Items=number_format($DatosVentas["Items"]);
         $DatosDepartamento=$obVenta->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVentas["idDepartamento"]);
         $NombreDep=$DatosDepartamento["Nombre"];
-        if($NombreDep=="EXCLUIDOS"){
-            $SubtotalUser=$Total;
-            $TotalExluidos=$TotalExluidos+$DatosVentas["Total"];
-            $IVA=0;
-            $DatosVentas["Subtotal"]=$DatosVentas["Total"];
-            $DatosVentas["IVA"]=0;
-        }
+        $DatosIVAP[$TipoIva]=$TipoIva;
+        $DatosIVA[$TipoIva]["Valor"]=$DatosIVA[$TipoIva]["Valor"]+$IVA;
+        $DatosIVA[$TipoIva]["Base"]=$DatosIVA[$TipoIva]["Base"]+$DatosVentas["Subtotal"];
         $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
-        $TotalIVA=$TotalIVA+$DatosVentas["IVA"];
-        $TotalVentas=$TotalVentas+$DatosVentas["Total"];
+        $TotalIVA=$TotalIVA+$IVA;
+        $TotalVentas=$TotalVentas+$Total;
         $TotalItems=$TotalItems+$DatosVentas["Items"];
         $idDepartamentos=$DatosVentas["idDepartamento"];
-
-
+        $IVA= number_format($IVA);
+        $Total= number_format($Total);
         $tbl = <<<EOD
 
 <table border="1" cellpadding="2"  align="center">
  <tr>
   <td>$idDepartamentos</td>
   <td>$NombreDep</td>
+  <td>$TipoIva</td>
   <td>$Items</td>
   <td>$SubtotalUser</td>
+  
   <td>$IVA</td>
   <td>$Total</td>
  </tr>
@@ -147,8 +169,10 @@ $tbl = <<<EOD
  <tr>
   <td align="RIGHT"><h3>SUMATORIA</h3></td>
   <td><h3>NA</h3></td>
+  <td><h3>NA</h3></td>
   <td><h3>$TotalItems</h3></td>
   <td><h3>$Subtotal</h3></td>
+        
   <td><h3>$TotalIVA</h3></td>
   <td><h3>$TotalVentas</h3></td>
  </tr>
@@ -220,60 +244,43 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////INFORMACION DE IVA////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 $tbl = <<<EOD
 
 
 <BR><BR><span style="color:RED;font-family:'Bookman Old Style';font-size:12px;"><strong><em>Informe con los Porcentajes de IVA en ventas:
 </em></strong></span><BR><BR>
-
-
-<table border="1" cellspacing="2" align="center" >
+        <table border="1" cellspacing="2" align="center" >
   <tr> 
 	
-    <th><h3>  </h3></th>
+    <th><h3>Porcentaje</h3></th>
+    <th><h3>Base</h3></th>
     <th><h3>Valor</h3></th>
-    
-	
-  </tr >
+            </tr>
+      </table>  
+EOD;
+$pdf->writeHTML($tbl, false, false, false, false, '');
+foreach($DatosIVAP as $TipoIva){
+    $Base= number_format($DatosIVA[$TipoIva]["Base"]);
+    $Valor=number_format($DatosIVA[$TipoIva]["Valor"]);
+    $tbl = <<<EOD
+
+
+<table border="1" cellspacing="1" cellpadding="2" align="center" >
   
+    <tr>
+        <td>$TipoIva </td>
+        <td>$Base</td>
+        <td>$Valor</td>
+  
+ 
+ </tr>
+	  
 </table>
 
 
 EOD;
-
-$pdf->writeHTML($tbl, false, false, false, false, '');
-
-$TotalVentasIVA19=  number_format($BaseIVA-$TotalExluidos);
-$TotalExluidos=number_format($TotalExluidos);
-$tbl = <<<EOD
-
-<table border="1"  cellpadding="2" align="center">
- <tr>
-  <td>Venta Excluida </td>
-  <td>$TotalExluidos</td>
-  
- 
- </tr>
- 
- <tr>
-  <td>Valor IVA 19% </td>
-  <td>$TotalIVA</td>
-  
- 
- </tr>
-        
-  <tr>
-  <td>Base 19% </td>
-  <td>$TotalVentasIVA19</td>
-  
- 
- </tr>
- </table>
-EOD;
-
-$pdf->writeHTML($tbl, false, false, false, false, '');
-	
+    $pdf->writeHTML($tbl, false, false, false, false, '');
+}
 
 
 
