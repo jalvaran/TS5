@@ -63,7 +63,7 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 if(isset($_POST["BtnAplicar"])){
-$sql="UPDATE ori_facturas_items SET TotalItem = ROUND((TotalItem * $Porcentaje) , -2), SubtotalItem=TotalItem/1.19, IVAItem=SubtotalItem*0.19 "
+$sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , SubtotalItem=SubtotalItem*$Porcentaje, IVAItem=IVAItem*$Porcentaje "
         . "  WHERE $CondicionFecha1";
 $obVenta->Query($sql);
 
@@ -117,17 +117,20 @@ while($DatosVentas=$obVenta->FetchArray($Datos)){
             $PIVA=$PIVA/100;
             
         }
-        
-        $SubtotalUser=number_format($DatosVentas["Subtotal"]);
-        $IVA=$DatosVentas["Subtotal"]*$PIVA;
-        $Total=$DatosVentas["Subtotal"]+$IVA;
+        $Total=round($DatosVentas["Total"],-2);
+        $Subtotal1=$Total/(1+$PIVA);
+        $IVA=$Total-$Subtotal1;
+        $SubtotalUser=number_format($Subtotal1);
+        //$SubtotalUser=number_format($DatosVentas["Subtotal"]);
+        //$IVA=$DatosVentas["Subtotal"]*$PIVA;
+        //$Total=$DatosVentas["Subtotal"]+$IVA;
         $Items=number_format($DatosVentas["Items"]);
         $DatosDepartamento=$obVenta->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVentas["idDepartamento"]);
         $NombreDep=$DatosDepartamento["Nombre"];
         $DatosIVAP[$TipoIva]=$TipoIva;
         $DatosIVA[$TipoIva]["Valor"]=$DatosIVA[$TipoIva]["Valor"]+$IVA;
-        $DatosIVA[$TipoIva]["Base"]=$DatosIVA[$TipoIva]["Base"]+$DatosVentas["Subtotal"];
-        $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
+        $DatosIVA[$TipoIva]["Base"]=$DatosIVA[$TipoIva]["Base"]+$Subtotal1;
+        $Subtotal=$Subtotal+$Subtotal1;
         $TotalIVA=$TotalIVA+$IVA;
         $TotalVentas=$TotalVentas+$Total;
         $TotalItems=$TotalItems+$DatosVentas["Items"];
@@ -318,7 +321,9 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
 if(isset($_POST["BtnAplicar"])){
-    
+    if($TotalFacts==0){
+        $TotalFacts=1;
+    }
     $PromedioSubtotal=round($BaseIVA/$TotalFacts);
     $PromedioIVA=$PromedioSubtotal*0.19;
     $PromedioTotal=$PromedioSubtotal+$PromedioIVA;
