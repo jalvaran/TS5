@@ -627,7 +627,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' ORDER BY idPrecotizacion DESC");
         $DatosProduto=$this->FetchArray($consulta);
 	if($DatosProduto["Cantidad"]>0){
-            
+            if($DatosProductoGeneral["IVA"]=="E"){
+                $DatosProductoGeneral["IVA"]=0;
+            }
             $Cantidad=$DatosProduto["Cantidad"]+$Cantidad;
             $Subtotal=$DatosProduto["ValorAcordado"]*$Cantidad;
             $Impuestos=$DatosProductoGeneral["IVA"]*$Subtotal;
@@ -636,12 +638,14 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
             $this->Query($sql);
         }else{
-            $reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
-            $reg=mysql_fetch_array($reg);
+            $reg=$this->Query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+            $reg=$this->FetchArray($reg);
             $Porcentaje=$reg["Porcentaje"];
             $Departamento=$reg["Departamento"];
             $FechaDescuento=$reg["Fecha"];
-            
+            if($DatosProductoGeneral["IVA"]=="E"){
+                $DatosProductoGeneral["IVA"]=0;
+            }
             $impuesto=$DatosProductoGeneral["IVA"];
             $impuesto=$impuesto+1;
             if($DatosTablaItem["IVAIncluido"]=="SI"){
@@ -2054,7 +2058,7 @@ public function CalculePesoRemision($idCotizacion)
         $GranTotal=0;
         $TotalCostos=0;
         
-        while($DatosCotizacion=  mysql_fetch_array($Consulta)){
+        while($DatosCotizacion=  $this->FetchArray($Consulta)){
 
             $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaItem"], "idProductosVenta", $DatosCotizacion["ProductosVenta_idProductosVenta"]);
             ////Empiezo a insertar en la tabla items facturas
@@ -2066,12 +2070,16 @@ public function CalculePesoRemision($idCotizacion)
             $IVAItem=round($DatosCotizacion["Impuestos"]);
             $TotalIVA=$TotalIVA+$IVAItem; //se realiza la sumatoria del iva
             
-            $TotalItem=round($DatosCotizacion['TotalVenta']);
+            $TotalItem=$SubtotalItem+$IVAItem;
             $GranTotal=$GranTotal+$TotalItem;//se realiza la sumatoria del total
             
             $SubtotalCosto=$DatosCotizacion['Cantidad']*$DatosProducto["CostoUnitario"];
             $TotalCostos=$TotalCostos+$SubtotalCosto;//se realiza la sumatoria de los costos
-            
+            if($DatosProducto["IVA"]<>"E"){
+                $PorcentajeIVA=($DatosProducto["IVA"]*100)."%";
+            }else{
+                $PorcentajeIVA="Exc";
+            }
             //$ID=date("YmdHis").microtime(false);
             $tab="facturas_items";
             $NumRegistros=26;
@@ -2092,7 +2100,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[14]="SubtotalItem";       $Valores[14]=$SubtotalItem;
             $Columnas[15]="IVAItem";		$Valores[15]=$IVAItem;
             $Columnas[16]="TotalItem";		$Valores[16]=$TotalItem;
-            $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
+            $Columnas[17]="PorcentajeIVA";	$Valores[17]=$PorcentajeIVA;
             $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
             $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion["TipoItem"];

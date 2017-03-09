@@ -247,7 +247,8 @@
 	////Se guarda un separado
 	
 	if(isset($_REQUEST['BtnCrearSeparado'])){
-		$fecha=date("Y-m-d");
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
 		$Hora=date("H:i:s");
 		
 		$idPreventa=$_REQUEST['CmbPreVentaAct'];
@@ -257,26 +258,27 @@
                     print("<script>alert('Debe seleccionar un Cliente para poder ejecutar esta accion')</script>");
                     exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
                 }
-		        
-		$obVenta=new ProcesoVenta($idUser);
-                
-                $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-                $CentroCosto=$DatosCaja["CentroCostos"];
-                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
-                $VectorIngreso["fut"]="";
-                $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-                
-		$DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
-		$idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
-                $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-                if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
+		$consulta=$obVenta->ConsultarTabla("preventa", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
+                if($obVenta->NumRows($consulta)){
+                    $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+                    $CentroCosto=$DatosCaja["CentroCostos"];
+                    $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+                    $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
+                    $VectorIngreso["fut"]="";
+                    $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+
+                    $DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
+                    $idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
+                    $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+                    if($DatosImpresora["Habilitado"]=="SI"){
+                        $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
+                    }
+
+
+                    header("location:$myPage?CmbPreVentaAct=$idPreventa&Separado=$idSeparado");
+                }else{
+                    header("location:$myPage?CmbPreVentaAct=$idPreventa&E=Separado");	
                 }
-                
-             
-                header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidSeparado=$idSeparado");
-				
 	}
 	
 	
@@ -486,7 +488,7 @@
 		
 		$obVenta=new ProcesoVenta($idUser);
                 $Clave=$obVenta->normalizar($_POST['TxtAutorizacion']);
-                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND Role='ADMINISTRADOR'";
+                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND Role='ADMINISTRADOR' OR Role='SUPERVISOR'";
                 $Datos=$obVenta->Query($sql);
                 $DatosAutorizacion=$obVenta->FetchArray($Datos);
                 
