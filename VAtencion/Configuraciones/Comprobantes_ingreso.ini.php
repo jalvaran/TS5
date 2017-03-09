@@ -53,6 +53,14 @@ $Vector["Usuarios_idUsuarios"]["IDTabla"]="idUsuarios"; //id de la tabla que se 
 $Vector["Usuarios_idUsuarios"]["Display"]="Apellido"; 
 $Vector["Usuarios_idUsuarios"]["Predeterminado"]=1;
 
+// Nueva Accion
+$Ruta="AnularComprobanteIngreso.php?idComprobante=";
+$Vector["NuevaAccionLink"][0]="Anular";
+$Vector["NuevaAccion"]["Anular"]["Titulo"]=" Anular ";
+$Vector["NuevaAccion"]["Anular"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Anular"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Anular"]["Target"]="_self";
+
 $Vector["Soporte"]["Link"]=1;   //Indico que esta columna tendra un vinculo
 
 ///Filtros y orden
