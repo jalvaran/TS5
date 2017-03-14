@@ -171,9 +171,9 @@ print("<body>");
      * 
      */
     if(!empty($_REQUEST["TxtidIngreso"])){
-        $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
+        $RutaPrintIngreso="../tcpdf/examples/imprimircomp.php?ImgPrintComp=".$_REQUEST["TxtidIngreso"];			
         $css->CrearTabla();
-        $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
+        $css->CrearFilaNotificacion("Comprobante de Egreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Egreso No. $_REQUEST[TxtidIngreso]</a>",16);
         $css->CerrarTabla();
     }
       

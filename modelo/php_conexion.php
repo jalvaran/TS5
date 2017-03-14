@@ -7401,37 +7401,27 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     //registre comprobante de egreso
     public function RegistreComprobanteEgresoLibre($idComprobante){
         $Hora=date("H:i:s");
-        $DatosGenerales=$this->DevuelveValores("comprobantes_ingreso","ID",$idComprobante);
-        $Consulta=$this->ConsultarTabla("comprobantes_ingreso_items", "WHERE idComprobante='$idComprobante'");
+        $DatosGenerales=$this->DevuelveValores("egresos","idEgresos",$idComprobante);
+        $Consulta=$this->ConsultarTabla("comprobantes_egreso_items", "WHERE idComprobante='$idComprobante'");
         while($DatosComprobante=$this->FetchArray($Consulta)){
             $Fecha=$DatosComprobante["Fecha"];
             
             if($DatosComprobante["OrigenMovimiento"]=='cartera'){
-                $DatosCartera=$this->DevuelveValores("cartera", "idCartera", $DatosComprobante["idOrigen"]);
-                $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $DatosCartera["Facturas_idFacturas"]);
-                $idFactura=$DatosCartera["Facturas_idFacturas"];
-                $Total=$DatosComprobante["Credito"];
-                $NuevoSaldo=$DatosFactura["SaldoFact"]-$Total;
-                $TotalAbonos=$DatosFactura["Total"]-$NuevoSaldo;
-                $this->ActualizaRegistro("facturas", "SaldoFact", $NuevoSaldo, "idFacturas", $idFactura);
-                if($NuevoSaldo<=0){
-                    $this->BorraReg("cartera", "Facturas_idFacturas", $idFactura);
-                }else{
-                    $this->ActualizaRegistro("cartera", "Saldo", $NuevoSaldo, "Facturas_idFacturas", $idFactura);
-                    $this->ActualizaRegistro("cartera", "TotalAbonos", $TotalAbonos, "Facturas_idFacturas", $idFactura);
-                }
-                
-                $tab="facturas_abonos";
+                $DatosCuentasXPagar=$this->DevuelveValores("cuentasxpagar", "ID", $DatosComprobante["idOrigen"]);
+                $NuevoSaldo=$DatosCuentasXPagar["Saldo"]-$DatosComprobante["Debito"];
+                $TotalAbonos=$DatosCuentasXPagar["Abonos"]+$DatosComprobante["Debito"];
                 $NumRegistros=6;
+                $Columnas[0]="Fecha";            $Valores[0]=$Fecha;
+                $Columnas[1]="Hora";		$Valores[1]=$Hora;
+                $Columnas[2]="idCuentaXPagar";	$Valores[2]=$DatosCuentasXPagar["ID"];
+                $Columnas[3]="Monto";		$Valores[3]=$DatosComprobante["Debito"];
+                $Columnas[4]="idUsuarios";          $Valores[4]=$this->idUser;
+                $Columnas[5]="idComprobanteEgreso"; $Valores[5]=$idComprobante;
 
-                $Columnas[0]="Fecha";                       $Valores[0]=$Fecha;
-                $Columnas[1]="Hora";                        $Valores[1]=$Hora;
-                $Columnas[2]="Valor";                       $Valores[2]=$Total;
-                $Columnas[3]="Usuarios_idUsuarios";         $Valores[3]=$this->idUser;
-                $Columnas[4]="Facturas_idFacturas";         $Valores[4]=$idFactura;
-                $Columnas[5]="idComprobanteIngreso";        $Valores[5]=$idComprobante;
+                $this->InsertarRegistro("cuentasxpagar_abonos",$NumRegistros,$Columnas,$Valores);
 
-                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                $this->ActualizaRegistro("cuentasxpagar", "Saldo", $NuevoSaldo, "ID", $DatosCuentasXPagar["ID"]);
+                $this->ActualizaRegistro("cuentasxpagar", "Abonos", $TotalAbonos, "ID", $DatosCuentasXPagar["ID"]);
                 //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
             }
             
@@ -7447,7 +7437,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $DatosCentro=$this->DevuelveValores("centrocosto", "ID", $DatosComprobante["CentroCostos"]);
             
             $Columnas[0]="Fecha";			$Valores[0]=$Fecha;
-            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="ComprobanteIngreso";
+            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="CompEgreso";
             $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idComprobante;
             $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
             $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$DatosCliente['Num_Identificacion'];
@@ -7479,7 +7469,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             
             
         }
-        $this->ActualizaRegistro("comprobantes_ingreso", "Estado", "CERRADO", "ID", $idComprobante);
+        $this->ActualizaRegistro("egresos", "TipoEgreso", "EgresoLibre", "idEgresos", $idComprobante);
         
     }
 //////////////////////////////Fin	

@@ -14,9 +14,9 @@ if(!empty($_REQUEST["BtnGuardarCI"])){
     
     $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
          
-    $obVenta->RegistreComprobanteIngreso($idComprobante);
+    $obVenta->RegistreComprobanteEgresoLibre($idComprobante);
    
-    header("location:ComprobantesIngreso.php?TxtidIngreso=$idComprobante");
+    header("location:$myPage?TxtidIngreso=$idComprobante");
 }
 
 if(isset($_REQUEST["BtnCrearCI"])){
