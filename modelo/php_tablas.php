@@ -4578,6 +4578,47 @@ EOD;
         $this->css->CerrarForm();
     }
     
+    //Dibuje espacio para agregar items de una cuenta X Pagar
+    public function DibujePreMovimientoCuentaXPagar($myPage,$idCartera,$idComprobante,$Vector) {
+        $sql="SELECT * FROM cuentasxpagar WHERE ID='$idCartera'";
+        $consulta=$this->obCon->Query($sql);
+        $DatosCuenta= $this->obCon->FetchArray($consulta);
+        if($DatosCuenta["Estado"]=="ABIERTO"){
+            return($DatosCuenta["ID"]);
+        }
+        $this->css=new CssIni("");
+               
+        $this->css->CrearForm2("FrmAgregaMovCXP", $myPage, "post", "_self");
+        $this->css->CrearInputText("idComprobante", "hidden", "", $idComprobante, "", "", "", "", "", "", "", "");
+        $this->css->CrearInputText("idCartera", "hidden", "", $idCartera, "", "", "", "", "", "", "", "");
+        $this->css->CrearTabla();
+            $this->css->FilaTabla(16);
+                $this->css->ColTabla("ID", 1);
+                $this->css->ColTabla("Tercero", 1);
+                $this->css->ColTabla("Factura", 1);
+                $this->css->ColTabla("Total", 1);
+                $this->css->ColTabla("Total Abonos", 1);
+                $this->css->ColTabla("Saldo", 1);
+                $this->css->ColTabla("Abonar", 1);
+                $this->css->ColTabla("Agregar", 1);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(16);
+                $this->css->ColTabla($DatosCuenta["ID"], 1);
+                $this->css->ColTabla("$DatosCuenta[RazonSocial] $DatosCuenta[idProveedor]", 1);
+                $this->css->ColTabla("$DatosCuenta[DocumentoReferencia]", 1);
+                $this->css->ColTabla(number_format($DatosCuenta["Total"]), 1);
+                $this->css->ColTabla(number_format($DatosCuenta["Abonos"]), 1);
+                $this->css->ColTabla(number_format($DatosCuenta["Saldo"]), 1);
+                print("<td>");
+                $this->css->CrearInputNumber("TxtMontoAbono", "number", "", $DatosCuenta["Saldo"], "Digite el Abono", "", "", "", 100, 30, 0, 1, 0, $DatosCuenta["Saldo"], 1);
+                print("</td>");
+                print("<td>");
+                $this->css->CrearBoton("BtnAgregarMovCXP", "Agregar");
+                print("</td>");
+            $this->css->CierraFilaTabla();
+        $this->css->CerrarTabla();
+        $this->css->CerrarForm();
+    }
         // FIN Clases	
 }
 ?>

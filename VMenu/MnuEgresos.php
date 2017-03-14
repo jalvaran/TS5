@@ -55,6 +55,7 @@
                 $css->SubTabs("../VAtencion/notascontables.php","_blank","../images/historial3.png","Historial Notas Contables");
                 $css->SubTabs("../VAtencion/Egresos2.php","_blank","../images/compramercancias.png","Registrar Gasto o Compra");
                 $css->SubTabs("../VAtencion/compras_activas.php","_blank","../images/historial4.png","Historial de Compras Activas");
+                $css->SubTabs("../VAtencion/ComprobantesEgresoLibre.php","_blank","../images/precuenta.png","Realizar un comprobante de Egreso Libre");
                 //$css->SubTabs("../VAtencion/CompraMercancias.php","_blank","../images/compramercancias.png","Comprar Mercancias o Equipos");    //Uso Futuro
                 //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/equipos.png","Comprar Equipos");//Uso Futuro
             $css->FinTabs();

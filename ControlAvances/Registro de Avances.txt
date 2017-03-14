@@ -149,3 +149,8 @@ UPDATE `cuentas` SET `Nombre`=replace(`Nombre`,'á','a'),`Nombre`=replace(`Nombr
 
 se crea
 comprobantes_ingreso_items
+comprobantes_egreso_items
+
+Se agrega Columna Estado a cuentasxpagar
+
+agregar parametros contables
