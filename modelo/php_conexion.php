@@ -7422,6 +7422,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 
                 $this->ActualizaRegistro("cuentasxpagar", "Saldo", $NuevoSaldo, "ID", $DatosCuentasXPagar["ID"]);
                 $this->ActualizaRegistro("cuentasxpagar", "Abonos", $TotalAbonos, "ID", $DatosCuentasXPagar["ID"]);
+                $this->ActualizaRegistro("cuentasxpagar", "Estado", "", "ID", $DatosCuentasXPagar["ID"]);
                 //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
             }
             

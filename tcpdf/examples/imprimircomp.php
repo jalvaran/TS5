@@ -22,7 +22,7 @@ $DatosEgreso=$obVenta->DevuelveValores("egresos","idEgresos",$idEgresos);
 $nombre_file=$DatosEgreso["idEgresos"]."_Egreso_".$DatosEgreso["Beneficiario"];
 $fecha=$DatosEgreso["Fecha"];
 $Concepto=$DatosEgreso["Concepto"];
-$Tercero=$DatosEgreso["idProveedor"];
+$Tercero=$DatosEgreso["NIT"];
 $Usuarios_idUsuarios=$DatosEgreso["Usuario_idUsuario"];
 $Valor=  number_format($DatosEgreso["Valor"]-$DatosEgreso["Retenciones"]);
 require_once('Egreso_DatosTercero.php');

@@ -1,6 +1,9 @@
 <?php
 
-$DatosTercero=$obVenta->DevuelveValores("proveedores","idProveedores",$Tercero);
+$DatosTercero=$obVenta->DevuelveValores("proveedores","Num_Identificacion",$Tercero);
+if($DatosTercero["Num_Identificacion"]==''){
+    $DatosTercero=$obVenta->DevuelveValores("clientes","Num_Identificacion",$Tercero);
+}
 $DatosUsuario=$obVenta->DevuelveValores("usuarios","idUsuarios",$Usuarios_idUsuarios);   
 $tbl = <<<EOD
       
