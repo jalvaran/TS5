@@ -4532,6 +4532,46 @@ EOD;
         $this->css->CerrarForm();
     }
     
+    //Dibuje espacio para agregar items de una cuenta X Cobrar
+    public function DibujePreMovimientoCartera($myPage,$idCartera,$idComprobante,$Vector) {
+        $sql="SELECT ID,OrigenMovimiento, idOrigen, Estado FROM comprobantes_ingreso_items cii INNER JOIN comprobantes_ingreso ci "
+                . "ON cii.idComprobante=ci.ID WHERE idOrigen='$idCartera' AND OrigenMovimiento='cartera' AND Estado='ABIERTO' ";
+        $consulta=$this->obCon->Query($sql);
+        $DatosComprobante= $this->obCon->FetchArray($consulta);
+        if($DatosComprobante["Estado"]=="ABIERTO"){
+            return($DatosComprobante["ID"]);
+        }
+        $this->css=new CssIni("");
+        $DatosCartera= $this->obCon->DevuelveValores("cartera", "ID", $idCartera);
+        $DatosFactura= $this->obCon->DevuelveValores("facturas", "idFacturas", $DatosCartera["Facturas_idFacturas"]);
+        $DatosCliente= $this->obCon->DevuelveValores("clientes", "idClientes", $DatosCartera["idCliente"]);
+        
+        $this->css->CrearForm2("FrmAgregaMovCXC", $myPage, "post", "_self");
+        $this->css->CrearTabla();
+            $this->css->FilaTabla(16);
+                $this->css->ColTabla("ID", 1);
+                $this->css->ColTabla("Tercero", 1);
+                $this->css->ColTabla("Factura", 1);
+                $this->css->ColTabla("Total", 1);
+                $this->css->ColTabla("Total Abonos", 1);
+                $this->css->ColTabla("Saldo", 1);
+                $this->css->ColTabla("Abonar", 1);
+                $this->css->ColTabla("Agregar", 1);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(16);
+                $this->css->ColTabla($DatosCartera["ID"], 1);
+                $this->css->ColTabla("$DatosCliente[RazonSocial] $DatosCliente[Num_Identificacion]", 1);
+                $this->css->ColTabla("$DatosFactura[Prefijo]-$DatosFactura[NumeroFactura]", 1);
+                $this->css->ColTabla(number_format($DatosFactura["Total"]), 1);
+                $this->css->ColTabla(number_format($DatosCartera["TotalAbonos"]), 1);
+                $this->css->ColTabla(number_format($DatosCartera["Saldo"]), 1);
+                $this->css->ColTabla("Abonar", 1);
+                $this->css->ColTabla("Agregar", 1);
+            $this->css->CierraFilaTabla();
+        $this->css->CerrarTabla();
+        $this->css->CerrarForm();
+    }
+    
         // FIN Clases	
 }
 ?>
