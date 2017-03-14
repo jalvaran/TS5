@@ -7283,7 +7283,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     }
     //registre comprobante de ingreso
     public function RegistreComprobanteIngreso($idComprobante){
-        
+        $Hora=date("H:i:s");
         $DatosGenerales=$this->DevuelveValores("comprobantes_ingreso","ID",$idComprobante);
         $Consulta=$this->ConsultarTabla("comprobantes_ingreso_items", "WHERE idComprobante='$idComprobante'");
         while($DatosComprobante=$this->FetchArray($Consulta)){
@@ -7292,6 +7292,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             if($DatosComprobante["OrigenMovimiento"]=='cartera'){
                 $DatosCartera=$this->DevuelveValores("cartera", "idCartera", $DatosComprobante["idOrigen"]);
                 $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $DatosCartera["Facturas_idFacturas"]);
+                $idFactura=$DatosCartera["Facturas_idFacturas"];
+                $Total=$DatosComprobante["Credito"];
                 $NuevoSaldo=$DatosFactura["SaldoFact"]-$Total;
                 $TotalAbonos=$DatosFactura["Total"]-$NuevoSaldo;
                 $this->ActualizaRegistro("facturas", "SaldoFact", $NuevoSaldo, "idFacturas", $idFactura);
@@ -7305,15 +7307,15 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                 $tab="facturas_abonos";
                 $NumRegistros=6;
 
-                $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
+                $Columnas[0]="Fecha";                       $Valores[0]=$Fecha;
                 $Columnas[1]="Hora";                        $Valores[1]=$Hora;
                 $Columnas[2]="Valor";                       $Valores[2]=$Total;
-                $Columnas[3]="Usuarios_idUsuarios";         $Valores[3]=$idUser;
+                $Columnas[3]="Usuarios_idUsuarios";         $Valores[3]=$this->idUser;
                 $Columnas[4]="Facturas_idFacturas";         $Valores[4]=$idFactura;
                 $Columnas[5]="idComprobanteIngreso";        $Valores[5]=$idComprobante;
 
                 $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-                $idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
+                //$idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
             }
             
                       
