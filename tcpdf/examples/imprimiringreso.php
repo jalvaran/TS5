@@ -28,7 +28,12 @@ if($Clientes_idClientes>0){
     $DatosCliente=$obVenta->DevuelveValores("proveedores","idProveedores",$Tercero);
 }
 
-
+if($DatosCliente["Num_Identificacion"]==''){
+    $DatosCliente=$obVenta->DevuelveValores("proveedores","Num_Identificacion",$Tercero);
+    if($DatosCliente["Num_Identificacion"]==''){
+        $DatosCliente=$obVenta->DevuelveValores("clientes","Num_Identificacion",$Tercero);    
+    }
+}
 
 $DatosEmpresaPro=$obVenta->DevuelveValores("empresapro","idEmpresaPro",1);
 		  

@@ -213,7 +213,10 @@ print("<body>");
         }
         if($TipoMovimiento==3){
             $idCartera=$obVenta->normalizar($_REQUEST["CmbCuentaXCobrar"]);
-            $obTabla->DibujePreMovimientoCartera($idCartera,"");
+            $Notificacion=$obTabla->DibujePreMovimientoCartera($myPage,$idCartera,$idComprobante,"");
+            if($Notificacion>0){
+                $css->CrearNotificacionRoja("Esta Cuenta X Cobrar ya esta agregada en el CI $Notificacion, debe cerrar ese comprobante si desea agregar esta Cuenta X Cobrar a Otro", 16);
+            }
         }
     $sql="SELECT SUM(Debito) as Debito, SUM(Credito) as Credito FROM comprobantes_ingreso_items WHERE idComprobante='$idComprobante'";
     $consulta=$obVenta->Query($sql);
@@ -231,8 +234,8 @@ print("<body>");
     }
     
     $css->CrearForm2("FrmCerrarCompC", $myPage, "post", "_self");
-    $css->CrearInputText("TxtIdComprobanteContable","hidden",'',$idComprobante,'',"","","",300,30,0,0);
-    $css->CrearBotonConfirmado2("BtnGuardarMovimiento", "Guardar y Cerrar Comprobante",$H,"");
+    $css->CrearInputText("idComprobante","hidden",'',$idComprobante,'',"","","",300,30,0,0);
+    $css->CrearBotonConfirmado2("BtnGuardarCI", "Guardar y Cerrar Comprobante",$H,"");
     
     print("<br><br><br>");
     $css->CerrarForm();

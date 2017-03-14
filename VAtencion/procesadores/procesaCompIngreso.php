@@ -8,18 +8,13 @@ if(!empty($_REQUEST['del'])){
     header("location:$myPage?idComprobante=$IdPre");
 }
 //print("<script>alert('entra');</script>");		
-if(!empty($_REQUEST["BtnGuardarIngreso"])){
+if(!empty($_REQUEST["BtnGuardarCI"])){
     
-    $fecha=$_REQUEST["TxtFecha"];
-    $CuentaDestino=$_REQUEST["CmbCuentaDestino"];
-    $idProveedor=$_REQUEST["TxtTercero"];
-    $Total=$_REQUEST["TxtTotal"];
-    $CentroCosto=$_REQUEST["CmbCentroCostos"];
-    $Concepto=$_REQUEST["TxtConcepto"];   
-    $VectorIngreso["Fut"]="";        
-    $idIngreso=$obVenta->RegistreIngreso($fecha, $CuentaDestino, $idProveedor, $Total, $CentroCosto, $Concepto, $idUser, $VectorIngreso);
+    $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
+         
+    $obVenta->RegistreComprobanteIngreso($idComprobante);
    
-    header("location:ComprobantesIngreso.php?TxtidIngreso=$idIngreso");
+    header("location:ComprobantesIngreso.php?TxtidIngreso=$idComprobante");
 }
 
 if(isset($_REQUEST["BtnCrearCI"])){
@@ -65,7 +60,7 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
     
     $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
     $DatosComprobante=$obVenta->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
-    $fecha=$obVenta->normalizar($DatosComprobante["Fecha"]);
+    $fecha=$DatosComprobante["Fecha"];
     
     $Concepto=$obVenta->normalizar($_REQUEST["TxtConceptoMovimiento"]);
     $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCosto"]);
@@ -81,6 +76,20 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
     $NumDocSoporte=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
     $obVenta->AgregueMovimientoCI($fecha, $CentroCosto,$idSucursal, $Tercero, $CuentaPUC, $DC, $Valor, $Concepto, $NumDocSoporte, $destino, $idComprobante, $NombreCuenta, "");
     //header("location:$myPage?idComprobante=$idComprobante");
+}
+
+if(!empty($_REQUEST["BtnAgregarMovCXC"])){
+    $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
+    $idCartera=$obVenta->normalizar($_REQUEST["idCartera"]);
+    $Monto=$obVenta->normalizar($_REQUEST["TxtMontoAbono"]);
+    $DatosComprobante=$obVenta->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
+    $fecha=$DatosComprobante["Fecha"];
+    $DatosCartera=$obVenta->DevuelveValores("cartera", "idCartera", $idCartera);
+    $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $DatosCartera["Facturas_idFacturas"]);
+    $DatosCliente=$obVenta->DevuelveValores("clientes", "idClientes", $DatosCartera["idCliente"]);
+    $DatosCuentaDestino=$obVenta->DevuelveValores("parametros_contables", "ID", 6);
+    $Concepto="Abono a Factura $DatosFactura[Prefijo]-$DatosFactura[NumeroFactura]";
+    $obVenta->AgregueMovimientoCI($fecha, $DatosFactura["CentroCosto"],$DatosFactura["idSucursal"], $DatosCliente["Num_Identificacion"], $DatosCuentaDestino["CuentaPUC"], "C", $Monto, $Concepto, "", "", $idComprobante, $DatosCuentaDestino["NombreCuenta"], "","cartera",$idCartera);
 }
 ///////////////fin
 ?>
