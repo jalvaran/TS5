@@ -95,7 +95,7 @@ $VarInsert[$TablaConfig]["Cod_Mcipio"]["Required"]=1;
 $VarInsert[$TablaConfig]["Pais_Domicilio"]["Required"]=1;   
 $VarInsert[$TablaConfig]["Telefono"]["Required"]=1;   
 $VarInsert[$TablaConfig]["Ciudad"]["Required"]=1;   
-$VarInsert[$TablaConfig]["CIUU"]["Required"]=1; 
+//$VarInsert[$TablaConfig]["CIUU"]["Required"]=1; 
 
 $TablaConfig="proveedores";
 $VarInsert[$TablaConfig]["Num_Identificacion"]["Required"]=1;   
