@@ -146,3 +146,6 @@ se agregan columnas DocumentoGenerado y NumComprobante a compras_activas
 quitar tildes en cuentas y ?
 eliminar las tildes de la tabla cuentas
 UPDATE `cuentas` SET `Nombre`=replace(`Nombre`,'á','a'),`Nombre`=replace(`Nombre`,'é','e'),`Nombre`=replace(`Nombre`,'í','i'),`Nombre`=replace(`Nombre`,'ó','o'),`Nombre`=replace(`Nombre`,'ú','u')
+
+se crea
+comprobantes_ingreso_items

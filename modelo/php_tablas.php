@@ -4403,6 +4403,135 @@ EOD;
         $this->PDF_Output("Factura_$CodigoFactura");
     }
     
+    //dibuje agregar movimiento contable libre
+    
+    public function DibujeAgregaMovimientoContable($myPage,$Visible,$idComprobante) {
+        $this->css=new CssIni("");
+        $this->css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
+        
+        $this->css->CrearDiv("DivAgregaMov", "", "center", $Visible, 1);
+        $this->css->CrearTabla();
+        $this->css->FilaTabla(16);
+        $this->css->ColTabla("<strong>Comprobante:</strong>", 1);
+        print("<td>");
+           $this->css->CrearInputText("idComprobante", "text", "", $idComprobante, "idComprobante", "black", "", "", 100, 30, 1, 1);
+        print("</td>");  
+        $this->css->CierraFilaTabla();   
+        $this->css->FilaTabla(16);
+
+            $this->css->ColTabla("<strong>Centro de Costo</strong>", 1);
+            
+            $this->css->ColTabla("<strong>Tercero</strong>", 1);
+            $this->css->ColTabla("<strong>Cuenta Destino</strong>", 1);
+
+        $this->css->CierraFilaTabla();    
+        $this->css->FilaTabla(16);
+
+
+            print("<td>");
+
+                $this->css->CrearSelect("CmbCentroCosto"," Centro de Costos:<br>","black","",1);
+                //$this->css->CrearOptionSelect("","Seleccionar Centro de Costos",0);
+
+                $Consulta = $this->obCon->ConsultarTabla("centrocosto","");
+                while($CentroCosto=$this->obCon->FetchArray($Consulta)){
+                                $this->css->CrearOptionSelect($CentroCosto['ID'],$CentroCosto['Nombre'],0);							
+                }
+                $this->css->CerrarSelect();
+                 print("<br>");
+                $this->css->CrearSelect("idSucursal"," Sucursal:<br>","black","",1);
+                //$this->css->CrearOptionSelect("","Seleccionar Sucursal",0);
+               
+                $Consulta = $this->obCon->ConsultarTabla("empresa_pro_sucursales","");
+                while($CentroCosto=$this->obCon->FetchArray($Consulta)){
+                                $this->css->CrearOptionSelect($CentroCosto['ID'],$CentroCosto['Nombre'],0);							
+                }
+                $this->css->CerrarSelect();
+            print("</td>");
+            print("<td>");
+                $VarSelect["Ancho"]="200";
+                $VarSelect["PlaceHolder"]="Seleccione el tercero";
+                $this->css->CrearSelectChosen("CmbTerceroItem", $VarSelect);
+                $this->css->CrearOptionSelect("", "Seleccione un tercero" , 0);
+                $sql="SELECT * FROM proveedores";
+                $Consulta=$this->obCon->Query($sql);
+
+                   while($DatosProveedores=$this->obCon->FetchArray($Consulta)){
+                       $Sel=0;
+
+                       $this->css->CrearOptionSelect($DatosProveedores["Num_Identificacion"], "$DatosProveedores[RazonSocial] $DatosProveedores[Num_Identificacion]" , $Sel);
+                   }
+                   $sql="SELECT * FROM clientes";
+                $Consulta=$this->obCon->Query($sql);
+
+                   while($DatosProveedores=$this->obCon->FetchArray($Consulta)){
+                       $Sel=0;
+
+                       $this->css->CrearOptionSelect($DatosProveedores["Num_Identificacion"], "$DatosProveedores[RazonSocial] $DatosProveedores[Num_Identificacion]" , $Sel);
+                   }
+                $this->css->CerrarSelect();
+            print("</td>");
+            print("<td>");
+                $VarSelect["Ancho"]="200";
+                $VarSelect["PlaceHolder"]="Seleccione la cuenta destino";
+                $this->css->CrearSelectChosen("CmbCuentaDestino", $VarSelect);
+                $this->css->CrearOptionSelect("", "Seleccione la cuenta destino" , 0);
+
+                //Solo para cuando el PUC no está todo en subcuentas
+                $sql="SELECT * FROM cuentas";
+                $Consulta=$this->obCon->Query($sql);
+
+                   while($DatosProveedores=$this->obCon->FetchArray($Consulta)){
+                       $Sel=0;
+                       $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
+                       $this->css->CrearOptionSelect($DatosProveedores['idPUC'].';'.$NombreCuenta, "$DatosProveedores[idPUC] $DatosProveedores[Nombre]" , $Sel);
+                   }
+
+                //En subcuentas se debera cargar todo el PUC
+                $sql="SELECT * FROM subcuentas";
+                $Consulta=$this->obCon->Query($sql);
+
+                   while($DatosProveedores=$this->obCon->FetchArray($Consulta)){
+                       $Sel=0;
+                       $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
+                       $this->css->CrearOptionSelect($DatosProveedores['PUC'].';'.$NombreCuenta, "$DatosProveedores[PUC] $DatosProveedores[Nombre]" , $Sel);
+                   }
+
+                $this->css->CerrarSelect();
+            print("</td>");
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(16);
+            print("<td>");
+            $this->css->CrearInputNumber("TxtValorItem", "number", "<strong>Valor:</strong><br>", "", "Valor", "black", "", "", 220, 30, 0, 1, 1, "", 1);
+            print("<br>");
+
+            $this->css->CrearSelect("CmbDebitoCredito", "");
+                $this->css->CrearOptionSelect("D", "Debito", 1);
+                $this->css->CrearOptionSelect("C", "Credito", 0);
+            $this->css->CerrarSelect();
+            print("</td>");
+
+
+            print("<td>");
+            $this->css->CrearTextArea("TxtConceptoMovimiento","<strong>Concepto:</strong><br>","","Escriba el Concepto","black","","",300,100,0,1);
+            print("</td>");
+            print("<td>");
+            $this->css->CrearInputText("TxtNumFactura","text",'Numero del Documento soporte:<br>',"","Numero del documento","black","","",300,30,0,1);
+            echo"<br>";
+            $this->css->CrearUpload("foto");
+            echo"<br>";
+            echo"<br>";
+
+            $this->css->CrearBotonVerde("BtnAgregarItemMov", "Agregar Concepto");
+            print("</td>");
+
+        $this->css->CierraFilaTabla();
+        $this->css->CerrarTabla();
+        
+        $this->css->CerrarDiv();
+        $this->css->CerrarForm();
+    }
+    
         // FIN Clases	
 }
 ?>

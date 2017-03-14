@@ -7249,6 +7249,37 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
         return($Egresos);
     }
+    
+    //Agrega un movimiento a un comprobante de ingreso
+    
+    public function AgregueMovimientoCI($fecha,$CentroCosto,$idSucursal,$Tercero,$CuentaPUC,$TipoMov,$Valor,$Concepto,$NumDocSoporte,$destino,$idComprobante,$NombreCuenta,$Vector) {
+        if($TipoMov=="D"){
+            $Debito=$Valor;
+            $Credito=0;
+        }
+        if($TipoMov=="C"){
+            $Debito=0;
+            $Credito=$Valor;
+        }
+        $tab="comprobantes_ingreso_items";
+        $NumRegistros=12;
+
+        $Columnas[0]="Fecha";			$Valores[0]=$fecha;
+        $Columnas[1]="CentroCostos";		$Valores[1]=$CentroCosto;
+        $Columnas[2]="Tercero";			$Valores[2]=$Tercero;
+        $Columnas[3]="CuentaPUC";		$Valores[3]=$CuentaPUC;
+        $Columnas[4]="Debito";			$Valores[4]=$Debito;
+        $Columnas[5]="Credito";                 $Valores[5]=$Credito;
+        $Columnas[6]="Concepto";		$Valores[6]=$Concepto;
+        $Columnas[7]="NumDocSoporte";		$Valores[7]=$NumDocSoporte;
+        $Columnas[8]="Soporte";			$Valores[8]=$destino;
+        $Columnas[9]="idComprobante";		$Valores[9]=$idComprobante;
+        $Columnas[10]="NombreCuenta";		$Valores[10]=$NombreCuenta;
+        $Columnas[11]="idSucursal";		$Valores[11]=$idSucursal;
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    }
+    
 //////////////////////////////Fin	
 }
 	
