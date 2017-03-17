@@ -43,8 +43,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
         }
        $i++;
     }
-    $sql=substr($sql, 0, -1);
-    $sql.=" WHERE $NombresColumnas[0] ='$IDEdit'";
+    //$sql=substr($sql, 0, -1);
+    $Fecha=date("Y-m-d H:i:s");
+    $sql.=" Updated='$Fecha' WHERE $NombresColumnas[0] ='$IDEdit'";
     $obVenta->Query($sql);
     
     $PageReturn=  substr($myPage, 0, 21);
@@ -53,6 +54,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
         header("location:../$myPage");
         exit();
     }
+    
+    //$obVenta->ActualizaRegistro($tab, "Updated", date("Y-m-d H:i:s"), $NombresColumnas[0], $IDEdit);
+    
     header("location:../$myPage.php");
 }
 
