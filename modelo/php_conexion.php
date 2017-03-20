@@ -7473,6 +7473,61 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $this->ActualizaRegistro("egresos", "TipoEgreso", "EgresoLibre", "idEgresos", $idComprobante);
         
     }
+    
+    //imprime codigo barras monarch
+    
+    public function ImprimirCodigoBarrasMonarch($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Fmt 25" |
+B,1,12,F,155,70,1,2,50,5,L,0 |
+T,2,18,V,220,70,1,1,1,1,W,C,0,0,1 |
+T,3,30,V,120,70,1,2,1,1,B,C,0,0,1 |
+T,4,30,V,98,70,1,2,1,1,B,C,0,0,1 |
+T,5,18,V,65,70,1,1,1,1,B,C,0,0,1 |
+T,6,18,V,25,70,1,1,1,1,B,C,0,0,1 |
+B,7,12,F,155,410,1,2,50,5,L,0 |
+T,8,18,V,220,410,1,1,1,1,W,C,0,0,1 |
+T,9,30,V,120,410,1,2,1,1,B,C,0,0,1 |
+T,10,30,V,98,410,1,2,1,1,B,C,0,0,1 |
+T,11,18,V,65,410,1,1,1,1,B,C,0,0,1 |
+T,12,18,V,25,410,1,1,1,1,B,C,0,0,1 | 
+B,13,12,F,155,750,1,2,50,5,L,0 |
+T,14,18,V,220,750,1,1,1,1,W,C,0,0,1 |
+T,15,30,V,120,750,1,2,1,1,B,C,0,0,1 |
+T,16,30,V,98,750,1,2,1,1,B,C,0,0,1 |
+T,17,18,V,65,750,1,1,1,1,B,C,0,0,1 |
+T,18,18,V,25,750,1,1,1,1,B,C,0,0,1 | }
+{B,25,N,1 |
+1,"123456789012" |
+2,"INFINITO" | 
+3,"REF2122" |
+4,"02-14 COSTO  MAYOR" |
+5,"PRODUCTO" |
+6,"$20.000"|
+7,"12345678922" |
+8,"INFINITO" | 
+9,"REF2122" |
+10,"02-14 COSTO  MAYOR" |
+11,"PRODUCTO" |
+12,"$20.000"|
+13,"12345678922" |
+14,"INFINITO" | 
+15,"REF2122" |
+16,"02-14 COSTO  MAYOR" |
+17,"PRODUCTO" |
+18,"$20.000"|}'.$enter);
+        
+
+        $salida = shell_exec('lpr $Puerto');
+        
+     }
+    
+    
 //////////////////////////////Fin	
 }
 	

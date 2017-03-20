@@ -2426,6 +2426,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $Producto[$id]["Sub4"]=$DatosKardex["Sub4"];
         $Producto[$id]["Sub5"]=$DatosKardex["Sub5"];
       }  
+      $Producto[$id]["SaldoFinal"]=0; 
       if($DatosKardex["Movimiento"]=='SALDOS'){
         $Producto[$id]["SaldoFinal"]=$DatosKardex["Cantidad"];  
         

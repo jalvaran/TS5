@@ -45,7 +45,7 @@ $css->CrearDiv("principal", "container", "center",1,1);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-$css->CrearImageLink("../VMenu/Menu.php", "../images/productos.png", "_self",200,200);
+$css->CrearImageLink("CrearProductoVenta.php", "../images/agregar.png", "_self",200,200);
 
 
 ////Paginacion

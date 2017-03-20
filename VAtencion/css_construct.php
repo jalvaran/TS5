@@ -1123,6 +1123,63 @@ function Footer(){
                 initSample();
                 </script>");
         }
+        
+        
+        //Select de envio a div
+         /////////////////////Dibujar un cuadro de busqueda
+	
+	function DibujeSelectBuscador($Nombre,$pageConsulta,$OtrasVariables,$DivTarget,$Evento,$Alto,$Ancho,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Vector){
+            $obVenta=new ProcesoVenta(1);
+                            
+            ?>
+            <script>
+            function Busqueda<?php echo"$Nombre"?>() {
+                
+                str=document.getElementById("<?php echo"$Nombre"?>").value;
+                <?php
+                if(isset($Vector["Variable"][0])){
+                    $idObjeto=$Vector["Variable"][0];
+                    print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    //print("$idObjeto=document.getElementById('$idObjeto').value;");
+                    $OtrasVariables.='"+'.$idObjeto.'+"';
+                    //$VariableJS='"+document.getElementById(`'.$idObjeto.'`).value';
+                }
+                ?>
+                if (str == "") {
+                    document.getElementById("<?php echo"$DivTarget"?>").innerHTML = "";
+                    return;
+                } else {
+                    if (window.XMLHttpRequest) {
+                        // code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp = new XMLHttpRequest();
+                    } else {
+                        // code for IE6, IE5
+                        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xmlhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("<?php echo"$DivTarget"?>").innerHTML = this.responseText;
+                        }
+                    };
+                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>&idSel="+str+"&<?php print($OtrasVariables);?>",true);
+                    xmlhttp.send();
+                }
+            }
+            </script>
+            <?php 
+            $this->CrearSelect($Nombre, "Busqueda".$Nombre."()");
+            $this->CrearOptionSelect("", "Seleccione un Item", 0);
+            $consulta=$obVenta->ConsultarTabla($tabla, $Condicion);
+            while ($DatosConsulta=$obVenta->FetchAssoc($consulta)){
+                $this->CrearOptionSelect($DatosConsulta[$idItemValue], "$DatosConsulta[$OptionDisplay1] $DatosConsulta[$OptionDisplay2]", 0);
+            }
+            $this->CerrarSelect();
+            //$this->CrearInputText($Nombre, "text", "", "", "Buscar", "Black", $Evento, "Busqueda".$Nombre."()", $Ancho, $Alto, 0, 0);
+            
+            //$this->BotonBuscar(20, 20, "");
+            
+            
+	} 
         //////////////////////////////////FIN
 }
 	
