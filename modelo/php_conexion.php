@@ -17,7 +17,7 @@
 	$COMPrinter=3;
 	$PrintCuenta="SI";
         $CuentaAnticipos=2705;
- 
+        
 //////////////////////////////////////////////////////////////////////////
 ////////////Clase para guardar ventas ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ class ProcesoVenta{
         public  $ContraPartidaCREE=23657502;
 	public  $CuentaCostoMercancia=6135;
 	public  $CuentaInventarios=1435;
-              
+                      
 	function __construct($idUserR){
 		$idUserR=$this->normalizar($idUserR);		
 		$this->consulta =mysql_query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
@@ -7552,9 +7552,70 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
      }
     
-     public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$Vector) {
-         
+     public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector) {
+        
+        $tab="productosventa";	
+        $NumRegistros=18;
+        
+        $Columnas[0]="idProductosVenta";$Valores[0]="";
+        $Columnas[1]="CodigoBarras";	$Valores[1]="";
+        $Columnas[2]="Referencia";	$Valores[2]=$Referencia;
+        $Columnas[3]="Nombre";          $Valores[3]=$Nombre;
+        $Columnas[4]="Existencias";	$Valores[4]=$Existencias;
+        $Columnas[5]="PrecioVenta";	$Valores[5]=$PrecioVenta;
+        $Columnas[6]="PrecioMayorista";	$Valores[6]=$PrecioMayor;
+        $Columnas[7]="CostoUnitario";   $Valores[7]=$CostoUnitario;
+        $Columnas[8]="CostoTotal";	$Valores[8]=$CostoUnitario*$Existencias;
+        $Columnas[9]="IVA";             $Valores[9]=$IVA;
+        $Columnas[10]="Bodega_idBodega";$Valores[10]=1;
+        $Columnas[11]="Departamento";	$Valores[11]=$idDepartamento;
+        $Columnas[12]="Sub1";           $Valores[12]=$Sub1;
+        $Columnas[13]="Sub2";           $Valores[13]=$Sub2;
+        $Columnas[14]="Sub3";           $Valores[14]=$Sub3;
+        $Columnas[15]="Sub4";		$Valores[15]=$Sub4;
+        $Columnas[16]="Sub5";		$Valores[16]=$Sub5;
+        $Columnas[17]="CuentaPUC";	$Valores[17]=$CuentaPUC;	
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
+        $idProductoVenta=$ID;
+        $this->ActualizaRegistro("productosventa", "CodigoBarras", $ID, "idProductosVenta", $ID);
+        if($Referencia==''){
+            $this->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
+        }
+        
+        //Buscamos si hay mas bodegas para insertar los valores en cada una
+        $SqlCB="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID' LIMIT 1";
+        $DatosCodigo=$this->Query($SqlCB);
+        $DatosCodigo=$this->FetchArray($DatosCodigo);
+        $Datos=$this->ConsultarTabla("bodega", "");
+        
+        while($DatosBodegas=$this->FetchArray($Datos)){
+            $tabBodegas="productosventa_bodega_$DatosBodegas[0]";
+            
+            //$Vector["Tabla"]=$tabBodegas;
+            $ID=$this->ObtenerMAX($tabBodegas,"idProductosVenta", 1,"");
+            $ID++;                       
+            if($Referencia==''){
+                $Valores[2]="REF".$ID;
+            }
+            
+            $this->InsertarRegistro($tabBodegas,$NumRegistros,$Columnas,$Valores);
+            
+            $this->ActualizaRegistro($tabBodegas, "CodigoBarras", $ID, "idProductosVenta", $ID);
+            $tabBodegas="prod_codbarras_bodega_$DatosBodegas[0]";
+            $Columnas2[0]="ProductosVenta_idProductosVenta";    $Valores2[0]=$ID;
+            $Columnas2[1]="CodigoBarras";                       $Valores2[1]=$DatosCodigo["CodigoBarras"];
+            $this->InsertarRegistro($tabBodegas, 2, $Columnas2, $Valores2);
+            
+            
+        }
+        if($CodigoBarras<>''){
+            $this->AgregueCodBarras($idProductoVenta, $CodigoBarras, "");
+        }
+        return $idProductoVenta;
      }
+     
 //////////////////////////////Fin	
 }
 	

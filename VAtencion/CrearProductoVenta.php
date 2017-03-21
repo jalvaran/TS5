@@ -117,9 +117,9 @@ print("<body>");
             $css->ColTabla("<strong>Nombre</strong>", 1);
             $css->ColTabla("<strong>Existencias</strong>", 1);
             $css->ColTabla("<strong>PrecioVenta</strong>", 1);
+            $css->ColTabla("<strong>PrecioMayorista</strong>", 1);
             $css->ColTabla("<strong>CostoUnitario</strong>", 1);
-            $css->ColTabla("<strong>IVA</strong>", 1);
-            $css->ColTabla("<strong>Codigo Barras</strong>", 1);
+            
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
             print("<td style='text-align:center'>");
@@ -135,9 +135,21 @@ print("<body>");
             $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 100, 30, 0, 1, 0, "", "any");
             print("</td>");
             print("<td style='text-align:center'>");
-            $css->CrearInputNumber("TxtCostoUnitario", "number", "", "", "CostoUnitario", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            $css->CrearInputNumber("TxtPrecioMayorista", "number", "", "", "PrecioMayor", "", "", "", 100, 30, 0, 1, 0, "", "any");
             print("</td>");
             print("<td style='text-align:center'>");
+            $css->CrearInputNumber("TxtCostoUnitario", "number", "", "", "CostoUnitario", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            print("</td>");
+            
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>IVA</strong>", 1);
+        $css->ColTabla("<strong>CuentaPUC</strong>", 1);
+        $css->ColTabla("<strong>Codigo Barras</strong>", 2);
+        $css->ColTabla("<strong>Guardar</strong>", 2);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td style='text-align:center'>");
             $DatosEmpresa=$obVenta->DevuelveValores("empresapro", "idEmpresaPro", 1);
             $IVADefecto=0;
             if($DatosEmpresa["Regimen"]=="COMUN"){
@@ -155,13 +167,28 @@ print("<body>");
             }
             $css->CerrarSelect();
             print("</td>");
-            print("<td style='text-align:center'>");
-            $css->CrearInputText("TxtCodigoBarras", "text", "", "", "Codigo de Barras", "", "", "", 100, 30, 0, 0);
+            print("<td colspan='1' style='text-align:center'>");
+            $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione la cuenta contable";
+        $VarSelect["Required"]=1;
+        $css->CrearSelectChosen("TxtCuentaPUC", $VarSelect);
+        $sql="SELECT * FROM subcuentas WHERE PUC LIKE '41%'";
+        $Consulta=$obVenta->Query($sql);
+        $css->CrearOptionSelect("", "Seleccione una cuenta contable", 0);
+           while($DatosCuenta=$obVenta->FetchArray($Consulta)){
+               $sel=0;
+               if($DatosCuenta["PUC"]=='4135'){
+                   $sel=1;
+               }               
+               $css->CrearOptionSelect($DatosCuenta["PUC"],"$DatosCuenta[PUC] $DatosCuenta[Nombre]", $sel);
+           }
+        $css->CerrarSelect();
+        print("</td>");
+        print("<td colspan='2' style='text-align:center'>");
+            $css->CrearInputText("TxtCodigoBarras", "text", "", "", "Codigo de Barras", "", "", "", 200, 30, 0, 0);
             print("</td>");
-        $css->CierraFilaTabla();
-        $css->FilaTabla(16);
-        print("<td colspan='7' style='text-align:center'>");
-        $css->CrearBotonConfirmado("BtnCrearPV", "Crear");
+        print("<td colspan='2' style='text-align:center'>");
+        $css->CrearBotonConfirmado("BtnCrearPV", "Crear Producto");
         //$css->CrearBotonImagen("", "BtnGuardar", "_self", "../images/save.png", "onclick='Confirmar()'", 50, 100, "", "", "");
         print("</td>");
         $css->CierraFilaTabla();
