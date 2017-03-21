@@ -557,3 +557,7 @@ function ValidarFecha(FechaCierre,idFecha){
     document.getElementById(idFecha).value=Year+"-"+Mes+"-"+Dia;
  }
 }
+
+function Muestre(){
+    alert("Entra");
+}

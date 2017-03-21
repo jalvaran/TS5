@@ -1180,6 +1180,25 @@ function Footer(){
             
             
 	} 
+        
+        public function CrearSelectTable($Nombre,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Evento,$FuncionJS,$idSel,$Requerido) {
+            $obVenta=new ProcesoVenta(1);
+            $nombre=$Vector["Nombre"]=$Nombre;
+            $evento=$Vector["Evento"]=$Evento;
+            $funcion=$Vector["Funcion"]=$FuncionJS;
+            $Vector["Required"]=$Requerido;
+            $this->CrearSelect2($Vector);
+            $this->CrearOptionSelect("", "Seleccione un Item", 0);
+            $consulta=$obVenta->ConsultarTabla($tabla, $Condicion);
+            while ($DatosConsulta=$obVenta->FetchAssoc($consulta)){
+                $Sel=0;
+                if($DatosConsulta[$idItemValue]==$idSel){
+                  $Sel=1;  
+                }
+                $this->CrearOptionSelect($DatosConsulta[$idItemValue], "$DatosConsulta[$OptionDisplay1] $DatosConsulta[$OptionDisplay2]", $Sel);
+            }
+            $this->CerrarSelect();
+        }
         //////////////////////////////////FIN
 }
 	

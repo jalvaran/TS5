@@ -6829,8 +6829,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     
     //Quitar acentos y eñes
     public function QuitarAcentos($str) {
-        $no_permitidas= array ("`","´","á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","Ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹");
-        $permitidas= array ("","","a","e","i","o","u","A","E","I","O","U","n","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E");
+        $no_permitidas= array ('"',"`","´","á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","Ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹");
+        $permitidas= array ("","","","a","e","i","o","u","A","E","I","O","U","n","N","A","E","I","O","U","a","e","i","o","u","c","C","a","e","i","o","u","A","E","I","O","U","u","o","O","i","a","e","U","I","A","E");
         $texto = str_replace($no_permitidas, $permitidas ,$str);
         return $texto;
         
@@ -7552,7 +7552,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
      }
     
-    
+     public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$Vector) {
+         
+     }
 //////////////////////////////Fin	
 }
 	
