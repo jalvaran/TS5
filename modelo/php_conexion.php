@@ -7616,6 +7616,36 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         return $idProductoVenta;
      }
      
+     ///Crear ProductoVenta desde Archivo
+     public function CrearProductoVentaXCSV($ID,$Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector) {
+        
+        $tab="productosventa";	
+        $NumRegistros=18;
+        
+        $Columnas[0]="idProductosVenta";$Valores[0]=$ID;
+        $Columnas[1]="CodigoBarras";	$Valores[1]=$ID;
+        $Columnas[2]="Referencia";	$Valores[2]=$Referencia;
+        $Columnas[3]="Nombre";          $Valores[3]=$Nombre;
+        $Columnas[4]="Existencias";	$Valores[4]=$Existencias;
+        $Columnas[5]="PrecioVenta";	$Valores[5]=$PrecioVenta;
+        $Columnas[6]="PrecioMayorista";	$Valores[6]=$PrecioMayor;
+        $Columnas[7]="CostoUnitario";   $Valores[7]=$CostoUnitario;
+        $Columnas[8]="CostoTotal";	$Valores[8]=$CostoUnitario*$Existencias;
+        $Columnas[9]="IVA";             $Valores[9]=$IVA;
+        $Columnas[10]="Bodega_idBodega";$Valores[10]=1;
+        $Columnas[11]="Departamento";	$Valores[11]=$idDepartamento;
+        $Columnas[12]="Sub1";           $Valores[12]=$Sub1;
+        $Columnas[13]="Sub2";           $Valores[13]=$Sub2;
+        $Columnas[14]="Sub3";           $Valores[14]=$Sub3;
+        $Columnas[15]="Sub4";		$Valores[15]=$Sub4;
+        $Columnas[16]="Sub5";		$Valores[16]=$Sub5;
+        $Columnas[17]="CuentaPUC";	$Valores[17]=$CuentaPUC;	
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        //$ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
+        
+     }
+     
 //////////////////////////////Fin	
 }
 	

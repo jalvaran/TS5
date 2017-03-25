@@ -8,7 +8,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
     	$startpoint = ($page * $limit) - $limit;
 		
 /////////
-
+$obVenta = new ProcesoVenta($idUser);
 $myTitulo="Agregar Items al Inventario desde CSV";
 $MyPage="AgregarItemsXCB.php";
 include_once("css_construct.php");
@@ -94,13 +94,60 @@ if(!empty($_REQUEST['BtnCargar'])){
         $css->CrearNotificacionRoja("No se selecciono ningun archivo", 18);
     }
 }
+
+if(!empty($_REQUEST['BtnCargarInventario'])){
+    $destino="";
+    if(!empty($_FILES['UplCsv2']['type'])){
+        
+        $TipoArchivo=$_FILES['UplCsv2']['type'];
+        $NombreArchivo=$_FILES['UplCsv2']['name'];
+        //if($TipoArchivo=="text/csv"){
+            
+            
+            $handle = fopen($_FILES['UplCsv2']['tmp_name'], "r");
+            $i=0;
+            $css->CrearNotificacionAzul("Productos Agregados desde el archivo $NombreArchivo", 20);
+            
+            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+                
+                $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $data[0]);
+                if($i>0 and $DatosProducto["idProductosVenta"]==""){
+                    $DatosProducto=$obVenta->DevuelveValores("productosventa", "Referencia", $data[2]);
+                    $Referencia=$data[2];
+                    if($DatosProducto["idProductosVenta">1]){
+                        $Referencia="REF$data[0]";
+                        
+                    }
+                    //$ID=str_pad($data[0], 11, "0", STR_PAD_LEFT);
+                    //$obVenta->CrearProductoVentaXCSV($ID, $Nombre, $CodigoBarras, $Referencia, $PrecioVenta, $PrecioMayor, $Existencias, $CostoUnitario, $IVA, $idDepartamento, $Sub1, $Sub2, $Sub3, $Sub4, $Sub5, $CuentaPUC, $Vector)
+                    $obVenta->CrearProductoVentaXCSV($data[0], $data[3], $data[1], $Referencia, $data[5], $data[6], $data[4], $data[7], $data[9], $data[11], $data[12], $data[13], $data[14], $data[15], $data[16], $data[20], "");
+                    
+                     $css->CrearFilaNotificacion("producto $data[0] // $data[3] // $data[2] // $data[6] // $data[5] // $data[6] // $data[7] // $data[8] // Creado", 16);
+                        
+                   
+                }
+                 
+                $i++; 
+                
+            }
+            
+            fclose($handle);
+            
+        //}else{
+          //  $css->CrearNotificacionRoja("El archivo seleccionado no es valido", 18);
+        //}
+        
+    }else{
+        $css->CrearNotificacionRoja("No se selecciono ningun archivo", 18);
+    }
+}
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
 $css->CrearImageLink("../VMenu/Menu.php", "../images/inventarios.png", "_self",200,200);
 $css->CrearNotificacionNaranja("Seleccione el archivo", 16);
-print("<br>");
+print("<br> Subir por Codigo de Barras");
 
 $css->CrearForm2("FrmUploadCsv", $MyPage, "post", "_self");
 $css->CrearUpload("UplCsv");
@@ -108,6 +155,13 @@ print("<br><br>");
 $css->CrearBotonConfirmado("BtnCargar", "Enviar Archivo");
 $css->CerrarForm();
 
+print("<br> Subir por Archivo de Inventarios");
+
+$css->CrearForm2("FrmUploadInventario", $MyPage, "post", "_self");
+$css->CrearUpload("UplCsv2");
+print("<br><br>");
+$css->CrearBotonConfirmado("BtnCargarInventario", "Enviar Archivo");
+$css->CerrarForm();
 
 $css->CerrarDiv();//Cerramos contenedor Principal
 
