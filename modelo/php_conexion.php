@@ -7551,7 +7551,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $salida = shell_exec('lpr $Puerto');
         
      }
-    
+    //Crear un producto para la venta
      public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector) {
         
         $tab="productosventa";	
@@ -7643,6 +7643,85 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         //$ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
+        
+     }
+     
+     //Imprimir en una impresora de ocdigos de barra Monarch 9416 TM
+     
+     //imprime codigo barras monarch
+    
+    public function ImprimirCodigoBarrasMonarch9416TM($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        if(!isset($DatosCB["CodigoBarras"])){
+            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+            $Consulta =  $this->Query($sql);
+            $DatosCodigo=  $this->FetchArray($Consulta);  
+            $Codigo=$DatosCodigo["CodigoBarras"]; 
+        }else{
+            $Codigo=$DatosCB["CodigoBarras"]; 
+        }
+        
+        $Cantidad=$Cantidad/3;
+        $Numpages=ceil($Cantidad);
+        $idEmpresaPro=$DatosCB["EmpresaPro"];
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
+        $fecha=date("y-m-d");
+        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,15);
+        $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
+       
+        $Descripcion=substr($DatosProducto["Nombre"],0,22);
+        $PrecioVenta= number_format($DatosProducto["PrecioVenta"]);
+        $Referencia= $DatosProducto["Referencia"];
+        $ID= $DatosProducto["idProductosVenta"];
+        $Costo2= substr($DatosProducto["CostoUnitario"], 1, -1);
+        $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
+        $Costo=$Costo1."/".$Costo2;
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        B,1,2710,V,165,70,8,0,50,0,L,0 |
+                        T,2,30,V,145,70,1,2,1,1,B,C,0,0,1 |
+                        T,3,18,V,220,70,1,1,1,1,W,C,0,0,1 |
+                        T,4,30,V,123,70,1,2,1,1,B,C,0,0,1 |
+                        T,5,23,V,100,70,1,2,1,1,B,C,0,0,1 |
+                        T,6,18,V,45,80,1,3,1,1,B,L,0,0,1 |
+                        B,7,2710,V,165,410,8,0,50,0,L,0 |
+                        T,8,30,V,145,410,1,2,1,1,B,C,0,0,1 |
+                        T,9,18,V,220,410,1,1,1,1,W,C,0,0,1 |
+                        T,10,30,V,123,410,1,2,1,1,B,C,0,0,1 |
+                        T,11,23,V,100,410,1,2,1,1,B,C,0,0,1 |
+                        T,12,18,V,45,420,1,3,1,1,B,L,0,0,1 |
+                        B,13,2710,V,165,750,8,0,50,0,L,0 |
+                        T,14,30,V,145,750,1,2,1,1,B,C,0,0,1 |
+                        T,15,18,V,220,750,1,1,1,1,W,C,0,0,1 |
+                        T,16,30,V,123,750,1,2,1,1,B,C,0,0,1 |
+                        T,17,23,V,100,750,1,2,1,1,B,C,0,0,1 |
+                        T,18,18,V,45,760,1,3,1,1,B,L,0,0,1 |}
+                        {B,25,N,'.$Numpages.' |
+                        1,"'.$Codigo.'" |
+                        2,"'.$Codigo.' '.$Referencia.'" |
+                        3,"'.$RazonSocial.'" | 
+                        4,"'.$fecha.' '.$Costo.'" |
+                        5,"'.$Descripcion.'" |
+                        6,"'.$PrecioVenta.'"|
+                        7,"'.$Codigo.'" |
+                        8,"'.$Codigo.' '.$Referencia.'" |
+                        9,"'.$RazonSocial.'" | 
+                        10,"'.$fecha.' '.$Costo.'" |
+                        11,"'.$Descripcion.'" |
+                        12,"'.$PrecioVenta.'"|
+                        13,"'.$Codigo.'" |
+                        14,"'.$Codigo.' '.$Referencia.'" |
+                        15,"'.$RazonSocial.'" | 
+                        16,"'.$fecha.' '.$Costo.'" |
+                        17,"'.$Descripcion.'" |
+                        18,"'.$PrecioVenta.'"|}');
+        
+
+        $salida = shell_exec('lpr $Puerto');
         
      }
      
