@@ -109,9 +109,11 @@ if(!empty($_REQUEST['BtnCargarInventario'])){
             $css->CrearNotificacionAzul("Productos Agregados desde el archivo $NombreArchivo", 20);
             
             while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
-                
+                $css->CrearNotificacionAzul($data[0], 15);
+                print("<br>".$data[0]);
                 $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $data[0]);
                 if($i>0 and $DatosProducto["idProductosVenta"]==""){
+                    //print($data[0]);
                     $DatosProducto=$obVenta->DevuelveValores("productosventa", "Referencia", $data[2]);
                     $Referencia=$data[2];
                     if($DatosProducto["idProductosVenta">1]){
@@ -139,6 +141,46 @@ if(!empty($_REQUEST['BtnCargarInventario'])){
         
     }else{
         $css->CrearNotificacionRoja("No se selecciono ningun archivo", 18);
+        
+    }
+}
+
+if(!empty($_REQUEST['BtnAgregarCodigosBarras'])){
+    $destino="";
+    if(!empty($_FILES['UplCsv3']['type'])){
+        
+        $TipoArchivo=$_FILES['UplCsv3']['type'];
+        $NombreArchivo=$_FILES['UplCsv3']['name'];
+        //if($TipoArchivo=="text/csv"){
+            
+            
+            $handle = fopen($_FILES['UplCsv3']['tmp_name'], "r");
+            $i=0;
+            $css->CrearNotificacionAzul("Codigos de Barras Agregados desde el archivo $NombreArchivo", 20);
+            
+            while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+                $DatosCodigo=$obVenta->DevuelveValores("prod_codbarras", "CodigoBarras", $data[1]);
+                if($i>0 and $DatosCodigo["CodigoBarras"]==''){
+                     $obVenta->AgregarCodigoBarrasAItem($data[0], $data[1], "");
+                    
+                     $css->CrearFilaNotificacion("Codigo $data[0] // $data[1] // Agregado", 16);
+                        
+                   
+                }
+                 
+                $i++; 
+                
+            }
+            
+            fclose($handle);
+            
+        //}else{
+          //  $css->CrearNotificacionRoja("El archivo seleccionado no es valido", 18);
+        //}
+        
+    }else{
+        $css->CrearNotificacionRoja("No se selecciono ningun archivo", 18);
+        
     }
 }
 //print($statement);
@@ -163,6 +205,14 @@ print("<br><br>");
 $css->CrearBotonConfirmado("BtnCargarInventario", "Enviar Archivo");
 $css->CerrarForm();
 
+
+print("<br> Agregar Codigos de Barras a Items");
+
+$css->CrearForm2("FrmUploadInventario", $MyPage, "post", "_self");
+$css->CrearUpload("UplCsv3");
+print("<br><br>");
+$css->CrearBotonConfirmado("BtnAgregarCodigosBarras", "Enviar Archivo");
+$css->CerrarForm();
 $css->CerrarDiv();//Cerramos contenedor Principal
 
 $css->Footer();

@@ -7724,7 +7724,46 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $salida = shell_exec('lpr $Puerto');
         
      }
+     ///Crear ProductoVenta desde Archivo
+     public function AgregarCodigoBarrasAItem($idProducto,$CodigoBarras,$Vector) {
+        
+        $tab="prod_codbarras";	
+        $NumRegistros=2;
+        
+        $Columnas[0]="ProductosVenta_idProductosVenta";$Valores[0]=$idProducto;
+        $Columnas[1]="CodigoBarras";	$Valores[1]=$CodigoBarras;        	
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        //$ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
+        
+     }
      
+     //Cortar productos de la tabla productos venta a inventario temporal
+     public function CortarProductosVentaInventarioTemporal($idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$Vector) {
+         if($idDepartamento>0){
+            $condicion="WHERE Departamento='$idDepartamento'";
+         }
+         if($Sub1>0){
+            $condicion.=" AND Sub1='$Sub1' "; 
+         }
+         if($Sub2>0){
+            $condicion.=" AND Sub2='$Sub2' "; 
+         }
+         if($Sub3>0){
+            $condicion.=" AND Sub3='$Sub3' "; 
+         }
+         if($Sub4>0){
+            $condicion.=" AND Sub4='$Sub4' "; 
+         }
+         if($Sub5>0){
+            $condicion.=" AND Sub5='$Sub5' "; 
+         }
+         $sql="REPLACE INTO inventarios_temporal SELECT * FROM productosventa $condicion";
+         $this->Query($sql);
+         
+         $sql="DELETE FROM productosventa $condicion";
+         $this->Query($sql);
+     }
 //////////////////////////////Fin	
 }
 	
