@@ -25,7 +25,14 @@ if(isset($_REQUEST["BtnCortarKardex"])){
     $BorrarOrigen=1;
     $BorrarDestino=0;
     $obVenta->CopiarTabla("kardexmercancias","kardexmercancias_temporal",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
-   
+    $Datos=$obVenta->ConsultarTabla("bodega", "");
+        
+    while($DatosBodegas=$obVenta->FetchArray($Datos)){
+        $tabBodegas="productosventa_bodega_$DatosBodegas[0]";
+        $obVenta->VaciarTabla($tabBodegas);
+        $tabBodegas="prod_codbarras_bodega_$DatosBodegas[0]";
+        $obVenta->VaciarTabla($tabBodegas);
+    }
     header("location:inventario_preparacion.php");
         
 }

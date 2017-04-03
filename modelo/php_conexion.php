@@ -7552,13 +7552,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
      }
     //Crear un producto para la venta
-     public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector) {
+     public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector,$idProductoVenta='',$RutaImagen='') {
         
         $tab="productosventa";	
-        $NumRegistros=18;
+        $NumRegistros=19;
         
-        $Columnas[0]="idProductosVenta";$Valores[0]="";
-        $Columnas[1]="CodigoBarras";	$Valores[1]="";
+        $Columnas[0]="idProductosVenta";$Valores[0]=$idProductoVenta;
+        $Columnas[1]="CodigoBarras";	$Valores[1]=$idProductoVenta;
         $Columnas[2]="Referencia";	$Valores[2]=$Referencia;
         $Columnas[3]="Nombre";          $Valores[3]=$Nombre;
         $Columnas[4]="Existencias";	$Valores[4]=$Existencias;
@@ -7575,17 +7575,21 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Columnas[15]="Sub4";		$Valores[15]=$Sub4;
         $Columnas[16]="Sub5";		$Valores[16]=$Sub5;
         $Columnas[17]="CuentaPUC";	$Valores[17]=$CuentaPUC;	
-        
+        $Columnas[18]="RutaImagen";	$Valores[18]=$RutaImagen;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-        $ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
-        $idProductoVenta=$ID;
+        if($idProductoVenta==""){
+            $ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
+            $idProductoVenta=$ID;
+        }else{
+            $ID=$idProductoVenta;
+        }
         $this->ActualizaRegistro("productosventa", "CodigoBarras", $ID, "idProductosVenta", $ID);
         if($Referencia==''){
             $this->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
         }
         
         //Buscamos si hay mas bodegas para insertar los valores en cada una
-        $SqlCB="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID' LIMIT 1";
+        $SqlCB="SELECT idCodBarras,CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$ID' ORDER BY idCodBarras DESC LIMIT 1";
         $DatosCodigo=$this->Query($SqlCB);
         $DatosCodigo=$this->FetchArray($DatosCodigo);
         $Datos=$this->ConsultarTabla("bodega", "");
@@ -7594,8 +7598,12 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $tabBodegas="productosventa_bodega_$DatosBodegas[0]";
             
             //$Vector["Tabla"]=$tabBodegas;
-            $ID=$this->ObtenerMAX($tabBodegas,"idProductosVenta", 1,"");
-            $ID++;                       
+            if($idProductoVenta==''){
+                $ID=$this->ObtenerMAX($tabBodegas,"idProductosVenta", 1,"");
+                $ID++;   
+            }else{
+                $ID=$idProductoVenta;
+            }
             if($Referencia==''){
                 $Valores[2]="REF".$ID;
             }
@@ -7613,6 +7621,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         if($CodigoBarras<>''){
             $this->AgregueCodBarras($idProductoVenta, $CodigoBarras, "");
         }
+        
         return $idProductoVenta;
      }
      
@@ -7778,7 +7787,39 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      }
      //Registrar el conteo fisico
      public function RegistrarConteoFisicoInventario($Codigo,$Cantidad,$Vector) {
-         
+         $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $Codigo);
+         $idProducto=$DatosCodigoBarras["ProductosVenta_idProductosVenta"];
+         if($idProducto==''){
+             $idProducto=$Codigo;
+         }
+         $DatosProducto=$this->DevuelveValores("inventarios_temporal", "idProductosVenta", $idProducto);
+         if($DatosProducto["idProductosVenta"]==''){
+             $Respuestas["Error"]="el codigo $idProducto No se encuentra en la tabla temporal";
+             return($Respuestas);
+         }
+         $DatosProductoConteo=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+         if($DatosProductoConteo["idProductosVenta"]==''){
+             $idProducto=$this->CrearProductoVenta($DatosProducto["Nombre"], "", $DatosProducto["Referencia"], $DatosProducto["PrecioVenta"], $DatosProducto["PrecioMayorista"], $Cantidad, $DatosProducto["CostoUnitario"], $DatosProducto["IVA"], $DatosProducto["Departamento"], $DatosProducto["Sub1"], $DatosProducto["Sub2"], $DatosProducto["Sub3"], $DatosProducto["Sub4"], $DatosProducto["Sub5"], $DatosProducto["CuentaPUC"], "",$idProducto,$DatosProducto["RutaImagen"]);
+             
+             $sql="DELETE FROM `prod_codbarras` WHERE `ProductosVenta_idProductosVenta`='$idProducto' ORDER BY idCodBarras DESC LIMIT 1 ";
+             $this->Query($sql);
+             $Respuestas["Creado"]="el codigo $idProducto Se ha creado satisfactoriamente con Existencias = $Cantidad";
+             return($Respuestas);
+         }else{
+            $DatosKardex["Cantidad"]=$Cantidad;
+            $DatosKardex["idProductosVenta"]=$DatosProductoConteo["idProductosVenta"];
+            $DatosKardex["CostoUnitario"]=$DatosProductoConteo['CostoUnitario'];
+            $DatosKardex["Existencias"]=$DatosProductoConteo['Existencias'];
+            $DatosKardex["Detalle"]="Conteo";
+            $DatosKardex["idDocumento"]="NA";
+            $DatosKardex["TotalCosto"]=$Cantidad*$DatosProductoConteo['CostoUnitario'];
+            $DatosKardex["Movimiento"]="ENTRADA";
+            
+            $this->InserteKardex($DatosKardex);
+            $Saldo=$DatosProductoConteo['Existencias']+$Cantidad;
+            $Respuestas["Actualizado"]="el codigo $idProducto Se ha actualizado satisfactoriamente, existencia anterior = $DatosProductoConteo[Existencias], Cantidad Ingresada=$Cantidad, Nuevo Saldo = $Saldo";
+            return($Respuestas);
+         }
      }
 //////////////////////////////Fin	
 }
