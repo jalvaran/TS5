@@ -1,11 +1,11 @@
 <?php
-
+$obVenta=new ProcesoVenta($idUser); 
 /* 
  * Este archivo procesa la anulacion de un abono a un titulo
  */
 
-if(!empty($_REQUEST["BtnCortarPV"])){
-    $obVenta=new ProcesoVenta($idUser);        
+if(isset($_REQUEST["BtnCortarPV"])){
+           
     $idDepartamento=$obVenta->normalizar($_REQUEST["idDepartamento"]);
     $Sub1=$obVenta->normalizar($_REQUEST["Sub1"]);
     $Sub2=$obVenta->normalizar($_REQUEST["Sub2"]);
@@ -15,6 +15,41 @@ if(!empty($_REQUEST["BtnCortarPV"])){
     if($idDepartamento>0){
         $obVenta->CortarProductosVentaInventarioTemporal($idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,"");
     }
+    header("location:inventario_preparacion.php");
+        
+}
+//Cortar Kardex
+if(isset($_REQUEST["BtnCortarKardex"])){
+    
+    $condicion="";
+    $BorrarOrigen=1;
+    $BorrarDestino=0;
+    $obVenta->CopiarTabla("kardexmercancias","kardexmercancias_temporal",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
+   
+    header("location:inventario_preparacion.php");
+        
+}
+
+//Cortar productos venta 
+if(isset($_REQUEST["BtnCortarTodosProductos"])){
+    
+    $condicion="";
+    $BorrarOrigen=1;
+    $BorrarDestino=0;
+    $obVenta->CopiarTabla("productosventa","inventarios_temporal",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
+   
+    header("location:inventario_preparacion.php");
+        
+}
+
+//Cortar productos venta 
+if(isset($_REQUEST["BtnRestarurar"])){
+    
+    $condicion="";
+    $BorrarOrigen=0;
+    $BorrarDestino=1;
+    $obVenta->CopiarTabla("inventarios_temporal","productosventa",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
+    $obVenta->CopiarTabla("kardexmercancias_temporal","kardexmercancias",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
     header("location:inventario_preparacion.php");
         
 }

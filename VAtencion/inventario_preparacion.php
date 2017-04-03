@@ -54,16 +54,8 @@ print("<body>");
     $css->CrearNotificacionAzul("Cortar productos a la tabla temporal para inventario Fisico", 16);
     $css->CrearNotificacionRoja("Tenga especial cuidado al realizar esta accion, pues ocasionará que los productos "
             . "de la clasificacion que se seleccionen se retiraran del inventario principal y pasaran a la tabla temporal para su conteo fisico", 16);
-    $css->CrearNotificacionNaranja("Paso 1: Cortar Kardex a Kardex Temporal", 16);
-    $css->CrearForm2("FrmCortarKardex", $myPage, "post", "_self");
-    $css->CrearTabla();
-    $css->FilaTabla(16);
-    print("<td style='text-align:center'>");
-    $css->CrearBotonConfirmado("BtnCortarKardex", "Cortar Kardex");
-    print("</td>");
-    $css->CierraFilaTabla();
-    $css->CerrarTabla();
-    $css->CerrarForm();
+    
+    $css->CrearNotificacionNaranja("Paso 1: Copiar Inventarios por clasificacion, (Esto le permitira realizar el inventario fisico por partes)", 16);
     $css->CrearForm2("FrmSelDepartamentos", $myPage, "post", "_self");
     $css->CrearTabla();
         $css->FilaTabla(16);
@@ -139,6 +131,40 @@ print("<body>");
     $css->CerrarTabla();
     $css->CerrarForm();
 }
+    $css->CrearNotificacionNaranja("Paso 2: Cortar Kardex a Kardex Temporal", 16);
+    $css->CrearForm2("FrmCortarKardex", $myPage, "post", "_self");
+    $css->CrearTabla();
+    $css->FilaTabla(16);
+    print("<td style='text-align:center'>");
+    $css->CrearBotonConfirmado("BtnCortarKardex", "Cortar Kardex");
+    print("</td>");
+    $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    $css->CerrarForm();
+    $css->CrearNotificacionNaranja("Paso 3: Cortar productos venta a productos venta Temporal (No haga esto si va a realizar el inventario por clasificaciones, si lo desea realizar por clasificacion omita este paso)", 16);
+    $css->CrearForm2("FrmCortarProductosTotal", $myPage, "post", "_self");
+    $css->CrearTabla();
+    $css->FilaTabla(16);
+    print("<td style='text-align:center'>");
+    $css->CrearBotonConfirmado("BtnCortarTodosProductos", "Cortar Toda la tabla de productos Venta");
+    print("</td>");
+    $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    
+    $css->CerrarForm();
+    
+    $css->CrearNotificacionVerde("Restaurar: esta acción copiará nuevamente los productos de la tabla temporal a la real así como tambien el kardex", 16);
+    $css->CrearForm2("FrmRestaurar", $myPage, "post", "_self");
+    $css->CrearTabla();
+    $css->FilaTabla(16);
+    print("<td style='text-align:center'>");
+    $css->CrearBotonConfirmado("BtnRestarurar", "Restaurar");
+    print("</td>");
+    $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    
+    $css->CerrarForm();
+    
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts

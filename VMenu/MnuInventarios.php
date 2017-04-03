@@ -47,6 +47,7 @@ include_once("css_construct.php");
                 $css->SubMenuAlfa("Bodegas",3);
                 $css->SubMenuAlfa("Movimientos",4);
                 $css->SubMenuAlfa("General",5);
+                $css->SubMenuAlfa("Conteo Físico",6);
                 
 	$css->MenuAlfaFin();
             
@@ -83,14 +84,18 @@ include_once("css_construct.php");
             $css->NuevaTabs(4);
                 $css->SubTabs("../VAtencion/prod_bajas_altas.php","_blank","../images/historial.png","Ver el historial de las bajas y altas");  
                 $css->SubTabs("../VAtencion/DarBajaAlta.php","_blank","../images/baja.png","Dar de baja o alta a un producto"); 
-                $css->SubTabs("../VAtencion/inventario_preparacion.php","_blank","../images/terminado.png","Preparar Conteo Fisico");
-                $css->SubTabs("../VAtencion/inventarios_temporal.php","_blank","../images/pedidos.png","Tabla Temporal");
-                $css->SubTabs("../VAtencion/inventario_fisico.php","_blank","../images/inventorio.png","Realizar Inventario Fisico");
+                
             $css->FinTabs();
             $css->NuevaTabs(5);
                 $css->SubTabs("../VAtencion/ActualizacionesGeneralesInventarios.php","_blank","../images/actualizar.png","Actualizaciones Generales");  
                 
                 
+            $css->FinTabs();
+            
+            $css->NuevaTabs(6);
+                $css->SubTabs("../VAtencion/inventario_preparacion.php","_blank","../images/terminado.png","Preparar Conteo Fisico");
+                $css->SubTabs("../VAtencion/inventarios_temporal.php","_blank","../images/pedidos.png","Tabla Temporal");
+                $css->SubTabs("../VAtencion/ConteoFisico.php","_blank","../images/conteo_inventario.png","Realizar Conteo Fisico");
             $css->FinTabs();
             
             

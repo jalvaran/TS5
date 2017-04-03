@@ -7764,6 +7764,22 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
          $sql="DELETE FROM productosventa $condicion";
          $this->Query($sql);
      }
+     //Copia una tabla en otra 
+     public function CopiarTabla($TablaOrigen,$TablaDestino,$condicion,$BorrarOrigen,$BorrarDestino,$condicion,$Vector) {
+         if($BorrarDestino==1){
+            $this->VaciarTabla($TablaDestino);
+         }
+         $sql="REPLACE INTO $TablaDestino SELECT * FROM $TablaOrigen $condicion";
+         $this->Query($sql);
+         if($BorrarOrigen==1){
+            $this->VaciarTabla($TablaOrigen);
+         }
+         
+     }
+     //Registrar el conteo fisico
+     public function RegistrarConteoFisicoInventario($Codigo,$Cantidad,$Vector) {
+         
+     }
 //////////////////////////////Fin	
 }
 	
