@@ -7803,6 +7803,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
              
              $sql="DELETE FROM `prod_codbarras` WHERE `ProductosVenta_idProductosVenta`='$idProducto' ORDER BY idCodBarras DESC LIMIT 1 ";
              $this->Query($sql);
+             //$this->RegistrarDiferenciaInventarios($idProducto, "");
              $Respuestas["Creado"]="el codigo $idProducto Se ha creado satisfactoriamente con Existencias = $Cantidad";
              return($Respuestas);
          }else{
@@ -7816,11 +7817,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $DatosKardex["Movimiento"]="ENTRADA";
             
             $this->InserteKardex($DatosKardex);
-            $Saldo=$DatosProductoConteo['Existencias']+$Cantidad;
-            $Respuestas["Actualizado"]="el codigo $idProducto Se ha actualizado satisfactoriamente, existencia anterior = $DatosProductoConteo[Existencias], Cantidad Ingresada=$Cantidad, Nuevo Saldo = $Saldo";
+            //$this->RegistrarDiferenciaInventarios($idProducto, "");
+            $Saldo=$DatosProductoConteo['Existencias']+$Cantidad;            
+            $Respuestas["Actualizado"]="el codigo $idProducto, $DatosProductoConteo[Nombre], Referencia $DatosProductoConteo[Referencia],  Se ha actualizado satisfactoriamente, existencia anterior = $DatosProductoConteo[Existencias], Cantidad Ingresada=$Cantidad, Nuevo Saldo = $Saldo";
             return($Respuestas);
          }
      }
+     
 //////////////////////////////Fin	
 }
 	

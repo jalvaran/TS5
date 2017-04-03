@@ -35,7 +35,7 @@ $css =  new CssIni("Preparar inventario Fisico");
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/inventario_preparacion.php");
+    include_once("procesadores/inventario_preparacion.process.php");
     
     $css->CabeceraIni("Cortar productos a la tabla temporal para inventario Fisico"); //Inicia la cabecera de la pagina
        

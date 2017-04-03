@@ -33,6 +33,7 @@ if(isset($_REQUEST["BtnCortarKardex"])){
         $tabBodegas="prod_codbarras_bodega_$DatosBodegas[0]";
         $obVenta->VaciarTabla($tabBodegas);
     }
+    $obVenta->VaciarTabla("inventarios_diferencias");
     header("location:inventario_preparacion.php");
         
 }
