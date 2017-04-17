@@ -2411,8 +2411,9 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             
    
    while($DatosKardex=$this->obCon->FetchArray($Consulta)){
+       $id=$DatosKardex["idProductosVenta"];
       if($DatosKardex["Movimiento"]=='ENTRADA' or $DatosKardex["Movimiento"]=='SALIDA') {
-        $id=$DatosKardex["idProductosVenta"];
+        
         $Movimiento=$DatosKardex["Movimiento"];
         $Detalle=$DatosKardex["Detalle"];
         $idProductos[$id]=$DatosKardex["idProductosVenta"];

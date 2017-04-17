@@ -3713,7 +3713,7 @@ public function CalculePesoRemision($idCotizacion)
         
         $tab="traslados_mercancia";
         $NumRegistros=10; 
-        $id=  $DatosSucursalActual["ID"]."-".$Consecutivo;
+        $id=  $DatosSucursalActual["ID"]."-".$Destino."-".$Consecutivo;
         $Columnas[0]="Fecha";               $Valores[0]=$fecha;
         $Columnas[1]="Descripcion";         $Valores[1]=$Concepto;
         $Columnas[2]="Hora";                $Valores[2]=$hora;
