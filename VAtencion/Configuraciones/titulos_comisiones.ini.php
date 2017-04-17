@@ -31,6 +31,13 @@ $Vector["VerRegistro"]["ColumnaLink"]="idEgreso";
 //
 //
 
+// Nueva Accion
+$Ruta="anular_pago_comision.php?idPagoCom=";
+$Vector["NuevaAccionLink"][0]="AnulaComi";
+$Vector["NuevaAccion"]["AnulaComi"]["Titulo"]=" Anular ";
+$Vector["NuevaAccion"]["AnulaComi"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["AnulaComi"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["AnulaComi"]["Target"]="_self";
 
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
