@@ -71,6 +71,7 @@ include_once("../sesiones/php_control.php");
 		$css->FinTabs();
                 $css->NuevaTabs(5);
 			$css->SubTabs("../VAtencion/AuditoriaDocumentos.php","_blank","../images/auditoria.png","Auditoria de Documentos");
+                        $css->SubTabs("../VAtencion/registra_ediciones.php","_blank","../images/registros.png","Historial de Ediciones");
 		$css->FinTabs();
 		
 	$css->FinMenu(); 

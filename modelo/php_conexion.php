@@ -683,18 +683,37 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 ///////////////////////////////////////////////////////////////////
 
 
-public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem)
-  {		
+public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$ProcesoInterno=1)
+  {	
+        $Condicion=" WHERE `$filtro` = '$idItem'";
+        $sql="SELECT $campo FROM $tabla $Condicion LIMIT 1";
+        $c=$this->Query($sql);
+        $OldData=$this->FetchArray($c);
 	$tabla=$this->normalizar($tabla);
         $campo=$this->normalizar($campo);
         $value=$this->normalizar($value);
         $filtro=$this->normalizar($filtro);
         $idItem=$this->normalizar($idItem);
-        if($campo<>'ISQLd'){
+        if($campo<>'ISQLd' && $OldData[$campo]<>$value){
             $sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
             mysql_query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
-        }	
-	}
+            if($ProcesoInterno==0){
+                $tab="registra_ediciones";
+                $NumRegistros=8;
+
+                $Columnas[0]="Fecha";               $Valores[0]=date("Y-m-d");
+                $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");
+                $Columnas[2]="Tabla";               $Valores[2]=$tabla;
+                $Columnas[3]="Campo";               $Valores[3]=$campo;
+                $Columnas[4]="ValorAnterior";	$Valores[4]=$OldData[$campo];
+                $Columnas[5]="ValorNuevo";		$Valores[5]=$value;
+                $Columnas[6]="ConsultaRealizada";	$Valores[6]="$filtro = $idItem";
+                $Columnas[7]="idUsuario";		$Valores[7]=$this->idUser;
+
+                $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            }
+        }
+}
         
         ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Actualizar registro en tabla
@@ -708,7 +727,7 @@ public function update($tabla,$campo, $value, $condicion)
 	
 	mysql_query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
 		
-	}
+    }
 	
 
 	

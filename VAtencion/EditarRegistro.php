@@ -1,11 +1,13 @@
 <?php
 ob_start();
-session_start();
+$myPage="EditarRegistro.php";
+include_once("../sesiones/php_control.php");
 /* Desarrollado por Julian Alvaran, Techno Soluciones SAS
  * Este archivo se encargará de insertar un registro nuevo a una tabla
  * 
  */
 //$Parametros = json_decode(urldecode($_REQUEST['TxtParametros']));  //Decodifico el Vector y llega como un objeto
+
 $Parametros="";
 $IDEdit=$_REQUEST['TxtIdEdit'];
 $stament=$_REQUEST['Others'];
@@ -14,7 +16,6 @@ $Vector["stament"]= "$stament";
 //print("Parametros: ");
 //print_r($Parametros);
 $TablaEdit=$_REQUEST['TxtTabla'];
-$myPage="EditarRegistro.php";
 $myTitulo="Editar Registro En ".$TablaEdit;
 
 //Con esto visualizo los parametros recibidos
@@ -26,9 +27,9 @@ echo ("</pre>");
 include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
 include_once("css_construct.php");
 $obTabla = new Tabla($db);
-$obVenta = new ProcesoVenta($_SESSION["idUser"]);
+$obVenta = new ProcesoVenta($idUser);
 include_once("procesadores/procesaEdicion.Conf.php"); //Procesa la insercion
-include_once("procesadores/procesaEdicion.php"); //Procesa la insercion
+
 print("<html>");
 print("<head>");
 
@@ -43,6 +44,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+include_once("procesadores/procesaEdicion.php"); //Procesa la insercion
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////

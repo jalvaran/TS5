@@ -1,13 +1,15 @@
 <?php
+
 /* 
  * Este archivo se encarga de escuchar las peticiones para editar un registro
  */
 
 if(!empty($_REQUEST["BtnEditarRegistro"])){
     include_once("../../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
-    
+    session_start();
+    $idUser=$_SESSION['idUser'];
     $obTabla = new Tabla($db);
-    $obVenta = new ProcesoVenta(1);
+    $obVenta = new ProcesoVenta($idUser);
     $stament=$_REQUEST["TxtStament"];
     $tab=$_REQUEST["TxtTablaEdit"];
     if(isset($_REQUEST["TxtTabla"])){
@@ -36,7 +38,7 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
             $Name=str_replace(' ','_',$_FILES[$NombreCol]['name']);  
             $destino=$carpeta.$Name;
             move_uploaded_file($_FILES[$NombreCol]['tmp_name'],$dir.$destino);
-            $obVenta->ActualizaRegistro($tab, $NombreCol, $destino, $NombresColumnas[0], $IDEdit);
+            $obVenta->ActualizaRegistro($tab, $NombreCol, $destino, $NombresColumnas[0], $IDEdit,0);
         }
         $NumCar=strlen($_REQUEST[$NombreCol]);
         if(isset($_REQUEST[$NombreCol]) && $NumCar>0){
@@ -46,7 +48,7 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
                 
             }
             
-            $obVenta->ActualizaRegistro($tab, $NombreCol, $Edicion, $NombresColumnas[0], $IDEdit);
+            $obVenta->ActualizaRegistro($tab, $NombreCol, $Edicion, $NombresColumnas[0], $IDEdit,0);
         }
        $i++;
     }
