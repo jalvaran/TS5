@@ -78,6 +78,25 @@ $Vector[$TablaConfig]["Sub5"]["IDTabla"]="idSub5"; //id de la tabla que se vincu
 $Vector[$TablaConfig]["Sub5"]["Display"]="NombreSub5";                    //Columna que quiero mostrar
 
 /*
+ * Parametros de configuracion Tabla facturas
+ * Columnas Excluidas
+ */
+
+$TablaConfig="facturas";
+
+
+$Vector[$TablaConfig]["FormaPago"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["FormaPago"]["TablaVinculo"]="facturas_tipo_pago";  //tabla de donde se vincula
+$Vector[$TablaConfig]["FormaPago"]["IDTabla"]="TipoPago"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["FormaPago"]["Display"]="Leyenda"; 
+$Vector[$TablaConfig]["FormaPago"]["Predeterminado"]=0;
+
+$Vector[$TablaConfig]["Clientes_idClientes"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector[$TablaConfig]["Clientes_idClientes"]["TablaVinculo"]="clientes";  //tabla de donde se vincula
+$Vector[$TablaConfig]["Clientes_idClientes"]["IDTabla"]="idClientes"; //id de la tabla que se vincula
+$Vector[$TablaConfig]["Clientes_idClientes"]["Display"]="RazonSocial"; 
+$Vector[$TablaConfig]["Clientes_idClientes"]["Predeterminado"]=0;
+/*
  * Parametros de configuracion Tabla facturas_items
  * Columnas Excluidas
  */
