@@ -690,11 +690,10 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem)
         $value=$this->normalizar($value);
         $filtro=$this->normalizar($filtro);
         $idItem=$this->normalizar($idItem);
-        
-	$sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
-	
-	mysql_query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
-		
+        if($campo<>'ISQLd'){
+            $sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
+            mysql_query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
+        }	
 	}
         
         ////////////////////////////////////////////////////////////////////
@@ -1412,32 +1411,34 @@ public function CalculePesoRemision($idCotizacion)
         $FechaIngreso=$Datos["FechaFactura"]; 
         $FechaVencimiento=$Datos["FechaVencimiento"];
         $idCliente=$Datos["idCliente"];
-        $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $idCliente);
-        $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
-        $RazonSocial=$DatosCliente["RazonSocial"];
-        $Telefono=$DatosCliente["Telefono"];
-        $Contacto=$DatosCliente["Contacto"];
-        $TelContacto=$DatosCliente["TelContacto"];
-        $TotalFactura=$DatosFactura["Total"];
-        $tab="cartera";       
-        $NumRegistros=13; 
-                
-        $Columnas[0]="Facturas_idFacturas";         $Valores[0]=$idFactura;
-        $Columnas[1]="FechaIngreso";                $Valores[1]=$FechaIngreso;
-        $Columnas[2]="FechaVencimiento";            $Valores[2]=$FechaVencimiento;
-        $Columnas[3]="DiasCartera";                 $Valores[3]=0;
-        $Columnas[4]="idCliente";                   $Valores[4]=$idCliente;
-        $Columnas[5]="RazonSocial";                 $Valores[5]=$RazonSocial;
-        $Columnas[6]="Telefono";                    $Valores[6]=$Telefono;
-        $Columnas[7]="Contacto";                    $Valores[7]=$Contacto;
-        $Columnas[8]="TelContacto";                 $Valores[8]=$TelContacto;
-        $Columnas[9]="TotalFactura";                $Valores[9]=$TotalFactura;
-        $Columnas[10]="TotalAbonos";                $Valores[10]=0;
-        $Columnas[11]="Saldo";                      $Valores[11]=$TotalFactura;
-        $Columnas[12]="idUsuarios";                 $Valores[12]= $this->idUser;
-        
-        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-                
+        $DatosCartera=$this->DevuelveValores("cartera", "Facturas_idFacturas", $idFactura);
+        if($DatosCartera["idCartera"]==''){
+            $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $idCliente);
+            $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
+            $RazonSocial=$DatosCliente["RazonSocial"];
+            $Telefono=$DatosCliente["Telefono"];
+            $Contacto=$DatosCliente["Contacto"];
+            $TelContacto=$DatosCliente["TelContacto"];
+            $TotalFactura=$DatosFactura["Total"];
+            $tab="cartera";       
+            $NumRegistros=13; 
+
+            $Columnas[0]="Facturas_idFacturas";         $Valores[0]=$idFactura;
+            $Columnas[1]="FechaIngreso";                $Valores[1]=$FechaIngreso;
+            $Columnas[2]="FechaVencimiento";            $Valores[2]=$FechaVencimiento;
+            $Columnas[3]="DiasCartera";                 $Valores[3]=0;
+            $Columnas[4]="idCliente";                   $Valores[4]=$idCliente;
+            $Columnas[5]="RazonSocial";                 $Valores[5]=$RazonSocial;
+            $Columnas[6]="Telefono";                    $Valores[6]=$Telefono;
+            $Columnas[7]="Contacto";                    $Valores[7]=$Contacto;
+            $Columnas[8]="TelContacto";                 $Valores[8]=$TelContacto;
+            $Columnas[9]="TotalFactura";                $Valores[9]=$TotalFactura;
+            $Columnas[10]="TotalAbonos";                $Valores[10]=0;
+            $Columnas[11]="Saldo";                      $Valores[11]=$TotalFactura;
+            $Columnas[12]="idUsuarios";                 $Valores[12]= $this->idUser;
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }       
         
     }
 /*
@@ -7822,6 +7823,12 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $Respuestas["Actualizado"]="el codigo $idProducto, $DatosProductoConteo[Nombre], Referencia $DatosProductoConteo[Referencia],  Se ha actualizado satisfactoriamente, existencia anterior = $DatosProductoConteo[Existencias], Cantidad Ingresada=$Cantidad, Nuevo Saldo = $Saldo";
             return($Respuestas);
          }
+     }
+     
+     //Actualice tercero en libro diario
+     
+     public function ActualiceTerceroLibroDiario($TipoDocInterno, $NumDocInterno, $TablaTercero,$idTercero) {
+         $sql="";
      }
      
 //////////////////////////////Fin	

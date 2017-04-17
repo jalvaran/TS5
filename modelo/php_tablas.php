@@ -32,9 +32,10 @@ public function Columnas($Vector){
     $Results=$this->obCon->Query($sql);
     $i=0;
     while($Columnas = $this->obCon->FetchArray($Results) ){
-        $Nombres[$i]=$Columnas["Field"];
-        $i++;
-        
+        if($Columnas["Field"]<>''){
+            $Nombres[$i]=$Columnas["Field"];
+            $i++;
+        }
     }
     return($Nombres);
 }
