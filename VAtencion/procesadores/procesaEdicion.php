@@ -51,26 +51,32 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
        $i++;
     }
     //$sql=substr($sql, 0, -1);
-    $Fecha=date("Y-m-d H:i:s");
-    $obVenta->ActualizaRegistro($tab, "Updated", $Fecha, $NombresColumnas[0], $IDEdit);
-    if($tab=="facturas" && $_REQUEST["FormaPago"]<>"Contado"){
+    
+    if($tab=="facturas"){
        
         $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $IDEdit);
-        $Datos["Fecha"]=$DatosFactura["Fecha"];                
-        $Datos["Dias"]=$_REQUEST["FormaPago"];
-        $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
-        $Datos["idFactura"]=$IDEdit; 
-        $Datos["FechaFactura"]=$DatosFactura["Fecha"]; 
-        $Datos["FechaVencimiento"]=$FechaVencimiento;
-        $Datos["idCliente"]=$DatosFactura["Clientes_idClientes"];
-        $obVenta->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
         
-        $sql="UPDATE `librodiario` SET `CuentaPUC`='1305',`NombreCuenta`='CLIENTES NACIONALES' WHERE `Num_Documento_Interno`='$IDEdit' AND `CuentaPUC` LIKE '11%'";
-        $obVenta->Query($sql);
+        if($_REQUEST["FormaPago"]<>"Contado"){
+            $Datos["Fecha"]=$DatosFactura["Fecha"];                
+            $Datos["Dias"]=$_REQUEST["FormaPago"];
+            $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
+            $Datos["idFactura"]=$IDEdit; 
+            $Datos["FechaFactura"]=$DatosFactura["Fecha"]; 
+            $Datos["FechaVencimiento"]=$FechaVencimiento;
+            $Datos["idCliente"]=$DatosFactura["Clientes_idClientes"];
+            $obVenta->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
+
+            $sql="UPDATE `librodiario` SET `CuentaPUC`='1305',`NombreCuenta`='CLIENTES NACIONALES' WHERE `Num_Documento_Interno`='$IDEdit' AND `CuentaPUC` LIKE '11%'";
+            $obVenta->Query($sql);
+        }
         
+        $DatosTercero=$obVenta->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+        $obVenta->ActualiceTerceroLibroDiario("FACTURA", $IDEdit, "clientes", $DatosTercero["Num_Identificacion"]);
+        $obVenta->ActualiceClienteCartera($IDEdit, "clientes", $DatosTercero["Num_Identificacion"]);
     }
-    //$sql.=" Updated='$Fecha' WHERE $NombresColumnas[0] ='$IDEdit'";
-    //$obVenta->Query($sql);
+    
+   $Fecha=date("Y-m-d H:i:s");
+   $obVenta->ActualizaRegistro($tab, "Updated", $Fecha, $NombresColumnas[0], $IDEdit);
     
     $PageReturn=  substr($myPage, 0, 21);
     if($PageReturn=="productosventa_bodega"){

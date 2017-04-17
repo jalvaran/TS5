@@ -7828,7 +7828,23 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      //Actualice tercero en libro diario
      
      public function ActualiceTerceroLibroDiario($TipoDocInterno, $NumDocInterno, $TablaTercero,$idTercero) {
-         $sql="";
+         $DatosTercero=$this->DevuelveValores($TablaTercero, "Num_Identificacion", $idTercero);
+         $sql="UPDATE librodiario SET Tercero_Tipo_Documento='$DatosTercero[Tipo_Documento]',Tercero_Identificacion='$DatosTercero[Num_Identificacion]',Tercero_DV='$DatosTercero[DV]',"
+                 . " Tercero_Primer_Apellido='$DatosTercero[Primer_Apellido]',Tercero_Segundo_Apellido='$DatosTercero[Segundo_Apellido]',Tercero_Primer_Nombre='$DatosTercero[Primer_Nombre]', "
+                 . " Tercero_Otros_Nombres='$DatosTercero[Otros_Nombres]',Tercero_Razon_Social='$DatosTercero[RazonSocial]',Tercero_Direccion='$DatosTercero[Direccion]', "
+                 . " Tercero_Cod_Dpto='$DatosTercero[Cod_Dpto]',Tercero_Cod_Mcipio='$DatosTercero[Cod_Mcipio]',Tercero_Pais_Domicilio='$DatosTercero[Pais_Domicilio]' "
+                 . " WHERE Tipo_Documento_Intero='$TipoDocInterno' AND Num_Documento_Interno='$NumDocInterno'";
+        $this->Query($sql);         
+     }
+     
+     //Actualice tercero en cartera
+     
+     public function ActualiceClienteCartera($idFactura,$TablaTercero,$idTercero) {
+         $DatosTercero=$this->DevuelveValores($TablaTercero, "Num_Identificacion", $idTercero);
+         $sql="UPDATE cartera SET idCliente='$DatosTercero[idClientes]',RazonSocial='$DatosTercero[RazonSocial]', Telefono=$DatosTercero[Telefono],"
+                 . " Contacto='$DatosTercero[Contacto]',TelContacto='$DatosTercero[TelContacto]' "
+                 . " WHERE Facturas_idFacturas='$idFactura'";
+        $this->Query($sql);         
      }
      
 //////////////////////////////Fin	
