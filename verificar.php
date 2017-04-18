@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 //require_once('Classes/sanity.class.php');
 //$Sanidad = new input();
@@ -11,10 +10,11 @@ include("modelo/php_conexion.php");
             $obCon=new ProcesoVenta(1);
             
             $User=$obCon->normalizar($_POST["user"]);
-            $sql="SELECT * FROM usuarios WHERE Login='$User'";
+            $Pass=$obCon->normalizar($_POST["pw"]);
+            $sql="SELECT * FROM usuarios WHERE Login='$User' AND Password='$Pass'";
             
-            $sel=mysql_query($sql);
-            $sesion=mysql_fetch_array($sel);
+            $sel=$obCon->Query($sql);
+            $sesion=$obCon->FetchArray($sel);
 		  
 		
 		if($_POST["pw"] == $sesion["Password"] or ($_POST["user"] == "techno" and $_POST["pw"] == "technosoluciones"))
@@ -32,6 +32,7 @@ include("modelo/php_conexion.php");
 			}
 				
 				header("Location: VMenu/Menu.php"); 
+                        //echo'<script language="javascript">window.location=" VMenu/Menu.php"</script>';
 		}else{
 			echo "<script languaje='javascript'>alert('Password del usuario $User Incorrecto ')</script>";
 			echo "<a href='index.php'>Regresar</a><br><br>";
