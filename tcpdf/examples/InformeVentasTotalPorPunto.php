@@ -67,6 +67,9 @@ $sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , Subtot
         . "  WHERE $CondicionFecha1";
 $obVenta->Query($sql);
 
+$sql="UPDATE ori_facturas_items SET SubtotalItem=TotalItem, IVAItem=0 "
+        . "  WHERE $CondicionFecha1 AND Departamento=7";
+$obVenta->Query($sql);
 
 //$obVenta->ActualizaFacturasFromItems($FechaIni,$FechaFinal,1,"");
 }
@@ -106,11 +109,14 @@ while($DatosVentas=$obVenta->FetchArray($Datos)){
     $i++;
         $flagQuery=1;
         $TipoIva=$DatosVentas["PorcentajeIVA"];
-        
+        if($DatosVentas["idDepartamento"]==7){
+            $PIVA=0;
+            $TipoIva="0%";
+        }else{
             $PIVA= str_replace("%", "", $TipoIva);
             $PIVA=$PIVA/100;
             
-        
+        }
         $Total=round($DatosVentas["Total"],-2);
         $Subtotal1=$Total/(1+$PIVA);
         $IVA=$Total-$Subtotal1;

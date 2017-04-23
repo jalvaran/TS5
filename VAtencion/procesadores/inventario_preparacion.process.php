@@ -50,6 +50,18 @@ if(isset($_REQUEST["BtnCortarTodosProductos"])){
         
 }
 
+//inicializar productos venta 
+if(isset($_REQUEST["BtnInicializarProductosVenta"])){
+    
+    $condicion="";
+    $BorrarOrigen=0;
+    $BorrarDestino=0;
+    $obVenta->CopiarTabla("productosventa","inventarios_temporal",$condicion,$BorrarOrigen,$BorrarDestino,$condicion,"");
+    $obVenta->InicializarProductosVenta();
+    header("location:inventario_preparacion.php");
+        
+}
+
 //Cortar productos venta 
 if(isset($_REQUEST["BtnRestarurar"])){
     

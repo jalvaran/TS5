@@ -7804,6 +7804,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $this->VaciarTabla($TablaOrigen);
          }
          
+         
      }
      //Registrar el conteo fisico
      public function RegistrarConteoFisicoInventario($Codigo,$Cantidad,$Vector) {
@@ -7864,6 +7865,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                  . " Contacto='$DatosTercero[Contacto]',TelContacto='$DatosTercero[TelContacto]' "
                  . " WHERE Facturas_idFacturas='$idFactura'";
         $this->Query($sql);         
+     }
+     
+     // Coloque los productosventa en 0
+     
+     public function InicializarProductosVenta(){
+         $sql="UPDATE productosventa SET Existencias=0, CostoTotal=0";
+         $this->Query($sql);
      }
      
 //////////////////////////////Fin	
