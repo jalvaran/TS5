@@ -7211,13 +7211,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     //Crear un egreso desde la tabla egresos pre
     public function EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,$Vector){
         $DatosCuentaOrigen=$this->DevuelveValores("cuentasfrecuentes", "CuentaPUC", $CuentaOrigen);
-        $sql="SELECT ep.ID as idPre, cp.ID,cp.Soporte,cp.idCentroCostos,cp.idSucursal,cp.Concepto, ep.Abono, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Retenciones,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
+        $sql="SELECT ep.ID as idPre, cp.ID,cp.Soporte,cp.idCentroCostos,cp.idSucursal,cp.Concepto, ep.Abono,ep.Descuento, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Retenciones,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
         . " INNER JOIN cuentasxpagar cp ON ep.idCuentaXPagar=cp.ID AND ep.idUsuario='$idUser'";
         $Consulta=$this->Query($sql);
             
         while($DatosEgresos=$this->FetchArray($Consulta)){
-            $NuevoSaldo=$DatosEgresos["Saldo"]-$DatosEgresos["Abono"];
-            $TotalAbonos=$DatosEgresos["Abonos"]+$DatosEgresos["Abono"];
+            $NuevoSaldo=$DatosEgresos["Saldo"]-$DatosEgresos["Abono"]-$DatosEgresos["Descuento"];
+            $TotalAbonos=$DatosEgresos["Abonos"]+$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
             $DatosProveedor=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosEgresos["idProveedor"]);
             //$GranTotal=$DatosEgresos["Total"]+$DatosEgresos["Retenciones"];
             $ProcentajeAbono=(100/$DatosEgresos["Total"])*($DatosEgresos["Abono"]);
@@ -7249,16 +7249,20 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $Columnas[20]="idSucursal";             $Valores[20]= $DatosEgresos["idSucursal"];
 
             $this->InsertarRegistro("egresos",$NumRegistros,$Columnas,$Valores);
-
-            $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, ""); 
-            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], 2205, "PROVEEDORES NACIONALES", "Pago de Cuenta X Pagar", "DB", $DatosEgresos["Abono"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
-            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $CuentaOrigen, $DatosCuentaOrigen["Nombre"], "Pago de Cuenta X Pagar", "CR", $DatosEgresos["Abono"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
             
+            $TotalPagoProveedor=$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
+            $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, ""); 
+            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], 2205, "PROVEEDORES NACIONALES", "Pago de Cuenta X Pagar", "DB", $TotalPagoProveedor, $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
+            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $CuentaOrigen, $DatosCuentaOrigen["Nombre"], "Pago de Cuenta X Pagar", "CR", $DatosEgresos["Abono"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
+            if($DatosEgresos["Descuento"]>0){
+                $ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 15);
+                $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $ParametroContable["CuentaPUC"], $ParametroContable["NombreCuenta"], "Pago de Cuenta X Pagar", "CR", $DatosEgresos["Descuento"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
+            }
             $NumRegistros=6;
             $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
             $Columnas[1]="Hora";		$Valores[1]=date("H:i:s");
             $Columnas[2]="idCuentaXPagar";	$Valores[2]=$DatosEgresos["ID"];
-            $Columnas[3]="Monto";		$Valores[3]=$DatosEgresos["Abono"];
+            $Columnas[3]="Monto";		$Valores[3]=$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
             $Columnas[4]="idUsuarios";          $Valores[4]=$idUser;
             $Columnas[5]="idComprobanteEgreso"; $Valores[5]=$NumEgreso;
             

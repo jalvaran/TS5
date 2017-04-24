@@ -26,8 +26,16 @@ if(isset($_REQUEST['idCuentaXPagar'])){
 // se edita un abono
 if(isset($_REQUEST['BtnEditar'])){
     $idPreEgreso=$obVenta->normalizar($_REQUEST['idPre']);
+    $Saldo=$obVenta->normalizar($_REQUEST['TxtSaldo']);
     $Abono=$obVenta->normalizar($_REQUEST['TxtAbonoEdit']);
-    $obVenta->ActualizaRegistro("egresos_pre", "Abono", $Abono, "ID", $idPreEgreso);
+    $Descuento=$obVenta->normalizar($_REQUEST['TxtDescuentoProntoPago']);
+    $AbonoTotal=$Abono+$Descuento;
+    if($AbonoTotal<=$Saldo){
+        $obVenta->ActualizaRegistro("egresos_pre", "Abono", $Abono, "ID", $idPreEgreso);
+        $obVenta->ActualizaRegistro("egresos_pre", "Descuento", $Descuento, "ID", $idPreEgreso);
+    }else {
+        $css->CrearNotificacionRoja("El abono + el descuento no pueden superar al saldo: Abonos + Movimiento = $AbonoTotal, Saldo= $Saldo, por favor corrija los valores", 16);         
+    }
 }
 
 // se elimina un abono

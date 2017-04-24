@@ -6,7 +6,7 @@
 
 $css =  new CssIni("");
 $obVenta = new ProcesoVenta($idUser);
-$sql="SELECT ep.ID as idPre, cp.ID, ep.Abono, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
+$sql="SELECT ep.ID as idPre, cp.ID, ep.Abono,ep.Descuento, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
         . " INNER JOIN cuentasxpagar cp ON ep.idCuentaXPagar=cp.ID AND ep.idUsuario='$idUser'";
 $Consulta=$obVenta->Query($sql);
 if($obVenta->NumRows($Consulta)){
@@ -32,7 +32,9 @@ if($obVenta->NumRows($Consulta)){
         print("<td>");
         $css->CrearForm2("FrmEditarMonto".$DatosPreEgreso["ID"], $myPage, "post", "_self");
         $css->CrearInputText("idPre", "hidden", "", $DatosPreEgreso["idPre"], "", "", "", "", "", "", 0, 0);
-        $css->CrearInputNumber("TxtAbonoEdit", "Number", "", $DatosPreEgreso['Abono'], "Abono", "", "", "", 100, 30, 0, 1, 1, $DatosPreEgreso['Saldo'], 1);
+        $css->CrearInputText("TxtSaldo", "hidden", "", $DatosPreEgreso["Saldo"], "", "", "", "", "", "", 0, 0);
+        $css->CrearInputNumber("TxtAbonoEdit", "Number", "Abono:<br>", $DatosPreEgreso['Abono'], "Abono", "", "", "", 100, 30, 0, 1, 1, $DatosPreEgreso['Saldo'], 1);
+        $css->CrearInputNumber("TxtDescuentoProntoPago", "Number", "Descuento:<br>", $DatosPreEgreso['Descuento'], "Descuento", "", "", "", 100, 30, 0, 0, 0, $DatosPreEgreso['Saldo'], 1);
         $css->CrearBoton("BtnEditar", "E");
         $css->CerrarForm();
         print("</td>");
@@ -53,6 +55,8 @@ if($obVenta->NumRows($Consulta)){
     $css->FilaTabla(16);
     $css->ColTabla("<strong>Fecha</strong>", 1);
     $css->ColTabla("<strong>Total</strong>", 1);
+    $css->ColTabla("<strong>Total Descuentos</strong>", 1);
+    $css->ColTabla("<strong>Gran Total</strong>", 1);
     $css->ColTabla("<strong>Cuenta Origen</strong>", 6);
     $css->ColTabla("<strong>Generar</strong>", 2);
     $css->CierraFilaTabla();
@@ -62,7 +66,14 @@ if($obVenta->NumRows($Consulta)){
     print("</td>");
     print("<td>");
     $TotalAbono=$obVenta->Sume("egresos_pre", "Abono", " WHERE idUsuario='$idUser'");
+    $TotalDescuentos=$obVenta->Sume("egresos_pre", "Descuento", " WHERE idUsuario='$idUser'");
     print(number_format($TotalAbono));
+    print("</td>");
+    print("<td>");
+    print(number_format($TotalDescuentos));
+    print("</td>");
+    print("<td>");
+    print(number_format($TotalAbono+$TotalDescuentos));
     print("</td>");
     print("<td colspan='6'>");
     $VarSelect["Ancho"]=300;
