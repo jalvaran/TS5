@@ -1584,7 +1584,7 @@ public function DibujaCredito($myPage,$idPreventa,$Vector) {
     //Dibujo una busqueda de un separado
 if(!empty($_REQUEST["TxtBuscarCredito"])){
     $key=$this->obCon->normalizar($_REQUEST["TxtBuscarCredito"]);
-    $sql="SELECT cart.idCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
+    $sql="SELECT cart.idCartera,cart.TipoCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
             . " INNER JOIN clientes cl ON cart.idCliente = cl.idClientes "
             . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 100";
     $Datos=$this->obCon->Query($sql);
@@ -1593,8 +1593,16 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
         
         while($DatosCredito=$this->obCon->FetchArray($Datos)){
             $DatosFactura=$this->obCon->DevuelveValores("facturas", "idFacturas", $DatosCredito["Facturas_idFacturas"]);
+            
             $this->css->FilaTabla(14);
-            $this->css->ColTabla("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]."<strong>", 6);
+            if($DatosFactura["FormaPago"]=='SisteCredito'){
+                print("<td colspan=6 style='background-color:blue; color:white'>");
+            }else{
+                print("<td colspan=6 style='background-color:black; color:white'>");
+            }
+            
+            print("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]." TIPO DE CREDITO: $DatosFactura[FormaPago] <strong>");
+            print("</td>");
             $this->css->CierraFilaTabla();
             $this->css->FilaTabla(14);
             print("<td>");
