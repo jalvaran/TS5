@@ -1596,9 +1596,10 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             
             $this->css->FilaTabla(14);
             if($DatosFactura["FormaPago"]=='SisteCredito'){
-                print("<td colspan=6 style='background-color:blue; color:white'>");
+                
+                print("<td colspan=6 style='background-color:#ff391a; color:white'>");
             }else{
-                print("<td colspan=6 style='background-color:black; color:white'>");
+                print("<td colspan=6 style='background-color:#daeecf;'>");
             }
             
             print("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]." TIPO DE CREDITO: $DatosFactura[FormaPago] <strong>");
