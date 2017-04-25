@@ -208,7 +208,7 @@ $css->AnchoElemento("CmbCuentaDestino_chosen", 300);
 $css->AnchoElemento("CmbProveedores_chosen", 300);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
-$css->Footer();
+//$css->Footer();
 if(isset($_REQUEST["TxtBusqueda"])){
     print("<script>MostrarDialogo();</script>");
 }

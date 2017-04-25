@@ -1426,6 +1426,10 @@ public function CalculePesoRemision($idCotizacion)
  */
 
     public function InsertarFacturaEnCartera($Datos){		
+        $TipoCartera="Interna";
+        if(isset($Datos["SisteCredito"])){
+            $TipoCartera="SisteCredito";
+        }
         $idFactura=$Datos["idFactura"]; 
         $FechaIngreso=$Datos["FechaFactura"]; 
         $FechaVencimiento=$Datos["FechaVencimiento"];
@@ -1440,7 +1444,7 @@ public function CalculePesoRemision($idCotizacion)
             $TelContacto=$DatosCliente["TelContacto"];
             $TotalFactura=$DatosFactura["Total"];
             $tab="cartera";       
-            $NumRegistros=13; 
+            $NumRegistros=14; 
 
             $Columnas[0]="Facturas_idFacturas";         $Valores[0]=$idFactura;
             $Columnas[1]="FechaIngreso";                $Valores[1]=$FechaIngreso;
@@ -1455,7 +1459,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[10]="TotalAbonos";                $Valores[10]=0;
             $Columnas[11]="Saldo";                      $Valores[11]=$TotalFactura;
             $Columnas[12]="idUsuarios";                 $Valores[12]= $this->idUser;
-
+            $Columnas[13]="TipoCartera";                $Valores[13]= $TipoCartera;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }       
         
@@ -1939,6 +1943,9 @@ public function CalculePesoRemision($idCotizacion)
         }else{
             $SumaDias=$TipoPago;
         }
+        if($TipoPago=="SisteCredito"){
+            $SumaDias=30;
+        }
         ////////////////////////////////Preguntamos por disponibilidad
         ///////////
         ///////////
@@ -1979,6 +1986,9 @@ public function CalculePesoRemision($idCotizacion)
                 $FormaPagoFactura=$TipoPago;
                 if($TipoPago<>"Contado"){
                     $FormaPagoFactura="Credito a $TipoPago dias";
+                }
+                if($TipoPago=="SisteCredito"){
+                    $FormaPagoFactura="SisteCredito";
                 }
                 ////////////////Inserto datos de la factura
                 /////
@@ -2043,6 +2053,9 @@ public function CalculePesoRemision($idCotizacion)
                 $this->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
                
                 if($TipoPago<>"Contado"){                   //Si es a Credito
+                    if($TipoPago=="SisteCredito"){
+                        $Datos["SisteCredito"]=1;
+                    }
                     $Datos["Fecha"]=$FechaFactura; 
                     $Datos["Dias"]=$SumaDias;
                     $FechaVencimiento=$this->SumeDiasFecha($Datos);
@@ -2935,16 +2948,22 @@ public function CalculePesoRemision($idCotizacion)
     fwrite($handle,"TOTAL VENTAS CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasCredito"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL VENTAS SISTE CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasSisteCredito"]),14," ",STR_PAD_LEFT));
+    /*
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"EFECTIVO             ".str_pad("$".number_format($DatosCierre["Efectivo"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"DEVUELTAS            ".str_pad("$".number_format($DatosCierre["Devueltas"]),20," ",STR_PAD_LEFT));
-    
+    */
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS SEPARADOS     ".str_pad("$".number_format($DatosCierre["TotalAbonos"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS CREDITOS      ".str_pad("$".number_format($DatosCierre["AbonosCreditos"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"EGRESOS              ".str_pad("$".number_format($DatosCierre["TotalEgresos"]),20," ",STR_PAD_LEFT));
@@ -3025,12 +3044,23 @@ public function CalculePesoRemision($idCotizacion)
         //Calculo las ventas a credito
         //
         $sql="SELECT SUM(Total) as Total FROM facturas "
-                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'Contado'";
+                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'Contado' AND FormaPago<>'SisteCredito'";
         
         $Consulta=$this->Query($sql);
         $DatosSumatorias=$this->FetchArray($Consulta);
         
         $TotalVentasCredito=$DatosSumatorias["Total"]; 
+        
+        
+        //Calculo las ventas de SisteCredito
+        //
+        $sql="SELECT SUM(Total) as Total FROM facturas "
+                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago = 'SisteCredito'";
+        
+        $Consulta=$this->Query($sql);
+        $DatosSumatorias=$this->FetchArray($Consulta);
+        
+        $TotalVentasSisteCredito=$DatosSumatorias["Total"]; 
         
         //Calculo las devoluciones
         
@@ -3060,33 +3090,34 @@ public function CalculePesoRemision($idCotizacion)
         $TotalAbonos=$this->Sume("separados_abonos", "Valor", "WHERE idUsuarios='$idUser' AND idCierre=''");
         //Calculo los abonos de Creditos
         
-        $TotalAbonosCreditos=$this->Sume("facturas_abonos", "Valor", "WHERE Usuarios_idUsuarios='$idUser' AND idCierre=''");
-        
+        $TotalAbonosCreditos=$this->Sume("facturas_abonos", "Valor", "WHERE Usuarios_idUsuarios='$idUser' AND idCierre='' AND FormaPago <> 'SisteCredito'");
+        $TotalAbonosSisteCredito=$this->Sume("facturas_abonos", "Valor", "WHERE Usuarios_idUsuarios='$idUser' AND idCierre='' AND FormaPago = 'SisteCredito'");
         //Ingreso datos en tabla cierres
         
         $tab="cajas_aperturas_cierres";
-        $NumRegistros=20;
+        $NumRegistros=22;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
         $Columnas[3]="Movimiento";           $Valores[3]="Cierre";
         $Columnas[4]="Usuario";               $Valores[4]=$idUser;
         $Columnas[5]="idCaja";            $Valores[5]=$idCaja;
-        $Columnas[6]="TotalVentas";           $Valores[6]=$TotalVentasContado+$TotalVentasCredito-$TotalDevoluciones;
+        $Columnas[6]="TotalVentas";           $Valores[6]=$TotalVentasContado+$TotalVentasCredito+$TotalVentasSisteCredito-$TotalDevoluciones;
         $Columnas[7]="TotalVentasContado";    $Valores[7]=$TotalVentasContado;
         $Columnas[8]="TotalVentasCredito";    $Valores[8]=$TotalVentasCredito;
-        $Columnas[9]="TotalAbonos";                $Valores[9]=$TotalAbonos;
-        $Columnas[10]="TotalDevoluciones";           $Valores[10]=$TotalDevoluciones;
-        $Columnas[11]="TotalEntrega";               $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos-$TotalEgresos;
-        $Columnas[12]="TotalEfectivo";            $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos-$TotalTarjetas-$TotalCheques-$TotalOtros;
-        $Columnas[13]="TotalTarjetas";           $Valores[13]=$TotalTarjetas;
-        $Columnas[14]="TotalCheques";            $Valores[14]=$TotalCheques;
+        $Columnas[9]="TotalAbonos";           $Valores[9]=$TotalAbonos;
+        $Columnas[10]="TotalDevoluciones";    $Valores[10]=$TotalDevoluciones;
+        $Columnas[11]="TotalEntrega";         $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos+$TotalAbonosSisteCredito-$TotalEgresos;
+        $Columnas[12]="TotalEfectivo";        $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos+$TotalAbonosSisteCredito-$TotalTarjetas-$TotalCheques-$TotalOtros;
+        $Columnas[13]="TotalTarjetas";        $Valores[13]=$TotalTarjetas;
+        $Columnas[14]="TotalCheques";         $Valores[14]=$TotalCheques;
         $Columnas[15]="TotalOtros";           $Valores[15]=$TotalOtros;
-        $Columnas[16]="TotalEgresos";           $Valores[16]=$TotalEgresos;
-        $Columnas[17]="Efectivo";           $Valores[17]=$TotalEfectivo;
-        $Columnas[18]="Devueltas";           $Valores[18]=$TotalDevueltas;
-        $Columnas[19]="AbonosCreditos";           $Valores[19]=$TotalAbonosCreditos;
-        
+        $Columnas[16]="TotalEgresos";         $Valores[16]=$TotalEgresos;
+        $Columnas[17]="Efectivo";             $Valores[17]=$TotalEfectivo;
+        $Columnas[18]="Devueltas";            $Valores[18]=$TotalDevueltas;
+        $Columnas[19]="AbonosCreditos";       $Valores[19]=$TotalAbonosCreditos;
+        $Columnas[20]="AbonosSisteCredito";           $Valores[20]=$TotalAbonosSisteCredito;
+        $Columnas[21]="TotalVentasSisteCredito";      $Valores[21]=$TotalVentasSisteCredito;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idCierre=$this->ObtenerMAX($tab, "ID", 1, "");
         
@@ -5066,7 +5097,7 @@ public function VerificaPermisos($VectorPermisos) {
             //////Creo el comprobante de Ingreso
             
             $tab="facturas_abonos";
-            $NumRegistros=6;
+            $NumRegistros=7;
 
             $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
             $Columnas[1]="Hora";                        $Valores[1]=$Hora;
@@ -5074,7 +5105,7 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[3]="Usuarios_idUsuarios";		$Valores[3]=$idUser;
             $Columnas[4]="Facturas_idFacturas";		$Valores[4]=$idFactura;
             $Columnas[5]="idComprobanteIngreso";	$Valores[5]=$idIngreso;
-            
+            $Columnas[6]="FormaPago";                   $Valores[6]=$DatosFactura["FormaPago"];
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             $idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
             
