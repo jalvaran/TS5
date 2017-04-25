@@ -518,6 +518,24 @@ class CssIni{
         
         /////////////////////Crear una columna con un formulario
 	
+	function DivColTablaFormInputText($FormName,$Action,$Method,$Target,$TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required,$TxtHide,$ValueHide,$idPreventa){
+			
+		$this->DivColTable("left", 0, 1, "black", "100%", "");
+		$this->CrearForm2($FormName,$Action,$Method,$Target);
+		$this->CrearInputText($TxtHide,"hidden","",$ValueHide,"","","","","","","","");
+		$this->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+                $this->CrearInputNumber($TxtName, $TxtType, $TxtLabel, $TxtValue, $TxtPlaceh, $TxtColor, "", "", $TxtAncho, $TxtAlto, $ReadOnly, $Required, "", "", "any");
+		//$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
+		
+                print("<input type='submit' id='BtnCantidad$TxtName' name='BtnEditarCantidad' value='E' style='width: 30px;height: 30px;' $TxtEvento='$TxtFuncion' >");
+		$this->CerrarForm();
+		print('</div>');
+                               
+		
+	}
+        
+        /////////////////////Crear una columna con un formulario
+	
 	function ColTablaFormEditarPrecio($FormName,$Action,$Method,$Target,$TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtFuncion2,$TxtAncho,$TxtAlto,$ReadOnly,$Required,$TxtHide,$ValueHide,$idPreventa,$TxtPrecioMayor,$ValueMayor){
 				
 		print('<td>');
@@ -540,6 +558,31 @@ class CssIni{
                                
 		
 	}
+        
+        /////////////////////Crear una columna con un formulario
+	
+	function DivColTablaFormEditarPrecio($FormName,$Action,$Method,$Target,$TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtFuncion2,$TxtAncho,$TxtAlto,$ReadOnly,$Required,$TxtHide,$ValueHide,$idPreventa,$TxtPrecioMayor,$ValueMayor){
+				
+		$this->DivColTable("left", 0, 1, "black", "100%", "");
+                 //print("<script>alert('Vector $ReadOnly')</script>");
+		$this->CrearForm2($FormName,$Action,$Method,$Target);
+		$this->CrearInputText($TxtHide,"hidden","",$ValueHide,"","","","","","","","");
+                $this->CrearInputText($TxtPrecioMayor,"hidden","",$ValueMayor,"","","","","","","","");
+		$this->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+                //$this->CrearInputNumber($TxtName, $TxtType, $TxtLabel, $TxtValue, $TxtPlaceh, $TxtColor, "", "", $TxtAncho, $TxtAlto, $ReadOnly, $Required, "", "", "any")
+		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
+                
+		//print("<input type='submit' id='BtnEditar$TxtName' name='BtnEditar' value='E' style='width: 30px;height: 30px;' onClick='$TxtFuncion'>");
+		$vector["Enable"]=$ReadOnly;
+                $vector["Color"]="Azul";
+                $this->CrearBotonPersonalizado("BtnEditar", "E",$vector);
+                $vector["Color"]="Verde";
+                $this->CrearBotonPersonalizado("BtnMayorista", "M",$vector);
+                $this->CerrarForm();
+		print('</div>');
+                               
+		
+	}
 	
 	
 	/////////////////////Crear una columna con un formulario
@@ -550,6 +593,18 @@ class CssIni{
 		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required);
 		
 		print('</td>');
+                               
+		
+	}
+        
+        /////////////////////Crear una columna con un formulario
+	
+	function DivColTablaInputText($TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required){
+		
+		$this->DivColTable("left", 0, 1, "black", "100%", "");
+		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required);
+		
+		print('</div>');
                                
 		
 	}
@@ -1198,6 +1253,24 @@ function Footer(){
                 $this->CrearOptionSelect($DatosConsulta[$idItemValue], "$DatosConsulta[$OptionDisplay1] $DatosConsulta[$OptionDisplay2]", $Sel);
             }
             $this->CerrarSelect();
+        }
+        
+        //Crear una tabla con un div
+        public function DivTable() {
+            print("<div style='display:table;'>");
+        }
+        //Crear una tabla con un div
+        public function DivRowTable() {
+            print("<div style='display:table-row; '>");
+        }
+        //Crear una tabla con un div
+        public function DivColTable($Align,$Border,$BorderWith,$ColorFont,$FontSize,$Vector) {
+            if($Border==1){
+                $Border="border-style: solid;border-width:$BorderWith";
+            }else{
+                $Border="";
+            }
+            print("<div style='display:table-cell; text-align:$Align;$Border;font-size:$FontSize;color:$ColorFont'>");
         }
         //////////////////////////////////FIN
 }

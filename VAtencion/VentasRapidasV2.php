@@ -20,8 +20,6 @@ if(!empty($_REQUEST['CmbPreVentaAct'])){
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
 
-
-$myPage="VentasRapidas.php";
 $css =  new CssIni("TS5 Ventas");
 $obVenta=new ProcesoVenta($idUser);  
 $css->CabeceraIni("TS5 Ventas"); 
@@ -32,9 +30,9 @@ $css->CabeceraIni("TS5 Ventas");
     $css->CrearSelect("CmbPreVentaAct","EnviaForm('FrmPreventaSel')");
     $css->CrearOptionSelect('NO','Seleccione una preventa',0);
 
-    $pa=mysql_query("SELECT * FROM vestasactivas WHERE Usuario_idUsuario='$idUser'");	
+    $pa=$obVenta->Query("SELECT * FROM vestasactivas WHERE Usuario_idUsuario='$idUser'");	
 
-           while($DatosVentasActivas=mysql_fetch_array($pa)){
+           while($DatosVentasActivas=$obVenta->FetchArray($pa)){
                    $label=$DatosVentasActivas["idVestasActivas"]." ".$DatosVentasActivas["Nombre"];
 
                    if($idPreventa==$DatosVentasActivas["idVestasActivas"])
@@ -100,14 +98,18 @@ if(!empty($_REQUEST["CantidadCero"])){
 if(!empty($_REQUEST["NoAutorizado"])){
     $css->CrearNotificacionRoja("Clave Incorrecta !", 18);
 }
-include_once("procesadores/procesaVentasRapidas.php");
+
 
 $Visible=0;
 if($idPreventa>0){
     $Visible=1;
 }
 $css->CrearDiv("Principal", "container", "center", $Visible, 1);
+include_once("procesadores/procesaVentasRapidas.php");
 
+//$css->DivPage("TxtTitulo", "cuadros_informativos/TotalesVentasRapidas.php?idUser=$idUser&idPreventa=$idPreventa&myPage=$myPage", "", "DivBusqueda", "onClick", 30, 30, "");
+//$css->CrearDiv("DivBusqueda", "", "center",1,1);
+//$css->CerrarDiv();
 $sql="SELECT Autorizado FROM preventa WHERE Autorizado>=1 AND VestasActivas_idVestasActivas='$idPreventa' LIMIT 1";
 $ConsultaPreventa=$obVenta->Query($sql);
 $Autorizado=$obVenta->FetchArray($ConsultaPreventa); 
@@ -193,8 +195,21 @@ $css->CerrarForm();
 /*
  * Visualizamos Totales y opciones de pago
  */
-
+$css->CrearTabla();
+$css->FilaTabla(16);
+print("<td>");
+$css->CrearDiv("DivTotales", "", "center", 1, 1);
 include_once 'cuadros_informativos/TotalesVentasRapidas.php';
+$css->CerrarDiv();
+print("</td>");
+print("<td>");
+$css->CrearDiv("DivItemsPreventa", "", "center", 1, 1);
+include_once 'cuadros_informativos/ItemsPreventa.php';
+$css->CerrarDiv();
+print("</td>");
+$css->CierraFilaTabla();
+$css->CerrarTabla();
+
 include_once 'CuadroDialogoCrearCliente.php';
 $css->CerrarDiv();
 $css->AgregaJS(); //Agregamos javascripts
@@ -208,6 +223,7 @@ $css->AnchoElemento("CmbCuentaDestino_chosen", 300);
 $css->AnchoElemento("CmbProveedores_chosen", 300);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
+//print("<script>setInterval('BusquedaTxtTitulo()',500)</script>");
 //$css->Footer();
 if(isset($_REQUEST["TxtBusqueda"])){
     print("<script>MostrarDialogo();</script>");

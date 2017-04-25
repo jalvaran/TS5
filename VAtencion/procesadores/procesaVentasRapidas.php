@@ -66,7 +66,7 @@
 			print('<script language="JavaScript">alert("Este producto no esta en la base de datos por favor no lo entregue")</script>');
 			
 		}
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa");	
+		header("location:$myPage?CmbPreVentaAct=$idPreventa");	
 	}
 	
 	if(!empty($_REQUEST['del'])){
@@ -91,7 +91,7 @@
                 $Cantidad=1;
                 $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
                 
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa");
+		header("location:$myPage?CmbPreVentaAct=$idPreventa");
 			
 	}
 	
@@ -500,7 +500,7 @@
                     $NoAutorizado="NoAutorizado=1";
                     
                 }
-		header("location:VentasRapidas.php?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
+		header("location:$myPage?CmbPreVentaAct=$idPreventa&$NoAutorizado");	
 	}
         
         

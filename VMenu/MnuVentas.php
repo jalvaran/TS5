@@ -52,7 +52,7 @@ include_once("../sesiones/php_control.php");
 	$css->IniciaTabs();
 
 		$css->NuevaTabs(1);
-                    
+                    $css->SubTabs("../VAtencion/VentasRapidasV2.php","_blank","../images/vender.png","Ventas Rapidas V2");
                     $css->SubTabs("../VAtencion/VentasRapidas.php","_blank","../images/vender.png","Ventas Rapidas");
                     $css->SubTabs("../VAtencion/cajas_aperturas_cierres.php","_blank","../images/cierres_caja.jpg","Historial de Cierres");
                     $css->SubTabs("../VAtencion/separados.php","_blank","../images/separados.png","Historial de Separados");
