@@ -1059,6 +1059,7 @@ function Footer(){
             function Busqueda<?php echo"$Nombre"?>() {
                 
                 str=document.getElementById("<?php echo"$Nombre"?>").value;
+                document.getElementById("<?php echo"$Nombre"?>").value="";
                 <?php
                 if(isset($Vector["Variable"][0])){
                     $idObjeto=$Vector["Variable"][0];

@@ -97,6 +97,7 @@ function refrescaMesas(seg) {
 function posiciona(id){ 
    
    document.getElementById(id).focus();
+   
 }
 
 function CalculeDevuelta() {

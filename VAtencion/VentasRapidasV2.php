@@ -170,10 +170,11 @@ if(isset($_REQUEST["TxtBusqueda"]) and !empty($_REQUEST["TxtBusqueda"])){
 $css->CrearTabla();
 $css->FilaTabla(16);
 print("<td style='text-align:center'>");
-$css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
-$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
-$css->CerrarForm();
+//$css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
+//$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+//$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
+//$css->CerrarForm();
+$css->DibujeCuadroBusqueda("TxtCodigoBarras","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
 //$css->CrearForm2("FrmBusquedaItems",$myPage,"post","_self");
@@ -213,17 +214,10 @@ $css->CerrarDiv();//Cerramos contenedor Principal
 /*
  * Visualizamos Totales y opciones de pago
  */
-$css->CrearTabla();
-$css->FilaTabla(16);
-print("<td>");
-$css->CrearDiv("DivTotales", "", "center", 1, 1);
-include_once 'cuadros_informativos/TotalesVentasRapidas.php';
-$css->CerrarDiv();
-print("</td>");
-print("<td>");
+
 $css->CrearDiv("DivItemsPreventa", "", "center", 1, 1);
-include_once 'cuadros_informativos/ItemsPreventa.php';
 $css->CerrarDiv();
+$css->DivPage("BtnMuestraItems", "Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&myPage=$myPage", "", "DivItemsPreventa", "onClick", 30, 30, "");
 print("</td>");
 $css->CierraFilaTabla();
 $css->CerrarTabla();
@@ -241,10 +235,12 @@ $css->AnchoElemento("CmbCuentaDestino_chosen", 300);
 $css->AnchoElemento("CmbProveedores_chosen", 300);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
-//print("<script>setInterval('BusquedaTxtTitulo()',500)</script>");
+print("<script>document.getElementById('BtnMuestraItems').click();</script>");
+//print("<script>setInterval('BusquedaTxtCodigoBarras()',500)</script>");
 //$css->Footer();
 if(isset($_REQUEST["TxtBusqueda"])){
     print("<script>MostrarDialogo();</script>");
 }
+
 ob_end_flush();
 ?>
