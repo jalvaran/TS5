@@ -1384,13 +1384,14 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
         while($DatosProducto=$this->obCon->FetchArray($consulta)){
             $this->css->FilaTabla(16);
              print("<td>");
-            $Titulo="";
-            $Nombre="Agregar";
-            $RutaImage="../images/add.png";
-            $javascript="";
-            $VectorBim["f"]=0;
+            //$Titulo="";
+            //$Nombre="Agregar";
+            //$RutaImage="../images/add.png";
+            //$javascript="";
+            //$VectorBim["f"]=0;
             $target="$PageReturn$DatosProducto[idProductosVenta]&TxtIdCliente=$Variable&TxtTablaItem=$tab";
-            $this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
+            //$this->css->CrearLinkImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"relative","",$VectorBim);
+            $this->css->CrearLink($target, "_self", "Agregar");
             print("</td>");
             $this->css->ColTabla($DatosProducto["idProductosVenta"], 1);
             $this->css->ColTabla($DatosProducto["Referencia"], 1);

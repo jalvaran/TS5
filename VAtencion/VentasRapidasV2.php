@@ -166,32 +166,49 @@ if(isset($_REQUEST["TxtBusqueda"]) and !empty($_REQUEST["TxtBusqueda"])){
 
 }
             
-$css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
+
 $css->CrearTabla();
 $css->FilaTabla(16);
 print("<td style='text-align:center'>");
-
+$css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
 $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-$css->CrearInputText("TxtCodigoBarras","text","Buscar por codigo de Barras:<br>","","Digite un codigo de Barras","black","","",200,30,0,0);
-
+$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
+$css->CerrarForm();
 print("</td>");
 print("<td style='text-align:center'>");
-$VectorCuaBus["F"]=0;
-$obTabla->CrearCuadroBusqueda($myPage,"CmbPreVentaAct",$idPreventa,"","",$VectorCuaBus);
-$css->CrearBoton("BtnAgregarItem", "Buscar");
+//$css->CrearForm2("FrmBusquedaItems",$myPage,"post","_self");
+//$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+//$VectorCuaBus["F"]=0;
+//$obTabla->CrearCuadroBusqueda($myPage,"CmbPreVentaAct",$idPreventa,"","",$VectorCuaBus);
+//$css->CrearBoton("BtnAgregarItem", "Buscar");
+//$css->CerrarForm();
+$css->DibujeCuadroBusqueda("BuscarItems","Consultas/BuscarItems.php?TxtConsultaCupo","CmbPreVentaAct=$idPreventa","DivBusquedas","onChange",30,100,"");
 print("</td>");
-print("<td>");
-$css->CrearInputText("TxtAutorizacion", "password", "", "", "Autorizaciones", "", "", "", 200, 30, 0, 0);
+print("<td style='text-align:center'>");
+$css->CrearForm2("FrmAutorizacion",$myPage,"post","_self");
+$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+$css->CrearInputText("TxtAutorizacion", "password", "", "", "Autorizaciones", "", "", "", 150, 30, 0, 0);
+$css->CerrarForm();
 print("</td>");
-print("<td>");
-
-print("<strong>Cerrar Turno:<br></strong>");
-
+print("<td style='text-align:center'>");
+print("<strong>Buscar Cupo: </strong>");
+//$css->CrearForm2("FrmConsultaCupo",$myPage,"post","_self");
+//$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+//$css->CrearInputText("TxtConsultaCupo", "text", "", "", "Consultar Cupo", "", "", "", 150, 30, 0, 0);
+//$css->CerrarForm();
+//$css->DibujeCuadroBusqueda("BuscarComision","Consultas/DatosCupo.php?key","CmbPreVentaAct=$idPreventa","DivBusquedaComision","onChange",30,100,"");
+$css->DibujeCuadroBusqueda("BuscarCupo","Consultas/DatosCupoClientes.php?TxtConsultaCupo","CmbPreVentaAct=$idPreventa","DivBusquedas","onChange",30,100,"");
+print("</td>");
+print("<td style='text-align:center'>");
+$css->CrearForm2("FrmCerrarTurno",$myPage,"post","_self");
+$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
 $css->CrearBotonConfirmado("BtnCerrarTurno", "Cerrar Turno");
+$css->CerrarForm();
 print("</td>");
 $css->CerrarTabla();
-$css->CerrarForm();
-
+//$css->CrearDiv("DivBusquedaCupo", "", "center", 1, 1);
+$css->CrearDiv("DivBusquedas", "", "center", 1, 1);
+$css->CerrarDiv();//Cerramos contenedor Principal
 /*
  * Visualizamos Totales y opciones de pago
  */

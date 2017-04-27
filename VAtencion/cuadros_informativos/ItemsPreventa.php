@@ -31,10 +31,10 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
             $css->DivRowTable();
             $DatosProducto=$obVenta->DevuelveValores($DatosPreventa["TablaItem"],"idProductosVenta",$DatosPreventa["ProductosVenta_idProductosVenta"]);
             $css->DivColTable("left",0,1,"black","100%","");
-                    print("<strong>$DatosProducto[Referencia]</strong>");
+                    print("$DatosProducto[Referencia]");
             $css->CerrarDiv();
             $css->DivColTable("left",0,1,"black","100%","");
-                    print("<strong>$DatosProducto[Nombre]</strong>");
+                    print("$DatosProducto[Nombre]");
             $css->CerrarDiv();
             
             $Autorizado=!$DatosPreventa["Autorizado"];
@@ -51,11 +51,11 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
             $PrecioAcordado=round($DatosPreventa['ValorAcordado']);
             
             $css->DivColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","","","","150","30",$Autorizado,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa,"TxtPrecioMayor",$DatosProducto["PrecioMayorista"]);
-            $css->DivColTable("left",0,1,"black","100%","");
+            $css->DivColTable("right",0,1,"black","100%","");
                     print("<strong>".number_format($DatosPreventa['TotalVenta'])."</strong>");
             $css->CerrarDiv();
             
-            $css->DivColTable("left",0,1,"black","100%","");
+            $css->DivColTable("center",0,1,"black","100%","");
             $VectorDatosExtra["ID"]="LinkDel$DatosPreventa[idPrecotizacion]";
             
             $link="$myPage?del=$DatosPreventa[idPrecotizacion]&TxtTabla=preventa&TxtIdTabla=idPrecotizacion&TxtIdPre=$idPreventa";

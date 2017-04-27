@@ -209,6 +209,17 @@
                 exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
             }
             if($TipoPago<>"Contado"){
+                $Deuda=$obVenta->Sume("cartera", "Saldo", "WHERE idCliente='$idCliente'");
+                $DatosClientes=$obVenta->DevuelveValores("clientes", "idClientes", $idCliente);
+                $CupoDisponible=$DatosClientes["Cupo"]-$Deuda;
+                $CapacidadCompra=$CupoDisponible-$TotalVenta;
+                if($CapacidadCompra<=100){
+                    print("<script>alert('El cliente $DatosClientes[RazonSocial] No cuenta con cupo Disponible para realizar esta compra a credito')</script>");
+                    $css->CrearNotificacionRoja("El Cliente $DatosClientes[RazonSocial] $DatosClientes[Num_Identificacion] cuenta con un cupo de $".number_format($DatosClientes["Cupo"]).", Debe $".number_format($Deuda).", Tiene un cupo disponible de: ".number_format($CupoDisponible).", No tiene cupo para el total de la Factura: $". number_format($TotalVenta), 18);
+                    exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
+                }
+            }
+            if($TipoPago<>"Contado"){
                 $Efectivo=0;
                 $DatosVentaRapida["PagaCheque"]=0;
                 $DatosVentaRapida["PagaTarjeta"]=0;
@@ -559,6 +570,30 @@
             header("location:$myPage?CmbPreVentaAct=$idPreventa");
         }
         
+        
+        //////Verifico el cupo de una persona
+	if(!empty($_REQUEST['TxtConsultaCupo'])){
+		
+            $obVenta=new ProcesoVenta($idUser);
+            $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+            $key=$obVenta->normalizar($_REQUEST['TxtConsultaCupo']);
+            if(strlen($key)>3){
+                $sql="SELECT idClientes,Num_Identificacion, RazonSocial, Cupo FROM clientes WHERE Num_Identificacion='$key' or RazonSocial LIKE '%$key%'";
+                $Consulta=$obVenta->Query($sql);
+                while($DatosCliente=$obVenta->FetchArray($Consulta)){                
+                    $Deuda=$obVenta->Sume("cartera", "Saldo", "WHERE idCliente='$DatosCliente[idClientes]'");
+                    $CupoDisponible=$DatosCliente["Cupo"]-$Deuda;
+                    if($CupoDisponible > 100){
+                        $css->CrearNotificacionVerde("El Cliente $DatosCliente[RazonSocial] $DatosCliente[Num_Identificacion] cuenta con un cupo de $".number_format($DatosCliente["Cupo"]).", Debe $".number_format($Deuda).", Tiene un cupo disponible de: ".number_format($CupoDisponible), 18);
+                    }else{
+                        $css->CrearNotificacionRoja("El Cliente $DatosCliente[RazonSocial] $DatosCliente[Num_Identificacion] cuenta con un cupo de $".number_format($DatosCliente["Cupo"]).", Debe $".number_format($Deuda).", Tiene un cupo disponible de: ".number_format($CupoDisponible).", No tiene Acceso a mas creditos", 18);
+                    }
+                }
+            }else{
+                $css->CrearNotificacionNaranja("Debes introducir al menos 4 caracteres", 18);
+            }
+		
+	}
         ///////////////Fin
         
 	?>
