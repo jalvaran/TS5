@@ -264,31 +264,36 @@
 		
 		$idPreventa=$_REQUEST['CmbPreVentaAct'];
                 $idCliente=$_REQUEST['CmbClientes'];
-                $Abono=$_REQUEST['TxtAbono'];
-                if($idCliente<=1){
-                    print("<script>alert('Debe seleccionar un Cliente para poder ejecutar esta accion')</script>");
-                    exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
-                }
-		$consulta=$obVenta->ConsultarTabla("preventa", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
-                if($obVenta->NumRows($consulta)){
-                    $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-                    $CentroCosto=$DatosCaja["CentroCostos"];
-                    $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                    $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
-                    $VectorIngreso["fut"]="";
-                    $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-
-                    $DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
-                    $idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
-                    $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-                    if($DatosImpresora["Habilitado"]=="SI"){
-                        $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
+                $Abono=$obVenta->normalizar($_REQUEST['TxtAbono']);
+                $TotalSeparado=$obVenta->Sume("preventa", "TotalVenta", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
+                if($Abono<$TotalSeparado){
+                    if($idCliente<=1){
+                        print("<script>alert('Debe seleccionar un Cliente para poder ejecutar esta accion')</script>");
+                        exit("<a href='$myPage?CmbPreVentaAct=$idPreventa' ><h1>Volver</h1></a>");
                     }
+                    $consulta=$obVenta->ConsultarTabla("preventa", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
+                    if($obVenta->NumRows($consulta)){
+                        $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+                        $CentroCosto=$DatosCaja["CentroCostos"];
+                        $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+                        $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
+                        $VectorIngreso["fut"]="";
+                        $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+
+                        $DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
+                        $idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
+                        $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+                        if($DatosImpresora["Habilitado"]=="SI"){
+                            $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
+                        }
 
 
-                    header("location:$myPage?CmbPreVentaAct=$idPreventa&Separado=$idSeparado");
+                        header("location:$myPage?CmbPreVentaAct=$idPreventa&Separado=$idSeparado");
+                    }else{
+                        header("location:$myPage?CmbPreVentaAct=$idPreventa&E=Separado");	
+                    }
                 }else{
-                    header("location:$myPage?CmbPreVentaAct=$idPreventa&E=Separado");	
+                    $css->CrearNotificacionRoja("El abono debe ser menor al total del separado, verifique",16);
                 }
 	}
 	
@@ -319,7 +324,7 @@
 			}
 		
 			$tab="clientes";
-			$NumRegistros=15;  
+			$NumRegistros=16;  
 								
 			
 			$Columnas[0]="Tipo_Documento";						$Valores[0]=$_REQUEST['CmbTipoDocumento'];
@@ -337,7 +342,7 @@
 			$Columnas[12]="Telefono";			    			$Valores[12]=$_REQUEST['TxtTelefono'];
 			$Columnas[13]="Ciudad";			    				$Valores[13]=$DatosMunicipios["Ciudad"];
 			$Columnas[14]="Email";			    				$Valores[14]=$_REQUEST['TxtEmail'];
-			
+			$Columnas[15]="Cupo";			    				$Valores[15]=$_REQUEST['TxtCupo'];
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                         $tab="proveedores";
                         $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
@@ -499,7 +504,7 @@
 		
 		$obVenta=new ProcesoVenta($idUser);
                 $Clave=$obVenta->normalizar($_POST['TxtAutorizacion']);
-                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND Role='ADMINISTRADOR' OR Role='SUPERVISOR'";
+                $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' OR Role='SUPERVISOR')";
                 $Datos=$obVenta->Query($sql);
                 $DatosAutorizacion=$obVenta->FetchArray($Datos);
                 
@@ -594,6 +599,8 @@
             }
 		
 	}
+        
+        
         ///////////////Fin
         
 	?>

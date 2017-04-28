@@ -66,15 +66,21 @@ $NombreUser=$_SESSION['nombre'];
 $idUser=$_SESSION['idUser'];	
 $obTabla = new Tabla($db);
 
+$Visible=0;
+if($idPreventa>0){
+    $Visible=1;
+}
+$css->CrearDiv("Principal", "container", "center", $Visible, 1);
+
 if(!empty($_REQUEST["TxtidFactura"])){
             
     $idFactura=$_REQUEST["TxtidFactura"];
     if($idFactura<>""){
         $RutaPrint="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=".$idFactura;
         $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
-        $css->CrearTabla();
-        $css->CrearFilaNotificacion("Factura Creada Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Factura No. $DatosFactura[NumeroFactura]</a>",16);
-        $css->CerrarTabla();
+        
+        $css->CrearNotificacionVerde("Factura Creada Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Factura No. $DatosFactura[NumeroFactura]</a>",16);
+        
     }else{
 
        $css->AlertaJS("No se pudo crear la factura porque no hay resoluciones disponibles", 1, "", ""); 
@@ -85,9 +91,9 @@ if(!empty($_REQUEST["TxtidFactura"])){
 if(!empty($_REQUEST["TxtIdEgreso"])){
     $idEgreso=$_REQUEST["TxtIdEgreso"];
     $RutaPrint="../tcpdf/examples/imprimircomp.php?ImgPrintComp=".$idEgreso;
-    $css->CrearTabla();
-        $css->CrearFilaNotificacion("Egreso Creado Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Egreso No. $idEgreso</a>",16);
-    $css->CerrarTabla();
+    
+        $css->CrearNotificacionVerde("Egreso Creado Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Egreso No. $idEgreso</a>",16);
+    
 }
 
 if(!empty($_REQUEST["CantidadCero"])){
@@ -99,12 +105,6 @@ if(!empty($_REQUEST["NoAutorizado"])){
     $css->CrearNotificacionRoja("Clave Incorrecta !", 18);
 }
 
-
-$Visible=0;
-if($idPreventa>0){
-    $Visible=1;
-}
-$css->CrearDiv("Principal", "container", "center", $Visible, 1);
 include_once("procesadores/procesaVentasRapidas.php");
 
 //$css->DivPage("TxtTitulo", "cuadros_informativos/TotalesVentasRapidas.php?idUser=$idUser&idPreventa=$idPreventa&myPage=$myPage", "", "DivBusqueda", "onClick", 30, 30, "");

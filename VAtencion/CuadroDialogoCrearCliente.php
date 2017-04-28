@@ -23,7 +23,7 @@
 		 $css->CrearInputText("TxtTelefono","text","","","Telefono","black","","",200,30,0,1);
                  
 		 $css->CrearInputText("TxtEmail","text","","","Email","black","","",200,30,0,1);
-                 
+                 $css->CrearInputText("TxtCupo","text","","","Cupo Credito","black","","",200,30,0,1);
                  $VarSelect["Ancho"]="200";
                  $VarSelect["PlaceHolder"]="Seleccione el municipio";
                  $css->CrearSelectChosen("CmbCodMunicipio", $VarSelect);
@@ -67,7 +67,7 @@
         $css->CerrarSelect();
         echo '<br><br>';
         $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-        $css->CrearInputNumber("TxtAbono","number","Abono:<br>","","Digite el abono del cliente","black","","",200,30,0,1,1,$GranTotal,"");
+        $css->CrearInputNumber("TxtAbono","number","Abono:<br>","","Digite el abono del cliente","black","","",200,30,0,1,1,"","");
         
         $css->CrearBotonConfirmado("BtnCrearSeparado", "Crear Separado");
         $css->CerrarForm();

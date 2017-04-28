@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-</head>
-<body> 
 <?php
 
 session_start();
@@ -13,7 +7,7 @@ $TipoUser=$_SESSION['tipouser'];
 include_once("../../modelo/php_conexion.php");
 include_once("../css_construct.php");
 
-$css =  new CssIni("");
+$css =  new CssIni("id");
 $obVenta = new ProcesoVenta($idUser);
 //$key=$obVenta->normalizar($_REQUEST['key']);
 $myPage=$obVenta->normalizar($_REQUEST['myPage']);
@@ -194,7 +188,7 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                     $Consulta=$obVenta->Query($sql);
                     while($DatosCliente=$obVenta->FetchArray($Consulta)){
 
-                           $css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[Num_Identificacion] / $DatosCliente[RazonSocial] / $DatosCliente[Telefono]" , 0);
+                           $css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[RazonSocial] / CC $DatosCliente[Num_Identificacion]" , 0);
                        }
 
                 $css->CerrarSelect();
@@ -313,8 +307,5 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
     }else{
       $css->CrearNotificacionRoja("No hay items en esta preventa",20);  
     }
-
+$css->AgregaJS(); //Agregamos javascripts
 ?>
-
-</body>
-</html>
