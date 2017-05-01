@@ -19,6 +19,12 @@ if(!empty($_REQUEST['CmbPreVentaAct'])){
 
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
+$idClientes=1;
+//////Si recibo un cliente
+if(isset($_REQUEST['idClientes'])){
+
+        $idClientes=$_REQUEST['idClientes'];
+}
 
 $css =  new CssIni("TS5 Ventas");
 $obVenta=new ProcesoVenta($idUser);  
@@ -137,15 +143,6 @@ $css->CrearBotonConfirmado("BtnDescuentoGeneral", "Descuento %");
 
 $css->CerrarForm();
 print("</td>");
-/*
-print("<td style='text-align:center;'>");
-$css->CrearForm2("FrmDescuentoPorMayor", $myPage, "post", "_self");
-$css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
-$css->CrearBotonConfirmado("BtnDescuentoMayorGeneral", "Descuento Mayorista");
-
-$css->CerrarForm();
-print("</td>");
-*/
  
 $css->CierraFilaTabla();
 $css->CerrarTabla();
@@ -174,6 +171,7 @@ print("<td style='text-align:center'>");
 //$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
 //$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
 //$css->CerrarForm();
+print("<strong>Codigo de Barras: </strong>");
 $css->DibujeCuadroBusqueda("TxtCodigoBarras","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
@@ -187,10 +185,13 @@ print("<strong>Buscar Item: </strong>");
 $css->DibujeCuadroBusqueda("BuscarItems","Consultas/BuscarItems.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivBusquedas","onChange",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
-$css->CrearForm2("FrmAutorizacion",$myPage,"post","_self");
-$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-$css->CrearInputText("TxtAutorizacion", "password", "", "", "Autorizaciones", "", "", "", 150, 30, 0, 0);
-$css->CerrarForm();
+//$css->CrearForm2("FrmAutorizacion",$myPage,"post","_self");
+//$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+//$css->CrearInputText("TxtAutorizacion", "password", "", "", "Autorizaciones", "", "", "", 150, 30, 0, 0);
+//$css->CerrarForm();
+
+print("<strong>Autorizacion: </strong>");
+$css->DibujeCuadroBusqueda("TxtAutorizacion","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&TxtAutorizacion","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
 print("<strong>Buscar Cupo: </strong>");
@@ -217,7 +218,7 @@ $css->CerrarDiv();//Cerramos contenedor Principal
 
 $css->CrearDiv("DivItemsPreventa", "", "center", 1, 1);
 $css->CerrarDiv();
-$css->DivPage("BtnMuestraItems", "Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&myPage=$myPage", "", "DivItemsPreventa", "onClick", 30, 30, "");
+$css->DivPage("BtnMuestraItems", "Consultas/AgregaCB.php?idClientes=$idClientes&CmbPreVentaAct=$idPreventa&myPage=$myPage", "", "DivItemsPreventa", "onClick", 30, 30, "");
 print("</td>");
 $css->CierraFilaTabla();
 $css->CerrarTabla();

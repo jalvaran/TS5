@@ -12,6 +12,15 @@ $obVenta = new ProcesoVenta($idUser);
 //$key=$obVenta->normalizar($_REQUEST['key']);
 $myPage=$obVenta->normalizar($_REQUEST['myPage']);
 $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+$idClientes=1;
+//////Si recibo un cliente
+if(isset($_REQUEST['idClientes'])){
+
+    $idClientes=$_REQUEST['idClientes'];
+}
+
+
+//Si se recibe un codigo de barras
 if(isset($_REQUEST['key'])){
 		
         $CodBar=$obVenta->normalizar($_REQUEST['key']);
@@ -36,13 +45,35 @@ if(isset($_REQUEST['key'])){
         }
 }
 
+//Si se recibe una autorizacion
+
+if(isset($_REQUEST['TxtAutorizacion'])){
+		
+    $Clave=$obVenta->normalizar($_REQUEST['TxtAutorizacion']);
+    $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' OR Role='SUPERVISOR')";
+    $Datos=$obVenta->Query($sql);
+    $DatosAutorizacion=$obVenta->FetchArray($Datos);
+
+    $NoAutorizado="";
+    if($DatosAutorizacion["Identificacion"]>0){
+
+        $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
+    }else{
+        $css->CrearNotificacionRoja("Clave incorrecta o no autorizada", 16);
+    }	
+}
 
 //Dibujo cuadro de totales
 $css->CrearTabla();
 $css->FilaTabla(16);
+$DatosPersonalesCliente=$obVenta->DevuelveValores("clientes", "idClientes", $idClientes);
 print("<td>");
 $css->CrearDiv("DivTotales", "", "center", 1, 1);
-
+if($idClientes==1){
+    $css->CrearNotificacionVerde("Venta para $DatosPersonalesCliente[RazonSocial]", 14);
+}else{
+    $css->CrearNotificacionRoja("Venta para $DatosPersonalesCliente[RazonSocial]", 14);
+}
 $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasActivas",$idPreventa);
     $IVA=$obVenta->SumeColumna("preventa","Impuestos", "VestasActivas_idVestasActivas",$idPreventa);
     $DatosPreventa=$obVenta->DevuelveValores("vestasactivas","idVestasActivas", $idPreventa);
@@ -61,6 +92,7 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
     $Total=$Subtotal+$IVA;
     $GranTotal=round($Total-$SaldoFavor);
     $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
+    $css->CrearInputText("TxtCliente","hidden","",$idClientes,"","","","",150,30,0,0);
     $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",150,30,0,0);
     $css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
     $css->CrearInputText("TxtTotalH","hidden","",$Total,"","","","",150,30,0,0);
@@ -178,7 +210,7 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                        }
                 $css->CerrarSelect();
 
-
+                /*
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Busque un Cliente";
                 $VarSelect["Title"]="";
@@ -192,7 +224,7 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                        }
 
                 $css->CerrarSelect();
-
+                */
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Forma de Pago";
                 $VarSelect["Title"]="";

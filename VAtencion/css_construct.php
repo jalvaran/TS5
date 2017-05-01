@@ -1091,8 +1091,11 @@ function Footer(){
             }
             </script>
             <?php 
-            
-            $this->CrearInputText($Nombre, "text", "", "", "Buscar", "Black", $Evento, "Busqueda".$Nombre."()", $Ancho, $Alto, 0, 0);
+            $TipoText="text";
+            if($Nombre=="TxtAutorizacion"){
+                $TipoText="password";
+            }
+            $this->CrearInputText($Nombre, $TipoText, "", "", "Buscar", "Black", $Evento, "Busqueda".$Nombre."()", $Ancho, $Alto, 0, 0);
             
             $this->BotonBuscar(20, 20, "");
             
