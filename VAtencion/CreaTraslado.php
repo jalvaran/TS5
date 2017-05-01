@@ -33,7 +33,7 @@ print("<body>");
          
     if(isset($_REQUEST["TxtBusqueda"])){
         $key=$_REQUEST["TxtBusqueda"];
-        $PageReturn=$_REQUEST["TxtPageReturn"]."";
+        $PageReturn="";
         $VectorDI["idPre"]=$idComprobante;
         $obTabla->DibujeItemsBuscadosVentas2($key,$PageReturn,$VectorDI);
 

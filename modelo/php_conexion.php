@@ -1667,7 +1667,7 @@ public function CalculePesoRemision($idCotizacion)
         /*
          * Actualizo inventarios
          */
-        $sql="UPDATE productosventa SET Existencias='$Saldo', CostoTotal='$TotalCostoSaldo'"
+        $sql="UPDATE productosventa SET Existencias='$Saldo', CostoTotal='$TotalCostoSaldo',CostoUnitario='$DatosKardex[CostoUnitario]'"
                 . " WHERE idProductosVenta=$DatosKardex[idProductosVenta]";
         $this->Query($sql);
         
@@ -3795,15 +3795,26 @@ public function CalculePesoRemision($idCotizacion)
             $PrecioMayorista=$DatosProductoBodega["PrecioMayorista"];
             
        }
-       $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+       $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 5";
        $consulta=$this->Query($sql);
-       $CodigoBarras=$this->FetchArray($consulta);
+       $i=0;
+       $Codigo[0]="";
+       $Codigo[1]="";
+       $Codigo[2]="";
+       $Codigo[3]="";
+       $Codigo[4]="";
+       while($CodigoBarras=$this->FetchArray($consulta)){
+           
+            $Codigo[$i]=$CodigoBarras["CodigoBarras"];
+            $i++;
+       }
+       
        //$CodigoBarras=$this->DevuelveValores("prod_codbarras", "ProductosVenta_idProductosVenta", $idProducto);
        $tab="traslados_items";
-       $NumRegistros=19;
+       $NumRegistros=23;
 
        $Columnas[0]="Fecha";			$Valores[0]=$DatosTraslado["Fecha"];
-       $Columnas[1]="CodigoBarras";		$Valores[1]=$CodigoBarras["CodigoBarras"];
+       $Columnas[1]="CodigoBarras";		$Valores[1]=$Codigo[0];
        $Columnas[2]="Referencia";		$Valores[2]=$DatosProducto["Referencia"];
        $Columnas[3]="Nombre";			$Valores[3]=$DatosProducto["Nombre"];
        $Columnas[4]="Cantidad";			$Valores[4]=$Cantidad;
@@ -3821,7 +3832,10 @@ public function CalculePesoRemision($idCotizacion)
        $Columnas[16]="idTraslado";		$Valores[16]=$idComprobante;
        $Columnas[17]="Estado";                  $Valores[17]="EN DESARROLLO";
        $Columnas[18]="Destino";                 $Valores[18]=$DatosTraslado["Destino"];
-       
+       $Columnas[19]="CodigoBarras1";		$Valores[19]=$Codigo[1];
+       $Columnas[20]="CodigoBarras2";		$Valores[20]=$Codigo[2];
+       $Columnas[21]="CodigoBarras3";           $Valores[21]=$Codigo[3];
+       $Columnas[22]="CodigoBarras4";           $Valores[22]=$Codigo[4];
        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
      }
@@ -4152,6 +4166,7 @@ public function CalculePesoRemision($idCotizacion)
             if(empty($DatosProducto["Referencia"])){
                 $VectorPTI["FUT"]="";
                 $idProducto=$this->CrearProductoFromItemTraslado($DatosItems["ID"],$VectorPTI);
+                
             }else{
             
                 $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
@@ -4164,9 +4179,30 @@ public function CalculePesoRemision($idCotizacion)
                 $DatosKardex["Movimiento"]="ENTRADA";
                 $this->InserteKardex($DatosKardex);                
                 $idProducto=$DatosProducto["idProductosVenta"];
+                $sql="UPDATE productosventa SET PrecioVenta='$DatosItems[PrecioVenta]',PrecioMayorista='$DatosItems[PrecioMayorista]', Departamento='$DatosItems[Departamento]',Sub1='$DatosItems[Sub1]',Sub2='$DatosItems[Sub2]',"
+                        . " Sub3='$DatosItems[Sub3]',Sub4='$DatosItems[Sub4]' ,Sub5='$DatosItems[Sub5]' WHERE idProductosVenta='$idProducto'";
+                $this->Query($sql);
             }
-            $VectorCb["F"]="";
-            $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras'],$VectorCb);
+            $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $DatosItems['CodigoBarras']);
+            if($DatosCodigoBarras["CodigoBarras"]=="" and $DatosItems['CodigoBarras']<>""){
+                $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras'],"");
+            }
+            $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $DatosItems['CodigoBarras1']);
+            if($DatosCodigoBarras["CodigoBarras"]=="" and $DatosItems['CodigoBarras1']<>""){
+                $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras1'],"");
+            }
+            $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $DatosItems['CodigoBarras2']);
+            if($DatosCodigoBarras["CodigoBarras"]=="" and $DatosItems['CodigoBarras2']<>""){
+                $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras2'],"");
+            }
+            $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $DatosItems['CodigoBarras3']);
+            if($DatosCodigoBarras["CodigoBarras"]=="" and $DatosItems['CodigoBarras3']<>""){
+                $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras3'],"");
+            }
+            $DatosCodigoBarras=$this->DevuelveValores("prod_codbarras", "CodigoBarras", $DatosItems['CodigoBarras4']);
+            if($DatosCodigoBarras["CodigoBarras"]=="" and $DatosItems['CodigoBarras4']<>""){
+                $this->AgregueCodBarras($idProducto,$DatosItems['CodigoBarras4'],"");
+            }
             
         }
         $VectorCosto["Fut"]="";
