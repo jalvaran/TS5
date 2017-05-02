@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 class ProcesoVenta{
+        
 	private $consulta;
 	private $fetch;
 	private $MaxNumCoti;
@@ -40,13 +41,13 @@ class ProcesoVenta{
                       
 	function __construct($idUserR){
 		$idUserR=$this->normalizar($idUserR);		
-		$this->consulta =mysql_query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
-		$this->fetch = mysql_fetch_array($this->consulta);
+		$this->consulta =$this->Query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
+		$this->fetch = $this->FetchArray($this->consulta);
 		$this->NombreUser = $this->fetch['Nombre'];
 		$this->idUser=$idUserR;
                 $this->TipoUser=$this->fetch['TipoUser'];
-                
-                //$this->VerificaPermisos($VectorPermisos);
+                $this->COMBascula="/dev/ttyUSB0";
+                $this->COMPrinter="COM3";
 	}
 	
 	/////////////////////Funcion que permite verificar u obtener los datos de la venta activa si extisten
@@ -2234,7 +2235,7 @@ public function CalculePesoRemision($idCotizacion)
      * Imprime una factura pos
      */
     public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias){
-
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -2461,6 +2462,7 @@ public function CalculePesoRemision($idCotizacion)
     
     //imprime un tikete de promo
     public function ImprimirTiketePromo($idFactura,$Titulo,$COMPrinter,$Copias,$VectorTiket){
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -2606,7 +2608,7 @@ public function CalculePesoRemision($idCotizacion)
       */
      
      public function ImprimeSeparado($idSeparado,$COMPrinter,$Copias){
-
+         $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -2868,7 +2870,7 @@ public function CalculePesoRemision($idCotizacion)
       */
      
      public function ImprimeCierre($idUser,$VectorCierre,$COMPrinter,$Copias){
-            
+        $COMPrinter= $this->COMPrinter;    
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -3606,7 +3608,7 @@ public function CalculePesoRemision($idCotizacion)
      */
     
     public function ImprimeEgresoPOS($idEgreso,$VectorEgresos,$COMPrinter,$Copias){
-            
+        $COMPrinter= $this->COMPrinter;    
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -5173,7 +5175,7 @@ public function VerificaPermisos($VectorPermisos) {
       */
      
      public function ImprimeComprobanteAbonoFactura($idComprobanteAbono,$COMPrinter,$Copias){
-
+         $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -6556,6 +6558,7 @@ public function VerificaPermisos($VectorPermisos) {
     
     //imprime un pedido de restaurante
     public function ImprimePedidoRestaurante($idPedido,$COMPrinter,$Copias,$Vector){
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -6637,6 +6640,7 @@ public function VerificaPermisos($VectorPermisos) {
     
     //imprime un domicilio de restaurante
     public function ImprimeDomicilioRestaurante($idPedido,$COMPrinter,$Copias,$Vector){
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -6720,7 +6724,7 @@ public function VerificaPermisos($VectorPermisos) {
     //
     
     public function ImprimePrecuentaRestaurante($idPedido,$COMPrinter,$Copias){
-
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -6859,6 +6863,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     
     //imprime un cierre de restaurante
     public function ImprimirCierreRestaurante($idCierre,$COMPrinter,$Copias,$Vector) {
+        $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
@@ -7961,7 +7966,26 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      }
      
      //Obtener el peso desde una bascula PCR de TORREY
-     
+     public function ObtenerPesoPCR($COMBascula) {
+        if(isset($this->COMBascula)){
+            $COMBascula=$this->COMBascula;
+        }
+         if(($handle = fopen("$COMBascula", "w+")) === FALSE){
+            die('ERROR:\nNo se puedo abrir el puerto de comunicacion con la bascula, Verifique la conexion $COMBascula');
+        }
+        fwrite($handle,"P");
+        //sleep(1);
+        //set_time_limit(2);
+        stream_set_timeout($handle, 2);
+        $Datos=fread($handle,10);
+        
+        //set_time_limit(300);
+        $Cantidad=str_replace("kg", "", $Datos);
+        $Cantidad=str_replace(" ", "", $Datos);
+        
+        fclose($handle); // cierra el fichero PRN
+        return($Cantidad); 
+     }
 //////////////////////////////Fin	
 }
 	

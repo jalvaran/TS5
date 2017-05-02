@@ -26,26 +26,31 @@ if(isset($_REQUEST['key'])){
         $CodBar=$obVenta->normalizar($_REQUEST['key']);
         $obVenta=new ProcesoVenta($idUser);
         $TablaItem="productosventa";
+        $Cantidad=1;
         $DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
         if(isset($_REQUEST['Pesaje'])){
-            $COMBascula="/dev/ttyUSB0";
-            $Cantidad=$obVenta->ObtenerPesoPCR($COMBascula);
+            
+            $Cantidad=$obVenta->ObtenerPesoPCR("");
+            $css->CrearNotificacionRoja("Modo Bascula Activo", 16);
         }
         //$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
         $fecha=date("Y-m-d");
-        $Cantidad=1;
-        if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
-                
-                $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
-        }else{
-                $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);
-                if($DatosProducto["idProductosVenta"]){
-                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
-                }else{
-                    $css->CrearNotificacionRoja("Este producto no esta en la base de datos, no lo entregue", 16);
-                }
-                
+        if($Cantidad>0){
+            if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
 
+                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
+            }else{
+                    $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);
+                    if($DatosProducto["idProductosVenta"]){
+                        $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
+                    }else{
+                        $css->CrearNotificacionRoja("Este producto no esta en la base de datos, no lo entregue", 16);
+                    }
+
+
+            }
+        }else{
+            $css->CrearNotificacionRoja("No se pueden agregar Cantidades en Cero", 16);
         }
 }
 

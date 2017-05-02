@@ -11,5 +11,4 @@ $con = mysql_connect($host,$user,$pw);
 mysql_select_db($db,$con) or die(mysql_error());
 date_default_timezone_set("America/Bogota");
 
-
 ?>

@@ -171,7 +171,7 @@ print("<td style='text-align:center'>");
 //$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
 //$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
 //$css->CerrarForm();
-print("<strong>Pesar: </strong>");
+print("<strong>Bascula: </strong>");
 $css->DibujeCuadroBusqueda("TxtPesar","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&Pesaje=1&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
