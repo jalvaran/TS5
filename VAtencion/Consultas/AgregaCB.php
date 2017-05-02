@@ -27,11 +27,15 @@ if(isset($_REQUEST['key'])){
         $obVenta=new ProcesoVenta($idUser);
         $TablaItem="productosventa";
         $DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
+        if(isset($_REQUEST['Pesaje'])){
+            $COMBascula="/dev/ttyUSB0";
+            $Cantidad=$obVenta->ObtenerPesoPCR($COMBascula);
+        }
         //$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
         $fecha=date("Y-m-d");
         $Cantidad=1;
         if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
-
+                
                 $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
         }else{
                 $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);

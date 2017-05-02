@@ -2322,11 +2322,19 @@ public function CalculePesoRemision($idCotizacion)
         $sql = "SELECT * FROM facturas_items WHERE idFactura='$idFactura'";
 	
         $consulta=$this->Query($sql);
-								
+		$i=0;						
 	while($DatosVenta=$this->FetchArray($consulta)){
-		
-            //$Descuentos=$DatosVenta["Descuentos"];
-            //$Impuestos=$DatosVenta["Impuestos"];
+		$i++;
+            $ProcentajeIVA=$DatosVenta["PorcentajeIVA"];
+            $Base[$i]=$DatosVenta["PorcentajeIVA"];
+            if(!isset($SubtotalP[$ProcentajeIVA])){
+                $SubtotalP[$ProcentajeIVA]=0;
+            }
+            if(!isset($SubtotalP[$ProcentajeIVA])){
+                $ImpuestosP[$ProcentajeIVA]=0;
+            }
+            $SubtotalP[$ProcentajeIVA]=$Subtotal[$ProcentajeIVA]+$DatosVenta["SubtotalItem"];
+            $ImpuestosP[$ProcentajeIVA]=$ImpuestosP[$ProcentajeIVA]+$DatosVenta["IVAItem"];
             $SubTotalITem=$DatosVenta["TotalItem"];
             //$SubTotalITem=$TotalVenta-$Impuestos;
 
@@ -2349,11 +2357,18 @@ public function CalculePesoRemision($idCotizacion)
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
     if($Regimen<>"SIMPLIFICADO"){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
+        foreach($Base as $NombreBase){
+           fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+           fwrite($handle,"Base $NombreBase         ".str_pad("$".number_format($SubtotalP[$NombreBase]),20," ",STR_PAD_LEFT));
+           fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+           fwrite($handle,"Impuesto $NombreBase     ".str_pad("$".number_format($ImpuestosP[$NombreBase]),20," ",STR_PAD_LEFT));
+        
+        }
+        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        //fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
 
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
+        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        //fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
     }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($TotalVenta),20," ",STR_PAD_LEFT));
@@ -7944,6 +7959,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
          $sql="UPDATE productosventa SET Existencias=0, CostoTotal=0";
          $this->Query($sql);
      }
+     
+     //Obtener el peso desde una bascula PCR de TORREY
      
 //////////////////////////////Fin	
 }

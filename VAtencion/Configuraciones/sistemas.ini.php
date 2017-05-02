@@ -1,12 +1,19 @@
 <?php
 $obVenta = new ProcesoVenta($idUser);
-
 $DatosEmpresa=$obVenta->DevuelveValores("empresapro", "idEmpresaPro", 1);
-$myTabla="productosventa";
-$myPage="productosventa.php";
-$myTitulo="Productos Venta";
+$myTabla="sistemas";
+$idTabla="ID";
+$myPage="sistemas.php";
+$myTitulo="Sistemas";
 
+/*
+ * Opciones en Acciones
+ * 
+ */
 
+//$Vector["NuevoRegistro"]["Deshabilitado"]=1;            
+$Vector["VerRegistro"]["Deshabilitado"]=1;                      
+//$Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
 /////Asigno Datos necesarios para la visualizacion de la tabla en el formato que se desea
 ////
@@ -16,60 +23,44 @@ $Vector["Tabla"]=$myTabla;          //Tabla
 $Vector["Titulo"]=$myTitulo;        //Titulo
 $Vector["VerDesde"]=$startpoint;    //Punto desde donde empieza
 $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
-/*
- * Deshabilito Acciones
- * 
- */
- 
-$Vector["ProductosVenta"]=1;
-$Vector["NuevoRegistro"]["Deshabilitado"]=1;      
-$Vector["VerRegistro"]["Deshabilitado"]=1;       
-
-
+$Vector["MyPage"]=$myPage;            //pagina
 ///Columnas excluidas
 
-$Vector["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;   //Indico que esta columna no se mostrará
-$Vector["Excluir"]["Especial"]=1;
-$Vector["Excluir"]["PrecioMayorista"]=1;
-$Vector["Excluir"]["Kit"]=1;
-///Columnas requeridas al momento de una insercion
+//Link para la accion ver
+$Ruta="../tcpdf/examples/imprimirOT.php?idOT=";
+$Vector["VerRegistro"]["Link"]=$Ruta;
+$Vector["VerRegistro"]["ColumnaLink"]="ID";
+
+$Vector["Excluir"]["Estado"]=1;
+$Vector["Excluir"]["Hora"]=1;
+$Vector["Excluir"]["idUsuarioCreador"]=1;
+$Vector["Required"]["TipoOrden"]=1;
+
+//Nueva Accion
+$Ruta="AgregaItemsOT.php?idOT=";
+$Vector["NuevaAccionLink"][0]="AsociarCoti";
+$Vector["NuevaAccion"]["AsociarCoti"]["Titulo"]="Agregar Actividades";
+$Vector["NuevaAccion"]["AsociarCoti"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["AsociarCoti"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["AsociarCoti"]["Target"]="_self";
+
+/*
+ * 
+ * Selecciono las Columnas que tendran valores de otras tablas
+ */
 $Vector["Required"]["Departamento"]=1;   
 $Vector["Required"]["Nombre"]=1; 
 $Vector["Required"]["PrecioVenta"]=1;
 $Vector["Required"]["CostoUnitario"]=1;
-$Vector["Required"]["CostoTotal"]=1;
 $Vector["Required"]["IVA"]=1;
-$Vector["Required"]["Bodega_idBodega"]=1;
-$Vector["Required"]["CuentaPUC"]=1;
+$Vector["Required"]["CuentaPUC"]=1;                  //Columna que quiero mostrar
 
-//
-//Nuevo link dentro de una columna
-
-$RutaNewLink="procesadores/ProcesadorAgregaKits.php?Tabla=productosventa&IDProducto=";
-$Vector["Kit"]["NewLink"]=$RutaNewLink;
-$Vector["Kit"]["NewLinkTitle"]="Agregar a Kit";
-$Vector["Kit"]["Page"]="productosventa.php";
-$Vector["NewText"]["Kit"]="TxtCantidad";
-//Selecciono las Columnas que tendran valores de otras tablas
-//
-//
-$Vector["CodigoBarras"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["CodigoBarras"]["TablaVinculo"]="prod_codbarras";  //tabla de donde se vincula
-$Vector["CodigoBarras"]["IDTabla"]="ProductosVenta_idProductosVenta"; //id de la tabla que se vincula
-$Vector["CodigoBarras"]["Display"]="CodigoBarras";                    //Columna que quiero mostrar
-$Vector["CodigoBarras"]["Predeterminado"]="N";
 
 $Vector["IVA"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["IVA"]["TablaVinculo"]="porcentajes_iva";  //tabla de donde se vincula
 $Vector["IVA"]["IDTabla"]="Valor"; //id de la tabla que se vincula
 $Vector["IVA"]["Display"]="Nombre"; 
 $Vector["IVA"]["Predeterminado"]=0;
-
-$Vector["Bodega_idBodega"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["Bodega_idBodega"]["TablaVinculo"]="bodega";  //tabla de donde se vincula
-$Vector["Bodega_idBodega"]["IDTabla"]="idBodega"; //id de la tabla que se vincula
-$Vector["Bodega_idBodega"]["Display"]="Nombre";                    //Columna que quiero mostrar
-$Vector["Bodega_idBodega"]["Predeterminado"]=1;
 
 $Vector["Departamento"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["Departamento"]["TablaVinculo"]="prod_departamentos";  //tabla de donde se vincula
@@ -107,6 +98,6 @@ if($DatosEmpresa["Regimen"]=="COMUN"){
 }else{
     $Vector["IVA"]["Predeterminado"]='0';
 }
-//$Vector["RutaImagen"]["Link"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["Order"]=" idProductosVenta DESC ";   //Orden
+///Filtros y orden
+$Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>

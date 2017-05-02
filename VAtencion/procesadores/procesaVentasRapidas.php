@@ -248,10 +248,7 @@
             if(!empty($idColaborador)){
                 $obVenta->AgregueVentaColaborador($NumFactura,$idColaborador);
             }
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
-		
-		
-		
+            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");	
 			
 	}
 	

@@ -47,8 +47,8 @@ include_once("css_construct.php");
                 $css->SubMenuAlfa("Bodegas",3);
                 $css->SubMenuAlfa("Movimientos",4);
                 $css->SubMenuAlfa("General",5);
-                $css->SubMenuAlfa("Conteo Físico",6);
-                
+                $css->SubMenuAlfa("Sistemas",6);
+                $css->SubMenuAlfa("Conteo Físico",7);
 	$css->MenuAlfaFin();
             
 	$css->IniciaTabs();
@@ -60,11 +60,9 @@ include_once("css_construct.php");
                 $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
                 $css->SubTabs("../VAtencion/kardexmercancias.php","_self","../images/kardex.png","Kardex");
                 $css->SubTabs("../VAtencion/relacioncompras.php","_self","../images/compras.png","Historial de Compras");
-                $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
-                  
+                $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar CB");
                 $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
-                $css->SubTabs("../VAtencion/AgregarItemsXCB.php","_blank","../images/csv.png","Agregar Productos desde CSV");
-                //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/activos.png","Activos");
+                
             $css->FinTabs();
             $css->NuevaTabs(2);    
                 $css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/departamentos.png","Crear Departamentos");
@@ -88,11 +86,14 @@ include_once("css_construct.php");
             $css->FinTabs();
             $css->NuevaTabs(5);
                 $css->SubTabs("../VAtencion/ActualizacionesGeneralesInventarios.php","_blank","../images/actualizar.png","Actualizaciones Generales");  
-                
-                
+              
+            $css->FinTabs();
+            $css->NuevaTabs(6);
+                $css->SubTabs("../VAtencion/sistemas.php","_blank","../images/sistema.png","Sistemas");
             $css->FinTabs();
             
-            $css->NuevaTabs(6);
+            $css->NuevaTabs(7);
+                $css->SubTabs("../VAtencion/AgregarItemsXCB.php","_blank","../images/csv.png","Agregar Productos desde CSV");
                 $css->SubTabs("../VAtencion/inventario_preparacion.php","_blank","../images/terminado.png","Preparar Conteo Fisico");
                 $css->SubTabs("../VAtencion/inventarios_temporal.php","_blank","../images/pedidos.png","Tabla Temporal");
                 $css->SubTabs("../VAtencion/ConteoFisico.php","_blank","../images/conteo_inventario.png","Realizar Conteo Fisico");
