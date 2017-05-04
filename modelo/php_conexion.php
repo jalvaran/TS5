@@ -2161,9 +2161,9 @@ public function CalculePesoRemision($idCotizacion)
             }
         }
         $ID=$Datos["ID"]; 
-        $TotalSubtotal=round($TotalSubtotal);
-        $TotalIVA=round($TotalIVA);
-        $GranTotal=round($GranTotal);
+        //$TotalSubtotal=$TotalSubtotal;
+        //$TotalIVA=round($TotalIVA);
+        //$GranTotal=round($GranTotal);
         $TotalCostos=round($TotalCostos);
         $sql="UPDATE facturas SET Subtotal='$TotalSubtotal', IVA='$TotalIVA', Total='$GranTotal', "
                 . "SaldoFact='$GranTotal', TotalCostos='$TotalCostos' WHERE idFacturas='$ID'";
@@ -2358,13 +2358,15 @@ public function CalculePesoRemision($idCotizacion)
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
     if($Regimen<>"SIMPLIFICADO"){
-        foreach($Base as $NombreBase){
-           fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-           fwrite($handle,"Base $NombreBase         ".str_pad("$".number_format($SubtotalP[$NombreBase]),20," ",STR_PAD_LEFT));
-           fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-           fwrite($handle,"Impuesto $NombreBase     ".str_pad("$".number_format($ImpuestosP[$NombreBase]),20," ",STR_PAD_LEFT));
-        
-        }
+        $sql="SELECT sum(SubtotalItem) as Subtotal, sum(IVAItem) as IVA,sum(TotalItem) as TotalItem, PorcentajeIVA FROM facturas_items WHERE idFactura = '$idFactura' GROUP BY PorcentajeIVA";
+	$Consulta=$this->Query($sql);
+	while($DatosTotales=$this->FetchArray($Consulta)){
+	   fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+	   fwrite($handle,"Base $DatosTotales[PorcentajeIVA]         ".str_pad("$".number_format($DatosTotales["Subtotal"]),20," ",STR_PAD_LEFT));
+	   fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+	   fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"]),20," ",STR_PAD_LEFT));
+	}
+
         //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         //fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
 
