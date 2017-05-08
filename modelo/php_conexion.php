@@ -8028,7 +8028,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      //
      public function RegistraAnulacionNotaContable($Fecha,$Concepto,$idComprobante,$Vector) {
         $hora=date("H:i:s");
-        $tab="comprobantescontables_anulaciones";
+        $tab="notascontables_anulaciones";
         $NumRegistros=5;
         $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
         $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");

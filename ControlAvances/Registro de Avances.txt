@@ -1,18 +1,61 @@
 2017-05-08
 Reabrir Comprobante de Contabilidad
 crear tabla registra_apertura_documentos
-___________________________________
+            egresos_anulaciones
+            notascontables_anulaciones
 
-CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
+
+--
+-- Estructura de tabla para la tabla `egresos_anulaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `NumDocumento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idComprobanteEgreso` bigint(20) NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-________
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notascontables_anulaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idNota` bigint(20) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `registra_apertura_documentos`
+--
+
+CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `NumDocumento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `ConceptoApertura` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 2017-05-04
 Modificaciones en la base de datos:
