@@ -34,6 +34,14 @@ $Vector["VerRegistro"]["ColumnaLink"]="ID";
  * Selecciono las Columnas que tendran valores de otras tablas
  */
 
+// Nueva Accion
+$Ruta="AnularNota.php?idNota=";
+$Vector["NuevaAccionLink"][1]="Anular";
+$Vector["NuevaAccion"]["Anular"]["Titulo"]="Anular";
+$Vector["NuevaAccion"]["Anular"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Anular"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Anular"]["Target"]="_self";
+
 
 $Vector["CentroCostos"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["CentroCostos"]["TablaVinculo"]="centrocosto";  //tabla de donde se vincula

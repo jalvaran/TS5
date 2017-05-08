@@ -1,3 +1,30 @@
+2017-05-08
+Reabrir Comprobante de Contabilidad
+crear tabla registra_apertura_documentos
+___________________________________
+
+CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `NumDocumento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+________
+
+2017-05-04
+Modificaciones en la base de datos:
+ALTER TABLE `cajas_aperturas_cierres` ADD `AbonosSisteCredito` DOUBLE NOT NULL AFTER `TotalAbonos`;
+ALTER TABLE `cajas_aperturas_cierres` ADD `TotalVentasSisteCredito` DOUBLE NOT NULL AFTER `TotalVentasCredito`;
+ALTER TABLE `cartera` ADD `TipoCartera` VARCHAR(45) NOT NULL DEFAULT 'Interna' AFTER `Observaciones`;
+ALTER TABLE `clientes` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
+ALTER TABLE `proveedores` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
+ALTER TABLE `facturas_abonos` ADD `FormaPago` DOUBLE NOT NULL AFTER `Facturas_idFacturas`;
+ALTER TABLE `traslados_items` ADD `CodigoBarras1` VARCHAR(45) NOT NULL AFTER `DestinoSincronizado`, ADD `CodigoBarras2` VARCHAR(45) NOT NULL AFTER `CodigoBarras1`, ADD `CodigoBarras3` VARCHAR(45) NOT NULL AFTER `CodigoBarras2`, ADD `CodigoBarras4` VARCHAR(45) NOT NULL AFTER `CodigoBarras3`;
+
+
 2016-11-13
 
 MODULO DE PRODUCCION

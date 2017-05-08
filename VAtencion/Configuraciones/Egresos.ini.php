@@ -29,6 +29,15 @@ $Vector["NuevoRegistro"]["Deshabilitado"]=1;
 $Ruta="../tcpdf/examples/imprimircomp.php?ImgPrintComp=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="idEgresos";
+
+// Nueva Accion
+$Ruta="AnularEgreso.php?idEgreso=";
+$Vector["NuevaAccionLink"][1]="Anular";
+$Vector["NuevaAccion"]["Anular"]["Titulo"]="Anular Egreso";
+$Vector["NuevaAccion"]["Anular"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Anular"]["ColumnaLink"]="idEgresos";
+$Vector["NuevaAccion"]["Anular"]["Target"]="_self";
+
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas

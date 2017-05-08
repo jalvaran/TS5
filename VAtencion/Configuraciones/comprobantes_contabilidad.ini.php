@@ -29,10 +29,20 @@ $Vector["EditarRegistro"]["Deshabilitado"]=1;
 $Ruta="../tcpdf/examples/comprobantecontable.php?idComprobante=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="idComprobante";
+
+
+// Nueva Accion
+$Ruta="AbrirDocumento.php?Doc=CC&idDoc=";
+$Vector["NuevaAccionLink"][1]="Abrir";
+$Vector["NuevaAccion"]["Abrir"]["Titulo"]="Abrir Documento";
+$Vector["NuevaAccion"]["Abrir"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Abrir"]["ColumnaLink"]="idComprobante";
+$Vector["NuevaAccion"]["Abrir"]["Target"]="_self";
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas
  */
+
 
 
 $Vector["idCliente"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo

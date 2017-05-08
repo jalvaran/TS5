@@ -7988,6 +7988,62 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fclose($handle); // cierra el fichero PRN
         return($Cantidad); 
      }
+     
+     //Registra la apertura de un documento
+     public function RegistreAperturaDocumento($Documento,$idDoc,$ConceptoApertura,$Vector) {
+        $tab="registra_apertura_documentos";	
+        $NumRegistros=5;
+        
+        $Columnas[0]="Fecha";           $Valores[0]=date("Y-m-d");
+        $Columnas[1]="Documento";	$Valores[1]=$Documento;
+        $Columnas[2]="NumDocumento";	$Valores[2]=$idDoc;
+        $Columnas[3]="ConceptoApertura";$Valores[3]=$ConceptoApertura;
+        $Columnas[4]="idUsuario";	$Valores[4]=$this->idUser;
+                
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+     }
+     
+     //Registre anulacion de un comprobante de egreso
+     //
+     public function RegistraAnulacionComprobanteEgreso($Fecha,$Concepto,$idComprobante,$Vector) {
+        $hora=date("H:i:s");
+        $tab="egresos_anulaciones";
+        $NumRegistros=5;
+        $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
+        $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");
+        $Columnas[2]="Observaciones";       $Valores[2]=$Concepto;
+        $Columnas[3]="idComprobanteEgreso"; $Valores[3]=$idComprobante;
+        $Columnas[4]="idUsuario";           $Valores[4]=$this->idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+        $idAnulacion=$this->ObtenerMAX($tab,"ID", 1, "");
+        $DocumentoInterno="CompEgreso";
+        $this->AnularMovimientoLibroDiario($DocumentoInterno, $idComprobante, "");
+        $this->ActualizaRegistro("egresos", "PagoProg", "ANULADO", "idEgresos", $idComprobante);
+        return $idAnulacion;
+    }
+    
+    //Registre anulacion de un comprobante de egreso
+     //
+     public function RegistraAnulacionNotaContable($Fecha,$Concepto,$idComprobante,$Vector) {
+        $hora=date("H:i:s");
+        $tab="comprobantescontables_anulaciones";
+        $NumRegistros=5;
+        $Columnas[0]="Fecha";               $Valores[0]=$Fecha;
+        $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");
+        $Columnas[2]="Observaciones";       $Valores[2]=$Concepto;
+        $Columnas[3]="idNota";              $Valores[3]=$idComprobante;
+        $Columnas[4]="idUsuario";           $Valores[4]=$this->idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+        $idAnulacion=$this->ObtenerMAX($tab,"ID", 1, "");
+        $DocumentoInterno="NotaContable";
+        $this->AnularMovimientoLibroDiario($DocumentoInterno, $idComprobante, "");
+        $this->ActualizaRegistro("notascontables", "Detalle", "ANULADO", "ID", $idComprobante);
+        return $idAnulacion;
+    }
 //////////////////////////////Fin	
 }
 	
