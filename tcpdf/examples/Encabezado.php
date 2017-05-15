@@ -14,7 +14,7 @@ $DatosFormato=$obVenta->DevuelveValores("formatos_calidad","ID",$idFormatoCalida
 $TituloFormato=$DatosFormato["Nombre"];
 $VersionFormato=$DatosFormato["Version"];
 $CodigoFormato=$DatosFormato["Codigo"];
-$FechaFormato=$DatosFormato["Fecha"];
+$FechaFormato="";
 $PiePagina=$DatosFormato["NotasPiePagina"];
 if(isset($DatosCentroCostos["EmpresaPro"])){
     $idEmpresaPro=$DatosCentroCostos["EmpresaPro"];
