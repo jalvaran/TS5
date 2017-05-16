@@ -30,7 +30,8 @@ if(isset($_REQUEST['key'])){
         $DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
         if(isset($_REQUEST['Pesaje'])){
             
-            $Cantidad=$obVenta->ObtenerPesoPCR("");
+            $Cantidad=$obVenta->ObtenerPesoPCR_phpSerial("");
+            $Cantidad=str_replace(' ', '', $Cantidad);
             $css->CrearNotificacionRoja("Modo Bascula Activo", 16);
         }
         //$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
@@ -59,13 +60,13 @@ if(isset($_REQUEST['key'])){
 if(isset($_REQUEST['TxtAutorizacion'])){
 		
     $Clave=$obVenta->normalizar($_REQUEST['TxtAutorizacion']);
-    $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' OR Role='SUPERVISOR')";
+    $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' or Role='SUPERVISOR') LIMIT 1";
     $Datos=$obVenta->Query($sql);
     $DatosAutorizacion=$obVenta->FetchArray($Datos);
-
+    
     $NoAutorizado="";
-    if($DatosAutorizacion["Identificacion"]>0){
-
+    if($DatosAutorizacion["Identificacion"]<>''){
+        
         $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
     }else{
         $css->CrearNotificacionRoja("Clave incorrecta o no autorizada", 16);

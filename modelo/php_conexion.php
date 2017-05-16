@@ -1,6 +1,7 @@
 <?php
 	
 	include_once 'php_settings.php';
+        include_once 'php_serial.class.php';
 	$CuentaDestino=110510;   //Cuenta Por defecto para caja menor
 	$CuentaIngresos=4135;
 	$TablaCuentaIngreso="cuentas";
@@ -687,6 +688,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$ProcesoInterno=1)
   {	
         $Condicion=" WHERE `$filtro` = '$idItem'";
+        
         $sql="SELECT $campo FROM $tabla $Condicion LIMIT 1";
         $c=$this->Query($sql);
         $OldData=$this->FetchArray($c);
@@ -695,9 +697,9 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
         $value=$this->normalizar($value);
         $filtro=$this->normalizar($filtro);
         $idItem=$this->normalizar($idItem);
-        if($campo<>'ISQLd' && $OldData[$campo]<>$value){
+        if($campo<>'ISQLd'){
             $sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
-            mysql_query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
+            $this->Query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
             if($ProcesoInterno==0){
                 $tab="registra_ediciones";
                 $NumRegistros=8;
@@ -7978,9 +7980,12 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,"P");
         //sleep(1);
         //set_time_limit(2);
+        $Datos=1;
         stream_set_timeout($handle, 2);
-        $Datos=fread($handle,10);
         
+        //while (!feof($handle)) {
+            $Datos=fgets($handle,16);
+        //}
         //set_time_limit(300);
         $Cantidad=str_replace("kg", "", $Datos);
         $Cantidad=str_replace(" ", "", $Datos);
@@ -8044,6 +8049,22 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $this->ActualizaRegistro("notascontables", "Detalle", "ANULADO", "ID", $idComprobante);
         return $idAnulacion;
     }
+    
+    
+    //Obtener el peso desde una bascula PCR de TORREY con la clase phpSerial
+     public function ObtenerPesoPCR_phpSerial($COMBascula) {
+        $serial = new phpSerial;
+        $serial->deviceSet($this->COMBascula);
+        $serial->deviceOpen('w+');
+        stream_set_timeout($serial->_dHandle, 2);
+        //$serial->confBaudRate(9600);
+        $serial->sendMessage("P");
+        $Datos=$serial->readPort();
+        $Cantidad=str_replace("kg", "", $Datos);
+        $Cantidad=str_replace(" ", "", $Datos);
+        
+        return($Cantidad); 
+     }
 //////////////////////////////Fin	
 }
 	
