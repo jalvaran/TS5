@@ -8,7 +8,7 @@ cadena=''
 while True:
       var = raw_input("Introduzca  un Comando: ")
       arduino.write(var)
-      time.sleep(0.1)
+      time.sleep(1)
       while arduino.inWaiting() > 0:
             cadena += arduino.readline()
             print cadena.rstrip('\n')

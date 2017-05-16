@@ -623,6 +623,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         $TablaItem=$this->normalizar($TablaItem);
         
 	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
+        if($DatosProductoGeneral["PrecioVenta"]<=0){
+            return("E1");
+        }
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];
@@ -8057,8 +8060,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $serial->deviceSet($this->COMBascula);
         $serial->deviceOpen('w+');
         stream_set_timeout($serial->_dHandle, 2);
-        //$serial->confBaudRate(9600);
+        
         $serial->sendMessage("P");
+        sleep(1);//le damos tiempo para que responda
         $Datos=$serial->readPort();
         $Cantidad=str_replace("kg", "", $Datos);
         $Cantidad=str_replace(" ", "", $Datos);

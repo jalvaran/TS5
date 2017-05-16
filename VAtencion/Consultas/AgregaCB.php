@@ -29,24 +29,29 @@ if(isset($_REQUEST['key'])){
         $Cantidad=1;
         $DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
         if(isset($_REQUEST['Pesaje'])){
-            
+            $css->CrearNotificacionNaranja("Modo Bascula Activo", 16);
             $Cantidad=$obVenta->ObtenerPesoPCR_phpSerial("");
-            $Cantidad=str_replace(' ', '', $Cantidad);
-            $css->CrearNotificacionRoja("Modo Bascula Activo", 16);
+            $Cantidad=str_replace(' ', '', $Cantidad);            
         }
         //$DatosPreventa=$obVenta->DevuelveValores('vestasactivas',"idVestasActivas",$idPreventa);
         $fecha=date("Y-m-d");
         if($Cantidad>0){
             if($DatosCodigo['ProductosVenta_idProductosVenta']>0){
 
-                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
+                $Error=$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosCodigo['ProductosVenta_idProductosVenta'],$TablaItem);
+                if($Error=="E1"){
+                    $css->CrearNotificacionRoja("Este producto no tiene precio de venta, no lo entregue", 16);
+                }
             }else{
-                    $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);
-                    if($DatosProducto["idProductosVenta"]){
-                        $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
-                    }else{
-                        $css->CrearNotificacionRoja("Este producto no esta en la base de datos, no lo entregue", 16);
+                $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $CodBar);
+                if($DatosProducto["idProductosVenta"]){
+                    $Error=$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
+                    if($Error=="E1"){
+                        $css->CrearNotificacionRoja("Este producto no tiene precio de venta, no lo entregue", 16);
                     }
+                }else{
+                    $css->CrearNotificacionRoja("Este producto no esta en la base de datos, no lo entregue", 16);
+                }
 
 
             }
@@ -280,7 +285,7 @@ $css->CerrarDiv();
 print("</td>");
 print("<td>");
 
-$sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' ORDER BY idPrecotizacion DESC";
+$sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' ORDER BY Updated DESC";
     $pa=$obVenta->Query($sql);
     if($obVenta->NumRows($pa)){	
         //$css->CrearNotificacionVerde("Items en Esta Preventa",16);
