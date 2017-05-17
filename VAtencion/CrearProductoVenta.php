@@ -62,6 +62,7 @@ print("<body>");
         $css->FilaTabla(16);
             print("<td style='text-align:center'>");
             $css->CrearSelectTable("idDepartamento", "prod_departamentos", "", "idDepartamentos", "idDepartamentos", "Nombre", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $idDepartamento,1);
+            //$css->CrearSelectTable($Nombre, $tabla, $Condicion, $idItemValue, $OptionDisplay1, $OptionDisplay2, $Evento, $FuncionJS, $idSel, $Requerido)
             print("</td>");
             print("<td style='text-align:center'>");
                 if($idDepartamento>0){
@@ -110,7 +111,7 @@ print("<body>");
     $css->CrearInputText("Sub3", "hidden","" , $Sub3, "", "", "", "", "", "", "", "");
     $css->CrearInputText("Sub4", "hidden","" , $Sub4, "", "", "", "", "", "", "", "");
     $css->CrearInputText("Sub5", "hidden","" , $Sub5, "", "", "", "", "", "", "", "");
-    
+    //$css->CrearInputText($nombre, $type, $label, $value, $placeh, $color, $TxtEvento, $TxtFuncion, $Ancho, $Alto, $ReadOnly, $Required)
     $css->CrearTabla();
         $css->FilaTabla(16);
             $css->ColTabla("<strong>Referencia</strong>", 1);
