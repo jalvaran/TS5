@@ -78,6 +78,7 @@ include_once("../sesiones/php_control.php");
                     $css->SubTabs("MnuRestaurante.php","_blank","../images/restaurante.png","Restaurante");
                     $css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
                     $css->SubTabs("MnuRequerimientos.php","_blank","../images/requerimientos.png","Gestion de Requerimientos");
+                    //$css->SubTabs("MnuPedidos.php","_blank","../images/requerimientos.png","Gestion de Pedidos");
                     $css->SubTabs("MnuAjustes.php","_blank","../images/ajustes.png","Ajustes y Servicios Generales");
                     $css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");
 			

@@ -283,10 +283,11 @@ class CssIni{
 			$Required="required";
 		else
 			$Required="";
-		
-			print('<strong style="color:'.$color.'">'.$label.'<input name="'.$nombre.'" value="'.$value.'" type="'.$type.'" id="'.$nombre.'" placeholder="'.$placeh.'" '.$TxtEvento.' = "'.$TxtFuncion.'" 
-			'.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.'"></strong>');
-		
+		$JavaScript=$TxtEvento.' = '.$TxtFuncion;
+                
+                print('<strong style="color:'.$color.'">'.$label.'<input name="'.$nombre.'" value="'.$value.'" type="'.$type.'" id="'.$nombre.'" placeholder="'.$placeh.'" '.$JavaScript.' 
+                '.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.'"></strong>');
+
 	}
 	
 	/////////////////////Crea un text area
@@ -1150,10 +1151,13 @@ function Footer(){
                             document.getElementById("<?php echo"$DivTarget"?>").innerHTML = this.responseText;
                         }
                     };
-                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>",true);
+                    xmlhttp.open("GET","<?php echo"$pageConsulta"?>",true);                    
                     xmlhttp.send();
+                    
                 }
+                
             }
+            
             </script>
             <?php 
             $this->CrearBotonEvento($Nombre, "Cargar", 1, $Evento, "Busqueda".$Nombre."()", "verde", "");

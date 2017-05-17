@@ -3,6 +3,7 @@
 4. Cuentas X Pagar
 6. depreciacion de activos
 7. Alertas
+8. Menu dinamico
 Revisar por qué la 135595 no sumó el subnivel
 152405 tampoco está agrupando bien
 Ordenes de salida

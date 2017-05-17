@@ -74,6 +74,7 @@ include_once("../sesiones/php_control.php");
                         $css->SubTabs("../VAtencion/centrocosto.php","_self","../images/centrocostos.png","Crear Centro de Costos");
                         $css->SubTabs("../VAtencion/cajas.php","_self","../images/cajas.png","Crear/Editar Cajas");
                         $css->SubTabs("../VAtencion/config_tiketes_promocion.php","_self","../images/tiketes.png","Configurar Tikete de Promocion");
+                        $css->SubTabs("../VAtencion/costos.php","_self","../images/costos.png","Costos operativos");
 		$css->FinTabs();
 		$css->NuevaTabs(2);
 			$css->SubTabs("../VAtencion/usuarios.php","_self","../images/usuarios.png","Crear/Editar un Usuario");

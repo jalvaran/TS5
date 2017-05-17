@@ -102,6 +102,8 @@ $DatosIVA["16%"]["Base"]=0;
 $DatosIVA["5%"]["Base"]=0;
 $DatosIVA["8%"]["Base"]=0;
 $DatosIVA["19%"]["Base"]=0;
+$DatosIVA["Exc"]["Valor"]=0;
+$DatosIVA["Exc"]["Base"]=0;
 while($DatosVentas=$obVenta->FetchArray($Datos)){
     $i++;
         $flagQuery=1;
