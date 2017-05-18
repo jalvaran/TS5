@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2017 a las 13:49:55
+-- Tiempo de generación: 18-05-2017 a las 08:51:07
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `softcontech_v5`
+-- Base de datos: `ts5`
 --
 
 -- --------------------------------------------------------
@@ -946,7 +946,7 @@ CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
 CREATE TABLE IF NOT EXISTS `costos` (
   `idCostos` int(20) NOT NULL AUTO_INCREMENT,
   `NombreCosto` varchar(45) NOT NULL,
-  `ValorCosto` float NOT NULL,
+  `ValorCosto` double NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCostos`)
@@ -1258,6 +1258,24 @@ CREATE TABLE IF NOT EXISTS `egresos_activos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `egresos_anulaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idComprobanteEgreso` bigint(20) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `egresos_items`
 --
 
@@ -1561,11 +1579,11 @@ CREATE TABLE IF NOT EXISTS `facturas_formapago` (
 
 CREATE TABLE IF NOT EXISTS `facturas_items` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `FechaFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `TablaItems` varchar(100) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
-  `Referencia` varchar(200) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
-  `Nombre` varchar(500) COLLATE utf8_spanish2_ci NOT NULL,
+  `FechaFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `idFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `TablaItems` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
+  `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
+  `Nombre` varchar(500) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Departamento` int(11) NOT NULL,
   `SubGrupo1` int(11) NOT NULL,
   `SubGrupo2` int(11) NOT NULL,
@@ -1578,19 +1596,19 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   `SubtotalItem` double NOT NULL,
   `IVAItem` double NOT NULL,
   `TotalItem` double NOT NULL COMMENT 'Total del valor del Item',
-  `PorcentajeIVA` varchar(10) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
+  `PorcentajeIVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
   `PrecioCostoUnitario` double NOT NULL,
   `SubtotalCosto` double NOT NULL COMMENT 'Costo total del item',
-  `TipoItem` varchar(10) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
+  `TipoItem` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
   `CuentaPUC` int(11) NOT NULL COMMENT 'Cuenta donde se llevara el asiento contable ',
-  `GeneradoDesde` varchar(100) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla que agrega el item',
-  `NumeroIdentificador` varchar(45) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Identificar del que agrega el item',
+  `GeneradoDesde` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla que agrega el item',
+  `NumeroIdentificador` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Identificar del que agrega el item',
   `idUsuarios` int(11) NOT NULL,
   `idCierre` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Disparadores `facturas_items`
@@ -2077,6 +2095,24 @@ CREATE TABLE IF NOT EXISTS `notascontables` (
   `Usuario_idUsuario` int(11) NOT NULL,
   `CentroCostos` int(11) NOT NULL,
   `EmpresaPro` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notascontables_anulaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idNota` bigint(20) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -2656,7 +2692,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_1` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2690,7 +2726,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_2` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2724,7 +2760,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_3` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2758,7 +2794,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_4` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2792,7 +2828,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3135,6 +3171,24 @@ CREATE TABLE IF NOT EXISTS `proveedores` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `registra_apertura_documentos`
+--
+
+CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `NumDocumento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `ConceptoApertura` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `registra_ediciones`
 --
 
@@ -3161,7 +3215,7 @@ CREATE TABLE IF NOT EXISTS `registra_ediciones` (
 
 CREATE TABLE IF NOT EXISTS `relacioncompras` (
   `idRelacionCompras` int(11) NOT NULL AUTO_INCREMENT,
-  `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Fecha` date NOT NULL,
   `Documento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `NumDocumento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `idProveedor` int(11) NOT NULL,

@@ -1,3 +1,11 @@
+2017-05-18
+Se crea vista_kardex
+
+CREATE VIEW 
+vista_kardex AS 
+SELECT `k`.`Fecha` AS `Fecha`,`k`.`Movimiento` AS `Movimiento`,`k`.`Detalle` AS `Detalle`,`k`.`idDocumento` AS `idDocumento`,`k`.`Cantidad` AS `Cantidad`,`k`.`ValorUnitario` AS `ValorUnitario`,`k`.`ValorTotal` AS `ValorTotal`,`k`.`ProductosVenta_idProductosVenta` AS `ProductosVenta_idProductosVenta`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Existencias` AS `Existencias`,`pv`.`CostoUnitario` AS `CostoUnitario`,`pv`.`CostoTotal` AS `CostoTotal`,`pv`.`IVA` AS `IVA`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`k`.`idKardexMercancias` AS `ID` 
+FROM kardexmercancias k INNER JOIN productosventa pv ON `k`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`;
+
 2017-05-08
 Reabrir Comprobante de Contabilidad
 crear tabla registra_apertura_documentos

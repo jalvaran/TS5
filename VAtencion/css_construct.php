@@ -50,6 +50,7 @@
                 top:0px;
         }
         
+
 </style>
 
 <link rel="stylesheet" href="css/cronometro.css">
@@ -266,7 +267,7 @@ class CssIni{
 	
 	/////////////////////Crea un Cuadro de texto input
 	
-	function CrearInputText($nombre,$type,$label,$value,$placeh,$color,$TxtEvento,$TxtFuncion,$Ancho,$Alto,$ReadOnly,$Required){
+	function CrearInputText($nombre,$type,$label,$value,$placeh,$color,$TxtEvento,$TxtFuncion,$Ancho,$Alto,$ReadOnly,$Required,$ToolTip='Rellena este Campo'){
 		
             if($nombre=="TxtDevuelta"){
                     $TFont="2em";
@@ -286,8 +287,8 @@ class CssIni{
 		$JavaScript=$TxtEvento.' = '.$TxtFuncion;
                 
                 print('<strong style="color:'.$color.'">'.$label.'<input name="'.$nombre.'" value="'.$value.'" type="'.$type.'" id="'.$nombre.'" placeholder="'.$placeh.'" '.$JavaScript.' 
-                '.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.'"></strong>');
-
+                '.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.' data-toggle="tooltip" title="'.$ToolTip.'" "></strong>');
+                
 	}
 	
 	/////////////////////Crea un text area

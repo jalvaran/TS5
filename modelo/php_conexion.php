@@ -700,7 +700,7 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
         $value=$this->normalizar($value);
         $filtro=$this->normalizar($filtro);
         $idItem=$this->normalizar($idItem);
-        if($campo<>'ISQLd'){
+        if($campo<>'ISQLd' and $campo<>$value){
             $sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
             $this->Query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
             if($ProcesoInterno==0){

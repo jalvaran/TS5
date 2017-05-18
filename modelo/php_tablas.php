@@ -626,7 +626,9 @@ public function DibujeTabla($Vector){
                                 $VectorDatosExtra["ID"]=$idLink;
                                 $this->css->CrearLinkID($NewLink[$i]["Link"], "_self", $NewLink[$i]["Titulo"],$VectorDatosExtra);
                             }else{
-                                print("$DatosProducto[$i]"); 
+                                $this->css->CrearTextArea("TxtDatos_".$Columnas[$i]."_".$DatosProducto[0], "", $DatosProducto[$i], "", "", "Evento", "JS", "", "", 0, 0);
+                                //$this->css->CrearInputText("TxtDatos$DatosProducto[0]", "text", "", $DatosProducto[$i], "", "", "Evento", "JS", "", "", 0, 1);
+                                //print("$DatosProducto[$i]"); 
                             }
                         }
                         print("</td>");

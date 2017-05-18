@@ -67,7 +67,7 @@ $css->CrearDiv("TipoEgresos", "container", "center", 1, 1);
     ////////Creo el la tabla para seleccionar un proveedor
     $css->CrearForm2("FrmBuscarProveedor",$myPage,"post","_self");
     $css->CrearInputText("TxtIdPre","hidden","",$TipoEgresos,"","","","",150,30,0,0);
-    $css->CrearInputText("TxtBuscarProveedor","text",'','',"Buscar Un Proveedor","black","","",300,30,0,1);
+    $css->CrearInputText("TxtBuscarProveedor","text",'','',"Buscar Un Proveedor","black","","",300,30,0,1,"Escribe un dato asociado al proveedor");
     $css->CrearBoton("BtnBuscarProveedor","Buscar");
     $css->CerrarForm();
 
