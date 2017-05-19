@@ -560,5 +560,30 @@ function ValidarFecha(FechaCierre,idFecha){
 }
 
 function Muestre(){
-    alert("Entra");
+    alert("Entra2");
+}
+
+//Funcion para enviar el contenido de un texto a editar
+function EditeRegistro(Tab,Columna,idTabla,idEdit,idElement){
+    ValorEdit=document.getElementById(idElement).value;
+    
+    if (confirm('¿Estas seguro que deseas editar '+Columna+' de la tabla '+Tab+'?')){
+        
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                httpEdicion = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                httpEdicion = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpEdicion.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("DivRespuestasJS").innerHTML = this.responseText;
+                    MuestraOculta('ventana-flotante');
+                }
+            };
+        
+        httpEdicion.open("GET","ProcesadoresJS/ProcesaUpdateJS.php?BtnEditarRegistro=1&TxtTabla="+Tab+"&TxtIDEdit="+idEdit+"&TxtIdTabla="+idTabla+"&TxtValorEdit="+ValorEdit+"&TxtColumna="+Columna,true);
+        httpEdicion.send();
+    }
 }
