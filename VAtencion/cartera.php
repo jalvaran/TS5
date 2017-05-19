@@ -44,6 +44,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$css->DivNotificacionesJS();
 if(!empty($_REQUEST["TxtidIngreso"])){
         $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
         $css->CrearTabla();

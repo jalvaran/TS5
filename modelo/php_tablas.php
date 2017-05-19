@@ -629,7 +629,7 @@ public function DibujeTabla($Vector){
                                 include_once("../VAtencion/ConfiguracionesGenerales/Edicion.Conf.php");
                                 $NomCol=$Columnas[$i];
                                 $idTabla=$Columnas[0];
-                                if($i>0 and $Columnas[$i]<>"Sync" and $Columnas[$i]<>"Updated" and !isset($Vector[$tbl]["Excluir"][$NomCol])){
+                                if($i>0 and $Columnas[$i]<>"Sync" and $Columnas[$i]<>"Updated" and !isset($Vector[$tbl]["Excluir"][$NomCol]) and !isset($Vector["EditarRegistro"]["Deshabilitado"])){
                                     $idElement="TxtDatos_".$tbl."_".$Columnas[$i]."_".$DatosProducto[0];
                                     $idEdit=$DatosProducto[0];
                                     $this->css->CrearTextArea($idElement, "", $DatosProducto[$i], "", "", "onChange", "EditeRegistro(`$tbl`,`$NomCol`,`$idTabla`,`$idEdit`,`$idElement`)", "", "", 0, 1,0);

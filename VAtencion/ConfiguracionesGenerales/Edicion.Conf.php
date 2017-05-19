@@ -231,6 +231,8 @@ $Vector[$TablaConfig]["Excluir"]["TelContacto"]=1;
 $Vector[$TablaConfig]["Excluir"]["TotalFactura"]=1;
 $Vector[$TablaConfig]["Excluir"]["TotalAbonos"]=1;
 $Vector[$TablaConfig]["Excluir"]["Saldo"]=1;
+$Vector[$TablaConfig]["Excluir"]["idUsuarios"]=1;
+$Vector[$TablaConfig]["Excluir"]["TipoCartera"]=1;
 
 /*
  * Tabla departamentos

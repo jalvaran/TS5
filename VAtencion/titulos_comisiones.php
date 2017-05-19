@@ -42,6 +42,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$css->DivNotificacionesJS();
 include_once("procesadores/procesaTitulosComisiones.php");  //Clases de donde se escribirán las tablas
     
 $css->DibujeCuadroBusqueda("BuscarComision","Consultas/DatosComisiones.php?key","idPromocion=7","DivBusquedaComision","onChange",30,100,"");

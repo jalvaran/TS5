@@ -46,7 +46,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-//$css->CrearImageLink($myPage, "../images/cuentasxpagar2.png", "_self",50,50);
+$css->DivNotificacionesJS();
 include_once("procesadores/procesaCuentasXPagar2.php");  //Clases de donde se escribirán las tablas
 if(!empty($_REQUEST["TxtidIngreso"])){
         $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			

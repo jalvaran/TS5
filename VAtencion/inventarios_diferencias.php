@@ -41,6 +41,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$css->DivNotificacionesJS();
 include_once("procesadores/inventarios_diferencias.process.php");  //Clases de donde se escribirán las tablas
 $css->CrearNotificacionNaranja("El proceso de calcular la diferencia borra la tabla y realiza el calculo nuevamente producto por producto, esto puede tardar un poco", 16);
 $css->CrearForm2("FrmCalcularDiferencia", $myPage, "post", "_self");

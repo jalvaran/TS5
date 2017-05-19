@@ -42,6 +42,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$css->DivNotificacionesJS();
 include_once("procesadores/procesaTitulosCuentasXCobrar.php");  //Clases de donde se escribirán las tablas
     
 $css->DibujeCuadroBusqueda("BuscarCuentaXPagar","Consultas/DatosCuentaXPagar.php?key","idPromocion=7","DivBusqueda","onChange",30,100,"");

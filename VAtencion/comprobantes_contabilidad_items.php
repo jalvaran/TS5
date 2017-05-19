@@ -42,6 +42,7 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////

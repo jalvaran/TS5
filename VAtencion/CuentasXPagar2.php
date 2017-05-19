@@ -59,7 +59,7 @@ $css->CierraMenuBasico();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-
+$css->DivNotificacionesJS();
 if($ImprimeCC>0){
         $RutaPrintCot="../tcpdf/examples/comprobantecontable.php?idComprobante=$ImprimeCC";			
        
