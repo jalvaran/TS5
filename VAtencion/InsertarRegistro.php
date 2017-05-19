@@ -21,7 +21,7 @@ include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 $obTabla = new Tabla($db);
 $obVenta = new ProcesoVenta(1);
-include_once("procesadores/procesaInsercion.Conf.php"); //Procesa la insercion
+include_once("ConfiguracionesGenerales/Insercion.Conf.php"); //Procesa la insercion
 include_once("procesadores/procesaInsercion.php"); //Procesa la insercion
 print("<html>");
 print("<head>");

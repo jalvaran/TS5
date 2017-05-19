@@ -28,7 +28,7 @@ include_once("../modelo/php_tablas.php");  //Clases de donde se escribirán las 
 include_once("css_construct.php");
 $obTabla = new Tabla($db);
 $obVenta = new ProcesoVenta($idUser);
-include_once("procesadores/procesaEdicion.Conf.php"); //Procesa la insercion
+include_once("ConfiguracionesGenerales/Edicion.Conf.php"); //Procesa la insercion
 
 print("<html>");
 print("<head>");

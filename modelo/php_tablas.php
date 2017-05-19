@@ -626,9 +626,15 @@ public function DibujeTabla($Vector){
                                 $VectorDatosExtra["ID"]=$idLink;
                                 $this->css->CrearLinkID($NewLink[$i]["Link"], "_self", $NewLink[$i]["Titulo"],$VectorDatosExtra);
                             }else{
-                                $this->css->CrearTextArea("TxtDatos_".$Columnas[$i]."_".$DatosProducto[0], "", $DatosProducto[$i], "", "", "Evento", "JS", "", "", 0, 0);
+                                include_once("../VAtencion/ConfiguracionesGenerales/Edicion.Conf.php");
+                                $NomCol=$Columnas[$i];
+                                
+                                if($i>0 and $Columnas[$i]<>"Sync" and $Columnas[$i]<>"Updated" and !isset($Vector[$tbl]["Excluir"][$NomCol])){
+                                    $this->css->CrearTextArea("TxtDatos_".$tbl."_".$Columnas[$i]."_".$DatosProducto[0], "", $DatosProducto[$i], "", "", "Evento", "JS", "", "", 0, 1,0);
+                                }else{
                                 //$this->css->CrearInputText("TxtDatos$DatosProducto[0]", "text", "", $DatosProducto[$i], "", "", "Evento", "JS", "", "", 0, 1);
-                                //print("$DatosProducto[$i]"); 
+                                    print("$DatosProducto[$i]"); 
+                                }
                             }
                         }
                         print("</td>");

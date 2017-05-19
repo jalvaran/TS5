@@ -293,20 +293,19 @@ class CssIni{
 	
 	/////////////////////Crea un text area
 	
-	function CrearTextArea($nombre,$label,$value,$placeh,$color,$TxtEvento,$TxtFuncion,$Ancho,$Alto,$ReadOnly,$Required){
+	function CrearTextArea($nombre,$label,$value,$placeh,$color,$TxtEvento,$TxtFuncion,$Ancho,$Alto,$ReadOnly,$Required,$BorderWidth=1){
 		
 		if($ReadOnly==1)
 			$ReadOnly="readonly";
 		else
 			$ReadOnly="";
-		
-		if($Required==1){
-			print("<strong style= 'color:$color'>$label<textarea name='$nombre' id='$nombre' placeholder='$placeh' $TxtEvento = '$TxtFuncion'" 
-			." $ReadOnly autocomplete='off' style='width: ".$Ancho."px; height: ".$Alto."px;' required>".$value."</textarea></strong>");
-                }else{
-			print("<strong style= 'color:$color'>$label<textarea name='$nombre' id='$nombre' placeholder='$placeh' $TxtEvento = '$TxtFuncion'" 
-			." $ReadOnly autocomplete='off' style='width: ".$Ancho."px; height: ".$Alto."px;' >".$value."</textarea></strong>");
-                }
+		$Required="";
+		if($Required==1)
+			$Required="required";
+                
+                print("<strong style= 'color:$color'>$label<textarea name='$nombre' id='$nombre' placeholder='$placeh' $TxtEvento = '$TxtFuncion'" 
+                ." $ReadOnly  autocomplete='off' style='width: ".$Ancho."px; height: ".$Alto."px;border-top-width:".$BorderWidth."px;border-left-width:".$BorderWidth."px;border-right-width:".$BorderWidth."px;border-bottom-width:".$BorderWidth."px;' $Required>".$value."</textarea></strong>");
+
 			
 		
 	}

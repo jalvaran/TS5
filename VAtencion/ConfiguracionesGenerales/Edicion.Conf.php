@@ -6,15 +6,10 @@
 $TablaConfig="productosventa";
 $Vector[$TablaConfig]["Excluir"]["CodigoBarras"]=1;
 $Vector[$TablaConfig]["Excluir"]["Existencias"]=1;
-
-$Vector[$TablaConfig]["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;
-
-///Columnas excluidas
-
-$Vector[$TablaConfig]["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;   //Indico que esta columna no se mostrará
 $Vector[$TablaConfig]["Excluir"]["Especial"]=1;
-
 $Vector[$TablaConfig]["Excluir"]["Kit"]=1;
+$Vector[$TablaConfig]["Excluir"]["CostoTotal"]=1;
+$Vector[$TablaConfig]["Excluir"]["CostoUnitario"]=1;
 ///Columnas requeridas al momento de una insercion
 $Vector[$TablaConfig]["Required"]["Departamento"]=1;   
 $Vector[$TablaConfig]["Required"]["Nombre"]=1; 
