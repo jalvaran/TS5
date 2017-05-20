@@ -3838,7 +3838,7 @@ public function CalculePesoRemision($idCotizacion)
        $NumRegistros=23;
 
        $Columnas[0]="Fecha";			$Valores[0]=$DatosTraslado["Fecha"];
-       $Columnas[1]="CodigoBarras";		$Valores[1]=$Codigo[0];
+       $Columnas[1]="CodigoBarras";		$Valores[1]=$idProducto;
        $Columnas[2]="Referencia";		$Valores[2]=$DatosProducto["Referencia"];
        $Columnas[3]="Nombre";			$Valores[3]=$DatosProducto["Nombre"];
        $Columnas[4]="Cantidad";			$Valores[4]=$Cantidad;
@@ -3856,10 +3856,10 @@ public function CalculePesoRemision($idCotizacion)
        $Columnas[16]="idTraslado";		$Valores[16]=$idComprobante;
        $Columnas[17]="Estado";                  $Valores[17]="EN DESARROLLO";
        $Columnas[18]="Destino";                 $Valores[18]=$DatosTraslado["Destino"];
-       $Columnas[19]="CodigoBarras1";		$Valores[19]=$Codigo[1];
-       $Columnas[20]="CodigoBarras2";		$Valores[20]=$Codigo[2];
-       $Columnas[21]="CodigoBarras3";           $Valores[21]=$Codigo[3];
-       $Columnas[22]="CodigoBarras4";           $Valores[22]=$Codigo[4];
+       $Columnas[19]="CodigoBarras1";		$Valores[19]=$Codigo[0];
+       $Columnas[20]="CodigoBarras2";		$Valores[20]=$Codigo[1];
+       $Columnas[21]="CodigoBarras3";           $Valores[21]=$Codigo[2];
+       $Columnas[22]="CodigoBarras4";           $Valores[22]=$Codigo[3];
        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
      }
@@ -7698,10 +7698,11 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         if($idProductoVenta==""){
             $ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
             $idProductoVenta=$ID;
+            $this->ActualizaRegistro("productosventa", "CodigoBarras", $ID, "idProductosVenta", $ID);
         }else{
             $ID=$idProductoVenta;
         }
-        $this->ActualizaRegistro("productosventa", "CodigoBarras", $ID, "idProductosVenta", $ID);
+        
         if($Referencia==''){
             $this->ActualizaRegistro("productosventa", "Referencia", "REF".$ID, "idProductosVenta", $ID);
         }
@@ -7711,7 +7712,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $DatosCodigo=$this->Query($SqlCB);
         $DatosCodigo=$this->FetchArray($DatosCodigo);
         $Datos=$this->ConsultarTabla("bodega", "");
-        
+        /*
         while($DatosBodegas=$this->FetchArray($Datos)){
             $tabBodegas="productosventa_bodega_$DatosBodegas[0]";
             
@@ -7736,6 +7737,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             
             
         }
+         * *
+         */
+        
         if($CodigoBarras<>''){
             $this->AgregueCodBarras($idProductoVenta, $CodigoBarras, "");
         }
@@ -7792,8 +7796,10 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $Codigo=$DatosCB["CodigoBarras"]; 
         }
         
-        $Cantidad=$Cantidad/3;
-        $Numpages=ceil($Cantidad);
+        $Codigo=$idProducto;
+        $Cantidad=$Cantidad;
+        //$Numpages=ceil($Cantidad);
+        $Numpages=$Cantidad;
         $idEmpresaPro=$DatosCB["EmpresaPro"];
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
         $fecha=date("y-m-d");

@@ -1,3 +1,13 @@
+2017-05-19
+
+POSIBLE VISTA DE PRODUCTOS VENTA (FALTA ANALIZAR NO IMPLEMENTAR AUN)
+
+CREATE VIEW vista_productosventa AS 
+SELECT pv.`idProductosVenta`, pv.`CodigoBarras`, cb.CodigoBarras as CodigoBarras2, pv.`Referencia`, pv.`Nombre`, pv.`Existencias`, 
+pv.`PrecioVenta`,pv.`PrecioMayorista`,pv.`CostoUnitario`,pv.`CostoTotal`,pv.`IVA`,pv.`RutaImagen`,pv.`Departamento`,pv.`Sub1`,
+pv.`Sub2`,pv.`Sub3`,pv.`Sub4`,pv.`Sub5`,pv.`CuentaPUC`,pv.`Updated`,pv.`Sync` FROM productosventa pv 
+INNER JOIN prod_codbarras cb ON pv.`idProductosVenta`=cb.ProductosVenta_idProductosVenta GROUP BY pv.`idProductosVenta`
+
 2017-05-18
 Se crea vista_kardex
 
