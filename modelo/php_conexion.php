@@ -8163,9 +8163,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      //imprime tikete corto en monarch
     
     public function ImprimirTiketCortoMonarch($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
-        $Left1=45;
-        $Left2=385;
-        $Left3=720;
+        $L1=100;        $L2=125;        $L3=190;    
+        $L4=$L1+160;    $L5=$L2+160;    $L6=$L3+160;    
+        $L7=$L4+160;    $L8=$L5+160;    $L9=505;   //510  $L6+160
+        $L10=$L7+160;   $L11=$L8+160;   $L12=515+160;    
+        $L13=$L10+160;  $L14=$L11+160;  $L15=$L12+160;    
+        $L16=$L13+160;  $L17=$L14+160;  $L18=$L15+160;
+        
         `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
         $enter="\r\n";
         if(($handle = @fopen("$Puerto", "w")) === FALSE){
@@ -8188,10 +8192,11 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
         $fecha=date("y-m-d");
         $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
-        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,13);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,14);
         $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
        
-        $Descripcion=substr($DatosProducto["Nombre"],0,22);
+        $Descripcion=substr($DatosProducto["Nombre"],0,14);
+        $Descripcion2=substr($DatosProducto["Nombre"],14,14);
         $PrecioVenta= number_format($DatosProducto["PrecioVenta"]);
         $Referencia= $DatosProducto["Referencia"];
         $ID= $DatosProducto["idProductosVenta"];
@@ -8199,19 +8204,43 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
         $Costo=$Costo1."/".$Costo2;
         fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
-                        T,1,18,V,5,100,1,2,1,1,B,C,0,1,1 |
-                        T,2,30,V,5,125,1,2,1,1,B,C,0,1,1 |
-                        T,3,23,V,5,190,1,1,2,1,B,C,0,1,1 |
-                        T,4,18,V,5,260,1,2,1,1,B,C,0,1,1 |
-                        T,5,30,V,5,285,1,2,1,1,B,C,0,1,1 |
-                        T,6,23,V,5,350,1,1,2,1,B,C,0,1,1 |}
+                        T,1,18,V,5,'.$L1.',1,2,1,1,B,C,0,1,1 |
+                        T,2,30,V,5,'.$L2.',1,2,1,1,B,C,0,1,1 |
+                        T,3,23,V,5,'.$L3.',1,1,2,1,B,C,0,1,1 |
+                        T,4,18,V,5,'.$L4.',1,2,1,1,B,C,0,1,1 |
+                        T,5,30,V,5,'.$L5.',1,2,1,1,B,C,0,1,1 |
+                        T,6,23,V,5,'.$L6.',1,1,2,1,B,C,0,1,1 |
+                        T,7,18,V,5,'.$L7.',1,2,1,1,B,C,0,1,1 |
+                        T,8,30,V,5,'.$L8.',1,2,1,1,B,C,0,1,1 |
+                        T,9,23,V,5,'.$L9.',1,1,2,1,B,C,0,1,1 |
+                        T,10,18,V,5,'.$L10.',1,2,1,1,B,C,0,1,1 |
+                        T,11,30,V,5,'.$L11.',1,2,1,1,B,C,0,1,1 |
+                        T,12,23,V,5,'.$L12.',1,1,2,1,B,C,0,1,1 |
+                        T,13,18,V,5,'.$L13.',1,2,1,1,B,C,0,1,1 |
+                        T,14,30,V,5,'.$L14.',1,2,1,1,B,C,0,1,1 |
+                        T,15,23,V,5,'.$L15.',1,1,2,1,B,C,0,1,1 |
+                        T,16,18,V,5,'.$L16.',1,2,1,1,B,C,0,1,1 |
+                        T,17,30,V,5,'.$L17.',1,2,1,1,B,C,0,1,1 |
+                        T,18,23,V,5,'.$L18.',1,1,2,1,B,C,0,1,1 |}
                         {B,25,N,1 |
-                        1,"ORIENTE" | 
-                        2,"PRECIO" |
-                        3,"3.500" |
-                        4,"ORIENTE" | 
-                        5,"PRECIO" |
-                        6,"3.500" |}');
+                        1,"'.$Descripcion.'" | 
+                        2,"'.$Descripcion2.'" |
+                        3,"'.$PrecioVenta.'" |
+                        4,"'.$Descripcion.'" | 
+                        5,"'.$Descripcion2.'" |
+                        6,"'.$PrecioVenta.'" |
+                        7,"'.$Descripcion.'" | 
+                        8,"'.$Descripcion2.'" |
+                        9,"'.$PrecioVenta.'" |
+                        11,"'.$Descripcion.'" | 
+                        11,"'.$Descripcion2.'" |
+                        12,"'.$PrecioVenta.'" |
+                        13,"'.$Descripcion.'" | 
+                        14,"'.$Descripcion2.'" |
+                        15,"'.$PrecioVenta.'" |
+                        16,"'.$Descripcion.'" | 
+                        17,"'.$Descripcion2.'" |
+                        18,"'.$PrecioVenta.'" |}');
         
         $salida = shell_exec('lpr $Puerto');
         
