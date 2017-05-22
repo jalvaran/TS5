@@ -8163,12 +8163,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      //imprime tikete corto en monarch
     
     public function ImprimirTiketCortoMonarch($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
-        $L1=100;        $L2=125;        $L3=190;    
-        $L4=$L1+160;    $L5=$L2+160;    $L6=$L3+160;    
-        $L7=$L4+160;    $L8=$L5+160;    $L9=505;   //510  $L6+160
-        $L10=$L7+160;   $L11=$L8+160;   $L12=515+160;    
-        $L13=$L10+160;  $L14=$L11+160;  $L15=$L12+160;    
-        $L16=$L13+160;  $L17=$L14+160;  $L18=$L15+160;
+        $T=10;              $Factor=159;
+        $L1=100;            $L2=125;            $L3=190;    
+        $L4=$L1+$Factor;    $L5=$L2+$Factor;    $L6=$L3+$Factor;    
+        $L7=$L4+$Factor;    $L8=$L5+$Factor;    $L9=$L6+$Factor;   //510  $L6+160
+        $L10=$L7+$Factor;   $L11=$L8+$Factor;   $L12=$L9+$Factor+3;    
+        $L13=$L10+$Factor;  $L14=$L11+$Factor;  $L15=$L12+$Factor;    
+        $L16=$L13+$Factor;  $L17=$L14+$Factor;  $L18=$L15+$Factor;
         
         `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
         $enter="\r\n";
@@ -8185,8 +8186,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
         
         $Codigo=$idProducto;
-        $Cantidad=$Cantidad/3;
-        $Numpages=ceil($Cantidad);
+        //$Cantidad=$Cantidad/3;
+        //$Numpages=ceil($Cantidad);
         $Numpages=$Cantidad;
         $idEmpresaPro=$DatosCB["EmpresaPro"];
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
@@ -8204,25 +8205,25 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
         $Costo=$Costo1."/".$Costo2;
         fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
-                        T,1,18,V,5,'.$L1.',1,2,1,1,B,C,0,1,1 |
-                        T,2,30,V,5,'.$L2.',1,2,1,1,B,C,0,1,1 |
-                        T,3,23,V,5,'.$L3.',1,1,2,1,B,C,0,1,1 |
-                        T,4,18,V,5,'.$L4.',1,2,1,1,B,C,0,1,1 |
-                        T,5,30,V,5,'.$L5.',1,2,1,1,B,C,0,1,1 |
-                        T,6,23,V,5,'.$L6.',1,1,2,1,B,C,0,1,1 |
-                        T,7,18,V,5,'.$L7.',1,2,1,1,B,C,0,1,1 |
-                        T,8,30,V,5,'.$L8.',1,2,1,1,B,C,0,1,1 |
-                        T,9,23,V,5,'.$L9.',1,1,2,1,B,C,0,1,1 |
-                        T,10,18,V,5,'.$L10.',1,2,1,1,B,C,0,1,1 |
-                        T,11,30,V,5,'.$L11.',1,2,1,1,B,C,0,1,1 |
-                        T,12,23,V,5,'.$L12.',1,1,2,1,B,C,0,1,1 |
-                        T,13,18,V,5,'.$L13.',1,2,1,1,B,C,0,1,1 |
-                        T,14,30,V,5,'.$L14.',1,2,1,1,B,C,0,1,1 |
-                        T,15,23,V,5,'.$L15.',1,1,2,1,B,C,0,1,1 |
-                        T,16,18,V,5,'.$L16.',1,2,1,1,B,C,0,1,1 |
-                        T,17,30,V,5,'.$L17.',1,2,1,1,B,C,0,1,1 |
-                        T,18,23,V,5,'.$L18.',1,1,2,1,B,C,0,1,1 |}
-                        {B,25,N,1 |
+                        T,1,18,V,'.$T.','.$L1.',1,2,1,1,B,C,0,1,1 |
+                        T,2,30,V,'.$T.','.$L2.',1,2,1,1,B,C,0,1,1 |
+                        T,3,23,V,'.$T.','.$L3.',1,1,2,1,B,C,0,1,1 |
+                        T,4,18,V,'.$T.','.$L4.',1,2,1,1,B,C,0,1,1 |
+                        T,5,30,V,'.$T.','.$L5.',1,2,1,1,B,C,0,1,1 |
+                        T,6,23,V,'.$T.','.$L6.',1,1,2,1,B,C,0,1,1 |
+                        T,7,18,V,'.$T.','.$L7.',1,2,1,1,B,C,0,1,1 |
+                        T,8,30,V,'.$T.','.$L8.',1,2,1,1,B,C,0,1,1 |
+                        T,9,23,V,'.$T.','.$L9.',1,1,2,1,B,C,0,1,1 |
+                        T,10,18,V,'.$T.','.$L10.',1,2,1,1,B,C,0,1,1 |
+                        T,11,30,V,'.$T.','.$L11.',1,2,1,1,B,C,0,1,1 |
+                        T,12,23,V,'.$T.','.$L12.',1,1,2,1,B,C,0,1,1 |
+                        T,13,18,V,'.$T.','.$L13.',1,2,1,1,B,C,0,1,1 |
+                        T,14,30,V,'.$T.','.$L14.',1,2,1,1,B,C,0,1,1 |
+                        T,15,23,V,'.$T.','.$L15.',1,1,2,1,B,C,0,1,1 |
+                        T,16,18,V,'.$T.','.$L16.',1,2,1,1,B,C,0,1,1 |
+                        T,17,30,V,'.$T.','.$L17.',1,2,1,1,B,C,0,1,1 |
+                        T,18,23,V,'.$T.','.$L18.',1,1,2,1,B,C,0,1,1 |}
+                        {B,25,N,'.$Cantidad.' |
                         1,"'.$Descripcion.'" | 
                         2,"'.$Descripcion2.'" |
                         3,"'.$PrecioVenta.'" |
