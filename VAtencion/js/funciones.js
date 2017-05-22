@@ -589,7 +589,7 @@ function EditeRegistro(Tab,Columna,idTabla,idEdit,idElement){
 
 //Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
 function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
-    
+    //alert("Entra");
     ValorElement=document.getElementById(idElement).value;   
         
             if (window.XMLHttpRequest) {
@@ -611,4 +611,5 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         if(BorrarId==1){
             document.getElementById(idElement).value='';
         }
+        //alert("Sale");
 }

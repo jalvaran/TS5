@@ -7782,6 +7782,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
      //imprime codigo barras monarch
     
     public function ImprimirCodigoBarrasMonarch9416TM($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        $Left1=45;
+        $Left2=385;
+        $Left3=720;
         `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
         $enter="\r\n";
         if(($handle = @fopen("$Puerto", "w")) === FALSE){
@@ -7797,14 +7800,14 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
         
         $Codigo=$idProducto;
-        $Cantidad=$Cantidad;
-        //$Numpages=ceil($Cantidad);
+        $Cantidad=$Cantidad/3;
+        $Numpages=ceil($Cantidad);
         $Numpages=$Cantidad;
         $idEmpresaPro=$DatosCB["EmpresaPro"];
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
         $fecha=date("y-m-d");
         $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
-        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,15);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,13);
         $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
        
         $Descripcion=substr($DatosProducto["Nombre"],0,22);
@@ -7815,40 +7818,40 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
         $Costo=$Costo1."/".$Costo2;
         fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
-                        B,1,2710,V,165,70,8,0,50,0,L,0 |
-                        T,2,30,V,145,70,1,2,1,1,B,C,0,0,1 |
-                        T,3,18,V,220,70,1,1,1,1,W,C,0,0,1 |
-                        T,4,30,V,123,70,1,2,1,1,B,C,0,0,1 |
-                        T,5,23,V,100,70,1,2,1,1,B,C,0,0,1 |
-                        T,6,18,V,45,80,1,3,1,1,B,L,0,0,1 |
-                        B,7,2710,V,165,410,8,0,50,0,L,0 |
-                        T,8,30,V,145,410,1,2,1,1,B,C,0,0,1 |
-                        T,9,18,V,220,410,1,1,1,1,W,C,0,0,1 |
-                        T,10,30,V,123,410,1,2,1,1,B,C,0,0,1 |
-                        T,11,23,V,100,410,1,2,1,1,B,C,0,0,1 |
-                        T,12,18,V,45,420,1,3,1,1,B,L,0,0,1 |
-                        B,13,2710,V,165,750,8,0,50,0,L,0 |
-                        T,14,30,V,145,750,1,2,1,1,B,C,0,0,1 |
-                        T,15,18,V,220,750,1,1,1,1,W,C,0,0,1 |
-                        T,16,30,V,123,750,1,2,1,1,B,C,0,0,1 |
-                        T,17,23,V,100,750,1,2,1,1,B,C,0,0,1 |
-                        T,18,18,V,45,760,1,3,1,1,B,L,0,0,1 |}
+                        T,1,18,V,220,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        B,2,2710,V,165,'.$Left1.',8,0,50,0,L,0 |
+                        T,3,30,V,145,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,4,30,V,123,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,5,23,V,100,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,6,18,V,45,'.$Left1.',1,3,1,1,B,L,0,0,1 |
+                        T,7,18,V,220,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        B,8,2710,V,165,'.$Left2.',8,0,50,0,L,0 |
+                        T,9,30,V,145,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,10,30,V,123,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,11,23,V,100,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,12,18,V,45,'.$Left2.',1,3,1,1,B,L,0,0,1 |
+                        T,13,18,V,220,'.$Left3.',1,1,1,1,B,C,0,0,1 |    
+                        B,14,2710,V,165,'.$Left3.',8,0,50,0,L,0 |
+                        T,15,30,V,145,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,16,30,V,123,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,17,23,V,100,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,18,18,V,45,'.$Left3.',1,3,1,1,B,L,0,0,1 |}
                         {B,25,N,'.$Numpages.' |
-                        1,"'.$Codigo.'" |
-                        2,"'.$Codigo.' '.$Referencia.'" |
-                        3,"'.$RazonSocial.'" | 
+                        1,"'.$RazonSocial.'" | 
+                        2,"'.$Codigo.'" |
+                        3,"'.$Codigo.' '.$Referencia.'" |
                         4,"'.$fecha.' '.$Costo.'" |
                         5,"'.$Descripcion.'" |
                         6,"'.$PrecioVenta.'"|
-                        7,"'.$Codigo.'" |
-                        8,"'.$Codigo.' '.$Referencia.'" |
-                        9,"'.$RazonSocial.'" | 
+                        7,"'.$RazonSocial.'" |     
+                        8,"'.$Codigo.'" |
+                        9,"'.$Codigo.' '.$Referencia.'" |
                         10,"'.$fecha.' '.$Costo.'" |
                         11,"'.$Descripcion.'" |
                         12,"'.$PrecioVenta.'"|
-                        13,"'.$Codigo.'" |
-                        14,"'.$Codigo.' '.$Referencia.'" |
-                        15,"'.$RazonSocial.'" | 
+                        13,"'.$RazonSocial.'" | 
+                        14,"'.$Codigo.'" |
+                        15,"'.$Codigo.' '.$Referencia.'" |
                         16,"'.$fecha.' '.$Costo.'" |
                         17,"'.$Descripcion.'" |
                         18,"'.$PrecioVenta.'"|}');
@@ -8074,6 +8077,144 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $Cantidad=str_replace(" ", "", $Datos);
         
         return($Cantidad); 
+     }
+     
+      //imprime codigo barras monarch
+    
+    public function ImprimirLabelMonarch($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        $Left1=45;
+        $Left2=385;
+        $Left3=720;
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        if(!isset($DatosCB["CodigoBarras"])){
+            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+            $Consulta =  $this->Query($sql);
+            $DatosCodigo=  $this->FetchArray($Consulta);  
+            $Codigo=$DatosCodigo["CodigoBarras"]; 
+        }else{
+            $Codigo=$DatosCB["CodigoBarras"]; 
+        }
+        
+        $Codigo=$idProducto;
+        $Cantidad=$Cantidad/3;
+        $Numpages=ceil($Cantidad);
+        $Numpages=$Cantidad;
+        $idEmpresaPro=$DatosCB["EmpresaPro"];
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
+        $fecha=date("y-m-d");
+        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,13);
+        $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
+       
+        $Descripcion=substr($DatosProducto["Nombre"],0,22);
+        $PrecioVenta= number_format($DatosProducto["PrecioVenta"]);
+        $Referencia= $DatosProducto["Referencia"];
+        $ID= $DatosProducto["idProductosVenta"];
+        $Costo2= substr($DatosProducto["CostoUnitario"], 1, -1);
+        $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
+        $Costo=$Costo1."/".$Costo2;
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        T,1,18,V,220,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        B,2,2710,V,165,'.$Left1.',8,0,50,0,L,0 |
+                        T,3,30,V,145,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,4,30,V,123,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,5,23,V,100,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,6,18,V,45,'.$Left1.',1,3,1,1,B,L,0,0,1 |
+                        T,7,18,V,220,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        B,8,2710,V,165,'.$Left2.',8,0,50,0,L,0 |
+                        T,9,30,V,145,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,10,30,V,123,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,11,23,V,100,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,12,18,V,45,'.$Left2.',1,3,1,1,B,L,0,0,1 |
+                        T,13,18,V,220,'.$Left3.',1,1,1,1,B,C,0,0,1 |    
+                        B,14,2710,V,165,'.$Left3.',8,0,50,0,L,0 |
+                        T,15,30,V,145,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,16,30,V,123,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,17,23,V,100,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,18,18,V,45,'.$Left3.',1,3,1,1,B,L,0,0,1 |}
+                        {B,25,N,'.$Numpages.' |
+                        1,"'.$RazonSocial.'" | 
+                        2,"'.$Codigo.'" |
+                        3,"'.$Codigo.' '.$Referencia.'" |
+                        4,"'.$fecha.' '.$Costo.'" |
+                        5,"'.$Descripcion.'" |
+                        6,"'.$PrecioVenta.'"|
+                        7,"'.$RazonSocial.'" |     
+                        8,"'.$Codigo.'" |
+                        9,"'.$Codigo.' '.$Referencia.'" |
+                        10,"'.$fecha.' '.$Costo.'" |
+                        11,"'.$Descripcion.'" |
+                        12,"'.$PrecioVenta.'"|
+                        13,"'.$RazonSocial.'" | 
+                        14,"'.$Codigo.'" |
+                        15,"'.$Codigo.' '.$Referencia.'" |
+                        16,"'.$fecha.' '.$Costo.'" |
+                        17,"'.$Descripcion.'" |
+                        18,"'.$PrecioVenta.'"|}');
+        
+        $salida = shell_exec('lpr $Puerto');
+        
+     }
+     
+     //imprime tikete corto en monarch
+    
+    public function ImprimirTiketCortoMonarch($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        $Left1=45;
+        $Left2=385;
+        $Left3=720;
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        if(!isset($DatosCB["CodigoBarras"])){
+            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+            $Consulta =  $this->Query($sql);
+            $DatosCodigo=  $this->FetchArray($Consulta);  
+            $Codigo=$DatosCodigo["CodigoBarras"]; 
+        }else{
+            $Codigo=$DatosCB["CodigoBarras"]; 
+        }
+        
+        $Codigo=$idProducto;
+        $Cantidad=$Cantidad/3;
+        $Numpages=ceil($Cantidad);
+        $Numpages=$Cantidad;
+        $idEmpresaPro=$DatosCB["EmpresaPro"];
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
+        $fecha=date("y-m-d");
+        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,13);
+        $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
+       
+        $Descripcion=substr($DatosProducto["Nombre"],0,22);
+        $PrecioVenta= number_format($DatosProducto["PrecioVenta"]);
+        $Referencia= $DatosProducto["Referencia"];
+        $ID= $DatosProducto["idProductosVenta"];
+        $Costo2= substr($DatosProducto["CostoUnitario"], 1, -1);
+        $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
+        $Costo=$Costo1."/".$Costo2;
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        T,1,18,V,5,100,1,2,1,1,B,C,0,1,1 |
+                        T,2,30,V,5,125,1,2,1,1,B,C,0,1,1 |
+                        T,3,23,V,5,190,1,1,2,1,B,C,0,1,1 |
+                        T,4,18,V,5,260,1,2,1,1,B,C,0,1,1 |
+                        T,5,30,V,5,285,1,2,1,1,B,C,0,1,1 |
+                        T,6,23,V,5,350,1,1,2,1,B,C,0,1,1 |}
+                        {B,25,N,1 |
+                        1,"ORIENTE" | 
+                        2,"PRECIO" |
+                        3,"3.500" |
+                        4,"ORIENTE" | 
+                        5,"PRECIO" |
+                        6,"3.500" |}');
+        
+        $salida = shell_exec('lpr $Puerto');
+        
      }
 //////////////////////////////Fin	
 }
