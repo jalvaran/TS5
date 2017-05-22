@@ -8167,7 +8167,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $L1=100;            $L2=125;            $L3=190;    
         $L4=$L1+$Factor;    $L5=$L2+$Factor;    $L6=$L3+$Factor;    
         $L7=$L4+$Factor;    $L8=$L5+$Factor;    $L9=$L6+$Factor;   //510  $L6+160
-        $L10=$L7+$Factor;   $L11=$L8+$Factor;   $L12=$L9+$Factor+3;    
+        $L10=$L7+$Factor;   $L11=$L8+$Factor;   $L12=$L9+$Factor;    
         $L13=$L10+$Factor;  $L14=$L11+$Factor;  $L15=$L12+$Factor;    
         $L16=$L13+$Factor;  $L17=$L14+$Factor;  $L18=$L15+$Factor;
         
@@ -8233,7 +8233,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
                         7,"'.$Descripcion.'" | 
                         8,"'.$Descripcion2.'" |
                         9,"'.$PrecioVenta.'" |
-                        11,"'.$Descripcion.'" | 
+                        10,"'.$Descripcion.'" | 
                         11,"'.$Descripcion2.'" |
                         12,"'.$PrecioVenta.'" |
                         13,"'.$Descripcion.'" | 

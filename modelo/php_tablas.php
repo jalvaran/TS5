@@ -591,16 +591,18 @@ public function DibujeTabla($Vector){
                 $idProducto=$DatosProducto[0];
                 
                 $this->css->CrearInputNumber("TxtCantidadCodigos$idProducto", "number", "Cantidad:", 1, "Cantidad", "black", "", "", 100, 30, 0, 0, 1, 1000, 1);
-                //print("<br>");
-                //$this->css->CrearBoton("BtnImprimirBarCode", $idProducto);
-                //$this->css->CrearBotonImagen($Titulo, $Nombre, $target, $RutaImage, $javascript, $Alto, $Ancho, $posicion, $margenes, $VectorBim);
-                $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=1&idProducto=$idProducto&TxtCantidad=";
-                $this->css->CrearBotonEvento("BtnPrintCB$idProducto", "BARRAS", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "naranja", "");
-                $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=2&idProducto=$idProducto&TxtCantidad=";
-                $this->css->CrearBotonEvento("BtnPrintLB$idProducto", "LABEL", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "verde", "");
-                $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=3&idProducto=$idProducto&TxtCantidad=";
-                $this->css->CrearBotonEvento("BtnPrintMU$idProducto", "CORTO", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "rojo", "");
-                
+                if(isset($Vector["Enabled_PrinterCB"])){
+                    $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=1&idProducto=$idProducto&TxtCantidad=";
+                    $this->css->CrearBotonEvento("BtnPrintCB$idProducto", "BARRAS", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "naranja", "");
+                }
+                if(isset($Vector["Enabled_PrinterLB"])){
+                    $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=2&idProducto=$idProducto&TxtCantidad=";
+                    $this->css->CrearBotonEvento("BtnPrintLB$idProducto", "LABEL", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "verde", "");
+                }
+                if(isset($Vector["Enabled_PrinterCC"])){
+                    $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=3&idProducto=$idProducto&TxtCantidad=";
+                    $this->css->CrearBotonEvento("BtnPrintMU$idProducto", "CORTO", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadCodigos$idProducto`,`DivRespuestasJS`,`0`)", "rojo", "");
+                }
                 print("</td>");
                 
             }
