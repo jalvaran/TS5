@@ -1,3 +1,8 @@
+2017-05-25
+
+ALTER TABLE `clientes` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
+ALTER TABLE `proveedores` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
+
 2017-05-22
 
 ALTER TABLE `facturas_items` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
