@@ -149,4 +149,13 @@ if(isset($_REQUEST["BtnAgregueReteIVA"])){
        $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
     }
 }
+
+//Eliminar una retencion
+
+if(isset($_REQUEST["DelRetencion"])){
+    $idItem=$obCompra->normalizar($_REQUEST["DelRetencion"]);
+    $idCompra=$_REQUEST["idCompra"];
+    $obCompra->BorraReg("factura_compra_retenciones", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
+}
 ?>

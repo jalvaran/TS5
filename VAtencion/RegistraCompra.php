@@ -181,8 +181,13 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                 $css->CrearInputText("TxtProducto", "text", "", "", "Buscar Producto", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtProducto`,`DivBusquedas`);", 200, 30, 0, 1);
                 print("</td>");
             $css->CierraFilaTabla();
+            
+            
         $css->CerrarTabla();
+        
         $css->CrearBotonEvento("BtnRetenciones", "Agregar Retenciones", 1, "onclick", "MuestraOculta('DivRetenciones')", "naranja", "");
+        $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Productos", 1, "onclick", "MuestraOculta('DivProductos')", "verde", "");
+        $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Retenciones", 1, "onclick", "MuestraOculta('DivRetencionesPracticadas')", "naranja", "");
         $css->CrearDiv("DivRetenciones", "", "center", 0, 1);
         $css->CrearTabla();
             $sql="SELECT SUM(SubtotalCompra) as Subtotal, sum(ImpuestoCompra) as IVA, SUM(TotalCompra) AS Total FROM factura_compra_items "
@@ -191,7 +196,9 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
             $TotalesCompra=$obVenta->FetchArray($consulta);
             $Subtotal=$TotalesCompra["Subtotal"];
             $IVA=$TotalesCompra["IVA"];
+            $TotalRetenciones=$obVenta->Sume("factura_compra_retenciones", "ValorRetencion", " WHERE idCompra='$idCompra'");
             $Total=$TotalesCompra["Total"];
+            $TotalAPagar=$Total-$TotalRetenciones;
             $css->FilaTabla(16);
                 $css->ColTabla("<strong>Agregar Retenciones a esta Compra, Subtotal=$". number_format($TotalesCompra["Subtotal"]).", Impuestos=$". number_format($TotalesCompra["IVA"])." , Total=$". number_format($TotalesCompra["Total"])."<strong>", 4);
             $css->CierraFilaTabla();
@@ -265,6 +272,56 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
             $css->CierraFilaTabla();
         $css->CerrarTabla();
         $css->CerrarDiv();
+        $DivVisible=0;
+        if($Total>0){
+            $DivVisible=1;
+        }
+        $css->CrearDiv("DivTotales", "", "center", $DivVisible, 0);
+        $css->CrearNotificacionAzul("Esta Compra:", 16);
+        $css->CrearForm2("FrmGuardarCompra", $myPage, "post", "_self");
+        $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", 0, 1);
+            $css->CrearTabla();
+                $css->FilaTabla(14);
+                    $css->ColTabla("<strong>Subtotal:</strong>", 1);
+                    $css->ColTabla("<strong>Impuestos:</strong>", 1);
+                    $css->ColTabla("<strong>Total:</strong>", 1);
+                    $css->ColTabla("<strong>Retenciones:</strong>", 1);
+                    $css->ColTabla("<strong>Total a Pagar:</strong>", 1);
+                    $css->ColTabla("<strong>Tipo Pago:</strong>", 1);
+                    $css->ColTabla("<strong>Guardar</strong>", 1);
+                $css->CierraFilaTabla();
+                $css->FilaTabla(14);
+                    
+                    $css->ColTabla(number_format($Subtotal), 1);
+                    $css->ColTabla(number_format($IVA), 1);
+                    $css->ColTabla(number_format($Total), 1);
+                    $css->ColTabla(number_format($TotalRetenciones), 1);
+                    $css->ColTabla(number_format($TotalAPagar), 1);
+                    print("<td>");
+                        $css->CrearSelect("CmbTipoPago", "MuestraOculta('DivCuentaOrigen')");
+                            $css->CrearOptionSelect("Contado", "Contado", 1);
+                            $css->CrearOptionSelect("Credito", "Credito", 0);
+                        $css->CerrarSelect();
+                        $css->CrearDiv("DivCuentaOrigen", "", "left", 1, 1);
+                        print("<strong>Cuenta Origen: </strong><br>");
+                            $css->CrearSelect("CmbCuentaOrigen", "");
+                            $consulta=$obVenta->ConsultarTabla("subcuentas", " WHERE PUC LIKE '11%'");
+                            while($DatosCuenta=$obVenta->FetchArray($consulta)){
+                                $sel=0;
+                                if($DatosCuenta["PUC"]==1105){
+                                    $sel=1;
+                                }
+                                $css->CrearOptionSelect($DatosCuenta["PUC"], $DatosCuenta["Nombre"]." ".$DatosCuenta["PUC"], $sel);
+                            }
+                            
+                        $css->CerrarSelect();
+                        $css->CerrarDiv();
+                    print("</td>");
+                    $css->ColTabla("<strong>Guardar</strong>", 1);
+                $css->CierraFilaTabla();
+            $css->CerrarTabla();
+        $css->CerrarForm();
+        $css->CerrarDiv();
     }
     
     $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
@@ -308,6 +365,29 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
         }else{
             $css->CrearNotificacionNaranja("No hay productos agregados a esta Compra", 16);
         }
+    $css->CerrarDiv();
+    //Div retenciones aplicadas
+    $css->CrearDiv("DivRetencionesPracticadas", "", "center", 0, 1);
+        $consulta=$obVenta->ConsultarTabla("factura_compra_retenciones", "WHERE idCompra='$idCompra'");
+        if($obVenta->NumRows($consulta)){
+            $css->CrearNotificacionAzul("Retenciones practicadas a esta compra", 16);
+            $css->CrearTabla();
+            while ($DatosRetenciones=$obVenta->FetchArray($consulta)){
+                $css->FilaTabla(14);
+                $css->ColTabla($DatosRetenciones["CuentaPUC"], 1);
+                $css->ColTabla($DatosRetenciones["NombreCuenta"], 1);
+                $css->ColTabla(number_format($DatosRetenciones["ValorRetencion"]), 1);
+                print("<td>");
+                $link="$myPage?DelRetencion=$DatosRetenciones[ID]&idCompra=$idCompra";
+                $css->CrearLink($link, "_self", "X");
+                print("</td>");
+                $css->CierraFilaTabla();
+            }
+            $css->CerrarTabla();
+        }else{
+            $css->CrearNotificacionAzul("No hay retenciones practicadas a esta compra", 16);
+        }
+        
     $css->CerrarDiv();
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
