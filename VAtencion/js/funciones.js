@@ -613,3 +613,60 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         }
         //alert("Sale");
 }
+
+//Calcule la retefuente en una compra segun porcentaje
+
+
+function CalculeReteFuenteCompra(Subtotal){
+    Porcentaje=parseFloat(document.getElementById('TxtPorReteFuente').value);
+    Porcentaje=(Porcentaje/100);
+    Retefuente=(Subtotal*Porcentaje).toFixed(0);
+    document.getElementById('TxtReteFuenteProductos').value=Retefuente;
+}
+
+//Calcule la retefuente en una compra segun porcentaje
+
+
+function CalculePorcentajeReteFuenteCompra(Subtotal){
+    Retefuente=parseFloat(document.getElementById('TxtReteFuenteProductos').value);
+    Porcentaje=((100/Subtotal)*Retefuente).toFixed(2);
+    document.getElementById('TxtPorReteFuente').value=Porcentaje;
+}
+
+//Calcule la reteiva en una compra segun porcentaje
+
+
+function CalculeReteIVACompra(IVA){
+    Porcentaje=parseFloat(document.getElementById('TxtPorReteIVA').value);
+    Porcentaje=(Porcentaje/100);
+    Retefuente=(IVA*Porcentaje).toFixed(0);
+    document.getElementById('TxtReteIVA').value=Retefuente;
+}
+
+//Calcule la reteiva en una compra segun porcentaje
+
+
+function CalculePorcentajeIVACompra(IVA){
+    Retefuente=parseFloat(document.getElementById('TxtReteIVA').value);
+    Porcentaje=((100/IVA)*Retefuente).toFixed(2);
+    document.getElementById('TxtPorReteIVA').value=Porcentaje;
+}
+
+//Calcule la reteiva en una compra segun porcentaje
+
+
+function CalculeReteICACompra(Subtotal){
+    Porcentaje=parseFloat(document.getElementById('TxtPorReteICA').value);
+    Porcentaje=(Porcentaje/100);
+    Retefuente=(Subtotal*Porcentaje).toFixed(0);
+    document.getElementById('TxtReteICA').value=Retefuente;
+}
+
+//Calcule la reteiva en una compra segun porcentaje
+
+
+function CalculePorcentajeICACompra(Subtotal){
+    Retefuente=parseFloat(document.getElementById('TxtReteICA').value);
+    Porcentaje=((100/Subtotal)*Retefuente).toFixed(2);
+    document.getElementById('TxtPorReteICA').value=Porcentaje;
+}

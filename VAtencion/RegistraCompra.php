@@ -122,6 +122,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                         $css->CrearOptionSelect($CentroCosto['ID'],$CentroCosto['Nombre'],0);							
         }
         $css->CerrarSelect();
+        print("<br>");
+        $css->CrearTextArea("TxtConcepto", "", "", "Concepto", "", "", "", 200, 60, 0, 1);
         print("</td>"); 
                
         print("<td>");
@@ -145,175 +147,168 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
         
     $css->CrearDiv("principal", "container", "center",1,1);
     $css->CrearForm2("FrmSeleccionaCom", $myPage, "post", "_self");
-    $css->CrearSelect("idComprobante", "EnviaForm('FrmSeleccionaCom')");
+    $css->CrearSelect("idCompra", "EnviaForm('FrmSeleccionaCom')");
         
-            $css->CrearOptionSelect("","Selecciona un Comprobante",0);
+            $css->CrearOptionSelect("","Selecciona una Compra",0);
             
-            $consulta = $obVenta->ConsultarTabla("egresos","WHERE TipoEgreso='ABIERTO'");
+            $consulta = $obVenta->ConsultarTabla("factura_compra","WHERE Estado='ABIERTA'");
             while($DatosComprobante=$obVenta->FetchArray($consulta)){
-                if($idComprobante==$DatosComprobante['idEgresos']){
+                if($idCompra==$DatosComprobante['ID']){
                     $Sel=1;
                     
                 }else{
                     
                     $Sel=0;
                 }
-                $css->CrearOptionSelect($DatosComprobante['idEgresos'],$DatosComprobante['idEgresos']." ".$DatosComprobante['Concepto'],$Sel);							
+                $css->CrearOptionSelect($DatosComprobante['ID'],$DatosComprobante['ID']." ".$DatosComprobante['Concepto']." ".$DatosComprobante['NumeroFactura'],$Sel);							
             }
         $css->CerrarSelect();
     $css->CerrarForm();
-       
-    if($idComprobante>0){
-        $css->CrearForm2("FrmSeleccionaTipoComp", $myPage, "post", "_self");
-        $css->CrearInputText("idComprobante", "hidden", "", $idComprobante, "", "", "", "", "", "", "", "");
-        $css->CrearSelect("TipoMovimiento", "EnviaForm('FrmSeleccionaTipoComp')");
-        $sel=0;
-            $css->CrearOptionSelect("","Selecciona Tipo de Movimiento",0);
-            if($TipoMovimiento==1){
-                $sel=1;
-            }
-            $css->CrearOptionSelect(1,"Movimiento Libre",$sel);
-            $sel=0;
-            if($TipoMovimiento==2){
-                $sel=1;
-            }
-            $css->CrearOptionSelect(2,"Desde Cuenta X Pagar",$sel);
-        $css->CerrarSelect();
-    $css->CerrarForm();
-    }
+     
     ///////////////Se crea el DIV que servirá de contenedor secundario
     /////
     /////
     $css->CrearDiv("Secundario", "container", "center",1,1);
    										
-    /*
-     * Dibujamos el formulario para seleccionar los datos del ingreso
-     * 
-     */
-    if(!empty($_REQUEST["TxtidIngreso"])){
-        $RutaPrintIngreso="../tcpdf/examples/imprimircomp.php?ImgPrintComp=".$_REQUEST["TxtidIngreso"];			
+    if($idCompra>0){
         $css->CrearTabla();
-        $css->CrearFilaNotificacion("Comprobante de Egreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Egreso No. $_REQUEST[TxtidIngreso]</a>",16);
-        $css->CerrarTabla();
-    }
-      
-    //movimientos contables
-    
-    if($idComprobante>0){
-        if($TipoMovimiento==1){
-            $css->CrearNotificacionAzul("Ingrese los datos para realizar el movimiento", 16);
-            $obTabla->DibujeAgregaMovimientoContable($myPage, 1, $idComprobante);  //Dibujo movimiento libre    
-        }
-        if($TipoMovimiento==2){
-            $css->CrearNotificacionAzul("Busque y seleccione una Cuenta X Pagar", 16);
-            $css->CrearForm2("FrmSelCuentasXPagar", $myPage, "post", "_self");
-            $css->CrearInputText("idComprobante", "hidden", "", $idComprobante, "", "", "", "", "", "", "", "");
-            $css->CrearInputText("TipoMovimiento", "hidden", "", 3, "", "", "", "", "", "", "", "");
-            $css->CrearTabla();
             $css->FilaTabla(16);
-            print("<td style='text-align:center'><strong>Busca y Selecciona una Cuenta X Pagar:</strong><br><br>");
-            $VarSelect["Ancho"]="800";
-            $VarSelect["PlaceHolder"]="Seleccione la Cuenta X Pagar";
-            $css->CrearSelectChosen("CmbCuentaXPagar", $VarSelect);
-
-            $sql="SELECT * FROM cuentasxpagar WHERE Saldo>0";
-            $Consulta=$obVenta->Query($sql);
-               while($DatosCartera=$obVenta->FetchArray($Consulta)){
-                   $Sel=0;
-                   
-                   $css->CrearOptionSelect($DatosCartera["ID"], "$DatosCartera[RazonSocial] $DatosCliente[idProveedor]; Numero Factura: $DatosCartera[DocumentoReferencia]; Fecha: $DatosCartera[Fecha]; Total: $DatosCartera[Total]; Abonos: $DatosCartera[Abonos]; Saldo: $DatosCartera[Saldo]" , $Sel);
-               }
-               $css->CerrarSelect();
-               print("<br><br>");
-            $css->CrearBoton("BtnSeleccionaCXC", "Enviar"); 
-            print("</td>");
+                $css->ColTabla("<strong>Buscar Producto:<strong>", 1);
             $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+                print("<td>");
+                $Page="Consultas/BuscarItemsCompras.php?TipoItem=1&myPage=$myPage&idCompra=$idCompra&key=";
+                $css->CrearInputText("TxtProducto", "text", "", "", "Buscar Producto", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtProducto`,`DivBusquedas`);", 200, 30, 0, 1);
+                print("</td>");
+            $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CrearBotonEvento("BtnRetenciones", "Agregar Retenciones", 1, "onclick", "MuestraOculta('DivRetenciones')", "naranja", "");
+        $css->CrearDiv("DivRetenciones", "", "center", 0, 1);
+        $css->CrearTabla();
+            $sql="SELECT SUM(SubtotalCompra) as Subtotal, sum(ImpuestoCompra) as IVA, SUM(TotalCompra) AS Total FROM factura_compra_items "
+                    . " WHERE idFacturaCompra='$idCompra'";
+            $consulta=$obVenta->Query($sql);
+            $TotalesCompra=$obVenta->FetchArray($consulta);
+            $Subtotal=$TotalesCompra["Subtotal"];
+            $IVA=$TotalesCompra["IVA"];
+            $Total=$TotalesCompra["Total"];
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>Agregar Retenciones a esta Compra, Subtotal=$". number_format($TotalesCompra["Subtotal"]).", Impuestos=$". number_format($TotalesCompra["IVA"])." , Total=$". number_format($TotalesCompra["Total"])."<strong>", 4);
+            $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>Retefuente:<strong>", 1);
+                $css->ColTabla("<strong>ReteICA:<strong>", 1);
+                $css->ColTabla("<strong>ReteIVA:<strong>", 1);
+                
+            $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+                print("<td>");
+                $css->CrearForm2("FrmReteFuente", $myPage, "post", "_self");
+                    $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", "", 1);
+                    $VarSelect["Required"]="200";
+                    $VarSelect["Ancho"]="200";
+                    $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+                    $css->CrearSelectChosen("CmbCuentaReteFuente", $VarSelect);
+                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2365%'");
+                    while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                        $sel=0;
+                        if($DatosCuentaRete["PUC"]=="236540"){
+                            $sel=1;
+                        }
+                        $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+                    }
+                    $css->CerrarSelect();
+                    $css->CrearInputNumber("TxtPorReteFuente", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteFuenteCompra($Subtotal)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteFuenteProductos", "number", " Valor: ", 0, "ReteFuente", "Black", "onkeyup", "CalculePorcentajeReteFuenteCompra($Subtotal)", 100, 30, 0, 0, 1,$Subtotal, "any");
+                    $css->CrearBotonConfirmado("BtnAgregueReteFuente", "Agregar");
+                $css->CerrarForm();    
+                print("</td>");
+                print("<td>");
+                $css->CrearForm2("FrmReteICA", $myPage, "post", "_self");
+                    $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", "", 1);
+                    $VarSelect["Required"]="200";
+                    $VarSelect["Ancho"]="200";
+                    $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+                    $css->CrearSelectChosen("CmbCuentaReteICA", $VarSelect);
+                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2368%'");
+                    while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                        $sel=0;
+                        
+                        $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+                    }
+                    $css->CerrarSelect();
+                    $css->CrearInputNumber("TxtPorReteICA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteICACompra($Subtotal)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteICA", "number", " Valor: ", 0, "ReteICA", "Black", "onkeyup", "CalculePorcentajeICACompra($Subtotal)", 100, 30, 0, 0, 1, $Subtotal, "any");
+                    $css->CrearBotonConfirmado("BtnAgregueReteICA", "Agregar");
+                $css->CerrarForm();    
+                print("</td>");
+                print("<td>");
+                $css->CrearForm2("FrmReteIVA", $myPage, "post", "_self");
+                    $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", "", 1);
+                    $VarSelect["Required"]="200";
+                    $VarSelect["Ancho"]="200";
+                    $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+                    $css->CrearSelectChosen("CmbCuentaReteIVA", $VarSelect);
+                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2367%'");
+                    while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                        $sel=0;
+                        
+                        $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+                    }
+                    $css->CerrarSelect();
+                    $css->CrearInputNumber("TxtPorReteIVA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteIVACompra($IVA)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteIVA", "number", " Valor: ", 0, "ReteIVA", "Black", "onkeyup", "CalculePorcentajeIVACompra($IVA)", 100, 30, 0, 0, 1, $IVA, "any");
+                    $css->CrearBotonConfirmado("BtnAgregueReteIVA", "Agregar");
+                $css->CerrarForm();    
+                print("</td>");
+                
+            $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarDiv();
+    }
+    
+    $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
+    $css->CerrarDiv();
+    $css->CrearDiv("DivProductos", "", "Center", 1, 1);
+    
+        $consulta=$obVenta->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
+        if($obVenta->NumRows($consulta)){
+            $css->CrearNotificacionVerde("Productos agregados a esta Compra", 16);
+            $css->CrearTabla();
+            $css->FilaTabla(14);
+               
+               $css->ColTabla("<strong>idProducto</strong>", 1);
+               $css->ColTabla("<strong>Referencia</strong>", 1);
+               $css->ColTabla("<strong>Nombre</strong>", 1);
+               $css->ColTabla("<strong>Cantidad</strong>", 1);
+               $css->ColTabla("<strong>CostoUnitario</strong>", 1);
+               $css->ColTabla("<strong>Subtotal</strong>", 1);
+               $css->ColTabla("<strong>Impuestos</strong>", 1);
+               $css->ColTabla("<strong>Total</strong>", 1);
+               $css->ColTabla("<strong>% Impuestos</strong>", 1);
+               $css->CierraFilaTabla();
+            while($DatosItems=$obVenta->FetchAssoc($consulta)){
+               $css->FilaTabla(14);
+               $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $DatosItems["idProducto"]);
+               $DatosIVA=$obVenta->DevuelveValores("porcentajes_iva", "Valor", $DatosItems["Tipo_Impuesto"]);
+                    $css->ColTabla($DatosItems["idProducto"], 1);
+                    $css->ColTabla($DatosProducto["Referencia"], 1);
+                    $css->ColTabla($DatosProducto["Nombre"], 1);
+                    $css->ColTabla(number_format($DatosItems["Cantidad"]), 1);
+                    $css->ColTabla(number_format($DatosItems["CostoUnitarioCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["SubtotalCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["ImpuestoCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["TotalCompra"]), 1);
+                    $css->ColTabla($DatosIVA["Nombre"], 1);
+                    $css->ColTablaDel($myPage, "factura_compra_items", "ID", $DatosItems["ID"], $idCompra);
+
+               $css->CierraFilaTabla();
+            }
             $css->CerrarTabla();
-            $css->CerrarForm();   
+        }else{
+            $css->CrearNotificacionNaranja("No hay productos agregados a esta Compra", 16);
         }
-        if($TipoMovimiento==3){
-            $idCartera=$obVenta->normalizar($_REQUEST["CmbCuentaXPagar"]);
-            $Notificacion=$obTabla->DibujePreMovimientoCuentaXPagar($myPage,$idCartera,$idComprobante,"");
-            if($Notificacion>0){
-                $css->CrearNotificacionRoja("Esta Cuenta X Pagar ya esta agregada en otro comprobante", 16);
-            }
-        }
-    $sql="SELECT SUM(Debito) as Debito, SUM(Credito) as Credito FROM comprobantes_egreso_items WHERE idComprobante='$idComprobante'";
-    $consulta=$obVenta->Query($sql);
-    $DatosSumas=$obVenta->FetchArray($consulta);    
-    $Debitos=$DatosSumas["Debito"];
-    $Credito=$DatosSumas["Credito"];
-    $Neto=$Debitos-$Credito;
-    if($Neto<>0){
-        $css->CrearNotificacionRoja("Debitos = $Debitos, Creditos = $Credito, existe una diferencia de $Neto, no podrá guardar hasta que no sean iguales", 14);
-        $H=0;
-        
-    }else{
-        $css->CrearNotificacionVerde("Debitos = $Debitos, Creditos = $Credito, Pulse el boton si desea cerrar el comprobante", 14);
-        $H=1;
-    }
-    
-    $css->CrearForm2("FrmCerrarCompC", $myPage, "post", "_self");
-    $css->CrearInputText("idComprobante","hidden",'',$idComprobante,'',"","","",300,30,0,0);
-    $css->CrearBotonConfirmado2("BtnGuardarCI", "Guardar y Cerrar Comprobante",$H,"");
-    
-    print("<br><br><br>");
-    $css->CerrarForm();
-    ////Se dibujan los items del movimiento
-    $css->CrearSelect("CmbMostrarItems", "MuestraOculta('DivItems')");
-        $css->CrearOptionSelect("SI", "Mostrar Movimientos", 0);
-        $css->CrearOptionSelect("NO", "Ocultar Movimientos", 0);
-    $css->CerrarSelect();
-    $css->CrearDiv("DivItems", "", "center", 1, 1);
-    $Vector["Tabla"]="comprobantes_egreso_items";
-    $Columnas=$obTabla->ColumnasInfo($Vector);
-    $css->CrearTabla();
-    $css->FilaTabla(12);
-    
-    $i=0;
-    $ColNames[]="";
-    $css->ColTabla("<strong>Borrar</strong>", 1);
-    foreach($Columnas["Field"] as $NombresCol ){
-        $css->ColTabla("<strong>$NombresCol</strong>", 1);
-        $ColNames[$i]=$NombresCol;
-        $i++;
-    }
-    
-    $NumCols=$i-1;
-    $css->CierraFilaTabla();
-    
-    $i=0;
-    $sql="SELECT * FROM comprobantes_egreso_items WHERE idComprobante='$idComprobante'";
-    $consulta=$obVenta->Query($sql);
-    
-    while($DatosItems=$obVenta->FetchArray($consulta)){
-        
-        $css->FilaTabla(12);
-        $css->ColTablaDel($myPage,"comprobantes_egreso_items","ID",$DatosItems['ID'],$idComprobante);
-        for($z=0;$z<=$NumCols;$z++){
-            $NombreCol=$ColNames[$z];
-            print("<td>");
-            if($NombreCol=="Soporte"){
-                $link=$DatosItems[$NombreCol];
-                if($link<>""){
-                    $css->CrearLink($link, "_blank", "Ver");
-                }
-            }else{
-                print($DatosItems[$NombreCol]);
-            }
-            
-            print("</td>");
-            
-        }
-        
-        $i=0;
-        $css->CierraFilaTabla();
-        
-    }
-    
-    $css->CerrarTabla();
-    $css->CerrarDiv();//Cerramos Div con los items agregados
-    }
+    $css->CerrarDiv();
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
@@ -322,5 +317,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
     $css->AnchoElemento("TxtTerceroCI_chosen", 200);
     $css->AnchoElemento("CmbCodMunicipio_chosen", 200);    
     $css->AnchoElemento("CmbCuentaXPagar_chosen", 800);
+    $css->AnchoElemento("CmbCuentaReteFuente_chosen", 200);
+    $css->AnchoElemento("CmbCuentaReteIVA_chosen", 200);
+    $css->AnchoElemento("CmbCuentaReteICA_chosen", 200);
     print("</body></html>");
 ?>

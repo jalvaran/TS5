@@ -13,8 +13,18 @@ $CentroCosto=$obCompra->normalizar($_REQUEST["CmbCentroCosto"]);
 $idSede=$obCompra->normalizar($_REQUEST["idSucursal"]);
 $TipoCompra=$obCompra->normalizar($_REQUEST["TipoCompra"]);
 $NumeroFactura=$obCompra->normalizar($_REQUEST["TxtNumFactura"]);
-$idCompra=$obCompra->CrearCompra($Fecha, $idTercero, "", $CentroCosto, $idSede, $idUser,$TipoCompra,$NumeroFactura, $Vector);
+$Concepto=$obCompra->normalizar($_REQUEST["TxtConcepto"]);
+$idCompra=$obCompra->CrearCompra($Fecha, $idTercero, "", $CentroCosto, $idSede, $idUser,$TipoCompra,$NumeroFactura,$Concepto, $Vector);
 header("location:$myPage?idCompra=$idCompra");
+      
+}
+//Verificamos si se recibe la peticion de Agregar un item a la compra
+if(!empty($_REQUEST["TxtAgregarItemCompra"])){
+      
+    $idItem=$obCompra->normalizar($_REQUEST["TxtAgregarItemCompra"]);
+    $idCompra=$obCompra->normalizar($_REQUEST["TxtAgregarItemCompra"]);
+    $idCompra=$obCompra->CrearCompra($Fecha, $idTercero, "", $CentroCosto, $idSede, $idUser,$TipoCompra,$NumeroFactura,$Concepto, $Vector);
+    header("location:$myPage?idCompra=$idCompra");
       
 }
 
@@ -66,9 +76,77 @@ if(!empty($_REQUEST['BtnCrearProveedor'])){
 
             print("<script language='JavaScript'>alert('El cliente con Identificacion: $NIT, ya existe y no se puede crear nuevamente')</script>");
     }	
+		
+}
 
-    //header("location:VentaFacil.php?CmbPreVentaAct=$idPreventa");
+//Agrega un item a la compra
 
-			
-	}
+if(isset($_REQUEST["BtnAgregarItem"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $idProducto=$obCompra->normalizar($_REQUEST["TxtidProducto"]);
+    $Cantidad=$obCompra->normalizar($_REQUEST["TxtCantidad"]);
+    $TipoIVA=$obCompra->normalizar($_REQUEST["TipoIVA"]);
+    $IVAIncluido=$obCompra->normalizar($_REQUEST["IVAIncluido"]);
+    $CostoUnitario=$obCompra->normalizar($_REQUEST["TxtCosto"]);
+    switch ($_REQUEST["TipoItem"]){
+        case 1:
+            $obCompra->AgregueProductoCompra($idCompra,$idProducto,$Cantidad,$CostoUnitario,$TipoIVA,$IVAIncluido,"");
+            break;
+    }
+}
+
+//Eliminar un item a la compra
+
+if(isset($_REQUEST["del"])){
+    $idItem=$obCompra->normalizar($_REQUEST["del"]);
+    $idCompra=$_REQUEST["TxtIdPre"];
+    $obCompra->BorraReg("factura_compra_items", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
+}
+
+
+//Agrega una retencion en la fuente a la compra
+
+if(isset($_REQUEST["BtnAgregueReteFuente"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteFuente"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteFuente"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteFuenteProductos"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_items", "TotalCompra", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
+
+//Agrega reteica a la compra
+
+if(isset($_REQUEST["BtnAgregueReteICA"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteICA"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteICA"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteICA"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_items", "TotalCompra", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
+
+//Agrega reteiva a la compra
+
+if(isset($_REQUEST["BtnAgregueReteIVA"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteIVA"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteIVA"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteIVA"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_items", "ImpuestoCompra", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
 ?>
