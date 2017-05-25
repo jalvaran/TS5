@@ -1,3 +1,14 @@
+2017-05-22
+
+ALTER TABLE `facturas_items` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `SubtotalItem` `SubtotalItem` DOUBLE NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `IVAItem` `IVAItem` DOUBLE NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `TotalItem` `TotalItem` DOUBLE NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `PrecioCostoUnitario` `PrecioCostoUnitario` DOUBLE NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
+
+
+
 2017-05-19
 
 POSIBLE VISTA DE PRODUCTOS VENTA (FALTA ANALIZAR NO IMPLEMENTAR AUN)
@@ -17,6 +28,26 @@ SELECT `k`.`idKardexMercancias` AS `ID`,`k`.`Fecha` AS `Fecha`,`k`.`Movimiento` 
 FROM kardexmercancias k INNER JOIN productosventa pv ON `k`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`;
 
 2017-05-08
+
+--
+-- Estructura de tabla para la tabla `registra_ediciones`
+--
+
+CREATE TABLE IF NOT EXISTS `registra_ediciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Tabla` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
+  `Campo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorAnterior` text COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorNuevo` text COLLATE utf8_spanish2_ci NOT NULL,
+  `ConsultaRealizada` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
 Reabrir Comprobante de Contabilidad
 crear tabla registra_apertura_documentos
             egresos_anulaciones
@@ -79,12 +110,48 @@ CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
 Modificaciones en la base de datos:
 ALTER TABLE `cajas_aperturas_cierres` ADD `AbonosSisteCredito` DOUBLE NOT NULL AFTER `TotalAbonos`;
 ALTER TABLE `cajas_aperturas_cierres` ADD `TotalVentasSisteCredito` DOUBLE NOT NULL AFTER `TotalVentasCredito`;
+ALTER TABLE `cajas_aperturas_cierres` ADD `AbonosCreditos` DOUBLE NOT NULL AFTER `TotalAbonos`;
 ALTER TABLE `cartera` ADD `TipoCartera` VARCHAR(45) NOT NULL DEFAULT 'Interna' AFTER `Observaciones`;
 ALTER TABLE `clientes` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
 ALTER TABLE `proveedores` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
 ALTER TABLE `facturas_abonos` ADD `FormaPago` DOUBLE NOT NULL AFTER `Facturas_idFacturas`;
 ALTER TABLE `traslados_items` ADD `CodigoBarras1` VARCHAR(45) NOT NULL AFTER `DestinoSincronizado`, ADD `CodigoBarras2` VARCHAR(45) NOT NULL AFTER `CodigoBarras1`, ADD `CodigoBarras3` VARCHAR(45) NOT NULL AFTER `CodigoBarras2`, ADD `CodigoBarras4` VARCHAR(45) NOT NULL AFTER `CodigoBarras3`;
 
+
+INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
+(14, 'Cuenta x pagar proveedores', 2380, 'PROVEEDORES NACIONALES', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(15, 'Descuentos en compras por pronto pago', 421010, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-04-18 14:59:19', '2017-04-18 09:59:19');
+
+
+--
+-- Estructura de tabla para la tabla `facturas_tipo_pago`
+--
+
+CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `TipoPago` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Leyenda` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
+
+--
+-- Volcado de datos para la tabla `facturas_tipo_pago`
+--
+
+INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`) VALUES
+(1, 'Contado', 'Contado', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
+(2, '15', 'Credito a 15 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
+(3, '30', 'Credito a 30 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
+(4, '60', 'Credito a 60 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
+(5, '90', 'Credito a 90 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
+(6, 'SisteCredito', 'SisteCredito', '2017-05-22 13:18:14', '0000-00-00 00:00:00');
+
+ALTER TABLE `repuestas_forma_pago` CHANGE `DiasCartera` `DiasCartera` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
+
+INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, `Sync`) VALUES
+(6, 'SisteCredito', 'SisteCredito', '2017-04-24 20:17:14', '0000-00-00 00:00:00');
 
 2016-11-13
 

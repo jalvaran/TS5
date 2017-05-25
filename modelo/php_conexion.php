@@ -2873,7 +2873,7 @@ public function CalculePesoRemision($idCotizacion)
       */
      
      /*
-      * Imprime un separado
+      * Imprime un Cierre
       */
      
      public function ImprimeCierre($idUser,$VectorCierre,$COMPrinter,$Copias){
@@ -3039,7 +3039,7 @@ public function CalculePesoRemision($idCotizacion)
     }
     fclose($handle); // cierra el fichero PRN
     $salida = shell_exec('lpr $COMPrinter');
-    
+    $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
     }
     
     ///Registre un abono a un separado
@@ -5045,7 +5045,7 @@ public function VerificaPermisos($VectorPermisos) {
      
      
      public function AgregueVentaColaborador($idFactura,$idColaborador) {
-        $DatosFactura=$this->DevuelveValores("Facturas", "idFacturas", $idFactura);
+        $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
         $tab="colaboradores_ventas";
         $NumRegistros=4;
         $Columnas[0]="Fecha";                   $Valores[0]=$DatosFactura["Fecha"];
@@ -7800,8 +7800,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
         
         $Codigo=$idProducto;
-        $Cantidad=$Cantidad/3;
-        $Numpages=ceil($Cantidad);
+        //$Cantidad=$Cantidad/3;
+        //$Numpages=ceil($Cantidad);
         $Numpages=$Cantidad;
         $idEmpresaPro=$DatosCB["EmpresaPro"];
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
@@ -8246,6 +8246,78 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $salida = shell_exec('lpr $Puerto');
         
      }
+     //Imprime el dato de los departamentos en un cierre
+      public function ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias){
+        $COMPrinter= $this->COMPrinter;    
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $idCierre=$VectorCierre["idCierre"];
+       
+       $DatosCierre=$this->DevuelveValores("cajas_aperturas_cierres", "ID", $idCierre);
+      
+       
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        //fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"Resumen de Ventas por Departamento"); // ESCRIBO RAZON SOCIAL
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+        /////////////////////////////DEVOLUCIONES
+        
+        
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+
+        $sql = "SELECT sum(`TotalItem`) as Total, sum(`Cantidad`) as Cantidad, `Departamento` FROM `facturas_items` WHERE `idCierre`='$idCierre' GROUP BY `Departamento`";
+	
+        $consulta=$this->Query($sql);
+							
+	while($DatosVenta=$this->FetchArray($consulta)){
+	    $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVenta["Departamento"]);       
+            fwrite($handle,str_pad("Departamento: ".$DatosDepartamento["Nombre"],10," ",STR_PAD_RIGHT));
+            fwrite($handle,str_pad(number_format($DatosVenta["Cantidad"]),3," ",STR_PAD_LEFT));
+            fwrite($handle,str_pad("$".number_format($DatosVenta["Total"]),10," ",STR_PAD_LEFT));
+
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        }
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
+   
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
+    //fwrite($handle, chr(27). chr(100). chr(0));
+    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));
+    
+    //fwrite($handle,"=================================");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    
+    }
 //////////////////////////////Fin	
 }
 	
