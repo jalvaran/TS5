@@ -5,6 +5,9 @@ ALTER TABLE `proveedores` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES ('236701', 'Impuesto a las ventas retenido', '0', '2367', CURRENT_TIMESTAMP, '0000-00-00 00:00:00');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES ('236801', 'Impuesto de industria y comercio retenido', '0', '2368', CURRENT_TIMESTAMP, '0000-00-00 00:00:00');
+
+ALTER TABLE `porcentajes_iva` ADD `CuentaPUC` BIGINT NOT NULL AFTER `Valor`, ADD `NombreCuenta` VARCHAR(100) NOT NULL AFTER `CuentaPUC`;
+
 2017-05-22
 
 ALTER TABLE `facturas_items` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;

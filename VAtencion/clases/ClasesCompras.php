@@ -96,12 +96,26 @@ class Compra extends ProcesoVenta{
         $TotalInventarios= $this->Sume("factura_compra_items", "SubtotalCompra", "WHERE idFacturaCompra='$idCompra'");
         $TotalCompra= $this->Sume("factura_compra_items", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
         $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
-        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "D", $TotalInventarios, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "DB", $TotalInventarios, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
         $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
         $consulta= $this->Query($sql);
         while($DatosImpuestos= $this->FetchArray($consulta)){
-            
+            $DatosTipoIVA= $this->DevuelveValores("porcentajes_iva", "Valor", $DatosImpuestos["TipoImpuesto"]);
+            if($DatosImpuestos["IVA"]>0){
+                $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "Compras", "DB", $DatosImpuestos["IVA"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            }
         }
+        if($TipoPago=="Credito"){
+            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
+            $CuentaDestino=$ParametrosContables["CuentaPUC"];
+            $NombreCuenta=$ParametrosContables["NombreCuenta"];
+        }else{
+            $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
+            $CuentaDestino=$CuentaOrigen;
+            $NombreCuenta=$DatosSubcuentas["Nombre"];
+        }
+        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "Compras", "CR", $TotalCompra, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+        
     }
     //Fin Clases
 }

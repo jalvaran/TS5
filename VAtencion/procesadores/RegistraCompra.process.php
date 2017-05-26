@@ -164,7 +164,7 @@ if(isset($_REQUEST["BtnGuardarCompra"])){
     $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
     $TipoPago=$obCompra->normalizar($_REQUEST["CmbTipoPago"]);
     $CuentaOrigen=$obCompra->normalizar($_REQUEST["CmbCuentaOrigen"]);
-    $obCompra->BorraReg("factura_compra_retenciones", "ID", $idItem);
+    $obCompra->GuardarFacturaCompra($idCompra, $TipoPago, $CuentaOrigen, "");
     header("location:$myPage?idCompra=$idCompra");
 }
 ?>
