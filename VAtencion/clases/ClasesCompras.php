@@ -89,5 +89,19 @@ class Compra extends ProcesoVenta{
                             
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
+    
+    //Guarde una Compra
+    public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
+        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
+        $TotalInventarios= $this->Sume("factura_compra_items", "SubtotalCompra", "WHERE idFacturaCompra='$idCompra'");
+        $TotalCompra= $this->Sume("factura_compra_items", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
+        $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
+        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "D", $TotalInventarios, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+        $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
+        $consulta= $this->Query($sql);
+        while($DatosImpuestos= $this->FetchArray($consulta)){
+            
+        }
+    }
     //Fin Clases
 }

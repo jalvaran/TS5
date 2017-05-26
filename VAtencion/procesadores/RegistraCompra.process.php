@@ -158,4 +158,13 @@ if(isset($_REQUEST["DelRetencion"])){
     $obCompra->BorraReg("factura_compra_retenciones", "ID", $idItem);
     header("location:$myPage?idCompra=$idCompra");
 }
+//Eliminar una retencion
+
+if(isset($_REQUEST["BtnGuardarCompra"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $TipoPago=$obCompra->normalizar($_REQUEST["CmbTipoPago"]);
+    $CuentaOrigen=$obCompra->normalizar($_REQUEST["CmbCuentaOrigen"]);
+    $obCompra->BorraReg("factura_compra_retenciones", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
+}
 ?>
