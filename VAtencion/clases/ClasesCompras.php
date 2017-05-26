@@ -128,6 +128,20 @@ class Compra extends ProcesoVenta{
         if($TipoPago=="Credito"){
             $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $TotalInventarios, $IVA, $TotalCompra, $TotalRetenciones, 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
         }
+        $consulta= $this->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
+        while($DatosProductos= $this->FetchArray($consulta)){
+            $DatosProductoGeneral= $this->DevuelveValores("productosventa", "idProductosVenta", $DatosProductos["idProducto"]);
+            $DatosKardex["Cantidad"]=$DatosProductos["Cantidad"];
+            $DatosKardex["idProductosVenta"]=$DatosProductos["idProducto"];
+            $DatosKardex["CostoUnitario"]=$DatosProductos['CostoUnitarioCompra'];
+            $DatosKardex["Existencias"]=$DatosProductoGeneral['Existencias'];
+            $DatosKardex["Detalle"]="FacturaCompra";
+            $DatosKardex["idDocumento"]=$idCompra;
+            $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
+            $DatosKardex["Movimiento"]="ENTRADA";
+            
+            $this->InserteKardex($DatosKardex);
+        }
     }
     //Fin Clases
 }
