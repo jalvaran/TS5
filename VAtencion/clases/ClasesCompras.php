@@ -94,7 +94,10 @@ class Compra extends ProcesoVenta{
     public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
         $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
         $TotalInventarios= $this->Sume("factura_compra_items", "SubtotalCompra", "WHERE idFacturaCompra='$idCompra'");
+        $IVA= $this->Sume("factura_compra_items", "ImpuestoCompra", "WHERE idFacturaCompra='$idCompra'");
         $TotalCompra= $this->Sume("factura_compra_items", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
+        $TotalRetenciones= $this->Sume("factura_compra_retenciones", "ValorRetencion", "WHERE idCompra='$idCompra'");
+        $TotalCompra=$TotalCompra-$TotalRetenciones;
         $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
         $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "DB", $TotalInventarios, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
         $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
@@ -104,6 +107,13 @@ class Compra extends ProcesoVenta{
             if($DatosImpuestos["IVA"]>0){
                 $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "Compras", "DB", $DatosImpuestos["IVA"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
             }
+        }
+        $sql="SELECT SUM(`ValorRetencion`) AS Retencion, `CuentaPUC` AS CuentaPUC,`NombreCuenta` AS NombreCuenta FROM `factura_compra_retenciones` WHERE `idCompra`='$idCompra' GROUP BY `CuentaPUC` ";
+        $consulta= $this->Query($sql);
+        while($DatosRetencion= $this->FetchArray($consulta)){
+            
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosRetencion["CuentaPUC"], $DatosRetencion["NombreCuenta"], "Compras", "CR", $DatosRetencion["Retencion"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            
         }
         if($TipoPago=="Credito"){
             $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
@@ -115,7 +125,9 @@ class Compra extends ProcesoVenta{
             $NombreCuenta=$DatosSubcuentas["Nombre"];
         }
         $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "Compras", "CR", $TotalCompra, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
-        
+        if($TipoPago=="Credito"){
+            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $TotalInventarios, $IVA, $TotalCompra, $TotalRetenciones, 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
+        }
     }
     //Fin Clases
 }
