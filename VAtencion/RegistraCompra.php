@@ -19,7 +19,7 @@ if(isset($_REQUEST["idCompra"])){
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/RegistraCompra.process.php");
+    
     
     $css->CabeceraIni("Registrar Compra"); //Inicia la cabecera de la pagina
     $css->CreaBotonDesplegable("Proveedor","Crear Tercero");
@@ -146,6 +146,7 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
     ///////////////Creamos el contenedor
         
     $css->CrearDiv("principal", "container", "center",1,1);
+    include_once("procesadores/RegistraCompra.process.php");
     $css->CrearForm2("FrmSeleccionaCom", $myPage, "post", "_self");
     $css->CrearSelect("idCompra", "EnviaForm('FrmSeleccionaCom')");
         
@@ -186,7 +187,9 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
         $css->CerrarTabla();
         
         $css->CrearBotonEvento("BtnRetenciones", "Agregar Retenciones", 1, "onclick", "MuestraOculta('DivRetenciones')", "naranja", "");
-        $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Productos", 1, "onclick", "MuestraOculta('DivProductos')", "verde", "");
+        $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Productos Agregados", 1, "onclick", "MuestraOculta('DivProductos')", "verde", "");
+        $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Productos Devueltos", 1, "onclick", "MuestraOculta('DivProductosDevueltos')", "rojo", "");
+     
         $css->CrearBotonEvento("BtnMostrarProductos", "Ver/Ocultar Retenciones", 1, "onclick", "MuestraOculta('DivRetencionesPracticadas')", "naranja", "");
         $css->CrearDiv("DivRetenciones", "", "center", 0, 1);
         $css->CrearTabla();
@@ -194,11 +197,25 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                     . " WHERE idFacturaCompra='$idCompra'";
             $consulta=$obVenta->Query($sql);
             $TotalesCompra=$obVenta->FetchArray($consulta);
+            
             $Subtotal=$TotalesCompra["Subtotal"];
             $IVA=$TotalesCompra["IVA"];
-            $TotalRetenciones=$obVenta->Sume("factura_compra_retenciones", "ValorRetencion", " WHERE idCompra='$idCompra'");
             $Total=$TotalesCompra["Total"];
-            $TotalAPagar=$Total-$TotalRetenciones;
+            
+            $sql="SELECT SUM(SubtotalCompra) as Subtotal, sum(ImpuestoCompra) as IVA, SUM(TotalCompra) AS Total FROM factura_compra_items_devoluciones "
+                    . " WHERE idFacturaCompra='$idCompra'";
+            $consulta=$obVenta->Query($sql);
+            $TotalesCompraDev=$obVenta->FetchArray($consulta);
+            $SubtotalDev=$TotalesCompraDev["Subtotal"];
+            $IVADev=$TotalesCompraDev["IVA"];
+            $TotalDev=$TotalesCompraDev["Total"];
+            $GranSubTotal=$Subtotal-$SubtotalDev;
+            $GranIVA=$IVA-$IVADev;
+            $GranTotal=$Total-$TotalDev;
+            $TotalRetenciones=$obVenta->Sume("factura_compra_retenciones", "ValorRetencion", " WHERE idCompra='$idCompra'");
+            
+            
+            $TotalAPagar=$GranTotal-$TotalRetenciones;
             $css->FilaTabla(16);
                 $css->ColTabla("<strong>Agregar Retenciones a esta Compra, Subtotal=$". number_format($TotalesCompra["Subtotal"]).", Impuestos=$". number_format($TotalesCompra["IVA"])." , Total=$". number_format($TotalesCompra["Total"])."<strong>", 4);
             $css->CierraFilaTabla();
@@ -225,8 +242,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                         $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
                     }
                     $css->CerrarSelect();
-                    $css->CrearInputNumber("TxtPorReteFuente", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteFuenteCompra($Subtotal)", 70, 30, 0, 0, 0, 100, "any");
-                    $css->CrearInputNumber("TxtReteFuenteProductos", "number", " Valor: ", 0, "ReteFuente", "Black", "onkeyup", "CalculePorcentajeReteFuenteCompra($Subtotal)", 100, 30, 0, 0, 1,$Subtotal, "any");
+                    $css->CrearInputNumber("TxtPorReteFuente", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteFuenteCompra($GranSubTotal)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteFuenteProductos", "number", " Valor: ", 0, "ReteFuente", "Black", "onkeyup", "CalculePorcentajeReteFuenteCompra($GranSubTotal)", 100, 30, 0, 0, 1,$GranSubTotal, "any");
                     $css->CrearBotonConfirmado("BtnAgregueReteFuente", "Agregar");
                 $css->CerrarForm();    
                 print("</td>");
@@ -244,8 +261,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                         $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
                     }
                     $css->CerrarSelect();
-                    $css->CrearInputNumber("TxtPorReteICA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteICACompra($Subtotal)", 70, 30, 0, 0, 0, 100, "any");
-                    $css->CrearInputNumber("TxtReteICA", "number", " Valor: ", 0, "ReteICA", "Black", "onkeyup", "CalculePorcentajeICACompra($Subtotal)", 100, 30, 0, 0, 1, $Subtotal, "any");
+                    $css->CrearInputNumber("TxtPorReteICA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteICACompra($GranSubTotal)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteICA", "number", " Valor: ", 0, "ReteICA", "Black", "onkeyup", "CalculePorcentajeICACompra($GranSubTotal)", 100, 30, 0, 0, 1, $GranSubTotal, "any");
                     $css->CrearBotonConfirmado("BtnAgregueReteICA", "Agregar");
                 $css->CerrarForm();    
                 print("</td>");
@@ -263,8 +280,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                         $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
                     }
                     $css->CerrarSelect();
-                    $css->CrearInputNumber("TxtPorReteIVA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteIVACompra($IVA)", 70, 30, 0, 0, 0, 100, "any");
-                    $css->CrearInputNumber("TxtReteIVA", "number", " Valor: ", 0, "ReteIVA", "Black", "onkeyup", "CalculePorcentajeIVACompra($IVA)", 100, 30, 0, 0, 1, $IVA, "any");
+                    $css->CrearInputNumber("TxtPorReteIVA", "text", "<br><br>Porcentaje: ", 0, "Porcentaje ReteFuente", "Black", "onkeyup", "CalculeReteIVACompra($GranIVA)", 70, 30, 0, 0, 0, 100, "any");
+                    $css->CrearInputNumber("TxtReteIVA", "number", " Valor: ", 0, "ReteIVA", "Black", "onkeyup", "CalculePorcentajeIVACompra($GranIVA)", 100, 30, 0, 0, 1, $GranIVA, "any");
                     $css->CrearBotonConfirmado("BtnAgregueReteIVA", "Agregar");
                 $css->CerrarForm();    
                 print("</td>");
@@ -286,6 +303,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                     $css->ColTabla("<strong>Impuestos:</strong>", 1);
                     $css->ColTabla("<strong>Total:</strong>", 1);
                     $css->ColTabla("<strong>Retenciones:</strong>", 1);
+                    $css->ColTabla("<strong>Devoluciones:</strong>", 1);
+                    $css->ColTabla("<strong>Impuestos Devueltos:</strong>", 1);
                     $css->ColTabla("<strong>Total a Pagar:</strong>", 1);
                     $css->ColTabla("<strong>Tipo Pago:</strong>", 1);
                     $css->ColTabla("<strong>Guardar</strong>", 1);
@@ -296,6 +315,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                     $css->ColTabla(number_format($IVA), 1);
                     $css->ColTabla(number_format($Total), 1);
                     $css->ColTabla(number_format($TotalRetenciones), 1);
+                    $css->ColTabla(number_format($SubtotalDev), 1);
+                    $css->ColTabla(number_format($IVADev), 1);
                     $css->ColTabla(number_format($TotalAPagar), 1);
                     print("<td>");
                         $css->CrearSelect("CmbTipoPago", "MuestraOculta('DivCuentaOrigen')");
@@ -328,6 +349,32 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
     
     $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
     $css->CerrarDiv();
+    //Div retenciones aplicadas
+    $css->CrearDiv("DivRetencionesPracticadas", "", "center", 0, 1);
+        $consulta=$obVenta->ConsultarTabla("factura_compra_retenciones", "WHERE idCompra='$idCompra'");
+        if($obVenta->NumRows($consulta)){
+            $css->CrearNotificacionAzul("Retenciones practicadas a esta compra", 16);
+            $css->CrearTabla();
+            while ($DatosRetenciones=$obVenta->FetchArray($consulta)){
+                $css->FilaTabla(14);
+                $css->ColTabla($DatosRetenciones["CuentaPUC"], 1);
+                $css->ColTabla($DatosRetenciones["NombreCuenta"], 1);
+                $css->ColTabla(number_format($DatosRetenciones["ValorRetencion"]), 1);
+                $css->ColTabla($DatosRetenciones["PorcentajeRetenido"], 1);
+                print("<td>");
+                $link="$myPage?DelRetencion=$DatosRetenciones[ID]&idCompra=$idCompra";
+                $css->CrearLink($link, "_self", "X");
+                print("</td>");
+                $css->CierraFilaTabla();
+            }
+            $css->CerrarTabla();
+        }else{
+            $css->CrearNotificacionAzul("No hay retenciones practicadas a esta compra", 16);
+        }
+        
+    $css->CerrarDiv();
+    //Div con los productos
+    if($idCompra>1){
     $css->CrearDiv("DivProductos", "", "Center", 1, 1);
     
         $consulta=$obVenta->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
@@ -345,6 +392,8 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                $css->ColTabla("<strong>Impuestos</strong>", 1);
                $css->ColTabla("<strong>Total</strong>", 1);
                $css->ColTabla("<strong>% Impuestos</strong>", 1);
+               $css->ColTabla("<strong>Borrar</strong>", 1);
+               $css->ColTabla("<strong>Devolucion</strong>", 1);
                $css->CierraFilaTabla();
             while($DatosItems=$obVenta->FetchAssoc($consulta)){
                $css->FilaTabla(14);
@@ -360,7 +409,17 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
                     $css->ColTabla(number_format($DatosItems["TotalCompra"]), 1);
                     $css->ColTabla($DatosIVA["Nombre"], 1);
                     $css->ColTablaDel($myPage, "factura_compra_items", "ID", $DatosItems["ID"], $idCompra);
-
+                    print("<td>");
+                        $TotalItemsDevueltos=$obVenta->Sume("factura_compra_items_devoluciones", "Cantidad", "WHERE idFacturaCompra='$idCompra'");
+                        $MaxCantidad=$DatosItems["Cantidad"]-$TotalItemsDevueltos;
+                        $css->CrearForm2("FrmDevolverItem".$DatosItems["ID"], $myPage, "post", "_self");
+                            $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", 0, 1);
+                            $css->CrearInputText("idProducto", "hidden", "", $DatosItems["idProducto"], "", "", "", "", "", "", 0, 1);
+                            $css->CrearInputText("idFacturaItems", "hidden", "", $DatosItems["ID"], "", "", "", "", "", "", 0, 1);
+                            $css->CrearInputNumber("TxtCantidadDev", "number", "", 0, "Dev", "", "", "", 100, 30, 0, 1, 0, $MaxCantidad, "any");
+                            $css->CrearBotonConfirmado("BtnDevolverItem", "Devolver");
+                        $css->CerrarForm();
+                    print("</td>");
                $css->CierraFilaTabla();
             }
             $css->CerrarTabla();
@@ -368,29 +427,51 @@ $css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
             $css->CrearNotificacionNaranja("No hay productos agregados a esta Compra", 16);
         }
     $css->CerrarDiv();
-    //Div retenciones aplicadas
-    $css->CrearDiv("DivRetencionesPracticadas", "", "center", 0, 1);
-        $consulta=$obVenta->ConsultarTabla("factura_compra_retenciones", "WHERE idCompra='$idCompra'");
+    //Productos Devueltos
+    
+    $css->CrearDiv("DivProductosDevueltos", "", "Center", 1, 1);
+    
+        $consulta=$obVenta->ConsultarTabla("factura_compra_items_devoluciones", "WHERE idFacturaCompra='$idCompra'");
         if($obVenta->NumRows($consulta)){
-            $css->CrearNotificacionAzul("Retenciones practicadas a esta compra", 16);
+            $css->CrearNotificacionRoja("Productos devueltos en esta Compra", 16);
             $css->CrearTabla();
-            while ($DatosRetenciones=$obVenta->FetchArray($consulta)){
-                $css->FilaTabla(14);
-                $css->ColTabla($DatosRetenciones["CuentaPUC"], 1);
-                $css->ColTabla($DatosRetenciones["NombreCuenta"], 1);
-                $css->ColTabla(number_format($DatosRetenciones["ValorRetencion"]), 1);
-                print("<td>");
-                $link="$myPage?DelRetencion=$DatosRetenciones[ID]&idCompra=$idCompra";
-                $css->CrearLink($link, "_self", "X");
-                print("</td>");
-                $css->CierraFilaTabla();
+            $css->FilaTabla(14);
+               
+               $css->ColTabla("<strong>idProducto</strong>", 1);
+               $css->ColTabla("<strong>Referencia</strong>", 1);
+               $css->ColTabla("<strong>Nombre</strong>", 1);
+               $css->ColTabla("<strong>Cantidad</strong>", 1);
+               $css->ColTabla("<strong>CostoUnitario</strong>", 1);
+               $css->ColTabla("<strong>Subtotal</strong>", 1);
+               $css->ColTabla("<strong>Impuestos</strong>", 1);
+               $css->ColTabla("<strong>Total</strong>", 1);
+               $css->ColTabla("<strong>% Impuestos</strong>", 1);
+               $css->ColTabla("<strong>Borrar</strong>", 1);
+               
+               $css->CierraFilaTabla();
+            while($DatosItems=$obVenta->FetchAssoc($consulta)){
+               $css->FilaTabla(14);
+               $DatosProducto=$obVenta->DevuelveValores("productosventa", "idProductosVenta", $DatosItems["idProducto"]);
+               $DatosIVA=$obVenta->DevuelveValores("porcentajes_iva", "Valor", $DatosItems["Tipo_Impuesto"]);
+                    $css->ColTabla($DatosItems["idProducto"], 1);
+                    $css->ColTabla($DatosProducto["Referencia"], 1);
+                    $css->ColTabla($DatosProducto["Nombre"], 1);
+                    $css->ColTabla(number_format($DatosItems["Cantidad"]), 1);
+                    $css->ColTabla(number_format($DatosItems["CostoUnitarioCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["SubtotalCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["ImpuestoCompra"]), 1);
+                    $css->ColTabla(number_format($DatosItems["TotalCompra"]), 1);
+                    $css->ColTabla($DatosIVA["Nombre"], 1);
+                    $css->ColTablaDel($myPage, "factura_compra_items", "ID", $DatosItems["ID"], $idCompra);
+                    
+               $css->CierraFilaTabla();
             }
             $css->CerrarTabla();
         }else{
-            $css->CrearNotificacionAzul("No hay retenciones practicadas a esta compra", 16);
+            $css->CrearNotificacionNaranja("No hay productos devueltos en esta Compra", 16);
         }
-        
     $css->CerrarDiv();
+    }
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts

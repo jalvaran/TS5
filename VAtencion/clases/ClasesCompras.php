@@ -98,6 +98,7 @@ class Compra extends ProcesoVenta{
         $TotalCompra= $this->Sume("factura_compra_items", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
         $TotalRetenciones= $this->Sume("factura_compra_retenciones", "ValorRetencion", "WHERE idCompra='$idCompra'");
         $TotalCompra=$TotalCompra-$TotalRetenciones;
+        
         $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
         $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "DB", $TotalInventarios, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
         $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
@@ -125,9 +126,7 @@ class Compra extends ProcesoVenta{
             $NombreCuenta=$DatosSubcuentas["Nombre"];
         }
         $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "Compras", "CR", $TotalCompra, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
-        if($TipoPago=="Credito"){
-            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $TotalInventarios, $IVA, $TotalCompra, $TotalRetenciones, 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
-        }
+        
         $consulta= $this->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
         while($DatosProductos= $this->FetchArray($consulta)){
             $DatosProductoGeneral= $this->DevuelveValores("productosventa", "idProductosVenta", $DatosProductos["idProducto"]);
@@ -142,6 +141,81 @@ class Compra extends ProcesoVenta{
             
             $this->InserteKardex($DatosKardex);
         }
+        //Miro si hay productos devueltos
+        $TotalInventariosDevuelto= $this->Sume("factura_compra_items_devoluciones", "SubtotalCompra", "WHERE idFacturaCompra='$idCompra'");
+        $IVADev=0;
+        if($TotalInventariosDevuelto>0){
+            $IVADev= $this->Sume("factura_compra_items_devoluciones", "ImpuestoCompra", "WHERE idFacturaCompra='$idCompra'");
+            $TotalCompraDev= $this->Sume("factura_compra_items_devoluciones", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
+            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "DevolucionCompras", "CR", $TotalInventariosDevuelto, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items_devoluciones` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
+            $consulta= $this->Query($sql);
+            while($DatosImpuestos= $this->FetchArray($consulta)){
+                $DatosTipoIVA= $this->DevuelveValores("porcentajes_iva", "Valor", $DatosImpuestos["TipoImpuesto"]);
+                if($DatosImpuestos["IVA"]>0){
+                    $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "DevolucionCompras", "CR", $DatosImpuestos["IVA"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+                }
+            }
+            
+            if($TipoPago=="Credito"){
+                $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
+                $CuentaDestino=$ParametrosContables["CuentaPUC"];
+                $NombreCuenta=$ParametrosContables["NombreCuenta"];
+            }else{
+                $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
+                $CuentaDestino=$CuentaOrigen;
+                $NombreCuenta=$DatosSubcuentas["Nombre"];
+            }
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "DevolucionCompras", "DB", $TotalCompraDev, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            //Retiro los Productos de inventario
+            $consulta= $this->ConsultarTabla("factura_compra_items_devoluciones", "WHERE idFacturaCompra='$idCompra'");
+            while($DatosProductos= $this->FetchArray($consulta)){
+                $DatosProductoGeneral= $this->DevuelveValores("productosventa", "idProductosVenta", $DatosProductos["idProducto"]);
+                $DatosKardex["Cantidad"]=$DatosProductos["Cantidad"];
+                $DatosKardex["idProductosVenta"]=$DatosProductos["idProducto"];
+                $DatosKardex["CostoUnitario"]=$DatosProductos['CostoUnitarioCompra'];
+                $DatosKardex["Existencias"]=$DatosProductoGeneral['Existencias'];
+                $DatosKardex["Detalle"]="FacturaCompra";
+                $DatosKardex["idDocumento"]=$idCompra;
+                $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
+                $DatosKardex["Movimiento"]="SALIDA";
+
+                $this->InserteKardex($DatosKardex);
+            }
+        }
+        if($TipoPago=="Credito"){
+            $SubtotalCuentaXPagar=$TotalInventarios-$TotalInventariosDevuelto;
+            $TotalIVACXP=$IVA-$IVADev;
+            $TotalCompraCXP=$TotalCompra-$TotalCompraDev+$TotalRetenciones;
+            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $SubtotalCuentaXPagar, $TotalIVACXP, $TotalCompraCXP, $TotalRetenciones, 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
+        }
+        $this->ActualizaRegistro("factura_compra", "Estado", "CERRADA", "ID", $idCompra);
+    }
+    
+    //Clase para devolver un item a una compra
+    public function DevolverProductoCompra($idCompra,$idProducto,$Cantidad,$idFacturaItems,$Vector) {
+        //Proceso la informacion
+        $DatosFacturaItems= $this->DevuelveValores("factura_compra_items", "ID", $idFacturaItems);
+        $CostoUnitario=$DatosFacturaItems["CostoUnitarioCompra"];
+        $TipoIVA=$DatosFacturaItems["Tipo_Impuesto"];
+        $Subtotal=round($CostoUnitario*$Cantidad);
+        $Impuestos= round($Subtotal*$TipoIVA);
+        $Total=$Subtotal+$Impuestos;
+        //////Agrego el registro           
+        $tab="factura_compra_items_devoluciones";
+        $NumRegistros=8;
+
+        $Columnas[0]="idFacturaCompra";     $Valores[0]=$idCompra;
+        $Columnas[1]="idProducto";          $Valores[1]=$idProducto;
+        $Columnas[2]="Cantidad";            $Valores[2]=$Cantidad;
+        $Columnas[3]="CostoUnitarioCompra"; $Valores[3]=$CostoUnitario;
+        $Columnas[4]="SubtotalCompra";      $Valores[4]=$Subtotal;
+        $Columnas[5]="ImpuestoCompra";      $Valores[5]=$Impuestos;
+        $Columnas[6]="TotalCompra";         $Valores[6]=$Total;
+        $Columnas[7]="Tipo_Impuesto";       $Valores[7]=$TipoIVA;
+                    
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     //Fin Clases
 }

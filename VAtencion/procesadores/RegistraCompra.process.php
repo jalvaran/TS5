@@ -100,7 +100,10 @@ if(isset($_REQUEST["BtnAgregarItem"])){
 if(isset($_REQUEST["del"])){
     $idItem=$obCompra->normalizar($_REQUEST["del"]);
     $idCompra=$_REQUEST["TxtIdPre"];
+    $DatosItem=$obCompra->DevuelveValores("factura_compra_items", "ID", $idItem);
     $obCompra->BorraReg("factura_compra_items", "ID", $idItem);
+    $sql="DELETE FROM factura_compra_items_devoluciones WHERE idProducto='$DatosItem[idProducto]' AND idFacturaCompra='$DatosItem[idFacturaCompra]'";
+    $obCompra->Query($sql);   
     header("location:$myPage?idCompra=$idCompra");
 }
 
@@ -165,6 +168,18 @@ if(isset($_REQUEST["BtnGuardarCompra"])){
     $TipoPago=$obCompra->normalizar($_REQUEST["CmbTipoPago"]);
     $CuentaOrigen=$obCompra->normalizar($_REQUEST["CmbCuentaOrigen"]);
     $obCompra->GuardarFacturaCompra($idCompra, $TipoPago, $CuentaOrigen, "");
-    header("location:$myPage?idCompra=$idCompra");
+    //$css->CrearNotificacionVerde("Compra Registrada Correctamente", 16);
+    header("location:$myPage");
+}
+
+//Devolver un item 
+
+if(isset($_REQUEST["BtnDevolverItem"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $idProducto=$obCompra->normalizar($_REQUEST["idProducto"]);
+    $Cantidad=$obCompra->normalizar($_REQUEST["TxtCantidadDev"]);
+    $idFacturaItems=$obCompra->normalizar($_REQUEST["idFacturaItems"]);
+    $obCompra->DevolverProductoCompra($idCompra,$idProducto,$Cantidad,$idFacturaItems,"");          
+    
 }
 ?>
