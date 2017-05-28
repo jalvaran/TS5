@@ -7303,7 +7303,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     }    
     
     //Crear un egreso desde la tabla egresos pre
-    public function EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,$Vector){
+    public function EgresosDesdePre($Fecha,$CuentaOrigen,$idUser,$Observaciones,$Vector){
         $DatosCuentaOrigen=$this->DevuelveValores("cuentasfrecuentes", "CuentaPUC", $CuentaOrigen);
         $sql="SELECT ep.ID as idPre, cp.ID,cp.Soporte,cp.idCentroCostos,cp.idSucursal,cp.Concepto, ep.Abono,ep.Descuento, cp.DocumentoReferencia,cp.Subtotal,cp.IVA,cp.Total,cp.Retenciones,cp.Saldo,cp.Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
         . " INNER JOIN cuentasxpagar cp ON ep.idCuentaXPagar=cp.ID AND ep.idUsuario='$idUser'";
@@ -7323,7 +7323,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $Columnas[0]="Fecha";                   $Valores[0]=$Fecha;
             $Columnas[1]="Beneficiario";		$Valores[1]=$DatosEgresos["RazonSocial"];
             $Columnas[2]="NIT";			$Valores[2]=$DatosEgresos["idProveedor"];
-            $Columnas[3]="Concepto";		$Valores[3]="Abono a Cuenta Por pagar ".$DatosEgresos["ID"]." ".$DatosEgresos["Concepto"];
+            $Columnas[3]="Concepto";		$Valores[3]="Abono a Cuenta Por pagar ".$DatosEgresos["ID"]." ".$DatosEgresos["Concepto"]." ".$Observaciones;
             $Columnas[4]="Valor";			$Valores[4]=$Total;
             $Columnas[5]="Usuario_idUsuario";       $Valores[5]=$idUser;
             $Columnas[6]="PagoProg";		$Valores[6]="Contado";

@@ -84,6 +84,9 @@ if($obVenta->NumRows($Consulta)){
         while($DatosCuentas=$obVenta->FetchArray($Consulta)){
             $css->CrearOptionSelect($DatosCuentas["CuentaPUC"], $DatosCuentas["Nombre"]." (".$DatosCuentas["CuentaPUC"].")", 0);
         }
+    $css->CerrarSelect();
+    print("<br>");
+    $css->CrearTextArea("TxtObservaciones", "", "", "Observaciones", "", "", "", 200, 60, 0, 0);
     print("</td>");
     print("<td colspan='2'>");
     $css->CrearBotonConfirmado("BtnGuardar", "Guardar");
