@@ -153,6 +153,51 @@ if(isset($_REQUEST["BtnAgregueReteIVA"])){
     }
 }
 
+//Agrega una retencion en la fuente a servicios
+
+if(isset($_REQUEST["BtnAgregueReteFuenteServicios"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteFuenteServicios"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteFuenteServicios"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteFuenteServicios"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_servicios", "Total_Servicio", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
+
+//Agrega reteica a la compra
+
+if(isset($_REQUEST["BtnAgregueReteICAServicios"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteICAServicios"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteICAServicios"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteICAServicios"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_servicios", "Total_Servicio", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
+
+//Agrega reteiva a la compra
+
+if(isset($_REQUEST["BtnAgregueReteIVAServicios"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Cuenta=$obCompra->normalizar($_REQUEST["CmbCuentaReteIVAServicios"]);
+    $Porcentaje=$obCompra->normalizar($_REQUEST["TxtPorReteIVAServicios"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtReteIVAServicios"]);
+    $TotalCompra=$obCompra->SumeColumna("factura_compra_servicios", "Impuesto_Servicio", "idFacturaCompra", $idCompra);
+    if($TotalCompra>0 and $TotalCompra>$Valor){
+        $obCompra->AgregueRetencionCompra($idCompra, $Cuenta, $Valor, $Porcentaje, "");
+    }else{
+       $css->CrearNotificacionRoja("No se pueden agregar retenciones sin valor o Mayores a la base", 16);
+    }
+}
+
 //Eliminar una retencion
 
 if(isset($_REQUEST["DelRetencion"])){
@@ -161,7 +206,7 @@ if(isset($_REQUEST["DelRetencion"])){
     $obCompra->BorraReg("factura_compra_retenciones", "ID", $idItem);
     header("location:$myPage?idCompra=$idCompra");
 }
-//Eliminar una retencion
+//Guardar Compra
 
 if(isset($_REQUEST["BtnGuardarCompra"])){
     $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
@@ -180,6 +225,36 @@ if(isset($_REQUEST["BtnDevolverItem"])){
     $Cantidad=$obCompra->normalizar($_REQUEST["TxtCantidadDev"]);
     $idFacturaItems=$obCompra->normalizar($_REQUEST["idFacturaItems"]);
     $obCompra->DevolverProductoCompra($idCompra,$idProducto,$Cantidad,$idFacturaItems,"");          
-    
+    header("location:$myPage?idCompra=$idCompra");
+}
+
+//Agregar un Servicio
+
+if(isset($_REQUEST["BtnAgregarServicio"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $CuentaPUC=$obCompra->normalizar($_REQUEST["CmbCuentaServicio"]);
+    $Concepto=$obCompra->normalizar($_REQUEST["TxtConceptoServicio"]);
+    $Valor=$obCompra->normalizar($_REQUEST["TxtValor"]);
+    $TipoIVA=$obCompra->normalizar($_REQUEST["CmbTipoIva"]);
+    $obCompra->AgregueServicioCompra($idCompra,$CuentaPUC,$Concepto,$Valor,$TipoIVA,"");
+    header("location:$myPage?idCompra=$idCompra");
+}
+
+//Eliminar un servicio
+
+if(isset($_REQUEST["DelServicio"])){
+    $idItem=$obCompra->normalizar($_REQUEST["DelServicio"]);
+    $idCompra=$_REQUEST["idCompra"];
+    $obCompra->BorraReg("factura_compra_servicios", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
+}
+
+//Eliminar un producto devuelto
+
+if(isset($_REQUEST["DelProductoDevuelto"])){
+    $idItem=$obCompra->normalizar($_REQUEST["DelProductoDevuelto"]);
+    $idCompra=$_REQUEST["idCompra"];
+    $obCompra->BorraReg("factura_compra_items_devoluciones", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
 }
 ?>

@@ -617,56 +617,105 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
 //Calcule la retefuente en una compra segun porcentaje
 
 
-function CalculeReteFuenteCompra(Subtotal){
-    Porcentaje=parseFloat(document.getElementById('TxtPorReteFuente').value);
+function CalculeReteFuenteCompra(Subtotal,Servicios=0){
+    if(Servicios==0){
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteFuente').value);
+    }else{
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteFuenteServicios').value);
+    }
     Porcentaje=(Porcentaje/100);
     Retefuente=(Subtotal*Porcentaje).toFixed(0);
-    document.getElementById('TxtReteFuenteProductos').value=Retefuente;
+    if(Servicios==0){
+        document.getElementById('TxtReteFuenteProductos').value=Retefuente;
+    }else{
+        document.getElementById('TxtReteFuenteServicios').value=Retefuente;
+    }
 }
 
 //Calcule la retefuente en una compra segun porcentaje
 
 
-function CalculePorcentajeReteFuenteCompra(Subtotal){
-    Retefuente=parseFloat(document.getElementById('TxtReteFuenteProductos').value);
+function CalculePorcentajeReteFuenteCompra(Subtotal,Servicios=0){
+    if(Servicios==0){
+        Retefuente=parseFloat(document.getElementById('TxtReteFuenteProductos').value);
+    }else{
+        Retefuente=parseFloat(document.getElementById('TxtReteFuenteServicios').value);
+    }
     Porcentaje=((100/Subtotal)*Retefuente).toFixed(2);
-    document.getElementById('TxtPorReteFuente').value=Porcentaje;
+    if(Servicios==0){
+        document.getElementById('TxtPorReteFuente').value=Porcentaje;
+    }else{
+        document.getElementById('TxtPorReteFuenteServicios').value=Porcentaje;
+    }
+    
 }
 
 //Calcule la reteiva en una compra segun porcentaje
 
 
-function CalculeReteIVACompra(IVA){
-    Porcentaje=parseFloat(document.getElementById('TxtPorReteIVA').value);
+function CalculeReteIVACompra(IVA,Servicios=0){
+    if(Servicios==0){
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteIVA').value);
+    }else{
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteIVAServicios').value);
+    }
     Porcentaje=(Porcentaje/100);
     Retefuente=(IVA*Porcentaje).toFixed(0);
-    document.getElementById('TxtReteIVA').value=Retefuente;
+    if(Servicios==0){
+        document.getElementById('TxtReteIVA').value=Retefuente;
+    }else{
+        document.getElementById('TxtReteIVAServicios').value=Retefuente;
+    }    
 }
 
 //Calcule la reteiva en una compra segun porcentaje
 
 
-function CalculePorcentajeIVACompra(IVA){
-    Retefuente=parseFloat(document.getElementById('TxtReteIVA').value);
+function CalculePorcentajeIVACompra(IVA,Servicios=0){
+    if(Servicios==0){
+        Retefuente=parseFloat(document.getElementById('TxtReteIVA').value);
+    }else{
+        Retefuente=parseFloat(document.getElementById('TxtReteIVAServicios').value);
+    }    
     Porcentaje=((100/IVA)*Retefuente).toFixed(2);
-    document.getElementById('TxtPorReteIVA').value=Porcentaje;
+    if(Servicios==0){
+        document.getElementById('TxtPorReteIVA').value=Porcentaje;
+    }else{
+        document.getElementById('TxtPorReteIVAServicios').value=Porcentaje;    
+    }
 }
 
 //Calcule la reteiva en una compra segun porcentaje
 
 
-function CalculeReteICACompra(Subtotal){
-    Porcentaje=parseFloat(document.getElementById('TxtPorReteICA').value);
+function CalculeReteICACompra(Subtotal,Servicios=0){
+    if(Servicios==0){
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteICA').value);
+    }else{
+        Porcentaje=parseFloat(document.getElementById('TxtPorReteICAServicios').value);
+    }    
     Porcentaje=(Porcentaje/100);
     Retefuente=(Subtotal*Porcentaje).toFixed(0);
-    document.getElementById('TxtReteICA').value=Retefuente;
+    if(Servicios==0){
+        document.getElementById('TxtReteICA').value=Retefuente;
+    }else{
+        document.getElementById('TxtReteICAServicios').value=Retefuente;
+    }    
 }
 
 //Calcule la reteiva en una compra segun porcentaje
 
 
-function CalculePorcentajeICACompra(Subtotal){
-    Retefuente=parseFloat(document.getElementById('TxtReteICA').value);
+function CalculePorcentajeICACompra(Subtotal,Servicios=0){
+    if(Servicios==0){
+        Retefuente=parseFloat(document.getElementById('TxtReteICA').value);
+    }else{
+        Retefuente=parseFloat(document.getElementById('TxtReteICAServicios').value);
+    }
     Porcentaje=((100/Subtotal)*Retefuente).toFixed(2);
-    document.getElementById('TxtPorReteICA').value=Porcentaje;
+    if(Servicios==0){
+        document.getElementById('TxtPorReteICA').value=Porcentaje;
+    }else{
+        document.getElementById('TxtPorReteICAServicios').value=Porcentaje;
+    }    
 }

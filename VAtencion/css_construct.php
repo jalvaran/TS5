@@ -1365,6 +1365,10 @@ function Footer(){
         public function DivNotificacionesJS() {
             print("<div id='DivRespuestasJS' style='position: fixed;bottom: 50%;right: 50%;width: 300px;'></div>");
         }
+        //Imagen que oculta o muestra un div o un objeto
+        public function ImageOcultarMostrar($Nombre,$Leyenda,$idObjeto,$Ancho,$Alto,$Vector,$RutaImage='../images/hidde.png') {
+            print("<strong>$Leyenda</strong><image name='$Nombre' id='$Nombre' src='$RutaImage' style='height:$Ancho"."px".";width:$Alto"."px"."' onclick=MuestraOculta('$idObjeto');>");
+        }
         //////////////////////////////////FIN
 }
 	
