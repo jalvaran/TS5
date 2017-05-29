@@ -4669,13 +4669,13 @@ EOD;
         $Position=$this->PDF->SetY(80);
         $this->PDF_Write($html);
         
-        $Position=$this->PDF->GetY();
-        if($Position>246){
-          $this->PDF_Add();
-        }
+        //$Position=$this->PDF->GetY();
+        //if($Position>246){
+          //$this->PDF_Add();
+        //}
         
         //$html= $this->HTML_Totales_Factura($idFactura, $DatosFactura["ObservacionesFact"], $DatosEmpresaPro["ObservacionesLegales"]);
-        $this->PDF->SetY(246);
+        //$this->PDF->SetY(246);
         //$this->PDF_Write($html);
         
         $this->PDF_Output("FC_$CodigoFactura");
@@ -4777,8 +4777,8 @@ $h=1;
 
 while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
     
-    $Credito= number_format($DatosItemFactura["Debito"]);
-    $Debito=number_format($DatosItemFactura["Credito"]);
+    $Credito= number_format($DatosItemFactura["Credito"]);
+    $Debito=number_format($DatosItemFactura["Debito"]);
     $Cuenta=$DatosItemFactura["CuentaPUC"];
     $NombreCuenta=$DatosItemFactura["NombreCuenta"];
     

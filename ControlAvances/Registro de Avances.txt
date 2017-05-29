@@ -12,6 +12,30 @@ FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Ident
 INNER JOIN factura_compra_items fi ON fi.idFacturaCompra=c.ID INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta
 WHERE c.`Estado`='CERRADA';
 
+
+CREATE VIEW 
+vista_compras_productos_devueltos AS 
+SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
+fi.idProducto AS idProducto,pv.Referencia AS Referencia,pv.Nombre AS Producto, pv.PrecioVenta,fi.Cantidad,fi.CostoUnitarioCompra AS CostoUnitario, fi.SubtotalCompra AS Subtotal,
+fi.ImpuestoCompra AS Impuestos, fi.TotalCompra AS Total,fi.Tipo_Impuesto AS Tipo_Impuesto,
+`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,
+`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,
+`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,
+`c`.`idSucursal` AS `idSucursal`,c.Updated,c.Sync
+FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Identificacion` 
+INNER JOIN factura_compra_items_devoluciones fi ON fi.idFacturaCompra=c.ID INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta
+WHERE c.`Estado`='CERRADA';
+
+CREATE VIEW 
+vista_compras_servicios AS 
+SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
+fs.CuentaPUC_Servicio AS Cuenta, fs.Nombre_Cuenta AS NombreCuenta, fs.Concepto_Servicio, fs.Subtotal_Servicio AS Subtotal, fs.Impuesto_Servicio AS Impuestos, 
+fs.Total_Servicio AS Total,fs.Tipo_Impuesto ,`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,
+`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,
+`c`.`idSucursal` AS `idSucursal`,c.Updated,c.Sync
+FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Identificacion` 
+INNER JOIN factura_compra_servicios fs ON fs.idFacturaCompra=c.ID 
+WHERE c.`Estado`='CERRADA';
 2017-05-25
 
 ALTER TABLE `clientes` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
