@@ -95,16 +95,6 @@ class Compra extends ProcesoVenta{
         $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
         $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);   //Cuenta de inventarios
         $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "Compras", "DB", $TotalesCompra["Subtotal_Productos_Add"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
-
-    }
-    //Guarde una Compra
-    public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
-        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
-        $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
-        $TotalInventarios= $TotalesCompra["Subtotal_Productos_Add"];
-        $IVA= $TotalesCompra["Impuestos_Productos_Add"];
-        $TotalCompra= $TotalesCompra["Total_Productos_Add"];
-        $TotalRetenciones= $TotalesCompra["Total_Retenciones"];
         $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
         $consulta= $this->Query($sql);
         while($DatosImpuestos= $this->FetchArray($consulta)){
@@ -113,26 +103,42 @@ class Compra extends ProcesoVenta{
                 $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "Compras", "DB", $DatosImpuestos["IVA"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
             }
         }
-              
+    }
+    
+    //Contabilizar Items de la compra
+    public function ContabilizarServiciosCompra($idCompra) {
+        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
+        //$TotalesCompra=$this->CalculeTotalesCompra($idCompra);
+        $sql="SELECT CuentaPUC_Servicio AS CuentaPUC,Nombre_Cuenta AS NombreCuenta, Concepto_Servicio AS Concepto,`Subtotal_Servicio` AS Subtotal,`Impuesto_Servicio` AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_servicios` WHERE `idFacturaCompra`='$idCompra' ";
+        $consulta= $this->Query($sql);
+        while($DatosServicios= $this->FetchArray($consulta)){
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosServicios["CuentaPUC"], $DatosServicios["NombreCuenta"], "Servicios", "DB", $DatosServicios["Subtotal"], $DatosServicios["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            $DatosTipoIVA= $this->DevuelveValores("porcentajes_iva", "Valor", $DatosServicios["TipoImpuesto"]);
+            if($DatosServicios["IVA"]>0){
+                $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "Servicios", "DB", $DatosServicios["IVA"], $DatosServicios["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            }
+        }
+    }
+    //Contabilice Retenciones
+    public function ContabilizarRetencionesCompra($idCompra) {
+        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
+        //$TotalesCompra=$this->CalculeTotalesCompra($idCompra);
         $sql="SELECT SUM(`ValorRetencion`) AS Retencion, `CuentaPUC` AS CuentaPUC,`NombreCuenta` AS NombreCuenta FROM `factura_compra_retenciones` WHERE `idCompra`='$idCompra' GROUP BY `CuentaPUC` ";
         $consulta= $this->Query($sql);
         while($DatosRetencion= $this->FetchArray($consulta)){
             
-            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosRetencion["CuentaPUC"], $DatosRetencion["NombreCuenta"], "Compras", "CR", $DatosRetencion["Retencion"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosRetencion["CuentaPUC"], $DatosRetencion["NombreCuenta"], "Retenciones", "CR", $DatosRetencion["Retencion"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
             
         }
-        if($TipoPago=="Credito"){
-            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
-            $CuentaDestino=$ParametrosContables["CuentaPUC"];
-            $NombreCuenta=$ParametrosContables["NombreCuenta"];
+    }
+    
+    //Ingrese los items al inventario o retire items del inventario
+    public function IngreseRetireProductosInventarioCompra($idCompra,$Movimiento) {
+        if($Movimiento=="ENTRADA"){
+            $consulta= $this->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
         }else{
-            $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
-            $CuentaDestino=$CuentaOrigen;
-            $NombreCuenta=$DatosSubcuentas["Nombre"];
-        }
-        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "Compras", "CR", $TotalCompra, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
-        
-        $consulta= $this->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
+            $consulta= $this->ConsultarTabla("factura_compra_items_devoluciones", "WHERE idFacturaCompra='$idCompra'");
+        } 
         while($DatosProductos= $this->FetchArray($consulta)){
             $DatosProductoGeneral= $this->DevuelveValores("productosventa", "idProductosVenta", $DatosProductos["idProducto"]);
             $DatosKardex["Cantidad"]=$DatosProductos["Cantidad"];
@@ -142,18 +148,20 @@ class Compra extends ProcesoVenta{
             $DatosKardex["Detalle"]="FacturaCompra";
             $DatosKardex["idDocumento"]=$idCompra;
             $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
-            $DatosKardex["Movimiento"]="ENTRADA";
+            $DatosKardex["Movimiento"]=$Movimiento;
             
             $this->InserteKardex($DatosKardex);
         }
-        //Miro si hay productos devueltos
-        $TotalInventariosDevuelto= $this->Sume("factura_compra_items_devoluciones", "SubtotalCompra", "WHERE idFacturaCompra='$idCompra'");
-        $IVADev=0;
-        if($TotalInventariosDevuelto>0){
-            $IVADev= $this->Sume("factura_compra_items_devoluciones", "ImpuestoCompra", "WHERE idFacturaCompra='$idCompra'");
-            $TotalCompraDev= $this->Sume("factura_compra_items_devoluciones", "TotalCompra", "WHERE idFacturaCompra='$idCompra'");
-            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4);
-            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "DevolucionCompras", "CR", $TotalInventariosDevuelto, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+    }
+    //Revise si hay productos devueltos y contabilice
+    public function ContabiliceProductosDevueltos($idCompra) {
+        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
+        $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
+        
+        if($TotalesCompra["Total_Productos_Dev"]>0){
+            
+            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 4); //Cuenta de inventarios
+            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $ParametrosContables["CuentaPUC"], $ParametrosContables["NombreCuenta"], "DevolucionCompras", "CR", $TotalesCompra["Subtotal_Productos_Dev"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
             $sql="SELECT SUM(`ImpuestoCompra`) AS IVA, `Tipo_Impuesto` AS TipoImpuesto FROM `factura_compra_items_devoluciones` WHERE `idFacturaCompra`='$idCompra' GROUP BY `Tipo_Impuesto` ";
             $consulta= $this->Query($sql);
             while($DatosImpuestos= $this->FetchArray($consulta)){
@@ -162,38 +170,42 @@ class Compra extends ProcesoVenta{
                     $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $DatosTipoIVA["CuentaPUC"], $DatosTipoIVA["NombreCuenta"], "DevolucionCompras", "CR", $DatosImpuestos["IVA"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
                 }
             }
-            
-            if($TipoPago=="Credito"){
-                $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
-                $CuentaDestino=$ParametrosContables["CuentaPUC"];
-                $NombreCuenta=$ParametrosContables["NombreCuenta"];
-            }else{
-                $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
-                $CuentaDestino=$CuentaOrigen;
-                $NombreCuenta=$DatosSubcuentas["Nombre"];
-            }
-            $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "DevolucionCompras", "DB", $TotalCompraDev, $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
-            //Retiro los Productos de inventario
-            $consulta= $this->ConsultarTabla("factura_compra_items_devoluciones", "WHERE idFacturaCompra='$idCompra'");
-            while($DatosProductos= $this->FetchArray($consulta)){
-                $DatosProductoGeneral= $this->DevuelveValores("productosventa", "idProductosVenta", $DatosProductos["idProducto"]);
-                $DatosKardex["Cantidad"]=$DatosProductos["Cantidad"];
-                $DatosKardex["idProductosVenta"]=$DatosProductos["idProducto"];
-                $DatosKardex["CostoUnitario"]=$DatosProductos['CostoUnitarioCompra'];
-                $DatosKardex["Existencias"]=$DatosProductoGeneral['Existencias'];
-                $DatosKardex["Detalle"]="FacturaCompra";
-                $DatosKardex["idDocumento"]=$idCompra;
-                $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
-                $DatosKardex["Movimiento"]="SALIDA";
-
-                $this->InserteKardex($DatosKardex);
-            }
+                       
         }
+    }
+    //Guarde una Compra
+    public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
+        $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
+        $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
+        $TotalRetenciones= $TotalesCompra["Total_Retenciones"];
+        $this->ContabilizarProductosCompra($idCompra);     //Contabilizo los productos agregados
+        $this->ContabilizarServiciosCompra($idCompra);     //Contabilizo los Servicios agregados
+        $this->ContabilizarRetencionesCompra($idCompra);   //Contabilizo las Retenciones
+        //Contabilizo salida de dinero o cuenta X Pagar
         if($TipoPago=="Credito"){
-            $SubtotalCuentaXPagar=$TotalInventarios-$TotalInventariosDevuelto;
-            $TotalIVACXP=$IVA-$IVADev;
-            $TotalCompraCXP=$TotalCompra-$TotalCompraDev+$TotalRetenciones;
-            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $SubtotalCuentaXPagar, $TotalIVACXP, $TotalCompraCXP, $TotalRetenciones, 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
+            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
+            $CuentaDestino=$ParametrosContables["CuentaPUC"];
+            $NombreCuenta=$ParametrosContables["NombreCuenta"];
+        }else{
+            $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
+            $CuentaDestino=$CuentaOrigen;
+            $NombreCuenta=$DatosSubcuentas["Nombre"];
+        }
+        $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "Compras", "CR", $TotalesCompra["Total_Productos_Add"]+$TotalesCompra["Total_Servicios"]-$TotalesCompra["Total_Retenciones"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+        if($TotalesCompra["Total_Productos_Dev"]>0){  //Si hay devoluciones en compras se debita la cuenta de proveedores
+          $this->IngreseMovimientoLibroDiario($DatosFacturaCompra["Fecha"], "FacturaCompra", $idCompra, $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Tercero"], $CuentaDestino, $NombreCuenta, "DevolucionCompras", "DB", $TotalesCompra["Total_Productos_Dev"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["idSucursal"], "");
+            
+        }
+        $this->ContabiliceProductosDevueltos($idCompra);
+        $this->IngreseRetireProductosInventarioCompra($idCompra,"ENTRADA");  //Ingreso los productos al inventario
+        $this->IngreseRetireProductosInventarioCompra($idCompra,"SALIDA");   //Retiro los productos del inventario
+        //Si es credito se ingresa a cuentas X Pagar
+        
+        if($TipoPago=="Credito"){
+            $SubtotalCuentaXPagar=$TotalesCompra["Gran_Subtotal"];
+            $TotalIVACXP=$TotalesCompra["Gran_Impuestos"];
+            $TotalCompraCXP=$TotalesCompra["Gran_Total"];
+            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $SubtotalCuentaXPagar, $TotalIVACXP, $TotalCompraCXP, $TotalesCompra["Total_Retenciones"], 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
         }
         $this->ActualizaRegistro("factura_compra", "Estado", "CERRADA", "ID", $idCompra);
     }

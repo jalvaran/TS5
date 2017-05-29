@@ -460,7 +460,7 @@ print("<body>");
             }
             $css->CerrarTabla();
         }else{
-            $css->CrearNotificacionNaranja("No hay productos agregados a esta Compra", 16);
+            $css->CrearNotificacionNaranja("No hay Servicios agregados a esta Compra", 16);
         }
     $css->CerrarDiv();
     //Productos Devueltos
