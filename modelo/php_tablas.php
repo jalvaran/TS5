@@ -4665,9 +4665,9 @@ EOD;
         $this->PDF_Encabezado($DatosFactura["Fecha"],1, $idFormato, "",$Documento);
         $DatosEmpresaPro=$this->PDF_Encabezado_Factura_Compra($idCompra);
         
-        //$html= $this->HTML_Items_Factura($idFactura);
+        $html= $this->HTML_Items_Factura_Compra($idCompra);
         $Position=$this->PDF->SetY(80);
-        //$this->PDF_Write($html);
+        $this->PDF_Write($html);
         
         $Position=$this->PDF->GetY();
         if($Position>246){
@@ -4757,33 +4757,31 @@ $this->PDF->MultiCell(93, 25, $tbl, 0, 'R', 1, 0, '', '', true,0, true, true, 10
     
     //Arme HTML de los Items de una Factura
     
-    public function HTML_Items_Factura_Compra($idFactura) {
+    public function HTML_Items_Factura_Compra($idCompra) {
         $tbl = <<<EOD
 <table cellspacing="1" cellpadding="2" border="0">
     <tr>
-        <td align="center" ><strong>Referencia</strong></td>
-        <td align="center" colspan="3"><strong>Producto o Servicio</strong></td>
-        <td align="center" ><strong>Precio Unitario</strong></td>
-        <td align="center" ><strong>Cantidad</strong></td>
-        <td align="center" ><strong>Valor Total</strong></td>
+        
+        <td align="center" ><strong>Cuenta PUC</strong></td>
+        <td align="center" colspan="3"><strong>Nombre Cuenta</strong></td>
+        <td align="center" ><strong>Débitos</strong></td>
+        <td align="center" ><strong>Créditos</strong></td>
     </tr>
     
          
 EOD;
 
-$sql="SELECT fi.Dias, fi.Referencia, fi.Nombre, fi.ValorUnitarioItem, fi.Cantidad, fi.SubtotalItem"
-        . " FROM facturas_items fi WHERE fi.idFactura='$idFactura'";
+$sql="SELECT * FROM librodiario WHERE Tipo_Documento_Intero='FacturaCompra' AND Num_Documento_Interno='$idCompra'";
 $Consulta= $this->obCon->Query($sql);
 $h=1;  
 
 while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
-    $ValorUnitario=  number_format($DatosItemFactura["ValorUnitarioItem"]);
-    $SubTotalItem=  number_format($DatosItemFactura["SubtotalItem"]);
-    $Multiplicador=$DatosItemFactura["Cantidad"];
     
-    if($DatosItemFactura["Dias"]>1){
-        $Multiplicador="$DatosItemFactura[Cantidad] X $DatosItemFactura[Dias]";
-    }
+    $Credito= number_format($DatosItemFactura["Debito"]);
+    $Debito=number_format($DatosItemFactura["Credito"]);
+    $Cuenta=$DatosItemFactura["CuentaPUC"];
+    $NombreCuenta=$DatosItemFactura["NombreCuenta"];
+    
     if($h==0){
         $Back="#f2f2f2";
         $h=1;
@@ -4795,14 +4793,12 @@ while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
     $tbl .= <<<EOD
     
     <tr>
-        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
-        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Nombre]</td>
-        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
-        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Multiplicador</td>
-        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Cuenta</td>
+        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$NombreCuenta</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Debito</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Credito</td>
+        
     </tr>
-    
-     
     
         
 EOD;
