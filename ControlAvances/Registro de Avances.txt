@@ -1,4 +1,11 @@
 2017-05-28
+
+ALTER TABLE `sistemas_relaciones` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL;
+ALTER TABLE `sistemas_relaciones` CHANGE `TablaOrigen` `TablaOrigen` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL;
+
+
+
+2017-05-28
 CREATE VIEW 
 vista_compras_productos AS 
 SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
