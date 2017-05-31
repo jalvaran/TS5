@@ -1,3 +1,180 @@
+2017-05-31
+--
+-- Estructura de tabla para la tabla `factura_compra`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Tercero` bigint(20) NOT NULL,
+  `Concepto` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `NumeroFactura` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Estado` varchar(30) COLLATE utf8_spanish2_ci NOT NULL,
+  `TipoCompra` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
+  `Soporte` varchar(150) COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `idCentroCostos` int(11) NOT NULL,
+  `idSucursal` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_descuentos`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_descuentos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idCompra` bigint(20) NOT NULL,
+  `CuentaPUCDescuento` bigint(20) NOT NULL,
+  `NombreCuentaDescuento` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorDescuento` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_items`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_items` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idFacturaCompra` bigint(20) NOT NULL,
+  `idProducto` bigint(20) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `CostoUnitarioCompra` double NOT NULL,
+  `SubtotalCompra` double NOT NULL,
+  `ImpuestoCompra` double NOT NULL,
+  `TotalCompra` double NOT NULL,
+  `Tipo_Impuesto` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_items_devoluciones`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_items_devoluciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idFacturaCompra` bigint(20) NOT NULL,
+  `idProducto` bigint(20) NOT NULL,
+  `Cantidad` double NOT NULL,
+  `CostoUnitarioCompra` double NOT NULL,
+  `SubtotalCompra` double NOT NULL,
+  `ImpuestoCompra` double NOT NULL,
+  `TotalCompra` double NOT NULL,
+  `Tipo_Impuesto` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_retenciones`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_retenciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idCompra` bigint(20) NOT NULL,
+  `CuentaPUC` bigint(20) NOT NULL,
+  `NombreCuenta` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorRetencion` double NOT NULL,
+  `PorcentajeRetenido` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_servicios`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idFacturaCompra` bigint(20) NOT NULL,
+  `CuentaPUC_Servicio` bigint(20) NOT NULL,
+  `Nombre_Cuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Concepto_Servicio` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Subtotal_Servicio` double NOT NULL,
+  `Impuesto_Servicio` double NOT NULL,
+  `Total_Servicio` double NOT NULL,
+  `Tipo_Impuesto` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sistemas`
+--
+
+CREATE TABLE IF NOT EXISTS `sistemas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
+  `PrecioVenta` double NOT NULL,
+  `PrecioMayorista` double NOT NULL,
+  `RutaImagen` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Estado` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sistemas_relaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TablaOrigen` varchar(90) COLLATE utf8_spanish_ci NOT NULL,
+  `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `Cantidad` double NOT NULL,
+  `idSistema` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;
+
+DROP VIEW IF EXISTS `vista_sistemas`;
+CREATE VIEW 
+vista_sistemas AS 
+SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, st.PrecioVenta AS Precio_Venta_Sistema,  st.PrecioMayorista AS Precio_Mayor_Sistema,
+si.TablaOrigen,s.`Referencia`,s.`Nombre`,si.Cantidad,s.`PrecioVenta` as PrecioUnitario,
+round(s.`PrecioVenta`*si.Cantidad) AS PrecioVenta,round(s.`PrecioMayorista`*si.Cantidad) AS PrecioMayorista,
+round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
+s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
+FROM sistemas_relaciones si INNER JOIN `servicios` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
+UNION
+SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema, st.Observaciones AS Observaciones,st.PrecioVenta AS Precio_Venta_Sistema,st.PrecioMayorista AS Precio_Mayor_Sistema,  
+si.TablaOrigen,s.`Referencia`,s.`Nombre`,si.Cantidad,s.`PrecioVenta` as PrecioUnitario,
+round(s.`PrecioVenta`*si.Cantidad) AS PrecioVenta,round(s.`PrecioMayorista`*si.Cantidad) AS PrecioMayorista,
+round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
+s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
+FROM sistemas_relaciones si  INNER JOIN `productosventa` s ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema;
+
 2017-05-28
 
 ALTER TABLE `sistemas_relaciones` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL;

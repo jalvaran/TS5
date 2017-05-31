@@ -89,7 +89,8 @@ include_once("css_construct.php");
               
             $css->FinTabs();
             $css->NuevaTabs(6);
-                $css->SubTabs("../VAtencion/sistemas.php","_blank","../images/sistema.png","Sistemas");
+                $css->SubTabs("../VAtencion/vista_sistemas.php","_blank","../images/sistema.png","Consolidado Sistemas");
+                //$css->SubTabs("../VAtencion/sistemas.php","_blank","../images/sistema.png","Editar Sistemas");
                 $css->SubTabs("../VAtencion/CreaSistema.php","_blank","../images/crearsistema.png","Crear");
             $css->FinTabs();
             

@@ -22,6 +22,8 @@ print("<body>");
     
     include_once("procesadores/CreaSistema.process.php");
     $css->CabeceraIni("Crear Sistema"); //Inicia la cabecera de la pagina
+    $css->CrearImageLink("vista_sistemas.php", "../images/volver2.png", "_self", 30, 30);
+   
     $css->CreaBotonDesplegable("CrearSistema","Nuevo");  
     $css->CabeceraFin(); 
    
@@ -100,19 +102,27 @@ print("<body>");
     $css->CerrarForm();
     print("</td>");
     print("<td>");
+    $css->CrearDiv("DivActualiza", "", "center", 1, 1);
     if($idSistema>0){
+        
         $DatosSistemas=$obSistema->DevuelveValores("sistemas", "ID", $idSistema);
         $TotalSistema=$obSistema->Sume("vista_sistemas", "PrecioVenta", "WHERE idSistema='$idSistema'");
+        print("<strong> Precio Sugerido para sistema $DatosSistemas[Nombre]: $TotalSistema<strong><br>");
         $css->CrearForm2("FrmEditaValorSistema", $myPage, "post", "_self");
         $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 1, 1);
         $css->CrearInputText("TxtTotalSistema", "hidden", "", $TotalSistema, "", "", "", "", "", "", 1, 1);
-        $css->CrearInputNumber("TxtValorSistema", "number", " Valor del Sistema: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
-        print("<strong> Precio Sugerido: ".number_format($TotalSistema)."<strong> ");
+        $css->CrearInputNumber("TxtValorSistema", "number", " Precio Venta: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
+        $css->CrearInputNumber("TxtPrecioMayor", "number", " Precio Mayorista: ", $DatosSistemas["PrecioMayorista"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
+        print("<br>");   
+        $css->CrearTextArea("TxtObservaciones", "", $DatosSistemas["Observaciones"], "Observaciones", "", "", "", 450, 40, 0, 1);
+        print("<br>");
         $css->CrearBotonConfirmado("BtnEditarPrecioVenta", "Actualizar");
+        
         $css->CerrarForm();
     }else{
         $css->CrearNotificacionAzul("No se ha seleccionado un sistema", 16);
     }
+    $css->CerrarDiv();
     print("</td>");
     $css->CierraFilaTabla();
     $css->CerrarTabla();

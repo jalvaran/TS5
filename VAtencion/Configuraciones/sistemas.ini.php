@@ -11,7 +11,7 @@ $myTitulo="Sistemas";
  * 
  */
 
-//$Vector["NuevoRegistro"]["Deshabilitado"]=1;            
+$Vector["NuevoRegistro"]["Deshabilitado"]=1;            
 $Vector["VerRegistro"]["Deshabilitado"]=1;                      
 //$Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
