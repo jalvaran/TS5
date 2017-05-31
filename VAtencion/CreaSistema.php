@@ -102,12 +102,10 @@ print("<body>");
     print("<td>");
     if($idSistema>0){
         $DatosSistemas=$obSistema->DevuelveValores("sistemas", "ID", $idSistema);
-        $sql="SELECT SUM()";
-        $PrecioVenta=$obSistema->Sume("vista_sistemas", "PrecioVenta", "WHERE ID='$idSistema'");
-        $Cantidad=$obSistema->Sume("vista_sistemas", "Cantidad", "WHERE ID='$idSistema'");
-        
+        $TotalSistema=$obSistema->Sume("vista_sistemas", "PrecioVenta", "WHERE idSistema='$idSistema'");
         $css->CrearForm2("FrmEditaValorSistema", $myPage, "post", "_self");
         $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 1, 1);
+        $css->CrearInputText("TxtTotalSistema", "hidden", "", $TotalSistema, "", "", "", "", "", "", 1, 1);
         $css->CrearInputNumber("TxtValorSistema", "number", " Valor del Sistema: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
         print("<strong> Precio Sugerido: ".number_format($TotalSistema)."<strong> ");
         $css->CrearBotonConfirmado("BtnEditarPrecioVenta", "Actualizar");
