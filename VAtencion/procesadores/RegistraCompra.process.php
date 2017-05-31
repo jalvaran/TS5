@@ -4,7 +4,7 @@
  */
 
 //$obVenta=new ProcesoVenta($idUser); 
-$obCompra=new Compra($idUser);
+$obSistema=new Compra($idUser);
 if(!empty($_REQUEST["BtnCrearCompra"])){
       
 $Fecha=$obCompra->normalizar($_REQUEST["TxtFecha"]);

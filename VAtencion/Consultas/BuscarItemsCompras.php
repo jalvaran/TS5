@@ -23,7 +23,8 @@ if($key<>""){
     $css->CrearTabla();
 
     if($TipoBusqueda==1){    
-        $sql="SELECT * FROM `productosventa` pv WHERE pv.`idProductosVenta`='$key' OR pv.Nombre LIKE '%$key%' or pv.Referencia = '$key' LIMIT 50";
+        $sql="SELECT * FROM `productosventa` pv INNER JOIN prod_codbarras cb ON pv.idProductosVenta=cb.ProductosVenta_idProductosVenta 
+		WHERE pv.`idProductosVenta`='$key' OR pv.Nombre LIKE '%$key%' or pv.Referencia = '$key' OR cb.CodigoBarras LIKE '%$key%' LIMIT 50";
         $consulta=$obVenta->Query($sql);
         if($obVenta->NumRows($consulta)){
             $css->FilaTabla(16);

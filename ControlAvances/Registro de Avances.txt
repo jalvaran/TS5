@@ -6,6 +6,26 @@ ALTER TABLE `sistemas_relaciones` CHANGE `TablaOrigen` `TablaOrigen` VARCHAR(200
 
 
 2017-05-28
+
+--
+-- Estructura de tabla para la tabla `factura_compra_servicios`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idFacturaCompra` bigint(20) NOT NULL,
+  `CuentaPUC_Servicio` bigint(20) NOT NULL,
+  `Nombre_Cuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Concepto_Servicio` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Subtotal_Servicio` double NOT NULL,
+  `Impuesto_Servicio` double NOT NULL,
+  `Total_Servicio` double NOT NULL,
+  `Tipo_Impuesto` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
 CREATE VIEW 
 vista_compras_productos AS 
 SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
