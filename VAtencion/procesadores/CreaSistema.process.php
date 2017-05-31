@@ -1,15 +1,10 @@
 <?php 
 $obSistema=new Sistema($idUser);
 if(!empty($_REQUEST['del'])){
-    $id=$_REQUEST['del'];
-    $Tabla=$_REQUEST['TxtTabla'];
-    $IdTabla=$_REQUEST['TxtIdTabla'];
-    $IdPre= $_REQUEST['TxtIdPre'];
-    $DatosItem=$obVenta->DevuelveValores($Tabla, $IdTabla, $id);
-    $obVenta->ActualizaRegistro("librodiario", "Estado", "", "idLibroDiario", $DatosItem["idLibroDiario"]);
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
-    
-    header("location:$MyPage?CmbTrasladoID=$IdPre");
+    $id=$obSistema->normalizar($_REQUEST['del']);
+    $idSistema=$obSistema->normalizar($_REQUEST['idSistema']);
+    $obSistema->BorraReg("sistemas_relaciones", "ID", $id);
+    header("location:$myPage?idSistema=$idSistema");
 }
 
 if(!empty($_REQUEST["BtnCrearSistema"])){
@@ -18,29 +13,30 @@ if(!empty($_REQUEST["BtnCrearSistema"])){
     $PrecioVenta=$obSistema->normalizar($_REQUEST["TxtPrecioVenta"]);
     $PrecioMayorista=$obSistema->normalizar($_REQUEST["TxtPrecioMayor"]);
     $Observaciones=$obSistema->normalizar($_REQUEST["TxtObservaciones"]);
-    
     $idSistema=$obSistema->CrearSistema($Nombre, $PrecioVenta, $PrecioMayorista, $Observaciones, "");
-        
-    //$obVenta->CerrarCon();
     header("location:$myPage?idSistema=$idSistema");
 }
 
 		
 if(!empty($_REQUEST["BtnAgregarItem"])){
-    
-   
-    $obVenta=new ProcesoVenta($idUser);
-        
-    $idComprobante=$_REQUEST["TxtidPre"];
-    $Cantidad=$_REQUEST["TxtCantidad"];
-    
-    $idProducto=$_REQUEST["TxtIdItem"];
-    $VectorItem["Fut"]=0;
-    $obVenta->AgregarItemTraslado($idComprobante,$idProducto,$Cantidad,$VectorItem);
-    
-    //header("location:$myPage?idComprobante=$idComprobante");
+           
+    $idSistema=$obSistema->normalizar($_REQUEST["idSistema"]);
+    $Cantidad=$obSistema->normalizar($_REQUEST["TxtCantidad"]);
+    $idItem=$obSistema->normalizar($_REQUEST["idProducto"]);
+    $TipoItem=$obSistema->normalizar($_REQUEST["TipoItem"]);
+    $obSistema->AgregarItemSistema($TipoItem,$idSistema,$Cantidad,$idItem,"");
+    header("location:$myPage?idSistema=$idSistema");
 }
-
+// si se requiere editar una cantidad
+if(!empty($_REQUEST["BtnEditarCantidad"])){
+    
+    $idSistema=$obSistema->normalizar($_REQUEST["idSistema"]);
+    $idItem=$obSistema->normalizar($_REQUEST["idItem"]);
+    $Cantidad=$obSistema->normalizar($_REQUEST["TxtCantidadEdit"]);
+    $obSistema->ActualizaRegistro("sistemas_relaciones", "Cantidad", $Cantidad, "ID", $idItem);
+    header("location:$myPage?idSistema=$idSistema");
+    
+}
 // si se requiere guardar y cerrar
 if(!empty($_REQUEST["BtnGuardar"])){
     

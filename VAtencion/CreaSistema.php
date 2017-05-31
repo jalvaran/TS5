@@ -24,30 +24,11 @@ print("<body>");
     $css->CabeceraIni("Crear Sistema"); //Inicia la cabecera de la pagina
     $css->CreaBotonDesplegable("CrearSistema","Nuevo");  
     $css->CabeceraFin(); 
-    
-         
-    if(isset($_REQUEST["TxtBusqueda"])){
-        $key=$_REQUEST["TxtBusqueda"];
-        $PageReturn="";
-        $VectorDI["idPre"]=$idSistema;
-        $obTabla->DibujeItemsBuscadosVentas2($key,$myPage,$VectorDI);
-
-    }
-    
+   
     ///////////////Creamos el contenedor
     /////
     /////
-     print("<br><br><br>");
-     
-    $css->CrearDiv("principal", "container", "center",1,1);
-    ////Menu de historial
-      
-    ///////////////Se crea el DIV que servirá de contenedor secundario
-    /////
-    /////
-    $css->CrearDiv("Secundario", "container", "center",1,1);
-     /////////////////Cuadro de dialogo de Clientes create
-    $css->CrearCuadroDeDialogo("CrearSistema","Crear un Sistema"); 
+     $css->CrearCuadroDeDialogo("CrearSistema","Crear un Sistema"); 
         $css->CrearForm2("FrmCrearSistema", $myPage, "post", "_self");
         
         $css->CrearTabla();
@@ -82,16 +63,24 @@ print("<body>");
         $css->CierraFilaTabla();
         $css->CierraFilaTabla();
     $css->CerrarTabla();
+    $css->CerrarForm();
     $css->CerrarCuadroDeDialogo();
     
-    $css->CrearNotificacionAzul("Agregar Items al Sistema", 18);
-    $css->CerrarForm();
-    $css->CrearForm2("FrmSeleccionaSistema", $myPage, "post", "_self");
+    $css->CrearDiv("principal", "container", "center",1,1);
+    ////Menu de historial
+    $css->CrearNotificacionAzul("Agregar Items al Sistema", 18);  
+    ///////////////Se crea el DIV que servirá de contenedor secundario
+    /////
+    /////
+    $css->CrearDiv("Secundario", "container", "center",1,1);
+     /////////////////Cuadro de dialogo de Clientes create
+    
+    
     
     $css->CrearTabla();
     $css->FilaTabla(16);
     print("<td style='text-align:center'>");
-    
+    $css->CrearForm2("FrmSeleccionaSistema", $myPage, "post", "_self");
         $css->CrearSelect("idSistema", "EnviaForm('FrmSeleccionaSistema')");
         
             $css->CrearOptionSelect("","Selecciona un Sistema",0);
@@ -108,109 +97,111 @@ print("<body>");
                 $css->CrearOptionSelect($DatosSistemas['ID'],$DatosSistemas['Nombre'],$Sel);							
             }
         $css->CerrarSelect();
+    $css->CerrarForm();
+    print("</td>");
+    print("<td>");
+    if($idSistema>0){
+        $DatosSistemas=$obSistema->DevuelveValores("sistemas", "ID", $idSistema);
+        $sql="SELECT SUM()";
+        $PrecioVenta=$obSistema->Sume("vista_sistemas", "PrecioVenta", "WHERE ID='$idSistema'");
+        $Cantidad=$obSistema->Sume("vista_sistemas", "Cantidad", "WHERE ID='$idSistema'");
+        
+        $css->CrearForm2("FrmEditaValorSistema", $myPage, "post", "_self");
+        $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 1, 1);
+        $css->CrearInputNumber("TxtValorSistema", "number", " Valor del Sistema: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
+        print("<strong> Precio Sugerido: ".number_format($TotalSistema)."<strong> ");
+        $css->CrearBotonConfirmado("BtnEditarPrecioVenta", "Actualizar");
+        $css->CerrarForm();
+    }else{
+        $css->CrearNotificacionAzul("No se ha seleccionado un sistema", 16);
+    }
     print("</td>");
     $css->CierraFilaTabla();
     $css->CerrarTabla();
-    $css->CerrarForm();
     
-    $css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
+    
+    
     $Visible=0;
     if(!empty($idSistema)){
         $Visible=1;
     }
     $css->CrearDiv("DivDatosItemSistema", "", "center", $Visible, 1);
     $css->CrearTabla();
-    $css->FilaTabla(16);
-    $css->ColTabla("<strong>Sistema:</strong>", 2);
-    print("<td>");
-       $css->CrearInputText("idSistema", "text", "", $idSistema, "idSistema", "black", "", "", 100, 30, 1, 1);
-    print("</td>");  
-    $css->CierraFilaTabla();   
+        
     $css->FilaTabla(16);
         
-        $css->ColTabla("<strong>Busque un Item para Agregar</strong>", 3);
-        
+        $css->ColTabla("<strong>Busque un Item para Agregar</strong>", 1);
+        $css->ColTabla("<strong>Busque un Servicio para Agregar</strong>", 1);
+        $css->ColTabla("<strong>Guardar</strong>", 1);
     $css->CierraFilaTabla();  
-    $css->CerrarForm();
+    
     $css->FilaTabla(16);
-    print("<td colspan='3'>");
-	        
-        $VectorCuaBus["F"]=0;
-        $obTabla->CrearCuadroBusqueda($myPage,"","","idSistema",$idSistema,$VectorCuaBus);
-        print("</td>");
-        
-        $css->CierraFilaTabla();
-    $css->CierraFilaTabla();
-    
-    
-    
-    $css->CerrarTabla();
-    
-    
+    print("<td>");
+    $Page="Consultas/BuscarItemsSistemas.php?TipoItem=1&myPage=$myPage&idSistema=$idSistema&key=";
+    $css->CrearInputText("TxtProducto", "text", "", "", "Buscar Producto", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtProducto`,`DivBusquedas`);", 200, 30, 0, 1);
+    print("</td>");
+    print("<td>");
+    $Page="Consultas/BuscarItemsSistemas.php?TipoItem=2&myPage=$myPage&idSistema=$idSistema&key=";
+    $css->CrearInputText("TxtServicio", "text", "", "", "Buscar Servicio", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtServicio`,`DivBusquedas`);", 200, 30, 0, 1);
+    print("</td>");
+    print("<td>");
     $css->CrearForm2("FrmCerrarSistema", $myPage, "post", "_self");
-    $css->CrearInputText("idSistema","hidden",'',$idSistema,'',"","","",300,30,0,0);
-    $css->CrearBotonConfirmado2("BtnGuardar", "Guardar",1,"");
-    
-    print("<br>");
+        $css->CrearInputText("idSistema","hidden",'',$idSistema,'',"","","",300,30,0,0);
+        $css->CrearBotonConfirmado2("BtnGuardar", "Guardar",1,"");
     $css->CerrarForm();
-    
-    $css->CrearDiv("DivItems", "", "center", 1, 1);
-    $Vector["Tabla"]="traslados_items";
-    $Columnas=$obTabla->ColumnasInfo($Vector);
-    $css->CrearTabla();
-    $css->FilaTabla(12);
-    
-    $i=0;
-    $ColNames[]="";
-    $css->ColTabla("<strong>Borrar</strong>", 1);
-    foreach($Columnas["Field"] as $NombresCol ){
-        $css->ColTabla("<strong>$NombresCol</strong>", 1);
-        $ColNames[$i]=$NombresCol;
-        $i++;
-    }
-    
-    $NumCols=$i-1;
+    print("</td>");
     $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
+    $css->CerrarDiv();
     
-    $i=0;
-    $sql="SELECT * FROM traslados_items WHERE idTraslado='$idComprobante'";
-    $consulta=$obVenta->Query($sql);
-    
-    while($DatosItems=$obVenta->FetchArray($consulta)){
-        
-        $css->FilaTabla(12);
-        $css->ColTablaDel($myPage,"traslados_items","ID",$DatosItems['ID'],$idComprobante);
-        for($z=0;$z<=$NumCols;$z++){
-            $NombreCol=$ColNames[$z];
-            print("<td>");
-            if($NombreCol=="Soporte"){
-                $link=$DatosItems[$NombreCol];
-                if($link<>""){
-                    $css->CrearLink($link, "_blank", "Ver");
-                }
-            }else{
-                print($DatosItems[$NombreCol]);
+    $css->CrearDiv("DivSistemas", "", "center", 1, 1);
+    $css->CrearTabla();
+        $consulta=$obSistema->ConsultarTabla("sistemas_relaciones", " WHERE idSistema='$idSistema' ORDER BY ID Desc");
+        if($obSistema->NumRows($consulta)){
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>Tabla</strong>", 1);
+                $css->ColTabla("<strong>Nombre</strong>", 1);
+                $css->ColTabla("<strong>Referencia</strong>", 1);
+                $css->ColTabla("<strong>Precio Unitario</strong>", 1);
+                $css->ColTabla("<strong>Cantidad</strong>", 1);
+                $css->ColTabla("<strong>Total</strong>", 1);
+                $css->ColTabla("<strong>Borrar</strong>", 1);
+            $css->CierraFilaTabla();
+            while($DatosSistemas=$obSistema->FetchArray($consulta)){
+                $DatosItem=$obSistema->DevuelveValores($DatosSistemas["TablaOrigen"], "Referencia", $DatosSistemas["Referencia"]);
+                $css->FilaTabla(16);
+                    
+                    $css->ColTabla($DatosSistemas["TablaOrigen"], 1);
+                    $css->ColTabla($DatosItem["Nombre"], 1);
+                    $css->ColTabla($DatosItem["Referencia"], 1);
+                    $css->ColTabla($DatosItem["PrecioVenta"], 1);
+                    print("<td>");
+                    $css->CrearForm2("FrmEditarCant".$DatosSistemas["ID"], $myPage, "post", "_self");
+                    $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 0, 0);
+                    $css->CrearInputText("idItem", "hidden", "", $DatosSistemas["ID"], "", "", "", "", "", "", 0, 0);
+                    $css->CrearInputNumber("TxtCantidadEdit", "number", "", $DatosSistemas["Cantidad"], "Cantidad", "", "", "", 100, 30, 0, 1, 1, "", "any");
+                    $css->CrearBotonNaranja("BtnEditarCantidad", "E");
+                    $css->CerrarForm();
+                    print("</td>");
+                    $css->ColTabla($DatosItem["PrecioVenta"]*$DatosSistemas["Cantidad"], 1);
+                    print("<td>");
+                    $link=$myPage."?del=$DatosSistemas[ID]&idSistema=$idSistema";
+                    $css->CrearLink($link, "_self", "X");
+                    print("</td>");
+                $css->CierraFilaTabla();
             }
-            
-            print("</td>");
-            
+        }else{
+            $css->CrearNotificacionNaranja("No hay items en este Sistema", 16);
         }
-        
-        $i=0;
-        $css->CierraFilaTabla();
-        
-    }
-    
-    
     $css->CerrarTabla();
     $css->CerrarDiv();//Cerramos Div con los items agregados
-    $css->CerrarDiv();//Cerramos Div con los datos de los preitems
+    
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
     $css->AgregaSubir();
-    $css->AnchoElemento("CmbDestino_chosen", 200);
-    $css->AnchoElemento("CmbCuentaDestino_chosen", 200);
+    
     if(isset($_REQUEST["TxtBusqueda"])){
         print("<script>MostrarDialogo();</script>");
     }

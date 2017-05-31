@@ -39,34 +39,24 @@ class Sistema extends ProcesoVenta{
         return $idSistema;
     }
     
-    //Clase para agregar un item a una compra
-    public function AgregueProductoCompra($idCompra,$idProducto,$Cantidad,$CostoUnitario,$TipoIVA,$IVAIncluido,$Vector) {
+    //Clase para agregar un item a un sistema
+    public function AgregarItemSistema($TipoItem,$idSistema,$Cantidad,$idItem,$Vector) {
         //Proceso la informacion
-        if($IVAIncluido=="SI"){
-            if(is_numeric($TipoIVA)){
-                $CostoUnitario=round($CostoUnitario/(1+$TipoIVA));
-            }            
-        }
-        $Subtotal= round($CostoUnitario*$Cantidad);
-        if(is_numeric($TipoIVA)){
-            $Impuestos=round($Subtotal*$TipoIVA);
+        if($TipoItem==1){
+            $TablaOrigen="productosventa";
         }else{
-            $Impuestos=0;
+            $TablaOrigen="servicios";
         }
-        $Total=$Subtotal+$Impuestos;
+        $DatosProducto=$this->DevuelveValores($TablaOrigen, "idProductosVenta", $idItem);
         //////Agrego el registro           
-        $tab="factura_compra_items";
-        $NumRegistros=8;
+        $tab="sistemas_relaciones";
+        $NumRegistros=4;
 
-        $Columnas[0]="idFacturaCompra";     $Valores[0]=$idCompra;
-        $Columnas[1]="idProducto";          $Valores[1]=$idProducto;
+        $Columnas[0]="TablaOrigen";         $Valores[0]=$TablaOrigen;
+        $Columnas[1]="Referencia";          $Valores[1]=$DatosProducto["Referencia"];
         $Columnas[2]="Cantidad";            $Valores[2]=$Cantidad;
-        $Columnas[3]="CostoUnitarioCompra"; $Valores[3]=$CostoUnitario;
-        $Columnas[4]="SubtotalCompra";      $Valores[4]=$Subtotal;
-        $Columnas[5]="ImpuestoCompra";      $Valores[5]=$Impuestos;
-        $Columnas[6]="TotalCompra";         $Valores[6]=$Total;
-        $Columnas[7]="Tipo_Impuesto";       $Valores[7]=$TipoIVA;
-                    
+        $Columnas[3]="idSistema";           $Valores[3]=$idSistema;
+                            
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     
