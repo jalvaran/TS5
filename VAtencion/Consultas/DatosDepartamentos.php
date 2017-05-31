@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: application/json');
 $myPage="DatosDepartamentos.php";
 include_once("../../modelo/php_conexion.php");
 include_once("../../modelo/php_tablas.php");
@@ -21,5 +20,5 @@ if($Valida==2){
     
     $css->DibujeSelectBuscador("CmbSub1", $pageConsulta, "", "DivSub3", "onChange", 30, 100, "prod_sub1",$Consulta, "idSub1", "NombreSub1", "idDepartamento", "");
 }
-$css->AgregaJS(); //Agregamos javascripts
+
 ?>

@@ -990,8 +990,18 @@ function Footer(){
 /////////////////////Crear una Chosen
 	
 	function CrearSelectChosen($Nombre, $VarSelect){
-           $Ancho=$VarSelect["Ancho"];
-           $PlaceHolder=$VarSelect["PlaceHolder"];
+          $Ancho=200; 
+          $PlaceHolder="Seleccione una opcion"; 
+          if(isset($VarSelect["Ancho"])){
+             $Ancho=$VarSelect["Ancho"];
+          }
+              
+          
+          if(isset($VarSelect["PlaceHolder"])){
+             $PlaceHolder=$VarSelect["PlaceHolder"];
+          }           
+           
+           
            if(isset($VarSelect["Required"])){
                $Required="required=1";
            }else{

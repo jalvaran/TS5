@@ -1,4 +1,8 @@
 2017-05-31
+ALTER TABLE `prod_codbarras` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
+ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE `prod_codbarras` ADD `TablaOrigen` VARCHAR(90) NOT NULL DEFAULT 'productosventa' AFTER `CodigoBarras`;
+ALTER TABLE `sistemas` ADD `Departamento` INT(11) AFTER `Observaciones`,`Sub1` INT(11) AFTER `Departamento`;
 --
 -- Estructura de tabla para la tabla `factura_compra`
 --
@@ -121,10 +125,6 @@ CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
 
 -- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `sistemas`
---
-
 CREATE TABLE IF NOT EXISTS `sistemas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -132,13 +132,19 @@ CREATE TABLE IF NOT EXISTS `sistemas` (
   `PrecioMayorista` double NOT NULL,
   `RutaImagen` text COLLATE utf8_spanish2_ci NOT NULL,
   `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `Departamento` int(11) NOT NULL,
+  `Sub1` int(11) NOT NULL,
+  `Sub2` int(11) NOT NULL,
+  `Sub3` int(11) NOT NULL,
+  `Sub4` int(11) NOT NULL,
+  `Sub5` int(11) NOT NULL,
+  `CuentaPUC` bigint(20) NOT NULL,
   `Estado` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -155,8 +161,6 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
-ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;
 
 DROP VIEW IF EXISTS `vista_sistemas`;
 CREATE VIEW 

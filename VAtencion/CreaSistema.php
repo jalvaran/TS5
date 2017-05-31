@@ -30,7 +30,8 @@ print("<body>");
     ///////////////Creamos el contenedor
     /////
     /////
-     $css->CrearCuadroDeDialogo("CrearSistema","Crear un Sistema"); 
+    $css->CrearCuadroDeDialogoAmplio("CrearSistema", "Crear un Sistema");
+     
         $css->CrearForm2("FrmCrearSistema", $myPage, "post", "_self");
         
         $css->CrearTabla();
@@ -38,36 +39,81 @@ print("<body>");
             $css->ColTabla("<strong>Nombre</strong>", 1);
             $css->ColTabla("<strong>PrecioVenta</strong>", 1);
             $css->ColTabla("<strong>PrecioMayorista</strong>", 1);
-            
-            
-            
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
         print("<td>");
-        $css->CrearTextArea("TxtNombre","","","Escriba el Nombre del Sistema","black","","",200,60,0,1);
+        $css->CrearTextArea("TxtNombre","","","Escriba el Nombre del Sistema","black","","",320,60,0,1);
         
         print("</td>");        
         print("<td>"); 
-        $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 100, 30, 0, 1, 1, "", 1);
+        $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 200, 30, 0, 1, 1, "", 1);
         print("</td>");
         print("<td>");
-        $css->CrearInputNumber("TxtPrecioMayor", "number", "", "", "PrecioMayorista", "", "", "", 100, 30, 0, 1, 1, "", 1);
+        $css->CrearInputNumber("TxtPrecioMayor", "number", "", "", "PrecioMayorista", "", "", "", 200, 30, 0, 1, 1, "", 1);
         print("</td>");
-         
+        $css->CierraFilaTabla();
         $css->FilaTabla(16);
-        print("<td colspan=2>");
+            $css->ColTabla("<strong>Observaciones</strong>", 1);
+            $css->ColTabla("<strong>Imagen</strong>", 1);
+            $css->ColTabla("<strong>CuentaPUC</strong>", 1);
+        $css->CierraFilaTabla(); 
+        $css->FilaTabla(16);
+        print("<td>");
         $css->CrearTextArea("TxtObservaciones","","","Observaciones","black","","",320,60,0,1);
+        print("</td>");
+        print("<td>");
         $css->CrearUpload("foto");
-        print("</td>"); 
-        print("<td style='text-align:center'>");
-        $css->CrearBotonConfirmado("BtnCrearSistema", "Crear");
-        print("</td>");  
+        print("</td>");
+        print("<td>");
+        $VarSelect["PlaceHolder"]="Seleccione la cuenta";
+        $css->CrearSelectChosen("CuentaPUC", $VarSelect);
+            $consulta=$obSistema->ConsultarTabla("subcuentas", "WHERE PUC LIKE '4135%' OR PUC LIKE '4235%'");
+            while($DatosCuenta=$obSistema->FetchArray($consulta)){
+                $sel=0;
+                if($DatosCuenta=="4135"){
+                    $sel=1;
+                }
+                $css->CrearOptionSelect($DatosCuenta["PUC"], $DatosCuenta["Nombre"]." ".$DatosCuenta["PUC"] , $sel);
+                
+            }
+          
+        $css->CerrarSelect();
+        print("</td>");
         $css->CierraFilaTabla();
-        $css->CierraFilaTabla();
-    $css->CerrarTabla();
-    $css->CerrarForm();
-    $css->CerrarCuadroDeDialogo();
+        $css->FilaTabla(16);
+        print("<td><strong>Subgrupos:</strong>");
+            $css->CrearDiv("DivDepartamentos", "", "center", 1, 1);
+            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=1&key=";
+            $Page2="Consultas/AsignaDepartamentosSistemas.php?Valida=5&key=";
+            $css->CrearSelectTable("CmbDepartamento", "prod_departamentos", "", "idDepartamentos", "Nombre", "idDepartamentos", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbDepartamento`,`DivSub1`,`0`);EnvieObjetoConsulta(`$Page2`,`CmbDepartamento`,`DivSub5`,`0`)", "idDepartamentos", 1);
+            $css->CerrarDiv();
+            $css->CrearDiv("DivSub1", "", "center", 1, 1);
+            $css->CerrarDiv();
+            $css->CrearDiv("DivSub2", "", "center", 1, 1);
+            $css->CerrarDiv();
+            $css->CrearDiv("DivSub3", "", "center", 1, 1);
+            $css->CerrarDiv();
+            $css->CrearDiv("DivSub4", "", "center", 1, 1);
+            $css->CerrarDiv();
+            
+        print("</td>");
+        print("<td><strong>Subgrupo 5 y Codigo de Barras:</strong>");
+            $css->CrearDiv("DivSub5", "", "center", 1, 1);
+            $css->CerrarDiv();
+            $css->CrearDiv("DivCodBarras", "", "center", 1, 1);
+                $css->CrearInputText("TxtCodigoBarras", "text", "", "", "CodigoBarras", "", "", "", 200, 30, 0, 0);
+            $css->CerrarDiv();
+        print("</td>");
+        print("<td>");
+            $css->CrearBotonConfirmado("BtnCrearSistema", "Crear Sistema");
+        print("</td>");
+        $css->CierraFilaTabla();   
     
+    $css->CerrarTabla();
+    
+    $css->CerrarForm();
+    $css->CerrarCuadroDeDialogoAmplio();
+       
     $css->CrearDiv("principal", "container", "center",1,1);
     ////Menu de historial
     $css->CrearNotificacionAzul("Agregar Items al Sistema", 18);  
@@ -208,6 +254,7 @@ print("<body>");
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
+    $css->AnchoElemento("CuentaPUC_chosen", 200);
     $css->AgregaSubir();
     
     if(isset($_REQUEST["TxtBusqueda"])){
