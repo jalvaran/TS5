@@ -1,4 +1,37 @@
 2017-06-02
+DROP TABLE IF EXISTS `parametros_contables`;
+CREATE TABLE IF NOT EXISTS `parametros_contables` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
+  `CuentaPUC` bigint(20) NOT NULL,
+  `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=16 ;
+
+--
+-- Volcado de datos para la tabla `parametros_contables`
+--
+
+INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
+(1, 'Cuenta que se utiliza para el iva generado en las operaciones de venta ', 240805, 'Impuesto sobre las ventas por pagar Generado', '2017-06-02 12:52:52', '2017-04-18 09:59:19'),
+(2, 'Cuenta Costo de venta de la mercancia', 613501, 'Venta de Mercancias No Fabricadas por la Empresa', '2017-06-02 13:13:10', '2017-04-18 09:59:19'),
+(3, 'Cuenta Gasto Para Bajas de Mercancias no fabricadas por la empresa', 529915, '', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(4, 'Cuenta donde se alojan los inventarios de las mercancias no fabricadas por la empresa', 143501, 'Mercancias No Fabricadas por la Empresa', '2017-05-26 00:53:09', '2017-04-18 09:59:19'),
+(5, 'Cuenta para Realizar el Credito a las altas de un producto', 529915, '', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(6, 'Cuenta para realizar creditos o debitos a los clientes', 130505, 'CLIENTES NACIONALES', '2017-06-02 12:47:13', '2017-04-18 09:59:19'),
+(7, 'Cuenta para registrar el gasto por otros descuentos cuando se registra un ingreso por cartera', 521095, 'OTROS DESCUENTOS', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(8, 'CUENTA PARA REGISTRAR EL PAGO DE COMISIONES', 520518, 'COMISIONES', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(9, 'Cuenta para registrar la devolucion de una venta', 417501, 'DEVOLUCIONES EN VENTA', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(10, 'CUENTA ORIGEN DE LA CREACION DE UN EGRESO A PARTIR DE UN CONCEPTO CONTABLE CREADO.', 110505, 'CAJA GENERAL', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(11, 'Cuenta para llevar la utilidad del ejercicio', 3605, 'Utilidad del Ejercicio', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(12, 'Cuenta para llevar la perdida del ejercicio', 3610, 'Perdida del Ejercicio', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(13, 'Contrapartida para llevar la perdida o ganancia del ejercicio', 5905, 'Ganancias y perdidas', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
+(14, 'Cuenta x pagar proveedores', 2205, 'PROVEEDORES NACIONALES', '2017-05-26 01:13:05', '2017-04-18 09:59:19'),
+(15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-05-25 22:45:57', '2017-04-18 09:59:19');
+
+
 DROP TABLE IF EXISTS `porcentajes_iva`;
 --
 -- Estructura de tabla para la tabla `porcentajes_iva`
@@ -277,6 +310,7 @@ fs.Total_Servicio AS Total,fs.Tipo_Impuesto ,`c`.`Concepto` AS `Concepto`,`c`.`O
 FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Identificacion` 
 INNER JOIN factura_compra_servicios fs ON fs.idFacturaCompra=c.ID 
 WHERE c.`Estado`='CERRADA';
+
 2017-05-25
 
 ALTER TABLE `clientes` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;

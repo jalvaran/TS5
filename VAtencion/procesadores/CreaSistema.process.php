@@ -76,6 +76,12 @@ if(!empty($_REQUEST["BtnEditarPrecioVenta"])){
     $obSistema->ActualizaRegistro("sistemas", "PrecioVenta", $TotalSistema, "ID", $idSistema,0);
     $obSistema->ActualizaRegistro("sistemas", "PrecioMayorista", $PrecioMayorista, "ID", $idSistema,0);
     $obSistema->ActualizaRegistro("sistemas", "Observaciones", $Observaciones, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Departamento", $Departamento, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Sub1", $Sub1, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Sub2", $Sub2, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Sub3", $Sub3, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Sub4", $Sub5, "ID", $idSistema,0);
+    $obSistema->ActualizaRegistro("sistemas", "Sub5", $Sub5, "ID", $idSistema,0);
     header("location:$myPage?idSistema=$idSistema");
     
 }

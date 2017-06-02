@@ -367,7 +367,7 @@ print("<body>");
         
     $css->CerrarDiv();
     //Div con los productos
-    if($idCompra>1){
+    if($idCompra>0){
     $css->CrearDiv("DivProductos", "", "Center", 1, 1);
     
         $consulta=$obVenta->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
