@@ -1633,6 +1633,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             $this->css->CrearInputText("TxtIdFactura","hidden","",$DatosCredito["Facturas_idFacturas"],"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdCartera","hidden","",$DatosCredito["idCartera"],"","","","",0,0,0,0);
             if(isset($Vector["HabilitaCmbCuentaDestino"])){
+                $this->css->CrearInputFecha("Fecha: ", "TxtFecha", date("Y-m-d"), 100, 30, "");
                 $VectorCuentas["Nombre"]="CmbCuentaDestino";
                 $VectorCuentas["Evento"]="";
                 $VectorCuentas["Funcion"]="";
@@ -1640,9 +1641,9 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 print("<strong>Cuenta:</strong>");
                 $this->css->CrearSelect2($VectorCuentas);
                 $this->css->CrearOptionSelect("", "Seleccione una cuenta destino", 0);
-                $ConsultaCuentas=$this->obCon->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
+                $ConsultaCuentas=$this->obCon->ConsultarTabla("subcuentas", "WHERE PUC LIKE '11%'");
                 while($DatosCuentaFrecuentes=$this->obCon->FetchArray($ConsultaCuentas)){
-                    $this->css->CrearOptionSelect($DatosCuentaFrecuentes["CuentaPUC"], $DatosCuentaFrecuentes["Nombre"], 0);
+                    $this->css->CrearOptionSelect($DatosCuentaFrecuentes["PUC"], $DatosCuentaFrecuentes["Nombre"]." ".$DatosCuentaFrecuentes["PUC"], 0);
                 }
                 $this->css->CerrarSelect();
                 print("<br>");

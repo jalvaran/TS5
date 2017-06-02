@@ -1,3 +1,36 @@
+2017-06-02
+DROP TABLE IF EXISTS `porcentajes_iva`;
+--
+-- Estructura de tabla para la tabla `porcentajes_iva`
+--
+
+CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Valor` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `CuentaPUC` bigint(20) NOT NULL,
+  `CuentaPUCIVAGenerado` bigint(20) NOT NULL,
+  `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Habilitado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
+
+--
+-- Volcado de datos para la tabla `porcentajes_iva`
+--
+
+INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `CuentaPUC`, `CuentaPUCIVAGenerado`, `NombreCuenta`, `Habilitado`, `Updated`, `Sync`) VALUES
+(1, 'Sin IVA', '0', 2408, 2408, '', 'SI', '2017-06-02 13:28:26', '2017-04-18 09:59:23'),
+(2, 'Excluidos', 'E', 2408, 2408, '', 'SI', '2017-06-02 13:28:30', '2017-04-18 09:59:23'),
+(3, 'IVA 5 %', '0.05', 24080503, 24081003, 'Impuestos del 5%', 'SI', '2017-06-02 13:28:31', '2017-04-18 09:59:23'),
+(4, 'IVA del 8%', '0.08', 24080502, 24081002, 'Impuestos del 8%', 'SI', '2017-06-02 13:28:33', '2017-04-18 09:59:23'),
+(5, 'IVA del 16%', '0.16', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-02 13:29:41', '2017-04-18 09:59:23'),
+(6, 'IVA del 19%', '0.19', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-02 13:28:36', '2017-04-18 09:59:23');
+
+
+
 2017-05-31
 ALTER TABLE `prod_codbarras` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
 ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;

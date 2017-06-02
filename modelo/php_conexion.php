@@ -8,13 +8,13 @@
 	$CuentaIVAGen=2408;
 	$TablaIVAGen="cuentas";
         $IDTablaIVAGen="idPUC";
-	$RegCREE="SI";
+	$RegCREE="NO";
         $CuentaCREE=135595;
         $ContraPartidaCREE=23657502;
 	$CuentaCostoMercancia=6135;
 	$CuentaInventarios=1435;
 	$AjustaInventario="SI";
-	$RegCREE="SI";
+	$RegCREE="NO";
 	$COMPrinter=3;
 	$PrintCuenta="SI";
         $CuentaAnticipos=2705;
@@ -387,8 +387,8 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
             $EmpresaPro=$Datos["EmpresaPro"];
             $CentroCostos=$Datos["CentroCostos"];
             $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
-            $sql="SELECT CuentaPUC, TipoItem, sum(SubtotalItem) as SubtotalItem,sum(TotalItem) as TotalItem,sum(IVAItem) as IVAItem ,sum(SubtotalCosto) as SubtotalCosto  "
-                    . "FROM facturas_items WHERE idFactura='$idFact' GROUP BY CuentaPUC";
+            $sql="SELECT PorcentajeIVA,CuentaPUC, TipoItem, sum(SubtotalItem) as SubtotalItem,sum(TotalItem) as TotalItem,sum(IVAItem) as IVAItem ,sum(SubtotalCosto) as SubtotalCosto  "
+                    . "FROM facturas_items WHERE idFactura='$idFact' GROUP BY CuentaPUC, PorcentajeIVA";
             $Consulta=$this->Query($sql);
             
               
@@ -400,14 +400,17 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                 $Total=$DatosItems["TotalItem"];
                 $Impuestos=$DatosItems["IVAItem"];
                 $TotalCostosM=$DatosItems["SubtotalCosto"];
-		if($DatosFactura['FormaPago']=="Contado"){
+		if($DatosFactura['FormaPago']=="Contado"){    //Si es pago de contado
 			$CuentaPUC=$CuentaDestino;
 			$DatosCuenta=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaPUC);
-			
+			if($DatosCuenta["Nombre"]==''){
+                            $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);  //Si no hay cuentas frecuentes 
+                        }
 			$NombreCuenta=$DatosCuenta["Nombre"];
-		}else{	
-			$CuentaPUC="1305";
-			$NombreCuenta="Clientes Nacionales $RazonSocialC NIT $NIT";
+		}else{	   //Si es factura a credito
+                    $Parametros= $this->DevuelveValores("parametros_contables", "ID", 6);  //aqui se encuentras los parametros de la cuenta cliente
+                    $CuentaPUC=$Parametros["CuentaPUC"];
+                    $NombreCuenta=$Parametros["NombreCuenta"];
 		}
 		
 		
@@ -468,11 +471,13 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 		///////////////////////Registramos IVA Generado si aplica
 		
 		if($Impuestos<>0){
-		
-                    $CuentaPUC=$this->CuentaIVAGen; //2408   IVA Generado
-                    $DatosCuenta=$this->DevuelveValores($this->TablaIVAGen,$this->IDTablaIVAGen,$CuentaPUC);
-
-                    $NombreCuenta=$DatosCuenta["Nombre"];
+                    $TipoIVA=str_replace("%", "", $DatosItems["PorcentajeIVA"]);
+                    $TipoIVA=str_pad($TipoIVA, 2, "0", STR_PAD_LEFT);
+                    $TipoIVA="0.".$TipoIVA;
+                    $DatosIVA=$this->DevuelveValores("porcentajes_iva", "Valor", $TipoIVA);
+                    $CuentaPUC=$DatosIVA["CuentaPUCIVAGenerado"]; //   IVA Generado
+                    
+                    $NombreCuenta=$DatosIVA["NombreCuenta"];
 
                     $Valores[15]=$CuentaPUC;
                     $Valores[16]=$NombreCuenta;
@@ -484,79 +489,39 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 		
 		}
 					
-					
-					///////////////////////////////////////////////////////////////
-		////////////Registramos Autoretencion
-		if($this->RegCREE=="SI"){
-			
-			$CREE=$this->DevuelveValores("impret","Nombre","CREE");
-			
-			$ValorCREE=round($Subtotal*$CREE['Valor']);
-			
-			$CuentaPUC=$this->CuentaCREE; //  Autorretenciones CREE
-			
-			$DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=$ValorCREE;     //Valor del CREE
-			$Valores[19]=0; 			
-			$Valores[20]=$ValorCREE;  	//para la sumatoria contemplar el balance
-			
-			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-		
-		///////////////////////////////////////////////////////////////
-		////////////contra partida de la Autoretencion
-		
-			$CuentaPUC=$this->ContraPartidaCREE; //  Cuentas por pagar Autorretenciones CREE
-			
-			$DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
-			$NombreCuenta=$DatosCuenta["Nombre"];
-			
-			$Valores[15]=$CuentaPUC;
-			$Valores[16]=$NombreCuenta;
-			$Valores[18]=0;     //Valor del CREE
-			$Valores[19]=$ValorCREE; 			
-			$Valores[20]=$ValorCREE*(-1);  	//para la sumatoria contemplar el balance
-			
-			$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-			
-			}
-					
-			///////////////////////Ajustamos el inventario
-                        
-			if($DatosItems["TipoItem"]=="PR"){
-				
-				$CuentaPUC=$this->CuentaCostoMercancia; //6135   costo de mercancia vendida
-				
-				$DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-				$NombreCuenta=$DatosCuenta["Nombre"];
-				
-				$Valores[15]=$CuentaPUC;
-				$Valores[16]=$NombreCuenta;
-				$Valores[18]=$TotalCostosM;//Debito se escribe el costo de la mercancia vendida
-				$Valores[19]="0"; 			
-				$Valores[20]=$TotalCostosM;  	//para la sumatoria contemplar el balance
-				
-				$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-				
-				///////////////////////Ajustamos el inventario
-				
-				$CuentaPUC=$this->CuentaInventarios; //1435   Mercancias no fabricadas por la empresa
-				
-				$DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
-				$NombreCuenta=$DatosCuenta["Nombre"];
-				
-				$Valores[15]=$CuentaPUC;
-				$Valores[16]=$NombreCuenta;
-				$Valores[18]="0";
-				$Valores[19]=$TotalCostosM;//Credito se escribe el costo de la mercancia vendida			
-				$Valores[20]=$TotalCostosM*(-1);  	//para la sumatoria contemplar el balance
-				
-				$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-				
-			}
+
+                ///////////////////////Ajustamos el inventario
+
+                if($DatosItems["TipoItem"]=="PR"){
+                    $Parametros=$this->DevuelveValores("parametros_contables", "ID", 2);
+                    $CuentaPUC=$Parametros["CuentaPUC"]; //6135   costo de mercancia vendida
+                    
+                    $NombreCuenta=$Parametros["NombreCuenta"];
+
+                    $Valores[15]=$CuentaPUC;
+                    $Valores[16]=$NombreCuenta;
+                    $Valores[18]=$TotalCostosM;//Debito se escribe el costo de la mercancia vendida
+                    $Valores[19]="0"; 			
+                    $Valores[20]=$TotalCostosM;  	//para la sumatoria contemplar el balance
+
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                    ///////////////////////Ajustamos el inventario
+                    $Parametros=$this->DevuelveValores("parametros_contables", "ID", 4);
+                    $CuentaPUC=$Parametros["CuentaPUC"]; //1435   Mercancias no fabricadas por la empresa
+
+                    //$DatosCuenta=$this->DevuelveValores('cuentas',"idPUC",$CuentaPUC);
+                    $NombreCuenta=$Parametros["NombreCuenta"];
+
+                    $Valores[15]=$CuentaPUC;
+                    $Valores[16]=$NombreCuenta;
+                    $Valores[18]="0";
+                    $Valores[19]=$TotalCostosM;//Credito se escribe el costo de la mercancia vendida			
+                    $Valores[20]=$TotalCostosM*(-1);  	//para la sumatoria contemplar el balance
+
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                }
 
             }
 
@@ -1233,8 +1198,9 @@ public function FetchArray($Datos)
         
         $tab="librodiario";
         $NumRegistros=27;
-        $CuentaPUC="130505".$NIT;
-        $NombreCuenta="Clientes Nacionales $RazonSocialC $NIT";
+        $Parametros=$this->DevuelveValores("parametros_contables", "ID", 6);
+        $CuentaPUC= $Parametros["CuentaPUC"];
+        $NombreCuenta=$Parametros["NombreCuenta"];
         
         $Columnas[0]="Fecha";			$Valores[0]=$fecha;
         $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="ComprobanteIngreso";
@@ -1280,11 +1246,9 @@ public function FetchArray($Datos)
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         //Si hay retefuente se registra
         if($Retefuente>0){
-            
-            $DatosCuenta=$this->DevuelveValores("tiposretenciones","ID",1);
-                                        
-            $NombreCuenta=$DatosCuenta["NombreCuentaActivo"];
-            $CuentaPUC=$DatosCuenta["CuentaActivo"];
+            $CuentaPUC=$Vector["CuentaReteFuente"];
+            $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+            $NombreCuenta=$DatosCuenta["Nombre"];
 
             $Valores[15]=$CuentaPUC;
             $Valores[16]=$NombreCuenta;
@@ -1297,10 +1261,9 @@ public function FetchArray($Datos)
         //Si hay reteIVA se registra
         if($ReteIVA>0){
             
-            $DatosCuenta=$this->DevuelveValores("tiposretenciones","ID",2);
-                                        
-            $NombreCuenta=$DatosCuenta["NombreCuentaActivo"];
-            $CuentaPUC=$DatosCuenta["CuentaActivo"];
+            $CuentaPUC=$Vector["CuentaReteIVA"];
+            $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+            $NombreCuenta=$DatosCuenta["Nombre"];
 
             $Valores[15]=$CuentaPUC;
             $Valores[16]=$NombreCuenta;
@@ -1313,10 +1276,9 @@ public function FetchArray($Datos)
         //Si hay reteICA se registra
         if($ReteICA>0){
             
-            $DatosCuenta=$this->DevuelveValores("tiposretenciones","ID",3);
-                                        
-            $NombreCuenta=$DatosCuenta["NombreCuentaActivo"];
-            $CuentaPUC=$DatosCuenta["CuentaActivo"];
+            $CuentaPUC=$Vector["CuentaReteICA"];
+            $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+            $NombreCuenta=$DatosCuenta["Nombre"];
 
             $Valores[15]=$CuentaPUC;
             $Valores[16]=$NombreCuenta;
@@ -1329,10 +1291,9 @@ public function FetchArray($Datos)
         //Si hay retefuente se registra
         if($OtrosDescuentos>0){
             
-            $DatosCuenta=$this->DevuelveValores("parametros_contables","ID",7);
-                                        
-            $NombreCuenta=$DatosCuenta["NombreCuenta"];
-            $CuentaPUC=$DatosCuenta["CuentaPUC"];
+            $CuentaPUC=$Vector["CuentaOtros"];
+            $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);
+            $NombreCuenta=$DatosCuenta["Nombre"];
 
             $Valores[15]=$CuentaPUC;
             $Valores[16]=$NombreCuenta;
@@ -5070,6 +5031,9 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosCliente=$this->DevuelveValores("clientes","idClientes",$idCliente);
             $CuentaClientes=$this->DevuelveValores("parametros_contables","ID",6);
             $DatosCuentasFrecuentes=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaDestino);
+            if($DatosCuentasFrecuentes["CuentaPUC"]==''){
+                $DatosCuentasFrecuentes=$this->DevuelveValores("subcuentas","PUC",$CuentaDestino);
+            }
             $NIT=$DatosCliente["Num_Identificacion"];
             $RazonSocialC=$DatosCliente["RazonSocial"];
             
@@ -7861,14 +7825,14 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
      }
      ///Crear ProductoVenta desde Archivo
-     public function AgregarCodigoBarrasAItem($idProducto,$CodigoBarras,$Vector) {
+     public function AgregarCodigoBarrasAItem($idProducto,$CodigoBarras,$TablaOrigen='productosventa',$Vector) {
         
         $tab="prod_codbarras";	
-        $NumRegistros=2;
+        $NumRegistros=3;
         
-        $Columnas[0]="ProductosVenta_idProductosVenta";$Valores[0]=$idProducto;
-        $Columnas[1]="CodigoBarras";	$Valores[1]=$CodigoBarras;        	
-        
+        $Columnas[0]="ProductosVenta_idProductosVenta"; $Valores[0]=$idProducto;
+        $Columnas[1]="CodigoBarras";                    $Valores[1]=$CodigoBarras;        	
+        $Columnas[2]="TablaOrigen";                     $Valores[2]=$TablaOrigen; 
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         //$ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
         

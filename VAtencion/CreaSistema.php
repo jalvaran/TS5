@@ -159,8 +159,70 @@ print("<body>");
         $css->CrearInputText("TxtTotalSistema", "hidden", "", $TotalSistema, "", "", "", "", "", "", 1, 1);
         $css->CrearInputNumber("TxtValorSistema", "number", " Precio Venta: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
         $css->CrearInputNumber("TxtPrecioMayor", "number", " Precio Mayorista: ", $DatosSistemas["PrecioMayorista"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
-        print("<br>");   
-        $css->CrearTextArea("TxtObservaciones", "", $DatosSistemas["Observaciones"], "Observaciones", "", "", "", 450, 40, 0, 1);
+        print("<br>"); 
+        $css->ImageOcultarMostrar("ImgOculta", "Mostrar Mas Opciones: ", "DivMasOpciones", 30, 30, "");
+        $css->CrearDiv("DivMasOpciones", "", "center", 0, 1);
+        $css->CrearTextArea("TxtObservaciones", "", $DatosSistemas["Observaciones"], "Observaciones", "", "", "", 450, 60, 0, 1);
+        $css->CrearDiv("DivUpDepartamentos", "", "center", 1, 1);
+        $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=1&Update=1&key=";
+        $Page2="Consultas/AsignaDepartamentosSistemas.php?Valida=5&Update=1&key=";
+        
+        $css->CrearSelectTable("CmbDepartamentoUp", "prod_departamentos", "", "idDepartamentos", "Nombre", "idDepartamentos", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbDepartamentoUp`,`DivUpSub1`,`0`);EnvieObjetoConsulta(`$Page2`,`CmbDepartamento`,`DivUpSub5`,`0`)", $DatosSistemas["Departamento"], 1);
+        $css->CerrarDiv();
+        $css->CrearDiv("DivUpSub1", "", "center", 1, 1);
+        if($DatosSistemas["Sub1"]>0){
+            $idSel=$DatosSistemas["Sub1"];
+            $idDepartamento=$DatosSistemas["Departamento"];
+            $idDibujo="DivUpSub2";
+            $Up="Update=1&"; 
+            $Condicion=" WHERE idDepartamento='$idDepartamento'";
+            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
+            $css->CrearSelectTable("CmbSub1", "prod_sub1", $Condicion, "idSub1", "NombreSub1", "idDepartamento", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
+
+        }
+        $css->CerrarDiv();
+        $css->CrearDiv("DivUpSub2", "", "center", 1, 1);
+        if($DatosSistemas["Sub2"]>0){
+            $idDepartamento=$DatosSistemas["Sub1"];
+            $idSel=$DatosSistemas["Sub2"];
+            $idDibujo="DivUpSub3";
+            $Up="Update=1&"; 
+            $Condicion=" WHERE idSub1='$idDepartamento'";
+            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
+            $css->CrearSelectTable("CmbSub2", "prod_sub2", $Condicion, "idSub2", "NombreSub2", "idSub1", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
+
+        }
+        $css->CerrarDiv();
+        $css->CrearDiv("DivUpSub3", "", "center", 1, 1);
+        if($DatosSistemas["Sub3"]>0){
+            $idDepartamento=$DatosSistemas["Sub2"];
+            $idSel=$DatosSistemas["Sub3"];
+            $idDibujo="DivUpSub4";
+            $Up="Update=1&"; 
+            $Condicion=" WHERE idSub2='$idDepartamento'";
+            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
+            $css->CrearSelectTable("CmbSub3", "prod_sub3", $Condicion, "idSub3", "NombreSub3", "idSub2", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
+
+        }
+        $css->CerrarDiv();
+        $css->CrearDiv("DivUpSub4", "", "center", 1, 1);
+        if($DatosSistemas["Sub4"]>0){
+            $idDepartamento=$DatosSistemas["Sub3"];
+            $idSel=$DatosSistemas["Sub4"];
+            $Condicion=" WHERE idSub3='$idDepartamento'";
+            $css->CrearSelectTable("CmbSub4", "prod_sub4", $Condicion, "idSub4", "NombreSub4", "idSub3", "", "", $idSel, 0);
+
+        }
+        $css->CerrarDiv();
+        $css->CrearDiv("DivUpSub5", "", "center", 1, 1);
+        if($DatosSistemas["Sub5"]>0){
+            print("<strong>Sub5: </strong><br>");
+            $idSel=$DatosSistemas["Sub5"];            
+            $css->CrearSelectTable("CmbSub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "", "", $idSel, 0);
+
+        }
+        $css->CerrarDiv();
+        $css->CerrarDiv();
         print("<br>");
         $css->CrearBotonConfirmado("BtnEditarPrecioVenta", "Actualizar");
         

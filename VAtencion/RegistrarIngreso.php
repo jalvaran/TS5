@@ -171,14 +171,67 @@ print("<body>");
         $css->CerrarSelect();
         print("<br>");
         $css->CrearDiv("DivRetenciones", "", "center", 0, 1);
-        
-            $css->CrearInputNumber("TxtRetefuente", "number", "Retefuente:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
+            print("<strong>Retefuente:</strong><br>");
+            $VarSelect["Required"]="200";
+            $VarSelect["Ancho"]="200";
+            $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+            $css->CrearSelectChosen("CmbCuentaReteFuente", $VarSelect);
+            $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2365%'");
+            while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                $sel=0;
+                if($DatosCuentaRete["PUC"]=="236540"){
+                    $sel=1;
+                }
+                $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+            }
+            $css->CerrarSelect();
             print("<br>");
-            $css->CrearInputNumber("TxtReteICA", "number", "Rete-ICA:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
+            $css->CrearInputNumber("TxtRetefuente", "number", "", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 200, 30, 0, 1, 0, "", "any");
+            print("<br><strong>Rete-ICA:</strong><br>");
+            $VarSelect["Required"]="200";
+                    $VarSelect["Ancho"]="200";
+                    $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+                    $css->CrearSelectChosen("CmbCuentaReteICA", $VarSelect);
+                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2368%'");
+                    while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                        $sel=0;
+                        
+                        $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+                    }
+                    $css->CerrarSelect();
             print("<br>");
-            $css->CrearInputNumber("TxtReteIVA", "number", "ReteIVA:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
+            $css->CrearInputNumber("TxtReteICA", "number", "", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 200, 30, 0, 1, 0, "", "any");
+            print("<br><strong>ReteIVA:</strong><br>");
+            $VarSelect["Required"]="200";
+            $VarSelect["Ancho"]="200";
+            $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+            $css->CrearSelectChosen("CmbCuentaReteIVA", $VarSelect);
+            $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2367%'");
+            while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                $sel=0;
+
+                $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+            }
+            $css->CerrarSelect();
             print("<br>");
-            $css->CrearInputNumber("TxtOtrosDescuentos", "number", "Otros:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 150, 30, 0, 1, 0, "", "any");
+            $css->CrearInputNumber("TxtReteIVA", "number", "ReteIVA:<br>", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 200, 30, 0, 1, 0, "", "any");
+            print("<br><strong>Otros:</strong><br>");
+            $VarSelect["Required"]="200";
+            $VarSelect["Ancho"]="200";
+            $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
+            $css->CrearSelectChosen("CmbCuentaOtros", $VarSelect);
+            $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '5115%' OR PUC LIKE '5215%'");
+            while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
+                $sel=0;
+                if($DatosCuentaRete["PUC"]=="511595"){
+                    $sel=1;
+                }
+
+                $css->CrearOptionSelect($DatosCuentaRete["PUC"], $DatosCuentaRete["PUC"]." ".$DatosCuentaRete["Nombre"] , $sel);
+            }
+            $css->CerrarSelect();
+            print("<br>");
+            $css->CrearInputNumber("TxtOtrosDescuentos", "number", "", 0, "", "black", "onkeyup", "CalculeTotalPagoIngreso()", 200, 30, 0, 1, 0, "", "any");
             print("<br>");
         $css->CerrarDiv();
         print("<br>");
@@ -201,6 +254,10 @@ print("<body>");
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
+    $css->AnchoElemento("CmbCuentaReteFuente_chosen", 200);
+    $css->AnchoElemento("CmbCuentaReteIVA_chosen", 200);
+    $css->AnchoElemento("CmbCuentaReteICA_chosen", 200);
+    $css->AnchoElemento("CmbCuentaOtros_chosen", 200);
     $css->AgregaSubir();
     $css->Footer();
     print("</body></html>");

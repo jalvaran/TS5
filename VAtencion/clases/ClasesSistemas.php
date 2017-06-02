@@ -6,11 +6,14 @@
  */
 //include_once '../../php_conexion.php';
 class Sistema extends ProcesoVenta{
-    public function CrearSistema($Nombre, $PrecioVenta, $PrecioMayorista,$Observaciones,$idUser,$Vector ) {
-        
+    public function CrearSistema($Nombre, $PrecioVenta, $PrecioMayorista, $Observaciones,$Departamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$idUser, $Vector) {
+        if($CuentaPUC==0 or $CuentaPUC==""){
+            $CuentaPUC=4135;
+        }
         //////Creo la compra            
         $tab="sistemas";
-        $NumRegistros=7;
+        $idSistema=($this->ObtenerMAX($tab,"ID", 1,""))+1;
+        $NumRegistros=16;
 
         $Columnas[0]="Nombre";		$Valores[0]=$Nombre;
         $Columnas[1]="idUsuario";       $Valores[1]=$idUser;
@@ -19,7 +22,15 @@ class Sistema extends ProcesoVenta{
         $Columnas[4]="RutaImagen";	$Valores[4]="";
         $Columnas[5]="Observaciones";	$Valores[5]=$Observaciones;
         $Columnas[6]="Estado";          $Valores[6]="ABIERTO";
-               
+        $Columnas[7]="ID";              $Valores[7]=$idSistema;
+        $Columnas[8]="Referencia";      $Valores[8]=$idSistema;
+        $Columnas[9]="Departamento";	$Valores[9]=$Departamento;
+        $Columnas[10]="Sub1";           $Valores[10]=$Sub1;
+        $Columnas[11]="Sub2";           $Valores[11]=$Sub2;
+        $Columnas[12]="Sub3";           $Valores[12]=$Sub3;
+        $Columnas[13]="Sub4";           $Valores[13]=$Sub4;
+        $Columnas[14]="Sub5";           $Valores[14]=$Sub5;
+        $Columnas[15]="CuentaPUC";      $Valores[15]=$CuentaPUC;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
         $idSistema=$this->ObtenerMAX($tab,"ID", 1,"");

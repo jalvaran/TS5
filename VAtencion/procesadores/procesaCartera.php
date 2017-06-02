@@ -8,12 +8,12 @@
         if(!empty($_REQUEST['TxtIdCartera'])){
             
             $obVenta=new ProcesoVenta($idUser);
-            $fecha=date("Y-m-d");
+            $fecha=$obVenta->normalizar($_REQUEST['TxtFecha']);
             $Hora=date("H:i:s");
-            $idCartera=$_REQUEST['TxtIdCartera'];
-            $idFactura=$_REQUEST['TxtIdFactura'];
-            $CuentaDestino=$_REQUEST['CmbCuentaDestino'];
-            $Valor=$_REQUEST["TxtAbonoCredito$idCartera"];
+            $idCartera=$obVenta->normalizar($_REQUEST['TxtIdCartera']);
+            $idFactura=$obVenta->normalizar($_REQUEST['TxtIdFactura']);
+            $CuentaDestino=$obVenta->normalizar($_REQUEST['CmbCuentaDestino']);
+            $Valor=$obVenta->normalizar($_REQUEST["TxtAbonoCredito$idCartera"]);
             $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
             
             $CentroCosto=$DatosFactura["CentroCosto"];

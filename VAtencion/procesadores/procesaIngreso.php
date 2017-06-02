@@ -12,16 +12,20 @@ if(!empty($_REQUEST["BtnGuardarPago"])){
         $obTabla = new Tabla($db);
         $obVenta = new ProcesoVenta(1);
         
-        $idFactura=$_REQUEST['TxtIdFactura'];
-        $fecha=$_REQUEST['TxtFecha'];
-        $ReteFuente=$_REQUEST["TxtRetefuente"];
-        $CuentaDestino=$_REQUEST["CmbCuentaDestino"];
-        $ReteICA=$_REQUEST["TxtReteICA"];
-        $ReteIVA=$_REQUEST["TxtReteIVA"];
-        $OtrosDescuentos=$_REQUEST["TxtOtrosDescuentos"];
-        $Pago=$_REQUEST["TxtPagoH"];
+        $idFactura=$obVenta->normalizar($_REQUEST['TxtIdFactura']);
+        $fecha=$obVenta->normalizar($_REQUEST['TxtFecha']);
+        $ReteFuente=$obVenta->normalizar($_REQUEST["TxtRetefuente"]);
+        $CuentaDestino=$obVenta->normalizar($_REQUEST["CmbCuentaDestino"]);
+        $ReteICA=$obVenta->normalizar($_REQUEST["TxtReteICA"]);
+        $ReteIVA=$obVenta->normalizar($_REQUEST["TxtReteIVA"]);
+        $OtrosDescuentos=$obVenta->normalizar($_REQUEST["TxtOtrosDescuentos"]);
+        $Pago=$obVenta->normalizar($_REQUEST["TxtPagoH"]);
         
         $VectorIngresos["OtrosDescuentos"]=$OtrosDescuentos;
+        $VectorIngresos["CuentaReteFuente"]=$obVenta->normalizar($_REQUEST["CmbCuentaReteFuente"]);
+        $VectorIngresos["CuentaReteICA"]=$obVenta->normalizar($_REQUEST["CmbCuentaReteICA"]);
+        $VectorIngresos["CuentaReteIVA"]=$obVenta->normalizar($_REQUEST["CmbCuentaReteIVA"]);
+        $VectorIngresos["CuentaOtros"]=$obVenta->normalizar($_REQUEST["CmbCuentaOtros"]);
         $idIngreso=$obVenta->RegistrePagoFactura($idFactura, $fecha, $Pago, $CuentaDestino, $ReteFuente, $ReteIVA, $ReteICA, $idUser, $VectorIngresos);
         $obVenta->BorraReg("cartera", "Facturas_idFacturas", $idFactura);
         header("location:RegistrarIngreso.php?TxtidIngreso=$idIngreso");
