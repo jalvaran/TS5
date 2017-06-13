@@ -62,6 +62,14 @@ EOD;
 
 $pdf->writeHTML($tbl, false, false, false, false, '');
 
+/*
+$sql="SELECT `PorcentajeIVA` FROM `ori_facturas_items` GROUP BY `PorcentajeIVA` ";
+$consulta=$obVenta->Query($sql);
+while($DatosIVA=$obVenta->FetchArray($consulta)){
+    $TipoIVA=$DatosIVA["PorcentajeIVA"];
+    
+}
+ */       
 if(isset($_POST["BtnAplicar"])){
 $sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , SubtotalItem=SubtotalItem*$Porcentaje, IVAItem=IVAItem*$Porcentaje "
         . "  WHERE $CondicionFecha1";
@@ -92,20 +100,24 @@ $TotalItems=0;
 $flagQuery=0;   //para indicar si hay resultados
 $i=-1;
 $TotalExluidos=0;
+$DatosIVA["0"]["Valor"]=0;
+$DatosIVA["0"]["Base"]=0;
 $DatosIVA["0%"]["Valor"]=0;
-$DatosIVA["16%"]["Valor"]=0;
-$DatosIVA["5%"]["Valor"]=0;
-$DatosIVA["8%"]["Valor"]=0;
-$DatosIVA["19%"]["Valor"]=0;
 $DatosIVA["0%"]["Base"]=0;
-$DatosIVA["16%"]["Base"]=0;
+$DatosIVA["5%"]["Valor"]=0;
 $DatosIVA["5%"]["Base"]=0;
+$DatosIVA["8%"]["Valor"]=0;
 $DatosIVA["8%"]["Base"]=0;
+$DatosIVA["16%"]["Valor"]=0;
+$DatosIVA["16%"]["Base"]=0;
+$DatosIVA["19%"]["Valor"]=0;
 $DatosIVA["19%"]["Base"]=0;
 $DatosIVA["Exc"]["Valor"]=0;
 $DatosIVA["Exc"]["Base"]=0;
+$DatosIVAP[]=0;
 while($DatosVentas=$obVenta->FetchArray($Datos)){
-    $i++;
+    
+	$i++;
         $flagQuery=1;
         $TipoIva=$DatosVentas["PorcentajeIVA"];
         
@@ -259,6 +271,8 @@ $tbl = <<<EOD
 EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 foreach($DatosIVAP as $TipoIva){
+	
+		
     $Base= number_format($DatosIVA[$TipoIva]["Base"]);
     $Valor=number_format($DatosIVA[$TipoIva]["Valor"]);
     $tbl = <<<EOD

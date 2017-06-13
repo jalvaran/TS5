@@ -99,6 +99,7 @@ include_once("css_construct.php");
                 $css->SubTabs("../VAtencion/inventario_preparacion.php","_blank","../images/terminado.png","Preparar Conteo Fisico");
                 $css->SubTabs("../VAtencion/inventarios_temporal.php","_blank","../images/pedidos.png","Tabla Temporal");
                 $css->SubTabs("../VAtencion/ConteoFisico.php","_blank","../images/conteo_inventario.png","Realizar Conteo Fisico");
+                $css->SubTabs("../VAtencion/ConteoFisicoPDA.php","_blank","../images/PDA.png","Iniciar");
                 $css->SubTabs("../VAtencion/inventarios_diferencias.php","_blank","../images/inventarios_diferencias.png","Diferencias en los inventarios");
             $css->FinTabs();
             

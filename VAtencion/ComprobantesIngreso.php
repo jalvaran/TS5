@@ -21,7 +21,7 @@ if(isset($_REQUEST["TipoMovimiento"])){
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/procesaCompIngreso.php");
+    include_once("procesadores/ComprobantesIngreso.process.php");
     
     $css->CabeceraIni("Registrar Ingreso"); //Inicia la cabecera de la pagina
     $css->CreaBotonDesplegable("CrearComprobanteIngreso","Nuevo");  
@@ -46,14 +46,6 @@ print("<body>");
             $VarSelect["Ancho"]="200";
             $VarSelect["PlaceHolder"]="Seleccione el tercero";
             $css->CrearSelectChosen("TxtTerceroCI", $VarSelect);
-
-            $sql="SELECT * FROM proveedores";
-            $Consulta=$obVenta->Query($sql);
-               while($DatosProveedores=$obVenta->FetchArray($Consulta)){
-                   $Sel=0;
-                   
-                   $css->CrearOptionSelect($DatosProveedores["Num_Identificacion"], "$DatosProveedores[RazonSocial] $DatosProveedores[Num_Identificacion]" , $Sel);
-               }
                
                $sql="SELECT * FROM clientes";
             $Consulta=$obVenta->Query($sql);
@@ -67,10 +59,10 @@ print("<body>");
          print("<td>");
         
         $css->CrearSelect("CmbCuentaDestino", "");
-        $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
+        $Consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '11%'");
             if($obVenta->NumRows($Consulta)){
             while($DatosCuentasFrecuentes=  $obVenta->FetchArray($Consulta)){
-                $css->CrearOptionSelect($DatosCuentasFrecuentes["CuentaPUC"], $DatosCuentasFrecuentes["Nombre"], 0);
+                $css->CrearOptionSelect($DatosCuentasFrecuentes["PUC"], $DatosCuentasFrecuentes["Nombre"]." ".$DatosCuentasFrecuentes["PUC"], 0);
             }
             }else{
                 print("<script>alert('No hay cuentas frecuentes creadas debe crear al menos una')</script>");
@@ -185,6 +177,8 @@ print("<body>");
             $obTabla->DibujeAgregaMovimientoContable($myPage, 1, $idComprobante);  //Dibujo movimiento libre    
         }
         if($TipoMovimiento==2){
+            $DatosComprobante=$obVenta->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
+            $idCliente=$DatosComprobante["Tercero"];
             $css->CrearNotificacionAzul("Busque y seleccione una Cuenta X Cobrar", 16);
             $css->CrearForm2("FrmSelCartera", $myPage, "post", "_self");
             $css->CrearInputText("idComprobante", "hidden", "", $idComprobante, "", "", "", "", "", "", "", "");
@@ -196,7 +190,8 @@ print("<body>");
             $VarSelect["PlaceHolder"]="Seleccione la Cuenta X Cobrar";
             $css->CrearSelectChosen("CmbCuentaXCobrar", $VarSelect);
 
-            $sql="SELECT * FROM cartera c INNER JOIN facturas f ON c.Facturas_idFacturas=f.idFacturas WHERE c.Saldo>0";
+            $sql="SELECT * FROM cartera c INNER JOIN facturas f ON c.Facturas_idFacturas=f.idFacturas "
+                    . "INNER JOIN clientes cl ON c.idCliente=cl.idClientes WHERE c.Saldo>0 AND cl.Num_Identificacion='$idCliente'";
             $Consulta=$obVenta->Query($sql);
                while($DatosCartera=$obVenta->FetchArray($Consulta)){
                    $Sel=0;

@@ -22,7 +22,7 @@ $PageReturn=$myPage."?CmbPreVentaAct=$idPreventa&TxtAgregarItemPreventa=";
 if($key<>""){
  $css->CrearTabla();
     $tab="productosventa";
-    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
+    $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%' LIMIT 50";
     $consulta=$obVenta->ConsultarTabla($tab,$Condicion);
     if($obVenta->NumRows($consulta)){
         $css->FilaTabla(16);

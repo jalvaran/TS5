@@ -14,7 +14,6 @@ $idCompra=0;
 $TipoMovimiento=0;
 if(isset($_REQUEST["idCompra"])){
     $idCompra=$obVenta->normalizar($_REQUEST["idCompra"]);
-    
 }
 
 print("</head>");
@@ -31,6 +30,7 @@ print("<body>");
     ///////////////Creamos el contenedor
         
     $css->CrearDiv("principal", "container", "center",1,1);
+    
     include_once("procesadores/RegistraCompra.process.php");
     $css->CrearForm2("FrmSeleccionaCom", $myPage, "post", "_self");
     $css->CrearSelect("idCompra", "EnviaForm('FrmSeleccionaCom')");

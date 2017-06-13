@@ -193,7 +193,7 @@ print("<td style='text-align:center'>");
 //$css->CrearBoton("BtnAgregarItem", "Buscar");
 //$css->CerrarForm();
 print("<strong>Buscar Item: </strong>");
-$css->DibujeCuadroBusqueda("BuscarItems","Consultas/BuscarItems.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivBusquedas","onChange",30,100,"");
+$css->DibujeCuadroBusqueda("BuscarItems","Consultas/BuscarItems.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivBusquedas","onKeyUp",30,100,"");
 print("</td>");
 print("<td style='text-align:center'>");
 //$css->CrearForm2("FrmAutorizacion",$myPage,"post","_self");

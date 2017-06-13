@@ -4442,7 +4442,7 @@ EOD;
     public function DibujeAgregaMovimientoContable($myPage,$Visible,$idComprobante) {
         $this->css=new CssIni("");
         $this->css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
-        
+        $DatosComprobante=$this->obCon->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
         $this->css->CrearDiv("DivAgregaMov", "", "center", $Visible, 1);
         $this->css->CrearTabla();
         $this->css->FilaTabla(16);
@@ -4483,7 +4483,9 @@ EOD;
                 $this->css->CerrarSelect();
             print("</td>");
             print("<td>");
-                $VarSelect["Ancho"]="200";
+            $this->css->CrearInputText("CmbTerceroItem", "text", "", $DatosComprobante["Tercero"], "", "","" , "", 200, 30, 1, 1);
+            /*    
+            $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Seleccione el tercero";
                 $this->css->CrearSelectChosen("CmbTerceroItem", $VarSelect);
                 $this->css->CrearOptionSelect("", "Seleccione un tercero" , 0);
@@ -4504,6 +4506,8 @@ EOD;
                        $this->css->CrearOptionSelect($DatosProveedores["Num_Identificacion"], "$DatosProveedores[RazonSocial] $DatosProveedores[Num_Identificacion]" , $Sel);
                    }
                 $this->css->CerrarSelect();
+             * 
+             */
             print("</td>");
             print("<td>");
                 $VarSelect["Ancho"]="200";
@@ -4511,16 +4515,7 @@ EOD;
                 $this->css->CrearSelectChosen("CmbCuentaDestino", $VarSelect);
                 $this->css->CrearOptionSelect("", "Seleccione la cuenta destino" , 0);
 
-                //Solo para cuando el PUC no está todo en subcuentas
-                $sql="SELECT * FROM cuentas";
-                $Consulta=$this->obCon->Query($sql);
-
-                   while($DatosProveedores=$this->obCon->FetchArray($Consulta)){
-                       $Sel=0;
-                       $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
-                       $this->css->CrearOptionSelect($DatosProveedores['idPUC'].';'.$NombreCuenta, "$DatosProveedores[idPUC] $DatosProveedores[Nombre]" , $Sel);
-                   }
-
+                
                 //En subcuentas se debera cargar todo el PUC
                 $sql="SELECT * FROM subcuentas";
                 $Consulta=$this->obCon->Query($sql);
