@@ -78,6 +78,7 @@ $tbl = <<<EOD
     <tr align="center">
         <td><strong>Codigo PUC</strong></td>
         <td><strong>Cuenta</strong></td>
+        <td><strong>Concepto</strong></td>
         <td><strong>Débitos</strong></td>
         <td><strong>Créditos</strong></td>
     </tr>
@@ -91,7 +92,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 $h=0;
 $Consulta=$obVenta->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='ComprobanteIngreso' AND Num_Documento_Interno='$idComprobante'");
 
-while($DatosLibro=  mysql_fetch_array($Consulta)){
+while($DatosLibro=  $obVenta->FetchArray($Consulta)){
     $Debito=  number_format($DatosLibro["Debito"]);
     $Credito=  number_format($DatosLibro["Credito"]);
     if($h==0){
@@ -106,6 +107,7 @@ $tbl = <<<EOD
     <tr align="left">
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[CuentaPUC]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[NombreCuenta]</td>
+        <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosLibro[Concepto]</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$Debito</td>
         <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$Credito</td>
     </tr>
