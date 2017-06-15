@@ -34,10 +34,7 @@ include("modelo/php_conexion.php");
 				header("Location: VMenu/Menu.php"); 
                         //echo'<script language="javascript">window.location=" VMenu/Menu.php"</script>';
 		}else{
-			echo "<script languaje='javascript'>alert('Password del usuario $User Incorrecto ')</script>";
-			echo "<a href='index.php'>Regresar</a><br><br>";
-			echo "Si no recuerda su password contacte a su proveedor www.technosoluciones.com, info@technosoluciones.com, 317 7740609";
-			//header("Location: Menu.php"); 
+			exit("<a href='login/index.php' ><img src='images/401.png'>Usuario o Password Incorrecto</a>");
 	}
 	
 	}else{

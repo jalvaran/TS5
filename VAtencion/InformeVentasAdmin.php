@@ -32,8 +32,9 @@ function CrearFormularioInformes($VectorInformes) {
             $css->FilaTabla(14);
                 print("<td>");
                 $css->CrearSelect("CmbTipoReporte", "");
-                    $css->CrearOptionSelect("Corte", "Fecha de Corte", 1);
-                    $css->CrearOptionSelect("Rango", "Por Rango de Fechas", 0);
+                    $css->CrearOptionSelect("Rango", "Por Rango de Fechas", 1);
+                    $css->CrearOptionSelect("Corte", "Fecha de Corte", 0);
+                    
                 $css->CerrarSelect();
                 print("<br>");
                 $css->CrearInputText("TxtFechaCorte", "date", "Fecha de Corte:<br>", date("Y-m-d"), "Fecha Corte", "black", "", "", 150, 30, 0, 1);

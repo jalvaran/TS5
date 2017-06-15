@@ -40,7 +40,7 @@ class CssIni{
   <div class="container_12">
    <div class="grid_12"> 
     
-    <h1><a href="Menu.php"><img src="../images/header-logo.png" style="width: 350px;height: 120px;"></a> </h1>
+    <h1><a href="Menu.php"><img src="../images/header-logo.png" style="width: 350px;"></a> </h1>
     <div class="menu_block">
 					
 		');
