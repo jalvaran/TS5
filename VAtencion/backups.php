@@ -28,13 +28,15 @@ print("<body>");
     
     while($TablasBackup=$obVenta->FetchArray($Datos)){
         $Mensaje="";
-        $VectorTraslado["Tabla"]=$TablasBackup[0];
-        
-        $Mensaje=$obVenta->CrearBackup(2,$VectorTraslado);
-        if($Mensaje<>"SA"){
-            
-            $css->CrearNotificacionNaranja($Mensaje, 16);
-        }        
+        $nombre=explode("_", $TablasBackup[0]);
+        if($nombre[0]<>"vista"){
+            $VectorTraslado["Tabla"]=$TablasBackup[0];
+            $Mensaje=$obVenta->CrearBackup(2,$VectorTraslado);
+            if($Mensaje<>"SA"){
+
+                $css->CrearNotificacionNaranja($Mensaje, 16);
+            }    
+        }
     }
      
      

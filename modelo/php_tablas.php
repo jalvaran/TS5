@@ -1481,6 +1481,7 @@ public function DibujeItemsBuscadosVentas($key,$PageReturn,$Variable){
 //Funcion para Dibujar un item buscado en las tablas de ventas
 public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
     $this->css=new CssIni("");
+    $key= $this->obCon->normalizar($key);
     $idPre=$Variable["idPre"];
     $Titulo="Crear Item En servicios";
     $Nombre="ShowItemsBusqueda";
@@ -1494,9 +1495,17 @@ public function DibujeItemsBuscadosVentas2($key,$PageReturn,$Variable){
     $this->css->CrearCuadroDeDialogo("DialBusquedaItems", "Resultados");
     $this->css->CrearDiv("DivBusqueda", "", "center", 1, 1);
     $this->css->CrearTabla();
+    $sql="SELECT * FROM productosventa pv INNER JOIN prod_codbarras cb ON pv.idProductosVenta=cb.ProductosVenta_idProductosVenta"
+            . " WHERE cb.CodigoBarras='$key' OR pv.idProductosVenta='$key' OR pv.Nombre LIKE '%$key%' OR pv.Referencia LIKE '%$key%' LIMIT 50";
+    $consulta= $this->obCon->Query($sql);
+    
     $tab="productosventa";
+    /*
     $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%'";
     $consulta=$this->obCon->ConsultarTabla($tab,$Condicion);
+     * 
+     */
+    
     if($this->obCon->NumRows($consulta)){
         $this->css->FilaTabla(16);
         $this->css->ColTabla("<strong>Agregar</strong>", 1);
@@ -3184,12 +3193,19 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             $ConsultaAnterior=  $this->obCon->Query($sql);
             $DatosConsultaAnterior=$this->obCon->FetchArray($ConsultaAnterior);
             $DatosAbreviaturas=$this->obCon->DevuelveValores("documentos_generados", "Libro", $DatosLibro["Tipo_Documento_Intero"]);
+            $Doc_Interno=$DatosLibro["Num_Documento_Interno"];
+            if($DatosAbreviaturas["Abreviatura"]=="FV"){
+                $sql="SELECT NumeroFactura FROM facturas WHERE idFacturas='$Doc_Interno'";
+                $consultaF= $this->obCon->Query($sql);
+                $Num= $this->obCon->FetchArray($consultaF);
+                $Doc_Interno=$Num["NumeroFactura"];
+            }
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue($this->Campos[0].$f,$DatosLibro["Fecha"])
             ->setCellValue($this->Campos[1].$f,$DatosLibro["Tercero_Identificacion"])
             ->setCellValue($this->Campos[2].$f,$DatosLibro["Tercero_Razon_Social"])        
             ->setCellValue($this->Campos[3].$f,$DatosAbreviaturas["Abreviatura"])
-            ->setCellValue($this->Campos[4].$f,$DatosLibro["Num_Documento_Interno"])
+            ->setCellValue($this->Campos[4].$f,$Doc_Interno)
             ->setCellValue($this->Campos[5].$f,$DatosLibro["Detalle"]." ".$DatosLibro["Concepto"])
             ->setCellValue($this->Campos[6].$f,$DatosLibro["Num_Documento_Externo"])
             ->setCellValue($this->Campos[7].$f,$DatosLibro["CuentaPUC"])
