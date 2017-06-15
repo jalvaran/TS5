@@ -4428,6 +4428,7 @@ EOD;
     
     //Crear un PDF de una Factura
     public function PDF_Factura($idFactura,$TipoFactura,$Vector) {
+        $VistaFactura=1;
         $DatosFactura=$this->obCon->DevuelveValores("facturas", "idFacturas", $idFactura);
         $CodigoFactura="$DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
         $Documento="FACTURA DE VENTA No. $CodigoFactura<BR>$TipoFactura";
@@ -4447,6 +4448,7 @@ EOD;
         }
         
         $html= $this->HTML_Totales_Factura($idFactura, $DatosFactura["ObservacionesFact"], $DatosEmpresaPro["ObservacionesLegales"]);
+        if($VistaFactura==1)
         $this->PDF->SetY(246);
         $this->PDF_Write($html);
         
