@@ -62,9 +62,6 @@ INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `CuentaPUC`, `CuentaPUCI
 (5, 'IVA del 16%', '0.16', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-02 13:29:41', '2017-04-18 09:59:23'),
 (6, 'IVA del 19%', '0.19', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-02 13:28:36', '2017-04-18 09:59:23');
 
-
-
-2017-05-31
 ALTER TABLE `prod_codbarras` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
 ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `prod_codbarras` ADD `TablaOrigen` VARCHAR(90) NOT NULL DEFAULT 'productosventa' AFTER `CodigoBarras`;

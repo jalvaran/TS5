@@ -3127,10 +3127,12 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $Condicion=" WHERE ";
         $Condicion2=" WHERE ";
         if($TipoReporte=="Corte"){
+            $FechaCalculoAnterior=$FechaCorte;
             $Condicion.=" Fecha <= '$FechaCorte' ";
             $Condicion2.=" Fecha > '5000-01-01' AND  ";
             $Rango="Corte a $FechaCorte";
         }else{
+            $FechaCalculoAnterior=$FechaInicial;
             $Condicion.=" Fecha >= '$FechaInicial' AND Fecha <= '$FechaFinal' "; 
             $Condicion2.= " Fecha < '$FechaInicial' AND ";
             $Rango="De $FechaInicial a $FechaFinal";
@@ -3153,45 +3155,40 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $objPHPExcel = new PHPExcel();  
         
         $objPHPExcel->getActiveSheet()->getStyle('A:H')->getNumberFormat()->setFormatCode('#');
-        $objPHPExcel->getActiveSheet()->getStyle('J:M')->getNumberFormat()->setFormatCode('#,##0');
+        $objPHPExcel->getActiveSheet()->getStyle('I:M')->getNumberFormat()->setFormatCode('#,##0');
         $objPHPExcel->getActiveSheet()->getStyle("A:N")->getFont()->setSize(10);
         
         $f=1;
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue($this->Campos[2].$f,"AUXILIAR DE CUENTAS $Rango")
+            ->setCellValue($this->Campos[2].$f,"LIBRO AUXILIAR $Rango")
                         
             ;
-        $f=2;
-        
-        $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue($this->Campos[0].$f,"FECHA")
-            ->setCellValue($this->Campos[1].$f,"TERCERO")
-            ->setCellValue($this->Campos[2].$f,"RAZON SOCIAL")
-            ->setCellValue($this->Campos[3].$f,"DOC")
-            ->setCellValue($this->Campos[4].$f,"NUM_DOC")
-            ->setCellValue($this->Campos[5].$f,"DETALLE")
-            ->setCellValue($this->Campos[6].$f,"DOC_REF")
-            ->setCellValue($this->Campos[7].$f,"CUENTA")
-            ->setCellValue($this->Campos[8].$f,"NOMBRE")
-            ->setCellValue($this->Campos[9].$f,"SALDO ANTERIOR")
-            ->setCellValue($this->Campos[10].$f,"DEBITO")
-            ->setCellValue($this->Campos[11].$f,"CREDITO")
-            ->setCellValue($this->Campos[12].$f,"NUEVO SALDO")
-            
-            ;
-        
-        $sql="SELECT `Num_Documento_Externo`,`Tercero_Razon_Social`,`Fecha`, SUM(`Debito`) AS Debitos,SUM(`Credito`) AS Creditos,`CuentaPUC`,`NombreCuenta`,`Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`Concepto`,`Detalle` FROM `librodiario` $Condicion GROUP BY `Tipo_Documento_Intero`,`Num_Documento_Interno`,`Tercero_Identificacion`,`CuentaPUC` ORDER BY `Tercero_Razon_Social`,`Fecha` ";
+                
+        $sql="SELECT `Fecha`,`Num_Documento_Externo`,`Tercero_Razon_Social`, SUM(`Debito`) AS Debitos,SUM(`Credito`) AS Creditos,`CuentaPUC`,`NombreCuenta`,`Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`Concepto`,`Detalle` "
+                . " FROM `librodiario` $Condicion GROUP BY `Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`CuentaPUC` ORDER BY `Tercero_Identificacion`,`Fecha`,`CuentaPUC` ";
         $Datos=$this->obCon->Query($sql);
-        
+        $Tercero='';
+        $SaldoAnterior=0;
+        $NuevoSaldo=0;
+        $Totales[]=0;
+        $Cuenta=0;
         while($DatosLibro=$this->obCon->FetchArray($Datos)){
             $f++;
             $FechaLibro=$DatosLibro["Fecha"];
             $CuentaPUC=$DatosLibro["CuentaPUC"];
+            $CuentaComp=substr($CuentaPUC,0,4);
+            if(!isset($Totales["$CuentaComp"]["Valor"])){
+                //$Totales["$CuentaComp"]["Valor"]=0;
+                $Totales[$CuentaComp]=0;
+            }
+            $CambiaRazonSocial=0;
+            if($Tercero<>$DatosLibro["Tercero_Identificacion"] or $CuentaComp<>$Cuenta){
+                $CambiaRazonSocial=1;
+                $SaldoAnterior=0;
+                $NuevoSaldo=0;
+            }
             $Tercero=$DatosLibro["Tercero_Identificacion"];
                        
-            $sql="SELECT SUM(`Neto`) AS SaldoAnterior FROM librodiario WHERE Fecha<'$FechaLibro' AND CuentaPUC='$CuentaPUC' AND Tercero_Identificacion='$Tercero'";
-            $ConsultaAnterior=  $this->obCon->Query($sql);
-            $DatosConsultaAnterior=$this->obCon->FetchArray($ConsultaAnterior);
             $DatosAbreviaturas=$this->obCon->DevuelveValores("documentos_generados", "Libro", $DatosLibro["Tipo_Documento_Intero"]);
             $Doc_Interno=$DatosLibro["Num_Documento_Interno"];
             if($DatosAbreviaturas["Abreviatura"]=="FV"){
@@ -3200,24 +3197,77 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 $Num= $this->obCon->FetchArray($consultaF);
                 $Doc_Interno=$Num["NumeroFactura"];
             }
+            if($CambiaRazonSocial==1){
+                
+                $Cuenta=substr($CuentaPUC,0,4);
+                if($TipoReporte<>"Corte"){
+                    $sql="SELECT SUM(`Neto`) AS SaldoAnterior FROM librodiario WHERE Fecha<'$FechaCalculoAnterior' AND CuentaPUC LIKE '$Cuenta%' AND Tercero_Identificacion='$Tercero'";
+                    $ConsultaAnterior=  $this->obCon->Query($sql);
+                    $DatosConsultaAnterior=$this->obCon->FetchArray($ConsultaAnterior);
+                    $SaldoAnterior=$DatosConsultaAnterior["SaldoAnterior"];
+                    if($SaldoAnterior==''){
+                        $SaldoAnterior=0;
+                    }
+                }else{
+                    $SaldoAnterior=0;
+                }
+                $f++;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->Campos[0].$f,$DatosLibro["Tercero_Identificacion"])
+                    ->setCellValue($this->Campos[1].$f,$DatosLibro["Tercero_Razon_Social"]) ; 
+                $f++;
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->Campos[0].$f,"FECHA")
+                    ->setCellValue($this->Campos[1].$f,"DOC")
+                    ->setCellValue($this->Campos[2].$f,"NOMBRE DOCUMENTO")
+                    ->setCellValue($this->Campos[3].$f,"NUM_DOC")
+                    ->setCellValue($this->Campos[4].$f,"DETALLE")
+                    ->setCellValue($this->Campos[5].$f,"DOC_REF")
+                    ->setCellValue($this->Campos[6].$f,"CUENTA")
+                    ->setCellValue($this->Campos[7].$f,"NOMBRE")
+                    ->setCellValue($this->Campos[8].$f,"SALDO ANTERIOR")
+                    ->setCellValue($this->Campos[9].$f,"DEBITO")
+                    ->setCellValue($this->Campos[10].$f,"CREDITO")
+                    ->setCellValue($this->Campos[11].$f,"NUEVO SALDO");
+                $f++;
+                               
+            }
+            
+            $NuevoSaldo=$SaldoAnterior+$DatosLibro["Debitos"]-$DatosLibro["Creditos"];
+            $Totales[$CuentaComp]=$Totales[$CuentaComp]+$NuevoSaldo;
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue($this->Campos[0].$f,$DatosLibro["Fecha"])
-            ->setCellValue($this->Campos[1].$f,$DatosLibro["Tercero_Identificacion"])
-            ->setCellValue($this->Campos[2].$f,$DatosLibro["Tercero_Razon_Social"])        
-            ->setCellValue($this->Campos[3].$f,$DatosAbreviaturas["Abreviatura"])
-            ->setCellValue($this->Campos[4].$f,$Doc_Interno)
-            ->setCellValue($this->Campos[5].$f,$DatosLibro["Detalle"]." ".$DatosLibro["Concepto"])
-            ->setCellValue($this->Campos[6].$f,$DatosLibro["Num_Documento_Externo"])
-            ->setCellValue($this->Campos[7].$f,$DatosLibro["CuentaPUC"])
-            ->setCellValue($this->Campos[8].$f,$DatosLibro["NombreCuenta"])
-            ->setCellValue($this->Campos[9].$f,$DatosConsultaAnterior["SaldoAnterior"])
-            ->setCellValue($this->Campos[10].$f,$DatosLibro["Debitos"])
-            ->setCellValue($this->Campos[11].$f,$DatosLibro["Creditos"])
-            ->setCellValue($this->Campos[12].$f,$DatosLibro["Debitos"]-$DatosLibro["Creditos"])
-            
+            ->setCellValue($this->Campos[1].$f,$DatosAbreviaturas["Abreviatura"])
+            ->setCellValue($this->Campos[2].$f,$DatosAbreviaturas["Nombre"])
+            ->setCellValue($this->Campos[3].$f,$Doc_Interno)
+            ->setCellValue($this->Campos[4].$f,$DatosLibro["Detalle"]." ".$DatosLibro["Concepto"])
+            ->setCellValue($this->Campos[5].$f,$DatosLibro["Num_Documento_Externo"])
+            ->setCellValue($this->Campos[6].$f,$DatosLibro["CuentaPUC"])
+            ->setCellValue($this->Campos[7].$f,$DatosLibro["NombreCuenta"])
+            ->setCellValue($this->Campos[8].$f,$SaldoAnterior)
+            ->setCellValue($this->Campos[9].$f,$DatosLibro["Debitos"])
+            ->setCellValue($this->Campos[10].$f,$DatosLibro["Creditos"])
+            ->setCellValue($this->Campos[11].$f,$NuevoSaldo)
             ;
+            $SaldoAnterior=$NuevoSaldo;
         }
-        
+        /*
+        while (list($clave, $valor) = each($Totales)) {
+            $f++;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue($this->Campos[0].$f,"Total Cuenta $clave :")
+                ->setCellValue($this->Campos[1].$f,$Totales[$clave]) ;
+        }
+         
+        foreach($Totales["Cuenta"] as $NumeroCuenta){
+            $f++;
+            $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue($this->Campos[0].$f,"Total Cuenta $NumeroCuenta :")
+                ->setCellValue($this->Campos[1].$f,$Totales["$NumeroCuenta"]["Valor"]) ; 
+            
+        }
+          * 
+          */
         //Informacion del excel
    $objPHPExcel->
     getProperties()
@@ -3230,7 +3280,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         ->setCategory("Informe Ingresos");    
  
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="'."Interface_Ingresos".'.xls"');
+    header('Content-Disposition: attachment;filename="'."Auxiliar".'.xls"');
     header('Cache-Control: max-age=0');
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');
