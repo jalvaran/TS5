@@ -249,7 +249,7 @@ $obVenta=new ProcesoVenta($idUser);
             
             $idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
             $Nombre=$obVenta->normalizar($_REQUEST['TxtNombre']);
-            $Nombre=$obVenta->QuitarAcentos($Nombre);
+            $Nombre=$obVenta->QuitarAcentos2($Nombre);
             $PrecioVenta=$obVenta->normalizar($_REQUEST['TxtPrecioVenta']);
             $CostoUnitario=$obVenta->normalizar($_REQUEST['TxtCostoUnitario']);
             $CuentaPUC=$obVenta->normalizar($_REQUEST['TxtCuentaPUC']);
