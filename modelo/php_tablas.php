@@ -2808,7 +2808,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
        $Filtro=" CuentaPUC LIKE '51%' OR CuentaPUC LIKE '52%' ";
    }
    
-   $sql="SELECT * FROM librodiario WHERE ($Filtro) AND (Fecha>='$FechaIni' AND Fecha<='$FechaFin') ORDER BY Fecha";
+   $sql="SELECT * FROM librodiario WHERE (Fecha>='$FechaIni' AND Fecha<='$FechaFin') ORDER BY Fecha";
    //print($sql);
    $Consulta=  $this->obCon->Query($sql);
    $i=2;
@@ -2824,14 +2824,24 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
        $TipoDocumentoOLD=$TipoDocumento;
        $Num_DocumentoOLD=$Num_Documento;
        $CuentaPUC=$DatosIngreso["CuentaPUC"];
-       $Consulta2=$this->obCon->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='$TipoDocumento' AND Num_Documento_Interno='$Num_Documento' ");
+       $sql="SELECT Sum(Debito) as Debito, Sum(Credito) as Credito,Tipo_Documento_Intero,Fecha,CuentaPUC,Tercero_Identificacion, Num_Documento_Interno "
+               . " FROM librodiario WHERE Tipo_Documento_Intero='$TipoDocumento' AND Num_Documento_Interno='$Num_Documento' GROUP BY Tipo_Documento_Intero, CuentaPUC";
+       $Consulta2=$this->obCon->Query($sql);
+       //$Consulta2=$this->obCon->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='$TipoDocumento' AND Num_Documento_Interno='$Num_Documento' ");
        while($DatosMovimiento=$this->obCon->FetchArray($Consulta2)){
+           $NumDoc=$DatosMovimiento["Num_Documento_Interno"];
+           if($DatosMovimiento["Tipo_Documento_Intero"]=="FACTURA"){
+               $DatosDocumento=$this->obCon->DevuelveValores("facturas", "idFacturas", $DatosMovimiento["Num_Documento_Interno"]);
+           
+               $NumDoc=$DatosDocumento["NumeroFactura"];
+           }
+           $DatosDocumento=$this->obCon->DevuelveValores("facturas", "idFacturas", $DatosMovimiento["Num_Documento_Interno"]);
            $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue($this->Campos[0].$i,"101")
             ->setCellValue($this->Campos[1].$i," 0000 ")
             ->setCellValue($this->Campos[2].$i,".")
-            ->setCellValue($this->Campos[3].$i,"CIP")
-            ->setCellValue($this->Campos[4].$i,"$FechaVacia")
+            ->setCellValue($this->Campos[3].$i,$DatosMovimiento["Tipo_Documento_Intero"])
+            ->setCellValue($this->Campos[4].$i,$NumDoc)
             ->setCellValue($this->Campos[5].$i,$i-1)
             ->setCellValue($this->Campos[6].$i,$DatosMovimiento["Fecha"])
             ->setCellValue($this->Campos[7].$i,$DatosMovimiento["CuentaPUC"])
@@ -3165,7 +3175,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ;
                 
         $sql="SELECT `Fecha`,`Num_Documento_Externo`,`Tercero_Razon_Social`, SUM(`Debito`) AS Debitos,SUM(`Credito`) AS Creditos,`CuentaPUC`,`NombreCuenta`,`Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`Concepto`,`Detalle` "
-                . " FROM `librodiario` $Condicion GROUP BY `Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`CuentaPUC` ORDER BY `Tercero_Identificacion`,`Fecha`,`CuentaPUC` ";
+                . " FROM `librodiario` $Condicion GROUP BY `Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`CuentaPUC` ORDER BY `Tercero_Identificacion`,`idLibroDiario`,`CuentaPUC` ";
         $Datos=$this->obCon->Query($sql);
         $Tercero='';
         $SaldoAnterior=0;

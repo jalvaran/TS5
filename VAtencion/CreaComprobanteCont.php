@@ -173,15 +173,7 @@ print("<body>");
             $css->CrearSelectChosen("CmbCuentaDestino", $VarSelect);
             $css->CrearOptionSelect("", "Seleccione la cuenta destino" , 0);
             
-            //Solo para cuando el PUC no está todo en subcuentas
-            $sql="SELECT * FROM cuentas";
-            $Consulta=$obVenta->Query($sql);
-            
-               while($DatosProveedores=$obVenta->FetchArray($Consulta)){
-                   $Sel=0;
-                   $NombreCuenta=str_replace(" ","_",$DatosProveedores['Nombre']);
-                   $css->CrearOptionSelect($DatosProveedores['idPUC'].';'.$NombreCuenta, "$DatosProveedores[idPUC] $DatosProveedores[Nombre]" , $Sel);
-               }
+           
             
             //En subcuentas se debera cargar todo el PUC
             $sql="SELECT * FROM subcuentas";
