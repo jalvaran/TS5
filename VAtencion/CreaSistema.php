@@ -36,26 +36,21 @@ print("<body>");
         
         $css->CrearTabla();
         $css->FilaTabla(16);
-            $css->ColTabla("<strong>Nombre</strong>", 1);
-            $css->ColTabla("<strong>PrecioVenta</strong>", 1);
-            $css->ColTabla("<strong>PrecioMayorista</strong>", 1);
+            $css->ColTabla("<strong>Nombre</strong>", 2);
+            //$css->ColTabla("<strong>PrecioVenta</strong>", 1);
+            //$css->ColTabla("<strong>PrecioMayorista</strong>", 1);
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
-        print("<td>");
+        print("<td colspan=2>");
         $css->CrearTextArea("TxtNombre","","","Escriba el Nombre del Sistema","black","","",320,60,0,1);
         
         print("</td>");        
-        print("<td>"); 
-        $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 200, 30, 0, 1, 1, "", 1);
-        print("</td>");
-        print("<td>");
-        $css->CrearInputNumber("TxtPrecioMayor", "number", "", "", "PrecioMayorista", "", "", "", 200, 30, 0, 1, 1, "", 1);
-        print("</td>");
+        
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
             $css->ColTabla("<strong>Observaciones</strong>", 1);
-            $css->ColTabla("<strong>Imagen</strong>", 1);
-            $css->ColTabla("<strong>CuentaPUC</strong>", 1);
+            $css->ColTabla("<strong>Imagen y Codigo de Barras</strong>", 1);
+            //$css->ColTabla("<strong>CuentaPUC</strong>", 1);
         $css->CierraFilaTabla(); 
         $css->FilaTabla(16);
         print("<td>");
@@ -63,48 +58,13 @@ print("<body>");
         print("</td>");
         print("<td>");
         $css->CrearUpload("foto");
+        print("<br>");
+        $css->CrearInputText("TxtCodigoBarras", "text", "", "", "CodigoBarras", "", "", "", 200, 30, 0, 0);
         print("</td>");
-        print("<td>");
-        $VarSelect["PlaceHolder"]="Seleccione la cuenta";
-        $css->CrearSelectChosen("CuentaPUC", $VarSelect);
-            $consulta=$obSistema->ConsultarTabla("subcuentas", "WHERE PUC LIKE '4135%' OR PUC LIKE '4235%'");
-            while($DatosCuenta=$obSistema->FetchArray($consulta)){
-                $sel=0;
-                if($DatosCuenta=="4135"){
-                    $sel=1;
-                }
-                $css->CrearOptionSelect($DatosCuenta["PUC"], $DatosCuenta["Nombre"]." ".$DatosCuenta["PUC"] , $sel);
-                
-            }
-          
-        $css->CerrarSelect();
-        print("</td>");
+        
         $css->CierraFilaTabla();
-        $css->FilaTabla(16);
-        print("<td><strong>Subgrupos:</strong>");
-            $css->CrearDiv("DivDepartamentos", "", "center", 1, 1);
-            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=1&key=";
-            $Page2="Consultas/AsignaDepartamentosSistemas.php?Valida=5&key=";
-            $css->CrearSelectTable("CmbDepartamento", "prod_departamentos", "", "idDepartamentos", "Nombre", "idDepartamentos", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbDepartamento`,`DivSub1`,`0`);EnvieObjetoConsulta(`$Page2`,`CmbDepartamento`,`DivSub5`,`0`)", "idDepartamentos", 1);
-            $css->CerrarDiv();
-            $css->CrearDiv("DivSub1", "", "center", 1, 1);
-            $css->CerrarDiv();
-            $css->CrearDiv("DivSub2", "", "center", 1, 1);
-            $css->CerrarDiv();
-            $css->CrearDiv("DivSub3", "", "center", 1, 1);
-            $css->CerrarDiv();
-            $css->CrearDiv("DivSub4", "", "center", 1, 1);
-            $css->CerrarDiv();
-            
-        print("</td>");
-        print("<td><strong>Subgrupo 5 y Codigo de Barras:</strong>");
-            $css->CrearDiv("DivSub5", "", "center", 1, 1);
-            $css->CerrarDiv();
-            $css->CrearDiv("DivCodBarras", "", "center", 1, 1);
-                $css->CrearInputText("TxtCodigoBarras", "text", "", "", "CodigoBarras", "", "", "", 200, 30, 0, 0);
-            $css->CerrarDiv();
-        print("</td>");
-        print("<td>");
+        
+        print("<td colspan=2>");
             $css->CrearBotonConfirmado("BtnCrearSistema", "Crear Sistema");
         print("</td>");
         $css->CierraFilaTabla();   
@@ -152,79 +112,31 @@ print("<body>");
     if($idSistema>0){
         
         $DatosSistemas=$obSistema->DevuelveValores("sistemas", "ID", $idSistema);
-        $TotalSistema=$obSistema->Sume("vista_sistemas", "PrecioVenta", "WHERE idSistema='$idSistema'");
-        print("<strong> Precio Sugerido para sistema $DatosSistemas[Nombre]: $TotalSistema<strong><br>");
+        $TotalSistema=$obSistema->Sume("vista_sistemas", "PrecioVenta", " WHERE idSistema = '$idSistema'");
+        /*
+        $sql="SELECT SUM(ValorUnitario*Cantidad) AS PrecioVenta FROM sistemas_relaciones WHERE idSistema='$idSistema'";
+        $consulta=$obSistema->Query($sql);
+        $consulta=$obSistema->FetchArray($consulta);
+        $TotalSistema=$consulta["PrecioVenta"];
+         * 
+         */
+        //$TotalSistema=1;
+        print("<strong> Precio para el sistema $DatosSistemas[Nombre]: ".number_format($TotalSistema)." </strong><br>");
         $css->CrearForm2("FrmEditaValorSistema", $myPage, "post", "_self");
         $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 1, 1);
-        $css->CrearInputText("TxtTotalSistema", "hidden", "", $TotalSistema, "", "", "", "", "", "", 1, 1);
-        $css->CrearInputNumber("TxtValorSistema", "number", " Precio Venta: ", $DatosSistemas["PrecioVenta"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
-        $css->CrearInputNumber("TxtPrecioMayor", "number", " Precio Mayorista: ", $DatosSistemas["PrecioMayorista"], "Valor", "black", "", "", 100, 30, 0, 1, 1, "", 1);
+        
         print("<br>"); 
         $css->ImageOcultarMostrar("ImgOculta", "Mostrar Mas Opciones: ", "DivMasOpciones", 30, 30, "");
         $css->CrearDiv("DivMasOpciones", "", "center", 0, 1);
+        print("<strong>Nombre:</strong><br>");
+        $css->CrearTextArea("TxtNombre", "", $DatosSistemas["Nombre"], "Nombre", "", "", "", 450, 60, 0, 1);
+        print("<br><strong>Observaciones:</strong><br>");
         $css->CrearTextArea("TxtObservaciones", "", $DatosSistemas["Observaciones"], "Observaciones", "", "", "", 450, 60, 0, 1);
-        $css->CrearDiv("DivUpDepartamentos", "", "center", 1, 1);
-        $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=1&Update=1&key=";
-        $Page2="Consultas/AsignaDepartamentosSistemas.php?Valida=5&Update=1&key=";
-        
-        $css->CrearSelectTable("CmbDepartamentoUp", "prod_departamentos", "", "idDepartamentos", "Nombre", "idDepartamentos", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbDepartamentoUp`,`DivUpSub1`,`0`);EnvieObjetoConsulta(`$Page2`,`CmbDepartamento`,`DivUpSub5`,`0`)", $DatosSistemas["Departamento"], 1);
-        $css->CerrarDiv();
-        $css->CrearDiv("DivUpSub1", "", "center", 1, 1);
-        if($DatosSistemas["Sub1"]>0){
-            $idSel=$DatosSistemas["Sub1"];
-            $idDepartamento=$DatosSistemas["Departamento"];
-            $idDibujo="DivUpSub2";
-            $Up="Update=1&"; 
-            $Condicion=" WHERE idDepartamento='$idDepartamento'";
-            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
-            $css->CrearSelectTable("CmbSub1", "prod_sub1", $Condicion, "idSub1", "NombreSub1", "idDepartamento", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
-
-        }
-        $css->CerrarDiv();
-        $css->CrearDiv("DivUpSub2", "", "center", 1, 1);
-        if($DatosSistemas["Sub2"]>0){
-            $idDepartamento=$DatosSistemas["Sub1"];
-            $idSel=$DatosSistemas["Sub2"];
-            $idDibujo="DivUpSub3";
-            $Up="Update=1&"; 
-            $Condicion=" WHERE idSub1='$idDepartamento'";
-            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
-            $css->CrearSelectTable("CmbSub2", "prod_sub2", $Condicion, "idSub2", "NombreSub2", "idSub1", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
-
-        }
-        $css->CerrarDiv();
-        $css->CrearDiv("DivUpSub3", "", "center", 1, 1);
-        if($DatosSistemas["Sub3"]>0){
-            $idDepartamento=$DatosSistemas["Sub2"];
-            $idSel=$DatosSistemas["Sub3"];
-            $idDibujo="DivUpSub4";
-            $Up="Update=1&"; 
-            $Condicion=" WHERE idSub2='$idDepartamento'";
-            $Page="Consultas/AsignaDepartamentosSistemas.php?Valida=3&".$Up."key=";
-            $css->CrearSelectTable("CmbSub3", "prod_sub3", $Condicion, "idSub3", "NombreSub3", "idSub2", "onchange", "EnvieObjetoConsulta(`$Page`,`CmbSub2`,`$idDibujo`,`0`);", $idSel, 0);
-
-        }
-        $css->CerrarDiv();
-        $css->CrearDiv("DivUpSub4", "", "center", 1, 1);
-        if($DatosSistemas["Sub4"]>0){
-            $idDepartamento=$DatosSistemas["Sub3"];
-            $idSel=$DatosSistemas["Sub4"];
-            $Condicion=" WHERE idSub3='$idDepartamento'";
-            $css->CrearSelectTable("CmbSub4", "prod_sub4", $Condicion, "idSub4", "NombreSub4", "idSub3", "", "", $idSel, 0);
-
-        }
-        $css->CerrarDiv();
-        $css->CrearDiv("DivUpSub5", "", "center", 1, 1);
-        if($DatosSistemas["Sub5"]>0){
-            print("<strong>Sub5: </strong><br>");
-            $idSel=$DatosSistemas["Sub5"];            
-            $css->CrearSelectTable("CmbSub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "", "", $idSel, 0);
-
-        }
-        $css->CerrarDiv();
+        print("<br>");
+        $css->CrearBotonConfirmado("BtnEditarSistema", "Actualizar");
         $css->CerrarDiv();
         print("<br>");
-        $css->CrearBotonConfirmado("BtnEditarPrecioVenta", "Actualizar");
+        
         
         $css->CerrarForm();
     }else{
@@ -279,8 +191,10 @@ print("<body>");
                 $css->ColTabla("<strong>Tabla</strong>", 1);
                 $css->ColTabla("<strong>Nombre</strong>", 1);
                 $css->ColTabla("<strong>Referencia</strong>", 1);
-                $css->ColTabla("<strong>Precio Unitario</strong>", 1);
-                $css->ColTabla("<strong>Cantidad</strong>", 1);
+                $css->ColTabla("<strong>Precio Articulo</strong>", 1);
+                
+                $css->ColTabla("<strong>Cantidad // Precio En Sistema</strong>", 1);
+                
                 $css->ColTabla("<strong>Total</strong>", 1);
                 $css->ColTabla("<strong>Borrar</strong>", 1);
             $css->CierraFilaTabla();
@@ -297,10 +211,12 @@ print("<body>");
                     $css->CrearInputText("idSistema", "hidden", "", $idSistema, "", "", "", "", "", "", 0, 0);
                     $css->CrearInputText("idItem", "hidden", "", $DatosSistemas["ID"], "", "", "", "", "", "", 0, 0);
                     $css->CrearInputNumber("TxtCantidadEdit", "number", "", $DatosSistemas["Cantidad"], "Cantidad", "", "", "", 100, 30, 0, 1, 1, "", "any");
+                    $css->CrearInputNumber("TxtValorEdit", "number", "", $DatosSistemas["ValorUnitario"], "Precio", "", "", "", 100, 30, 0, 1, 1, "", "any");
+                    
                     $css->CrearBotonNaranja("BtnEditarCantidad", "E");
                     $css->CerrarForm();
                     print("</td>");
-                    $css->ColTabla($DatosItem["PrecioVenta"]*$DatosSistemas["Cantidad"], 1);
+                    $css->ColTabla($DatosSistemas["ValorUnitario"]*$DatosSistemas["Cantidad"], 1);
                     print("<td>");
                     $link=$myPage."?del=$DatosSistemas[ID]&idSistema=$idSistema";
                     $css->CrearLink($link, "_self", "X");

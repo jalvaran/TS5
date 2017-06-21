@@ -27,13 +27,13 @@ include_once ('funciones/function.php');
 include_once("procesadores/procesaCoti.php");
 	
 print("<html><head>");	
-$css =  new CssIni("SoftConTech Cotizaciones");
+$css =  new CssIni("Cotizaciones");
 print("</head><body align='center'>");	
          
 	 $obVenta=new ProcesoVenta($idUser);
          $obTabla = new Tabla($db);
 	 $myPage="Cotizaciones.php";
-	 $css->CabeceraIni("SoftConTech Cotizaciones"); 
+	 $css->CabeceraIni("TS5 Cotizaciones"); 
 	 
 	 $DatosUsuarios=$obVenta->DevuelveValores("usuarios","idUsuarios", $idUser);
 	

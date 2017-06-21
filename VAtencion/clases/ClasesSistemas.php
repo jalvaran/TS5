@@ -6,31 +6,19 @@
  */
 //include_once '../../php_conexion.php';
 class Sistema extends ProcesoVenta{
-    public function CrearSistema($Nombre, $PrecioVenta, $PrecioMayorista, $Observaciones,$Departamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$idUser, $Vector) {
-        if($CuentaPUC==0 or $CuentaPUC==""){
-            $CuentaPUC=4135;
-        }
+    public function CrearSistema($Nombre, $Observaciones,$idUser, $Vector) {
+        
         //////Creo la compra            
         $tab="sistemas";
         $idSistema=($this->ObtenerMAX($tab,"ID", 1,""))+1;
-        $NumRegistros=16;
+        $NumRegistros=5;
 
         $Columnas[0]="Nombre";		$Valores[0]=$Nombre;
         $Columnas[1]="idUsuario";       $Valores[1]=$idUser;
-        $Columnas[2]="PrecioVenta";     $Valores[2]=$PrecioVenta;
-        $Columnas[3]="PrecioMayorista";	$Valores[3]=$PrecioMayorista;
-        $Columnas[4]="RutaImagen";	$Valores[4]="";
-        $Columnas[5]="Observaciones";	$Valores[5]=$Observaciones;
-        $Columnas[6]="Estado";          $Valores[6]="ABIERTO";
-        $Columnas[7]="ID";              $Valores[7]=$idSistema;
-        $Columnas[8]="Referencia";      $Valores[8]=$idSistema;
-        $Columnas[9]="Departamento";	$Valores[9]=$Departamento;
-        $Columnas[10]="Sub1";           $Valores[10]=$Sub1;
-        $Columnas[11]="Sub2";           $Valores[11]=$Sub2;
-        $Columnas[12]="Sub3";           $Valores[12]=$Sub3;
-        $Columnas[13]="Sub4";           $Valores[13]=$Sub4;
-        $Columnas[14]="Sub5";           $Valores[14]=$Sub5;
-        $Columnas[15]="CuentaPUC";      $Valores[15]=$CuentaPUC;
+        $Columnas[2]="Observaciones";	$Valores[2]=$Observaciones;
+        $Columnas[3]="Estado";          $Valores[3]="ABIERTO";
+        $Columnas[4]="ID";              $Valores[4]=$idSistema;
+       
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 
         $idSistema=$this->ObtenerMAX($tab,"ID", 1,"");
@@ -51,7 +39,7 @@ class Sistema extends ProcesoVenta{
     }
     
     //Clase para agregar un item a un sistema
-    public function AgregarItemSistema($TipoItem,$idSistema,$Cantidad,$idItem,$Vector) {
+    public function AgregarItemSistema($TipoItem,$idSistema,$Cantidad,$ValorUnitario,$idItem,$Vector) {
         //Proceso la informacion
         if($TipoItem==1){
             $TablaOrigen="productosventa";
@@ -61,12 +49,13 @@ class Sistema extends ProcesoVenta{
         $DatosProducto=$this->DevuelveValores($TablaOrigen, "idProductosVenta", $idItem);
         //////Agrego el registro           
         $tab="sistemas_relaciones";
-        $NumRegistros=4;
+        $NumRegistros=5;
 
         $Columnas[0]="TablaOrigen";         $Valores[0]=$TablaOrigen;
         $Columnas[1]="Referencia";          $Valores[1]=$DatosProducto["Referencia"];
         $Columnas[2]="Cantidad";            $Valores[2]=$Cantidad;
         $Columnas[3]="idSistema";           $Valores[3]=$idSistema;
+        $Columnas[4]="ValorUnitario";       $Valores[4]=$ValorUnitario;
                             
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }

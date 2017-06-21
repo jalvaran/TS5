@@ -1,4 +1,7 @@
 2017-06-02
+alter table prod_codbarras drop index `CodigoBarras`;
+ALTER IGNORE TABLE `prod_codbarras` ADD UNIQUE INDEX(`CodigoBarras`);
+
 DROP TABLE IF EXISTS `parametros_contables`;
 CREATE TABLE IF NOT EXISTS `parametros_contables` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -228,19 +231,19 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
 DROP VIEW IF EXISTS `vista_sistemas`;
 CREATE VIEW 
 vista_sistemas AS 
-SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, st.PrecioVenta AS Precio_Venta_Sistema,  st.PrecioMayorista AS Precio_Mayor_Sistema,
-si.TablaOrigen,s.`Referencia`,s.`Nombre`,si.Cantidad,s.`PrecioVenta` as PrecioUnitario,
-round(s.`PrecioVenta`*si.Cantidad) AS PrecioVenta,round(s.`PrecioMayorista`*si.Cantidad) AS PrecioMayorista,
+SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
+si.TablaOrigen,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
+round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
 round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
 s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
 FROM sistemas_relaciones si INNER JOIN `servicios` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
 UNION
-SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema, st.Observaciones AS Observaciones,st.PrecioVenta AS Precio_Venta_Sistema,st.PrecioMayorista AS Precio_Mayor_Sistema,  
-si.TablaOrigen,s.`Referencia`,s.`Nombre`,si.Cantidad,s.`PrecioVenta` as PrecioUnitario,
-round(s.`PrecioVenta`*si.Cantidad) AS PrecioVenta,round(s.`PrecioMayorista`*si.Cantidad) AS PrecioMayorista,
+SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
+si.TablaOrigen,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
+round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
 round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
 s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
-FROM sistemas_relaciones si  INNER JOIN `productosventa` s ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema;
+FROM sistemas_relaciones si INNER JOIN `productosventa` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
 
 2017-05-28
 

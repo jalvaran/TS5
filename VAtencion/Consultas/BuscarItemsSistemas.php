@@ -53,6 +53,7 @@ if($key<>""){
                         $css->CrearInputText("idProducto", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
                         $css->CrearInputText("TipoItem", "hidden", "", $TipoBusqueda, "", "", "", "", "", "", 0, 0);
                         $css->CrearInputNumber("TxtCantidad", "number", "Cantidad: <br>", 1, "Cantidad", "Black", "", "", 100, 30, 0, 1, 1, "", "any");
+                        $css->CrearInputNumber("TxtValor", "number", "<br>ValorUnitario: <br>", $DatosProducto["PrecioVenta"], "Cantidad", "Black", "", "", 100, 30, 0, 1, 1, "", "any");
                         
                         print("<br>");
                         $css->CrearBotonNaranja("BtnAgregarItem", "Agregar");
