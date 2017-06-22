@@ -56,30 +56,6 @@ class ProcesoVenta extends db_conexion{
 	
 
 ////////////////////////////////////////////////////////////////////
-//////////////////////Funcion devuelve valores
-///////////////////////////////////////////////////////////////////
-
-public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
-        $tabla=$this->normalizar($tabla);
-        $ColumnaFiltro=$this->normalizar($ColumnaFiltro);
-        $idItem=$this->normalizar($idItem);
-        $reg=mysql_query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . mysql_error());
-        $reg=mysql_fetch_array($reg);	
-        return ($reg);
-}
-        
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion devuelve el valor de una columna
-///////////////////////////////////////////////////////////////////
-
-public function ValorActual($tabla,$Columnas,$Condicion){
-
-        $reg=mysql_query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . mysql_error());
-        $reg=mysql_fetch_array($reg);	
-        return ($reg);
-}
-
-////////////////////////////////////////////////////////////////////
 //////////////////////Funcion realiza asiento contable factura
 ///////////////////////////////////////////////////////////////////
 
@@ -422,17 +398,6 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 
         header("location:../printer/imprimir.php?print=$NumFactura&ruta=$ruta");
 }	
-
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion borra registro
-///////////////////////////////////////////////////////////////////
-
-	public function BorraReg($Tabla,$Filtro,$idFiltro){
-            $Tabla=  $this->normalizar($Tabla);
-            $Filtro=  $this->normalizar($Filtro);
-            $idFiltro=  $this->normalizar($idFiltro);
-            mysql_query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
-	}
 	
 	////////////////////////////////////////////////////////////////////
 //////////////////////Funcion reiniciar preventa
@@ -442,7 +407,7 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
                 $idPreventa=  $this->normalizar($idPreventa);
 		$sql="UPDATE `vestasactivas` SET `Clientes_idClientes` = '1', `SaldoFavor` = '0' WHERE `idVestasActivas` = $idPreventa;";
 
-		mysql_query($sql) or die('no se pudo actualizar la Preventa: ' . mysql_error());	
+		$this->Query($sql) or die('no se pudo actualizar la Preventa: ' . mysql_error());	
 	}
 
 ////////////////////////////////////////////////////////////////////

@@ -187,6 +187,42 @@ public function FetchArray($Datos){
 	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . mysql_error());	
 		
 }
-        
+
+////////////////////////////////////////////////////////////////////
+//////////////////////Funcion devuelve valores
+///////////////////////////////////////////////////////////////////
+
+public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
+        $tabla=$this->normalizar($tabla);
+        $ColumnaFiltro=$this->normalizar($ColumnaFiltro);
+        $idItem=$this->normalizar($idItem);
+        $reg= $this->Query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . mysql_error());
+        $reg=$this->FetchArray($reg);	
+        return ($reg);
+}
+
+////////////////////////////////////////////////////////////////////
+//////////////////////Funcion devuelve el valor de una columna
+///////////////////////////////////////////////////////////////////
+
+public function ValorActual($tabla,$Columnas,$Condicion){
+
+        $reg=$this->Query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . mysql_error());
+        $reg=$this->FetchArray($reg);	
+        return ($reg);
+}
+
+////////////////////////////////////////////////////////////////////
+//////////////////////Funcion borra registro
+///////////////////////////////////////////////////////////////////
+
+	public function BorraReg($Tabla,$Filtro,$idFiltro){
+            $Tabla=  $this->normalizar($Tabla);
+            $Filtro=  $this->normalizar($Filtro);
+            $idFiltro=  $this->normalizar($idFiltro);
+            $this->Query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
+	}
+
+//Fin Clases
 }
 ?>
