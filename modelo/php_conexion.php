@@ -27,7 +27,7 @@ class ProcesoVenta extends db_conexion{
                       
 	function __construct($idUserR){
 		$idUserR=$this->normalizar($idUserR);		
-		$this->consulta =$this->Query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'") or die('problemas para consultas usuarios: ' . mysql_error());
+		$this->consulta =$this->Query("SELECT Nombre, TipoUser FROM usuarios WHERE idUsuarios='$idUserR'");
 		$this->fetch = $this->FetchArray($this->consulta);
 		$this->NombreUser = $this->fetch['Nombre'];
 		$this->idUser=$idUserR;
@@ -45,7 +45,7 @@ class ProcesoVenta extends db_conexion{
 	$sql="SELECT SUM(TotalVenta) AS TotalVenta, SUM(Impuestos) AS Impuestos, SUM(TotalCosto) AS TotalCosto FROM ventas 
 	WHERE NumVenta = '$NumVenta'";
 	
-	$reg=$this->Query($sql) or die('no se pudo obtener los totales de la venta No $NumVenta en ObtengaTotalesVenta: ' . mysql_error());
+	$reg=$this->Query($sql);
 	$reg=$this->FetchArray($reg);
 	
 	$Subtotal=$reg["TotalVenta"]-$reg["Impuestos"];
@@ -407,7 +407,7 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
                 $idPreventa=  $this->normalizar($idPreventa);
 		$sql="UPDATE `vestasactivas` SET `Clientes_idClientes` = '1', `SaldoFavor` = '0' WHERE `idVestasActivas` = $idPreventa;";
 
-		$this->Query($sql) or die('no se pudo actualizar la Preventa: ' . mysql_error());	
+		$this->Query($sql);	
 	}
 
 ////////////////////////////////////////////////////////////////////
@@ -459,7 +459,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
             $this->Query($sql);
         }else{
-            $reg=$this->Query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+            $reg=$this->Query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1");
             $reg=$this->FetchArray($reg);
             $Porcentaje=$reg["Porcentaje"];
             $Departamento=$reg["Departamento"];
@@ -491,7 +491,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`)
                     VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem');";
 
-            $this->Query($sql) or die('no se pudo guardar el item en preventa: ' . mysql_error());	
+            $this->Query($sql);	
 	
         }
 	}	
@@ -518,7 +518,7 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
         $idItem=$this->normalizar($idItem);
         if($campo<>'ISQLd' and $campo<>$value){
             $sql="UPDATE `$tabla` SET `$campo` = '$value' WHERE `$filtro` = '$idItem'";
-            $this->Query($sql) or die("no se pudo actualizar $campo en el registro en $tabla: " . mysql_error());	
+            $this->Query($sql);	
             if($ProcesoInterno==0){
                 $tab="registra_ediciones";
                 $NumRegistros=8;
@@ -536,33 +536,7 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
             }
         }
 }
-        
-        
-	
-
-	
-	////////////////////////////////////////////////////////////////////
-//////////////////////Funcion Obtener Ultimo ID de una Tabla
-///////////////////////////////////////////////////////////////////
-
-
-public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
-  {	
-        $tabla=$this->normalizar($tabla);
-        $campo=$this->normalizar($campo);
-        $filtro=$this->normalizar($filtro);
-        $idItem=$this->normalizar($idItem);
-	if($filtro==1){
-		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla`";
-	}else{
-		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla` WHERE `$filtro` = '$idItem'";
-	}
-		
-	$Reg=mysql_query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
-	$MN=mysql_fetch_array($Reg);
-	return($MN["MaxNum"]);	
-	}
-				
+        			
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Obtener inicializar las preventas
 ///////////////////////////////////////////////////////////////////
@@ -586,36 +560,9 @@ public function InicializarPreventas()
 		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 		
 		$sql="UPDATE `usuarios` SET Role=''";
-	
-		mysql_query($sql) or die('no se pudo actualizar los usuarios: ' . mysql_error());	
+		$this->Query($sql);	
 		
 	}
-	
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion Habilitar un espacio disponible
-///////////////////////////////////////////////////////////////////
-public function AsignarEspacioDisponible($idUser)
-  {		
-		$sql="SELECT (t1.idFacturas + 1) as gap_starts_at, (SELECT MIN(t3.idFacturas) -1 FROM facturas t3 WHERE t3.idFacturas > t1.idFacturas) as gap_ends_at FROM facturas t1 
-		WHERE NOT EXISTS (SELECT t2.idFacturas FROM facturas t2 WHERE t2.idFacturas = t1.idFacturas + 1) HAVING gap_ends_at IS NOT NULL";
-		$this->CrearPreventa($idUser);
-		$DatosVenta=$this->DevuelveValores("vestasactivas","Usuario_idUsuario",$idUser);
-			
-		$Consul=mysql_query($sql) or die('no se pudo actualizar los usuarios: ' . mysql_error());
-		while($DatosDispo=mysql_fetch_array($Consul)){
-		
-		$FactDispo=$DatosDispo['gap_starts_at'];
-		$Ocupado=$this->DevuelveValores("vestasactivas","NumFactura",$FactDispo);
-		if($FactDispo < $DatosVenta['NumFactura'] AND $Ocupado["NumFactura"]<>$FactDispo){
-			$this->ActualizaRegistro("vestasactivas","NumVenta", $FactDispo, "Usuario_idUsuario", $idUser);
-			$this->ActualizaRegistro("vestasactivas","NumFactura", $FactDispo, "Usuario_idUsuario", $idUser);
-			
-		}
-		
-		}
-		//print("<script language='JavaScript'>alert('Factura $DatosVenta[NumFactura], Cotizacion $DatosVenta[NumCotizacion], Venta $DatosVenta[NumVenta], Ini $DatosDispo[gap_starts_at] , FIN $DatosDispo[gap_ends_at]')</script>");
-		
-	}	
 	
 
 ////////////////////////////////////////////////////////////////////
@@ -4113,7 +4060,6 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
             $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
             $TipoItem=$DatosDepartamento["TipoItem"];
             $sql="select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0') ORDER BY idFechaDescuentos DESC LIMIT 1 ";
-            //$reg=mysql_query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0') ORDER BY idFechaDescuentos DESC LIMIT 1 ") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
             $reg=$this->Query($sql);
             $reg=$this->FetchArray($reg);
             $Porcentaje=$reg["Porcentaje"];

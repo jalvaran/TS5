@@ -222,7 +222,26 @@ public function ValorActual($tabla,$Columnas,$Condicion){
             $idFiltro=  $this->normalizar($idFiltro);
             $this->Query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
 	}
+	////////////////////////////////////////////////////////////////////
+//////////////////////Funcion Obtener Ultimo ID de una Tabla
+///////////////////////////////////////////////////////////////////
 
+public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
+  {	
+        $tabla=$this->normalizar($tabla);
+        $campo=$this->normalizar($campo);
+        $filtro=$this->normalizar($filtro);
+        $idItem=$this->normalizar($idItem);
+	if($filtro==1){
+		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla`";
+	}else{
+		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla` WHERE `$filtro` = '$idItem'";
+	}
+		
+	$Reg=$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
+	$MN=$this->FetchArray($Reg);
+	return($MN["MaxNum"]);	
+	}
 //Fin Clases
 }
 ?>
