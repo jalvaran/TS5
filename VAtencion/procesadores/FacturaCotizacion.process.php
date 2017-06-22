@@ -28,8 +28,14 @@ if(!empty($_REQUEST['del'])){
 if(!empty($_REQUEST["TxtAsociarCotizacion"])){
     $idCotizacion=$_REQUEST["TxtAsociarCotizacion"];
     $obVenta=new ProcesoVenta($idUser);
-    $obVenta->AgregarCotizacionPrefactura($idCotizacion);
-    header("location:FacturaCotizacion.php");
+    $Error=$obVenta->AgregarCotizacionPrefactura($idCotizacion);
+    if(is_array($Error)){
+        foreach ($Error as $Productos){
+            $css->CrearNotificacionRoja("El producto con el id $Productos no tiene existencias, no se puede realizar la factura",16);
+        }
+        $obVenta->VaciarTabla("facturas_pre");
+    }
+    //header("location:FacturaCotizacion.php");
 }
 ////Se recibe edicion
 	

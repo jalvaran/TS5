@@ -3029,7 +3029,7 @@ public function CalculePesoRemision($idCotizacion)
         //Calculo las ventas a credito
         //
         $sql="SELECT SUM(Total) as Total FROM facturas "
-                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'Contado' AND FormaPago<>'SisteCredito'";
+                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'Contado' AND FormaPago<>'SisteCredito' AND FormaPago<>'Separado'";
         
         $Consulta=$this->Query($sql);
         $DatosSumatorias=$this->FetchArray($Consulta);
@@ -3046,6 +3046,16 @@ public function CalculePesoRemision($idCotizacion)
         $DatosSumatorias=$this->FetchArray($Consulta);
         
         $TotalVentasSisteCredito=$DatosSumatorias["Total"]; 
+        
+        //Calculo los retiros de separados
+        //
+        $sql="SELECT SUM(Total) as Total FROM facturas "
+                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago = 'Separado'";
+        
+        $Consulta=$this->Query($sql);
+        $DatosSumatorias=$this->FetchArray($Consulta);
+        
+        $TotalRetiroSeparados=$DatosSumatorias["Total"]; 
         
         //Calculo las devoluciones
         
@@ -3080,7 +3090,7 @@ public function CalculePesoRemision($idCotizacion)
         //Ingreso datos en tabla cierres
         
         $tab="cajas_aperturas_cierres";
-        $NumRegistros=22;
+        $NumRegistros=23;
         $Columnas[0]="ID";                  $Valores[0]="";
         $Columnas[1]="Fecha";               $Valores[1]=$fecha;
         $Columnas[2]="Hora";                $Valores[2]=$Hora;
@@ -3103,6 +3113,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[19]="AbonosCreditos";       $Valores[19]=$TotalAbonosCreditos;
         $Columnas[20]="AbonosSisteCredito";           $Valores[20]=$TotalAbonosSisteCredito;
         $Columnas[21]="TotalVentasSisteCredito";      $Valores[21]=$TotalVentasSisteCredito;
+        $Columnas[22]="TotalRetiroSeparados";      $Valores[22]=$TotalRetiroSeparados;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idCierre=$this->ObtenerMAX($tab, "ID", 1, "");
         
@@ -3230,7 +3241,7 @@ public function CalculePesoRemision($idCotizacion)
                 $Columnas[3]="Fecha";                       $Valores[3]=$FechaFactura;
                 $Columnas[4]="OCompra";                     $Valores[4]=$OrdenCompra;
                 $Columnas[5]="OSalida";                     $Valores[5]=$OrdenSalida;
-                $Columnas[6]="FormaPago";                   $Valores[6]=$FormaPagoFactura;
+                $Columnas[6]="FormaPago";                   $Valores[6]="Separado";
                 $Columnas[7]="Subtotal";                    $Valores[7]=$DatosSeparadoItems["Subtotal"];
                 $Columnas[8]="IVA";                         $Valores[8]=$DatosSeparadoItems["IVA"];
                 $Columnas[9]="Descuentos";                  $Valores[9]="";
@@ -4450,16 +4461,25 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
      * Esta clase agrega items desde una cotizacion a una prefactura
      */
     public function AgregarCotizacionPrefactura($idCotizacion) {
+        $DatosEmpresa= $this->DevuelveValores("empresapro", "idEmpresaPro", 1);
         $Datos=  $this->ConsultarTabla("cot_itemscotizaciones", " WHERE NumCotizacion='$idCotizacion'");
+        
+        $Marca=0;
         while($DatosCotizacion=  $this->FetchArray($Datos)){
             if($DatosCotizacion["TablaOrigen"]<>'sistemas'){
                 if($DatosCotizacion["Referencia"]<>''){
-                $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
-                
+                    $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
+                    if($DatosCotizacion["TablaOrigen"]=="productosventa" and $DatosEmpresa["FacturaSinInventario"]=='NO'){
+                        if($DatosProducto["Existencias"]<=0){
+                            $Marca=1;
+                            $idProducto=$DatosProducto["idProductosVenta"];
+                            $Error[$idProducto]=$DatosProducto["idProductosVenta"];
+                        }
+                    }
                     $tab="facturas_pre";
                     $NumRegistros=26;
                     $Columnas[0]="ID";			$Valores[0]="";
-                    $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
+                    $Columnas[1]="idFactura";           $Valores[1]="";
                     $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaOrigen"];
                     $Columnas[3]="Referencia";          $Valores[3]=$DatosCotizacion["Referencia"];
                     $Columnas[4]="Nombre";              $Valores[4]=$DatosCotizacion["Descripcion"];
@@ -4488,6 +4508,11 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                 }
             }
+        }
+        if($Marca==1){
+            return $Error;
+        }else{
+            return $Marca;
         }
     }
     

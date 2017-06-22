@@ -1,4 +1,5 @@
 2017-06-02
+ALTER TABLE `cajas_aperturas_cierres` ADD `TotalRetiroSeparados` DOUBLE NOT NULL AFTER `TotalVentasSisteCredito`;
 ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;
 
 ALTER TABLE `cot_itemscotizaciones` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
