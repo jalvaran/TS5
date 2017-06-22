@@ -474,7 +474,7 @@ if($obVenta->NumRows($sel1)){
 	
 	
 	
-	while($DatosVentas=mysql_fetch_array($sel1)){
+	while($DatosVentas=$obVenta->FetchArray($sel1)){
 			
 		$SubtotalUser=number_format($DatosVentas["Subtotal"]);
 		
@@ -575,7 +575,7 @@ $sql="SELECT Usuarios_idUsuarios as IdUsuarios, Fecha as Fecha, SUM(Total) as To
 		$sql="SELECT SUM(Valor) as TotalAbonos FROM separados_abonos
 		WHERE $CondicionFecha2 AND idUsuarios = '$idUser' ";
 		$DatosAbonos=$obVenta->Query($sql);
-		$DatosAbonos=mysql_fetch_array($DatosAbonos);
+		$DatosAbonos=$obVenta->FetchArray($DatosAbonos);
 		$TotalAbonosUser=number_format($DatosAbonos['TotalAbonos']);
 		$TotalAbonos=$TotalAbonos+$DatosAbonos['TotalAbonos'];
 		

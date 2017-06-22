@@ -1,7 +1,6 @@
 <?php
 session_start();
-//require_once('Classes/sanity.class.php');
-//$Sanidad = new input();
+
 include("modelo/php_conexion.php");
 
 	if(isset($_POST["user"]) && !empty($_POST["user"]) &&

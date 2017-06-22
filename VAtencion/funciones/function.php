@@ -2,9 +2,10 @@
 
  
    function pagination($Ruta,$query, $per_page = 10,$page = 1, $url = "?"){        
-    	$statementEnc=  base64_encode($query);
+    	$obCon=new db_conexion(); 
+       $statementEnc=  base64_encode($query);
        $query = "SELECT COUNT(*) as `num` FROM {$query}";
-    	$row = mysql_fetch_array(mysql_query($query));
+    	$row = $obCon->FetchArray($obCon->Query($query));
     	$total = $row['num'];
         $adjacents = "2"; 
 		$url.=$Ruta."st=".$statementEnc."&";
