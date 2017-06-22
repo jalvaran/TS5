@@ -1,14 +1,29 @@
 <?php
 	
-include_once 'php_settings.php';
-include_once 'php_serial.class.php';
-include_once 'php_mysql.php';
-	        
+	include_once 'php_settings.php';
+        include_once 'php_serial.class.php';
+	$CuentaDestino=110510;   //Cuenta Por defecto para caja menor
+	$CuentaIngresos=4135;
+	$TablaCuentaIngreso="cuentas";
+	$CuentaIVAGen=2408;
+	$TablaIVAGen="cuentas";
+        $IDTablaIVAGen="idPUC";
+	$RegCREE="NO";
+        $CuentaCREE=135595;
+        $ContraPartidaCREE=23657502;
+	$CuentaCostoMercancia=6135;
+	$CuentaInventarios=1435;
+	$AjustaInventario="SI";
+	$RegCREE="NO";
+	$COMPrinter=3;
+	$PrintCuenta="SI";
+        $CuentaAnticipos=2705;
+        
 //////////////////////////////////////////////////////////////////////////
-////////////Clase para manejar los procesos mas relevantes ///////////////////////////////////
+////////////Clase para guardar ventas ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-class ProcesoVenta extends db_conexion{
+class ProcesoVenta{
         
 	private $consulta;
 	private $fetch;
@@ -36,6 +51,36 @@ class ProcesoVenta extends db_conexion{
                 $this->COMPrinter="COM3";
 	}
 	
+	/////////////////////Funcion que permite verificar u obtener los datos de la venta activa si extisten
+	
+	function ObtengaDatosEspacio(){
+		
+		return array($this->CotiUser,$this->NumVenta,$this->NumFactura);
+	}
+	
+	/////////////////////Si no existen datos de venta activa deberá crearse
+	
+	function ObtengaEspacioVenta(){
+		
+		$this->consulta=mysql_query("SELECT MAX(NumCotizacion) as NumCotizacion, MAX(NumVenta) as NumVenta, MAX(NumFactura) as NumFactura  FROM vestasactivas") or die('problemas para consultas vestasactivas: ' . mysql_error());
+		$this->fetch=mysql_fetch_array($this->consulta);
+		$this->NumCotizacion = $this->fetch["NumCotizacion"]+1;
+		$this->NumVenta = $this->fetch["NumVenta"]+1;
+		$this->NumFactura = $this->fetch["NumFactura"]+1;
+		if($this->CotiUser>0){
+				
+			mysql_query("UPDATE vestasactivas SET NumCotizacion='$this->NumCotizacion' WHERE Usuario_idUsuario='$this->idUser'") or die('problemas para actualizar vestasactivas: ' . mysql_error());
+			
+		}else{
+						
+			mysql_query("INSERT INTO vestasactivas (`Nombre`,`Usuario_idUsuario`,`Clientes_idClientes`, `NumCotizacion`,`NumVenta`,`NumFactura` ) 
+						VALUES('Venta por: $this->NombreUser','$this->idUser','1','$this->NumCotizacion','$this->NumVenta','$this->NumFactura')") 
+						or die('problemas para actualizar vestasactivas: ' . mysql_error());
+		}
+
+		
+		return array($this->CotiUser,$this->NumVenta,$this->NumFactura);
+	}
 	
 		
 	/////Suma un valor en especifico de una tabla	
@@ -1319,7 +1364,27 @@ public function CalculePesoRemision($idCotizacion)
         }
         return($Promedio);
     }    
-  
+    /*
+ * 
+ * Funcion evitar la inyeccion de codigo sql
+ */
+
+    public function normalizar($string){		
+        $str=str_ireplace("'", "", $string);
+        $str=str_ireplace('"', "", $string);
+        //$str=$string;
+        $str=str_ireplace("CREATE", "ISQL", $str);
+        $str=str_ireplace("DROP", "ISQL", $str);
+        $str=str_ireplace("ALTER", "ISQL", $str);
+        $str=str_ireplace("SELECT", "ISQL", $str);
+        $str=str_ireplace("INSERT", "ISQL", $str);
+        $str=str_ireplace("UPDATE", "ISQL", $str);
+        $str=str_ireplace("DELETE", "ISQL", $str);
+        $str=str_ireplace("REPLACE", "ISQL", $str);
+        $str=str_ireplace("TRUNCATE", "ISQL", $str);
+        //$str=filter_var($string, FILTER_SANITIZE_STRING);
+        return($str);
+    }
     
     
     /*
