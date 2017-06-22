@@ -1,4 +1,6 @@
 2017-06-02
+ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;
+
 ALTER TABLE `cot_itemscotizaciones` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
 ALTER TABLE `cot_itemscotizaciones` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 ALTER TABLE `cot_itemscotizaciones` CHANGE `Subtotal` `Subtotal` DOUBLE NOT NULL;

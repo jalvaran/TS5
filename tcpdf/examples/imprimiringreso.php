@@ -1,21 +1,21 @@
 <?php
 
 include("../../modelo/php_conexion.php");
-
+$obVenta=new ProcesoVenta(1);
 ////////////////////////////////////////////
 /////////////Obtengo el ID del comprobante a que se imprimirá 
 ////////////////////////////////////////////
 $idComprobante = $_REQUEST["ImgPrintIngreso"];
 
 $idFormatoCalidad=4;
-
-$Documento="<strong>COMPROBANTE DE INGRESO No. $idComprobante</strong>";
+$DatosFormato=$obVenta->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
+$Documento="<strong>$DatosFormato[Nombre] No. $idComprobante</strong>";
 require_once('Encabezado.php');
 ////////////////////////////////////////////
 /////////////Obtengo valores de la Remision
 ////////////////////////////////////////////
 			
-$obVenta=new ProcesoVenta(1);
+
 $DatosIngreso=$obVenta->DevuelveValores("comprobantes_ingreso","ID",$idComprobante);
 $fecha=$DatosIngreso["Fecha"];
 $Concepto=$DatosIngreso["Concepto"];
