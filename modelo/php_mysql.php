@@ -154,6 +154,39 @@ public function FetchArray($Datos){
         return($reg["suma"]);
 
     }	
+    
+    //////Funcion para insertar un Registro a un tabla
+	
+	public function InsertarRegistro($tabla,$NumRegistros,$Columnas,$Valores){
+  
+  	$tabla=$this->normalizar($tabla);
+        
+      
+	$sql="INSERT INTO $tabla (";
+	$fin=$NumRegistros-1;
+	for($i=0;$i<$NumRegistros;$i++){
+		$col=$Columnas[$i];
+		$reg=$this->normalizar($Valores[$i]);
+		if($fin<>$i)
+			$sql=$sql."`$col`,";
+		else	
+			$sql=$sql."`$col`)";
+	}
+	$sql=$sql."VALUES (";
+	
+	for($i=0;$i<$NumRegistros;$i++){
+		
+		$reg=$Valores[$i];
+		if($fin<>$i)
+			$sql=$sql."'$reg',";
+		else	
+			$sql=$sql."'$reg')";
+	}
+	
+	
+	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . mysql_error());	
+		
+}
         
 }
 ?>
