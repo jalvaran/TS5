@@ -248,10 +248,8 @@ public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
 ///////////////////////////////////////////////////////////////////
 
 
-public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$ProcesoInterno=1)
-  {	
+public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$ProcesoInterno=1){	
         $Condicion=" WHERE `$filtro` = '$idItem'";
-        
         $sql="SELECT $campo FROM $tabla $Condicion LIMIT 1";
         $c=$this->Query($sql);
         $OldData=$this->FetchArray($c);
@@ -274,7 +272,7 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
                 $Columnas[4]="ValorAnterior";	$Valores[4]=$OldData[$campo];
                 $Columnas[5]="ValorNuevo";		$Valores[5]=$value;
                 $Columnas[6]="ConsultaRealizada";	$Valores[6]="$filtro = $idItem";
-                $Columnas[7]="idUsuario";		$Valores[7]=$this->idUser;
+                $Columnas[7]="idUsuario";		$Valores[7]=$_SESSION["idUser"];
 
                 $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             }

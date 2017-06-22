@@ -23,21 +23,21 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     if($tab=="facturas"){
        
         $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $IDEdit);
-        
-        if($_REQUEST["FormaPago"]<>"Contado"){
-            $Datos["Fecha"]=$DatosFactura["Fecha"];                
-            $Datos["Dias"]=$_REQUEST["FormaPago"];
-            $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
-            $Datos["idFactura"]=$IDEdit; 
-            $Datos["FechaFactura"]=$DatosFactura["Fecha"]; 
-            $Datos["FechaVencimiento"]=$FechaVencimiento;
-            $Datos["idCliente"]=$DatosFactura["Clientes_idClientes"];
-            $obVenta->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
+        if(isset($_REQUEST["FormaPago"])){
+            if($_REQUEST["FormaPago"]<>"Contado"){
+                $Datos["Fecha"]=$DatosFactura["Fecha"];                
+                $Datos["Dias"]=$_REQUEST["FormaPago"];
+                $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
+                $Datos["idFactura"]=$IDEdit; 
+                $Datos["FechaFactura"]=$DatosFactura["Fecha"]; 
+                $Datos["FechaVencimiento"]=$FechaVencimiento;
+                $Datos["idCliente"]=$DatosFactura["Clientes_idClientes"];
+                $obVenta->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
 
-            $sql="UPDATE `librodiario` SET `CuentaPUC`='1305',`NombreCuenta`='CLIENTES NACIONALES' WHERE `Num_Documento_Interno`='$IDEdit' AND `CuentaPUC` LIKE '11%'";
-            $obVenta->Query($sql);
+                $sql="UPDATE `librodiario` SET `CuentaPUC`='130505',`NombreCuenta`='CLIENTES NACIONALES' WHERE `Num_Documento_Interno`='$IDEdit' AND `CuentaPUC` LIKE '11%'";
+                $obVenta->Query($sql);
+            }
         }
-        
         $DatosTercero=$obVenta->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
         $obVenta->ActualiceTerceroLibroDiario("FACTURA", $IDEdit, "clientes", $DatosTercero["Num_Identificacion"]);
         $obVenta->ActualiceClienteCartera($IDEdit, "clientes", $DatosTercero["Num_Identificacion"]);

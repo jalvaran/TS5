@@ -1,6 +1,4 @@
 <?php
-	
-include_once 'php_settings.php';
 include_once 'php_serial.class.php';
 include_once 'php_mysql.php';
 	        
