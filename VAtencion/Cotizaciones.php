@@ -24,7 +24,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 /////////
 
 include_once ('funciones/function.php');
-include_once("procesadores/procesaCoti.php");
+include_once("procesadores/Cotizaciones.process.php");
 	
 print("<html><head>");	
 $css =  new CssIni("Cotizaciones");
@@ -61,14 +61,6 @@ print("</head><body align='center'>");
 	 $VectorCDSer["servitorn"]=1;
          $obTabla->CrearCuadroCrearServicios("DialCrearItemServicios","Crear Nuevo Item Servicios",$myPage,$idClientes,$VectorCDSer); 
 	 
-         if(isset($_REQUEST["TxtBusqueda"])){
-                $key=$obVenta->normalizar($_REQUEST["TxtBusqueda"]);
-                $PageReturn=$_REQUEST["TxtPageReturn"]."?TxtAgregarItemPreventa=";
-                
-                $obTabla->DibujeItemsBuscadosVentas($key,$PageReturn,$idClientes);
-                
-            }
-        
 	//$css->CrearImageLink("../VMenu/MnuVentas.php", "../images/cotizacion.png", "_self",200,200);
 	if(!empty($_REQUEST["TxtIdCotizacion"])){
             $idCotizacion=$obVenta->normalizar($_REQUEST["TxtIdCotizacion"]);
@@ -112,8 +104,15 @@ print("</head><body align='center'>");
             $css->CrearTabla();
             $css->FilaTabla(16);
             print("<td style='text-align:center'>");
-            $VectorCuaBus["F"]=0;
-            $obTabla->CrearCuadroBusqueda($myPage,"TxtIdCliente",$idClientes,"TxtPageReturn",$myPage,$VectorCuaBus);
+            $Page="Consultas/CotizacionesBusquedaItems.php?TipoItem=1&myPage=$myPage&TxtIdCliente=$idClientes&key=";
+            $css->CrearInputText("TxtProducto", "text", "", "", "Buscar Producto", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtProducto`,`DivBusquedas`);", 200, 30, 0, 1);
+            print("<br>");
+            $Page="Consultas/CotizacionesBusquedaItems.php?TipoItem=2&myPage=$myPage&TxtIdCliente=$idClientes&key=";
+            $css->CrearInputText("TxtServicio", "text", "", "", "Buscar Servicio", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtServicio`,`DivBusquedas`);", 200, 30, 0, 1);
+            print("<br>");
+            $Page="Consultas/CotizacionesBusquedaItems.php?TipoItem=3&myPage=$myPage&TxtIdCliente=$idClientes&key=";
+            $css->CrearInputText("TxtSistema", "text", "", "", "Buscar Sistema", "", "onChange", "EnvieObjetoConsulta(`$Page`,`TxtSistema`,`DivBusquedas`);", 200, 30, 0, 1);
+    
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearForm2("FrmAgregarItemsToCotiza", $myPage, "post", "_self");
@@ -123,6 +122,8 @@ print("</head><body align='center'>");
             print("</td>");
             $css->CerrarTabla();
 	}
+        $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
+        $css->CerrarDiv();
         $css->CrearDiv("Productos Agregados", "container", "center", 1, 1);
 	
 										

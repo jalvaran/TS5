@@ -1,4 +1,23 @@
 2017-06-02
+ALTER TABLE `cot_itemscotizaciones` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `Subtotal` `Subtotal` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `IVA` `IVA` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `Total` `Total` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `Descuento` `Descuento` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `ValorDescuento` `ValorDescuento` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `PrecioCosto` `PrecioCosto` DOUBLE NOT NULL;
+ALTER TABLE `cot_itemscotizaciones` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
+
+ALTER TABLE `precotizacion` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `SubTotal` `SubTotal` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `IVA` `IVA` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `Descuento` `Descuento` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `ValorDescuento` `ValorDescuento` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `PrecioCosto` `PrecioCosto` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
+ALTER TABLE `precotizacion` CHANGE `Total` `Total` DOUBLE NOT NULL;
 alter table prod_codbarras drop index `CodigoBarras`;
 ALTER IGNORE TABLE `prod_codbarras` ADD UNIQUE INDEX(`CodigoBarras`);
 
@@ -232,14 +251,14 @@ DROP VIEW IF EXISTS `vista_sistemas`;
 CREATE VIEW 
 vista_sistemas AS 
 SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
-si.TablaOrigen,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
+si.TablaOrigen,s.`idProductosVenta` AS CodigoInterno,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
 round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
 round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
 s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
 FROM sistemas_relaciones si INNER JOIN `servicios` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
 UNION
 SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
-si.TablaOrigen,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
+si.TablaOrigen,s.`idProductosVenta` AS CodigoInterno,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
 round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
 round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
 s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 

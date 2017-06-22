@@ -51,17 +51,52 @@ $obVenta=new ProcesoVenta($idUser);
 		header("location:Cotizaciones.php?TxtIdCliente=$IdPre");
 	}
 		
-	if(!empty($_REQUEST['TxtAgregarItemPreventa'])){
-		
-		$idItem=$obVenta->normalizar($_REQUEST['TxtAgregarItemPreventa']);
-		$TablaItem=$obVenta->normalizar($_REQUEST['TxtTablaItem']);
-		
-		$Cantidad=1;
+	if(!empty($_REQUEST['BtnAgregarItem'])){
 		$idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
-		
-		$VectorPrecoti["F"]=0;
-		$obVenta->AgregaPrecotizacion($Cantidad,$idItem,$TablaItem,$VectorPrecoti);
-		
+		$idItem=$obVenta->normalizar($_REQUEST['idProducto']);
+                $Cantidad=$obVenta->normalizar($_REQUEST['TxtCantidad']);
+                $ValorUnitario=$obVenta->normalizar($_REQUEST['TxtValor']);
+                $TipoItem=$obVenta->normalizar($_REQUEST['TipoItem']);
+                if($TipoItem==1){
+                    $TablaItem="productosventa";
+                }
+                if($TipoItem==2){
+                    $TablaItem="servicios";
+                }
+                if($TipoItem==3){
+                    $TablaItem="sistemas";
+                }                
+                if($TipoItem<>3){
+                    $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$TablaItem,$ValorUnitario,"");
+                }else{
+                    $DatosProductoGeneral=$obVenta->DevuelveValores("sistemas", "ID", $idItem);
+                    $tab="precotizacion";
+                    $NumRegistros=13;  
+                    $Columnas[0]="Cantidad";						$Valores[0]=$Cantidad;
+                    $Columnas[1]="Referencia";						$Valores[1]="";
+                    $Columnas[2]="ValorUnitario";					$Valores[2]=0;
+                    $Columnas[3]="SubTotal";						$Valores[3]=0;
+                    $Columnas[4]="Descripcion";						$Valores[4]=$DatosProductoGeneral["Nombre"];
+                    $Columnas[5]="IVA";							$Valores[5]=0;
+                    $Columnas[6]="PrecioCosto";						$Valores[6]=0;
+                    $Columnas[7]="SubtotalCosto";					$Valores[7]=0;
+                    $Columnas[8]="Total";						$Valores[8]=0;
+                    $Columnas[9]="TipoItem";						$Valores[9]="";
+                    $Columnas[10]="idUsuario";						$Valores[10]=$idUser;
+                    $Columnas[11]="CuentaPUC";						$Valores[11]="";
+                    $Columnas[12]="Tabla";			    			$Valores[12]=$TablaItem;
+
+                    $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                    $consulta=$obVenta->ConsultarTabla("vista_sistemas", "WHERE idSistema='$idItem'");
+                    while($DatosSistema=$obVenta->FetchArray($consulta)){
+                        $Cantidad=$DatosSistema["Cantidad"];
+                        $idItem=$DatosSistema["CodigoInterno"];
+                        $TablaItem=$DatosSistema["TablaOrigen"];
+                        $ValorUnitario=$DatosSistema["PrecioUnitario"];
+                        $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$TablaItem,$ValorUnitario,"");
+                    }
+                    
+                }
 		header("location:Cotizaciones.php?TxtIdCliente=$idClientes");
 			
 	}
@@ -81,11 +116,14 @@ $obVenta=new ProcesoVenta($idUser);
 		$DatosPreventa=$obVenta->DevuelveValores('precotizacion',"ID",$idItem);
                 $DatosProductos=$obVenta->DevuelveValores($Tabla,"Referencia",$DatosPreventa["Referencia"]);
                 $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $DatosPreventa["Tabla"]);
+                /*
                 if($DatosTablaItem["IVAIncluido"]=="SI"){
                     $ValorAcordado=round($ValorAcordado/($DatosProductos["IVA"]+1));
 
                 }
                 
+                 * 
+                 */
 		$Subtotal=$ValorAcordado*$Cantidad*$Multiplicador;
 		
 		$IVA=round($Subtotal*$DatosProductos["IVA"]);
