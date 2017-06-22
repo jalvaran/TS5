@@ -50,7 +50,7 @@ $h=0;
 
 $Consulta=$obVenta->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='CompEgreso' AND Num_Documento_Interno='$idEgresos'");
 
-while($DatosLibro=  mysql_fetch_array($Consulta)){
+while($DatosLibro=  $obVenta->FetchArray($Consulta)){
     
     if($h==0){
         $Back="#f2f2f2";

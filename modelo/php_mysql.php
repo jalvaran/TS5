@@ -5,20 +5,7 @@
  */
 include_once("php_settings.php");
 class db_conexion{
-    public  $mysqli;
-    public  $host="localhost";
-    public  $user="root";
-    public  $pw="pirlo1985";
-    public  $db="ts5";
     
-    // evita la injeccion de codigo sql
-    public function Conectar(){
-        $this->mysqli = new mysqli($this->host, $this->user, $this->pw, $this->db);
-        if ($this->mysqli->connect_errno) {
-            printf("Falla en la conexion: %s\n", $this->mysqli->connect_error);
-            exit();
-        }
-    }
    // evita la injeccion de codigo sql
     public function normalizar($string){		
         $str=str_ireplace("'", "", $string);
@@ -39,28 +26,34 @@ class db_conexion{
     
     //Funcion para Conetarse a un servidor y seleccionar una base de datos
      public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
-        $this->mysqli = new mysqli($ip, $User, $Pass, $db);
-        if ($this->mysqli->connect_errno) {
-            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".$this->mysqli->connect_error;
-            exit();
+        
+        $con = mysql_connect($ip,$User,$Pass);
+        if(!$con){
+            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".  mysql_error();
+            exit($Mensaje);
+        }else{
+            $Mensaje="Conexion satisfactoria";
+            mysql_select_db($db,$con) or die("No es posible abrir la base de datos ".  mysql_error());
+            return($Mensaje);
         }
-        $Mensaje="Conexion satisfactoria";
-        return($Mensaje);
-                   
+            
+            
     }
     
     //Funcion para Conetarse a un servidor y seleccionar una base de datos
      public function CerrarCon(){
-         $this->mysqli->close();
+        
+         mysql_close();
+        
+        
      }
     ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion query mysql
 ///////////////////////////////////////////////////////////////////
 public function Query($sql)
-  {	
-    $this->Conectar();
-    $Consul=$this->mysqli->query($sql);				
-    $this->CerrarCon();
+  {		
+					
+    $Consul=mysql_query($sql) or die("<pre>no se pudo realizar la consulta $sql en query php_conexion: " . mysql_error()."</pre>");
     return($Consul);
 }
     ////////////////////////////////////////////////////////////////////
@@ -71,7 +64,7 @@ public function VaciarTabla($tabla)
 	$tabla=$this->normalizar($tabla);
 	$sql="TRUNCATE `$tabla`";
 	
-	$this->Query($sql) or die('no se pudo vaciar la tabla $tabla: ' . mysql_error());	
+	mysql_query($sql) or die('no se pudo vaciar la tabla $tabla: ' . mysql_error());	
 		
 	}
 
@@ -98,7 +91,7 @@ public function ConsultarTabla($tabla,$Condicion)
 //////////////////////Funcion fetcharray mysql
 ///////////////////////////////////////////////////////////////////
 public function FetchArray($Datos){					
-    $Vector=  $Datos->fetch_array(MYSQLI_BOTH);
+    $Vector=  mysql_fetch_array($Datos);
     return($Vector);
 }
 
@@ -107,23 +100,27 @@ public function FetchArray($Datos){
 ////////////////////////////////////////////////////////////////////
     
     public function NumRows($consulta){
-	
-	return ($consulta->num_rows);	
+	$NR=mysql_num_rows($consulta);
+	return ($NR);	
 		
     }
     
     //Fetch assoc
    public function FetchAssoc($Consulta) {
-        $Results=$Consulta->fetch_assoc();
+        $Results=mysql_fetch_assoc($Consulta);
         return ($Results);
     }
     
     /////Cuente una columna
 		
     public function Count($Tabla,$NombreColumna, $Condicion){
+	
+		
 	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
+	
 	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . mysql_error());
 	$reg=$this->FetchArray($reg);
+	
 	return($reg["Cuenta"]);
 
     }

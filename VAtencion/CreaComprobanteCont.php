@@ -92,7 +92,7 @@ print("<body>");
             $css->CrearOptionSelect("","Selecciona un Comprobante",0);
             
             $consulta = $obVenta->ConsultarTabla("comprobantes_pre","WHERE Estado<>'C'");
-            while($DatosPreEgreso=mysql_fetch_array($consulta)){
+            while($DatosPreEgreso=$obVenta->FetchArray($consulta)){
                 if($idComprobante==$DatosPreEgreso['idComprobanteContabilidad']){
                     $Sel=1;
                     
