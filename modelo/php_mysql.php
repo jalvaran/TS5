@@ -23,6 +23,30 @@ class db_conexion{
         //$str=filter_var($string, FILTER_SANITIZE_STRING);
         return($str);
     }
+    
+    //Funcion para Conetarse a un servidor y seleccionar una base de datos
+     public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
+        
+        $con = mysql_connect($ip,$User,$Pass);
+        if(!$con){
+            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".  mysql_error();
+            exit($Mensaje);
+        }else{
+            $Mensaje="Conexion satisfactoria";
+            mysql_select_db($db,$con) or die("No es posible abrir la base de datos ".  mysql_error());
+            return($Mensaje);
+        }
+            
+            
+    }
+    
+    //Funcion para Conetarse a un servidor y seleccionar una base de datos
+     public function CerrarCon(){
+        
+         mysql_close();
+        
+        
+     }
     ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion query mysql
 ///////////////////////////////////////////////////////////////////
@@ -80,5 +104,56 @@ public function FetchArray($Datos){
 	return ($NR);	
 		
     }
+    
+    //Fetch assoc
+   public function FetchAssoc($Consulta) {
+        $Results=mysql_fetch_assoc($Consulta);
+        return ($Results);
+    }
+    
+    /////Cuente una columna
+		
+    public function Count($Tabla,$NombreColumna, $Condicion){
+	
+		
+	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
+	
+	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . mysql_error());
+	$reg=$this->FetchArray($reg);
+	
+	return($reg["Cuenta"]);
+
+    }
+    
+    /////Suma un valor en especifico de una tabla	
+		
+    function SumeColumna($Tabla,$NombreColumnaSuma, $NombreColumnaFiltro,$filtro){
+	
+	$Tabla=$this->normalizar($Tabla);
+        $NombreColumnaSuma=$this->normalizar($NombreColumnaSuma);
+        $NombreColumnaFiltro=$this->normalizar($NombreColumnaFiltro);
+        $filtro=$this->normalizar($filtro);
+		
+	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla WHERE $NombreColumnaFiltro = '$filtro'";
+	
+	$reg= $this->Query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . mysql_error());
+	$reg=$this->FetchArray($reg);
+	
+	return($reg["suma"]);
+
+    }	
+        
+        /////Suma un valor en especifico de una tabla segun una condicion
+		
+    function Sume($Tabla,$NombreColumnaSuma, $Condicion){
+        $sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla $Condicion";
+
+        $reg=$this->Query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . mysql_error());
+        $reg=$this->FetchArray($reg);
+
+        return($reg["suma"]);
+
+    }	
+        
 }
 ?>

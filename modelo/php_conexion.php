@@ -36,42 +36,6 @@ class ProcesoVenta extends db_conexion{
                 $this->COMPrinter="COM3";
 	}
 	
-	
-		
-	/////Suma un valor en especifico de una tabla	
-		
-	function SumeColumna($Tabla,$NombreColumnaSuma, $NombreColumnaFiltro,$filtro){
-	
-	$Tabla=$this->normalizar($Tabla);
-        $NombreColumnaSuma=$this->normalizar($NombreColumnaSuma);
-        $NombreColumnaFiltro=$this->normalizar($NombreColumnaFiltro);
-        $filtro=$this->normalizar($filtro);
-		
-	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla WHERE $NombreColumnaFiltro = '$filtro'";
-	
-	$reg=mysql_query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . mysql_error());
-	$reg=mysql_fetch_array($reg);
-	
-	return($reg["suma"]);
-
-	}	
-        
-        /////Suma un valor en especifico de una tabla segun una condicion
-		
-	function Sume($Tabla,$NombreColumnaSuma, $Condicion){
-	
-	
-		
-	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla $Condicion";
-	
-	$reg=mysql_query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . mysql_error());
-	$reg=mysql_fetch_array($reg);
-	
-	return($reg["suma"]);
-
-	}	
-        
-	
 	///Totaliza una venta
 	
 	function ObtengaTotalesVenta($NumVenta){
@@ -81,8 +45,8 @@ class ProcesoVenta extends db_conexion{
 	$sql="SELECT SUM(TotalVenta) AS TotalVenta, SUM(Impuestos) AS Impuestos, SUM(TotalCosto) AS TotalCosto FROM ventas 
 	WHERE NumVenta = '$NumVenta'";
 	
-	$reg=mysql_query($sql) or die('no se pudo obtener los totales de la venta No $NumVenta en ObtengaTotalesVenta: ' . mysql_error());
-	$reg=mysql_fetch_array($reg);
+	$reg=$this->Query($sql) or die('no se pudo obtener los totales de la venta No $NumVenta en ObtengaTotalesVenta: ' . mysql_error());
+	$reg=$this->FetchArray($reg);
 	
 	$Subtotal=$reg["TotalVenta"]-$reg["Impuestos"];
 	$GranTotal=$reg["TotalVenta"];
@@ -2022,7 +1986,7 @@ public function CalculePesoRemision($idCotizacion)
         $sql="SELECT * FROM separados_items WHERE idSeparado='$idSeparado'";
         $Consulta=$this->Query($sql);
                 
-        while($DatosItems=  mysql_fetch_array($Consulta)){
+        while($DatosItems=  $this->FetchArray($Consulta)){
 
               
             //$ID=date("YmdHis").microtime(false);
@@ -3587,32 +3551,6 @@ public function CalculePesoRemision($idCotizacion)
     $salida = shell_exec('lpr $COMPrinter');
     
     }
-    //Funcion para Conetarse a un servidor y seleccionar una base de datos
-     public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
-        
-        $con = mysql_connect($ip,$User,$Pass);
-        if(!$con){
-            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".  mysql_error();
-            exit($Mensaje);
-        }else{
-            $Mensaje="Conexion satisfactoria";
-            mysql_select_db($db,$con) or die("No es posible abrir la base de datos ".  mysql_error());
-            return($Mensaje);
-        }
-            
-            
-    }
-     
-        
-     //Funcion para Conetarse a un servidor y seleccionar una base de datos
-     public function CerrarCon(){
-        
-         mysql_close();
-        
-        
-     }
-     
-     
      
      //Funcion para Crear un nuevo traslado
      public function CrearTraslado($fecha,$hora,$Concepto,$Destino,$VectorTraslado){
@@ -5367,12 +5305,7 @@ public function VerificaPermisos($VectorPermisos) {
         return ($HoraDecimal);
     }
      
-    //Fetch assoc
-   public function FetchAssoc($Consulta) {
-        $Results=mysql_fetch_assoc($Consulta);
-        return ($Results);
-    } 
-    
+     
     /*
       * Crear una Tabla de un listado de titulos 
       */
@@ -6034,20 +5967,6 @@ public function VerificaPermisos($VectorPermisos) {
             
             return($idConceptoNEW);
         }
-        
-        /////Cuente una columna
-		
-	public function Count($Tabla,$NombreColumna, $Condicion){
-	
-		
-	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
-	
-	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . mysql_error());
-	$reg=$this->FetchArray($reg);
-	
-	return($reg["Cuenta"]);
-
-	}
         
         //Agregar un Producto a un pedido
         
