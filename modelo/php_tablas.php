@@ -4158,6 +4158,7 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
         $IVAFinal=0;
         $TotalFinal=0;
         $i=0;
+        $TotalSistema=0;
         while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
             $i++;
             $SubtotalFinal=$SubtotalFinal+$DatosItemFactura["Subtotal"];
@@ -4165,6 +4166,7 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
             $ValorUnitario=  number_format($DatosItemFactura["ValorUnitario"]);
             $SubTotalItem=  number_format($DatosItemFactura["Subtotal"]);
             $Multiplicador=$DatosItemFactura["Cantidad"];
+            
     if($DatosItemFactura["Multiplicador"]>1){
         $Multiplicador="$DatosItemFactura[Cantidad] X $DatosItemFactura[Multiplicador]";
     }
@@ -4175,6 +4177,21 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
         $Back="white";
         $h=0;
     }
+    if($DatosItemFactura["TablaOrigen"]<>'sistemas'){
+        if($DatosItemFactura["Descripcion"]=="<br>"){
+            $html.= <<<EOD
+                <hr>
+            <tr>
+
+                <td align="center" colspan="7" style="border-bottom: 1px solid #ddd;background-color: $Back;">
+                        </td>
+
+            </tr>
+
+EOD;
+        }else{
+            
+        
     $html.= <<<EOD
     
 <tr>
@@ -4187,8 +4204,28 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
 </tr>
           
 EOD;
+    }
+    }else{
+        $idSistema=$DatosItemFactura["Referencia"];
+        $DatosSistema=$this->obCon->DevuelveValores("sistemas", "ID", $idSistema);
+        $Cantidad=$DatosItemFactura["Cantidad"];
+        $TotalSistema= number_format($this->obCon->Sume("vista_sistemas", "PrecioVenta", "WHERE idSistema='$idSistema'")*$Cantidad);
+        
+        if($DatosItemFactura["Multiplicador"]>1){
+            $Cantidad=$DatosItemFactura["Cantidad"]." X ".$DatosItemFactura["Multiplicador"];
+        }
+        $html.= <<<EOD
+    <hr>
+<tr>
     
-   
+    <td align="center" colspan="7" style="border-bottom: 1px solid #ddd;background-color: $Back;">
+        <strong>$Cantidad $DatosItemFactura[Descripcion] $ $TotalSistema</strong><br><br>
+        $DatosSistema[Observaciones]<br><br>Compuesto por los Siguientes elementos: <br></td>
+    
+</tr>
+          
+EOD;
+    }
     }
 
     $html.= "</table>";
@@ -4250,6 +4287,8 @@ EOD;
         $this->PDF_Encabezado($DatosCotizacion["Fecha"],1, 1, "",$NumeracionDocumento);
         $this->PDF_Encabezado_Cotizacion($idCotizacion);
         $html= $this->ArmeHTMLItemsCotizacion($idCotizacion);
+        //print($html);
+        
         $Position=$this->PDF->SetY(67);
         $this->PDF_Write($html);
         

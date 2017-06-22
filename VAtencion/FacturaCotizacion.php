@@ -14,13 +14,13 @@ $idRemision="";
 print("<html>");
 print("<head>");
 $css =  new CssIni("Asociar una cotizacion a una factura");
-
+$obVenta=new ProcesoVenta($idUser);
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/procesaFacturarCoti.php");
+    include_once("procesadores/FacturaCotizacion.process.php");
     
-    $css->CabeceraIni("SoftConTech Facturar una Cotización"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("TS5 Facturar una Cotización"); //Inicia la cabecera de la pagina
        
     $css->CabeceraFin(); 
     ///////////////Creamos el contenedor
@@ -66,7 +66,7 @@ print("<body>");
     $consulta=$obVenta->ConsultarTabla("facturas_pre"," WHERE idUsuarios='$idUser' ORDER BY ID desc");
           
 
-    if(mysql_affected_rows()){
+    if($obVenta->NumRows($consulta)){
 
         
         $css->CrearTabla();
@@ -79,7 +79,7 @@ print("<body>");
         $css->ColTabla("<strong>Borrar</strong>", 1);
         $css->CierraFilaTabla();
 
-        while($DatosItemsCotizacion=mysql_fetch_array($consulta)){
+        while($DatosItemsCotizacion=$obVenta->FetchArray($consulta)){
             $idItem=$DatosItemsCotizacion["ID"];
             $css->FilaTabla(16);
             $css->ColTabla($DatosItemsCotizacion["Referencia"], 1);
@@ -151,8 +151,8 @@ print("<body>");
         print("Centro de costos: <br>");
         $css->CrearSelect("CmbCentroCostos", "");
             $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCentroCosto=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCentroCosto=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCentroCosto["ID"], $DatosCentroCosto["Nombre"], 0);
             }
             }else{
@@ -164,8 +164,8 @@ print("<body>");
         print("Resolucion:<br> ");
         $css->CrearSelect("CmbResolucion", "");
             $Consulta=$obVenta->ConsultarTabla("empresapro_resoluciones_facturacion", "WHERE Completada<>'SI'");
-            if(mysql_num_rows($Consulta)){
-            while($DatosResolucion=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosResolucion= $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosResolucion["ID"], "$DatosResolucion[NombreInterno] $DatosResolucion[NumResolucion]", 0);
             }
             }else{
@@ -189,8 +189,8 @@ print("<body>");
         print("Cuenta donde ingresa el dinero: <br>");
         $css->CrearSelect("CmbCuentaDestino", "");
             $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCuentasFrecuentes=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCuentasFrecuentes=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCuentasFrecuentes["CuentaPUC"], $DatosCuentasFrecuentes["Nombre"], 0);
             }
             }else{

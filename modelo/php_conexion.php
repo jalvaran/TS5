@@ -4452,38 +4452,42 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
     public function AgregarCotizacionPrefactura($idCotizacion) {
         $Datos=  $this->ConsultarTabla("cot_itemscotizaciones", " WHERE NumCotizacion='$idCotizacion'");
         while($DatosCotizacion=  $this->FetchArray($Datos)){
-            $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
-            
-            $tab="facturas_pre";
-            $NumRegistros=26;
-            $Columnas[0]="ID";			$Valores[0]="";
-            $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
-            $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaOrigen"];
-            $Columnas[3]="Referencia";          $Valores[3]=$DatosCotizacion["Referencia"];
-            $Columnas[4]="Nombre";              $Valores[4]=$DatosCotizacion["Descripcion"];
-            $Columnas[5]="Departamento";	$Valores[5]=$DatosProducto["Departamento"];
-            $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosProducto['Sub1'];
-            $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosProducto['Sub2'];
-            $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProducto['Sub3'];
-            $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProducto['Sub4'];
-            $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProducto['Sub5'];
-            $Columnas[11]="ValorUnitarioItem";	$Valores[11]=$DatosCotizacion['ValorUnitario'];
-            $Columnas[12]="Cantidad";		$Valores[12]=$DatosCotizacion['Cantidad'];
-            $Columnas[13]="Dias";		$Valores[13]=1;
-            $Columnas[14]="SubtotalItem";       $Valores[14]=$DatosCotizacion['Subtotal'];
-            $Columnas[15]="IVAItem";		$Valores[15]=$DatosCotizacion['IVA'];
-            $Columnas[16]="TotalItem";		$Valores[16]=$DatosCotizacion['Total'];
-            $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
-            $Columnas[19]="SubtotalCosto";	$Valores[19]=$DatosProducto['CostoUnitario']*$DatosCotizacion['Cantidad'];
-            $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion['TipoItem'];
-            $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
-            $Columnas[22]="GeneradoDesde";	$Valores[22]="cotizacionesv5";
-            $Columnas[23]="NumeroIdentificador";$Valores[23]=$idCotizacion;
-            $Columnas[24]="FechaFactura";       $Valores[24]="";
-            $Columnas[25]="idUsuarios";         $Valores[25]= $this->idUser;
-            
-            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            if($DatosCotizacion["TablaOrigen"]<>'sistemas'){
+                if($DatosCotizacion["Referencia"]<>''){
+                $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaOrigen"], "Referencia", $DatosCotizacion["Referencia"]);
+                
+                    $tab="facturas_pre";
+                    $NumRegistros=26;
+                    $Columnas[0]="ID";			$Valores[0]="";
+                    $Columnas[1]="idFactura";           $Valores[1]=$NumFactura;
+                    $Columnas[2]="TablaItems";          $Valores[2]=$DatosCotizacion["TablaOrigen"];
+                    $Columnas[3]="Referencia";          $Valores[3]=$DatosCotizacion["Referencia"];
+                    $Columnas[4]="Nombre";              $Valores[4]=$DatosCotizacion["Descripcion"];
+                    $Columnas[5]="Departamento";	$Valores[5]=$DatosProducto["Departamento"];
+                    $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosProducto['Sub1'];
+                    $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosProducto['Sub2'];
+                    $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProducto['Sub3'];
+                    $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProducto['Sub4'];
+                    $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProducto['Sub5'];
+                    $Columnas[11]="ValorUnitarioItem";	$Valores[11]=$DatosCotizacion['ValorUnitario'];
+                    $Columnas[12]="Cantidad";		$Valores[12]=$DatosCotizacion['Cantidad'];
+                    $Columnas[13]="Dias";		$Valores[13]=1;
+                    $Columnas[14]="SubtotalItem";       $Valores[14]=$DatosCotizacion['Subtotal'];
+                    $Columnas[15]="IVAItem";		$Valores[15]=$DatosCotizacion['IVA'];
+                    $Columnas[16]="TotalItem";		$Valores[16]=$DatosCotizacion['Total'];
+                    $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
+                    $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
+                    $Columnas[19]="SubtotalCosto";	$Valores[19]=$DatosProducto['CostoUnitario']*$DatosCotizacion['Cantidad'];
+                    $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion['TipoItem'];
+                    $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
+                    $Columnas[22]="GeneradoDesde";	$Valores[22]="cotizacionesv5";
+                    $Columnas[23]="NumeroIdentificador";$Valores[23]=$idCotizacion;
+                    $Columnas[24]="FechaFactura";       $Valores[24]="";
+                    $Columnas[25]="idUsuarios";         $Valores[25]= $this->idUser;
+
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                }
+            }
         }
     }
     

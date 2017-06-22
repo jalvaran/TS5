@@ -73,7 +73,7 @@ $obVenta=new ProcesoVenta($idUser);
                     $tab="precotizacion";
                     $NumRegistros=13;  
                     $Columnas[0]="Cantidad";						$Valores[0]=$Cantidad;
-                    $Columnas[1]="Referencia";						$Valores[1]="";
+                    $Columnas[1]="Referencia";						$Valores[1]=$idItem;
                     $Columnas[2]="ValorUnitario";					$Valores[2]=0;
                     $Columnas[3]="SubTotal";						$Valores[3]=0;
                     $Columnas[4]="Descripcion";						$Valores[4]=$DatosProductoGeneral["Nombre"];
@@ -88,8 +88,9 @@ $obVenta=new ProcesoVenta($idUser);
 
                     $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                     $consulta=$obVenta->ConsultarTabla("vista_sistemas", "WHERE idSistema='$idItem'");
+                    $CantidadSistema=$Cantidad;
                     while($DatosSistema=$obVenta->FetchArray($consulta)){
-                        $Cantidad=$DatosSistema["Cantidad"];
+                        $Cantidad=$DatosSistema["Cantidad"]*$CantidadSistema;
                         $idItem=$DatosSistema["CodigoInterno"];
                         $TablaItem=$DatosSistema["TablaOrigen"];
                         $ValorUnitario=$DatosSistema["PrecioUnitario"];
@@ -313,6 +314,31 @@ $obVenta=new ProcesoVenta($idUser);
            $idCliente=$obVenta->normalizar($_REQUEST["TxtIdCliente"]);
            $idCotizacion=$obVenta->normalizar($_REQUEST["TxtIdCotizacionAdd"]);
            $obVenta->AgregueItemsDesdeCotizacionAPrecotizacion($idCotizacion,"");
+           header("location:Cotizaciones.php?TxtIdCliente=$idCliente");
+           
+       }
+       
+       //Agregar los items de otra cotizacion
+        
+       if(isset($_REQUEST["BtnAgregarSalto"])){
+           $idCliente=$obVenta->normalizar($_REQUEST["TxtIdCliente"]);
+           $tab="precotizacion";
+            $NumRegistros=13;  
+            $Columnas[0]="Cantidad";						$Valores[0]=0;
+            $Columnas[1]="Referencia";						$Valores[1]="";
+            $Columnas[2]="ValorUnitario";					$Valores[2]=0;
+            $Columnas[3]="SubTotal";						$Valores[3]=0;
+            $Columnas[4]="Descripcion";						$Valores[4]="<br>";
+            $Columnas[5]="IVA";							$Valores[5]=0;
+            $Columnas[6]="PrecioCosto";						$Valores[6]=0;
+            $Columnas[7]="SubtotalCosto";					$Valores[7]=0;
+            $Columnas[8]="Total";						$Valores[8]=0;
+            $Columnas[9]="TipoItem";						$Valores[9]="";
+            $Columnas[10]="idUsuario";						$Valores[10]=$idUser;
+            $Columnas[11]="CuentaPUC";						$Valores[11]="";
+            $Columnas[12]="Tabla";			    			$Valores[12]="";
+
+            $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
            header("location:Cotizaciones.php?TxtIdCliente=$idCliente");
            
        }
