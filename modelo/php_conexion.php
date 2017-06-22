@@ -641,19 +641,7 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
         }
 }
         
-        ////////////////////////////////////////////////////////////////////
-//////////////////////Funcion Actualizar registro en tabla
-///////////////////////////////////////////////////////////////////
-
-
-public function update($tabla,$campo, $value, $condicion)
-  {		
-	
-	$sql="UPDATE `$tabla` SET `$campo` = '$value' $condicion";
-	
-	mysql_query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
-		
-    }
+        
 	
 
 	
@@ -678,21 +666,7 @@ public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
 	$MN=mysql_fetch_array($Reg);
 	return($MN["MaxNum"]);	
 	}
-			
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion Obtener vaciar una tabla
-///////////////////////////////////////////////////////////////////
-public function VaciarTabla($tabla)
-  {		
-	$tabla=$this->normalizar($tabla);
-	$sql="TRUNCATE `$tabla`";
-	
-	mysql_query($sql) or die('no se pudo vaciar la tabla $tabla: ' . mysql_error());	
-		
-	}
-
-	
-	
+				
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Obtener inicializar las preventas
 ///////////////////////////////////////////////////////////////////
@@ -746,39 +720,8 @@ public function AsignarEspacioDisponible($idUser)
 		//print("<script language='JavaScript'>alert('Factura $DatosVenta[NumFactura], Cotizacion $DatosVenta[NumCotizacion], Venta $DatosVenta[NumVenta], Ini $DatosDispo[gap_starts_at] , FIN $DatosDispo[gap_ends_at]')</script>");
 		
 	}	
-
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion consultar una tabla
-///////////////////////////////////////////////////////////////////
-public function ConsultarTabla($tabla,$Condicion)
-  {		
-    $sql="SELECT * FROM $tabla $Condicion";
-
-
-    $Consul=mysql_query($sql) or die("no se pudo consultar la tabla $tabla en CosultarTabla php_conexion: " . mysql_error());
-
-    return($Consul);
-}	
 	
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion query mysql
-///////////////////////////////////////////////////////////////////
-public function Query($sql)
-  {		
-					
-    $Consul=mysql_query($sql) or die("<pre>no se pudo realizar la consulta $sql en query php_conexion: " . mysql_error()."</pre>");
-    return($Consul);
-}
 
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion fetcharray mysql
-///////////////////////////////////////////////////////////////////
-public function FetchArray($Datos)
-  {		
-					
-    $Vector=  mysql_fetch_array($Datos);
-    return($Vector);
-}
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Registra Anticipo
 ///////////////////////////////////////////////////////////////////
@@ -1269,7 +1212,7 @@ public function CalculePesoRemision($idCotizacion)
     $idCotizacion=$this->normalizar($idCotizacion);
         $Peso=0;
         $Consulta=$this->ConsultarTabla("cot_itemscotizaciones", "WHERE NumCotizacion=$idCotizacion");
-        while($DatosItems=  mysql_fetch_array($Consulta)){
+        while($DatosItems=  $this->FetchArray($Consulta)){
             if($DatosItems["TablaOrigen"]=="productosalquiler"){
                 $Producto=  $this->DevuelveValores("productosalquiler", "Referencia", $DatosItems["Referencia"]);
                 $Peso=$Peso+($Producto["PesoUnitario"]*$DatosItems["Cantidad"]);
@@ -1384,7 +1327,7 @@ public function CalculePesoRemision($idCotizacion)
         $TotalIVA=0;
         $GranTotal=0;
         $TotalCostos=0;
-        while($DatosDevolucion=  mysql_fetch_array($Consulta)){
+        while($DatosDevolucion= $this->FetchArray($Consulta)){
 
             $DatosProducto=$this->DevuelveValores($DatosDevolucion["TablaOrigen"], "Referencia", $DatosDevolucion["Referencia"]);
             ////Empiezo a insertar en la tabla items facturas
@@ -1457,7 +1400,7 @@ public function CalculePesoRemision($idCotizacion)
         $TotalIVA=0;
         $GranTotal=0;
         $TotalCostos=0;
-        while($DatosCotizacion =  mysql_fetch_array($Consulta)){
+        while($DatosCotizacion =  $this->FetchArray($Consulta)){
             ////Empiezo a insertar en la tabla items facturas
             ///
             ///
@@ -1794,19 +1737,7 @@ public function CalculePesoRemision($idCotizacion)
         
         return ($idComprobante);
     }
-    
-    /*
-     * revisa si hay resultados tras una consulta
-     * 
-     */
-    
-    public function NumRows($consulta){
-  		
-	$NR=mysql_num_rows($consulta);
-	return ($NR);	
-		
-	}
-        
+       
         /*
      * Registra una Venta Rapida
      * 
