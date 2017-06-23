@@ -1,3 +1,7 @@
+2017-06-23
+
+ALTER TABLE `factura_compra_items` ADD `ProcentajeDescuento` VARCHAR(10) NOT NULL AFTER `Tipo_Impuesto`, ADD `ValorDescuento` DOUBLE NOT NULL AFTER `ProcentajeDescuento`;
+ALTER TABLE `factura_compra_items` ADD `SubtotalDescuento` DOUBLE NOT NULL AFTER `ValorDescuento`;
 2017-06-02
 ALTER TABLE `cajas_aperturas_cierres` ADD `TotalRetiroSeparados` DOUBLE NOT NULL AFTER `TotalVentasSisteCredito`;
 ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;

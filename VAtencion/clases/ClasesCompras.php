@@ -264,7 +264,7 @@ class Compra extends ProcesoVenta{
     //Calcule totales de la compra
     
     public function CalculeTotalesCompra($idCompra) {
-        $sql="SELECT SUM(SubtotalCompra) as Subtotal, sum(ImpuestoCompra) as IVA, SUM(TotalCompra) AS Total FROM factura_compra_items "
+        $sql="SELECT SUM(SubtotalDescuento) as SubtotalDescuento,SUM(SubtotalCompra) as Subtotal, sum(ImpuestoCompra) as IVA, SUM(TotalCompra) AS Total FROM factura_compra_items "
                     . " WHERE idFacturaCompra='$idCompra'";
         $consulta= $this->Query($sql);
         $TotalesCompraProductos=$this->FetchArray($consulta);
@@ -282,6 +282,7 @@ class Compra extends ProcesoVenta{
         $TotalesCompra["Subtotal_Productos_Add"]=$TotalesCompraProductos["Subtotal"];
         $TotalesCompra["Impuestos_Productos_Add"]=$TotalesCompraProductos["IVA"];
         $TotalesCompra["Total_Productos_Add"]=$TotalesCompraProductos["Total"];
+        $TotalesCompra["Subtotal_Descuentos_Productos_Add"]=$TotalesCompraProductos["SubtotalDescuento"];
         $TotalesCompra["Subtotal_Servicios"]=$TotalesServicios["Subtotal"];
         $TotalesCompra["Impuestos_Servicios"]=$TotalesServicios["IVA"];
         $TotalesCompra["Total_Servicios"]=$TotalesServicios["Total"];

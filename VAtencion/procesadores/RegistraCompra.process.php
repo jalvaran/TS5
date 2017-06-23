@@ -4,7 +4,7 @@
  */
 
 //$obVenta=new ProcesoVenta($idUser); 
-$obSistema=new Compra($idUser);
+$obCompra=new Compra($idUser);
 if(!empty($_REQUEST["BtnCrearCompra"])){
       
 $Fecha=$obCompra->normalizar($_REQUEST["TxtFecha"]);
@@ -255,6 +255,31 @@ if(isset($_REQUEST["DelProductoDevuelto"])){
     $idItem=$obCompra->normalizar($_REQUEST["DelProductoDevuelto"]);
     $idCompra=$_REQUEST["idCompra"];
     $obCompra->BorraReg("factura_compra_items_devoluciones", "ID", $idItem);
+    header("location:$myPage?idCompra=$idCompra");
+}
+
+//Devolver un item 
+
+if(isset($_REQUEST["BtnAplicaDescuento"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $idProducto=$obCompra->normalizar($_REQUEST["idProducto"]);
+    $Descuento=$obCompra->normalizar($_REQUEST["TxtDescuentoCompra"]);
+    $idFacturaItems=$obCompra->normalizar($_REQUEST["idFacturaItems"]);
+    $DatosItem=$obCompra->DevuelveValores("factura_compra_items", "ID", $idFacturaItems);
+    
+    $ValorDescuento=round($DatosItem["CostoUnitarioCompra"]*($Descuento/100),2);
+    $SubtotalDescuento=$ValorDescuento*$DatosItem["Cantidad"];
+    $ValorUnitario=$DatosItem["CostoUnitarioCompra"]-$ValorDescuento;
+    $Subtotal=$ValorUnitario*$DatosItem["Cantidad"];
+    $IVA=round($Subtotal*$DatosItem["Tipo_Impuesto"],2);
+    $Total=$Subtotal+$IVA;
+    $obCompra->ActualizaRegistro("factura_compra_items", "ProcentajeDescuento", $Descuento, "ID", $idFacturaItems); 
+    $obCompra->ActualizaRegistro("factura_compra_items", "ValorDescuento", $ValorDescuento, "ID", $idFacturaItems);
+    $obCompra->ActualizaRegistro("factura_compra_items", "SubtotalDescuento", $SubtotalDescuento, "ID", $idFacturaItems);
+    $obCompra->ActualizaRegistro("factura_compra_items", "CostoUnitarioCompra", $ValorUnitario, "ID", $idFacturaItems); 
+    $obCompra->ActualizaRegistro("factura_compra_items", "SubtotalCompra", $Subtotal, "ID", $idFacturaItems); 
+    $obCompra->ActualizaRegistro("factura_compra_items", "ImpuestoCompra", $IVA, "ID", $idFacturaItems); 
+    $obCompra->ActualizaRegistro("factura_compra_items", "TotalCompra", $Total, "ID", $idFacturaItems); 
     header("location:$myPage?idCompra=$idCompra");
 }
 ?>
