@@ -5073,7 +5073,7 @@ EOD;
     }
     //HTML Ventas X Usuarios Informe admin
     
-    public function HTML_VentasXUsuario($CondicionFacturas) {
+    public function HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1) {
         $html="";
         $sql="SELECT Usuarios_idUsuarios as IdUsuarios, FormaPago as  TipoVenta, SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, 
         SUM(Total) as Total, SUM(TotalCostos) as TotalCostos"
@@ -5152,11 +5152,42 @@ EOD;
 
         $Datos=$this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-	
+            $html.='<BR><BR><BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total devoluciones:
+                </em></strong></span><BR><BR>
+                <table border="1" cellspacing="2" align="center" >
+                  <tr> 
+                    <th><h3>Usuario</h3></th>
+                        <th><h3>Total Items</h3></th>
+                        <th><h3>Total</h3></th>
+                  </tr >
+
+                </table>';
             $TotalVentas=0;
             $TotalItems=0;
             $i=0;
-            
+            while($DatosVentas= $this->obCon->FetchArray($Datos)){
+                $Total=number_format($DatosVentas["Total"]);
+		$Items=number_format($DatosVentas["Items"]);
+		$TotalVentas=$TotalVentas+$DatosVentas["Total"];
+		$TotalItems=$TotalItems+$DatosVentas["Items"];
+		$idUser=$DatosVentas["IdUsuarios"];
+                $html.='<table border="1"  cellpadding="2" align="center">
+                            <tr>
+                                <td>'.$idUser.'</td>
+                                <td>'.$Items.'</td>
+                                <td>'.$Total.'</td>
+                            </tr>
+                        </table>';
+            }
+            $TotalItems=number_format($TotalItems);
+            $TotalVentas=number_format($TotalVentas);
+            $html.='<table border="1" cellspacing="2" align="center">
+                        <tr>
+                            <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                            <td><h3>'.$TotalItems.'</h3></td>
+                            <td><h3>'.$TotalVentas.'</h3></td>
+                        </tr>
+                    </table>';
         }
         return($html);
     }
@@ -5188,7 +5219,7 @@ EOD;
                
         $html= $this->HTML_VentasXDepartamentos($CondicionItems);
         $this->PDF_Write($html);
-        $html= $this->HTML_VentasXUsuario($CondicionFacturas);
+        $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1);
         $this->PDF_Write("<br>".$html);
         
         $this->PDF_Output("Informe_Ventas_");
