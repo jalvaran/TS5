@@ -5292,13 +5292,55 @@ EOD;
         }
         return($html);
     }
+    //HTML Entregas
+    public function HTML_Entregas($CondicionFecha2) {
+        $html="";
+        $sql="SELECT SUM(Total) as Total, Tabla, Tipo,idUsuario FROM vista_entregas WHERE $CondicionFecha2 GROUP BY idUsuario,Tabla,Tipo";
+        $Datos=$this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $idUsuario_Comp=0;
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Entregas:
+                    </em></strong></span><BR><BR> <table border="1" CELLPADDING="5" align="center"> ';
+            $Salto=0;
+            $TotalEntrega=0;
+            $Factor="+";
+            while ($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                if($idUsuario_Comp<>$DatosEntregas["idUsuario"]){
+                    $Salto=1;
+                    if($idUsuario_Comp<>0){
+                        $html.='<tr> <td colspan="2" align="RIGHT"> <h2>Total Entrega Usuario '.$idUsuario_Comp.' : </h2></td><td><h2>'.number_format($TotalEntrega).'</h2></td></tr>';
+                   
+                    }
+                    $TotalEntrega=0;
+                }
+                if($DatosEntregas["Tabla"]=="egresos"){
+                    $TotalEntrega=$TotalEntrega-$DatosEntregas["Total"];
+                    $Factor="(-) ";
+                }else{
+                    $TotalEntrega=$TotalEntrega+$DatosEntregas["Total"];
+                    $Factor="(+) ";
+                }
+                $idUsuario_Comp=$DatosEntregas["idUsuario"];
+                if($Salto==1){
+                    $html.='<tr> <td colspan="3"> <h2>Usuario: '.$DatosEntregas["idUsuario"].'</h2></td></tr>';
+                }
+                $html.='<tr> <td>'.$Factor.$DatosEntregas["Tabla"].'</td><td>'.$DatosEntregas["Tipo"].'</td><td>'.number_format($DatosEntregas["Total"]).'</td></tr>';
+            
+                $Salto=0;
+                
+            }
+            $html.='<tr> <td colspan="2" align="RIGHT"> <h2>Total Entrega Usuario '.$idUsuario_Comp.' : </h2></td><td><h2>'.number_format($TotalEntrega).'</h2></td></tr>';
+            $html.="</table>";
+        }
+        return ($html);
+    }
     ///Clases para hacer el informe de administrador
     public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
         $Condicion=" ori_facturas_items WHERE ";
         $Condicion2=" ori_facturas WHERE ";
         if($TipoReporte=="Corte"){
-            $CondicionFecha1=" FechaFactura <= '$FechaFinal' ";
-            $CondicionFecha2=" Fecha <= '$FechaFinal' ";
+            $CondicionFecha1=" FechaFactura <= '$FechaCorte' ";
+            $CondicionFecha2=" Fecha <= '$FechaCorte' ";
             $Rango="Corte a $FechaFinal";
         }else{
             $CondicionFecha1=" FechaFactura >= '$FechaIni' AND FechaFactura <= '$FechaFinal' ";
@@ -5324,6 +5366,8 @@ EOD;
         $html= $this->HTML_Egresos_Admin($CondicionFecha2);
         $this->PDF_Write("<br>".$html);
         $html= $this->HTML_Abonos_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Entregas($CondicionFecha2);
         $this->PDF_Write("<br>".$html);
         $this->PDF_Output("Informe_Ventas_");
         

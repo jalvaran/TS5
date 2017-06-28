@@ -1,4 +1,22 @@
 2017-06-28
+ALTER TABLE `ori_facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `facturas_abonos` CHANGE `Fecha` `Fecha` DATE NOT NULL;
+ALTER TABLE `ori_facturas_items` CHANGE `FechaFactura` `FechaFactura` DATE NOT NULL;
+ALTER TABLE `facturas_abonos` CHANGE `Valor` `Valor` DOUBLE NOT NULL;
+ALTER TABLE `separados_abonos` CHANGE `Valor` `Valor` DOUBLE NOT NULL;
+ALTER TABLE `ori_facturas_items` CHANGE `TotalItem` `TotalItem` DOUBLE NOT NULL COMMENT 'Total del valor del Item';
+
+DROP VIEW IF EXISTS `vista_entregas`;
+CREATE VIEW vista_entregas AS 
+SELECT 'ventas' as Tabla,f.FormaPago as Tipo, fa.FechaFactura as Fecha, fa.idUsuarios as idUsuario, fa.TotalItem as Total FROM ori_facturas_items fa INNER JOIN ori_facturas f ON f.idFacturas=fa.idFactura WHERE f.FormaPago='Contado'
+UNION 
+SELECT 'abonos_creditos' as Tabla,fa.FormaPago as Tipo,fa.Fecha as Fecha, fa.Usuarios_idUsuarios as idUsuario, fa.Valor as Total FROM facturas_abonos fa
+UNION 
+SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, fa.idUsuarios as idUsuario, fa.Valor as Total FROM separados_abonos fa
+UNION 
+SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas'
+
+
 DROP VIEW IF EXISTS `vista_abonos`;
 CREATE VIEW vista_abonos AS 
 SELECT 'abonos_factura' as Tabla,fa.FormaPago as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.Usuarios_idUsuarios as idUsuario, fa.idCierre FROM facturas_abonos fa
