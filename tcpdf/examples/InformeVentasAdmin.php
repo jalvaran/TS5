@@ -63,7 +63,7 @@ $tbl = <<<EOD
     <th><h3>Departamento</h3></th>
 	<th><h3>Nombre</h3></th>
 	<th><h3>Total Items</h3></th>
-    <th><h3>SubTotal</h3></th>
+        <th><h3>SubTotal</h3></th>
 	<th><h3>IVA</h3></th>
 	<th><h3>Total</h3></th>
   </tr >
@@ -274,7 +274,7 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 
 
 	$sql="SELECT idUsuarios as IdUsuarios, Sum(Cantidad) as Items, 
-SUM(TotalItem) as Total "
+                SUM(TotalItem) as Total "
         . "  FROM facturas_items WHERE Cantidad < 0 AND $CondicionFecha1 GROUP BY idUsuarios";
 
         $sel1=$obVenta->Query($sql);

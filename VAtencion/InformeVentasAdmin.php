@@ -66,7 +66,7 @@ function CrearFormularioInformes($VectorInformes) {
                 print("</td>"); 
             $css->FilaTabla(16);
             print("<td colspan='5' style='text-align:center'>");
-            $css->CrearBotonVerde("BtnVerInforme", "Generar Informe");
+            $css->CrearBotonVerde("BtnVerInformeAdmin", "Generar Informe");
             print("</td>");
             $css->CierraFilaTabla();
         $css->CerrarTabla();
@@ -107,7 +107,8 @@ print("<body>");
     $css->CrearNotificacionNaranja("GENERAR INFORME DE VENTAS", 16);
     
     $VectorInformes["FormName"]="FrmInformeVentas";
-    $VectorInformes["ActionForm"]="../tcpdf/examples/InformeVentasAdmin.php";
+    //$VectorInformes["ActionForm"]="../tcpdf/examples/InformeVentasAdmin.php";
+    $VectorInformes["ActionForm"]="PDF_Informes_Ventas.php";
     $VectorInformes["Metod"]="post";
     $VectorInformes["Target"]="_blank";
     $VectorInformes["Titulo"]="INFORME DE VENTAS";

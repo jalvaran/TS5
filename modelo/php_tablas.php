@@ -4995,6 +4995,207 @@ EOD;
     
     return $tbl;
     }
+    //HTML Ventas discriminadas por departamentos
+    public function HTML_VentasXDepartamentos($CondicionItems) {
+        $html="";
+        $sql="SELECT Departamento as idDepartamento, SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, SUM(Cantidad) as Items"
+        . "  FROM $CondicionItems GROUP BY Departamento";
+        $Datos=$this->obCon->Query($sql);
+        
+        if($this->obCon->NumRows($Datos)){
+            $html='<span style="color:RED;font-family:`Bookman Old Style`;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Departamento:
+            </em></strong></span><BR><BR>
+
+
+            <table border="1" cellspacing="2" align="center" >
+              <tr> 
+                <th><h3>Departamento</h3></th>
+                    <th><h3>Nombre</h3></th>
+                    <th><h3>Total Items</h3></th>
+                    <th><h3>SubTotal</h3></th>
+                    <th><h3>IVA</h3></th>
+                    <th><h3>Total</h3></th>
+              </tr >
+
+            </table>';
+            $Subtotal=0;
+            $TotalIVA=0;
+            $TotalVentas=0;
+            $TotalItems=0;
+            $flagQuery=0;   //para indicar si hay resultados
+            $i=0;
+            
+            while($DatosVentas= $this->obCon->FetchArray($Datos)){
+                $flagQuery=1;	
+                $SubtotalUser=number_format($DatosVentas["Subtotal"]);
+                $IVA=number_format($DatosVentas["IVA"]);
+                $Total=number_format($DatosVentas["Total"]);
+                $Items=number_format($DatosVentas["Items"]);
+                $DatosDepartamento=$this->obCon->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVentas["idDepartamento"]);
+                $NombreDep=$DatosDepartamento["Nombre"];
+
+                $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
+                $TotalIVA=$TotalIVA+$DatosVentas["IVA"];
+                $TotalVentas=$TotalVentas+$DatosVentas["Total"];
+                $TotalItems=$TotalItems+$DatosVentas["Items"];
+                $idDepartamentos=$DatosVentas["idDepartamento"];
+                $html.='<table border="1" cellpadding="2"  align="center">
+                            <tr>
+                                <td>'.$idDepartamentos.'</td>
+                                <td>'.$NombreDep.'</td>
+                                <td>'.$Items.'</td>
+                                <td>'.$SubtotalUser.'</td>
+                                <td>'.$IVA.'</td>
+                                <td>'.$Total.'</td>
+                            </tr>
+                            </table>';
+            }
+            if($flagQuery==1){
+            $TotalItems=number_format($TotalItems);
+            $Subtotal=number_format($Subtotal);
+            $TotalIVA=number_format($TotalIVA);
+            $TotalVentas=number_format($TotalVentas);
+            $html.= ' 
+            <table border="1" cellspacing="2" align="center">
+             <tr>
+              <td align="RIGHT"><h3>SUMATORIA</h3></td>
+              <td><h3>NA</h3></td>
+              <td><h3>'.$TotalItems.'</h3></td>
+              <td><h3>'.$Subtotal.'</h3></td>
+              <td><h3>'.$TotalIVA.'</h3></td>
+              <td><h3>'.$TotalVentas.'</h3></td>
+             </tr>
+             </table>
+            ';
+            }
+        }
+        return($html);
+    }
+    //HTML Ventas X Usuarios Informe admin
+    
+    public function HTML_VentasXUsuario($CondicionFacturas) {
+        $html="";
+        $sql="SELECT Usuarios_idUsuarios as IdUsuarios, FormaPago as  TipoVenta, SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, 
+        SUM(Total) as Total, SUM(TotalCostos) as TotalCostos"
+                . "  FROM $CondicionFacturas GROUP BY Usuarios_idUsuarios, FormaPago";
+        $Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $html='<br><br><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Usuarios y Tipo de Venta:
+                </em></strong></span><BR><BR>
+
+
+                <table border="1" cellspacing="2" align="center" >
+                  <tr> 
+                    <th><h3>Usuario</h3></th>
+                        <th><h3>TipoVenta</h3></th>
+                        <th><h3>Total Costos</h3></th>
+                    <th><h3>SubTotal</h3></th>
+                        <th><h3>IVA</h3></th>
+                        <th><h3>Total</h3></th>
+                  </tr >
+
+                </table>';
+            $Subtotal=0;
+            $TotalIVA=0;
+            $TotalVentas=0;
+            $TotalCostos=0;
+            $flagQuery=0;
+            $i=0;
+            while($DatosVentas= $this->obCon->FetchArray($Datos)){
+                $flagQuery=1;
+                $SubtotalUser=number_format($DatosVentas["Subtotal"]);
+                $IVA=number_format($DatosVentas["IVA"]);
+                $Total=number_format($DatosVentas["Total"]);
+                $Costos=number_format($DatosVentas["TotalCostos"]);
+                $TipoVenta=$DatosVentas["TipoVenta"];
+                $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
+                $TotalIVA=$TotalIVA+$DatosVentas["IVA"];
+                $TotalVentas=$TotalVentas+$DatosVentas["Total"];
+                $TotalCostos=$TotalCostos+$DatosVentas["TotalCostos"];
+                $idUser=$DatosVentas["IdUsuarios"];
+                $html.=' 
+                    <table border="1" cellpadding="2"  align="center">
+                        <tr>
+                            <td>'.$idUser.'</td>
+                            <td>'.$TipoVenta.'</td>
+                            <td>'.$Costos.'</td>
+                            <td>'.$SubtotalUser.'</td>
+                            <td>'.$IVA.'</td>
+                            <td>'.$Total.'</td>
+                        </tr>
+                    </table>
+                    ';
+            }
+            if($flagQuery==1){
+                $TotalCostos=number_format($TotalCostos);
+                $Subtotal=number_format($Subtotal);
+                $TotalIVA=number_format($TotalIVA);
+                $TotalVentas=number_format($TotalVentas);
+                $html.= '
+                    <table border="1" cellspacing="2" align="center">
+                        <tr>
+                            <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                            <td><h3>NA</h3></td>
+                            <td><h3>'.$TotalCostos.'</h3></td>
+                            <td><h3>'.$Subtotal.'</h3></td>
+                            <td><h3>'.$TotalIVA.'</h3></td>
+                            <td><h3>'.$TotalVentas.'</h3></td>
+                        </tr>
+                    </table>
+                ';
+            }
+        }
+        //Total de devoluciones
+        $sql="SELECT idUsuarios as IdUsuarios, Sum(Cantidad) as Items, 
+                SUM(TotalItem) as Total "
+        . "  FROM facturas_items WHERE Cantidad < 0 AND $CondicionFecha1 GROUP BY idUsuarios";
+
+        $Datos=$this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+	
+            $TotalVentas=0;
+            $TotalItems=0;
+            $i=0;
+            
+        }
+        return($html);
+    }
+    
+    ///Clases para hacer el informe de administrador
+    public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
+        $Condicion=" ori_facturas_items WHERE ";
+        $Condicion2=" ori_facturas WHERE ";
+        if($TipoReporte=="Corte"){
+            $CondicionFecha1=" FechaFactura <= '$FechaFinal' ";
+            $CondicionFecha2=" Fecha <= '$FechaFinal' ";
+            $Rango="Corte a $FechaFinal";
+        }else{
+            $CondicionFecha1=" FechaFactura >= '$FechaIni' AND FechaFactura <= '$FechaFinal' ";
+            $CondicionFecha2=" Fecha >= '$FechaIni' AND Fecha <= '$FechaFinal' ";
+            $Rango="De $FechaIni a $FechaFinal";
+        }
+
+        $CondicionItems=$Condicion.$CondicionFecha1;
+        $CondicionFacturas=$Condicion2.$CondicionFecha2;
+        $idFormato=16;
+        $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
+        
+        $Documento="$DatosFormatos[Nombre] $Rango";
+        
+        $this->PDF_Ini("Informe_Ventas", 8, "");
+        
+        $this->PDF_Encabezado($Rango,1, $idFormato, "",$Documento);
+               
+        $html= $this->HTML_VentasXDepartamentos($CondicionItems);
+        $this->PDF_Write($html);
+        $html= $this->HTML_VentasXUsuario($CondicionFacturas);
+        $this->PDF_Write("<br>".$html);
+        
+        $this->PDF_Output("Informe_Ventas_");
+        
+    }
+    
+    
         // FIN Clases	
 }
 ?>
