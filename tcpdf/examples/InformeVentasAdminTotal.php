@@ -181,19 +181,6 @@ SUM(Total) as Total, SUM(TotalCostos) as TotalCostos"
 
 $Datos=$obVenta->Query($sql);
 
-/*
-	$sel1=mysql_query("SELECT f.Usuarios_idUsuarios as IdUsuarios, f.FormaPago as  TipoVenta, SUM(c.Subtotal) as Subtotal, SUM(c.IVA) as IVA, 
-SUM(c.Total) as Total,SUM(c.Descuento) as Descuentos, SUM(c.Cantidad) as Items 
-FROM facturas f INNER JOIN cotizaciones c ON f.Cotizaciones_idCotizaciones=c.NumCotizacion 
-INNER JOIN productosventa pr ON c.Referencia = pr.Referencia 
-INNER JOIN prod_departamentos dpt ON dpt.idDepartamentos = pr.Departamento
-WHERE f.Fecha >= '$FechaIni' AND f.Fecha <= '$FechaFinal' 
-	GROUP BY f.Usuarios_idUsuarios, f.FormaPago",$con) or die("problemas con la consulta a join ventas ".mysql_error());
-
-
-*/
-
-
 $Subtotal=0;
 $TotalIVA=0;
 $TotalVentas=0;

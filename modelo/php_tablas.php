@@ -4145,10 +4145,10 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
             <tr>
                 
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Referencia</strong></td>
-                <td align="center" colspan="3" style="border-bottom: 2px solid #ddd;"><strong>Producto o Servicio</strong></td>
-                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td>
+                <td align="center" colspan="5" style="border-bottom: 2px solid #ddd;"><strong>Producto o Servicio</strong></td>
+                <!-- <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td> -->
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Cantidad</strong></td>
-                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Valor Total</strong></td>
+                <!-- <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Valor Total</strong></td> -->
             </tr>';
 
         $sql="SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
@@ -4171,7 +4171,7 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
         $Multiplicador="$DatosItemFactura[Cantidad] X $DatosItemFactura[Multiplicador]";
     }
     if($h==0){
-        $Back="#f2f2f2";
+        $Back="#ecfcfc";
         $h=1;
     }else{
         $Back="white";
@@ -4197,20 +4197,22 @@ EOD;
 <tr>
     
     <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
-    <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Descripcion]</td>
-    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
+    <td align="left" colspan="5" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Descripcion]</td>
+    <!-- <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td> -->
     <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Multiplicador</td>
-    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
+    <!-- <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td> -->
 </tr>
           
 EOD;
     }
     }else{
+        $Back="white";
+        $h=1;
         $idSistema=$DatosItemFactura["Referencia"];
         $DatosSistema=$this->obCon->DevuelveValores("sistemas", "ID", $idSistema);
         $Cantidad=$DatosItemFactura["Cantidad"];
         $TotalSistema= number_format($this->obCon->Sume("vista_sistemas", "PrecioVenta", "WHERE idSistema='$idSistema'")*$Cantidad);
-        
+        $TotalSistema="";  //Se quita cuando quiera ver los precios
         if($DatosItemFactura["Multiplicador"]>1){
             $Cantidad=$DatosItemFactura["Cantidad"]." X ".$DatosItemFactura["Multiplicador"];
         }
@@ -4219,8 +4221,8 @@ EOD;
 <tr>
     
     <td align="center" colspan="7" style="border-bottom: 1px solid #ddd;background-color: $Back;">
-        <strong>$Cantidad $DatosItemFactura[Descripcion] $ $TotalSistema</strong><br><br>
-        $DatosSistema[Observaciones]<br><br>Compuesto por los Siguientes elementos: <br></td>
+        <strong><h2>$Cantidad $DatosItemFactura[Descripcion] $TotalSistema</h2></strong><br><br>
+        <div style="font-size:13px">$DatosSistema[Observaciones]</div><br><br>Compuesto por: <br></td>
     
 </tr>
           

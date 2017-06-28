@@ -2,7 +2,7 @@
 $myPage="Devoluciones.php";
 include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
-	
+$obVenta = new ProcesoVenta($idUser);	
 $idRemision="";
 //////Si recibo un cliente
 if(!empty($_REQUEST['TxtAsociarRemision'])){
@@ -77,9 +77,9 @@ print("<body>");
     if(!empty($_REQUEST["TxtBuscarRemision"])){
 
         $Key=$_REQUEST["TxtBuscarRemision"];
-        $pa=mysql_query("SELECT * FROM remisiones r INNER JOIN clientes cl ON r.Clientes_idClientes = cl.idClientes "
-                . "WHERE r.Estado<>'C' AND(cl.RazonSocial LIKE '%$Key%' OR r.ID = '$Key' OR r.Obra LIKE '%$Key%' OR r.FechaDespacho LIKE '%$Key%') ORDER BY r.ID DESC LIMIT 20") or die(mysql_error());
-        if(mysql_num_rows($pa)){
+        $pa=$obVenta->Query("SELECT * FROM remisiones r INNER JOIN clientes cl ON r.Clientes_idClientes = cl.idClientes "
+                . "WHERE r.Estado<>'C' AND(cl.RazonSocial LIKE '%$Key%' OR r.ID = '$Key' OR r.Obra LIKE '%$Key%' OR r.FechaDespacho LIKE '%$Key%') ORDER BY r.ID DESC LIMIT 20");
+        if($obVenta->NumRows($pa)){
             print("<br>");
             $css->CrearTabla();
             $css->FilaTabla(18);
@@ -97,7 +97,7 @@ print("<body>");
                 $css->ColTabla('Ver Remision',1);
                 $css->ColTabla('Asociar',1);
             $css->CierraFilaTabla();
-            while($DatosRemision=mysql_fetch_array($pa)){
+            while($DatosRemision=$obVenta->FetchArray($pa)){
                 $css->FilaTabla(14);
                 $css->ColTabla($DatosRemision['ID'],1);
                 $css->ColTabla($DatosRemision['Fecha'],1);
@@ -157,7 +157,7 @@ print("<body>");
             $Total=0;
             $Subtotal=0;
             $IVA=0;
-            while($DatosItemRemision=mysql_fetch_array($Consulta)){
+            while($DatosItemRemision=$obVenta->FetchArray($Consulta)){
 
                 $DatosItems=$obVenta->DevuelveValores("cot_itemscotizaciones", "ID", $DatosItemRemision["idItemCotizacion"]);
                 $Entregas=$obVenta->Sume('rem_relaciones', "CantidadEntregada", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision=$idRemision");
@@ -222,7 +222,7 @@ print("<body>");
     $sql.=" WHERE pre.idRemision='$idRemision'";
     $consulta=$obVenta->Query($sql);              
 
-    if(mysql_affected_rows()){
+    if($obVenta->NumRows($consulta)){
 
 
         $css->CrearTabla();
@@ -237,7 +237,7 @@ print("<body>");
         $css->ColTabla("<strong>Borrar</strong>", 1);
         $css->CierraFilaTabla();
 
-        while($DatosPreDevolucion=mysql_fetch_array($consulta)){
+        while($DatosPreDevolucion=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
             $css->ColTabla($DatosPreDevolucion["Referencia"], 1);
             $css->ColTabla($DatosPreDevolucion["Descripcion"], 1);
@@ -280,8 +280,8 @@ print("<body>");
         print("Centro de costos: <br>");
         $css->CrearSelect("CmbCentroCostos", "");
             $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCentroCosto=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCentroCosto=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCentroCosto["ID"], $DatosCentroCosto["Nombre"], 0);
             }
             }else{
@@ -292,8 +292,8 @@ print("<body>");
         print("Resolucion:<br> ");
         $css->CrearSelect("CmbResolucion", "");
             $Consulta=$obVenta->ConsultarTabla("empresapro_resoluciones_facturacion", "WHERE Completada<>'SI'");
-            if(mysql_num_rows($Consulta)){
-            while($DatosResolucion=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosResolucion=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosResolucion["ID"], $DatosResolucion["NumResolucion"], 0);
             }
             }else{
@@ -317,8 +317,8 @@ print("<body>");
         print("Cuenta donde ingresa el dinero: <br>");
         $css->CrearSelect("CmbCuentaDestino", "");
             $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCuentasFrecuentes=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCuentasFrecuentes=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCuentasFrecuentes["CuentaPUC"], $DatosCuentasFrecuentes["Nombre"], 0);
             }
             }else{

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-06-2017 a las 08:21:56
+-- Tiempo de generación: 26-06-2017 a las 09:55:22
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -2351,122 +2351,6 @@ INSERT INTO `cod_paises` (`Codigo`, `Pais`, `Updated`, `Sync`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `conceptos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `FechaHoraCreacion` datetime NOT NULL,
-  `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
-  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Genera` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Completo` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Activo` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=10 ;
-
---
--- Volcado de datos para la tabla `conceptos`
---
-
-INSERT INTO `conceptos` (`ID`, `FechaHoraCreacion`, `Nombre`, `Observaciones`, `Genera`, `idUsuario`, `Completo`, `Activo`, `Updated`, `Sync`) VALUES
-(2, '2016-12-20 19:43:32', 'Pago de servicio de electricidad', 'pago de servicio electrico', 'CE', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(3, '2016-12-20 22:05:10', 'Compra de insumos papeleria', 'Compra de insumos para la papeleria', 'CE', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(4, '2016-12-21 10:52:16', 'Compra de Equipos', 'Concepto Creado para la compra de equipos', 'CC', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(5, '2016-12-26 10:26:41', 'PAGO DE AGUA', 'SE CREA PARA PAGAR EL ACUEDUCTO', 'CC', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(6, '2016-12-26 13:27:33', 'Pago de servicio de gas', 'pago de servicio gas', 'CE', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(7, '2016-12-26 13:32:11', 'Pago de peajes', 'pago de peajes', 'CE', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(8, '2016-12-26 17:28:54', 'prueba', 'djalkjdlkjkslj', 'CE', 3, 'SI', 'SI', '2017-04-18 14:34:22', '2017-04-18 09:34:22'),
-(9, '2017-01-24 08:51:01', 'Pago de Nomina Directo', 'Se establace para el pago de nomina de los colaboradores directos', 'CC', 3, 'NO', 'NO', '2017-04-18 14:34:22', '2017-04-18 09:34:22');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `conceptos_montos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos_montos` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `idConcepto` int(11) NOT NULL,
-  `NombreMonto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Depende` bigint(20) NOT NULL,
-  `Operacion` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `ValorDependencia` bigint(20) NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=16 ;
-
---
--- Volcado de datos para la tabla `conceptos_montos`
---
-
-INSERT INTO `conceptos_montos` (`ID`, `idConcepto`, `NombreMonto`, `Depende`, `Operacion`, `ValorDependencia`, `idUsuario`, `Updated`, `Sync`) VALUES
-(1, 2, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(2, 3, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(3, 3, 'IVA', 2, 'P', 16, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(4, 3, 'Total', 3, 'S', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(5, 4, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(6, 4, 'IVA', 5, 'P', 16, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(7, 4, 'Total', 6, 'S', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(8, 5, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(10, 6, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(11, 7, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(12, 8, 'Subtotal', 0, '', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(13, 8, 'IVA', 12, 'P', 19, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(14, 8, 'ReteFuente', 12, 'P', 4, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25'),
-(15, 8, 'Total', 12, 'S', 0, 3, '2017-04-18 14:34:25', '2017-04-18 09:34:25');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `conceptos_movimientos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos_movimientos` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `idConcepto` int(11) NOT NULL,
-  `idMonto` int(11) NOT NULL,
-  `CuentaPUC` bigint(20) NOT NULL,
-  `NombreCuentaPUC` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `TipoMovimiento` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=26 ;
-
---
--- Volcado de datos para la tabla `conceptos_movimientos`
---
-
-INSERT INTO `conceptos_movimientos` (`ID`, `idConcepto`, `idMonto`, `CuentaPUC`, `NombreCuentaPUC`, `TipoMovimiento`, `idUsuario`, `Updated`, `Sync`) VALUES
-(5, 2, 1, 513530, 'Energ?a el?ctrica', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(7, 2, 1, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(8, 3, 2, 529530, '?tiles, papeler?a y fotocopias', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(9, 3, 3, 2408, 'Impuesto sobre las ventas por pagar', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(10, 3, 4, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(11, 4, 5, 152410, 'Equipos', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(12, 4, 6, 2408, 'Impuesto sobre las ventas por pagar', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(13, 4, 7, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(14, 5, 8, 513525, 'Acueducto y alcantarillado', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(16, 6, 10, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(17, 6, 10, 513555, 'Gas', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(18, 7, 11, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(19, 7, 11, 51950101, 'Peajes', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(20, 5, 9, 110505, ' Caja general', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(21, 8, 12, 5135, 'Gasto', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(23, 8, 13, 2408, 'Impuesto sobre las ventas por pagar', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(24, 8, 14, 2365, 'Retencion en la fuente', 'CR', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27'),
-(25, 8, 15, 1105, 'Caja', 'DB', 3, '2017-04-18 14:34:27', '2017-04-18 09:34:27');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `config_codigo_barras`
 --
 
@@ -2515,7 +2399,7 @@ CREATE TABLE IF NOT EXISTS `config_puertos` (
 --
 
 INSERT INTO `config_puertos` (`ID`, `Puerto`, `Utilizacion`, `Habilitado`, `Updated`, `Sync`) VALUES
-(1, 'COM3', 'IMPRESORA POS EPSON', 'NO', '2017-05-17 14:14:58', '2017-04-18 09:34:33'),
+(1, 'COM3', 'IMPRESORA POS EPSON', 'NO', '2017-06-15 14:02:14', '2017-06-15 09:02:14'),
 (2, 'COM6', 'IMPRESORA CODIGO DE BARRAS', 'SI', '2017-04-18 14:34:33', '2017-04-18 09:34:33');
 
 -- --------------------------------------------------------
@@ -2541,54 +2425,6 @@ CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
 
 INSERT INTO `config_tiketes_promocion` (`ID`, `NombreTiket`, `Tope`, `Multiple`, `Activo`, `Updated`, `Sync`) VALUES
 (1, 'PROMOCION DEL MES', '10000', 'NO', 'NO', '2017-04-18 14:34:38', '2017-04-18 09:34:38');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `costos`
---
-
-CREATE TABLE IF NOT EXISTS `costos` (
-  `idCostos` int(20) NOT NULL AUTO_INCREMENT,
-  `NombreCosto` varchar(45) NOT NULL,
-  `ValorCosto` double NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idCostos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
-
---
--- Volcado de datos para la tabla `costos`
---
-
-INSERT INTO `costos` (`idCostos`, `NombreCosto`, `ValorCosto`, `Updated`, `Sync`) VALUES
-(1, 'participacion ', 2000000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(2, 'Transporte', 240000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(3, 'Publicidad', 100000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(4, 'Arriendo', 1200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(5, 'Energia', 1400000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(6, 'Telefono', 220000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(7, 'Mano de Obra ', 11531200, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(8, 'Agua', 40000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(9, 'Contador', 230000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(10, 'Aceite Hid.', 8000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(11, 'Aceite Caja ', 13500, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(12, 'Formularios Cont.', 0, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(13, 'Gas', 5500, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(14, 'Oxigeno', 80000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(15, 'Aseo', 10000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(16, 'Cumplea', 11000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(17, 'Dotacion', 125000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(18, 'Anchetas fda', 21000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(19, 'Herramientas', 1800000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(20, 'otros gastos de administracion ', 1200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(21, 'Gastos Financieros ', 2271420, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(22, 'internet ', 108700, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(23, 'Asistente administrativo ', 1364260, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(24, 'auxiliar contable', 1125930, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(25, 'papeleria ', 200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
-(26, 'dsadas', 43243234.5, '2017-05-17 20:47:33', '0000-00-00 00:00:00'),
-(27, 'ARRIENDO', 50000, '2017-05-19 02:58:25', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2989,7 +2825,7 @@ CREATE TABLE IF NOT EXISTS `documentos_generados` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Abreviatura` (`Abreviatura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `documentos_generados`
@@ -3000,7 +2836,35 @@ INSERT INTO `documentos_generados` (`ID`, `Nombre`, `Abreviatura`, `Libro`, `Upd
 (2, 'COMPROBANTE DE EGRESO', 'CE', 'CompEgreso', '2017-04-18 14:35:19', '2017-04-18 09:35:19'),
 (3, 'COMPROBANTE DE INGRESO', 'CI', 'ComprobanteIngreso', '2017-04-18 14:35:19', '2017-04-18 09:35:19'),
 (4, 'COMPROBANTE CONTABLE', 'CC', 'COMPROBANTE CONTABLE', '2017-04-18 14:35:19', '2017-04-18 09:35:19'),
-(5, 'NOTA DE CONTABILIDAD', 'NC', 'NotaContable', '2017-04-18 14:35:19', '2017-04-18 09:35:19');
+(5, 'NOTA DE CONTABILIDAD', 'NC', 'NotaContable', '2017-04-18 14:35:19', '2017-04-18 09:35:19'),
+(6, 'FACTURA DE COMPRA', 'FC', 'FacturaCompra', '2017-06-16 17:12:42', '2017-06-16 12:12:42'),
+(7, 'VENTA DE TITULO', 'VT', 'VentaTitulo', '2017-06-16 17:12:42', '2017-06-16 12:12:42');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `egresos_activos`
+--
+
+CREATE TABLE IF NOT EXISTS `egresos_activos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) NOT NULL,
+  `Cuentas_idCuentas` int(11) NOT NULL,
+  `Visible` int(1) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Volcado de datos para la tabla `egresos_activos`
+--
+
+INSERT INTO `egresos_activos` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Updated`, `Sync`) VALUES
+(1, 'Mercancias no fabricadas por la empresa', 1435, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26'),
+(2, 'Equipo Medico Cientifico', 1532, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26'),
+(3, 'Equipos de Oficina', 1524, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26'),
+(4, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26');
 
 -- --------------------------------------------------------
 
@@ -3062,6 +2926,7 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
   `PuntoEquilibrio` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `DatosBancarios` text COLLATE utf8_spanish_ci NOT NULL,
   `RutaImagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'LogosEmpresas/logotipo1.png',
+  `FacturaSinInventario` varchar(2) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idEmpresaPro`)
@@ -3071,8 +2936,8 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
 -- Volcado de datos para la tabla `empresapro`
 --
 
-INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Telefono`, `Celular`, `Ciudad`, `ResolucionDian`, `Regimen`, `Email`, `WEB`, `ObservacionesLegales`, `PuntoEquilibrio`, `DatosBancarios`, `RutaImagen`, `Updated`, `Sync`) VALUES
-(1, 'TECHNO SOLUCIONES SAS', '900833180-7', 'CARRERA 17 7 18', '3177740609', '3177740609', 'BUGA', 'IVA REGIMEN COMUN\r\nACTIVIDAD ECONOMICA CIIU 8020\r\n', 'COMUN', 'info@technosoluciones.com', 'www.technosoluciones.com', 'Esta Factura de Venta se asimila en todos sus efectos a una letra de cambio (Art. 621 y siguientes del Codigo de Comercio). En caso de mora se causaran los intereses legales Vigentes. Cuenta', '5000000', 'DATOS BANCARIOS: BANCOLOMBIA CUENTA DE AHORROS 848-232213-03 A NOMBRE DE TECNOAGRO R.L. SAS ', 'LogosEmpresas/logotipo1.png', '2017-04-18 14:35:38', '2017-04-18 09:35:38');
+INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Telefono`, `Celular`, `Ciudad`, `ResolucionDian`, `Regimen`, `Email`, `WEB`, `ObservacionesLegales`, `PuntoEquilibrio`, `DatosBancarios`, `RutaImagen`, `FacturaSinInventario`, `Updated`, `Sync`) VALUES
+(1, 'TECHNO SOLUCIONES SAS', '900833180-7', 'CARRERA 17 7 18', '3177740609', '3177740609', 'BUGA', 'IVA REGIMEN COMUN\r\nACTIVIDAD ECONOMICA CIIU 8020\r\n', 'COMUN', 'info@technosoluciones.com', 'www.technosoluciones.com', 'Esta Factura de Venta se asimila en todos sus efectos a una letra de cambio (Art. 621 y siguientes del Codigo de Comercio). En caso de mora se causaran los intereses legales Vigentes. Cuenta', '5000000', 'DATOS BANCARIOS: BANCOLOMBIA CUENTA DE AHORROS 848-232213-03 A NOMBRE DE TECNOAGRO R.L. SAS ', 'LogosEmpresas/logotipo1.png', 'NO', '2017-06-22 22:35:28', '2017-06-22 17:35:28');
 
 -- --------------------------------------------------------
 
@@ -3105,8 +2970,8 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
 --
 
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`, `Updated`, `Sync`) VALUES
-(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-06-05 14:31:11', '2017-04-18 09:35:41'),
-(2, 'Facturas por POS', '1555431', '2016-03-28', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2017-05-19 16:58:55', '2017-04-18 09:35:41');
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-06-22 22:49:48', '2017-06-22 17:49:48'),
+(2, 'Facturas por POS', '1555431', '2016-03-28', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2017-06-15 14:03:08', '2017-06-15 09:03:08');
 
 -- --------------------------------------------------------
 
@@ -3133,10 +2998,28 @@ CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
 --
 
 INSERT INTO `empresa_pro_sucursales` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `idEmpresaPro`, `Visible`, `Actual`, `idServidor`, `Updated`, `Sync`) VALUES
-(1, 'TECHNO YOTOCO', 'YOTOCO', '', 1, 'SI', '1', 0, '2017-05-01 15:49:07', '2017-04-18 09:35:36'),
-(2, 'TECHNO BUGA', 'BUGA', '', 1, 'SI', '0', 3, '2017-05-01 15:21:48', '2017-04-18 09:35:36'),
+(1, 'TECHNO YOTOCO', 'YOTOCO', '', 1, 'SI', '1', 0, '2017-06-15 14:03:02', '2017-06-15 09:03:02'),
+(2, 'TECHNO BUGA', 'BUGA', '', 1, 'SI', '0', 3, '2017-06-15 14:03:02', '2017-06-15 09:03:02'),
 (3, 'TECHNO GINEBRA', 'GINEBRA', '', 1, 'SI', '0', 0, '2017-04-18 14:35:36', '2017-04-18 09:35:36'),
-(4, 'TECHNO SAN PEDRO', 'SAN PEDRO', '', 1, 'SI', '0', 0, '2017-05-01 15:49:04', '2017-04-18 09:35:36');
+(4, 'TECHNO SAN PEDRO', 'SAN PEDRO', '', 1, 'SI', '0', 0, '2017-06-15 14:03:02', '2017-06-15 09:03:02');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `facturas_formapago`
+--
+
+CREATE TABLE IF NOT EXISTS `facturas_formapago` (
+  `idFacturas_FormaPago` int(16) NOT NULL AUTO_INCREMENT,
+  `Total` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Paga` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Devuelve` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `FormaPago` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Facturas_idFacturas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`idFacturas_FormaPago`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -3163,7 +3046,7 @@ INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`
 (3, '30', 'Credito a 30 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
 (4, '60', 'Credito a 60 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
 (5, '90', 'Credito a 90 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(6, 'SisteCredito', 'SisteCredito', '2017-05-22 13:18:14', '0000-00-00 00:00:00');
+(6, 'SisteCredito', 'SisteCredito', '2017-06-15 14:03:53', '2017-06-15 09:03:53');
 
 -- --------------------------------------------------------
 
@@ -3188,10 +3071,10 @@ CREATE TABLE IF NOT EXISTS `formatos_calidad` (
 --
 
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES
-(1, 'COTIZACION', '001', 'F-GA-015', '2016-05-11', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
-(2, 'FACTURA DE VENTA', '001', 'F-GA-013', '2016-05-11', '', '2017-05-29 01:40:35', '2017-04-18 09:40:41'),
+(1, 'PROPUESTA ECONOMICA', '002', 'F-GA-015', '2016-05-11', '', '2017-06-22 22:35:38', '2017-06-22 17:35:38'),
+(2, 'FACTURA DE VENTA', '001', 'F-GA-013', '2016-05-11', '', '2017-06-15 14:03:57', '2017-06-15 09:03:57'),
 (3, 'CONTROL DE MANTENIMIENTO', '001', 'F-GO-001', '2016-05-11', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
-(4, 'COMPROBANTE DE INGRESO', '001', 'F-GA-016', '2016-05-11', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
+(4, 'COMPROBANTE DE INGRESO', '001', 'F-GA-016', '2016-05-11', '', '2017-06-22 22:35:38', '2017-06-22 17:35:38'),
 (5, 'ORDEN DE COMPRA', '001', 'F-GA-006', '2016-05-11', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (6, 'ORDEN DE SERVICIO', '001', 'F-GA-014', '2016-05-11', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (7, 'REMISION', '001', 'F-GA-012', '2016-05-11', 'Certifico que los equipos o mercancia entregada se recibio completa y en buen estado y me hago totalmente responsable del buen uso que se le de, asi mismo a pagar los faltantes que se produzcan.', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
@@ -3210,7 +3093,7 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 (20, 'BALANCE COMPROBACION', '001', 'F-GC-050', '2016-06-06', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (21, 'DATOS EXPORTADOS EN PDF', '001', 'F-GC-051', '2016-06-06', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (22, 'TRASLADO DE TITULO', '001', 'F-GC-052', '2016-06-06', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
-(23, 'FACTURA DE COMPRA', '001', 'F-GC-002', '2016-05-11', '', '2017-05-29 01:41:31', '2017-04-18 09:40:41');
+(23, 'FACTURA DE COMPRA', '001', 'F-GC-002', '2016-05-11', '', '2017-06-15 14:03:57', '2017-06-15 09:03:57');
 
 -- --------------------------------------------------------
 
@@ -3319,28 +3202,6 @@ INSERT INTO `impret` (`idImpRet`, `Nombre`, `Tipo`, `Valor`, `CuentaRetFavor`, `
 (7, 'Retencion en la Fuente Aplicado al Regimen Comun por Servicios', 'RetencionAplicada', '0.04', '', '2365', 'Subtotal', '2017-04-18 14:40:47', '2017-04-18 09:40:47'),
 (8, 'Impuesto a las ventas retenido, aplicado al IVA', 'RetencionAplicada', '0.15', '', '2367', 'IVA', '2017-04-18 14:40:47', '2017-04-18 09:40:47'),
 (9, 'Impuesto de industria y comercio retenido, las tarifas dependen de la ciudad y actividad', 'RetencionAplicada', '0.009', '', '2368', 'Subtotal', '2017-04-18 14:40:47', '2017-04-18 09:40:47');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ordenesdetrabajo_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_tipo` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Tipo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
-
---
--- Volcado de datos para la tabla `ordenesdetrabajo_tipo`
---
-
-INSERT INTO `ordenesdetrabajo_tipo` (`ID`, `Tipo`, `Updated`, `Sync`) VALUES
-(1, 'EXTERNA', '2017-04-18 14:59:06', '2017-04-18 09:59:06'),
-(2, 'INTERNA', '2017-04-18 14:59:06', '2017-04-18 09:59:06');
 
 -- --------------------------------------------------------
 
@@ -3508,7 +3369,7 @@ INSERT INTO `paginas_bloques` (`ID`, `TipoUsuario`, `Pagina`, `Habilitado`, `Upd
 (24, 'comercial', 'prod_codbarras.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
 (25, 'cajero', 'Menu.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
 (26, 'cajero', 'MnuVentas.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
-(27, 'cajero', 'VentasRapidasV2.php', 'SI', '2017-05-04 15:25:31', '2017-04-18 09:59:17'),
+(27, 'cajero', 'VentasRapidasV2.php', 'SI', '2017-06-15 14:05:36', '2017-06-15 09:05:36'),
 (28, 'cajero', 'separados.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
 (29, 'cajero', 'separados_abonos.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
 (30, 'cajero', 'separados_items.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
@@ -3562,12 +3423,12 @@ CREATE TABLE IF NOT EXISTS `parametros_contables` (
 --
 
 INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
-(1, 'Cuenta que se utiliza para el iva generado en las operaciones de venta ', 240805, 'Impuesto sobre las ventas por pagar Generado', '2017-06-02 12:52:52', '2017-04-18 09:59:19'),
-(2, 'Cuenta Costo de venta de la mercancia', 613501, 'Venta de Mercancias No Fabricadas por la Empresa', '2017-06-02 13:13:10', '2017-04-18 09:59:19'),
+(1, 'Cuenta que se utiliza para el iva generado en las operaciones de venta ', 24080501, 'Impuesto sobre las ventas por pagar Generado', '2017-06-22 22:35:55', '2017-06-22 17:35:55'),
+(2, 'Cuenta Costo de venta de la mercancia', 613501, 'Venta de Mercancias No Fabricadas por la Empresa', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
 (3, 'Cuenta Gasto Para Bajas de Mercancias no fabricadas por la empresa', 529915, '', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
-(4, 'Cuenta donde se alojan los inventarios de las mercancias no fabricadas por la empresa', 143501, 'Mercancias No Fabricadas por la Empresa', '2017-05-26 00:53:09', '2017-04-18 09:59:19'),
+(4, 'Cuenta donde se alojan los inventarios de las mercancias no fabricadas por la empresa', 143501, 'Mercancias No Fabricadas por la Empresa', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
 (5, 'Cuenta para Realizar el Credito a las altas de un producto', 529915, '', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
-(6, 'Cuenta para realizar creditos o debitos a los clientes', 130505, 'CLIENTES NACIONALES', '2017-06-02 12:47:13', '2017-04-18 09:59:19'),
+(6, 'Cuenta para realizar creditos o debitos a los clientes', 130505, 'CLIENTES NACIONALES', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
 (7, 'Cuenta para registrar el gasto por otros descuentos cuando se registra un ingreso por cartera', 521095, 'OTROS DESCUENTOS', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (8, 'CUENTA PARA REGISTRAR EL PAGO DE COMISIONES', 520518, 'COMISIONES', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (9, 'Cuenta para registrar la devolucion de una venta', 417501, 'DEVOLUCIONES EN VENTA', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
@@ -3575,8 +3436,226 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 (11, 'Cuenta para llevar la utilidad del ejercicio', 3605, 'Utilidad del Ejercicio', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (12, 'Cuenta para llevar la perdida del ejercicio', 3610, 'Perdida del Ejercicio', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (13, 'Contrapartida para llevar la perdida o ganancia del ejercicio', 5905, 'Ganancias y perdidas', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
-(14, 'Cuenta x pagar proveedores', 2205, 'PROVEEDORES NACIONALES', '2017-05-26 01:13:05', '2017-04-18 09:59:19'),
-(15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-05-25 22:45:57', '2017-04-18 09:59:19');
+(14, 'Cuenta x pagar proveedores', 220505, 'PROVEEDORES NACIONALES', '2017-06-16 17:13:00', '2017-06-16 12:13:00'),
+(15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-06-15 14:05:38', '2017-06-15 09:05:38');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `plataforma_tablas`
+--
+
+CREATE TABLE IF NOT EXISTS `plataforma_tablas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=199 ;
+
+--
+-- Volcado de datos para la tabla `plataforma_tablas`
+--
+
+INSERT INTO `plataforma_tablas` (`ID`, `Nombre`, `Updated`, `Sync`) VALUES
+(1, 'abonos_libro', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(2, 'act_movimientos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(3, 'act_ordenes', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(4, 'act_pre_movimientos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(5, 'act_pre_ordenes', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(6, 'activos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(7, 'alertas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(8, 'autorizaciones_generales', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(9, 'bodega', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(10, 'cajas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(11, 'cajas_aperturas_cierres', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(12, 'cartera', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(13, 'centrocosto', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(14, 'cierres_contables', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(15, 'ciuu', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(16, 'clasecuenta', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(17, 'clientes', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(18, 'cod_departamentos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(19, 'cod_documentos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(20, 'cod_municipios_dptos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(21, 'cod_paises', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(22, 'col_registrohoras', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(23, 'colaboradores', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(24, 'colaboradores_ventas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(25, 'comisiones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(26, 'comisionesporventas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(27, 'compras', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(28, 'compras_activas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(29, 'compras_precompra', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(30, 'comprobantes_contabilidad', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(31, 'comprobantes_contabilidad_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(32, 'comprobantes_egreso_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(33, 'comprobantes_ingreso', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(34, 'comprobantes_ingreso_anulaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(35, 'comprobantes_ingreso_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(36, 'comprobantes_pre', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(37, 'concejales', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(38, 'concejales_intervenciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(39, 'concejo_sesiones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(40, 'concejo_tipo_sesiones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(41, 'conceptos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(42, 'conceptos_montos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(43, 'conceptos_movimientos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(44, 'config_codigo_barras', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(45, 'config_puertos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(46, 'config_tiketes_promocion', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(47, 'costos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(48, 'cot_itemscotizaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(49, 'cotizaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(50, 'cotizaciones_anexos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(51, 'cotizacionesv5', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(52, 'crono_controles', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(53, 'cuentas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(54, 'cuentasfrecuentes', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(55, 'cuentasxpagar', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(56, 'cuentasxpagar_abonos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(57, 'devolucionesventas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(58, 'documentos_generados', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(59, 'egresos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(60, 'egresos_activos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(61, 'egresos_anulaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(62, 'egresos_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(63, 'egresos_pre', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(64, 'egresos_tipo', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(65, 'empresa_pro_sucursales', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(66, 'empresapro', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(67, 'empresapro_resoluciones_facturacion', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(68, 'estadosfinancieros_mayor_temporal', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(69, 'factura_compra', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(70, 'factura_compra_descuentos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(71, 'factura_compra_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(72, 'factura_compra_items_devoluciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(73, 'factura_compra_retenciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(74, 'factura_compra_servicios', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(75, 'facturas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(76, 'facturas_abonos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(77, 'facturas_anticipos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(78, 'facturas_autoretenciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(79, 'facturas_formapago', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(80, 'facturas_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(81, 'facturas_pre', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(82, 'facturas_reten_aplicadas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(83, 'facturas_tipo_pago', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(84, 'fechas_descuentos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(85, 'formatos_calidad', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(86, 'gupocuentas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(87, 'impret', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(88, 'ingresos', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(89, 'ingresosvarios', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(90, 'inventarios_diferencias', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(91, 'inventarios_temporal', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(92, 'kardexmercancias', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(93, 'kardexmercancias_temporal', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(94, 'kits', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(95, 'kits_relaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(96, 'librodiario', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(97, 'libromayorbalances', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(98, 'maquinas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(99, 'menu', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(100, 'notascontables', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(101, 'notascontables_anulaciones', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(102, 'notascredito', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(103, 'ordenesdecompra', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(104, 'ordenesdecompra_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(105, 'ordenesdetrabajo', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(106, 'ordenesdetrabajo_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(107, 'ordenesdetrabajo_tipo', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(108, 'ori_facturas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(109, 'ori_facturas_items', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(110, 'paginas', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(111, 'paginas_bloques', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(112, 'parametros_contables', '2017-06-22 23:09:19', '2017-06-22 18:09:19'),
+(113, 'plataforma_tablas', '2017-06-22 23:09:21', '0000-00-00 00:00:00'),
+(114, 'porcentajes_iva', '2017-06-22 23:09:23', '0000-00-00 00:00:00'),
+(115, 'precotizacion', '2017-06-22 23:09:24', '0000-00-00 00:00:00'),
+(116, 'preventa', '2017-06-22 23:09:26', '0000-00-00 00:00:00'),
+(117, 'prod_bajas_altas', '2017-06-22 23:09:27', '0000-00-00 00:00:00'),
+(118, 'prod_bodega', '2017-06-22 23:09:29', '0000-00-00 00:00:00'),
+(119, 'prod_codbarras', '2017-06-22 23:09:30', '0000-00-00 00:00:00'),
+(120, 'prod_codbarras_bodega_1', '2017-06-22 23:09:32', '0000-00-00 00:00:00'),
+(121, 'prod_codbarras_bodega_2', '2017-06-22 23:09:33', '0000-00-00 00:00:00'),
+(122, 'prod_codbarras_bodega_3', '2017-06-22 23:09:34', '0000-00-00 00:00:00'),
+(123, 'prod_codbarras_bodega_4', '2017-06-22 23:09:36', '0000-00-00 00:00:00'),
+(124, 'prod_codbarras_bodega_5', '2017-06-22 23:09:37', '0000-00-00 00:00:00'),
+(125, 'prod_comisiones', '2017-06-22 23:09:39', '0000-00-00 00:00:00'),
+(126, 'prod_departamentos', '2017-06-22 23:09:40', '0000-00-00 00:00:00'),
+(127, 'prod_kits', '2017-06-22 23:09:42', '0000-00-00 00:00:00'),
+(128, 'prod_sinc', '2017-06-22 23:09:43', '0000-00-00 00:00:00'),
+(129, 'prod_sub1', '2017-06-22 23:09:45', '0000-00-00 00:00:00'),
+(130, 'prod_sub2', '2017-06-22 23:09:46', '0000-00-00 00:00:00'),
+(131, 'prod_sub3', '2017-06-22 23:09:47', '0000-00-00 00:00:00'),
+(132, 'prod_sub4', '2017-06-22 23:09:49', '0000-00-00 00:00:00'),
+(133, 'prod_sub5', '2017-06-22 23:09:50', '0000-00-00 00:00:00'),
+(134, 'prod_sub6', '2017-06-22 23:09:52', '0000-00-00 00:00:00'),
+(135, 'produccion_actividades', '2017-06-22 23:09:53', '0000-00-00 00:00:00'),
+(136, 'produccion_horas_cronograma', '2017-06-22 23:09:55', '0000-00-00 00:00:00'),
+(137, 'produccion_ordenes_trabajo', '2017-06-22 23:09:56', '0000-00-00 00:00:00'),
+(138, 'produccion_pausas_predefinidas', '2017-06-22 23:09:58', '0000-00-00 00:00:00'),
+(139, 'produccion_registro_tiempos', '2017-06-22 23:09:59', '0000-00-00 00:00:00'),
+(140, 'productosalquiler', '2017-06-22 23:10:01', '0000-00-00 00:00:00'),
+(141, 'productosventa', '2017-06-22 23:10:02', '0000-00-00 00:00:00'),
+(142, 'productosventa_bodega_1', '2017-06-22 23:10:04', '0000-00-00 00:00:00'),
+(143, 'productosventa_bodega_2', '2017-06-22 23:10:05', '0000-00-00 00:00:00'),
+(144, 'productosventa_bodega_3', '2017-06-22 23:10:06', '0000-00-00 00:00:00'),
+(145, 'productosventa_bodega_4', '2017-06-22 23:10:08', '0000-00-00 00:00:00'),
+(146, 'productosventa_bodega_5', '2017-06-22 23:10:09', '0000-00-00 00:00:00'),
+(147, 'proveedores', '2017-06-22 23:10:11', '0000-00-00 00:00:00'),
+(148, 'registra_apertura_documentos', '2017-06-22 23:10:12', '0000-00-00 00:00:00'),
+(149, 'registra_ediciones', '2017-06-22 23:10:14', '0000-00-00 00:00:00'),
+(150, 'relacioncompras', '2017-06-22 23:10:15', '0000-00-00 00:00:00'),
+(151, 'rem_devoluciones', '2017-06-22 23:10:17', '0000-00-00 00:00:00'),
+(152, 'rem_devoluciones_totalizadas', '2017-06-22 23:10:18', '0000-00-00 00:00:00'),
+(153, 'rem_pre_devoluciones', '2017-06-22 23:10:19', '0000-00-00 00:00:00'),
+(154, 'rem_relaciones', '2017-06-22 23:10:21', '0000-00-00 00:00:00'),
+(155, 'remisiones', '2017-06-22 23:10:22', '0000-00-00 00:00:00'),
+(156, 'repuestas_forma_pago', '2017-06-22 23:10:24', '0000-00-00 00:00:00'),
+(157, 'requerimientos_proyectos', '2017-06-22 23:10:25', '0000-00-00 00:00:00'),
+(158, 'respuestas_condicional', '2017-06-22 23:10:27', '0000-00-00 00:00:00'),
+(159, 'respuestas_tipo_item', '2017-06-22 23:10:28', '0000-00-00 00:00:00'),
+(160, 'restaurante_cierres', '2017-06-22 23:10:29', '0000-00-00 00:00:00'),
+(161, 'restaurante_mesas', '2017-06-22 23:10:31', '0000-00-00 00:00:00'),
+(162, 'restaurante_pedidos', '2017-06-22 23:10:32', '0000-00-00 00:00:00'),
+(163, 'restaurante_pedidos_items', '2017-06-22 23:10:34', '0000-00-00 00:00:00'),
+(164, 'separados', '2017-06-22 23:10:35', '0000-00-00 00:00:00'),
+(165, 'separados_abonos', '2017-06-22 23:10:37', '0000-00-00 00:00:00'),
+(166, 'separados_items', '2017-06-22 23:10:38', '0000-00-00 00:00:00'),
+(167, 'servicios', '2017-06-22 23:10:40', '0000-00-00 00:00:00'),
+(168, 'servidores', '2017-06-22 23:10:41', '0000-00-00 00:00:00'),
+(169, 'sistemas', '2017-06-22 23:10:43', '0000-00-00 00:00:00'),
+(170, 'sistemas_relaciones', '2017-06-22 23:10:44', '0000-00-00 00:00:00'),
+(171, 'subcuentas', '2017-06-22 23:10:46', '0000-00-00 00:00:00'),
+(172, 'subcuentas_equivalencias_niif', '2017-06-22 23:10:47', '0000-00-00 00:00:00'),
+(173, 'tablas_ventas', '2017-06-22 23:10:48', '0000-00-00 00:00:00'),
+(174, 'tarjetas_forma_pago', '2017-06-22 23:10:50', '0000-00-00 00:00:00'),
+(175, 'tiposretenciones', '2017-06-22 23:10:51', '0000-00-00 00:00:00'),
+(176, 'titulos_abonos', '2017-06-22 23:10:53', '0000-00-00 00:00:00'),
+(177, 'titulos_asignaciones', '2017-06-22 23:10:54', '0000-00-00 00:00:00'),
+(178, 'titulos_comisiones', '2017-06-22 23:10:56', '0000-00-00 00:00:00'),
+(179, 'titulos_cuentasxcobrar', '2017-06-22 23:10:57', '0000-00-00 00:00:00'),
+(180, 'titulos_devoluciones', '2017-06-22 23:10:59', '0000-00-00 00:00:00'),
+(181, 'titulos_listados_promocion_1', '2017-06-22 23:11:00', '0000-00-00 00:00:00'),
+(182, 'titulos_listados_promocion_6', '2017-06-22 23:11:02', '0000-00-00 00:00:00'),
+(183, 'titulos_listados_promocion_7', '2017-06-22 23:11:03', '0000-00-00 00:00:00'),
+(184, 'titulos_promociones', '2017-06-22 23:11:04', '0000-00-00 00:00:00'),
+(185, 'titulos_traslados', '2017-06-22 23:11:06', '0000-00-00 00:00:00'),
+(186, 'titulos_ventas', '2017-06-22 23:11:07', '0000-00-00 00:00:00'),
+(187, 'traslados_estados', '2017-06-22 23:11:09', '0000-00-00 00:00:00'),
+(188, 'traslados_items', '2017-06-22 23:11:10', '0000-00-00 00:00:00'),
+(189, 'traslados_mercancia', '2017-06-22 23:11:11', '0000-00-00 00:00:00'),
+(190, 'usuarios', '2017-06-22 23:11:13', '0000-00-00 00:00:00'),
+(191, 'usuarios_ip', '2017-06-22 23:11:15', '0000-00-00 00:00:00'),
+(192, 'usuarios_keys', '2017-06-22 23:11:16', '0000-00-00 00:00:00'),
+(193, 'usuarios_tipo', '2017-06-22 23:11:18', '0000-00-00 00:00:00'),
+(194, 'ventas', '2017-06-22 23:11:19', '0000-00-00 00:00:00'),
+(195, 'ventas_devoluciones', '2017-06-22 23:11:21', '0000-00-00 00:00:00'),
+(196, 'ventas_nota_credito', '2017-06-22 23:11:22', '0000-00-00 00:00:00'),
+(197, 'ventas_separados', '2017-06-22 23:11:23', '0000-00-00 00:00:00'),
+(198, 'vestasactivas', '2017-06-22 23:11:25', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3602,12 +3681,12 @@ CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
 --
 
 INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `CuentaPUC`, `CuentaPUCIVAGenerado`, `NombreCuenta`, `Habilitado`, `Updated`, `Sync`) VALUES
-(1, 'Sin IVA', '0', 2408, 2408, '', 'SI', '2017-06-02 18:28:26', '2017-04-18 09:59:23'),
-(2, 'Excluidos', 'E', 2408, 2408, '', 'SI', '2017-06-02 18:28:30', '2017-04-18 09:59:23'),
-(3, 'IVA 5 %', '0.05', 24080503, 24081003, 'Impuestos del 5%', 'SI', '2017-06-02 18:28:31', '2017-04-18 09:59:23'),
-(4, 'IVA del 8%', '0.08', 24080502, 24081002, 'Impuestos del 8%', 'SI', '2017-06-02 18:28:33', '2017-04-18 09:59:23'),
-(5, 'IVA del 16%', '0.16', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-02 18:29:41', '2017-04-18 09:59:23'),
-(6, 'IVA del 19%', '0.19', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-02 18:28:36', '2017-04-18 09:59:23');
+(1, 'Sin IVA', '0', 2408, 2408, '', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(2, 'Excluidos', 'E', 2408, 2408, '', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(3, 'IVA 5 %', '0.05', 24080503, 24081003, 'Impuestos del 5%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(4, 'IVA del 8%', '0.08', 24080502, 24081002, 'Impuestos del 8%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(5, 'IVA del 16%', '0.16', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(6, 'IVA del 19%', '0.19', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43');
 
 -- --------------------------------------------------------
 
@@ -3634,7 +3713,7 @@ INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, 
 (3, '30', 'Credito a 30 Dias', '2017-04-18 15:08:26', '2017-04-18 10:08:26'),
 (4, '60', 'Credito a 60 Dias', '2017-04-18 15:08:26', '2017-04-18 10:08:26'),
 (5, '90', 'Credito a 90 Dias', '2017-04-18 15:08:26', '2017-04-18 10:08:26'),
-(6, 'SisteCredito', 'SisteCredito', '2017-04-24 20:17:14', '0000-00-00 00:00:00');
+(6, 'SisteCredito', 'SisteCredito', '2017-06-15 14:07:58', '2017-06-15 09:07:58');
 
 -- --------------------------------------------------------
 
@@ -3750,7 +3829,7 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (112510, ' Rotatorios moneda extranjera', '0', '1125', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (112515, ' Especiales moneda nacional', '0', '1125', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (112520, ' Especiales moneda extranjera', '0', '1125', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
-(130505, 'CLIENTES NACIONALES', NULL, '1305', '2017-04-25 16:17:19', '0000-00-00 00:00:00'),
+(130505, 'CLIENTES NACIONALES', NULL, '1305', '2017-06-15 14:08:36', '2017-06-15 09:08:36'),
 (135515, 'Retencion en la Fuente', '0', '1355', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (135517, 'Impuesto a las Ventas Retenido', '0', '1355', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (135518, 'Impuesto de Industria y Comercio Retenido', '0', '1355', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
@@ -3830,8 +3909,8 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (236565, ' Por impuesto de timbre', '0', '2365', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (236570, ' Otras retenciones y patrimonio (CREE)', '0', '2365', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (236575, ' Autorretenciones', '0', '2365', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
-(236701, 'Impuesto a las ventas retenido', '0', '2367', '2017-05-25 20:15:09', '0000-00-00 00:00:00'),
-(236801, 'Impuesto de industria y comercio retenido', '0', '2368', '2017-05-25 20:35:03', '0000-00-00 00:00:00'),
+(236701, 'Impuesto a las ventas retenido', '0', '2367', '2017-06-15 14:08:36', '2017-06-15 09:08:36'),
+(236801, 'Impuesto de industria y comercio retenido', '0', '2368', '2017-06-15 14:08:36', '2017-06-15 09:08:36'),
 (237005, ' Aportes a entidades promotoras de salud EPS', '0', '2370', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (237006, ' Aportes a administradoras de riesgos profesi', '0', '2370', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (237010, ' Aportes al ICBF SENA y cajas de compensacion', '0', '2370', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
@@ -5299,7 +5378,10 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (11100502, 'CHEQUES RECIBIDOS', NULL, '1110', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (11100503, 'BONOS U OTROS RECIBIDOS', NULL, '1110', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (13050517, 'CLIENTES NACIONALES SEGURIDAD ATLAS LTDA', '0', '1305', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
+(13559503, 'CUENTAS X COBRAR ANTICIPOS X GASTOS', NULL, '1355', '2017-06-22 22:36:14', '2017-06-22 17:36:14');
+INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
 (23657502, 'Autorretenciones (CREE)', '0', '2365', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
+(24080218, 'IVA DESCONTABLE X SERVICIOS Y GASTOS', NULL, '2408', '2017-06-22 22:36:14', '2017-06-22 17:36:14'),
 (51950101, 'Peajes', '0', '5195', '2017-04-18 15:08:57', '2017-04-18 10:08:57');
 
 -- --------------------------------------------------------
@@ -5359,33 +5441,6 @@ INSERT INTO `tarjetas_forma_pago` (`ID`, `Tipo`, `Nombre`, `PorcentajeComision`,
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tiposretenciones`
---
-
-CREATE TABLE IF NOT EXISTS `tiposretenciones` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaPasivo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `NombreCuentaPasivo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaActivo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `NombreCuentaActivo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
-
---
--- Volcado de datos para la tabla `tiposretenciones`
---
-
-INSERT INTO `tiposretenciones` (`ID`, `Nombre`, `CuentaPasivo`, `NombreCuentaPasivo`, `CuentaActivo`, `NombreCuentaActivo`, `Updated`, `Sync`) VALUES
-(1, 'RETENCION EN LA FUENTE', '236540', 'Rete Fuente x compras', '135515', 'Anticipo de Impuestos Retefuente', '2017-04-18 15:09:09', '2017-04-18 10:09:09'),
-(2, 'RETEIVA', '236701', 'IVA retenido', '135517', 'Anticipo de Impuestos ReteIVA', '2017-04-18 15:09:09', '2017-04-18 10:09:09'),
-(3, 'RETE-ICA', '2368', 'Rete Fuente x ICA', '135518', 'Anticipo de Impuestos ReteICA', '2017-04-18 15:09:09', '2017-04-18 10:09:09');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `traslados_estados`
 --
 
@@ -5439,22 +5494,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`idUsuarios`, `Nombre`, `Apellido`, `Identificacion`, `Telefono`, `Login`, `Password`, `TipoUser`, `Email`, `Role`, `Updated`, `Sync`) VALUES
 (1, 'TECHNO ', 'SOLUCIONES', '900833180', '3177740609', 'admin', 'technosoluciones', 'administrador', 'info@technosoluciones.com', 'SUPERVISOR', '2017-04-18 15:10:30', '2017-04-18 10:10:30'),
 (2, 'ADMINISTRADOR', 'SOFTCONTECH', '1', '1', 'administrador', 'administrador', 'operador', 'no@no.com', 'SUPERVISOR', '2017-04-18 15:10:30', '2017-04-18 10:10:30'),
-(3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2017-05-25 00:18:02', '2017-04-18 10:10:30'),
-(4, 'OPERADOR', 'OPERADOR', '11111', '1', 'operador', 'demo', 'administrador', 'operador', 'prueba', '2017-05-19 17:22:50', '2017-04-18 10:10:30');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios_ip`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios_ip` (
-  `Direccion` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`Direccion`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+(3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2017-06-15 14:09:18', '2017-06-15 09:09:18'),
+(4, 'OPERADOR', 'OPERADOR', '11111', '1', 'operador', 'demo', 'administrador', 'operador', 'prueba', '2017-06-15 14:09:18', '2017-06-15 09:09:18');
 
 -- --------------------------------------------------------
 

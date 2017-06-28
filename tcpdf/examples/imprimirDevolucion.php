@@ -102,7 +102,7 @@ $sql="SELECT rd.Total,rd.Subtotal,rd.Dias,rd.ValorUnitario,rd.Cantidad,ci.Refere
 $Consulta=$obVenta->Query($sql);
 $GranTotal=0;
 $h=0;        
-while($registros2=mysql_fetch_array($Consulta)){
+while($registros2=$obVenta->FetchArray($Consulta)){
 
     if($h==0){
         $Back="#f2f2f2";

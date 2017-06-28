@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-06-2017 a las 08:16:47
+-- Tiempo de generación: 26-06-2017 a las 09:51:16
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -245,6 +245,7 @@ CREATE TABLE IF NOT EXISTS `cajas_aperturas_cierres` (
   `TotalVentasContado` double NOT NULL,
   `TotalVentasCredito` double NOT NULL,
   `TotalVentasSisteCredito` double NOT NULL,
+  `TotalRetiroSeparados` double NOT NULL,
   `TotalDevoluciones` double NOT NULL,
   `TotalTarjetas` double NOT NULL,
   `TotalCheques` double NOT NULL,
@@ -1036,16 +1037,16 @@ CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
   `Descripcion` varchar(300) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `TablaOrigen` varchar(45) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `ValorUnitario` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Cantidad` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `ValorUnitario` double NOT NULL,
+  `Cantidad` double NOT NULL,
   `Multiplicador` int(11) NOT NULL,
-  `Subtotal` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `IVA` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Total` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Descuento` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `ValorDescuento` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `PrecioCosto` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `SubtotalCosto` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Subtotal` double NOT NULL,
+  `IVA` double NOT NULL,
+  `Total` double NOT NULL,
+  `Descuento` double NOT NULL,
+  `ValorDescuento` double NOT NULL,
+  `PrecioCosto` double NOT NULL,
+  `SubtotalCosto` double NOT NULL,
   `TipoItem` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Devuelto` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `CuentaPUC` varchar(45) CHARACTER SET utf8 NOT NULL,
@@ -1311,7 +1312,7 @@ CREATE TABLE IF NOT EXISTS `egresos_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -1351,6 +1352,7 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
   `PuntoEquilibrio` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `DatosBancarios` text COLLATE utf8_spanish_ci NOT NULL,
   `RutaImagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'LogosEmpresas/logotipo1.png',
+  `FacturaSinInventario` varchar(2) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idEmpresaPro`)
@@ -1662,7 +1664,7 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -1807,6 +1809,9 @@ CREATE TABLE IF NOT EXISTS `factura_compra_items` (
   `ImpuestoCompra` double NOT NULL,
   `TotalCompra` double NOT NULL,
   `Tipo_Impuesto` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
+  `ProcentajeDescuento` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorDescuento` double NOT NULL,
+  `SubtotalDescuento` double NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -2200,6 +2205,23 @@ CREATE TABLE IF NOT EXISTS `maquinas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `Pagina` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `Estado` int(1) NOT NULL DEFAULT '1',
+  `Image` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `notascontables`
 --
 
@@ -2534,18 +2556,18 @@ CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
 CREATE TABLE IF NOT EXISTS `precotizacion` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `NumSolicitud` varchar(45) NOT NULL,
-  `Cantidad` float NOT NULL,
+  `Cantidad` double NOT NULL,
   `Multiplicador` int(11) NOT NULL DEFAULT '1',
   `Referencia` varchar(45) NOT NULL,
-  `ValorUnitario` int(11) NOT NULL,
-  `SubTotal` int(11) NOT NULL,
+  `ValorUnitario` double NOT NULL,
+  `SubTotal` double NOT NULL,
   `Descripcion` varchar(500) NOT NULL,
-  `IVA` int(11) NOT NULL,
-  `Descuento` int(11) NOT NULL,
-  `ValorDescuento` int(11) NOT NULL,
-  `PrecioCosto` varchar(45) NOT NULL,
-  `SubtotalCosto` varchar(45) NOT NULL,
-  `Total` varchar(45) NOT NULL,
+  `IVA` double NOT NULL,
+  `Descuento` double NOT NULL,
+  `ValorDescuento` double NOT NULL,
+  `PrecioCosto` double NOT NULL,
+  `SubtotalCosto` double NOT NULL,
+  `Total` double NOT NULL,
   `TipoItem` varchar(10) NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `CuentaPUC` varchar(45) NOT NULL,
@@ -3007,7 +3029,8 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras` (
   `TablaOrigen` varchar(90) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'productosventa',
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idCodBarras`)
+  PRIMARY KEY (`idCodBarras`),
+  UNIQUE KEY `CodigoBarras` (`CodigoBarras`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -3181,7 +3204,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub1` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub1`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3196,7 +3219,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub2` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub2`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3211,7 +3234,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub3` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub3`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3226,7 +3249,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub4` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub4`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3241,7 +3264,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub5` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub5`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3797,24 +3820,13 @@ CREATE TABLE IF NOT EXISTS `servidores` (
 CREATE TABLE IF NOT EXISTS `sistemas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Referencia` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `PrecioVenta` double NOT NULL,
-  `PrecioMayorista` double NOT NULL,
   `RutaImagen` text COLLATE utf8_spanish2_ci NOT NULL,
   `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Departamento` int(11) NOT NULL,
-  `Sub1` int(11) NOT NULL,
-  `Sub2` int(11) NOT NULL,
-  `Sub3` int(11) NOT NULL,
-  `Sub4` int(11) NOT NULL,
-  `Sub5` int(11) NOT NULL,
-  `CuentaPUC` bigint(20) NOT NULL,
   `Estado` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Referencia` (`Referencia`)
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
@@ -3828,6 +3840,7 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
   `TablaOrigen` varchar(90) COLLATE utf8_spanish_ci NOT NULL,
   `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `Cantidad` double NOT NULL,
+  `ValorUnitario` double NOT NULL,
   `idSistema` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -4626,15 +4639,12 @@ CREATE TABLE IF NOT EXISTS `vista_sistemas` (
 ,`idSistema` bigint(20)
 ,`Nombre_Sistema` text
 ,`Observaciones` text
-,`Precio_Venta_Sistema` double
-,`Precio_Mayor_Sistema` double
 ,`TablaOrigen` varchar(90)
-,`Referencia` varchar(100)
+,`CodigoInterno` bigint(20)
 ,`Nombre` text
 ,`Cantidad` double
-,`PrecioUnitario` varchar(45)
+,`PrecioUnitario` double
 ,`PrecioVenta` double(17,0)
-,`PrecioMayorista` double(17,0)
 ,`CostoUnitario` double(17,0)
 ,`Costo_Total_Item` double(17,0)
 ,`IVA` varchar(10)
@@ -4690,7 +4700,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_sistemas`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_sistemas` AS select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`st`.`PrecioVenta` AS `Precio_Venta_Sistema`,`st`.`PrecioMayorista` AS `Precio_Mayor_Sistema`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`Referencia` AS `Referencia`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`s`.`PrecioVenta` AS `PrecioUnitario`,round((`s`.`PrecioVenta` * `si`.`Cantidad`),0) AS `PrecioVenta`,round((`s`.`PrecioMayorista` * `si`.`Cantidad`),0) AS `PrecioMayorista`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `servicios` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`))) union select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`st`.`PrecioVenta` AS `Precio_Venta_Sistema`,`st`.`PrecioMayorista` AS `Precio_Mayor_Sistema`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`Referencia` AS `Referencia`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`s`.`PrecioVenta` AS `PrecioUnitario`,round((`s`.`PrecioVenta` * `si`.`Cantidad`),0) AS `PrecioVenta`,round((`s`.`PrecioMayorista` * `si`.`Cantidad`),0) AS `PrecioMayorista`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `productosventa` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_sistemas` AS select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `servicios` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`))) union select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `productosventa` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`)));
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
