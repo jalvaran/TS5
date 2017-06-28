@@ -5191,7 +5191,107 @@ EOD;
         }
         return($html);
     }
-    
+    ///Funcion para armar html de los egresos informe admin
+    public function HTML_Egresos_Admin($CondicionFecha2) {
+        $html="";
+        $sql="SELECT Usuario_idUsuario as IdUsuarios, SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, SUM(Valor) as Total FROM egresos
+	WHERE $CondicionFecha2 GROUP BY Usuario_idUsuario";	
+        $Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Egresos:
+                    </em></strong></span><BR><BR>
+                    <table border="1" cellspacing="2" align="center" >
+                      <tr> 
+                        <th><h3>Usuario</h3></th>
+                        <th><h3>SubTotal</h3></th>
+                        <th><h3>IVA</h3></th>
+                        <th><h3>Total</h3></th>
+                      </tr >
+
+                    </table>';
+            
+            $Subtotal=0;
+            $TotalIVA=0;
+            $TotalVentas=0;
+            $TotalItems=0;
+            $i=0;
+            while($DatosVentas=$this->obCon->FetchArray($Datos)){
+                $SubtotalUser=number_format($DatosVentas["Subtotal"]);
+                $IVA=number_format($DatosVentas["IVA"]);
+                $Total=number_format($DatosVentas["Total"]);
+                $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
+                $TotalIVA=$TotalIVA+$DatosVentas["IVA"];
+                $TotalVentas=$TotalVentas+$DatosVentas["Total"];
+                $idUser=$DatosVentas["IdUsuarios"];
+                $html.= ' 
+                    <table border="1"  cellpadding="2" align="center">
+                        <tr>
+                            <td>'.$idUser.'</td>
+                            <td>'.$SubtotalUser.'</td>
+                            <td>'.$IVA.'</td>
+                            <td>'.$Total.'</td>
+                        </tr>
+                    </table>
+                    ';
+            }
+            $TotalItems=number_format($TotalItems);
+            $Subtotal=number_format($Subtotal);
+            $TotalIVA=number_format($TotalIVA);
+            $TotalVentas=number_format($TotalVentas);
+	$html.=' 
+            <table border="1" cellspacing="2" align="center">
+                <tr>
+                    <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                    <td><h3>'.$Subtotal.'</h3></td>
+                    <td><h3>'.$TotalIVA.'</h3></td>
+                    <td><h3>'.$TotalVentas.'</h3></td>
+                </tr>
+            </table>
+            ';
+        }
+        return($html);
+    }
+    //Funcion para armar el html de los abonos en el informe de administrador
+    public function HTML_Abonos_Admin($CondicionFecha2) {
+        $html="";
+        $sql="SELECT TipoAbono,idUsuario, SUM(Valor) as Subtotal, Tabla FROM vista_abonos
+	WHERE $CondicionFecha2
+	GROUP BY idUsuario,Tabla,TipoAbono";
+	$Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos:
+                </em></strong></span><BR><BR>
+                <table border="1" cellspacing="2" align="center" >
+                    <tr> 
+                      <th><h3>Usuario</h3></th>
+                      <th><h3>TipoAbono</h3></th>
+                      <th><h3>Total</h3></th>
+                    </tr >
+                </table>';
+            $TotalAbonos=0;
+            while($DatosAbonos=$this->obCon->FetchArray($Datos)){
+                $TotalAbonos=$TotalAbonos+$DatosAbonos["Subtotal"];
+                $html.='<table border="1"  cellpadding="2" align="center">
+                            <tr>
+                                <td>'.$DatosAbonos["idUsuario"].'</td>
+                                <td>'.$DatosAbonos["TipoAbono"].'</td>
+                                <td>'.number_format($DatosAbonos["Subtotal"]).'</td>
+
+                            </tr>
+                        </table>';
+            }
+            $html.=' 
+            <table border="1" cellspacing="2" align="center">
+                <tr>
+                    <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                    <td><h3>NA</h3></td>
+                    <td><h3>'.number_format($TotalAbonos).'</h3></td>
+                </tr>
+            </table>
+            ';
+        }
+        return($html);
+    }
     ///Clases para hacer el informe de administrador
     public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
         $Condicion=" ori_facturas_items WHERE ";
@@ -5221,7 +5321,10 @@ EOD;
         $this->PDF_Write($html);
         $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1);
         $this->PDF_Write("<br>".$html);
-        
+        $html= $this->HTML_Egresos_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Abonos_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
         $this->PDF_Output("Informe_Ventas_");
         
     }

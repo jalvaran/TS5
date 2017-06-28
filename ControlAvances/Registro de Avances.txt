@@ -1,3 +1,9 @@
+2017-06-28
+DROP VIEW IF EXISTS `vista_abonos`;
+CREATE VIEW vista_abonos AS 
+SELECT 'abonos_factura' as Tabla,fa.FormaPago as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.Usuarios_idUsuarios as idUsuario, fa.idCierre FROM facturas_abonos fa
+UNION 
+SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa
 2017-06-23
 
 ALTER TABLE `factura_compra_items` ADD `ProcentajeDescuento` VARCHAR(10) NOT NULL AFTER `Tipo_Impuesto`, ADD `ValorDescuento` DOUBLE NOT NULL AFTER `ProcentajeDescuento`;
