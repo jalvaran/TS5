@@ -11,6 +11,8 @@
 		 $css->CrearSelect("CmbTipoDocumento","Oculta()");
 		 $css->CrearOptionSelect('13','Cedula',1);
 		 $css->CrearOptionSelect('31','NIT',0);
+                 $css->CrearOptionSelect('12','Tarjeta Identidad',0);
+                 $css->CrearOptionSelect('22','Cedula Extranjeria',0);
 		 $css->CerrarSelect();
 		 //$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
 		 $css->CrearInputText("TxtNIT","number","","","Identificacion","black","","",200,30,0,1);

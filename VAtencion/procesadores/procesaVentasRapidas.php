@@ -82,13 +82,13 @@
 		
 		$idItem=$_REQUEST['TxtAgregarItemPreventa'];
 		$TablaItem=$_REQUEST['TxtTablaItem'];
-                
+                $Cantidad=$_REQUEST['TxtCantidad'];
                 $fecha=date("Y-m-d");
                 
 
                 $obVenta=new ProcesoVenta($idUser);
 
-                $Cantidad=1;
+                
                 $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
                 
 		header("location:$myPage?CmbPreVentaAct=$idPreventa");

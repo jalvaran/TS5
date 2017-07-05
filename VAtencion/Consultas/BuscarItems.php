@@ -9,7 +9,7 @@
 session_start();
 $idUser=$_SESSION['idUser'];
 $TipoUser=$_SESSION['tipouser'];
-$myPage="titulos_comisiones.php";
+$myPage="VentasRapidasV2.php";
 include_once("../../modelo/php_conexion.php");
 include_once("../css_construct.php");
 
@@ -37,8 +37,16 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab";
-            $css->CrearLink($target, "_self", "Agregar");
+            $css->CrearForm2("FrmAgregaItem$DatosProducto[idProductosVenta]", $myPage, "post", "_self");
+            $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
+            
+            $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            $css->CrearBotonNaranja("BtnAgregar", "Agregar");
+            $css->CerrarForm();
+            //$target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab";
+            //$css->CrearLink($target, "_self", "Agregar");
             print("</td>");
             $css->ColTabla($DatosProducto["idProductosVenta"], 1);
             $css->ColTabla($DatosProducto["Referencia"], 1);

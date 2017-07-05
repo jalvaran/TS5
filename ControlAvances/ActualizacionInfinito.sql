@@ -1,4 +1,3 @@
-
 ALTER TABLE `ori_facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `facturas_abonos` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 ALTER TABLE `ori_facturas_items` CHANGE `FechaFactura` `FechaFactura` DATE NOT NULL;
@@ -16,17 +15,12 @@ SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, 
 UNION 
 SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas'
 
-
 DROP VIEW IF EXISTS `vista_abonos`;
 CREATE VIEW vista_abonos AS 
 SELECT 'abonos_factura' as Tabla,fa.FormaPago as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.Usuarios_idUsuarios as idUsuario, fa.idCierre FROM facturas_abonos fa
 UNION 
 SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa
-2017-06-23
 
-ALTER TABLE `factura_compra_items` ADD `ProcentajeDescuento` VARCHAR(10) NOT NULL AFTER `Tipo_Impuesto`, ADD `ValorDescuento` DOUBLE NOT NULL AFTER `ProcentajeDescuento`;
-ALTER TABLE `factura_compra_items` ADD `SubtotalDescuento` DOUBLE NOT NULL AFTER `ValorDescuento`;
-2017-06-02
 ALTER TABLE `cajas_aperturas_cierres` ADD `TotalRetiroSeparados` DOUBLE NOT NULL AFTER `TotalVentasSisteCredito`;
 ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;
 
@@ -49,8 +43,6 @@ ALTER TABLE `precotizacion` CHANGE `ValorDescuento` `ValorDescuento` DOUBLE NOT 
 ALTER TABLE `precotizacion` CHANGE `PrecioCosto` `PrecioCosto` DOUBLE NOT NULL;
 ALTER TABLE `precotizacion` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
 ALTER TABLE `precotizacion` CHANGE `Total` `Total` DOUBLE NOT NULL;
-alter table prod_codbarras drop index `CodigoBarras`;
-ALTER IGNORE TABLE `prod_codbarras` ADD UNIQUE INDEX(`CodigoBarras`);
 
 DROP TABLE IF EXISTS `parametros_contables`;
 CREATE TABLE IF NOT EXISTS `parametros_contables` (
@@ -118,7 +110,7 @@ INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `CuentaPUC`, `CuentaPUCI
 ALTER TABLE `prod_codbarras` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
 ALTER TABLE `prod_codbarras` CHANGE `idCodBarras` `idCodBarras` BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `prod_codbarras` ADD `TablaOrigen` VARCHAR(90) NOT NULL DEFAULT 'productosventa' AFTER `CodigoBarras`;
-ALTER TABLE `sistemas` ADD `Departamento` INT(11) AFTER `Observaciones`,`Sub1` INT(11) AFTER `Departamento`;
+
 --
 -- Estructura de tabla para la tabla `factura_compra`
 --
@@ -278,50 +270,6 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-DROP VIEW IF EXISTS `vista_sistemas`;
-CREATE VIEW 
-vista_sistemas AS 
-SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
-si.TablaOrigen,s.`idProductosVenta` AS CodigoInterno,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
-round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
-round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
-s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
-FROM sistemas_relaciones si INNER JOIN `servicios` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
-UNION
-SELECT si.ID as ID,st.ID as idSistema,st.Nombre AS Nombre_Sistema,st.Observaciones AS Observaciones, 
-si.TablaOrigen,s.`idProductosVenta` AS CodigoInterno,s.`Nombre`,si.Cantidad,si.`ValorUnitario` as PrecioUnitario,
-round(si.`ValorUnitario`*si.Cantidad) AS PrecioVenta,
-round(s.`CostoUnitario`) AS CostoUnitario,round(si.Cantidad*s.`CostoUnitario`) as Costo_Total_Item,s.`IVA`,
-s.`Departamento`,s.Sub1,s.`Sub2`,s.`Sub3`,s.`Sub4`,s.`Sub5`,st.`Updated`,st.`Sync` 
-FROM sistemas_relaciones si INNER JOIN `productosventa` s  ON s.Referencia=si.Referencia INNER JOIN sistemas st ON st.ID=si.idSistema
-
-2017-05-28
-
-ALTER TABLE `sistemas_relaciones` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL;
-ALTER TABLE `sistemas_relaciones` CHANGE `TablaOrigen` `TablaOrigen` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL;
-
-
-
-2017-05-28
-
---
--- Estructura de tabla para la tabla `factura_compra_servicios`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `idFacturaCompra` bigint(20) NOT NULL,
-  `CuentaPUC_Servicio` bigint(20) NOT NULL,
-  `Nombre_Cuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Concepto_Servicio` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Subtotal_Servicio` double NOT NULL,
-  `Impuesto_Servicio` double NOT NULL,
-  `Total_Servicio` double NOT NULL,
-  `Tipo_Impuesto` double NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 CREATE VIEW 
 vista_compras_productos AS 
@@ -361,17 +309,11 @@ FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Ident
 INNER JOIN factura_compra_servicios fs ON fs.idFacturaCompra=c.ID 
 WHERE c.`Estado`='CERRADA';
 
-2017-05-25
-
 ALTER TABLE `clientes` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
 ALTER TABLE `proveedores` CHANGE `DV` `DV` VARCHAR(5) NOT NULL;
 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES ('236701', 'Impuesto a las ventas retenido', '0', '2367', CURRENT_TIMESTAMP, '0000-00-00 00:00:00');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES ('236801', 'Impuesto de industria y comercio retenido', '0', '2368', CURRENT_TIMESTAMP, '0000-00-00 00:00:00');
-
-ALTER TABLE `porcentajes_iva` ADD `CuentaPUC` BIGINT NOT NULL AFTER `Valor`, ADD `NombreCuenta` VARCHAR(100) NOT NULL AFTER `CuentaPUC`;
-
-2017-05-22
 
 ALTER TABLE `facturas_items` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 ALTER TABLE `facturas_items` CHANGE `SubtotalItem` `SubtotalItem` DOUBLE NOT NULL;
@@ -380,305 +322,7 @@ ALTER TABLE `facturas_items` CHANGE `TotalItem` `TotalItem` DOUBLE NOT NULL;
 ALTER TABLE `facturas_items` CHANGE `PrecioCostoUnitario` `PrecioCostoUnitario` DOUBLE NOT NULL;
 ALTER TABLE `facturas_items` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
 
-
-
-2017-05-19
-
-POSIBLE VISTA DE PRODUCTOS VENTA (FALTA ANALIZAR NO IMPLEMENTAR AUN)
-
-CREATE VIEW vista_productosventa AS 
-SELECT pv.`idProductosVenta`, pv.`CodigoBarras`, cb.CodigoBarras as CodigoBarras2, pv.`Referencia`, pv.`Nombre`, pv.`Existencias`, 
-pv.`PrecioVenta`,pv.`PrecioMayorista`,pv.`CostoUnitario`,pv.`CostoTotal`,pv.`IVA`,pv.`RutaImagen`,pv.`Departamento`,pv.`Sub1`,
-pv.`Sub2`,pv.`Sub3`,pv.`Sub4`,pv.`Sub5`,pv.`CuentaPUC`,pv.`Updated`,pv.`Sync` FROM productosventa pv 
-INNER JOIN prod_codbarras cb ON pv.`idProductosVenta`=cb.ProductosVenta_idProductosVenta GROUP BY pv.`idProductosVenta`
-
-2017-05-18
-Se crea vista_kardex
-
 CREATE VIEW 
 vista_kardex AS 
 SELECT `k`.`idKardexMercancias` AS `ID`,`k`.`Fecha` AS `Fecha`,`k`.`Movimiento` AS `Movimiento`,`k`.`Detalle` AS `Detalle`,`k`.`idDocumento` AS `idDocumento`,`k`.`Cantidad` AS `Cantidad`,`k`.`ValorUnitario` AS `ValorUnitario`,`k`.`ValorTotal` AS `ValorTotal`,`k`.`ProductosVenta_idProductosVenta` AS `ProductosVenta_idProductosVenta`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Existencias` AS `Existencias`,`pv`.`CostoUnitario` AS `CostoUnitario`,`pv`.`CostoTotal` AS `CostoTotal`,`pv`.`IVA` AS `IVA`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`k`.`Updated` AS `Updated`,`k`.`Sync` AS `Sync`
 FROM kardexmercancias k INNER JOIN productosventa pv ON `k`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`;
-
-2017-05-08
-
---
--- Estructura de tabla para la tabla `registra_ediciones`
---
-
-CREATE TABLE IF NOT EXISTS `registra_ediciones` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Fecha` date NOT NULL,
-  `Hora` time NOT NULL,
-  `Tabla` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
-  `Campo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `ValorAnterior` text COLLATE utf8_spanish2_ci NOT NULL,
-  `ValorNuevo` text COLLATE utf8_spanish2_ci NOT NULL,
-  `ConsultaRealizada` text COLLATE utf8_spanish2_ci NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
-Reabrir Comprobante de Contabilidad
-crear tabla registra_apertura_documentos
-            egresos_anulaciones
-            notascontables_anulaciones
-
-
---
--- Estructura de tabla para la tabla `egresos_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Fecha` date NOT NULL,
-  `Hora` time NOT NULL,
-  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
-  `idComprobanteEgreso` bigint(20) NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `notascontables_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Fecha` date NOT NULL,
-  `Hora` time NOT NULL,
-  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
-  `idNota` bigint(20) NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `registra_apertura_documentos`
---
-
-CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Fecha` date NOT NULL,
-  `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `NumDocumento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `ConceptoApertura` text COLLATE utf8_spanish2_ci NOT NULL,
-  `idUsuario` bigint(20) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
-2017-05-04
-Modificaciones en la base de datos:
-ALTER TABLE `cajas_aperturas_cierres` ADD `AbonosSisteCredito` DOUBLE NOT NULL AFTER `TotalAbonos`;
-ALTER TABLE `cajas_aperturas_cierres` ADD `TotalVentasSisteCredito` DOUBLE NOT NULL AFTER `TotalVentasCredito`;
-ALTER TABLE `cajas_aperturas_cierres` ADD `AbonosCreditos` DOUBLE NOT NULL AFTER `TotalAbonos`;
-ALTER TABLE `cartera` ADD `TipoCartera` VARCHAR(45) NOT NULL DEFAULT 'Interna' AFTER `Observaciones`;
-ALTER TABLE `clientes` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
-ALTER TABLE `proveedores` ADD `Cupo` DOUBLE NOT NULL AFTER `CIUU`;
-ALTER TABLE `facturas_abonos` ADD `FormaPago` DOUBLE NOT NULL AFTER `Facturas_idFacturas`;
-ALTER TABLE `traslados_items` ADD `CodigoBarras1` VARCHAR(45) NOT NULL AFTER `DestinoSincronizado`, ADD `CodigoBarras2` VARCHAR(45) NOT NULL AFTER `CodigoBarras1`, ADD `CodigoBarras3` VARCHAR(45) NOT NULL AFTER `CodigoBarras2`, ADD `CodigoBarras4` VARCHAR(45) NOT NULL AFTER `CodigoBarras3`;
-
-
-INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
-(14, 'Cuenta x pagar proveedores', 2380, 'PROVEEDORES NACIONALES', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
-(15, 'Descuentos en compras por pronto pago', 421010, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-04-18 14:59:19', '2017-04-18 09:59:19');
-
-
---
--- Estructura de tabla para la tabla `facturas_tipo_pago`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `TipoPago` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Leyenda` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
-
---
--- Volcado de datos para la tabla `facturas_tipo_pago`
---
-
-INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`) VALUES
-(1, 'Contado', 'Contado', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(2, '15', 'Credito a 15 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(3, '30', 'Credito a 30 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(4, '60', 'Credito a 60 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(5, '90', 'Credito a 90 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
-(6, 'SisteCredito', 'SisteCredito', '2017-05-22 13:18:14', '0000-00-00 00:00:00');
-
-ALTER TABLE `repuestas_forma_pago` CHANGE `DiasCartera` `DiasCartera` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
-
-INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, `Sync`) VALUES
-(6, 'SisteCredito', 'SisteCredito', '2017-04-24 20:17:14', '0000-00-00 00:00:00');
-
-2016-11-13
-
-MODULO DE PRODUCCION
-- Se acomoda el cronograma, tiempos y otras peticiones
-    *Se modifica gran parte de la carpeta VAtencion.
-    *Se modifica php_tablas.php
-    *Se modifica php_conexion.php
-
-MODULO DE INFORMES DE COMPRAS
-
-- Se inicia con el informe de compras
-PHP
-    *Se incluye informeCompras.php VAtencion
-    *Se incluye informeComprasPDF.php TCPDF
-MYSQL
-    *En la tabla FormatosCalidad se agrega el registro 18 con el informe de compras
-
-MODULO DE VENTAS
-
-- Se inicia con el informe de ventas por rangosrangos
-PHP
-    *Se modifica InformeVentas.php VAtencion
-    *Se incluye InformeVentasRangos.php TCPDF
-    *Se modifica php_tablas.php
-    *Se modifica MnuInformes.php
-MYSQL
-    *En la tabla facturas_items se cambia el tipo de variable de varchar a double en TotalItem
-
-MODULO DE CUENTAS X PAGAR
-PHP
-    *Se modifica php_conexion.php clase: RegistreComprobanteContable(),  agregando el documento soporte externo al libro diario 
-    *Se modifica Egresos2.php
-    *Se Corta procesaEgresos.php de la carpera VAtencion y se pega en VAtencion/procesadores
-    *Se Modifica procesaEgresos.php en VAtencion/procesadores
-    *Se Modifica procesaCompras.php en VAtencion/procesadores
-MYSQL
-    *En la tabla librodiario se agrega columna Num_Documento_Externo var(45), alli se registrará el documento externo de una cuenta x pagar 
-
-2016-11-18 
-INFORMES CONTABLES
-    Objetivo: Mostrar de forma ordenada los informes contables
-
-PHP
-    *Se modifica php_tablas.php agregando ArmeTablaBalanceComprobacion();
-    *Se Modifica balancecomprobacion.php en TCPDF
-
-MYSQL
-    *Se deben eliminar las tildes de la tabla subcuentas 
-    UPDATE `subcuentas` SET `Nombre`=replace(`Nombre`,'á','a'), `Nombre`=replace(`Nombre`,'é','e'), `Nombre`=replace(`Nombre`,'í','i'), `Nombre`=replace(`Nombre`,'ó','o'), `Nombre`=replace(`Nombre`,'ú','u')
-  
-2016-12-02
-
-TITULOS PARA RIFAS
-
-MYSQL
-    *Se agrega tabla titulos_promociones
-    *Se Agrega tabla titulos_listados_promocion_1
-    *Se Modifica la tabla colaboradores
-    *Se Crea Tabla titulos_asignaciones
-    *Se Agrega la Columna Lugar_Expedicion_Documento en clientes y proveedores
-    *Se Crea titulos_ventas
-    *Se Crea cuentasxpagar
-    *Se agrega parametros_contables
-    *Se Agrega Registro a formatos de calidad
-
-PHP
-    *Se Agrega VAtencion/titulos_promociones.php
-    *Se Agrega VAtencion/Configuraciones/titulos_promociones.ini.php
-    *Se modifica Procesadores/procesaInsercion.php
-    *Se modifica Modelo/php_conexion.php, se agrega funcion 
-    CrearTablaListadoTitulos($idPromocion,$Vector) 
-    AsignarTitulosColaborador();
-    *Se Agrega VAtencion/listados_titulos.php
-    *Se Agrega VAtencion/Configuraciones/listados_titulos.ini.php
-    *Se Agrega VAtencion/Procesadores/procesalistados_Titulos.ini.php
-    *Se Modifica MnuTitulos.php
-    *Se Agrega tcpdf/examples/ImprimaAsignacionTitulos.php
-    *Se Agrega VMenu/MnuTitulos.php
-    *Se Agrega VAtencion/titulos_asignaciones.php
-    *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php
-    *Se modifica funciones.js
-    *Se modifica ccs_construct.php
-    *Se agrega VentasTitulos.php
-    *Se agrega procesaVentasTitulos.php
-    *Se modifica php_tablas.php
-    *Se Agrega Consultas/DatosTitulos.php
-    *Se Agrega cuadros_dialogo/CrearTercero.php
-    *Se Agrega VAtencion/titulos_cuentasxcobrar.php
-    *Se Agrega VAtencion/Configuraciones/titulos_asignaciones.ini.php
-    *Se Agrega VAtencion/Consultas/DatosCuentaXPagar.php
-    *Se Agrega VAtencion/Consultas/DatosTitulos.php
-
-
-////Ventas Rapidas Descuentos
-
-    *Se modifica VentasRapidas, procesaVentasRapidas, css_construct
-
-2016-12-18  
-
-TITULOS
-MYSQL
-    * Se agrega titulos_comisiones
-    * Se Agrega Columna ComisionAPagar a titulos_promociones
-    * Se Agregan Columnas ComisionAPagar y SaldoComision a titulos_ventas
-    * Se agrega titulos_devoluciones
-
-PHP
-    *Se modifica ccs_construct.php
-    *VentasTitulos.php
-    *php_tablas
-    *php_conexion
-    *procesa_TitulosComisiones
-    *titulos_comisiones
-    DatosComisiones
-    titulos_ventas
-    titulos_ventas.ini
-    Mnu_Titulos
-    Consultas/DatosTitulos
-    Consultas/DatosCuentasXPagar
-
-2016-12-20
-
-INFORMES
-
-    *Se modifica php_tablas
-    *Se modifica InformeCompras
-
-
-CONCEPTOS
-
-    *Se agrega las tablas iniciadas por conceptos
-    *Se Agrega las Columnas idUsuario a LibroDiario
-
-Cambiar a double debito credito y neto en libro diario
-
-
-cambiar Items en Egresos por idSucursal
-cierres_contables
-comprobantes_ingreso_anulaciones
-agregar estado a tabla titulos_abonos
-cuentasxpagar
-cuentasxpagar_abonos
-egresos_pre
-se agregan registros a egresos_tipo
-se agregan columnas DocumentoGenerado y NumComprobante a compras_activas
-quitar tildes en cuentas y ?
-eliminar las tildes de la tabla cuentas
-UPDATE `cuentas` SET `Nombre`=replace(`Nombre`,'á','a'),`Nombre`=replace(`Nombre`,'é','e'),`Nombre`=replace(`Nombre`,'í','i'),`Nombre`=replace(`Nombre`,'ó','o'),`Nombre`=replace(`Nombre`,'ú','u')
-
-se crea
-comprobantes_ingreso_items
-comprobantes_egreso_items
-
-Se agrega Columna Estado a cuentasxpagar
-
-agregar parametros contables

@@ -36,11 +36,18 @@ if(isset($_REQUEST['key'])){
         }
         $fecha=date("Y-m-d");
         if($Cantidad>0){
+            /*
             $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
                 . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
                 . " WHERE pv.`idProductosVenta`='$CodBar' "
                 . " OR pv.`CodigoBarras`='$CodBar' "
                 . " OR k.`CodigoBarras`='$CodBar' LIMIT 1 ";
+            */
+            $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
+                . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
+                . " WHERE k.`CodigoBarras`='$CodBar' "
+                . " OR pv.`CodigoBarras`='$CodBar' "
+                . " OR pv.`idProductosVenta`='$CodBar' ORDER BY pv.`idProductosVenta` DESC LIMIT 1";
             $Consulta=$obVenta->Query($sql);
             $DatosProducto=$obVenta->FetchArray($Consulta);
             if($DatosProducto["idProductosVenta"]){

@@ -167,12 +167,14 @@ if(isset($_REQUEST["TxtBusqueda"]) and !empty($_REQUEST["TxtBusqueda"])){
 $css->CrearTabla();
 $css->FilaTabla(16);
 print("<td style='text-align:center'>");
-//$css->CrearForm2("FrmCodBarras",$myPage,"post","_self");
-//$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
-//$css->CrearInputText("TxtCodigoBarras","text","","","Digite un codigo de Barras","black","","",200,30,0,0);
-//$css->CerrarForm();
+
 print("<strong>Bascula: </strong>");
-$css->DibujeCuadroBusqueda("TxtPesar","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&Pesaje=1&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
+//Formato Lector de Bascula
+//$css->DibujeCuadroBusqueda("TxtPesar","Consultas/AgregaCB.php?CmbPreVentaAct=$idPreventa&Pesaje=1&myPage=$myPage&key","CmbPreVentaAct=$idPreventa","DivItemsPreventa","onChange",30,100,"");
+//Formato Ingresar Manualmente
+$Page="Consultas/AgregaItemXPeso.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key=";
+$css->CrearInputText("TxtPesar","text","","","Digite el ID","black","onchange","EnvieObjetoConsulta(`$Page`,`TxtPesar`,`DivBusquedas`,`2`);return false ; document.getElementById('TxtCantidadBascula').focus();",200,30,0,0);
+
 print("</td>");
 
 print("<td style='text-align:center'>");

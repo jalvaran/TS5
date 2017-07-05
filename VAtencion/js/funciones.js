@@ -152,6 +152,11 @@ shortcut("Ctrl+S",function()
 document.getElementById("BtnGuardar").click();
 });
 
+shortcut("Ctrl+A",function()
+{
+document.getElementById("TxtCantidadBascula").focus();
+});
+
 }
 
 function CreaRazonSocial() {
@@ -610,6 +615,11 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         //document.getElementById(idElement).value='Limpiando';
         if(BorrarId==1){
             document.getElementById(idElement).value='';
+        }
+        if(BorrarId==2){
+            //alert('entra');
+            setTimeout("posiciona('TxtCantidad')",500);
+            //document.getElementById('TxtCantidadBascula').select();
         }
         //alert("Sale");
 }
