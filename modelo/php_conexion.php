@@ -4689,7 +4689,7 @@ public function VerificaPermisos($VectorPermisos) {
  */
 
 
-	public function RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Total,$CentroCosto,$Concepto,$idUser,$VectorIngreso){
+	public function RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Total,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso){
             
             $DatosCentro=$this->DevuelveValores("centrocosto","ID",$CentroCosto);
             $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$idFactura);
@@ -4714,6 +4714,7 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[3]="Tipo";		$Valores[3]="EFECTIVO";
             $Columnas[4]="Concepto";		$Valores[4]=$Concepto;
             $Columnas[5]="Usuarios_idUsuarios";	$Valores[5]=$idUser;
+            
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
@@ -4787,7 +4788,7 @@ public function VerificaPermisos($VectorPermisos) {
             //////Creo el comprobante de Ingreso
             
             $tab="facturas_abonos";
-            $NumRegistros=7;
+            $NumRegistros=8;
 
             $Columnas[0]="Fecha";                       $Valores[0]=$fecha;
             $Columnas[1]="Hora";                        $Valores[1]=$Hora;
@@ -4796,6 +4797,7 @@ public function VerificaPermisos($VectorPermisos) {
             $Columnas[4]="Facturas_idFacturas";		$Valores[4]=$idFactura;
             $Columnas[5]="idComprobanteIngreso";	$Valores[5]=$idIngreso;
             $Columnas[6]="FormaPago";                   $Valores[6]=$DatosFactura["FormaPago"];
+            $Columnas[7]="TipoPagoAbono";               $Valores[7]=$TipoPago;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             $idComprobanteAbono=$this->ObtenerMAX($tab,"ID", 1,"");
             

@@ -1641,6 +1641,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             $this->css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdFactura","hidden","",$DatosCredito["Facturas_idFacturas"],"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdCartera","hidden","",$DatosCredito["idCartera"],"","","","",0,0,0,0);
+            $CarteraAct=0;
             if(isset($Vector["HabilitaCmbCuentaDestino"])){
                 $this->css->CrearInputFecha("Fecha: ", "TxtFecha", date("Y-m-d"), 100, 30, "");
                 $VectorCuentas["Nombre"]="CmbCuentaDestino";
@@ -1656,9 +1657,22 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 }
                 $this->css->CerrarSelect();
                 print("<br>");
+                $CarteraAct=1;
             }
             
-            $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Abonar: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);
+            $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Efectivo: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);
+            print("<br>");
+            if($CarteraAct==0){
+                print("<strong>Opciones de Pago:</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivCredito$DatosCredito[idCartera]');><br>");
+            }    
+            $this->css->CrearDiv("DivCredito$DatosCredito[idCartera]", "", "left", 0, 1);
+                print("<br>");  
+                $this->css->CrearInputNumber("TxtAbonoTarjeta$DatosCredito[idCartera]", "number", "Tarjetas: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], 1);  
+                print("<br>");
+                $this->css->CrearInputNumber("TxtAbonoCheques$DatosCredito[idCartera]", "number", "Cheques: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], 1);  
+                 // $this->css->CrearInputNumber("TxtAbonoOtros$DatosCredito[idCartera]", "number", "Tarjetas: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);  
+            print("<br>");
+            $this->css->CerrarDiv();
             $this->css->CrearBotonConfirmado("BtnAbono$DatosCredito[idCartera]", "Abonar a Credito");
             $this->css->CerrarForm();
             print("</td>");
@@ -1689,7 +1703,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 $this->css->CierraFilaTabla();
             }           
             
-             
+            
             
         }
         $this->css->CerrarTabla();

@@ -1,3 +1,5 @@
+
+
 ALTER TABLE `ori_facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `facturas_abonos` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 ALTER TABLE `ori_facturas_items` CHANGE `FechaFactura` `FechaFactura` DATE NOT NULL;
@@ -13,13 +15,13 @@ SELECT 'abonos_creditos' as Tabla,fa.FormaPago as Tipo,fa.Fecha as Fecha, fa.Usu
 UNION 
 SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, fa.idUsuarios as idUsuario, fa.Valor as Total FROM separados_abonos fa
 UNION 
-SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas'
+SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas';
 
 DROP VIEW IF EXISTS `vista_abonos`;
 CREATE VIEW vista_abonos AS 
 SELECT 'abonos_factura' as Tabla,fa.FormaPago as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.Usuarios_idUsuarios as idUsuario, fa.idCierre FROM facturas_abonos fa
 UNION 
-SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa
+SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa;
 
 ALTER TABLE `cajas_aperturas_cierres` ADD `TotalRetiroSeparados` DOUBLE NOT NULL AFTER `TotalVentasSisteCredito`;
 ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;
@@ -270,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-
+DROP VIEW IF EXISTS `vista_compras_productos`;
 CREATE VIEW 
 vista_compras_productos AS 
 SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
@@ -284,7 +286,7 @@ FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Ident
 INNER JOIN factura_compra_items fi ON fi.idFacturaCompra=c.ID INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta
 WHERE c.`Estado`='CERRADA';
 
-
+DROP VIEW IF EXISTS `vista_compras_productos_devueltos`;
 CREATE VIEW 
 vista_compras_productos_devueltos AS 
 SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
@@ -298,6 +300,7 @@ FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Ident
 INNER JOIN factura_compra_items_devoluciones fi ON fi.idFacturaCompra=c.ID INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta
 WHERE c.`Estado`='CERRADA';
 
+DROP VIEW IF EXISTS `vista_compras_servicios`;
 CREATE VIEW 
 vista_compras_servicios AS 
 SELECT `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,
@@ -322,6 +325,7 @@ ALTER TABLE `facturas_items` CHANGE `TotalItem` `TotalItem` DOUBLE NOT NULL;
 ALTER TABLE `facturas_items` CHANGE `PrecioCostoUnitario` `PrecioCostoUnitario` DOUBLE NOT NULL;
 ALTER TABLE `facturas_items` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
 
+DROP VIEW IF EXISTS `vista_kardex`;
 CREATE VIEW 
 vista_kardex AS 
 SELECT `k`.`idKardexMercancias` AS `ID`,`k`.`Fecha` AS `Fecha`,`k`.`Movimiento` AS `Movimiento`,`k`.`Detalle` AS `Detalle`,`k`.`idDocumento` AS `idDocumento`,`k`.`Cantidad` AS `Cantidad`,`k`.`ValorUnitario` AS `ValorUnitario`,`k`.`ValorTotal` AS `ValorTotal`,`k`.`ProductosVenta_idProductosVenta` AS `ProductosVenta_idProductosVenta`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Existencias` AS `Existencias`,`pv`.`CostoUnitario` AS `CostoUnitario`,`pv`.`CostoTotal` AS `CostoTotal`,`pv`.`IVA` AS `IVA`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`k`.`Updated` AS `Updated`,`k`.`Sync` AS `Sync`

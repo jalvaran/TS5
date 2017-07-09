@@ -527,29 +527,45 @@
             $obVenta=new ProcesoVenta($idUser);
             $fecha=date("Y-m-d");
             $Hora=date("H:i:s");
-            $idCartera=$_REQUEST['TxtIdCartera'];
-            $idFactura=$_REQUEST['TxtIdFactura'];
-            $idPreventa=$_REQUEST['CmbPreVentaAct'];
-            $Valor=$_REQUEST["TxtAbonoCredito$idCartera"];
+            $idCartera=$obVenta->normalizar($_REQUEST['TxtIdCartera']);
+            $idFactura=$obVenta->normalizar($_REQUEST['TxtIdFactura']);
+            $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+            $Valor=$obVenta->normalizar($_REQUEST["TxtAbonoCredito$idCartera"]);
+            $AbonoTarjetas=$obVenta->normalizar($_REQUEST["TxtAbonoTarjeta$idCartera"]);
+            $AbonoCheques=$obVenta->normalizar($_REQUEST["TxtAbonoCheques$idCartera"]);
+            $TotalAbono=$Valor+$AbonoTarjetas+$AbonoCheques;
             $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
-            
-            $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
-            $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-            $CentroCosto=$DatosCaja["CentroCostos"];
-            $Concepto="ABONO A FACTURA No $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
-            $VectorIngreso["fut"]="";
-            $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
-                                
-            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-                        
-            if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
-                    
+            if($TotalAbono<=$DatosFactura["SaldoFact"]){
+                $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+                $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+                $CentroCosto=$DatosCaja["CentroCostos"];
+                $Concepto="ABONO A FACTURA No $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
+                $VectorIngreso["fut"]="";
+                $TipoPago="";
+                $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+                if($AbonoTarjetas>0){
+                    $TipoPago="Tarjetas";
+                    $DatosParametros=$obVenta->DevuelveValores("parametros_contables", "ID", 17);
+                    $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$DatosParametros["CuentaPUC"],$idFactura,$AbonoTarjetas,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+                }
+                if($AbonoCheques>0){
+                    $TipoPago="Cheques";
+                    $DatosParametros=$obVenta->DevuelveValores("parametros_contables", "ID", 18);
+                    $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$DatosParametros["CuentaPUC"],$idFactura,$AbonoCheques,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+                }
+                $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+
+                if($DatosImpresora["Habilitado"]=="SI"){
+                    $obVenta->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
+
+                }
+                $css->CrearNotificacionVerde("Abono Registrado Exitosamente",16);
+           
+            }else{
+                $css->CrearNotificacionRoja("El Saldo de la Factura es inferior a los abonos digitados, vuelva a intentarlo",16);
             }
-            
              
-             
-            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$idFactura");
+            //header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$idFactura");
         }
         
         

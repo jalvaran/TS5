@@ -21,12 +21,12 @@ DROP VIEW IF EXISTS `vista_abonos`;
 CREATE VIEW vista_abonos AS 
 SELECT 'abonos_factura' as Tabla,fa.FormaPago as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.Usuarios_idUsuarios as idUsuario, fa.idCierre FROM facturas_abonos fa
 UNION 
-SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa
-2017-06-23
+SELECT 'abonos_separados' as Tabla,'Separados' as TipoAbono,fa.Fecha as Fecha, fa.Valor as Valor, fa.idUsuarios as idUsuario, fa.idCierre FROM separados_abonos fa;
+
 
 ALTER TABLE `factura_compra_items` ADD `ProcentajeDescuento` VARCHAR(10) NOT NULL AFTER `Tipo_Impuesto`, ADD `ValorDescuento` DOUBLE NOT NULL AFTER `ProcentajeDescuento`;
 ALTER TABLE `factura_compra_items` ADD `SubtotalDescuento` DOUBLE NOT NULL AFTER `ValorDescuento`;
-2017-06-02
+
 ALTER TABLE `cajas_aperturas_cierres` ADD `TotalRetiroSeparados` DOUBLE NOT NULL AFTER `TotalVentasSisteCredito`;
 ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL AFTER `RutaImagen`;
 
@@ -49,6 +49,7 @@ ALTER TABLE `precotizacion` CHANGE `ValorDescuento` `ValorDescuento` DOUBLE NOT 
 ALTER TABLE `precotizacion` CHANGE `PrecioCosto` `PrecioCosto` DOUBLE NOT NULL;
 ALTER TABLE `precotizacion` CHANGE `SubtotalCosto` `SubtotalCosto` DOUBLE NOT NULL;
 ALTER TABLE `precotizacion` CHANGE `Total` `Total` DOUBLE NOT NULL;
+
 alter table prod_codbarras drop index `CodigoBarras`;
 ALTER IGNORE TABLE `prod_codbarras` ADD UNIQUE INDEX(`CodigoBarras`);
 
@@ -360,6 +361,81 @@ fs.Total_Servicio AS Total,fs.Tipo_Impuesto ,`c`.`Concepto` AS `Concepto`,`c`.`O
 FROM factura_compra c INNER JOIN proveedores t ON `c`.`Tercero` = `t`.`Num_Identificacion` 
 INNER JOIN factura_compra_servicios fs ON fs.idFacturaCompra=c.ID 
 WHERE c.`Estado`='CERRADA';
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de datos: `ts5`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventarios_diferencias`
+--
+
+CREATE TABLE IF NOT EXISTS `inventarios_diferencias` (
+  `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CodigoBarras` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Nombre` varchar(70) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ExistenciaAnterior` double NOT NULL,
+  `ExistenciaActual` double NOT NULL,
+  `Diferencia` double DEFAULT NULL,
+  `PrecioVenta` double DEFAULT NULL,
+  `CostoUnitario` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `CostoTotal` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `IVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+  `Departamento` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Sub1` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub2` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub3` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub4` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub5` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`idProductosVenta`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventarios_temporal`
+--
+
+CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
+  `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CodigoBarras` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Nombre` varchar(70) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Existencias` double DEFAULT '0',
+  `PrecioVenta` double DEFAULT NULL,
+  `PrecioMayorista` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `CostoUnitario` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `CostoTotal` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `IVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+  `Bodega_idBodega` int(11) NOT NULL DEFAULT '1',
+  `Departamento` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Sub1` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub2` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub3` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub4` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Sub5` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Kit` int(11) NOT NULL,
+  `RutaImagen` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Especial` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `CuentaPUC` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL DEFAULT '4135',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`idProductosVenta`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 2017-05-25
 
