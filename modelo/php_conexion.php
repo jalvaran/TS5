@@ -2609,9 +2609,37 @@ public function CalculePesoRemision($idCotizacion)
     */
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS SEPARADOS     ".str_pad("$".number_format($DatosCierre["TotalAbonos"]),20," ",STR_PAD_LEFT));
+    $sql="SELECT SUM(Valor) as Abono, TipoPagoAbono FROM facturas_abonos WHERE idCierre='$idCierre' GROUP BY TipoPagoAbono ";
+    $ConsultaAbonos=$this->Query($sql);
+    $AbonosCreditoEfectivo=0;
+    $AbonosCreditoTarjeta=0;
+    $AbonosCreditoCheque=0;
+    $AbonosCreditoOtros=0;
+    while ($DatosAbonos=$this->FetchArray($ConsultaAbonos)){
+        if($DatosAbonos["TipoPagoAbono"]==""){
+            $AbonosCreditoEfectivo=$AbonosCreditoEfectivo+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Tarjetas"){
+            $AbonosCreditoTarjeta=$AbonosCreditoTarjeta+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Cheques"){
+            $AbonosCreditoCheque=$AbonosCreditoCheque+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Bonos"){
+            $AbonosCreditoOtros=$AbonosCreditoOtros+$DatosAbonos["Abono"];
+        }
+    }
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED EFECTIVO ".str_pad("$".number_format($AbonosCreditoEfectivo),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS CREDITOS      ".str_pad("$".number_format($DatosCierre["AbonosCreditos"]),20," ",STR_PAD_LEFT));
+    fwrite($handle,"ABONOS CRED TARJETAS ".str_pad("$".number_format($AbonosCreditoTarjeta),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED CHEQUES  ".str_pad("$".number_format($AbonosCreditoCheque),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED BONOS    ".str_pad("$".number_format($AbonosCreditoOtros),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
@@ -3854,8 +3882,8 @@ public function CalculePesoRemision($idCotizacion)
         $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", 1);
         $Regimen=$DatosEmpresa["Regimen"];
         $DatosItem =  $this->DevuelveValores("traslados_items", "ID", $idTrasladoItem);
-        $id = $this->ObtenerMAX("productosventa", "idProductosVenta", 1, "");
-        $id++;
+        $id = $DatosItem["CodigoBarras"];
+        
         $IVA=$DatosItem["IVA"];
         if($Regimen=="SIMPLIFICADO"){
             $IVA=0;

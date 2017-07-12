@@ -533,6 +533,7 @@
             $Valor=$obVenta->normalizar($_REQUEST["TxtAbonoCredito$idCartera"]);
             $AbonoTarjetas=$obVenta->normalizar($_REQUEST["TxtAbonoTarjeta$idCartera"]);
             $AbonoCheques=$obVenta->normalizar($_REQUEST["TxtAbonoCheques$idCartera"]);
+            $AbonoOtros=$obVenta->normalizar($_REQUEST["TxtAbonoOtros$idCartera"]);
             $TotalAbono=$Valor+$AbonoTarjetas+$AbonoCheques;
             $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
             if($TotalAbono<=$DatosFactura["SaldoFact"]){
@@ -552,6 +553,11 @@
                     $TipoPago="Cheques";
                     $DatosParametros=$obVenta->DevuelveValores("parametros_contables", "ID", 18);
                     $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$DatosParametros["CuentaPUC"],$idFactura,$AbonoCheques,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+                }
+                if($AbonoOtros>0){
+                    $TipoPago="Bonos";
+                    
+                    $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$DatosCaja["CuentaPUCEfectivo"],$idFactura,$AbonoCheques,$TipoPago,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
                 }
                 $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
 
