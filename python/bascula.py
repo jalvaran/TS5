@@ -11,7 +11,7 @@ conn = mysql.connector.connect(
 
 cur = conn.cursor()
 
-arduino=serial.Serial('COM8',baudrate=9600, timeout = 0.5)
+arduino=serial.Serial('/dev/ttyUSB0',baudrate=9600, timeout = 0.5)
 cadena=''
 idBascula=1
 while True:

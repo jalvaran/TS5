@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-06-2017 a las 09:55:22
+-- Tiempo de generación: 12-07-2017 a las 14:14:28
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -20,28 +20,16 @@ SET time_zone = "+00:00";
 -- Base de datos: `ts5`
 --
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `cajas`
+-- Volcado de datos para la tabla `bodega`
 --
 
-CREATE TABLE IF NOT EXISTS `cajas` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
-  `Base` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaPUCEfectivo` bigint(20) NOT NULL,
-  `CuentaPUCCheques` bigint(20) NOT NULL,
-  `CuentaPUCOtros` bigint(20) NOT NULL,
-  `CuentaPUCIVAEgresos` bigint(20) NOT NULL,
-  `CentroCostos` int(11) NOT NULL,
-  `idResolucionDian` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
+INSERT INTO `bodega` (`idBodega`, `Nombre`, `Direccion`, `Ciudad`, `Telefono`, `idServidor`, `Updated`, `Sync`) VALUES
+(1, 'BODEGA LOCAL ', '', 'BUGA', '', 2, '2017-04-18 14:32:16', '2017-04-18 09:32:16'),
+(2, 'BODEGA YOTOCO', '', 'YOTOCO', '', 4, '2017-04-18 14:32:16', '2017-04-18 09:32:16'),
+(3, 'BODEGA BUGA', '', 'BUGA', '', 3, '2017-04-18 14:32:16', '2017-04-18 09:32:16'),
+(4, 'BODEGA GINEBRA', '', 'GINEBRA', '', 5, '2017-04-18 14:32:16', '2017-04-18 09:32:16'),
+(5, 'BODEGA SAN PEDRO', '', 'SAN PEDRO', '', 6, '2017-04-18 14:32:16', '2017-04-18 09:32:16');
 
 --
 -- Volcado de datos para la tabla `cajas`
@@ -52,41 +40,12 @@ INSERT INTO `cajas` (`ID`, `Nombre`, `Base`, `idUsuario`, `Estado`, `CuentaPUCEf
 (2, 'CAJA 2', '200000', 1, 'ABIERTA', 11051002, 11100502, 11100503, 2408, 1, 2, '2017-04-18 14:32:22', '2017-04-18 09:32:22'),
 (3, 'CAJA 3', '150000', 0, 'ABIERTA', 11051002, 11100502, 11100503, 2408, 1, 1, '2017-04-18 14:32:22', '2017-04-18 09:32:22');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `centrocosto`
---
-
-CREATE TABLE IF NOT EXISTS `centrocosto` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `EmpresaPro` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
-
 --
 -- Volcado de datos para la tabla `centrocosto`
 --
 
 INSERT INTO `centrocosto` (`ID`, `Nombre`, `EmpresaPro`, `Updated`, `Sync`) VALUES
 (1, 'PRINCIPAL', 1, '2017-04-18 14:32:32', '2017-04-18 09:32:32');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ciuu`
---
-
-CREATE TABLE IF NOT EXISTS `ciuu` (
-  `Codigo` int(11) NOT NULL,
-  `Descripcion` varchar(300) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`Codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `ciuu`
@@ -819,21 +778,6 @@ INSERT INTO `ciuu` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
 (9820, ' Actividades no diferenciadas de los hogares individuales como productores de servicios para uso propio.', '2017-04-18 14:32:45', '2017-04-18 09:32:45'),
 (9900, ' Actividades de organizaciones y entidades extraterritoriales.', '2017-04-18 14:32:45', '2017-04-18 09:32:45');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `clasecuenta`
---
-
-CREATE TABLE IF NOT EXISTS `clasecuenta` (
-  `PUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Clase` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`PUC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
 --
 -- Volcado de datos para la tabla `clasecuenta`
 --
@@ -848,20 +792,6 @@ INSERT INTO `clasecuenta` (`PUC`, `Clase`, `Valor`, `Updated`, `Sync`) VALUES
 ('7', 'Costos de produccion o de operacion', '0', '2017-04-18 14:33:01', '2017-04-18 09:33:01'),
 ('8', 'Cuentas de Orden Deudoras', '0', '2017-04-18 14:33:01', '2017-04-18 09:33:01'),
 ('9', 'Cuentas de orden Acreedoras', '0', '2017-04-18 14:33:01', '2017-04-18 09:33:01');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cod_departamentos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_departamentos` (
-  `Cod_dpto` int(11) NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`Cod_dpto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cod_departamentos`
@@ -902,21 +832,6 @@ INSERT INTO `cod_departamentos` (`Cod_dpto`, `Nombre`, `Updated`, `Sync`) VALUES
 (97, 'VAUPES', '2017-04-18 14:33:10', '2017-04-18 09:33:10'),
 (99, 'VICHADA', '2017-04-18 14:33:10', '2017-04-18 09:33:10');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cod_documentos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_documentos` (
-  `Codigo` int(11) NOT NULL,
-  `Descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  KEY `Codigo` (`Codigo`),
-  KEY `Codigo_2` (`Codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
 --
 -- Volcado de datos para la tabla `cod_documentos`
 --
@@ -936,23 +851,6 @@ INSERT INTO `cod_documentos` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
 (43, 'Sin identificaci?n del exterior o para uso definido por la DIAN. ', '2017-04-18 14:33:14', '2017-04-18 09:33:14'),
 (44, 'Documento de Identificaci?n extranjero Persona Jur?dica ', '2017-04-18 14:33:14', '2017-04-18 09:33:14'),
 (46, 'Carn? Diplom?tico: Documento expedido por el Ministerio de relaciones Exteriores a los miembros de la misiones diplom?ticas y consulares, con el que se deben identificar ente las autoridades nacionale', '2017-04-18 14:33:14', '2017-04-18 09:33:14');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cod_municipios_dptos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_municipios_dptos` (
-  `ID` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `Cod_mcipio` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `Cod_Dpto` int(11) NOT NULL,
-  `Departamento` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `Ciudad` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cod_municipios_dptos`
@@ -2082,20 +1980,6 @@ INSERT INTO `cod_municipios_dptos` (`ID`, `Cod_mcipio`, `Cod_Dpto`, `Departament
 ('999', '770', 73, 'TOLIMA', 'SUAREZ', '2017-04-18 14:33:16', '2017-04-18 09:33:16'),
 ('ID', 'idMcipio', 0, 'depat', 'muni', '2017-04-18 14:33:16', '2017-04-18 09:33:16');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cod_paises`
---
-
-CREATE TABLE IF NOT EXISTS `cod_paises` (
-  `Codigo` int(11) NOT NULL,
-  `Pais` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`Codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
 --
 -- Volcado de datos para la tabla `cod_paises`
 --
@@ -2348,51 +2232,12 @@ INSERT INTO `cod_paises` (`Codigo`, `Pais`, `Updated`, `Sync`) VALUES
 (998, 'COMUNIDAD EUROPEA', '2017-04-18 14:33:24', '2017-04-18 09:33:24'),
 (999, 'NO DECLARADOS', '2017-04-18 14:33:24', '2017-04-18 09:33:24');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `config_codigo_barras`
---
-
-CREATE TABLE IF NOT EXISTS `config_codigo_barras` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `TituloEtiqueta` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `DistaciaEtiqueta1` int(11) NOT NULL,
-  `DistaciaEtiqueta2` int(11) NOT NULL,
-  `DistaciaEtiqueta3` int(11) NOT NULL,
-  `AlturaLinea1` int(11) NOT NULL,
-  `AlturaLinea2` int(11) NOT NULL,
-  `AlturaLinea3` int(11) NOT NULL,
-  `AlturaLinea4` int(11) NOT NULL,
-  `AlturaLinea5` int(11) NOT NULL,
-  `AlturaCodigoBarras` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
-
 --
 -- Volcado de datos para la tabla `config_codigo_barras`
 --
 
 INSERT INTO `config_codigo_barras` (`ID`, `TituloEtiqueta`, `DistaciaEtiqueta1`, `DistaciaEtiqueta2`, `DistaciaEtiqueta3`, `AlturaLinea1`, `AlturaLinea2`, `AlturaLinea3`, `AlturaLinea4`, `AlturaLinea5`, `AlturaCodigoBarras`, `Updated`, `Sync`) VALUES
 (1, 'ALMACEN INFINITO', 10, 280, 560, 1, 20, 40, 60, 120, 30, '2017-04-18 14:34:30', '2017-04-18 09:34:30');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `config_puertos`
---
-
-CREATE TABLE IF NOT EXISTS `config_puertos` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Puerto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Utilizacion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Habilitado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `config_puertos`
@@ -2402,23 +2247,6 @@ INSERT INTO `config_puertos` (`ID`, `Puerto`, `Utilizacion`, `Habilitado`, `Upda
 (1, 'COM3', 'IMPRESORA POS EPSON', 'NO', '2017-06-15 14:02:14', '2017-06-15 09:02:14'),
 (2, 'COM6', 'IMPRESORA CODIGO DE BARRAS', 'SI', '2017-04-18 14:34:33', '2017-04-18 09:34:33');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `config_tiketes_promocion`
---
-
-CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `NombreTiket` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Tope` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Multiple` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Activo` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
-
 --
 -- Volcado de datos para la tabla `config_tiketes_promocion`
 --
@@ -2426,21 +2254,38 @@ CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
 INSERT INTO `config_tiketes_promocion` (`ID`, `NombreTiket`, `Tope`, `Multiple`, `Activo`, `Updated`, `Sync`) VALUES
 (1, 'PROMOCION DEL MES', '10000', 'NO', 'NO', '2017-04-18 14:34:38', '2017-04-18 09:34:38');
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `cuentas`
+-- Volcado de datos para la tabla `costos`
 --
 
-CREATE TABLE IF NOT EXISTS `cuentas` (
-  `idPUC` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `Nombre` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Valor` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
-  `GupoCuentas_PUC` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idPUC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+INSERT INTO `costos` (`idCostos`, `NombreCosto`, `ValorCosto`, `Updated`, `Sync`) VALUES
+(1, 'participacion ', 2000000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(2, 'Transporte', 240000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(3, 'Publicidad', 100000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(4, 'Arriendo', 1200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(5, 'Energia', 1400000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(6, 'Telefono', 220000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(7, 'Mano de Obra ', 11531200, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(8, 'Agua', 40000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(9, 'Contador', 230000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(10, 'Aceite Hid.', 8000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(11, 'Aceite Caja ', 13500, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(12, 'Formularios Cont.', 0, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(13, 'Gas', 5500, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(14, 'Oxigeno', 80000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(15, 'Aseo', 10000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(16, 'Cumplea', 11000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(17, 'Dotacion', 125000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(18, 'Anchetas fda', 21000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(19, 'Herramientas', 1800000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(20, 'otros gastos de administracion ', 1200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(21, 'Gastos Financieros ', 2271420, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(22, 'internet ', 108700, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(23, 'Asistente administrativo ', 1364260, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(24, 'auxiliar contable', 1125930, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(25, 'papeleria ', 200000, '2017-04-18 14:34:41', '2017-04-18 09:34:41'),
+(26, 'dsadas', 43243234.5, '2017-06-15 14:02:18', '2017-06-15 09:02:18'),
+(27, 'ARRIENDO', 50000, '2017-06-15 14:02:18', '2017-06-15 09:02:18');
 
 --
 -- Volcado de datos para la tabla `cuentas`
@@ -2783,22 +2628,6 @@ INSERT INTO `cuentas` (`idPUC`, `Nombre`, `Valor`, `GupoCuentas_PUC`, `Updated`,
 ('9395', 'Otras cuentas de orden acreedoras de control', '0', '93', '2017-04-18 14:35:01', '2017-04-18 09:35:01'),
 ('9399', 'Ajustes por inflaci?n patrimonio', '0', '93', '2017-04-18 14:35:01', '2017-04-18 09:35:01');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cuentasfrecuentes`
---
-
-CREATE TABLE IF NOT EXISTS `cuentasfrecuentes` (
-  `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `ClaseCuenta` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `UsoFuturo` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`CuentaPUC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
 --
 -- Volcado de datos para la tabla `cuentasfrecuentes`
 --
@@ -2809,23 +2638,6 @@ INSERT INTO `cuentasfrecuentes` (`CuentaPUC`, `Nombre`, `ClaseCuenta`, `UsoFutur
 ('11051002', 'CAJA MENOR CAJA 2', 'ACTIVOS', '', '2017-04-18 14:35:04', '2017-04-18 09:35:04'),
 ('11100501', 'CUENTA DE AHORROS DAVIVIENDA', 'ACTIVOS', '_', '2017-04-18 14:35:04', '2017-04-18 09:35:04'),
 ('523505', 'Aseo y vigilacia', 'EGRESOS', '', '2017-04-18 14:35:04', '2017-04-18 09:35:04');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `documentos_generados`
---
-
-CREATE TABLE IF NOT EXISTS `documentos_generados` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
-  `Abreviatura` varchar(3) COLLATE utf8_spanish2_ci NOT NULL,
-  `Libro` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Abreviatura` (`Abreviatura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `documentos_generados`
@@ -2840,22 +2652,6 @@ INSERT INTO `documentos_generados` (`ID`, `Nombre`, `Abreviatura`, `Libro`, `Upd
 (6, 'FACTURA DE COMPRA', 'FC', 'FacturaCompra', '2017-06-16 17:12:42', '2017-06-16 12:12:42'),
 (7, 'VENTA DE TITULO', 'VT', 'VentaTitulo', '2017-06-16 17:12:42', '2017-06-16 12:12:42');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `egresos_activos`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_activos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(45) NOT NULL,
-  `Cuentas_idCuentas` int(11) NOT NULL,
-  `Visible` int(1) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
 --
 -- Volcado de datos para la tabla `egresos_activos`
 --
@@ -2865,22 +2661,6 @@ INSERT INTO `egresos_activos` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `
 (2, 'Equipo Medico Cientifico', 1532, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26'),
 (3, 'Equipos de Oficina', 1524, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26'),
 (4, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-04-18 14:35:26', '2017-04-18 09:35:26');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `egresos_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_tipo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) NOT NULL,
-  `Cuentas_idCuentas` int(11) NOT NULL,
-  `Visible` int(1) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=54 ;
 
 --
 -- Volcado de datos para la tabla `egresos_tipo`
@@ -2904,34 +2684,6 @@ INSERT INTO `egresos_tipo` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Upd
 (52, 'Equipos de Oficina', 1524, 1, '2017-04-18 14:35:33', '2017-04-18 09:35:33'),
 (53, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-04-18 14:35:33', '2017-04-18 09:35:33');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `empresapro`
---
-
-CREATE TABLE IF NOT EXISTS `empresapro` (
-  `idEmpresaPro` int(11) NOT NULL AUTO_INCREMENT,
-  `RazonSocial` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `NIT` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Direccion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Telefono` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Celular` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Ciudad` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `ResolucionDian` text COLLATE utf8_spanish_ci NOT NULL,
-  `Regimen` enum('SIMPLIFICADO','COMUN') COLLATE utf8_spanish_ci DEFAULT 'SIMPLIFICADO',
-  `Email` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `WEB` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `ObservacionesLegales` text COLLATE utf8_spanish_ci NOT NULL,
-  `PuntoEquilibrio` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `DatosBancarios` text COLLATE utf8_spanish_ci NOT NULL,
-  `RutaImagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'LogosEmpresas/logotipo1.png',
-  `FacturaSinInventario` varchar(2) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idEmpresaPro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
-
 --
 -- Volcado de datos para la tabla `empresapro`
 --
@@ -2939,59 +2691,13 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
 INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Telefono`, `Celular`, `Ciudad`, `ResolucionDian`, `Regimen`, `Email`, `WEB`, `ObservacionesLegales`, `PuntoEquilibrio`, `DatosBancarios`, `RutaImagen`, `FacturaSinInventario`, `Updated`, `Sync`) VALUES
 (1, 'TECHNO SOLUCIONES SAS', '900833180-7', 'CARRERA 17 7 18', '3177740609', '3177740609', 'BUGA', 'IVA REGIMEN COMUN\r\nACTIVIDAD ECONOMICA CIIU 8020\r\n', 'COMUN', 'info@technosoluciones.com', 'www.technosoluciones.com', 'Esta Factura de Venta se asimila en todos sus efectos a una letra de cambio (Art. 621 y siguientes del Codigo de Comercio). En caso de mora se causaran los intereses legales Vigentes. Cuenta', '5000000', 'DATOS BANCARIOS: BANCOLOMBIA CUENTA DE AHORROS 848-232213-03 A NOMBRE DE TECNOAGRO R.L. SAS ', 'LogosEmpresas/logotipo1.png', 'NO', '2017-06-22 22:35:28', '2017-06-22 17:35:28');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `empresapro_resoluciones_facturacion`
---
-
-CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `NombreInterno` text COLLATE utf8_spanish2_ci NOT NULL,
-  `NumResolucion` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
-  `Fecha` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `NumSolicitud` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Tipo` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
-  `Factura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Prefijo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Desde` int(16) NOT NULL,
-  `Hasta` int(16) NOT NULL,
-  `FechaVencimiento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idEmpresaPro` int(11) NOT NULL,
-  `Estado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'OC: Ocupada',
-  `Completada` varchar(2) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'NO',
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
-
 --
 -- Volcado de datos para la tabla `empresapro_resoluciones_facturacion`
 --
 
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`, `Updated`, `Sync`) VALUES
-(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-06-22 22:49:48', '2017-06-22 17:49:48'),
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-07-04 13:48:27', '2017-06-22 17:49:48'),
 (2, 'Facturas por POS', '1555431', '2016-03-28', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2017-06-15 14:03:08', '2017-06-15 09:03:08');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `empresa_pro_sucursales`
---
-
-CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Ciudad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Direccion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `idEmpresaPro` int(11) NOT NULL,
-  `Visible` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Actual` varchar(1) COLLATE utf8_spanish2_ci NOT NULL,
-  `idServidor` int(11) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `empresa_pro_sucursales`
@@ -3002,39 +2708,6 @@ INSERT INTO `empresa_pro_sucursales` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `id
 (2, 'TECHNO BUGA', 'BUGA', '', 1, 'SI', '0', 3, '2017-06-15 14:03:02', '2017-06-15 09:03:02'),
 (3, 'TECHNO GINEBRA', 'GINEBRA', '', 1, 'SI', '0', 0, '2017-04-18 14:35:36', '2017-04-18 09:35:36'),
 (4, 'TECHNO SAN PEDRO', 'SAN PEDRO', '', 1, 'SI', '0', 0, '2017-06-15 14:03:02', '2017-06-15 09:03:02');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `facturas_formapago`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_formapago` (
-  `idFacturas_FormaPago` int(16) NOT NULL AUTO_INCREMENT,
-  `Total` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Paga` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Devuelve` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `FormaPago` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Facturas_idFacturas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idFacturas_FormaPago`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `facturas_tipo_pago`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `TipoPago` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Leyenda` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
 
 --
 -- Volcado de datos para la tabla `facturas_tipo_pago`
@@ -3047,24 +2720,6 @@ INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`
 (4, '60', 'Credito a 60 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
 (5, '90', 'Credito a 90 dias', '2017-04-18 14:40:33', '2017-04-18 09:40:33'),
 (6, 'SisteCredito', 'SisteCredito', '2017-06-15 14:03:53', '2017-06-15 09:03:53');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `formatos_calidad`
---
-
-CREATE TABLE IF NOT EXISTS `formatos_calidad` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Version` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Codigo` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Fecha` date NOT NULL,
-  `NotasPiePagina` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=24 ;
 
 --
 -- Volcado de datos para la tabla `formatos_calidad`
@@ -3094,22 +2749,6 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 (21, 'DATOS EXPORTADOS EN PDF', '001', 'F-GC-051', '2016-06-06', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (22, 'TRASLADO DE TITULO', '001', 'F-GC-052', '2016-06-06', '', '2017-04-18 14:40:41', '2017-04-18 09:40:41'),
 (23, 'FACTURA DE COMPRA', '001', 'F-GC-002', '2016-05-11', '', '2017-06-15 14:03:57', '2017-06-15 09:03:57');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `gupocuentas`
---
-
-CREATE TABLE IF NOT EXISTS `gupocuentas` (
-  `PUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `ClaseCuenta_PUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`PUC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `gupocuentas`
@@ -3169,25 +2808,6 @@ INSERT INTO `gupocuentas` (`PUC`, `Nombre`, `Valor`, `ClaseCuenta_PUC`, `Updated
 ('95', 'Acreedoras fiscales por contra (DB)', '0', '9', '2017-04-18 14:40:43', '2017-04-18 09:40:43'),
 ('96', 'Acreedoras de control por contra (DB)', '0', '9', '2017-04-18 14:40:43', '2017-04-18 09:40:43');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `impret`
---
-
-CREATE TABLE IF NOT EXISTS `impret` (
-  `idImpRet` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Tipo` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `CuentaRetFavor` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `CuentaRetRealizadas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Aplicable_A` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idImpRet`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=10 ;
-
 --
 -- Volcado de datos para la tabla `impret`
 --
@@ -3203,21 +2823,13 @@ INSERT INTO `impret` (`idImpRet`, `Nombre`, `Tipo`, `Valor`, `CuentaRetFavor`, `
 (8, 'Impuesto a las ventas retenido, aplicado al IVA', 'RetencionAplicada', '0.15', '', '2367', 'IVA', '2017-04-18 14:40:47', '2017-04-18 09:40:47'),
 (9, 'Impuesto de industria y comercio retenido, las tarifas dependen de la ciudad y actividad', 'RetencionAplicada', '0.009', '', '2368', 'Subtotal', '2017-04-18 14:40:47', '2017-04-18 09:40:47');
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `paginas`
+-- Volcado de datos para la tabla `ordenesdetrabajo_tipo`
 --
 
-CREATE TABLE IF NOT EXISTS `paginas` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
-  `TipoPagina` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Visible` tinyint(1) NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=99 ;
+INSERT INTO `ordenesdetrabajo_tipo` (`ID`, `Tipo`, `Updated`, `Sync`) VALUES
+(1, 'EXTERNA', '2017-04-18 14:59:06', '2017-04-18 09:59:06'),
+(2, 'INTERNA', '2017-04-18 14:59:06', '2017-04-18 09:59:06');
 
 --
 -- Volcado de datos para la tabla `paginas`
@@ -3323,22 +2935,6 @@ INSERT INTO `paginas` (`ID`, `Nombre`, `TipoPagina`, `Visible`, `Updated`, `Sync
 (97, 'Ejecutar_Actividades.php', 'Vista', 1, '2017-04-18 14:59:14', '2017-04-18 09:59:14'),
 (98, 'facturas_abonos.php', 'Vista', 1, '2017-04-18 14:59:14', '2017-04-18 09:59:14');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `paginas_bloques`
---
-
-CREATE TABLE IF NOT EXISTS `paginas_bloques` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `TipoUsuario` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Pagina` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
-  `Habilitado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'SI',
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=59 ;
-
 --
 -- Volcado de datos para la tabla `paginas_bloques`
 --
@@ -3402,22 +2998,6 @@ INSERT INTO `paginas_bloques` (`ID`, `TipoUsuario`, `Pagina`, `Habilitado`, `Upd
 (57, 'bodega', 'InsertarRegistro.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17'),
 (58, 'bodega', 'EditarRegistro.php', 'SI', '2017-04-18 14:59:17', '2017-04-18 09:59:17');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `parametros_contables`
---
-
-CREATE TABLE IF NOT EXISTS `parametros_contables` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaPUC` bigint(20) NOT NULL,
-  `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=16 ;
-
 --
 -- Volcado de datos para la tabla `parametros_contables`
 --
@@ -3437,21 +3017,10 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 (12, 'Cuenta para llevar la perdida del ejercicio', 3610, 'Perdida del Ejercicio', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (13, 'Contrapartida para llevar la perdida o ganancia del ejercicio', 5905, 'Ganancias y perdidas', '2017-04-18 14:59:19', '2017-04-18 09:59:19'),
 (14, 'Cuenta x pagar proveedores', 220505, 'PROVEEDORES NACIONALES', '2017-06-16 17:13:00', '2017-06-16 12:13:00'),
-(15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-06-15 14:05:38', '2017-06-15 09:05:38');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `plataforma_tablas`
---
-
-CREATE TABLE IF NOT EXISTS `plataforma_tablas` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=199 ;
+(15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
+(16, 'impuesto generado al consumo de bolsas plasticas', 24081004, 'IMPUESTO AL CONSUMO DE BOLSAS PLASTICAS', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
+(17, 'Cuenta para registrar los abonos a los creditos con tarjetas', 11100501, 'BANCOS', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
+(18, 'Cuenta para registrar los abonos a los creditos con Cheques', 11100510, 'BANCOS CHEQUES', '2017-06-15 14:05:38', '2017-06-15 09:05:38');
 
 --
 -- Volcado de datos para la tabla `plataforma_tablas`
@@ -3657,25 +3226,6 @@ INSERT INTO `plataforma_tablas` (`ID`, `Nombre`, `Updated`, `Sync`) VALUES
 (197, 'ventas_separados', '2017-06-22 23:11:23', '0000-00-00 00:00:00'),
 (198, 'vestasactivas', '2017-06-22 23:11:25', '0000-00-00 00:00:00');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `porcentajes_iva`
---
-
-CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaPUC` bigint(20) NOT NULL,
-  `CuentaPUCIVAGenerado` bigint(20) NOT NULL,
-  `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
-  `Habilitado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
-
 --
 -- Volcado de datos para la tabla `porcentajes_iva`
 --
@@ -3688,20 +3238,19 @@ INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `CuentaPUC`, `CuentaPUCI
 (5, 'IVA del 16%', '0.16', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
 (6, 'IVA del 19%', '0.19', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43');
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `repuestas_forma_pago`
+-- Volcado de datos para la tabla `prod_departamentos`
 --
 
-CREATE TABLE IF NOT EXISTS `repuestas_forma_pago` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `DiasCartera` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Etiqueta` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
+INSERT INTO `prod_departamentos` (`idDepartamentos`, `Nombre`, `TablaOrigen`, `TipoItem`, `ManejaExistencias`, `Updated`, `Sync`) VALUES
+(1, 'ROPA', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(2, 'CACHARRO', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(3, 'CALZADO', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(4, 'ESCOLAR', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(5, 'SUPER', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(6, 'HOGAR', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(7, 'PROMOCION', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42'),
+(8, 'PROMOCIONES TEMPORALES', 'productosventa', 'PR', 'SI', '2017-04-18 15:00:42', '2017-04-18 10:00:42');
 
 --
 -- Volcado de datos para la tabla `repuestas_forma_pago`
@@ -3715,20 +3264,6 @@ INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, 
 (5, '90', 'Credito a 90 Dias', '2017-04-18 15:08:26', '2017-04-18 10:08:26'),
 (6, 'SisteCredito', 'SisteCredito', '2017-06-15 14:07:58', '2017-06-15 09:07:58');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `respuestas_condicional`
---
-
-CREATE TABLE IF NOT EXISTS `respuestas_condicional` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Valor` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=3 ;
-
 --
 -- Volcado de datos para la tabla `respuestas_condicional`
 --
@@ -3736,20 +3271,6 @@ CREATE TABLE IF NOT EXISTS `respuestas_condicional` (
 INSERT INTO `respuestas_condicional` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
 (1, 'NO', '2017-04-18 15:08:30', '2017-04-18 10:08:30'),
 (2, 'SI', '2017-04-18 15:08:30', '2017-04-18 10:08:30');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `respuestas_tipo_item`
---
-
-CREATE TABLE IF NOT EXISTS `respuestas_tipo_item` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Valor` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `respuestas_tipo_item`
@@ -3759,52 +3280,6 @@ INSERT INTO `respuestas_tipo_item` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
 (1, 'PR', '2017-04-18 15:08:32', '2017-04-18 10:08:32'),
 (2, 'MO', '2017-04-18 15:08:32', '2017-04-18 10:08:32'),
 (3, 'AQ', '2017-04-18 15:08:32', '2017-04-18 10:08:32');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `servidores`
---
-
-CREATE TABLE IF NOT EXISTS `servidores` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `IP` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Usuario` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `Password` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `DataBase` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=7 ;
-
---
--- Volcado de datos para la tabla `servidores`
---
-
-INSERT INTO `servidores` (`ID`, `IP`, `Nombre`, `Usuario`, `Password`, `DataBase`, `Updated`, `Sync`) VALUES
-(1, '213.239.232.149', 'SERVIDOR GRUPO GENERAL', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_replica', '2017-04-18 15:08:55', '2017-04-18 10:08:55'),
-(2, '213.239.232.149', 'SERVIDOR PARA BACKUPS', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_replica', '2017-04-18 15:08:55', '2017-04-18 10:08:55'),
-(3, '213.239.232.149', 'SERVIDOR SUCURSAL BUGA', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_buga', '2017-04-18 15:08:55', '2017-04-18 10:08:55'),
-(4, '213.239.232.149', 'SERVIDOR SUCURSAL YOTOCO', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_yotoco', '2017-04-18 15:08:55', '2017-04-18 10:08:55'),
-(5, '213.239.232.149', 'SERVIDOR SUCURSAL GINEBRA', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_ginebra', '2017-04-18 15:08:55', '2017-04-18 10:08:55'),
-(6, '213.239.232.149', 'SERVIDOR SUCURSAL SAN PEDRO', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_sanpedro', '2017-04-18 15:08:55', '2017-04-18 10:08:55');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `subcuentas`
---
-
-CREATE TABLE IF NOT EXISTS `subcuentas` (
-  `PUC` int(11) NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Cuentas_idPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`PUC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `subcuentas`
@@ -5382,25 +4857,8 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
 (23657502, 'Autorretenciones (CREE)', '0', '2365', '2017-04-18 15:08:57', '2017-04-18 10:08:57'),
 (24080218, 'IVA DESCONTABLE X SERVICIOS Y GASTOS', NULL, '2408', '2017-06-22 22:36:14', '2017-06-22 17:36:14'),
+(24081004, 'IMPUESTO AL CONSUMO DE BOLSAS PLASTICAS', NULL, '2408', '2017-07-04 13:47:55', '0000-00-00 00:00:00'),
 (51950101, 'Peajes', '0', '5195', '2017-04-18 15:08:57', '2017-04-18 10:08:57');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tablas_ventas`
---
-
-CREATE TABLE IF NOT EXISTS `tablas_ventas` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `NombreTabla` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idTabla` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `TipoVenta` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `IVAIncluido` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
-  `CuentaPUCDefecto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `tablas_ventas`
@@ -5411,24 +4869,6 @@ INSERT INTO `tablas_ventas` (`ID`, `NombreTabla`, `idTabla`, `TipoVenta`, `IVAIn
 (2, 'servicios', 'idProductosVenta', 'SERVICIOS', 'NO', '412060', '2017-04-18 15:09:05', '2017-04-18 10:09:05'),
 (3, 'productosalquiler', 'idProductosVenta', 'ALQUILER DE SERVICIOS', 'SI', '4135', '2017-04-18 15:09:05', '2017-04-18 10:09:05');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tarjetas_forma_pago`
---
-
-CREATE TABLE IF NOT EXISTS `tarjetas_forma_pago` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `PorcentajeComision` float NOT NULL,
-  `CuentaPUC` bigint(20) NOT NULL,
-  `NombreCuenta` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4 ;
-
 --
 -- Volcado de datos para la tabla `tarjetas_forma_pago`
 --
@@ -5438,20 +4878,14 @@ INSERT INTO `tarjetas_forma_pago` (`ID`, `Tipo`, `Nombre`, `PorcentajeComision`,
 (2, 'CREDITO', 'VISA', 0.04, 11100501, 'CUENTA DE AHORROS DAVIVIENDA', '2017-04-18 15:09:07', '2017-04-18 10:09:07'),
 (3, 'DEBITO', 'TARJETAS DEBITO', 0, 11100501, 'CUENTA DE AHORROS DAVIVIENDA', '2017-04-18 15:09:07', '2017-04-18 10:09:07');
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `traslados_estados`
+-- Volcado de datos para la tabla `tiposretenciones`
 --
 
-CREATE TABLE IF NOT EXISTS `traslados_estados` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=7 ;
+INSERT INTO `tiposretenciones` (`ID`, `Nombre`, `CuentaPasivo`, `NombreCuentaPasivo`, `CuentaActivo`, `NombreCuentaActivo`, `Updated`, `Sync`) VALUES
+(1, 'RETENCION EN LA FUENTE', '236540', 'Rete Fuente x compras', '135515', 'Anticipo de Impuestos Retefuente', '2017-04-18 15:09:09', '2017-04-18 10:09:09'),
+(2, 'RETEIVA', '236701', 'IVA retenido', '135517', 'Anticipo de Impuestos ReteIVA', '2017-04-18 15:09:09', '2017-04-18 10:09:09'),
+(3, 'RETE-ICA', '2368', 'Rete Fuente x ICA', '135518', 'Anticipo de Impuestos ReteICA', '2017-04-18 15:09:09', '2017-04-18 10:09:09');
 
 --
 -- Volcado de datos para la tabla `traslados_estados`
@@ -5465,28 +4899,6 @@ INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`, `Updated`, `Sync
 (5, 'RECHAZADO', 'cuando el destino rechaza el traslado', '2017-04-18 15:10:21', '2017-04-18 10:10:21'),
 (6, 'EN DESARROLLO', 'estado inicial mientras se agregan items ', '2017-04-18 15:10:21', '2017-04-18 10:10:21');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `idUsuarios` int(11) NOT NULL AUTO_INCREMENT,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Apellido` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Identificacion` varchar(40) COLLATE utf8_spanish_ci NOT NULL,
-  `Telefono` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Login` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Password` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `TipoUser` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Email` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Role` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idUsuarios`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=5 ;
-
 --
 -- Volcado de datos para la tabla `usuarios`
 --
@@ -5496,20 +4908,6 @@ INSERT INTO `usuarios` (`idUsuarios`, `Nombre`, `Apellido`, `Identificacion`, `T
 (2, 'ADMINISTRADOR', 'SOFTCONTECH', '1', '1', 'administrador', 'administrador', 'operador', 'no@no.com', 'SUPERVISOR', '2017-04-18 15:10:30', '2017-04-18 10:10:30'),
 (3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2017-06-15 14:09:18', '2017-06-15 09:09:18'),
 (4, 'OPERADOR', 'OPERADOR', '11111', '1', 'operador', 'demo', 'administrador', 'operador', 'prueba', '2017-06-15 14:09:18', '2017-06-15 09:09:18');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios_tipo` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=6 ;
 
 --
 -- Volcado de datos para la tabla `usuarios_tipo`

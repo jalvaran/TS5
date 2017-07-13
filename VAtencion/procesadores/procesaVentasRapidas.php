@@ -90,7 +90,10 @@
 
                 
                 $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
-                
+                if(isset($_REQUEST['Bascula'])){
+                    $obVenta->update("registro_basculas", "Leido", 1, "WHERE idBascula='1'");
+                    
+                }
 		header("location:$myPage?CmbPreVentaAct=$idPreventa");
 			
 	}

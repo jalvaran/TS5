@@ -30,8 +30,12 @@ if(!empty($_REQUEST["key"])){
             $css->CrearForm2("FrmAgregarItem$CodBar", $myPage, 'post', '_self');
             $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("Bascula", "hidden", "", 1, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
-            $css->CrearInputNumber("TxtCantidad", "number", "", "", "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            $sql="SELECT Gramos,ID FROM registro_basculas WHERE idBascula='1' AND Leido=0 ORDER BY ID DESC LIMIT 1";
+            $DatosBascula=$obVenta->Query($sql);
+            $DatosBascula=$obVenta->FetchArray($DatosBascula);
+            $css->CrearInputNumber("TxtCantidad", "number", "", $DatosBascula["Gramos"], "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
             $css->CrearBotonNaranja("BtnAgregar", "Agregar");
              
             

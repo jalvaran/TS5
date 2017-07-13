@@ -2,7 +2,7 @@ ALTER TABLE `facturas_abonos` ADD `TipoPagoAbono` VARCHAR(30) NOT NULL AFTER `Ho
 --
 -- Estructura de tabla para la tabla `parametros_contables`
 --
-
+DROP TABLE IF EXISTS `parametros_contables`;
 CREATE TABLE IF NOT EXISTS `parametros_contables` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -36,3 +36,11 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 (16, 'impuesto generado al consumo de bolsas plasticas', 24081004, 'IMPUESTO AL CONSUMO DE BOLSAS PLASTICAS', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
 (17, 'Cuenta para registrar los abonos a los creditos con tarjetas', 11100501, 'BANCOS', '2017-06-15 14:05:38', '2017-06-15 09:05:38'),
 (18, 'Cuenta para registrar los abonos a los creditos con Cheques', 11100510, 'BANCOS CHEQUES', '2017-06-15 14:05:38', '2017-06-15 09:05:38');
+DROP TABLE IF EXISTS `registro_basculas`;
+CREATE TABLE IF NOT EXISTS `registro_basculas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Gramos` double NOT NULL,
+  `idBascula` int(11) NOT NULL,
+  `Leido` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;

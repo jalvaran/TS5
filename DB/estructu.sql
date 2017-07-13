@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-06-2017 a las 09:51:16
+-- Tiempo de generación: 12-07-2017 a las 14:04:54
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -1500,9 +1500,10 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `facturas_abonos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Fecha` date NOT NULL,
   `Hora` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `Valor` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `TipoPagoAbono` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
+  `Valor` double NOT NULL,
   `Usuarios_idUsuarios` int(11) NOT NULL,
   `Facturas_idFacturas` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
   `FormaPago` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -2435,12 +2436,12 @@ CREATE TABLE IF NOT EXISTS `ori_facturas` (
 --
 
 CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
-  `ID` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `FechaFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `idFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `TablaItems` varchar(100) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
-  `Referencia` varchar(200) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
-  `Nombre` varchar(500) COLLATE utf8_spanish2_ci NOT NULL,
+  `ID` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `FechaFactura` date NOT NULL,
+  `idFactura` varchar(45) NOT NULL,
+  `TablaItems` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
+  `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
+  `Nombre` varchar(500) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Departamento` int(11) NOT NULL,
   `SubGrupo1` int(11) NOT NULL,
   `SubGrupo2` int(11) NOT NULL,
@@ -2448,23 +2449,23 @@ CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
   `SubGrupo4` int(11) NOT NULL,
   `SubGrupo5` int(11) NOT NULL,
   `ValorUnitarioItem` int(11) NOT NULL,
-  `Cantidad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `Dias` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `SubtotalItem` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `IVAItem` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `TotalItem` varchar(45) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Total del valor del Item',
-  `PorcentajeIVA` varchar(10) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
-  `PrecioCostoUnitario` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
-  `SubtotalCosto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Costo total del item',
-  `TipoItem` varchar(10) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
+  `Cantidad` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `Dias` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `SubtotalItem` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `IVAItem` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `TotalItem` double NOT NULL COMMENT 'Total del valor del Item',
+  `PorcentajeIVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
+  `PrecioCostoUnitario` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `SubtotalCosto` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Costo total del item',
+  `TipoItem` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
   `CuentaPUC` int(11) NOT NULL COMMENT 'Cuenta donde se llevara el asiento contable ',
-  `GeneradoDesde` varchar(100) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla que agrega el item',
-  `NumeroIdentificador` varchar(45) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Identificar del que agrega el item',
+  `GeneradoDesde` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla que agrega el item',
+  `NumeroIdentificador` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Identificar del que agrega el item',
   `idUsuarios` int(11) NOT NULL,
   `idCierre` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3360,6 +3361,20 @@ CREATE TABLE IF NOT EXISTS `registra_ediciones` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `registro_basculas`
+--
+
+CREATE TABLE IF NOT EXISTS `registro_basculas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Gramos` double NOT NULL,
+  `idBascula` int(11) NOT NULL,
+  `Leido` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `relacioncompras`
 --
 
@@ -3717,7 +3732,7 @@ CREATE TABLE IF NOT EXISTS `separados_abonos` (
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
   `idSeparado` bigint(20) unsigned NOT NULL,
-  `Valor` int(11) NOT NULL,
+  `Valor` double NOT NULL,
   `idCliente` int(11) NOT NULL,
   `idUsuarios` int(11) NOT NULL,
   `idComprobanteIngreso` bigint(20) NOT NULL,
@@ -4500,6 +4515,19 @@ CREATE TABLE IF NOT EXISTS `vestasactivas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vista_abonos`
+--
+CREATE TABLE IF NOT EXISTS `vista_abonos` (
+`Tabla` varchar(16)
+,`TipoAbono` varchar(45)
+,`Fecha` date
+,`Valor` double
+,`idUsuario` int(11)
+,`idCierre` bigint(20)
+);
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vista_compras_productos`
 --
 CREATE TABLE IF NOT EXISTS `vista_compras_productos` (
@@ -4602,6 +4630,18 @@ CREATE TABLE IF NOT EXISTS `vista_compras_servicios` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vista_entregas`
+--
+CREATE TABLE IF NOT EXISTS `vista_entregas` (
+`Tabla` varchar(16)
+,`Tipo` varchar(45)
+,`Fecha` varchar(45)
+,`idUsuario` int(11)
+,`Total` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vista_kardex`
 --
 CREATE TABLE IF NOT EXISTS `vista_kardex` (
@@ -4660,6 +4700,15 @@ CREATE TABLE IF NOT EXISTS `vista_sistemas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `vista_abonos`
+--
+DROP TABLE IF EXISTS `vista_abonos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_abonos` AS select 'abonos_factura' AS `Tabla`,`fa`.`FormaPago` AS `TipoAbono`,`fa`.`Fecha` AS `Fecha`,`fa`.`Valor` AS `Valor`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`idCierre` AS `idCierre` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'Separados' AS `TipoAbono`,`fa`.`Fecha` AS `Fecha`,`fa`.`Valor` AS `Valor`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`idCierre` AS `idCierre` from `separados_abonos` `fa`;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `vista_compras_productos`
 --
 DROP TABLE IF EXISTS `vista_compras_productos`;
@@ -4683,6 +4732,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_compras_servicios`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_compras_servicios` AS select `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,`fs`.`CuentaPUC_Servicio` AS `Cuenta`,`fs`.`Nombre_Cuenta` AS `NombreCuenta`,`fs`.`Concepto_Servicio` AS `Concepto_Servicio`,`fs`.`Subtotal_Servicio` AS `Subtotal`,`fs`.`Impuesto_Servicio` AS `Impuestos`,`fs`.`Total_Servicio` AS `Total`,`fs`.`Tipo_Impuesto` AS `Tipo_Impuesto`,`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,`c`.`idSucursal` AS `idSucursal`,`c`.`Updated` AS `Updated`,`c`.`Sync` AS `Sync` from ((`factura_compra` `c` join `proveedores` `t` on((`c`.`Tercero` = `t`.`Num_Identificacion`))) join `factura_compra_servicios` `fs` on((`fs`.`idFacturaCompra` = `c`.`ID`))) where (`c`.`Estado` = 'CERRADA');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_entregas`
+--
+DROP TABLE IF EXISTS `vista_entregas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_entregas` AS select 'ventas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`TotalItem` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'abonos_creditos' AS `Tabla`,`fa`.`FormaPago` AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'AbonoSeparado' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `separados_abonos` `fa` union select 'egresos' AS `Tabla`,'Egresos' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuario_idUsuario` AS `idUsuario`,`fa`.`Valor` AS `Total` from `egresos` `fa` where (`fa`.`TipoEgreso` = 'VentasRapidas');
 
 -- --------------------------------------------------------
 
