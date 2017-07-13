@@ -5,11 +5,14 @@
 
 if(!empty($_REQUEST["TipoCodigo"])){
     include_once("../../modelo/php_tablas.php");  //Clases de donde se escribirán las tablas
+    include_once("../../modelo/PrintBarras.php");  //Clases para la impresion de codigos de barras
     include_once("../css_construct.php");
     session_start();
+    
     $idUser=$_SESSION['idUser'];
     $obTabla = new Tabla($db);
     $obVenta = new ProcesoVenta($idUser);
+    $obPrintBarras = new Barras($idUser);
     $idProducto=$obVenta->normalizar($_REQUEST["idProducto"]);
     $Cantidad=$obVenta->normalizar($_REQUEST["TxtCantidad"]);
     $Tabla="productosventa";
@@ -20,7 +23,11 @@ if(!empty($_REQUEST["TipoCodigo"])){
     if($DatosPuerto["Habilitado"]=="SI"){
         switch ($_REQUEST["TipoCodigo"]){
             case 1:
-                $obVenta->ImprimirCodigoBarrasMonarch9416TM($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                    //Impresora de codigos de barras Monarch
+                //$obVenta->ImprimirCodigoBarrasMonarch9416TM($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                
+                $obPrintBarras->ImprimirCBZebraLP2814($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                
                 break;
             case 2:
                 $obVenta->ImprimirLabelMonarch($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
@@ -33,7 +40,7 @@ if(!empty($_REQUEST["TipoCodigo"])){
         //$css->CrearNotificacionAzul("Impreso", 16);
     }
     
-   $css->VentanaFlotante("Se ha impreso $Cantidad Tikets");
+   $css->VentanaFlotante("Se ha impreso $Cantidad Tikets del producto $idProducto");
     
 }
 

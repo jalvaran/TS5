@@ -595,9 +595,12 @@ function EditeRegistro(Tab,Columna,idTabla,idEdit,idElement){
 //Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
 function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
     //alert("Entra");
-    ValorElement=document.getElementById(idElement).value;   
-        
-            if (window.XMLHttpRequest) {
+    ValorElement=document.getElementById(idElement).value;  
+        verifique=Page.substr(14,10);
+        if(verifique=="/PrintCodi"){
+            document.getElementById(idTarget).innerHTML ='Conectando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
+        }
+        if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();
             } else {
@@ -607,6 +610,7 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             httpEdicion.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById(idTarget).innerHTML = this.responseText;
+                    
                 }
             };
         

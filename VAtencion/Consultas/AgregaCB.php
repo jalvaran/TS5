@@ -36,13 +36,22 @@ if(isset($_REQUEST['key'])){
         }
         $fecha=date("Y-m-d");
         if($Cantidad>0){
+            $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar'";
+            $consulta=$obVenta->Query($sql);
+            $DatosProducto=$obVenta->FetchArray($consulta);
+            if($DatosProducto["idProductosVenta"]==''){
+                $idProducto=ltrim($CodBar, "0");
+                $sql="SELECT idProductosVenta FROM productosventa WHERE idProductosVenta='$CodBar'";
+                $consulta=$obVenta->Query($sql);
+                $DatosProducto=$obVenta->FetchArray($consulta);
+            }
             /*
             $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
                 . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
                 . " WHERE pv.`idProductosVenta`='$CodBar' "
                 . " OR pv.`CodigoBarras`='$CodBar' "
                 . " OR k.`CodigoBarras`='$CodBar' LIMIT 1 ";
-            */
+            
             $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
                 . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
                 . " WHERE k.`CodigoBarras`='$CodBar' "
@@ -50,6 +59,8 @@ if(isset($_REQUEST['key'])){
                 . " OR pv.`idProductosVenta`='$CodBar' ORDER BY pv.`idProductosVenta` DESC LIMIT 1";
             $Consulta=$obVenta->Query($sql);
             $DatosProducto=$obVenta->FetchArray($Consulta);
+             * 
+             */
             if($DatosProducto["idProductosVenta"]){
                 $Error=$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
                 if($Error=="E1"){

@@ -15,6 +15,7 @@ if(!empty($_REQUEST["key"])){
     $CodBar=$obVenta->normalizar($_REQUEST['key']);
     $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
     $myPage=$obVenta->normalizar($_REQUEST['myPage']);
+    /*
     $sql="SELECT pv.`idProductosVenta`,pv.`PrecioVenta`,pv.`Nombre`, pv.`Referencia` FROM `productosventa` pv "
                 . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
                 . " WHERE k.`CodigoBarras`='$CodBar' "
@@ -22,8 +23,22 @@ if(!empty($_REQUEST["key"])){
                 . " OR pv.`idProductosVenta`='$CodBar' ORDER BY pv.`idProductosVenta` DESC LIMIT 1";
     $Consulta=$obVenta->Query($sql);
     $DatosProducto=$obVenta->FetchArray($Consulta);
+    
+    */
+    $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar'";
+        $consulta=$obVenta->Query($sql);
+        $DatosProducto=$obVenta->FetchArray($consulta);
+        if($DatosProducto["idProductosVenta"]==''){
+            $idProducto=ltrim($CodBar, "0");
+            $sql="SELECT idProductosVenta FROM productosventa WHERE idProductosVenta='$CodBar'";
+            $consulta=$obVenta->Query($sql);
+            $DatosProducto=$obVenta->FetchArray($consulta);
+        }
     if($DatosProducto["idProductosVenta"]){
-        
+        $id=$DatosProducto["idProductosVenta"];
+        $sql="SELECT idProductosVenta,PrecioVenta,Nombre FROM productosventa WHERE idProductosVenta='$id'";
+            $consulta=$obVenta->Query($sql);
+            $DatosProducto=$obVenta->FetchArray($consulta);
         if($DatosProducto["PrecioVenta"]>0){
             $tab="productosventa";
             $css->CrearNotificacionAzul("Digite la cantidad que desea agregar del producto $DatosProducto[Nombre]", 14);
