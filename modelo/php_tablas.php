@@ -4576,7 +4576,14 @@ EOD;
     public function DibujeAgregaMovimientoContable($myPage,$Visible,$idComprobante) {
         $this->css=new CssIni("");
         $this->css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
-        $DatosComprobante=$this->obCon->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
+        
+        if($myPage=='ComprobantesIngreso.php'){
+            $DatosComprobante=$this->obCon->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
+            $Tercero=$DatosComprobante["Tercero"];
+        }else{
+            $DatosComprobante=$this->obCon->DevuelveValores("egresos", "idEgresos", $idComprobante);
+            $Tercero=$DatosComprobante["NIT"];
+        }
         $this->css->CrearDiv("DivAgregaMov", "", "center", $Visible, 1);
         $this->css->CrearTabla();
         $this->css->FilaTabla(16);
@@ -4617,7 +4624,7 @@ EOD;
                 $this->css->CerrarSelect();
             print("</td>");
             print("<td>");
-            $this->css->CrearInputText("CmbTerceroItem", "text", "", $DatosComprobante["Tercero"], "", "","" , "", 200, 30, 1, 1);
+            $this->css->CrearInputText("CmbTerceroItem", "text", "", $Tercero, "", "","" , "", 200, 30, 1, 1);
             /*    
             $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Seleccione el tercero";
