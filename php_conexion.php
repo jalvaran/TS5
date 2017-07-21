@@ -1917,7 +1917,7 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
         fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
         fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-        fwrite($handle,"*************************************");
+        fwrite($handle,"*********************************");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
@@ -1943,13 +1943,13 @@ public function CalculePesoRemision($idCotizacion)
 
         fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
+        fwrite($handle,"*********************************");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,"Cliente: $DatosCliente[RazonSocial]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,"NIT: $DatosCliente[Num_Identificacion]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
+        fwrite($handle,"*********************************");
         /////////////////////////////FECHA Y NUM FACTURA
 
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
@@ -1960,7 +1960,7 @@ public function CalculePesoRemision($idCotizacion)
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"TIPO DE FACTURA: $DatosFactura[FormaPago]");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"_____________________________________");
+        fwrite($handle,"_________________________________");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
         /////////////////////////////ITEMS VENDIDOS
@@ -1990,7 +1990,7 @@ public function CalculePesoRemision($idCotizacion)
 
             fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
 
-            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,20),20," ",STR_PAD_BOTH)."   ");
+            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,16),16," ",STR_PAD_BOTH)."   ");
 
             fwrite($handle,str_pad("$".number_format($SubTotalITem),10," ",STR_PAD_LEFT));
 
@@ -2002,7 +2002,7 @@ public function CalculePesoRemision($idCotizacion)
 
     /////////////////////////////TOTALES
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
     if($Regimen<>"SIMPLIFICADO"){
@@ -2011,12 +2011,12 @@ public function CalculePesoRemision($idCotizacion)
 	while($DatosTotales=$this->FetchArray($Consulta)){
             $TotalVenta=$DatosTotales["Subtotal"]+$DatosTotales["IVA"]+$DatosTotales["OtrosImpuestos"];
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Base $DatosTotales[PorcentajeIVA]         ".str_pad("$".number_format($DatosTotales["Subtotal"],2),20," ",STR_PAD_LEFT));
+                fwrite($handle,"Base $DatosTotales[PorcentajeIVA]         ".str_pad("$".number_format($DatosTotales["Subtotal"],2),16," ",STR_PAD_LEFT));
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"],2),20," ",STR_PAD_LEFT));
+                fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"],2),16," ",STR_PAD_LEFT));
                 if($DatosTotales["OtrosImpuestos"]>0){
                     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                    fwrite($handle,"Impoconsumo      ".str_pad("$".number_format($DatosTotales["OtrosImpuestos"]),20," ",STR_PAD_LEFT));
+                    fwrite($handle,"Impoconsumo      ".str_pad("$".number_format($DatosTotales["OtrosImpuestos"]),16," ",STR_PAD_LEFT));
                   
                 }
            
@@ -2029,15 +2029,15 @@ public function CalculePesoRemision($idCotizacion)
         //fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
     }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($TotalVenta),20," ",STR_PAD_LEFT));
+    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($TotalVenta),16," ",STR_PAD_LEFT));
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
     /////////////////////////////Forma de PAGO
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
 
@@ -2064,13 +2064,13 @@ public function CalculePesoRemision($idCotizacion)
     }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     //Se mira si hay observaciones
     if($DatosFactura["ObservacionesFact"]<>""){
         /////////////////////////////Forma de PAGO
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
 
@@ -2081,7 +2081,7 @@ public function CalculePesoRemision($idCotizacion)
 
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
-    fwrite($handle,"_____________________________________");
+    fwrite($handle,"_________________________________");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     }
     
@@ -2098,9 +2098,9 @@ public function CalculePesoRemision($idCotizacion)
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Factura impresa por SoftConTech***");
+    fwrite($handle,"***Factura impresa por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
+    fwrite($handle,"Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(100). chr(1));

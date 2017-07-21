@@ -121,7 +121,8 @@
                     $Tabla=$DatosPreventa["TablaItem"];
                     $Subtotal=$ValorAcordado*$Cantidad;
                     $DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
-                    $IVA=$Subtotal*$DatosProductos["IVA"];
+                    $DatosImpuestosAdicionales=$obVenta->DevuelveValores("productos_impuestos_adicionales", "idProducto", $idProducto);
+                    $IVA=$Subtotal*$DatosProductos["IVA"]+($DatosImpuestosAdicionales["ValorImpuesto"]*$Cantidad);
                     $SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
                     $Total=$Subtotal+$IVA;
                     $filtro="idPrecotizacion";

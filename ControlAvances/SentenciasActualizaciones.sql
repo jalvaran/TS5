@@ -44,3 +44,61 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   `Leido` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+ALTER TABLE `porcentajes_iva` ADD `Factor` VARCHAR(10) NOT NULL DEFAULT 'M' AFTER `Valor`;
+
+DROP TABLE IF EXISTS `porcentajes_iva`;
+CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Valor` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Factor` varchar(10) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'M',
+  `CuentaPUC` bigint(20) NOT NULL,
+  `CuentaPUCIVAGenerado` bigint(20) NOT NULL,
+  `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
+  `Habilitado` varchar(2) COLLATE utf8_spanish2_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=8 ;
+
+--
+-- Volcado de datos para la tabla `porcentajes_iva`
+--
+
+INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `Factor`, `CuentaPUC`, `CuentaPUCIVAGenerado`, `NombreCuenta`, `Habilitado`, `Updated`, `Sync`) VALUES
+(1, 'Sin IVA', '0', 'M', 2408, 2408, '', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(2, 'Excluidos', 'E', 'M', 2408, 2408, '', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(3, 'IVA 5 %', '0.05', 'M', 24080503, 24081003, 'Impuestos del 5%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(4, 'IVA del 8%', '0.08', 'M', 24080502, 24081002, 'Impuestos del 8%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(5, 'IVA del 16%', '0.16', 'M', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(6, 'IVA del 19%', '0.19', 'M', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-06-15 14:05:43', '2017-06-15 09:05:43'),
+(7, 'ImpoConsumo Bolsas', '20', 'S', 24080511, 24081011, 'IMPUESTO AL CONSUMO DE BOLSAS', 'SI', '2017-07-21 15:35:47', '0000-00-00 00:00:00');
+
+ALTER TABLE `facturas_items` ADD `idPorcentajeIVA` INT NOT NULL AFTER `PorcentajeIVA`;
+ALTER TABLE `ori_facturas_items` ADD `idPorcentajeIVA` INT NOT NULL AFTER `PorcentajeIVA`;
+
+ALTER TABLE `facturas_items` ADD `ValorOtrosImpuestos` DOUBLE NOT NULL AFTER `IVAItem`;
+ALTER TABLE `facturas_items` ADD `idOtrosImpuestos` INT NOT NULL AFTER `PorcentajeIVA`;
+
+ALTER TABLE `ori_facturas_items` ADD `ValorOtrosImpuestos` DOUBLE NOT NULL AFTER `IVAItem`;
+ALTER TABLE `ori_facturas_items` ADD `idOtrosImpuestos` INT NOT NULL AFTER `PorcentajeIVA`;
+
+
+DROP TABLE IF EXISTS `productos_impuestos_adicionales`;
+CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NombreImpuesto` text COLLATE latin1_spanish_ci NOT NULL,
+  `idProducto` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `ValorImpuesto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `CuentaPUC` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `NombreCuenta` text COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `productos_impuestos_adicionales`
+--
+
+INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`) VALUES
+(1, 'Impoconsumo', '215865', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS');

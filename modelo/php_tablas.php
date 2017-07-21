@@ -1671,7 +1671,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 print("<br>");
                 $this->css->CrearInputNumber("TxtAbonoCheques$DatosCredito[idCartera]", "number", "Cheques: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], 1);  
                 print("<br>");
-                $this->css->CrearInputNumber("TxtAbonoOtros$DatosCredito[idCartera]", "number", "Otros: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);  
+                $this->css->CrearInputNumber("TxtAbonoOtros$DatosCredito[idCartera]", "number", "Otros: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], 1);  
             print("<br>");
             $this->css->CerrarDiv();
             $this->css->CrearBotonConfirmado("BtnAbono$DatosCredito[idCartera]", "Abonar a Credito");
