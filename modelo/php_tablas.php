@@ -3197,6 +3197,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         $NuevoSaldo=0;
         $Totales[]=0;
         $Cuenta=0;
+        $TotalSaldo=0;
         while($DatosLibro=$this->obCon->FetchArray($Datos)){
             $f++;
             $FechaLibro=$DatosLibro["Fecha"];
@@ -3208,6 +3209,11 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             }
             $CambiaRazonSocial=0;
             if($Tercero<>$DatosLibro["Tercero_Identificacion"] or $CuentaComp<>$Cuenta){
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->Campos[11].$f,"Saldo Final")    
+                    ->setCellValue($this->Campos[12].$f,$NuevoSaldo);
+                $f++;  
+                $TotalSaldo=$TotalSaldo+$NuevoSaldo;
                 $CambiaRazonSocial=1;
                 $SaldoAnterior=0;
                 $NuevoSaldo=0;
@@ -3275,7 +3281,15 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ->setCellValue($this->Campos[11].$f,$NuevoSaldo)
             ;
             $SaldoAnterior=$NuevoSaldo;
+            
         }
+        $TotalSaldo=$TotalSaldo+$NuevoSaldo;
+        $f++;
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($this->Campos[11].$f,"Saldo Final")    
+                    ->setCellValue($this->Campos[12].$f,$NuevoSaldo)        
+                    ->setCellValue($this->Campos[13]."2","Saldo Total")    
+                    ->setCellValue($this->Campos[14]."2",$TotalSaldo);
         /*
         while (list($clave, $valor) = each($Totales)) {
             $f++;
