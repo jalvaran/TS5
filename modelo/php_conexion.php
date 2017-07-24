@@ -6909,6 +6909,24 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         while($DatosEgresos=$this->FetchArray($Consulta)){
             $NuevoSaldo=$DatosEgresos["Saldo"]-$DatosEgresos["Abono"]-$DatosEgresos["Descuento"];
             $TotalAbonos=$DatosEgresos["Abonos"]+$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
+                        
+            $this->ActualizaRegistro("cuentasxpagar", "Saldo", $NuevoSaldo, "ID", $DatosEgresos["ID"]);
+            $this->ActualizaRegistro("cuentasxpagar", "Abonos", $TotalAbonos, "ID", $DatosEgresos["ID"]);
+            
+        }
+        
+        // SE crean los egresos
+        
+        $sql="SELECT ep.ID as idPre , GROUP_CONCAT(cp.ID SEPARATOR ';') AS ID ,cp.Soporte,cp.idCentroCostos,cp.idSucursal,GROUP_CONCAT(cp.Concepto SEPARATOR ';') AS Concepto, "
+                . "SUM(ep.Abono) AS Abono,SUM(ep.Descuento) AS Descuento, GROUP_CONCAT(cp.DocumentoReferencia SEPARATOR ';') AS DocumentoReferencia,"
+                . "SUM(cp.Subtotal) as Subtotal,SUM(cp.IVA) as IVA,SUM(cp.Total) as Total,SUM(cp.Retenciones) as Retenciones,SUM(cp.Saldo) as Saldo,"
+                . "SUM(cp.Abonos) as Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
+                . "INNER JOIN cuentasxpagar cp ON ep.idCuentaXPagar=cp.ID AND ep.idUsuario='$idUser' GROUP BY cp.idProveedor,cp.idSucursal ";
+        $Consulta=$this->Query($sql);
+            
+        while($DatosEgresos=$this->FetchArray($Consulta)){
+            $NuevoSaldo=$DatosEgresos["Saldo"]-$DatosEgresos["Abono"]-$DatosEgresos["Descuento"];
+            $TotalAbonos=$DatosEgresos["Abonos"]+$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
             $DatosProveedor=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosEgresos["idProveedor"]);
             //$GranTotal=$DatosEgresos["Total"]+$DatosEgresos["Retenciones"];
             $ProcentajeAbono=(100/$DatosEgresos["Total"])*($DatosEgresos["Abono"]);
@@ -6943,7 +6961,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             
             $TotalPagoProveedor=$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
             $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, ""); 
-            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], 2205, "PROVEEDORES NACIONALES", "Pago de Cuenta X Pagar", "DB", $TotalPagoProveedor, $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
+            $ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 14);  //Parametro donde alberga la cuenta de proveedores
+            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $ParametroContable["CuentaPUC"],$ParametroContable["NombreCuenta"], "Pago de Cuenta X Pagar", "DB", $TotalPagoProveedor, $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
             $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $CuentaOrigen, $DatosCuentaOrigen["Nombre"], "Pago de Cuenta X Pagar", "CR", $DatosEgresos["Abono"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
             if($DatosEgresos["Descuento"]>0){
                 $ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 15);
@@ -6958,11 +6977,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $Columnas[5]="idComprobanteEgreso"; $Valores[5]=$NumEgreso;
             
             $this->InsertarRegistro("cuentasxpagar_abonos",$NumRegistros,$Columnas,$Valores);
-            
-            $this->ActualizaRegistro("cuentasxpagar", "Saldo", $NuevoSaldo, "ID", $DatosEgresos["ID"]);
-            $this->ActualizaRegistro("cuentasxpagar", "Abonos", $TotalAbonos, "ID", $DatosEgresos["ID"]);
             $Egresos[$NumEgreso]=$NumEgreso;
         }
+        
         return($Egresos);
     }
     

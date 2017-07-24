@@ -25,10 +25,6 @@ $Vector["VerRegistro"]["Deshabilitado"]=1;
 ///Columnas excluidas
 
 
-$Vector["Habilitado"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["Habilitado"]["TablaVinculo"]="respuestas_condicional";  //tabla de donde se vincula
-$Vector["Habilitado"]["IDTabla"]="Valor"; //id de la tabla que se vincula
-$Vector["Habilitado"]["Display"]="Valor"; 
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>

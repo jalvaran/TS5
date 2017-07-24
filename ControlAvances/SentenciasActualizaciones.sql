@@ -102,3 +102,6 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
 
 INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`) VALUES
 (1, 'Impoconsumo', '215865', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS');
+
+ALTER TABLE `egresos_pre` CHANGE `Abono` `Abono` DOUBLE NOT NULL;
+ALTER TABLE `cuentasxpagar_abonos` CHANGE `idCuentaXPagar` `idCuentaXPagar` TEXT NOT NULL;

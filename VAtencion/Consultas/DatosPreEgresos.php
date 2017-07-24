@@ -33,7 +33,7 @@ if($obVenta->NumRows($Consulta)){
         $css->CrearForm2("FrmEditarMonto".$DatosPreEgreso["ID"], $myPage, "post", "_self");
         $css->CrearInputText("idPre", "hidden", "", $DatosPreEgreso["idPre"], "", "", "", "", "", "", 0, 0);
         $css->CrearInputText("TxtSaldo", "hidden", "", $DatosPreEgreso["Saldo"], "", "", "", "", "", "", 0, 0);
-        $css->CrearInputNumber("TxtAbonoEdit", "Number", "Abono:<br>", $DatosPreEgreso['Abono'], "Abono", "", "", "", 100, 30, 0, 1, 1, $DatosPreEgreso['Saldo'], 1);
+        $css->CrearInputNumber("TxtAbonoEdit", "Number", "Abono:<br>", $DatosPreEgreso['Abono'], "Abono", "", "", "", 100, 30, 0, 1, 1, $DatosPreEgreso['Saldo'], "any");
         $css->CrearInputNumber("TxtDescuentoProntoPago", "Number", "Descuento:<br>", $DatosPreEgreso['Descuento'], "Descuento", "", "", "", 100, 30, 0, 0, 0, $DatosPreEgreso['Saldo'], 1);
         $css->CrearBoton("BtnEditar", "E");
         $css->CerrarForm();

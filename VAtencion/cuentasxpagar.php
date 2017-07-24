@@ -62,7 +62,7 @@ if(!empty($_REQUEST["TxtidIngreso"])){
 
 
 $PromedioDias=$obVenta->ActualiceDiasCuentasXPagar();
-$TotalCuentas=  number_format($obVenta->Sume("cuentasxpagar", "Saldo",""));
+$TotalCuentas=  number_format($obVenta->Sume("cuentasxpagar", "Saldo","$statement"));
 
 $css->CrearNotificacionAzul("Total Cuentas X Pagar: $ $TotalCuentas", 16);
 
