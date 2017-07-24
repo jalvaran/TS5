@@ -1,4 +1,5 @@
 <?php
+//header('Content-Type: text/html; charset=ISO-8859-1'); 
 $myPage="Menu.php";
 include_once("../sesiones/php_control.php");
 ?>
@@ -6,11 +7,11 @@ include_once("../sesiones/php_control.php");
 <html lang="es">
      <head>
 	 <title>TS5</title>
-     <meta charset="utf-8">
+     <meta charset="ISO-8859-1">
 	 <?php
 	 
 
-	include_once("../modelo/php_conexion.php");
+	include_once("../modelo/php_mysql.php");
 	include_once("css_construct.php");
 
 	if (!isset($_SESSION['username']))
@@ -30,7 +31,7 @@ include_once("../sesiones/php_control.php");
 <!--==============================header=================================-->
 
  <?php 
- 
+        $obCon = new db_conexion();
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 
@@ -48,7 +49,10 @@ include_once("../sesiones/php_control.php");
   
     
 	<?php 
- 
+        $sql="SELECT TipoUser,Role FROM usuarios WHERE idUsuarios='$idUser'";
+        $DatosUsuario=$obCon->Query($sql);
+        $DatosUsuario=$obCon->FetchArray($DatosUsuario);
+        $TipoUser=$DatosUsuario["TipoUser"];                
 	$css->IniciaMenu("Bienvenido $NombreUser que deseas hacer?"); 
 	$css->MenuAlfaIni("Menu");
 	//$css->SubMenuAlfa("Otro",2);
@@ -56,34 +60,28 @@ include_once("../sesiones/php_control.php");
 	
 	$css->IniciaTabs();
             $css->NuevaTabs(1);
-                    //$css->SubTabs("../VAtencion/crono_admin_sesiones.php","_blank","../images/admin.png","Administrar Tiempos");
-                    //$css->SubTabs("../VAtencion/crono.php","_blank","../images/crono.png","Visualizar Tiempo");
-                    $css->SubTabs("Admin.php","_blank","../images/admin.png","Administrar");
-                    $css->SubTabs("MnuVentas.php","_blank","../images/comercial.png","Gestion Comercial");
+                
+                $sql="SELECT m.Nombre, m.Pagina,m.Target,m.Image,m.Orden, c.Ruta FROM menu m "
+                        . "INNER JOIN menu_carpetas c ON c.ID=m.idCarpeta WHERE m.Estado=1 ORDER BY m.Orden ASC";
+                $Consulta=$obCon->Query($sql);
+                while($DatosMenu=$obCon->FetchArray($Consulta)){
                     
-                    $css->SubTabs("MnuFacturacion.php","_blank","../images/factura.png","Facturación");
-                    $css->SubTabs("../VAtencion/cartera.php","_blank","../images/cartera.png","Cartera");
-                    $css->SubTabs("MnuIngresos.php","_blank","../images/ingresos.png","Ingresos");
-                    $css->SubTabs("MnuCompras.php","_blank","../images/factura_compras.png","Compras");
-                    $css->SubTabs("MnuEgresos.php","_blank","../images/egresos.png","Egresos");
-                    $css->SubTabs("../VAtencion/CreaComprobanteCont.php","_blank","../images/egresoitems.png","Comprobantes Contables");
-                    $css->SubTabs("../VAtencion/ConceptosContablesUtilidad.php","_blank","../images/conceptos.png","Conceptos Contables");
-                    $css->SubTabs("../VAtencion/clientes.php","_blank","../images/clientes.png","Clientes");
-                    $css->SubTabs("../VAtencion/proveedores.php","_blank","../images/proveedores.png","Proveedores");
-                    //$css->SubTabs("../VAtencion/CuentasXCobrar.php","_blank","../images/cuentasxcobrar.png","Cuentas Por Cobrar");
-                    $css->SubTabs("../VAtencion/cuentasxpagar.php","_blank","../images/cuentasxpagar.png","Cuentas Por Pagar");
-                    $css->SubTabs("MnuInventarios.php","_blank","../images/inventarios.png","Inventarios");
-                    $css->SubTabs("../VAtencion/ordenesdetrabajo.php","_blank","../images/ordentrabajo.png","Ordenes de servicio");
-                    $css->SubTabs("../VAtencion/CronogramaProduccion.php","_blank","../images/produccion.png","Produccion");
-                    $css->SubTabs("MnuTitulos.php","_blank","../images/titulos.jpg","Titulos");
-                    $css->SubTabs("MnuRestaurante.php","_blank","../images/restaurante.png","Restaurante");
-                    $css->SubTabs("MnuInformes.php","_blank","../images/informes.png","Informes");
-                    $css->SubTabs("MnuRequerimientos.php","_blank","../images/requerimientos.png","Gestion de Requerimientos");
-                    //$css->SubTabs("MnuPedidos.php","_blank","../images/requerimientos.png","Gestion de Pedidos");
-                    $css->SubTabs("MnuAjustes.php","_blank","../images/ajustes.png","Ajustes y Servicios Generales");
-                    $css->SubTabs("../destruir.php","_self","../images/salir.png","Salir");
-			
-	
+                    if($DatosUsuario["TipoUser"]=="administrador"){
+                        $Visible=1;
+                    }else{
+                        $Visible=0;
+                        $sql="SELECT ID FROM paginas_bloques WHERE TipoUsuario='$TipoUser' AND Pagina='$DatosMenu[Pagina]' AND Habilitado='SI'";
+                        $DatosUser=$obCon->Query($sql);
+                        $DatosUser=$obCon->FetchArray($DatosUser);
+                        if($DatosUser["ID"]>0){
+                            $Visible=1;
+                        }
+                    }
+                    if($Visible==1){
+                        $css->SubTabs($DatosMenu["Ruta"].$DatosMenu["Pagina"],$DatosMenu["Target"],"../images/".$DatosMenu["Image"],$DatosMenu["Nombre"]);
+                    }    
+                }
+                    
 	$css->FinTabs();
 	$css->FinMenu(); 	
 	?>

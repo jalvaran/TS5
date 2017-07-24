@@ -7,6 +7,7 @@ if (!isset($_SESSION['username'])){
 }
 $idUser=$_SESSION['idUser'];
 $TipoUser=$_SESSION['tipouser'];
+
 include_once("../modelo/php_tablas.php");  //Clases con el contenido del manejo de las tablas
 $obVenta = new ProcesoVenta($idUser);
 $VectorPermisos["Page"]=$myPage;
