@@ -105,3 +105,78 @@ INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProduc
 
 ALTER TABLE `egresos_pre` CHANGE `Abono` `Abono` DOUBLE NOT NULL;
 ALTER TABLE `cuentasxpagar_abonos` CHANGE `idCuentaXPagar` `idCuentaXPagar` TEXT NOT NULL;
+
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE IF NOT EXISTS `menu` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `idCarpeta` int(11) NOT NULL,
+  `Pagina` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `Target` varchar(10) COLLATE latin1_spanish_ci NOT NULL DEFAULT '_SELF',
+  `Estado` int(1) NOT NULL DEFAULT '1',
+  `Image` text COLLATE latin1_spanish_ci NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=24 ;
+
+--
+-- Volcado de datos para la tabla `menu`
+--
+
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES
+(1, 'Administrar', 1, 'Admin.php', '_BLANK', 1, 'admin.png', 1, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(2, 'Gestión Comercial', 1, 'MnuVentas.php', '_BLANK', 1, 'comercial.png', 2, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(3, 'Facturación', 1, 'MnuFacturacion.php', '_BLANK', 1, 'factura.png', 3, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(4, 'Cartera', 3, 'cartera.php', '_BLANK', 1, 'cartera.png', 4, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(5, 'Compras', 1, 'MnuCompras.php', '_BLANK', 1, 'factura_compras.png', 5, '2017-07-24 19:38:53', '2017-06-22 18:08:59'),
+(6, 'Egresos', 1, 'MnuEgresos.php', '_BLANK', 1, 'egresos.png', 6, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(7, 'Comprobantes Contables', 3, 'CreaComprobanteCont.php', '_BLANK', 1, 'egresoitems.png', 7, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(8, 'Conceptos Contables', 3, 'ConceptosContablesUtilidad.php', '_BLANK', 1, 'conceptos.png', 8, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(9, 'Clientes', 3, 'clientes.php', '_BLANK', 1, 'clientes.png', 9, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(10, 'Proveedores', 3, 'proveedores.php', '_BLANK', 1, 'proveedores.png', 10, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(11, 'Cuentas X Pagar', 3, 'cuentasxpagar.php', '_BLANK', 1, 'cuentasxpagar.png', 11, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(12, 'Inventarios', 1, 'MnuInventarios.php', '_BLANK', 1, 'inventarios.png', 12, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(13, 'Ordenes de Servicio', 3, 'ordenesdetrabajo.php', '_BLANK', 1, 'ordentrabajo.png', 13, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(14, 'Producción', 3, 'CronogramaProduccion.php', '_BLANK', 1, 'produccion.png', 14, '2017-07-24 19:03:17', '2017-06-22 18:08:59'),
+(15, 'Títulos', 1, 'MnuTitulos.php', '_BLANK', 1, 'titulos.jpg', 15, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(16, 'Restaurante', 1, 'MnuRestaurante.php', '_BLANK', 1, 'restaurante.png', 16, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(17, 'Informes', 1, 'MnuInformes.php', '_BLANK', 1, 'informes.png', 17, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(18, 'Gestión de Requerimientos', 1, 'MnuRequerimientos.php', '_BLANK', 1, 'requerimientos.png', 18, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(19, 'Ajustes y Servicios Generales', 1, 'MnuAjustes.php', '_BLANK', 1, 'ajustes.png', 19, '2017-07-24 19:05:12', '2017-06-22 18:08:59'),
+(20, 'Salir', 2, 'destruir.php', '_SELF', 1, 'salir.png', 20, '2017-07-24 19:07:08', '2017-06-22 18:08:59'),
+(21, 'Administrar Tiempos', 3, 'crono_admin_sesiones.php', '_BLANK', 0, 'admin.png', 21, '2017-07-24 19:10:13', '2017-06-22 18:08:59'),
+(22, 'Visualizar Tiempo', 3, 'crono.php', '_BLANK', 0, 'crono.png', 22, '2017-07-24 19:10:11', '2017-06-22 18:08:59'),
+(23, 'Ingresos', 1, 'MnuIngresos.php', '_BLANK', 1, 'ingresos.png', 5, '2017-07-24 19:38:53', '2017-06-22 18:08:59');
+
+
+DROP TABLE IF EXISTS `menu_carpetas`;
+CREATE TABLE IF NOT EXISTS `menu_carpetas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Ruta` varchar(90) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `menu_carpetas`
+--
+
+INSERT INTO `menu_carpetas` (`ID`, `Ruta`) VALUES
+(1, ''),
+(2, '../'),
+(3, '../VAtencion/');
+
+DROP VIEW IF EXISTS `vista_entregas`;
+CREATE VIEW vista_entregas AS 
+SELECT 'ventas' as Tabla,'Contado' as Tipo, fa.FechaFactura as Fecha, fa.idUsuarios as idUsuario, fa.TotalItem as Total FROM ori_facturas_items fa 
+UNION 
+SELECT 'bolsas' as Tabla,f.FormaPago as Tipo, fa.FechaFactura as Fecha, fa.idUsuarios as idUsuario, fa.ValorOtrosImpuestos as Total FROM ori_facturas_items fa INNER JOIN ori_facturas f ON f.idFacturas=fa.idFactura
+UNION 
+SELECT 'abonos_creditos' as Tabla,fa.FormaPago as Tipo,fa.Fecha as Fecha, fa.Usuarios_idUsuarios as idUsuario, fa.Valor as Total FROM facturas_abonos fa
+UNION 
+SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, fa.idUsuarios as idUsuario, fa.Valor as Total FROM separados_abonos fa
+UNION 
+SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas';
+
+

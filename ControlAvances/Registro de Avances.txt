@@ -10,6 +10,8 @@ DROP VIEW IF EXISTS `vista_entregas`;
 CREATE VIEW vista_entregas AS 
 SELECT 'ventas' as Tabla,f.FormaPago as Tipo, fa.FechaFactura as Fecha, fa.idUsuarios as idUsuario, fa.TotalItem as Total FROM ori_facturas_items fa INNER JOIN ori_facturas f ON f.idFacturas=fa.idFactura WHERE f.FormaPago='Contado'
 UNION 
+SELECT 'bolsas' as Tabla,f.FormaPago as Tipo, fa.FechaFactura as Fecha, fa.idUsuarios as idUsuario, fa.ValorOtrosImpuestos as Total FROM ori_facturas_items fa INNER JOIN ori_facturas f ON f.idFacturas=fa.idFactura WHERE f.FormaPago='Contado'
+UNION 
 SELECT 'abonos_creditos' as Tabla,fa.FormaPago as Tipo,fa.Fecha as Fecha, fa.Usuarios_idUsuarios as idUsuario, fa.Valor as Total FROM facturas_abonos fa
 UNION 
 SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, fa.idUsuarios as idUsuario, fa.Valor as Total FROM separados_abonos fa

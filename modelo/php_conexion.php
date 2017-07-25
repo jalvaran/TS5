@@ -437,9 +437,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         $TablaItem=$this->normalizar($TablaItem);
         
 	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
-        if($DatosProductoGeneral["PrecioVenta"]<=0){
-            return("E1");
-        }
+        //if($DatosProductoGeneral["PrecioVenta"]<=0){
+          //  return("E1");
+        //}
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];

@@ -5109,11 +5109,20 @@ EOD;
     }
     //HTML Ventas X Usuarios Informe admin
     
-    public function HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1) {
+    public function HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3) {
         $html="";
+        /*
         $sql="SELECT Usuarios_idUsuarios as IdUsuarios, FormaPago as  TipoVenta, SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, 
         SUM(Total) as Total, SUM(TotalCostos) as TotalCostos"
                 . "  FROM $CondicionFacturas GROUP BY Usuarios_idUsuarios, FormaPago";
+        
+         * 
+         */
+        $sql="SELECT fi.idUsuarios as IdUsuarios,fa.FormaPago as TipoVenta,sum(fi.`TotalItem`) as Total,sum(fi.`IVAItem`) as IVA,sum(fi.`SubtotalItem`) as Subtotal,"
+                . "sum(fi.`SubtotalCosto`) as TotalCostos, sum(fi.`ValorOtrosImpuestos`) as Bolsas, "
+                . "SUM(fi.`Cantidad`) AS Items, fi.idUsuarios FROM `ori_facturas_items` fi "
+                . "INNER JOIN facturas fa ON fi.idFactura=fa.idFacturas "
+                . "WHERE $CondicionFecha3 GROUP BY fi.idUsuarios,fa.FormaPago";
         $Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
             $html='<br><br><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Usuarios y Tipo de Venta:
@@ -5125,8 +5134,9 @@ EOD;
                     <th><h3>Usuario</h3></th>
                         <th><h3>TipoVenta</h3></th>
                         <th><h3>Total Costos</h3></th>
-                    <th><h3>SubTotal</h3></th>
+                        <th><h3>SubTotal</h3></th>
                         <th><h3>IVA</h3></th>
+                        <th><h3>Bolsas</h3></th>
                         <th><h3>Total</h3></th>
                   </tr >
 
@@ -5135,18 +5145,21 @@ EOD;
             $TotalIVA=0;
             $TotalVentas=0;
             $TotalCostos=0;
+            $TotalBolsas=0;
             $flagQuery=0;
             $i=0;
             while($DatosVentas= $this->obCon->FetchArray($Datos)){
                 $flagQuery=1;
                 $SubtotalUser=number_format($DatosVentas["Subtotal"]);
                 $IVA=number_format($DatosVentas["IVA"]);
-                $Total=number_format($DatosVentas["Total"]);
+                $Bolsas=number_format($DatosVentas["Bolsas"]);
+                $Total=number_format($DatosVentas["Total"]+$DatosVentas["Bolsas"]);
                 $Costos=number_format($DatosVentas["TotalCostos"]);
                 $TipoVenta=$DatosVentas["TipoVenta"];
                 $Subtotal=$Subtotal+$DatosVentas["Subtotal"];
                 $TotalIVA=$TotalIVA+$DatosVentas["IVA"];
-                $TotalVentas=$TotalVentas+$DatosVentas["Total"];
+                $TotalBolsas=$TotalBolsas+$DatosVentas["Bolsas"];
+                $TotalVentas=$TotalVentas+$DatosVentas["Total"]+$DatosVentas["Bolsas"];
                 $TotalCostos=$TotalCostos+$DatosVentas["TotalCostos"];
                 $idUser=$DatosVentas["IdUsuarios"];
                 $html.=' 
@@ -5157,6 +5170,7 @@ EOD;
                             <td>'.$Costos.'</td>
                             <td>'.$SubtotalUser.'</td>
                             <td>'.$IVA.'</td>
+                            <td>'.$Bolsas.'</td>    
                             <td>'.$Total.'</td>
                         </tr>
                     </table>
@@ -5175,6 +5189,7 @@ EOD;
                             <td><h3>'.$TotalCostos.'</h3></td>
                             <td><h3>'.$Subtotal.'</h3></td>
                             <td><h3>'.$TotalIVA.'</h3></td>
+                            <td><h3>'.number_format($TotalBolsas).'</h3></td>    
                             <td><h3>'.$TotalVentas.'</h3></td>
                         </tr>
                     </table>
@@ -5331,6 +5346,7 @@ EOD;
     //HTML Entregas
     public function HTML_Entregas($CondicionFecha2) {
         $html="";
+        
         $sql="SELECT SUM(Total) as Total, Tabla, Tipo,idUsuario FROM vista_entregas WHERE $CondicionFecha2 GROUP BY idUsuario,Tabla,Tipo";
         $Datos=$this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
@@ -5377,10 +5393,12 @@ EOD;
         if($TipoReporte=="Corte"){
             $CondicionFecha1=" FechaFactura <= '$FechaCorte' ";
             $CondicionFecha2=" Fecha <= '$FechaCorte' ";
+            $CondicionFecha3=" fi.FechaFactura <= '$FechaCorte' ";
             $Rango="Corte a $FechaFinal";
         }else{
             $CondicionFecha1=" FechaFactura >= '$FechaIni' AND FechaFactura <= '$FechaFinal' ";
             $CondicionFecha2=" Fecha >= '$FechaIni' AND Fecha <= '$FechaFinal' ";
+            $CondicionFecha3=" fi.FechaFactura >= '$FechaIni' AND fi.FechaFactura <= '$FechaFinal' ";
             $Rango="De $FechaIni a $FechaFinal";
         }
 
@@ -5397,14 +5415,14 @@ EOD;
                
         $html= $this->HTML_VentasXDepartamentos($CondicionItems);
         $this->PDF_Write($html);
-        $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1);
+        $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3);
         $this->PDF_Write("<br>".$html);
-        $html= $this->HTML_Egresos_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
-        $html= $this->HTML_Abonos_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
-        $html= $this->HTML_Entregas($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        //$html= $this->HTML_Egresos_Admin($CondicionFecha2);
+        //$this->PDF_Write("<br>".$html);
+        //$html= $this->HTML_Abonos_Admin($CondicionFecha2);
+        //$this->PDF_Write("<br>".$html);
+        //$html= $this->HTML_Entregas($CondicionFecha2);
+        //$this->PDF_Write("<br>".$html);
         $this->PDF_Output("Informe_Ventas_");
         
     }
