@@ -35,6 +35,7 @@ if($key<>""){
         $css->ColTabla('<strong>Saldo</strong>', 1);
         $css->ColTabla('<strong>UltimoPago</strong>', 1);
         $css->ColTabla('<strong>Mayor</strong>', 1);
+        $css->ColTabla('<strong>Promocion</strong>', 1);
         $css->CierraFilaTabla();
 
         $css->FilaTabla(16);
@@ -72,7 +73,7 @@ if($key<>""){
         $css->ColTabla($DatosCuentasXCobrar['Saldo'], 1);
         $css->ColTabla($DatosCuentasXCobrar['UltimoPago'], 1);
         $css->ColTabla($DatosCuentasXCobrar['Mayor'], 1);
-
+        $css->ColTabla($DatosCuentasXCobrar['Promocion'], 1);
         $css->CierraFilaTabla();
         $css->CerrarTabla();
         $css->CrearTabla(); 

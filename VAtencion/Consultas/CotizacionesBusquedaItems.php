@@ -35,7 +35,12 @@ if($key<>""){
       $sql="SELECT * FROM `sistemas`
 		WHERE `ID`='$key' OR Nombre LIKE '%$key%' LIMIT 50";
       
-    }    
+    } 
+    if($TipoBusqueda==4){   
+      $sql="SELECT * FROM `productosalquiler` pv
+		WHERE pv.`idProductosVenta`='$key' OR pv.Nombre LIKE '%$key%' or pv.Referencia = '$key' LIMIT 50";
+      
+    } 
         $consulta=$obVenta->Query($sql);
         if($obVenta->NumRows($consulta)){
             $css->FilaTabla(16);

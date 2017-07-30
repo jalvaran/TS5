@@ -2028,8 +2028,10 @@ public function CalculePesoRemision($idCotizacion)
         //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         //fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
     }
+    $Total=$this->Sume("facturas_items", "TotalItem", " WHERE idFactura='$idFactura'");
+    $Bolsa=$this->Sume("facturas_items", "ValorOtrosImpuestos", " WHERE idFactura='$idFactura'");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($TotalVenta),20," ",STR_PAD_LEFT));
+    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($Total+$Bolsa),20," ",STR_PAD_LEFT));
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
     fwrite($handle,"_____________________________________");
@@ -3962,8 +3964,10 @@ public function CalculePesoRemision($idCotizacion)
     
     //Esta clase permite agregar items desde un archivo csv cargado
     public function AgregarItemXCB($CodigoBarras, $Cantidad, $VectorItem) {
-        $DatosCodigo=  $this->DevuelveValores("prod_codbarras", "CodigoBarras", $CodigoBarras);
-        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosCodigo["ProductosVenta_idProductosVenta"]);
+        //$DatosCodigo=  $this->DevuelveValores("prod_codbarras", "CodigoBarras", $CodigoBarras);
+        //$DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosCodigo["ProductosVenta_idProductosVenta"]);
+        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $CodigoBarras);//modificado para recibir por id
+    
         if(empty($DatosProducto["idProductosVenta"])){
             return ("SR");
         }

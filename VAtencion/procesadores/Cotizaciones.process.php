@@ -65,7 +65,10 @@ $obVenta=new ProcesoVenta($idUser);
                 }
                 if($TipoItem==3){
                     $TablaItem="sistemas";
-                }                
+                }
+                if($TipoItem==4){
+                    $TablaItem="productosalquiler";
+                }
                 if($TipoItem<>3){
                     $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$TablaItem,$ValorUnitario,"");
                 }else{

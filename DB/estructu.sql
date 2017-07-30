@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2017 a las 14:04:54
+-- Tiempo de generación: 26-07-2017 a las 10:13:25
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -1155,7 +1155,7 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar_abonos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
-  `idCuentaXPagar` bigint(20) NOT NULL,
+  `idCuentaXPagar` text COLLATE utf8_spanish2_ci NOT NULL,
   `Monto` double NOT NULL,
   `idUsuarios` bigint(20) NOT NULL,
   `idComprobanteEgreso` bigint(20) NOT NULL,
@@ -1306,7 +1306,7 @@ CREATE TABLE IF NOT EXISTS `egresos_items` (
 CREATE TABLE IF NOT EXISTS `egresos_pre` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idCuentaXPagar` bigint(20) NOT NULL,
-  `Abono` int(11) NOT NULL,
+  `Abono` double NOT NULL,
   `Descuento` double NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1598,8 +1598,11 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   `Dias` double NOT NULL,
   `SubtotalItem` double NOT NULL,
   `IVAItem` double NOT NULL,
+  `ValorOtrosImpuestos` double NOT NULL,
   `TotalItem` double NOT NULL COMMENT 'Total del valor del Item',
   `PorcentajeIVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
+  `idOtrosImpuestos` int(11) NOT NULL,
+  `idPorcentajeIVA` int(11) NOT NULL,
   `PrecioCostoUnitario` double NOT NULL,
   `SubtotalCosto` double NOT NULL COMMENT 'Costo total del item',
   `TipoItem` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
@@ -2212,9 +2215,26 @@ CREATE TABLE IF NOT EXISTS `maquinas` (
 CREATE TABLE IF NOT EXISTS `menu` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `idCarpeta` int(11) NOT NULL,
   `Pagina` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
+  `Target` varchar(10) COLLATE latin1_spanish_ci NOT NULL DEFAULT '_SELF',
   `Estado` int(1) NOT NULL DEFAULT '1',
   `Image` text COLLATE latin1_spanish_ci NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `menu_carpetas`
+--
+
+CREATE TABLE IF NOT EXISTS `menu_carpetas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Ruta` varchar(90) COLLATE latin1_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -2453,8 +2473,11 @@ CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
   `Dias` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `SubtotalItem` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `IVAItem` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `ValorOtrosImpuestos` double NOT NULL,
   `TotalItem` double NOT NULL COMMENT 'Total del valor del Item',
   `PorcentajeIVA` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'que porcentaje de IVA se le aplico',
+  `idOtrosImpuestos` int(11) NOT NULL,
+  `idPorcentajeIVA` int(11) NOT NULL,
   `PrecioCostoUnitario` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `SubtotalCosto` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Costo total del item',
   `TipoItem` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Define si se realiza ajustes a inventarios',
@@ -2539,6 +2562,7 @@ CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Valor` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `Factor` varchar(10) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'M',
   `CuentaPUC` bigint(20) NOT NULL,
   `CuentaPUCIVAGenerado` bigint(20) NOT NULL,
   `NombreCuenta` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2982,6 +3006,24 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `productos_impuestos_adicionales`
+--
+
+CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NombreImpuesto` text COLLATE latin1_spanish_ci NOT NULL,
+  `idProducto` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `ValorImpuesto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `CuentaPUC` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `NombreCuenta` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `prod_bajas_altas`
 --
 
@@ -3026,7 +3068,7 @@ CREATE TABLE IF NOT EXISTS `prod_bodega` (
 CREATE TABLE IF NOT EXISTS `prod_codbarras` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
-  `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `CodigoBarras` varchar(90) COLLATE utf8_spanish_ci NOT NULL,
   `TablaOrigen` varchar(90) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'productosventa',
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -3369,6 +3411,8 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   `Gramos` double NOT NULL,
   `idBascula` int(11) NOT NULL,
   `Leido` bit(1) NOT NULL DEFAULT b'0',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -4740,7 +4784,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_entregas`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_entregas` AS select 'ventas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`TotalItem` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'abonos_creditos' AS `Tabla`,`fa`.`FormaPago` AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'AbonoSeparado' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `separados_abonos` `fa` union select 'egresos' AS `Tabla`,'Egresos' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuario_idUsuario` AS `idUsuario`,`fa`.`Valor` AS `Total` from `egresos` `fa` where (`fa`.`TipoEgreso` = 'VentasRapidas');
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_entregas` AS select 'ventas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`TotalItem` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'bolsas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`ValorOtrosImpuestos` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'abonos_creditos' AS `Tabla`,`fa`.`FormaPago` AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'AbonoSeparado' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `separados_abonos` `fa` union select 'egresos' AS `Tabla`,'Egresos' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuario_idUsuario` AS `idUsuario`,`fa`.`Valor` AS `Total` from `egresos` `fa` where (`fa`.`TipoEgreso` = 'VentasRapidas');
 
 -- --------------------------------------------------------
 

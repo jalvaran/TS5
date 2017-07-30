@@ -112,7 +112,10 @@ print("</head><body align='center'>");
             print("<br>");
             $Page="Consultas/CotizacionesBusquedaItems.php?TipoItem=3&myPage=$myPage&TxtIdCliente=$idClientes&key=";
             $css->CrearInputText("TxtSistema", "text", "", "", "Buscar Sistema", "", "onKeyUp", "EnvieObjetoConsulta(`$Page`,`TxtSistema`,`DivBusquedas`,`0`);", 200, 30, 0, 1);
-    
+            print("<br>");
+            $Page="Consultas/CotizacionesBusquedaItems.php?TipoItem=4&myPage=$myPage&TxtIdCliente=$idClientes&key=";
+            $css->CrearInputText("TxtAlquiler", "text", "", "", "Buscar Alquiler", "", "onKeyUp", "EnvieObjetoConsulta(`$Page`,`TxtAlquiler`,`DivBusquedas`,`0`);", 200, 30, 0, 1);
+            print("<br>");
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearForm2("FrmAgregarItemsToCotiza", $myPage, "post", "_self");
