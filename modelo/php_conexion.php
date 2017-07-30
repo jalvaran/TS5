@@ -7497,9 +7497,6 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 
         /////////////////////////////DEVOLUCIONES
         
-        
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
         $sql = "SELECT Cantidad as Cantidad, TotalItem as Total, Referencia as Referencia"
                 . " FROM facturas_items fi "
                 . " WHERE Cantidad < 0 AND idCierre='$idCierre'";
@@ -7521,14 +7518,10 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 
         fwrite($handle,str_pad("Total Devoluciones $TotalDevoluciones",10," ",STR_PAD_LEFT));
     
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     /////////////////////////////TOTALES
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    
+    $this->SeparadorHorizontal($handle, "_", 37);
+    
     fwrite($handle,"TOTAL VENTAS         ".str_pad("$".number_format($DatosCierre["TotalVentas"]),20," ",STR_PAD_LEFT));
 
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
@@ -7608,9 +7601,7 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
     
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $this->SeparadorHorizontal($handle, "_", 37);
 
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
@@ -7623,9 +7614,11 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle,"***Comprobante impreso por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
+    fwrite($handle,"Techno Soluciones SAS, 3177740609");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(100). chr(1));

@@ -1379,6 +1379,24 @@ function Footer(){
         public function ImageOcultarMostrar($Nombre,$Leyenda,$idObjeto,$Ancho,$Alto,$Vector,$RutaImage='../images/hidde.png') {
             print("<strong>$Leyenda</strong><image name='$Nombre' id='$Nombre' src='$RutaImage' style='height:$Ancho"."px".";width:$Alto"."px"."' onclick=MuestraOculta('$idObjeto');>");
         }
+        //Div para maquetear
+        public function DivGrid($ID, $Class, $Alineacion,$Visible, $Habilitado,$Ubicacion,$Altura,$Ancho,$Border,$BorderColor){
+            if($Visible==1)
+                $V="block";
+            else
+                $V="none";
+            if($Ubicacion==1)
+                $Ubicacion="left";
+            if($Ubicacion==2)
+               $Ubicacion="center";
+            if($Ubicacion==3)
+               $Ubicacion="rigth";
+            if($Habilitado==1) ///pensado a futuro, aun no esta en uso
+                $H="true";
+            else
+                $H="false";
+            print("<div id='$ID' class='$Class' align='$Alineacion' style='display:$V;float: left;$Ubicacion;height:".$Altura."%;width:".$Ancho."%;overflow: auto;border: ".$Border."px solid;border-color: $BorderColor;' >");
+        }
         //////////////////////////////////FIN
 }
 	
