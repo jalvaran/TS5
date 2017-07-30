@@ -2438,213 +2438,7 @@ public function CalculePesoRemision($idCotizacion)
         
      }
      
-     /*
-      * Imprime el cierre de un dia
-      * 
-      */
-     
-     /*
-      * Imprime un Cierre
-      */
-     
-     public function ImprimeCierre($idUser,$VectorCierre,$COMPrinter,$Copias){
-        $COMPrinter= $this->COMPrinter;    
-        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
-            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
-        }
-       $idCierre=$VectorCierre["idCierre"];
-       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", 1);
-       $RazonSocial=$DatosEmpresa["RazonSocial"];
-        $NIT=$DatosEmpresa["NIT"];
-        $Direccion=$DatosEmpresa["Direccion"];
-        $Ciudad=$DatosEmpresa["Ciudad"];
-       
-        $Telefono=$DatosEmpresa["Telefono"];
-
-       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $idUser);
-       $DatosCierre=$this->DevuelveValores("cajas_aperturas_cierres", "ID", $idCierre);
-      
-       
-        for($i=1; $i<=$Copias;$i++){
-        fwrite($handle,chr(27). chr(64));//REINICIO
-        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
-        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
-        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
-        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$NIT);
-        
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Direccion);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Ciudad);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Telefono);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-
-        fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
-        
-        /////////////////////////////FECHA Y NUM FACTURA
-
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-        fwrite($handle,"FECHA: $DatosCierre[Fecha]          HORA: $DatosCierre[Hora]");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"COMPROBANTE DE ENTREGA:   $idCierre");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"_____________________________________");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-        /////////////////////////////DEVOLUCIONES
-        
-        
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-        $sql = "SELECT Cantidad as Cantidad, TotalItem as Total, Referencia as Referencia"
-                . " FROM facturas_items fi "
-                . " WHERE Cantidad < 0 AND idCierre='$idCierre'";
-	
-        $consulta=$this->Query($sql);
-	$TotalDevoluciones=0;						
-	while($DatosVenta=$this->FetchArray($consulta)){
-	
-            $TotalDevoluciones=$TotalDevoluciones+$DatosVenta["Total"];
-           
-            fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
-
-            fwrite($handle,str_pad(substr($DatosVenta["Referencia"],0,20),20," ",STR_PAD_BOTH)."   ");
-
-            fwrite($handle,str_pad("$".number_format($DatosVenta["Total"]),10," ",STR_PAD_LEFT));
-
-            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        }
-
-        fwrite($handle,str_pad("Total Devoluciones $TotalDevoluciones",10," ",STR_PAD_LEFT));
     
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-    /////////////////////////////TOTALES
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL VENTAS         ".str_pad("$".number_format($DatosCierre["TotalVentas"]),20," ",STR_PAD_LEFT));
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL VENTAS CONTADO ".str_pad("$".number_format($DatosCierre["TotalVentasContado"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL VENTAS CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasCredito"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL VENTAS SISTE CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasSisteCredito"]),14," ",STR_PAD_LEFT));
-    /*
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"EFECTIVO             ".str_pad("$".number_format($DatosCierre["Efectivo"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"DEVUELTAS            ".str_pad("$".number_format($DatosCierre["Devueltas"]),20," ",STR_PAD_LEFT));
-    */
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS SEPARADOS     ".str_pad("$".number_format($DatosCierre["TotalAbonos"]),20," ",STR_PAD_LEFT));
-    $sql="SELECT SUM(Valor) as Abono, TipoPagoAbono FROM facturas_abonos WHERE idCierre='$idCierre' GROUP BY TipoPagoAbono ";
-    $ConsultaAbonos=$this->Query($sql);
-    $AbonosCreditoEfectivo=0;
-    $AbonosCreditoTarjeta=0;
-    $AbonosCreditoCheque=0;
-    $AbonosCreditoOtros=0;
-    while ($DatosAbonos=$this->FetchArray($ConsultaAbonos)){
-        if($DatosAbonos["TipoPagoAbono"]==""){
-            $AbonosCreditoEfectivo=$AbonosCreditoEfectivo+$DatosAbonos["Abono"];
-        }
-        if($DatosAbonos["TipoPagoAbono"]=="Tarjetas"){
-            $AbonosCreditoTarjeta=$AbonosCreditoTarjeta+$DatosAbonos["Abono"];
-        }
-        if($DatosAbonos["TipoPagoAbono"]=="Cheques"){
-            $AbonosCreditoCheque=$AbonosCreditoCheque+$DatosAbonos["Abono"];
-        }
-        if($DatosAbonos["TipoPagoAbono"]=="Bonos"){
-            $AbonosCreditoOtros=$AbonosCreditoOtros+$DatosAbonos["Abono"];
-        }
-    }
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS CRED EFECTIVO ".str_pad("$".number_format($AbonosCreditoEfectivo),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS CRED TARJETAS ".str_pad("$".number_format($AbonosCreditoTarjeta),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS CRED CHEQUES  ".str_pad("$".number_format($AbonosCreditoCheque),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS CRED BONOS    ".str_pad("$".number_format($AbonosCreditoOtros),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"EGRESOS              ".str_pad("$".number_format($DatosCierre["TotalEgresos"]),20," ",STR_PAD_LEFT));
-        
-    
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL TARJETAS       ".str_pad("$".number_format($DatosCierre["TotalTarjetas"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL CHEQUES        ".str_pad("$".number_format($DatosCierre["TotalCheques"]),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL OTROS          ".str_pad("$".number_format($DatosCierre["TotalOtros"]),20," ",STR_PAD_LEFT));
-    
-    $TotalOtrosImpuestos=$this->Sume("facturas_items", "ValorOtrosImpuestos", "WHERE idCierre='$idCierre'");
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"OTROS IMPUESTOS      ".str_pad("$".number_format($TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
-   
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
-    //fwrite($handle, chr(27). chr(100). chr(0));
-    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por SoftConTech***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
-    //fwrite($handle,"=================================");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-
-    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
-    }
-    fclose($handle); // cierra el fichero PRN
-    $salida = shell_exec('lpr $COMPrinter');
-    $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
-    }
     
     ///Registre un abono a un separado
     //
@@ -7639,6 +7433,212 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $dv = $y;
             return $dv;
         }
+    }
+    
+    public function SeparadorHorizontal($handle,$Caracter,$Cantidad){
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        $Line=str_pad($Caracter,  $Cantidad, $Caracter);
+        fwrite($handle,$Line); //
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+    }
+     /*
+      * Imprime un Cierre
+      */
+     
+     public function ImprimeCierre($idUser,$VectorCierre,$COMPrinter,$Copias){
+        $COMPrinter= $this->COMPrinter;    
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $idCierre=$VectorCierre["idCierre"];
+       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", 1);
+       $RazonSocial=$DatosEmpresa["RazonSocial"];
+        $NIT=$DatosEmpresa["NIT"];
+        $Direccion=$DatosEmpresa["Direccion"];
+        $Ciudad=$DatosEmpresa["Ciudad"];
+       
+        $Telefono=$DatosEmpresa["Telefono"];
+
+       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $idUser);
+       $DatosCierre=$this->DevuelveValores("cajas_aperturas_cierres", "ID", $idCierre);
+      
+       
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        $this->SeparadorHorizontal($handle,"*", 37);
+        fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$NIT);
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Direccion);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Ciudad);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,$Telefono);
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+
+        fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
+        $this->SeparadorHorizontal($handle,"*", 37);
+        
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+        fwrite($handle,"FECHA: $DatosCierre[Fecha]          HORA: $DatosCierre[Hora]");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"COMPROBANTE DE ENTREGA:   $idCierre");
+        $this->SeparadorHorizontal($handle, "_", 37);
+
+        /////////////////////////////DEVOLUCIONES
+        
+        
+        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+
+        $sql = "SELECT Cantidad as Cantidad, TotalItem as Total, Referencia as Referencia"
+                . " FROM facturas_items fi "
+                . " WHERE Cantidad < 0 AND idCierre='$idCierre'";
+	
+        $consulta=$this->Query($sql);
+	$TotalDevoluciones=0;						
+	while($DatosVenta=$this->FetchArray($consulta)){
+	
+            $TotalDevoluciones=$TotalDevoluciones+$DatosVenta["Total"];
+           
+            fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
+
+            fwrite($handle,str_pad(substr($DatosVenta["Referencia"],0,20),20," ",STR_PAD_BOTH)."   ");
+
+            fwrite($handle,str_pad("$".number_format($DatosVenta["Total"]),10," ",STR_PAD_LEFT));
+
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        }
+
+        fwrite($handle,str_pad("Total Devoluciones $TotalDevoluciones",10," ",STR_PAD_LEFT));
+    
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+    /////////////////////////////TOTALES
+
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL VENTAS         ".str_pad("$".number_format($DatosCierre["TotalVentas"]),20," ",STR_PAD_LEFT));
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL VENTAS CONTADO ".str_pad("$".number_format($DatosCierre["TotalVentasContado"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL VENTAS CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasCredito"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL VENTAS SISTE CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasSisteCredito"]),14," ",STR_PAD_LEFT));
+    /*
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"EFECTIVO             ".str_pad("$".number_format($DatosCierre["Efectivo"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"DEVUELTAS            ".str_pad("$".number_format($DatosCierre["Devueltas"]),20," ",STR_PAD_LEFT));
+    */
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS SEPARADOS     ".str_pad("$".number_format($DatosCierre["TotalAbonos"]),20," ",STR_PAD_LEFT));
+    $sql="SELECT SUM(Valor) as Abono, TipoPagoAbono FROM facturas_abonos WHERE idCierre='$idCierre' GROUP BY TipoPagoAbono ";
+    $ConsultaAbonos=$this->Query($sql);
+    $AbonosCreditoEfectivo=0;
+    $AbonosCreditoTarjeta=0;
+    $AbonosCreditoCheque=0;
+    $AbonosCreditoOtros=0;
+    while ($DatosAbonos=$this->FetchArray($ConsultaAbonos)){
+        if($DatosAbonos["TipoPagoAbono"]==""){
+            $AbonosCreditoEfectivo=$AbonosCreditoEfectivo+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Tarjetas"){
+            $AbonosCreditoTarjeta=$AbonosCreditoTarjeta+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Cheques"){
+            $AbonosCreditoCheque=$AbonosCreditoCheque+$DatosAbonos["Abono"];
+        }
+        if($DatosAbonos["TipoPagoAbono"]=="Bonos"){
+            $AbonosCreditoOtros=$AbonosCreditoOtros+$DatosAbonos["Abono"];
+        }
+    }
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED EFECTIVO ".str_pad("$".number_format($AbonosCreditoEfectivo),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED TARJETAS ".str_pad("$".number_format($AbonosCreditoTarjeta),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED CHEQUES  ".str_pad("$".number_format($AbonosCreditoCheque),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS CRED BONOS    ".str_pad("$".number_format($AbonosCreditoOtros),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"EGRESOS              ".str_pad("$".number_format($DatosCierre["TotalEgresos"]),20," ",STR_PAD_LEFT));
+        
+    
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL TARJETAS       ".str_pad("$".number_format($DatosCierre["TotalTarjetas"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL CHEQUES        ".str_pad("$".number_format($DatosCierre["TotalCheques"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL OTROS          ".str_pad("$".number_format($DatosCierre["TotalOtros"]),20," ",STR_PAD_LEFT));
+    
+    $TotalOtrosImpuestos=$this->Sume("facturas_items", "ValorOtrosImpuestos", "WHERE idCierre='$idCierre'");
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"OTROS IMPUESTOS      ".str_pad("$".number_format($TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
+   
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
+    //fwrite($handle, chr(27). chr(100). chr(0));
+    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
+    //fwrite($handle,"=================================");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
     }
 //////////////////////////////Fin	
 }
