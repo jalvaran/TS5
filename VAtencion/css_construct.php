@@ -591,7 +591,7 @@ class CssIni{
                 $this->CrearInputNumber($TxtName, $TxtType, $TxtLabel, $TxtValue, $TxtPlaceh, $TxtColor, "", "", $TxtAncho, $TxtAlto, $ReadOnly, $Required, "", "", "any");
 		//$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,"","",$TxtAncho,$TxtAlto,$ReadOnly,$Required);
 		
-                print("<input type='submit' id='BtnCantidad$TxtName' name='BtnEditarCantidad' value='E' style='width: 30px;height: 30px;' $TxtEvento='$TxtFuncion' >");
+                print("<input type='submit' id='BtnCantidad$TxtName' class='btn btn-warning' name='BtnEditarCantidad' value='E' style='width: 30px;height: 30px;' $TxtEvento='$TxtFuncion' >");
 		$this->CerrarForm();
 		print('</div>');
                                

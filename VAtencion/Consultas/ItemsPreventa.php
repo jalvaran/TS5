@@ -78,7 +78,7 @@ if(isset($_REQUEST['key'])){
 //Si se recibe una autorizacion
 
 if(isset($_REQUEST['TxtAutorizacion'])){
-		
+    	
     $Clave=$obVenta->normalizar($_REQUEST['TxtAutorizacion']);
     $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' or Role='SUPERVISOR') LIMIT 1";
     $Datos=$obVenta->Query($sql);
@@ -88,6 +88,29 @@ if(isset($_REQUEST['TxtAutorizacion'])){
     if($DatosAutorizacion["Identificacion"]<>''){
         
         $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
+        
+        $css->CrearBotonOcultaDiv("Opciones: ", "DivDescuentos", 20, 20,0, "");
+        $css->CrearDiv("DivDescuentos", "", "center", 0, 1);
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>DESCUENTO GENERAL POR PORCENTAJE</strong>", 1);
+        //$css->ColTabla("<strong>DESCUENTO GENERAL AL POR MAYOR</strong>", 1);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td style='text-align:center;'>");
+        $css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
+        $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+        $css->CrearInputNumber("TxtDescuento", "number", "", "", "Descuento", "", "", "", 100,30, 0, 1, 1, 30, 1);
+        print("<br>");
+        $css->CrearBotonConfirmado("BtnDescuentoGeneral", "Descuento %");
+
+        $css->CerrarForm();
+        print("</td>");
+
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarDiv();
+        
     }else{
         $css->CrearNotificacionRoja("Clave incorrecta o no autorizada", 16);
     }	
@@ -126,7 +149,7 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
                 $VectorDatosExtra["JS"]="";
             }
             print("<td>");
-                $css->DivColTablaFormInputText("FrmEdit$DatosPreventa[idPrecotizacion]",$myPage,"post","_self",$NameTxt,"Number",$DatosPreventa['Cantidad'],"","","","onClick",$Evento,"150","30","","","TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
+                $css->DivColTablaFormInputText("FrmEdit$DatosPreventa[idPrecotizacion]",$myPage,"post","_self",$NameTxt,"Number",$DatosPreventa['Cantidad'],"","","","onClick",$Evento,"70","30","","","TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa);
             print("</td>");
             $PrecioAcordado=round($DatosPreventa['ValorAcordado']);
             print("<td>");

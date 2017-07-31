@@ -144,7 +144,7 @@ $css->CerrarDiv();//Cerramos contenedor Principal
     $css->DivGrid("DivTotalesPreventa", "", "left", 1, 1, 1, 90, 40,5,"transparent");
     
     $css->CerrarDiv();
-        $css->DivGrid("DivItemsPreventa", "", "center", 1, 1, 2, 90, 55,5,"transparent");
+        $css->DivGrid("DivItemsPreventa", "", "center", 1, 1, 3, 90, 58,5,"transparent");
     
         $css->CerrarDiv();
     $css->CerrarDiv();
