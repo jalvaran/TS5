@@ -161,7 +161,7 @@ print("<body>");
             $css->CrearOptionSelect("", "Seleccione un IVA", 0);
             while($DatosIVA=$obVenta->FetchArray($consulta)){
                 $sel=0;
-                if($DatosIVA["Valor"]==$IVADefecto){
+                if($DatosIVA["Valor"]=="$IVADefecto"){
                     $sel=1;
                 }
                 $css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], $sel);

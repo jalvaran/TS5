@@ -179,4 +179,8 @@ SELECT 'abonos_separados' as Tabla,('AbonoSeparado') as Tipo,fa.Fecha as Fecha, 
 UNION 
 SELECT 'egresos' as Tabla,('Egresos') as Tipo,fa.Fecha as Fecha, fa.Usuario_idUsuario as idUsuario, fa.Valor as Total FROM egresos fa WHERE TipoEgreso='VentasRapidas';
 
+ALTER TABLE `facturas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 
+DROP VIEW IF EXISTS `vista_ori_facturas`;
+CREATE VIEW vista_ori_facturas AS 
+SELECT `FechaFactura` as Fecha, `idFactura`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,`ValorUnitarioItem`,`Cantidad`,`Dias`,`SubtotalItem`,`IVAItem`,`ValorOtrosImpuestos`,`TotalItem`,`PorcentajeIVA`,`idOtrosImpuestos`,`idPorcentajeIVA`,`PrecioCostoUnitario`,`SubtotalCosto`,`TipoItem`,`CuentaPUC`,`GeneradoDesde`,`NumeroIdentificador`,`idUsuarios`,`idCierre`,idResolucion,TipoFactura,Prefijo,NumeroFactura,Hora,FormaPago,CentroCosto,idSucursal,EmpresaPro_idEmpresaPro,Clientes_idClientes,ObservacionesFact FROM `ori_facturas_items` fi INNER JOIN facturas f ON fi.`idFactura`=f.idFacturas ;

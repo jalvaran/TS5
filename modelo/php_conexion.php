@@ -2539,7 +2539,7 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[8]="TotalVentasCredito";    $Valores[8]=$TotalVentasCredito;
         $Columnas[9]="TotalAbonos";           $Valores[9]=$TotalAbonos;
         $Columnas[10]="TotalDevoluciones";    $Valores[10]=$TotalDevoluciones;
-        $Columnas[11]="TotalEntrega";         $Valores[11]=$TotalVentasContado+$TotalTarjetas+$TotalCheques+$TotalOtros+$TotalAbonos+$TotalAbonosCreditos+$TotalAbonosSisteCredito-$TotalEgresos;
+        $Columnas[11]="TotalEntrega";         $Valores[11]=$TotalVentasContado+$TotalAbonos+$TotalAbonosCreditos+$TotalAbonosSisteCredito-$TotalEgresos;
         $Columnas[12]="TotalEfectivo";        $Valores[12]=$TotalVentasContado-$TotalEgresos+$TotalAbonos+$TotalAbonosCreditos+$TotalAbonosSisteCredito-$TotalTarjetas-$TotalCheques-$TotalOtros;
         $Columnas[13]="TotalTarjetas";        $Valores[13]=$TotalTarjetas;
         $Columnas[14]="TotalCheques";         $Valores[14]=$TotalCheques;
@@ -7633,6 +7633,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     $salida = shell_exec('lpr $COMPrinter');
     $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
     }
+    
+    
 //////////////////////////////Fin	
 }
 	

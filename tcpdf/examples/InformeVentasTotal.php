@@ -1,18 +1,19 @@
 <?php
 
 include("../../modelo/php_conexion.php");
-
+include("../../modelo/PrintPos.php");
 ////////////////////////////////////////////
 /////////////Obtengo el rango de fechas
 ////////////////////////////////////////////
 $VerFacturas=0;
 $obVenta = new ProcesoVenta(1);
+$obPrintPos = new PrintPos(1);
 $fecha=date("Y-m-d");
-$FechaIni = $_POST["TxtFechaIni"];
-$FechaFinal = $_POST["TxtFechaFinal"];
-$CentroCostos=$_POST["CmbCentroCostos"];
-$EmpresaPro=$_POST["CmbEmpresaPro"];
-$TipoReporte=$_POST["CmbTipoReporte"];
+$FechaIni = $obVenta->normalizar($_POST["TxtFechaIni"]);
+$FechaFinal =$obVenta->normalizar($_POST["TxtFechaFinal"]);
+$CentroCostos=$obVenta->normalizar($_POST["CmbCentroCostos"]);
+$EmpresaPro=$obVenta->normalizar($_POST["CmbEmpresaPro"]);
+$TipoReporte=$obVenta->normalizar($_POST["CmbTipoReporte"]);
 
 $Condicion=" ori_facturas_items WHERE ";
 $Condicion2="ori_facturas WHERE ";
@@ -341,7 +342,12 @@ $pdf->writeHTML($tbl, false, false, false, false, '');
 //$pdf->writeHTML($tab, false, false, false, false, '');
 //Close and output PDF document
 $pdf->Output($nombre_file.'.pdf', 'I');
-
+$DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+    if($DatosImpresora["Habilitado"]=="SI"){
+        $obPrintPos->ImprimeComprobanteInformeDiario($DatosImpresora["Puerto"], $FechaIni, $FechaFinal);
+        
+    }
+    
 //============================================================+
 // END OF FILE
 //============================================================+
