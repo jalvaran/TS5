@@ -15,17 +15,14 @@ $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
 $idClientes=$obVenta->normalizar($_REQUEST['idClientes']);
 
 //Dibujo cuadro de totales
-$css->CrearTabla();
-$css->FilaTabla(16);
 $DatosPersonalesCliente=$obVenta->DevuelveValores("clientes", "idClientes", $idClientes);
-print("<td>");
-$css->CrearDiv("DivTotales", "", "center", 1, 1);
 if($idClientes==1){
     $css->CrearNotificacionVerde("Venta para $DatosPersonalesCliente[RazonSocial]", 14);
 }else{
     $css->CrearNotificacionRoja("Venta para $DatosPersonalesCliente[RazonSocial]", 14);
 }
-$Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasActivas",$idPreventa);
+$css->CrearForm2("FrmGuarda",$myPage,"post","_self");
+    $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasActivas",$idPreventa);
     $IVA=$obVenta->SumeColumna("preventa","Impuestos", "VestasActivas_idVestasActivas",$idPreventa);
     $DatosPreventa=$obVenta->DevuelveValores("vestasactivas","idVestasActivas", $idPreventa);
     $SaldoFavor=$DatosPreventa["SaldoFavor"];
@@ -42,81 +39,47 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
 
     $Total=$Subtotal+$IVA;
     $GranTotal=round($Total-$SaldoFavor);
-    $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
+    
     $css->CrearInputText("TxtCliente","hidden","",$idClientes,"","","","",150,30,0,0);
     $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",150,30,0,0);
     $css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
     $css->CrearInputText("TxtTotalH","hidden","",$Total,"","","","",150,30,0,0);
     $css->CrearInputText("TxtCuentaDestino","hidden","",11051001,"","","","",150,30,0,0);
     $css->CrearInputText("TxtGranTotalH","hidden","",$GranTotal,"","","","",150,30,0,0);
-    $css->DivTable(); 
-        $css->DivRowTable();
-            $css->DivColTable("left",0,1,"black","150%","");
-                print("<strong>Ultima Devuelta : </strong>");
-            $css->CerrarDiv();
-            $css->DivColTable("right",0,1,"black","150%","");
-                print("<strong>".number_format($DatosDevuelta["Devuelve"])."<strong>");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-       
-        $css->DivRowTable();
-            $css->DivColTable("left",0,1,"black","120%","");
-                print("<strong>Cantidad de Productos : </strong>");
-            $css->CerrarDiv();
-            $css->DivColTable("right",0,1,"black","120%","");
-                print("<strong>".number_format($SumaItemsPreventa["NumItems"])."</strong> <br> ");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-    $css->CerrarDiv();//Cierro tabla
-    print("<br>");
-    $css->DivTable(); 
-        
-        $css->DivRowTable();
-            $css->DivColTable("left",0,1,"black","100%","");
-                print("<strong>SUBTOTAL : </strong>");
-            $css->CerrarDiv();
-            $css->DivColTable("right",0,1,"black","100%","");
-                print("<strong>".number_format($Subtotal)."</strong> ");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        
-        $css->DivRowTable();
-            $css->DivColTable("left",0,1,"black","100%","");
-                print("<strong>IMPUESTOS : </strong>");
-            $css->CerrarDiv();
-            $css->DivColTable("right",0,1,"black","100%","");
-                print("<strong>".number_format($IVA)."</strong> ");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        $css->DivRowTable();
-            
-            $css->DivColTable("center",0,1,"gray","10%","");
-                print("_");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        $css->DivRowTable();
-            $css->DivColTable("left",0,1,"blue","200%","");
-                print("<strong>TOTAL : </strong>");
-            $css->CerrarDiv();
-            $css->DivColTable("right",0,1,"blue","180%","");
-                print("<strong>".number_format($Total)."</strong>");
-            $css->CerrarDiv();
-            
-        $css->CerrarDiv();//Cierro Fila
-        $css->DivRowTable();
-            
-            $css->DivColTable("center",0,1,"gray","100%","");
-                print("__");
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        $Visible=0;
-        $css->DivRowTable();
-            
-            $css->DivColTable("center",0,1,"black","100%","");
-                $css->CrearInputNumber("TxtPaga","number","Efectivo:",round($Total),"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
-                print("<strong>+</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpcionesPago');>");
-                $css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
-                //print("<br>");
+    $css->CrearTabla();
+    $css->FilaTabla(20);
+        $css->ColTabla("<strong>Ultima Devuelta : </strong>", 1);
+        $css->ColTabla("<strong>$ ".number_format($DatosDevuelta["Devuelve"])."<strong>", 1); 
+    $css->CierraFilaTabla();
+    $css->FilaTabla(16);
+        $css->ColTabla("<strong>Productos : </strong>", 1);
+        $css->ColTabla("<strong>".number_format($SumaItemsPreventa["NumItems"])."<strong>", 1); 
+    $css->CierraFilaTabla();
+    $css->FilaTabla(14);
+        $css->ColTabla("<strong>SUBTOTAL : </strong>", 1);
+        $css->ColTabla("<strong> $".number_format($Subtotal)."<strong>", 1); 
+    $css->CierraFilaTabla();
+    $css->FilaTabla(14);
+        $css->ColTabla("<strong>IMPUESTOS : </strong>", 1);
+        $css->ColTabla("<strong> $".number_format($IVA)."<strong>", 1); 
+    $css->CierraFilaTabla();
+    $css->FilaTabla(22);
+        $css->ColTabla("<strong>TOTAL : </strong>", 1);
+        $css->ColTabla("<strong> $".number_format($Total)."<strong>", 1); 
+    $css->CierraFilaTabla();    
+    $css->FilaTabla(20);
+        $css->ColTabla("<strong>Efectivo : </strong>", 1);
+        print("<td>");
+        $css->CrearInputNumber("TxtPaga","number","",round($Total),"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
+        print("</td>");
+    $css->CierraFilaTabla();  
+    $Visible=0;
+    $css->FilaTabla(14);
+        $css->ColTabla("<strong>+ Pago: </strong>", 1);
+        print("<td>");
+        print("<strong>+</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpcionesPago');>");
+        $css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
+                print("<br>");
                 $css->CrearInputNumber("TxtPagaTarjeta","number","Tarjeta: <br>",0,"Tarjeta","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
 
                 $VectorSelect["Nombre"]="CmbIdTarjeta";
@@ -138,14 +101,14 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                 $css->CrearInputNumber("TxtPagaCheque","number","Cheque: <br>",0,"Cheque","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
                 print("<br>");
                 $css->CrearInputNumber("TxtPagaOtros","number","Otros: <br>",0,"Otros","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
-                $css->CerrarDiv();
             $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        
-        $css->DivRowTable();            
-            $css->DivColTable("left",0,1,"black","100%","");
-                print("<strong>+ Opciones </strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpciones');>");
-                $css->CrearDiv("DivOtrasOpciones", "", "center", $Visible, 1);
+        print("</td>");
+    $css->CierraFilaTabla();   
+    $css->FilaTabla(14);
+        $css->ColTabla("<strong>+ Opciones: </strong>", 1);
+        print("<td>");
+        print("<image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpciones');>");
+        $css->CrearDiv("DivOtrasOpciones", "", "center", $Visible, 1);
 
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Colaborador";
@@ -160,22 +123,6 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                            $css->CrearOptionSelect("$DatosColaborador[Identificacion]", " $DatosColaborador[Nombre] $DatosColaborador[Identificacion]" , 0);
                        }
                 $css->CerrarSelect();
-
-                /*
-                $VarSelect["Ancho"]="200";
-                $VarSelect["PlaceHolder"]="Busque un Cliente";
-                $VarSelect["Title"]="";
-                $css->CrearSelectChosen("TxtCliente", $VarSelect);
-
-                    $sql="SELECT * FROM clientes";
-                    $Consulta=$obVenta->Query($sql);
-                    while($DatosCliente=$obVenta->FetchArray($Consulta)){
-
-                           $css->CrearOptionSelect("$DatosCliente[idClientes]", "$DatosCliente[RazonSocial] / CC $DatosCliente[Num_Identificacion]" , 0);
-                       }
-
-                $css->CerrarSelect();
-                */
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Forma de Pago";
                 $VarSelect["Title"]="";
@@ -193,33 +140,21 @@ $Subtotal=$obVenta->SumeColumna("preventa","Subtotal", "VestasActivas_idVestasAc
                 $css->CrearTextArea("TxtObservacionesFactura","","","Observaciones Factura","black","","",200,60,0,0);
 
                 $css->CerrarDiv();
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        
-        $css->DivRowTable();
-            
-            $css->DivColTablaInputText("TxtDevuelta","text",0,"<strong>Devolver: <strong>","Devuelta","","","",150,50,1,0);
-            
-        $css->CerrarDiv();//Cierro Fila
-        
-        $css->DivRowTable();
-            
-            
-            $css->DivColTable("left",0,1,"blue","180%","");
-                $VectorBoton["Fut"]=0;
-                $css->CrearBotonEvento("BtnGuardar","Guardar",1,"onclick","EnviaFormVentasRapidas()","naranja",$VectorBoton);
-            $css->CerrarDiv();
-        $css->CerrarDiv();//Cierro Fila
-        
-    $css->CerrarDiv();//Cierro tabla
-    
-    $css->CerrarForm();
-
-///
-
-$css->CerrarDiv();
-print("</td>");
-
+        print("</td>");
+    $css->CierraFilaTabla(); 
    
+        $css->FilaTabla(14);
+        print("<td>");
+            $css->CrearInputText("TxtDevuelta","text","Devuelta : ",0,"Devuelta","black","","",150,50,1,0,$ToolTip='Esta es la Devuelta');
+            
+	print("</td>");
+        print("<td>");
+            
+            $css->CrearBotonEvento("BtnGuardar","Guardar",1,"onclick","EnviaFormVentasRapidas()","naranja","");
+	print("</td>");
+        $css->CierraFilaTabla(); 
+        
+    $css->CerrarTabla();
+    $css->CerrarForm();
 $css->AgregaJS(); //Agregamos javascripts
 ?>

@@ -350,7 +350,7 @@ class CssIni{
 		$JavaScript=$TxtEvento.' = '.$TxtFuncion;
                 
                 print('<strong style="color:'.$color.'">'.$label.'<input name="'.$nombre.'" value="'.$value.'" type="'.$type.'" id="'.$nombre.'" placeholder="'.$placeh.'" '.$JavaScript.' 
-                '.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.' data-toggle="tooltip" title="'.$ToolTip.'" "></strong>');
+                '.$ReadOnly.' '.$Required.' autocomplete="off" style="width: '.$Ancho.'px;height: '.$Alto.'px; font-size: '.$TFont.' ;data-toggle="tooltip" title="'.$ToolTip.'" "></strong>');
                 
 	}
 	
@@ -665,10 +665,10 @@ class CssIni{
 	
 	function DivColTablaInputText($TxtName,$TxtType,$TxtValue,$TxtLabel,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required){
 		
-		$this->DivColTable("left", 0, 1, "black", "100%", "");
+		
 		$this->CrearInputText($TxtName,$TxtType,$TxtLabel,$TxtValue,$TxtPlaceh,$TxtColor,$TxtEvento,$TxtFuncion,$TxtAncho,$TxtAlto,$ReadOnly,$Required);
 		
-		print('</div>');
+		
                                
 		
 	}
