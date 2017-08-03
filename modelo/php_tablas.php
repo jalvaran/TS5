@@ -4816,10 +4816,11 @@ EOD;
         $this->PDF_Encabezado($DatosFactura["Fecha"],1, $idFormato, "",$Documento);
         $DatosEmpresaPro=$this->PDF_Encabezado_Factura_Compra($idCompra);
         
-        $html= $this->HTML_Movimiento_Contable_FC($idCompra);
+        $html= $this->HTML_Items_Factura_Compra($idCompra);
         $Position=$this->PDF->SetY(80);
         $this->PDF_Write($html);
-        
+        $html= $this->HTML_Movimiento_Contable_FC($idCompra);
+        $this->PDF_Write("<br>".$html);
         //$Position=$this->PDF->GetY();
         //if($Position>246){
           //$this->PDF_Add();
@@ -4910,6 +4911,8 @@ $this->PDF->MultiCell(93, 25, $tbl, 0, 'R', 1, 0, '', '', true,0, true, true, 10
     
     public function HTML_Movimiento_Contable_FC($idCompra) {
         $tbl = <<<EOD
+                
+   <h3 align="CENTER">REGISTROS CONTABLES</H3>
 <table cellspacing="1" cellpadding="2" border="0">
     <tr>
         
@@ -5427,7 +5430,72 @@ EOD;
         
     }
     
+    //Arme HTML de los Items de una Factura DE COMPRA
     
+    public function HTML_Items_Factura_Compra($idFactura) {
+        $tbl = <<<EOD
+<table cellspacing="1" cellpadding="2" border="0">
+    <tr>
+        <td align="center" ><strong>ID</strong></td>
+        <td align="center" ><strong>Referencia</strong></td>
+        <td align="center" colspan="3"><strong>Producto</strong></td>
+        <td align="center" ><strong>Costo Unitario</strong></td>
+        <td align="center" ><strong>Cantidad</strong></td>
+        <td align="center" ><strong>Subtotal</strong></td>
+        <td align="center" ><strong>Impuestos</strong></td>
+        <td align="center" ><strong>Total</strong></td>
+        <td align="center" ><strong>TipoIVA</strong></td>
+    </tr>
+    
+         
+EOD;
+
+$sql="SELECT fi.idProducto,fi.Cantidad, fi.CostoUnitarioCompra, fi.SubtotalCompra, fi.ImpuestoCompra, fi.TotalCompra, fi.Tipo_Impuesto, pv.Referencia,pv.Nombre"
+        . " FROM factura_compra_items fi INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta WHERE fi.idFacturaCompra='$idFactura'";
+$Consulta= $this->obCon->Query($sql);
+$h=1;  
+
+while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+    $ValorUnitario=  number_format($DatosItemFactura["CostoUnitarioCompra"]);
+    $SubTotalItem=  number_format($DatosItemFactura["SubtotalCompra"]);
+    $Cantidad=$DatosItemFactura["Cantidad"];
+    
+    if($h==0){
+        $Back="#f2f2f2";
+        $h=1;
+    }else{
+        $Back="white";
+        $h=0;
+    }
+    
+    $tbl .= <<<EOD
+    
+    <tr>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[idProducto]</td>    
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
+        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Nombre]</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Cantidad</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[ImpuestoCompra]</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[TotalCompra]</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Tipo_Impuesto]</td>
+    </tr>
+    
+     
+    
+        
+EOD;
+    
+}
+
+$tbl .= <<<EOD
+        </table>
+EOD;
+
+        return($tbl);
+
+    }
         // FIN Clases	
 }
 ?>
