@@ -32,7 +32,7 @@ class PrintPos extends ProcesoVenta{
     }
     
     public function Footer($handle){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
@@ -70,6 +70,7 @@ class PrintPos extends ProcesoVenta{
        
        while($DatosCierre=$this->FetchArray($Consulta)){
             $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosCierre["Usuario"]);
+            $idUsuario=$DatosCierre["Usuario"];
             $this->EncabezadoComprobantesPos($handle, $DatosCierre["Fecha"], 1);
             fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
             $this->SeparadorHorizontal($handle,"*", 37);
@@ -98,6 +99,68 @@ class PrintPos extends ProcesoVenta{
             fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
             fwrite($handle,"Numero Facts:  ".($DatosFacturas["MaxFact"]-$DatosFacturas["MinFact"]+1));
             fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            
+            fwrite($handle,"VENTAS DISCRIMINADAS POR DEPARTAMENTO:");
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            
+            $CondicionItems=" ori_facturas_items WHERE FechaFactura BETWEEN '$FechaInicial' AND '$FechaFinal' AND idUsuarios='$idUsuario'";
+            $sql="SELECT Departamento as idDepartamento, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
+            . "  FROM $CondicionItems GROUP BY `Departamento`,`PorcentajeIVA`";
+            
+            $ConsultaItems= $this->Query($sql);
+            $GranSubtotal=0;
+            $GranIVA=0;
+            $GranTotal=0;
+            
+            while($DatosVentas= $this->FetchArray($ConsultaItems)){
+                if(round($DatosVentas["Total"],-2)>0){
+                    $this->SeparadorHorizontal($handle, "_", 37);
+                    $TipoIva=$DatosVentas["PorcentajeIVA"];
+                    $PIVA= str_replace("%", "", $TipoIva);
+                    $PIVA=$PIVA/100;
+                    $Total=round($DatosVentas["Total"],-2);
+                    $Subtotal=$Total/(1+$PIVA);
+                    $IVA=$Total-$Subtotal;
+                    $GranSubtotal=$GranSubtotal+$Subtotal;
+                    $GranIVA=$GranIVA+$IVA;
+                    $GranTotal=$GranTotal+$Total;
+                    $DatosDepartamentos=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVentas["idDepartamento"]);
+                    fwrite($handle,$DatosDepartamentos["Nombre"]." ".$DatosVentas["PorcentajeIVA"]);
+                    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+                    fwrite($handle,"BASE:             ".number_format($Subtotal));
+                    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+                    fwrite($handle,"IVA:              ".number_format($IVA));
+                    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+                    fwrite($handle,"TOTAL:            ".number_format($Total));
+                    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+                }
+            }
+            $this->SeparadorHorizontal($handle, "_", 37);
+            $this->SeparadorHorizontal($handle, "_", 37);
+            $sql="SELECT SUM(ValorOtrosImpuestos) AS Impoconsumo FROM facturas_items WHERE idCierre='$idCierre'";
+            $ConsultaOtros= $this->Query($sql);
+            $DatosOtrosImpuestos=$this->FetchArray($ConsultaOtros);
+            fwrite($handle,"       TOTALES          ");
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,"BASE:             ".number_format($GranSubtotal));
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,"IVA:              ".number_format($GranIVA));
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,"IMPOCONSUMO:      ".number_format($DatosOtrosImpuestos["Impoconsumo"]));
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            $GranTotal=$GranTotal+$DatosOtrosImpuestos["Impoconsumo"];
+            fwrite($handle,"TOTAL:            ".number_format($GranTotal));
+            
+            $sql="SELECT SUM(Tarjetas) AS Tarjetas FROM facturas WHERE 	CerradoDiario='$idCierre'";
+            $ConsultaTarjetas= $this->Query($sql);
+            $DatosTarjetas=$this->FetchArray($ConsultaTarjetas);
+            $this->SeparadorHorizontal($handle, "_", 37);
+            fwrite($handle,"       FORMAS DE PAGO          ");
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,"EFECTIVO:            ".number_format($GranTotal-$DatosTarjetas["Tarjetas"]));
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,"TARJETAS:            ".number_format($DatosTarjetas["Tarjetas"]));
+                          
             $this->Footer($handle);
             
        }     

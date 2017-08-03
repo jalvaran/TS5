@@ -1632,7 +1632,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 print("<td colspan=6 style='background-color:#daeecf;'>");
             }
             
-            print("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]." TIPO DE CREDITO: $DatosFactura[FormaPago] <strong>");
+            print("<strong>Factura No. ".$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"]." TIPO DE CREDITO: $DatosFactura[FormaPago] Fecha: $DatosFactura[Fecha]<strong>");
             print("</td>");
             $this->css->CierraFilaTabla();
             $this->css->FilaTabla(14);
@@ -1913,7 +1913,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     
     public function ArmeTablaVentaRangos($Titulo,$CondicionItems,$Vector) {
              
-        $sql="SELECT MAX(`TotalItem`) as Mayor, MIN(`TotalItem`) as Menor, SUM(`Cantidad`) as TotalItems FROM `facturas_items` WHERE `TotalItem`>1 $CondicionItems";
+        $sql="SELECT MAX(`TotalItem`/`Cantidad`) as Mayor, MIN(`TotalItem`/`Cantidad`) as Menor, SUM(`Cantidad`) as TotalItems FROM `facturas_items` WHERE `TotalItem`>1 $CondicionItems";
         
         $Consulta=$this->obCon->Query($sql);
         $Datos=$this->obCon->FetchArray($Consulta);
