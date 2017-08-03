@@ -1,10 +1,10 @@
 <?php
 
-$myTabla="titulos_devoluciones";
+$myTabla="vista_titulos_devueltos";
 $MyID="ID";
 $myPage="titulos_devoluciones.php";
 $myTitulo="Historial de Titulos Devueltos";
-
+$Vector["MyPage"]=$myPage;
 
 
 /////Asigno Datos necesarios para la visualizacion de la tabla en el formato que se desea

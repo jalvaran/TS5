@@ -5385,7 +5385,7 @@ public function VerificaPermisos($VectorPermisos) {
             
             $sql="UPDATE titulos_ventas SET Estado='ANULADA' WHERE ID='$idVenta'";
             $this->Query($sql);
-            $sql="UPDATE titulos_listados_promocion_$DatosVenta[Promocion] SET idCliente='0',NombreCliente='',FechaVenta='0',TotalPagoComisiones='0', TotalAbonos='0',Saldo='0' WHERE Mayor1='$DatosVenta[Mayor1]'";
+            $sql="UPDATE titulos_listados_promocion_$DatosVenta[Promocion] SET NombreColaborador='', idColaborador='0',idCliente='0',NombreCliente='',FechaVenta='0',TotalPagoComisiones='0', TotalAbonos='0',Saldo='0' WHERE Mayor1='$DatosVenta[Mayor1]'";
             $this->Query($sql);
             $this->BorraReg("titulos_cuentasxcobrar", "idDocumento", $idVenta);
             return($idComprobante);

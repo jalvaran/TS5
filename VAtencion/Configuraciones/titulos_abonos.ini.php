@@ -1,10 +1,10 @@
 <?php
 
-$myTabla="titulos_abonos";
+$myTabla="vista_titulos_abonos";
 $MyID="ID";
 $myPage="titulos_abonos.php";
 $myTitulo="Historial de Abonos a Ventas";
-
+$Vector["MyPage"]=$myPage;
 
 
 /////Asigno Datos necesarios para la visualizacion de la tabla en el formato que se desea

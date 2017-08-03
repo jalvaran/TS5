@@ -4816,7 +4816,7 @@ EOD;
         $this->PDF_Encabezado($DatosFactura["Fecha"],1, $idFormato, "",$Documento);
         $DatosEmpresaPro=$this->PDF_Encabezado_Factura_Compra($idCompra);
         
-        $html= $this->HTML_Items_Factura_Compra($idCompra);
+        $html= $this->HTML_Movimiento_Contable_FC($idCompra);
         $Position=$this->PDF->SetY(80);
         $this->PDF_Write($html);
         
@@ -4908,7 +4908,7 @@ $this->PDF->MultiCell(93, 25, $tbl, 0, 'R', 1, 0, '', '', true,0, true, true, 10
     
     //Arme HTML de los Items de una Factura
     
-    public function HTML_Items_Factura_Compra($idCompra) {
+    public function HTML_Movimiento_Contable_FC($idCompra) {
         $tbl = <<<EOD
 <table cellspacing="1" cellpadding="2" border="0">
     <tr>

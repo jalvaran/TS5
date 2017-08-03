@@ -197,3 +197,18 @@ ALTER TABLE `preventa` CHANGE `TotalVenta` `TotalVenta` DOUBLE NOT NULL;
 ALTER TABLE `preventa` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 ALTER TABLE `preventa` CHANGE `Descuento` `Descuento` DOUBLE NOT NULL;
 ALTER TABLE `preventa` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
+
+DROP VIEW IF EXISTS `vista_titulos_devueltos`;
+CREATE VIEW vista_titulos_devueltos AS
+SELECT td.`ID` as ID,td.`Fecha` as Fecha, td.`idVenta` as idVenta,td.`Promocion` as Promocion, td.`Mayor` as Mayor,td.`Concepto` as Concepto,td.`idColaborador` as idColaborador,td.`NombreColaborador`,td.idUsuario,tv.`Mayor2`,tv.`Adicional`,tv.`Valor`,tv.`TotalAbonos`,tv.`Saldo`,tv.`idCliente`,tv.`NombreCliente`  FROM titulos_devoluciones td INNER JOIN titulos_ventas tv ON td.idVenta=tv.ID;
+
+
+DROP VIEW IF EXISTS `vista_titulos_abonos`;
+CREATE VIEW vista_titulos_abonos AS
+SELECT td.`ID` as ID,td.`Fecha` as Fecha,td.`Hora` ,td.Monto, td.`idVenta`,tv.`Promocion` as Promocion, tv.`Mayor1` as Mayor,td.`Observaciones` as Concepto,td.`idColaborador` as idColaborador,td.`NombreColaborador`,td.`Estado`,td.`idComprobanteIngreso`,tv.`Mayor2`,tv.`Adicional`,tv.`Valor`,tv.`TotalAbonos`,tv.`Saldo`,tv.`idCliente`,tv.`NombreCliente`  FROM titulos_abonos td INNER JOIN titulos_ventas tv ON td.idVenta=tv.ID;
+
+DROP VIEW IF EXISTS `vista_titulos_comisiones`;
+CREATE VIEW vista_titulos_comisiones AS 
+SELECT td.`ID` as ID,td.`Fecha` as Fecha,td.`Hora` ,td.Monto, td.`idVenta`,tv.`Promocion` as Promocion, tv.`Mayor1` as Mayor,td.`Observaciones` as Concepto,td.`idColaborador` as idColaborador,td.`NombreColaborador`,td.`idUsuario`,td.`idEgreso`,tv.`Mayor2`,tv.`Adicional`,tv.`Valor`,tv.`TotalAbonos`,tv.`Saldo`,tv.`idCliente`,tv.`NombreCliente` FROM titulos_comisiones td INNER JOIN titulos_ventas tv ON td.idVenta=tv.ID;
+
+

@@ -1,10 +1,10 @@
 <?php
 
-$myTabla="titulos_comisiones";
+$myTabla="vista_titulos_comisiones";
 $myPage="titulos_comisiones.php";
 $myTitulo="Comisiones X Pagar";
 $idTabla="ID";
-
+$Vector["MyPage"]=$myPage;
 
 /////Asigno Datos necesarios para la visualizacion de la tabla en el formato que se desea
 ////
