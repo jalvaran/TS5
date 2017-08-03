@@ -184,3 +184,16 @@ ALTER TABLE `facturas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 DROP VIEW IF EXISTS `vista_ori_facturas`;
 CREATE VIEW vista_ori_facturas AS 
 SELECT `FechaFactura` as Fecha, `idFactura`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,`ValorUnitarioItem`,`Cantidad`,`Dias`,`SubtotalItem`,`IVAItem`,`ValorOtrosImpuestos`,`TotalItem`,`PorcentajeIVA`,`idOtrosImpuestos`,`idPorcentajeIVA`,`PrecioCostoUnitario`,`SubtotalCosto`,`TipoItem`,`CuentaPUC`,`GeneradoDesde`,`NumeroIdentificador`,`idUsuarios`,`idCierre`,idResolucion,TipoFactura,Prefijo,NumeroFactura,Hora,FormaPago,CentroCosto,idSucursal,EmpresaPro_idEmpresaPro,Clientes_idClientes,ObservacionesFact FROM `ori_facturas_items` fi INNER JOIN facturas f ON fi.`idFactura`=f.idFacturas ;
+
+
+ALTER TABLE `preventa` ADD `CostoUnitario` DOUBLE NOT NULL AFTER `ValorAcordado`, ADD `PrecioMayorista` DOUBLE NOT NULL AFTER `CostoUnitario`;
+ALTER TABLE `preventa` ADD `PorcentajeIVA` DOUBLE NOT NULL AFTER `Impuestos`;
+
+ALTER TABLE `preventa` CHANGE `ValorAcordado` `ValorAcordado` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `Subtotal` `Subtotal` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `Impuestos` `Impuestos` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `TotalVenta` `TotalVenta` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `Descuento` `Descuento` DOUBLE NOT NULL;
+ALTER TABLE `preventa` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;

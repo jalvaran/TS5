@@ -598,6 +598,39 @@
             header("location:$myPage?CmbPreVentaAct=$idPreventa");
         }
         
+        //Si se recibe hacer descuento a costo
+        if(!empty($_REQUEST['BtnDescuentoCosto'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $Hora=date("H:i:s");
+            
+            $idPreventa=$obVenta->normalizar($_REQUEST['TxtidPreventa']);
+            $sql="UPDATE `preventa` "
+                    . "SET `ValorAcordado`=((`CostoUnitario`)/(`PorcentajeIVA`+1)), "
+                    . "`Impuestos`=(`PorcentajeIVA`*(`ValorAcordado`*`Cantidad`)),"
+                    . "`Subtotal`=(`ValorAcordado`*`Cantidad`), `TotalVenta`=(`Subtotal`+`Impuestos`) "
+                    . "WHERE `VestasActivas_idVestasActivas`='$idPreventa' ";
+            $obVenta->Query($sql);
+            header("location:$myPage?CmbPreVentaAct=$idPreventa");
+        }
+        
+        //Si se recibe hacer descuento a costo
+        if(!empty($_REQUEST['BtnDescuentoMayor'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $Hora=date("H:i:s");
+            
+            $idPreventa=$obVenta->normalizar($_REQUEST['TxtidPreventa']);
+            $sql="UPDATE `preventa` "
+                    . "SET `ValorAcordado`=((`PrecioMayorista`)/(`PorcentajeIVA`+1)), "
+                    . "`Impuestos`=(`PorcentajeIVA`*(`ValorAcordado`*`Cantidad`)),"
+                    . "`Subtotal`=(`ValorAcordado`*`Cantidad`), `TotalVenta`=(`Subtotal`+`Impuestos`) "
+                    . "WHERE `VestasActivas_idVestasActivas`='$idPreventa' ";
+            $obVenta->Query($sql);
+            header("location:$myPage?CmbPreVentaAct=$idPreventa");
+        }
         
         //////Verifico el cupo de una persona
 	if(!empty($_REQUEST['TxtConsultaCupo'])){

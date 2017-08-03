@@ -79,46 +79,7 @@ if(isset($_REQUEST['key'])){
         }
 }
 
-//Si se recibe una autorizacion
 
-if(isset($_REQUEST['TxtAutorizacion'])){
-    	
-    $Clave=$obVenta->normalizar($_REQUEST['TxtAutorizacion']);
-    $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' or Role='SUPERVISOR') LIMIT 1";
-    $Datos=$obVenta->Query($sql);
-    $DatosAutorizacion=$obVenta->FetchArray($Datos);
-    
-    $NoAutorizado="";
-    if($DatosAutorizacion["Identificacion"]<>''){
-        
-        $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
-        
-        $css->CrearBotonOcultaDiv("Opciones: ", "DivDescuentos", 20, 20,0, "");
-        $css->CrearDiv("DivDescuentos", "", "center", 0, 1);
-        $css->CrearTabla();
-        $css->FilaTabla(16);
-        $css->ColTabla("<strong>DESCUENTO GENERAL POR PORCENTAJE</strong>", 1);
-        //$css->ColTabla("<strong>DESCUENTO GENERAL AL POR MAYOR</strong>", 1);
-        $css->CierraFilaTabla();
-        $css->FilaTabla(16);
-        print("<td style='text-align:center;'>");
-        $css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
-        $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
-        $css->CrearInputNumber("TxtDescuento", "number", "", "", "Descuento", "", "", "", 100,30, 0, 1, 1, 30, 1);
-        print("<br>");
-        $css->CrearBotonConfirmado("BtnDescuentoGeneral", "Descuento %");
-
-        $css->CerrarForm();
-        print("</td>");
-
-        $css->CierraFilaTabla();
-        $css->CerrarTabla();
-        $css->CerrarDiv();
-        
-    }else{
-        $css->CrearNotificacionRoja("Clave incorrecta o no autorizada", 16);
-    }	
-}
 
 $css->DivGrid("DivTotales", "", "left", 1, 1, 1, 90, 40,5,"transparent");
 
@@ -263,6 +224,74 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
 $css->CerrarDiv();
 
 $css->DivGrid("DivItems", "", "center", 1, 1, 3, 90, 58,5,"transparent");
+
+/*
+ * DIV con las autorizaciones
+ */
+//Si se recibe una autorizacion
+
+if(isset($_REQUEST['TxtAutorizacion'])){
+    	
+    $Clave=$obVenta->normalizar($_REQUEST['TxtAutorizacion']);
+    $sql="SELECT Identificacion FROM usuarios WHERE Password='$Clave' AND (Role='ADMINISTRADOR' or Role='SUPERVISOR') LIMIT 1";
+    $Datos=$obVenta->Query($sql);
+    $DatosAutorizacion=$obVenta->FetchArray($Datos);
+    
+    $NoAutorizado="";
+    if($DatosAutorizacion["Identificacion"]<>''){
+        
+        $obVenta->ActualizaRegistro("preventa", "Autorizado", $DatosAutorizacion["Identificacion"], "VestasActivas_idVestasActivas", $idPreventa);
+        
+        $css->CrearBotonOcultaDiv("Opciones: ", "DivDescuentos", 20, 20,0, "");
+        $css->CrearDiv("DivDescuentos", "", "center", 0, 1);
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+        $css->ColTabla("<strong>DESCUENTO GENERAL POR PORCENTAJE</strong>", 1);
+        $css->ColTabla("<strong>DESCUENTO GENERAL AL POR MAYOR</strong>", 1);
+        $css->ColTabla("<strong>DESCUENTO GENERAL A COSTO</strong>", 1);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td style='text-align:center;'>");
+        $css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
+        $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+        $css->CrearInputNumber("TxtDescuento", "number", "", "", "Descuento", "", "", "", 100,30, 0, 1, 1, 30, 1);
+        print("<br>");
+        $css->CrearBotonConfirmado("BtnDescuentoGeneral", "Descuento %");
+
+        $css->CerrarForm();
+        print("</td>");
+        
+        print("<td style='text-align:center;'>");
+        $css->CrearForm2("FrmAutorizacionMayor", $myPage, "post", "_self");
+        $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+        
+        $css->CrearBotonConfirmado("BtnDescuentoMayor", "Descuento al por Mayor");
+
+        $css->CerrarForm();
+        print("</td>");
+        
+        print("<td style='text-align:center;'>");
+        $css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
+        $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+        
+        $css->CrearBotonConfirmado("BtnDescuentoCosto", "Descuento A Precio Costo");
+
+        $css->CerrarForm();
+        print("</td>");
+
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarDiv();
+        
+    }else{
+        $css->CrearNotificacionRoja("Clave incorrecta o no autorizada", 16);
+    }	
+}
+
+/*
+ * Empieza a dibujar items
+ */
+
 $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' ORDER BY Updated DESC";
     $pa=$obVenta->Query($sql);
     if($obVenta->NumRows($pa)){	

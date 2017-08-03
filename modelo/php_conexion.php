@@ -435,8 +435,15 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         $idVentaActiva=$this->normalizar($idVentaActiva);
         $idProducto=$this->normalizar($idProducto);
         $TablaItem=$this->normalizar($TablaItem);
-        
+        $CostoUnitario=0;
+        $PrecioMayor=0;
 	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
+        if(isset($DatosProductoGeneral["CostoUnitario"])){
+            $CostoUnitario=$DatosProductoGeneral["CostoUnitario"];
+        }
+        if(isset($DatosProductoGeneral["PrecioMayorista"])){
+            $PrecioMayor=$DatosProductoGeneral["PrecioMayorista"];
+        }
         //if($DatosProductoGeneral["PrecioVenta"]<=0){
           //  return("E1");
         //}
@@ -467,6 +474,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
                 $DatosProductoGeneral["IVA"]=0;
             }
             $impuesto=$DatosProductoGeneral["IVA"];
+            $PorcentajeIVA=$impuesto;
             $DatosImpuestosAdicionales["ValorImpuesto"];
             
             if($DatosTablaItem["IVAIncluido"]=="SI"){
@@ -494,8 +502,8 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $Total=$Subtotal+$impuesto;
 
 
-            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`)
-                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem');";
+            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`, `CostoUnitario`, `PrecioMayorista`, `PorcentajeIVA`)
+                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem', '$CostoUnitario', '$PrecioMayor', '$PorcentajeIVA');";
 
             $this->Query($sql);	
 	
