@@ -4896,11 +4896,11 @@ $tbl = <<<EOD
 <table cellspacing="0" cellpadding="2" border="1">
     <tr>
         <td align="center" ><strong>Comprador: </strong></td>
-        
+        <td align="center" ><strong>Documento Referencia:</strong></td>
     </tr>
     <tr>
         <td align="center" >$Comprador</td>
-        
+        <td align="center" >$DatosFactura[NumeroFactura]</td>
     </tr>
      
 </table>
