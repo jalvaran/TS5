@@ -4819,8 +4819,13 @@ EOD;
         $html= $this->HTML_Items_Factura_Compra($idCompra);
         $Position=$this->PDF->SetY(80);
         $this->PDF_Write($html);
+        $html= $this->HTML_Items_Devueltos_FC($idCompra);
+        $this->PDF_Write($html);
+        $html= $this->HTML_Servicios_FC($idCompra);
+        $this->PDF_Write($html);
+        
         $html= $this->HTML_Movimiento_Contable_FC($idCompra);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         //$Position=$this->PDF->GetY();
         //if($Position>246){
           //$this->PDF_Add();
@@ -4911,7 +4916,7 @@ $this->PDF->MultiCell(93, 25, $tbl, 0, 'R', 1, 0, '', '', true,0, true, true, 10
     
     public function HTML_Movimiento_Contable_FC($idCompra) {
         $tbl = <<<EOD
-                
+          <br>      
    <h3 align="CENTER">REGISTROS CONTABLES</H3>
 <table cellspacing="1" cellpadding="2" border="0">
     <tr>
@@ -5430,10 +5435,19 @@ EOD;
         
     }
     
-    //Arme HTML de los Items de una Factura DE COMPRA
+    //Arme HTML de los prodctos agregados en una Factura DE COMPRA
     
     public function HTML_Items_Factura_Compra($idFactura) {
-        $tbl = <<<EOD
+        $tbl = "";
+        
+
+$sql="SELECT fi.idProducto,fi.Cantidad, fi.CostoUnitarioCompra, fi.SubtotalCompra, fi.ImpuestoCompra, fi.TotalCompra, fi.Tipo_Impuesto, pv.Referencia,pv.Nombre"
+        . " FROM factura_compra_items fi INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta WHERE fi.idFacturaCompra='$idFactura'";
+$Consulta= $this->obCon->Query($sql);
+$h=1;  
+if($this->obCon->NumRows($Consulta)){
+    $tbl = <<<EOD
+                <h3 align="center">PRODUCTOS AGREGADOS</h3>
 <table cellspacing="1" cellpadding="2" border="0">
     <tr>
         <td align="center" ><strong>ID</strong></td>
@@ -5449,13 +5463,14 @@ EOD;
     
          
 EOD;
-
-$sql="SELECT fi.idProducto,fi.Cantidad, fi.CostoUnitarioCompra, fi.SubtotalCompra, fi.ImpuestoCompra, fi.TotalCompra, fi.Tipo_Impuesto, pv.Referencia,pv.Nombre"
-        . " FROM factura_compra_items fi INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta WHERE fi.idFacturaCompra='$idFactura'";
-$Consulta= $this->obCon->Query($sql);
-$h=1;  
-
+$GranSubtotal=0;
+$GranIVA=0;
+$GranTotal=0;
 while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+    $GranSubtotal=$GranSubtotal+$DatosItemFactura["SubtotalCompra"];
+    $GranIVA=$GranIVA+$DatosItemFactura["ImpuestoCompra"];
+    $GranTotal=$GranTotal+$DatosItemFactura["TotalCompra"];
+    
     $ValorUnitario=  number_format($DatosItemFactura["CostoUnitarioCompra"]);
     $SubTotalItem=  number_format($DatosItemFactura["SubtotalCompra"]);
     $Cantidad=$DatosItemFactura["Cantidad"];
@@ -5468,31 +5483,183 @@ while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
         $h=0;
     }
     
-    $tbl .= <<<EOD
+    $tbl .= '    
     
     <tr>
-        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[idProducto]</td>    
-        <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
-        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Nombre]</td>
-        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
-        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Cantidad</td>
-        <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
-        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[ImpuestoCompra]</td>
-        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[TotalCompra]</td>
-        <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Tipo_Impuesto]</td>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["idProducto"].'</td>    
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Referencia"].'</td>
+        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Nombre"].'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$ValorUnitario.'</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$Cantidad.'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$SubTotalItem.'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["ImpuestoCompra"]).'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["TotalCompra"]).'</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Tipo_Impuesto"].'</td>
     </tr>
-    
-     
-    
         
-EOD;
+ ';
     
 }
+$tbl.= '<tr>'
+        . '<td align="right" colspan="7" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTALES</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranSubtotal).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranIVA).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranTotal).'</strong></td>'
+        . '<td align="center" style="border-bottom: 1px solid #ddd;background-color: white;"> </td>'
+        . '</tr>';
+$tbl.= "</table>";
+        
+}
+        return($tbl);
 
-$tbl .= <<<EOD
-        </table>
+    }
+    
+    // Arma el html de los productos devueltos en una compra
+    public function HTML_Items_Devueltos_FC($idFactura) {
+        $tbl = "";
+        
+
+$sql="SELECT fi.idProducto,fi.Cantidad, fi.CostoUnitarioCompra, fi.SubtotalCompra, fi.ImpuestoCompra, fi.TotalCompra, fi.Tipo_Impuesto, pv.Referencia,pv.Nombre"
+        . " FROM factura_compra_items_devoluciones fi INNER JOIN productosventa pv ON fi.idProducto=pv.idProductosVenta WHERE fi.idFacturaCompra='$idFactura'";
+$Consulta= $this->obCon->Query($sql);
+$h=1;  
+if($this->obCon->NumRows($Consulta)){
+    $tbl = <<<EOD
+            <br>
+                <h3 align="center">PRODUCTOS DEVUELTOS</h3>
+<table cellspacing="1" cellpadding="2" border="0">
+    <tr>
+        <td align="center" ><strong>ID</strong></td>
+        <td align="center" ><strong>Referencia</strong></td>
+        <td align="center" colspan="3"><strong>Producto</strong></td>
+        <td align="center" ><strong>Costo Unitario</strong></td>
+        <td align="center" ><strong>Cantidad</strong></td>
+        <td align="center" ><strong>Subtotal</strong></td>
+        <td align="center" ><strong>Impuestos</strong></td>
+        <td align="center" ><strong>Total</strong></td>
+        <td align="center" ><strong>TipoIVA</strong></td>
+    </tr>
+    
+         
 EOD;
+$GranSubtotal=0;
+$GranIVA=0;
+$GranTotal=0;
+while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+    $GranSubtotal=$GranSubtotal+$DatosItemFactura["SubtotalCompra"];
+    $GranIVA=$GranIVA+$DatosItemFactura["ImpuestoCompra"];
+    $GranTotal=$GranTotal+$DatosItemFactura["TotalCompra"];
+    
+    $ValorUnitario=  number_format($DatosItemFactura["CostoUnitarioCompra"]);
+    $SubTotalItem=  number_format($DatosItemFactura["SubtotalCompra"]);
+    $Cantidad=$DatosItemFactura["Cantidad"];
+    
+    if($h==0){
+        $Back="#f2f2f2";
+        $h=1;
+    }else{
+        $Back="white";
+        $h=0;
+    }
+    
+    $tbl .= '    
+    
+    <tr>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["idProducto"].'</td>    
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Referencia"].'</td>
+        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Nombre"].'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$ValorUnitario.'</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$Cantidad.'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$SubTotalItem.'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["ImpuestoCompra"]).'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["TotalCompra"]).'</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Tipo_Impuesto"].'</td>
+    </tr>
+        
+ ';
+    
+}
+$tbl.= '<tr>'
+        . '<td align="right" colspan="7" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTALES</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranSubtotal).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranIVA).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranTotal).'</strong></td>'
+        . '<td align="center" style="border-bottom: 1px solid #ddd;background-color: white;"> </td>'
+        . '</tr>';
+$tbl.= "</table>";
+        
+}
+        return($tbl);
 
+    }
+    
+    // Arma el html de los servicios agregados en una factura compra
+    public function HTML_Servicios_FC($idFactura) {
+        $tbl = "";
+        
+
+$sql="SELECT fi.CuentaPUC_Servicio,fi.Nombre_Cuenta, fi.Concepto_Servicio, fi.Subtotal_Servicio, fi.Impuesto_Servicio, fi.Total_Servicio, fi.Tipo_Impuesto"
+        . " FROM factura_compra_servicios fi WHERE fi.idFacturaCompra='$idFactura'";
+$Consulta= $this->obCon->Query($sql);
+$h=1;  
+if($this->obCon->NumRows($Consulta)){
+    $tbl = <<<EOD
+            <br>
+                <h3 align="center">SERVICIOS AGREGADOS</h3>
+<table cellspacing="1" cellpadding="2" border="0">
+    <tr>
+        <td align="center" ><strong>Cuenta</strong></td>
+        <td align="center" ><strong>Nombre</strong></td>
+        <td align="center" colspan="3"><strong>Concepto</strong></td>
+        <td align="center" ><strong>Subtotal</strong></td>
+        <td align="center" ><strong>Impuestos</strong></td>
+        <td align="center" ><strong>Total</strong></td>
+        <td align="center" ><strong>TipoIVA</strong></td>
+    </tr>
+    
+         
+EOD;
+$GranSubtotal=0;
+$GranIVA=0;
+$GranTotal=0;
+while($DatosItemFactura=$this->obCon->FetchArray($Consulta)){
+    $GranSubtotal=$GranSubtotal+$DatosItemFactura["Subtotal_Servicio"];
+    $GranIVA=$GranIVA+$DatosItemFactura["Impuesto_Servicio"];
+    $GranTotal=$GranTotal+$DatosItemFactura["Total_Servicio"];
+        
+    if($h==0){
+        $Back="#f2f2f2";
+        $h=1;
+    }else{
+        $Back="white";
+        $h=0;
+    }
+    
+    $tbl .= '    
+    
+    <tr>
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["CuentaPUC_Servicio"].'</td>    
+        <td align="left" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Nombre_Cuenta"].'</td>
+        <td align="left" colspan="3" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Concepto_Servicio"].'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["Subtotal_Servicio"]).'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["Impuesto_Servicio"]).'</td>
+        <td align="right" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosItemFactura["Total_Servicio"]).'</td>
+        <td align="center" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosItemFactura["Tipo_Impuesto"].'</td>
+    </tr>
+        
+ ';
+    
+}
+$tbl.= '<tr>'
+        . '<td align="right" colspan="5" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTALES</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranSubtotal).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranIVA).'</strong></td>'
+        . '<td align="right" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.number_format($GranTotal).'</strong></td>'
+        . '<td align="center" style="border-bottom: 1px solid #ddd;background-color: white;"> </td>'
+        . '</tr>';
+$tbl.= "</table>";
+        
+}
         return($tbl);
 
     }
