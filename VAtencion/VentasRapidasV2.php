@@ -111,8 +111,8 @@ if($idPreventa>0){
     print("<td style='text-align:center'>");
    
     $Page="Consultas/ItemsPreventa.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key=";
-    $Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=$idPreventa&";
-    $css->CrearInputText("TxtCodigoBarras","text","","","Codigo de Barras","black","onchange","EnvieObjetoConsulta(`$Page`,`TxtCodigoBarras`,`DivItemsPreventa`);EnvieObjetoConsulta(`$Page2`,`CmbPreVentaAct`,`DivTotalesPreventa`,`2`);return false ;",200,30,0,0);
+    //$Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=$idPreventa&";
+    $css->CrearInputText("TxtCodigoBarras","text","","","Codigo de Barras","black","onchange","EnvieObjetoConsulta(`$Page`,`TxtCodigoBarras`,`DivItemsPreventa`);return false ;",200,30,0,0);
     print("</td>");
     print("<td style='text-align:center'>");
     
@@ -141,11 +141,8 @@ if($idPreventa>0){
 $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
 $css->CerrarDiv();//Cerramos contenedor Principal
 
-    $css->DivGrid("DivTotalesPreventa", "", "left", 1, 1, 1, 90, 40,5,"transparent");
-    
-    $css->CerrarDiv();
-        $css->DivGrid("DivItemsPreventa", "", "center", 1, 1, 3, 90, 58,5,"transparent");
-    
+        $css->CrearDiv("DivItemsPreventa", "", "center", 1, 1);
+        
         $css->CerrarDiv();
     $css->CerrarDiv();
     
@@ -164,7 +161,7 @@ $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 if($idPreventa>0){
     $Page="Consultas/ItemsPreventa.php?myPage=$myPage&CmbPreVentaAct=";
-    $Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=";
-    print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivItemsPreventa`,`2`);EnvieObjetoConsulta(`$Page2`,`CmbPreVentaAct`,`DivTotalesPreventa`,`2`);</script>");
+    //$Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=";
+    print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivItemsPreventa`,`2`);</script>");
 }
 ?>
