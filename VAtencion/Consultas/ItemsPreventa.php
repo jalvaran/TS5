@@ -145,6 +145,7 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
         
         print("<td>");
         print("<strong>Formas de Pago: </strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpcionesPago');>");
+        
         $css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
                 print("<br>");
                 $css->CrearInputNumber("TxtPagaTarjeta","number","Tarjeta: <br>",0,"Tarjeta","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);

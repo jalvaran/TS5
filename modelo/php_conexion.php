@@ -1729,10 +1729,24 @@ public function CalculePesoRemision($idCotizacion)
  */
     
     public function InsertarItemsPreventaAItemsFactura($Datos){
-        
+        $idUser=$this->idUser;
         $idPreventa=$Datos["idPreventa"];
         $NumFactura=$Datos["ID"];
         $FechaFactura=$Datos["FechaFactura"];
+        /*
+        $sql="INSERT INTO facturas_items (FechaFactura,idFactura,TablaItems,Referencia,Nombre,Departamento,SubGrupo1,SubGrupo2,"
+                . "SubGrupo3,SubGrupo4,SubGrupo5,ValorUnitarioItem,Cantidad,Dias,SubtotalItem,IVAItem,ValorOtrosImpuestos,TotalItem,"
+                . "PorcentajeIVA,PrecioCostoUnitario,SubtotalCosto,TipoItem,CuentaPUC,idUsuarios) "
+                . " (SELECT '$FechaFactura' as FechaFactura,'$NumFactura' as idFactura, TablaItems,"
+                . " Referencia, Nombre,Departamento,SubGrupo1,SubGrupo2,SubGrupo3,SubGrupo4,SubGrupo5,ValorUnitarioItem,"
+                . " Cantidad,Dias,SubtotalItem,IVAItem,ValorOtrosImpuestos,TotalItem,PorcentajeIVA,PrecioCostoUnitario,SubtotalCosto"
+                . ", TipoItem,CuentaPUC,'$idUser' as idUsuarios"
+                . " FROM vista_preventa WHERE VestasActivas_idVestasActivas='$idPreventa') ";
+        
+        $Consulta=$this->Query($sql);
+        $this->RegistraKardexItemsFactura($NumFactura);
+         * 
+         */
         
         $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa'";
         $Consulta=$this->Query($sql);
@@ -1801,6 +1815,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[28]="ValorOtrosImpuestos";$Valores[28]= $DatosOtrosImpuestos["ValorImpuesto"]*$DatosCotizacion['Cantidad'];
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+           
             if($DatosCotizacion["TipoItem"]=="PR"){
                 
                 $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
@@ -1814,6 +1829,7 @@ public function CalculePesoRemision($idCotizacion)
                 
                 $this->InserteKardex($DatosKardex);
             }
+             
         }
         $ID=$Datos["ID"]; 
         //$TotalSubtotal=$TotalSubtotal;
@@ -1823,6 +1839,7 @@ public function CalculePesoRemision($idCotizacion)
         $sql="UPDATE facturas SET Subtotal='$TotalSubtotal', IVA='$TotalIVA', Total='$GranTotal', "
                 . "SaldoFact='$GranTotal', TotalCostos='$TotalCostos' WHERE idFacturas='$ID'";
         $this->Query($sql);
+        
         
     } 
     
@@ -7642,6 +7659,31 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
     }
     
+    //Descarga del kardex productos de una preventa sin uso por ahora
+    public function RegistraKardexItemsFactura($idFactura) {
+        $sql="SELECT Referencia,TipoItem,TablaItems,Cantidad,PrecioCostoUnitario,SubtotalCosto FROM facturas_items WHERE idFactura='$idFactura'";
+        
+        $Consulta=$this->Query($sql);
+        while($DatosFactura=$this->FetchArray($Consulta)){
+            if($DatosFactura["TipoItem"]=="PR"){
+                $Tabla=$DatosFactura["TablaItems"];
+                $sql="SELECT idProductosVenta,Existencias FROM $Tabla WHERE Referencia='$DatosFactura[Referencia]'";
+                $DatosProducto=$this->Query($sql);
+                $DatosProducto=$this->FetchArray($DatosProducto);
+                $DatosKardex["Cantidad"]=$DatosFactura['Cantidad'];
+                $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+                $DatosKardex["CostoUnitario"]=$DatosFactura['PrecioCostoUnitario'];
+                $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+                $DatosKardex["Detalle"]="Factura";
+                $DatosKardex["idDocumento"]=$idFactura;
+                $DatosKardex["TotalCosto"]=$DatosFactura["SubtotalCosto"];
+                $DatosKardex["Movimiento"]="SALIDA";
+                
+                $this->InserteKardex($DatosKardex);
+            }
+        }   
+    
+    }
     
 //////////////////////////////Fin	
 }

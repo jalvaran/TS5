@@ -499,7 +499,7 @@ class CssIni{
 	/////////////////////Crear una Tabla
 	
 	function CrearTabla(){
-		print('<table class="table table-bordered table table-hover" >');
+		print('<div class="table-responsive"><table class="table table-bordered table table-hover" >');
 		
 	}
 	
@@ -538,7 +538,7 @@ class CssIni{
 	/////////////////////Cierra una tabla
 	
 	function CerrarTabla(){
-		print('</table>');
+		print('</table></div>');
 		
 	}
 	
@@ -742,25 +742,33 @@ class CssIni{
         
         /////////////////////Crear una fila para una tabla
 	function CrearNotificacionVerde($Mensaje,$FontSize){
-		print('<div class="alert alert-success" align="center" style="font-size:'.$FontSize.'px"><strong>'.$Mensaje.'</strong></div>');
+		print('<div class="alert alert-success fade in" align="center" style="font-size:'.$FontSize.'px">'
+                        . '<a href="#" class="close" data-dismiss="alert" aria-label="close">x</a>'
+                        . '<strong>'.$Mensaje.'</strong></div>');
 		
 	}
         
         /////////////////////Crear una fila para una tabla
 	function CrearNotificacionAzul($Mensaje,$FontSize){
-		print('<div class="alert alert-info" align="center" style="font-size:'.$FontSize.'px"><strong>'.$Mensaje.'</strong></div>');
+		print('<div class="alert alert-info fade in" align="center" style="font-size:'.$FontSize.'px">'
+                        . '<a href="#" class="close" data-dismiss="alert" aria-label="close">x</a>'
+                        . '<strong>'.$Mensaje.'</strong></div>');
 		
 	}
         
         /////////////////////Crear una fila para una tabla
 	function CrearNotificacionNaranja($Mensaje,$FontSize){
-		print('<div class="alert alert-warning" align="center" style="font-size:'.$FontSize.'px"><strong>'.$Mensaje.'</strong></div>');
+		print('<div class="alert alert-warning fade in" align="center" style="font-size:'.$FontSize.'px">'
+                        . '<a href="#" class="close" data-dismiss="alert" aria-label="close">x</a>'
+                        . '<strong>'.$Mensaje.'</strong></div>');
 		
 	}
         
         /////////////////////Crear una fila para una tabla
 	function CrearNotificacionRoja($Mensaje,$FontSize){
-		print('<div class="alert alert-danger" align="center" style="font-size:'.$FontSize.'px"><strong>'.$Mensaje.'</strong></div>');
+		print('<div class="alert alert-danger fade in" align="center" style="font-size:'.$FontSize.'px">'
+                        . '<a href="#" class="close" data-dismiss="alert" aria-label="close">x</a>'
+                        . '<strong>'.$Mensaje.'</strong></div>');
 		
 	}
 	
