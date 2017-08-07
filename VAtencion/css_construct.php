@@ -933,6 +933,8 @@ class CssIni{
 		
 	}
         
+        
+        
         /////////////////////Crear un DIV
 	
 	function CrearDiv2($ID, $Class, $Alineacion,$Visible, $Habilitado, $Ancho, $Alto,$top,$left,$posicion,$Vector){
@@ -1405,6 +1407,23 @@ function Footer(){
                 $H="false";
             print("<div id='$ID' class='$Class' align='$Alineacion' style='display:$V;float: left;$Ubicacion;height:".$Altura."%;width:".$Ancho."%;overflow: auto;border: ".$Border."px solid;border-color: $BorderColor;' >");
         }
+        
+        //DivBusquedas
+        
+        function CrearDivBusquedas($ID, $Class, $Alineacion,$Visible, $Habilitado){
+            if($Visible==1)
+                $V="block";
+            else
+                $V="none";
+            
+            if($Habilitado==1) ///pensado a futuro, aun no esta en uso
+                $H="true";
+            else
+                $H="false";
+            print("<div id='$ID' class='fade in' align='$Alineacion' style='display:$V;' >");
+            print('<a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>');
+		
+	}
         //////////////////////////////////FIN
 }
 	

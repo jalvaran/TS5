@@ -20,6 +20,7 @@ $myPage=$obVenta->normalizar($_REQUEST['myPage']);
 $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
 $PageReturn=$myPage."?CmbPreVentaAct=$idPreventa&TxtAgregarItemPreventa=";
 if($key<>""){
+ $css->CrearDivBusquedas("BuscarItems", "", "left", 1, 1);
  $css->CrearTabla();
     $tab="productosventa";
     $Condicion=" WHERE idProductosVenta='$key' OR Nombre LIKE '%$key%' OR Referencia LIKE '%$key%' LIMIT 50";
@@ -104,7 +105,7 @@ if($key<>""){
     }
     
     $css->CerrarTabla();
-    
+    $css->CerrarDiv();
 }else{
     $css->CrearNotificacionRoja("Digite un Dato", 16);
 }

@@ -22,6 +22,7 @@ $obVenta = new ProcesoVenta($idUser);
         $Consulta=$obVenta->Query($sql);
         if($obVenta->NumRows($Consulta)){
             $TotalVenta=$obVenta->Sume("preventa", "TotalVenta", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
+            $css->CrearDivBusquedas("BuscarItems", "", "left", 1, 1);
             $css->CrearTabla();
             $css->FilaTabla(16);
             $css->ColTabla("<strong>Asignar</strong>", 1);
@@ -59,6 +60,7 @@ $obVenta = new ProcesoVenta($idUser);
                 }
             }
             $css->CerrarTabla();
+            $css->CerrarDiv();
         }else{
             $css->CrearNotificacionNaranja("No se encontraron datos", 18);
         }
