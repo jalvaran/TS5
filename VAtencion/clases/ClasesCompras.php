@@ -302,7 +302,7 @@ class Compra extends ProcesoVenta{
     
     //Anula una factura de compra
     
-    public function AnularCompra($Fecha,$Concepto,$idCompra) {
+    public function AnularCompra($Fecha,$Concepto,$idCompra,$idUser) {
         $hora=date("H:i:s");
         $tab="factura_compra_anulaciones";
         $NumRegistros=5;
@@ -310,7 +310,7 @@ class Compra extends ProcesoVenta{
         $Columnas[1]="Hora";                $Valores[1]=$hora;
         $Columnas[2]="Observaciones";       $Valores[2]=$Concepto;
         $Columnas[3]="idCompra";            $Valores[3]=$idCompra;
-        $Columnas[4]="idUsuario";           $Valores[4]=$this->idUser;
+        $Columnas[4]="idUsuario";           $Valores[4]=$idUser;
                 
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
@@ -321,7 +321,7 @@ class Compra extends ProcesoVenta{
         $this->ReverseInventarioCompra($idCompra,"Devoluciones");  //retiro los productos devueltos
         $sql="UPDATE cuentasxpagar SET Saldo=0, Estado='ANULADA' WHERE Origen='factura_compra' and DocumentoCruce='$idCompra'";
         $this->Query($sql);
-        $this->ActualizaRegistro("factura_compra", "Estado", "ANULADA", "ID", $idComprobanteIngreso);
+        $this->ActualizaRegistro("factura_compra", "Estado", "ANULADA", "ID", $idCompra);
         return $idAnulacion;
     }
     
