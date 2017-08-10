@@ -197,3 +197,16 @@ SELECT td.`ID` as ID,td.`Fecha` as Fecha,td.`Hora` ,td.Monto, td.`idVenta`,tv.`P
 DROP VIEW IF EXISTS `vista_preventa`;
 CREATE VIEW vista_preventa AS 
 select p.VestasActivas_idVestasActivas,'productosventa' AS `TablaItems`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `SubGrupo1`,`pv`.`Sub2` AS `SubGrupo2`,`pv`.`Sub3` AS `SubGrupo3`,`pv`.`Sub4` AS `SubGrupo4`,`pv`.`Sub5` AS `SubGrupo5`,`p`.`ValorAcordado` AS `ValorUnitarioItem`,`p`.`Cantidad` AS `Cantidad`,'1' AS `Dias`,(`p`.`ValorAcordado` * `p`.`Cantidad`) AS `SubtotalItem`,((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`) AS `IVAItem`,((select `productos_impuestos_adicionales`.`ValorImpuesto` from `productos_impuestos_adicionales` where (`productos_impuestos_adicionales`.`idProducto` = `p`.`ProductosVenta_idProductosVenta`)) * `p`.`Cantidad`) AS `ValorOtrosImpuestos`, ((`p`.`ValorAcordado` * `p`.`Cantidad`) + (`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA` ) as TotalItem,(CONCAT(pv.IVA*100,'%')) as PorcentajeIVA,pv.CostoUnitario as PrecioCostoUnitario, pv.CostoUnitario*p.Cantidad as SubtotalCosto,(SELECT TipoItem FROM prod_departamentos WHERE idDepartamentos=pv.Departamento) as TipoItem,pv.CuentaPUC as CuentaPUC,p.Updated as Updated,p.Sync as Sync from (`preventa` `p` join `productosventa` `pv` on((`p`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`))) where (`p`.`TablaItem` = 'productosventa');
+
+
+CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idCompra` bigint(20) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;

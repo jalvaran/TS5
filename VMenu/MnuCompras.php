@@ -60,6 +60,7 @@ include_once("../sesiones/php_control.php");
 	$css->IniciaTabs();
 	
 		$css->NuevaTabs(1);
+                        $css->SubTabs("../VAtencion/factura_compra.php","_self","../images/historial2.png","Historial");
 			$css->SubTabs("../VAtencion/vista_compras_productos.php","_self","../images/historial.png","Historial de Productos Comprados");
                         $css->SubTabs("../VAtencion/vista_compras_productos_devoluciones.php","_self","../images/devoluciones.png","Historial de Productos Devueltos");
                         $css->SubTabs("../VAtencion/vista_compras_servicios.php","_self","../images/servicios_compras.png","Historial de Compras Servicios");

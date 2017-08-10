@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-07-2017 a las 10:13:25
+-- Tiempo de generación: 08-08-2017 a las 07:19:08
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -475,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -1434,7 +1434,7 @@ CREATE TABLE IF NOT EXISTS `facturas` (
   `TipoFactura` varchar(10) NOT NULL,
   `Prefijo` varchar(45) NOT NULL,
   `NumeroFactura` int(16) NOT NULL,
-  `Fecha` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Fecha` date NOT NULL,
   `Hora` varchar(20) NOT NULL,
   `OCompra` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `OSalida` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
@@ -1512,7 +1512,7 @@ CREATE TABLE IF NOT EXISTS `facturas_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2611,17 +2611,20 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
 CREATE TABLE IF NOT EXISTS `preventa` (
   `idPrecotizacion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Cantidad` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Cantidad` double NOT NULL,
   `VestasActivas_idVestasActivas` int(11) NOT NULL,
   `idFacturas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `ProductosVenta_idProductosVenta` int(11) NOT NULL,
+  `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `TablaItem` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `ValorUnitario` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Subtotal` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `ValorAcordado` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Descuento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Impuestos` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `TotalVenta` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `ValorUnitario` double NOT NULL,
+  `Subtotal` double NOT NULL,
+  `ValorAcordado` double NOT NULL,
+  `CostoUnitario` double NOT NULL,
+  `PrecioMayorista` double NOT NULL,
+  `Descuento` double NOT NULL,
+  `Impuestos` double NOT NULL,
+  `PorcentajeIVA` double NOT NULL,
+  `TotalVenta` double NOT NULL,
   `TipoItem` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `Autorizado` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -4716,6 +4719,83 @@ CREATE TABLE IF NOT EXISTS `vista_kardex` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vista_ori_facturas`
+--
+CREATE TABLE IF NOT EXISTS `vista_ori_facturas` (
+`Fecha` date
+,`idFactura` varchar(45)
+,`Referencia` varchar(200)
+,`Nombre` varchar(500)
+,`Departamento` int(11)
+,`SubGrupo1` int(11)
+,`SubGrupo2` int(11)
+,`SubGrupo3` int(11)
+,`SubGrupo4` int(11)
+,`SubGrupo5` int(11)
+,`ValorUnitarioItem` int(11)
+,`Cantidad` varchar(45)
+,`Dias` varchar(45)
+,`SubtotalItem` varchar(45)
+,`IVAItem` varchar(45)
+,`ValorOtrosImpuestos` double
+,`TotalItem` double
+,`PorcentajeIVA` varchar(10)
+,`idOtrosImpuestos` int(11)
+,`idPorcentajeIVA` int(11)
+,`PrecioCostoUnitario` varchar(45)
+,`SubtotalCosto` varchar(45)
+,`TipoItem` varchar(10)
+,`CuentaPUC` int(11)
+,`GeneradoDesde` varchar(100)
+,`NumeroIdentificador` varchar(45)
+,`idUsuarios` int(11)
+,`idCierre` bigint(20)
+,`idResolucion` int(11)
+,`TipoFactura` varchar(10)
+,`Prefijo` varchar(45)
+,`NumeroFactura` int(16)
+,`Hora` varchar(20)
+,`FormaPago` varchar(20)
+,`CentroCosto` int(11)
+,`idSucursal` int(11)
+,`EmpresaPro_idEmpresaPro` int(11)
+,`Clientes_idClientes` int(11)
+,`ObservacionesFact` text
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_preventa`
+--
+CREATE TABLE IF NOT EXISTS `vista_preventa` (
+`VestasActivas_idVestasActivas` int(11)
+,`TablaItems` varchar(14)
+,`Referencia` varchar(100)
+,`Nombre` varchar(70)
+,`Departamento` varchar(45)
+,`SubGrupo1` varchar(45)
+,`SubGrupo2` varchar(45)
+,`SubGrupo3` varchar(45)
+,`SubGrupo4` varchar(45)
+,`SubGrupo5` varchar(45)
+,`ValorUnitarioItem` double
+,`Cantidad` double
+,`Dias` varchar(1)
+,`SubtotalItem` double
+,`IVAItem` double
+,`ValorOtrosImpuestos` double
+,`TotalItem` double
+,`PorcentajeIVA` varchar(24)
+,`PrecioCostoUnitario` varchar(45)
+,`SubtotalCosto` double
+,`TipoItem` varchar(2)
+,`CuentaPUC` varchar(45)
+,`Updated` timestamp
+,`Sync` datetime
+);
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vista_sistemas`
 --
 CREATE TABLE IF NOT EXISTS `vista_sistemas` (
@@ -4740,6 +4820,81 @@ CREATE TABLE IF NOT EXISTS `vista_sistemas` (
 ,`Sub5` varchar(45)
 ,`Updated` timestamp
 ,`Sync` datetime
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_titulos_abonos`
+--
+CREATE TABLE IF NOT EXISTS `vista_titulos_abonos` (
+`ID` bigint(20)
+,`Fecha` date
+,`Hora` time
+,`Monto` double
+,`idVenta` bigint(20)
+,`Promocion` int(11)
+,`Mayor` int(11)
+,`Concepto` text
+,`idColaborador` bigint(20)
+,`NombreColaborador` varchar(90)
+,`Estado` varchar(45)
+,`idComprobanteIngreso` bigint(20)
+,`Mayor2` int(11)
+,`Adicional` int(11)
+,`Valor` bigint(20)
+,`TotalAbonos` bigint(20)
+,`Saldo` bigint(20)
+,`idCliente` bigint(20)
+,`NombreCliente` varchar(90)
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_titulos_comisiones`
+--
+CREATE TABLE IF NOT EXISTS `vista_titulos_comisiones` (
+`ID` bigint(20)
+,`Fecha` date
+,`Hora` time
+,`Monto` double
+,`idVenta` bigint(20)
+,`Promocion` int(11)
+,`Mayor` int(11)
+,`Concepto` text
+,`idColaborador` bigint(20)
+,`NombreColaborador` varchar(90)
+,`idUsuario` int(11)
+,`idEgreso` bigint(20)
+,`Mayor2` int(11)
+,`Adicional` int(11)
+,`Valor` bigint(20)
+,`TotalAbonos` bigint(20)
+,`Saldo` bigint(20)
+,`idCliente` bigint(20)
+,`NombreCliente` varchar(90)
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vista_titulos_devueltos`
+--
+CREATE TABLE IF NOT EXISTS `vista_titulos_devueltos` (
+`ID` bigint(20)
+,`Fecha` date
+,`idVenta` bigint(20)
+,`Promocion` int(11)
+,`Mayor` bigint(20)
+,`Concepto` text
+,`idColaborador` bigint(20)
+,`NombreColaborador` varchar(90)
+,`idUsuario` int(11)
+,`Mayor2` int(11)
+,`Adicional` int(11)
+,`Valor` bigint(20)
+,`TotalAbonos` bigint(20)
+,`Saldo` bigint(20)
+,`idCliente` bigint(20)
+,`NombreCliente` varchar(90)
 );
 -- --------------------------------------------------------
 
@@ -4798,11 +4953,56 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `vista_ori_facturas`
+--
+DROP TABLE IF EXISTS `vista_ori_facturas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_ori_facturas` AS select `fi`.`FechaFactura` AS `Fecha`,`fi`.`idFactura` AS `idFactura`,`fi`.`Referencia` AS `Referencia`,`fi`.`Nombre` AS `Nombre`,`fi`.`Departamento` AS `Departamento`,`fi`.`SubGrupo1` AS `SubGrupo1`,`fi`.`SubGrupo2` AS `SubGrupo2`,`fi`.`SubGrupo3` AS `SubGrupo3`,`fi`.`SubGrupo4` AS `SubGrupo4`,`fi`.`SubGrupo5` AS `SubGrupo5`,`fi`.`ValorUnitarioItem` AS `ValorUnitarioItem`,`fi`.`Cantidad` AS `Cantidad`,`fi`.`Dias` AS `Dias`,`fi`.`SubtotalItem` AS `SubtotalItem`,`fi`.`IVAItem` AS `IVAItem`,`fi`.`ValorOtrosImpuestos` AS `ValorOtrosImpuestos`,`fi`.`TotalItem` AS `TotalItem`,`fi`.`PorcentajeIVA` AS `PorcentajeIVA`,`fi`.`idOtrosImpuestos` AS `idOtrosImpuestos`,`fi`.`idPorcentajeIVA` AS `idPorcentajeIVA`,`fi`.`PrecioCostoUnitario` AS `PrecioCostoUnitario`,`fi`.`SubtotalCosto` AS `SubtotalCosto`,`fi`.`TipoItem` AS `TipoItem`,`fi`.`CuentaPUC` AS `CuentaPUC`,`fi`.`GeneradoDesde` AS `GeneradoDesde`,`fi`.`NumeroIdentificador` AS `NumeroIdentificador`,`fi`.`idUsuarios` AS `idUsuarios`,`fi`.`idCierre` AS `idCierre`,`f`.`idResolucion` AS `idResolucion`,`f`.`TipoFactura` AS `TipoFactura`,`f`.`Prefijo` AS `Prefijo`,`f`.`NumeroFactura` AS `NumeroFactura`,`f`.`Hora` AS `Hora`,`f`.`FormaPago` AS `FormaPago`,`f`.`CentroCosto` AS `CentroCosto`,`f`.`idSucursal` AS `idSucursal`,`f`.`EmpresaPro_idEmpresaPro` AS `EmpresaPro_idEmpresaPro`,`f`.`Clientes_idClientes` AS `Clientes_idClientes`,`f`.`ObservacionesFact` AS `ObservacionesFact` from (`ori_facturas_items` `fi` join `facturas` `f` on((`fi`.`idFactura` = `f`.`idFacturas`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_preventa`
+--
+DROP TABLE IF EXISTS `vista_preventa`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_preventa` AS select `p`.`VestasActivas_idVestasActivas` AS `VestasActivas_idVestasActivas`,'productosventa' AS `TablaItems`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `SubGrupo1`,`pv`.`Sub2` AS `SubGrupo2`,`pv`.`Sub3` AS `SubGrupo3`,`pv`.`Sub4` AS `SubGrupo4`,`pv`.`Sub5` AS `SubGrupo5`,`p`.`ValorAcordado` AS `ValorUnitarioItem`,`p`.`Cantidad` AS `Cantidad`,'1' AS `Dias`,(`p`.`ValorAcordado` * `p`.`Cantidad`) AS `SubtotalItem`,((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`) AS `IVAItem`,((select `productos_impuestos_adicionales`.`ValorImpuesto` from `productos_impuestos_adicionales` where (`productos_impuestos_adicionales`.`idProducto` = `p`.`ProductosVenta_idProductosVenta`)) * `p`.`Cantidad`) AS `ValorOtrosImpuestos`,((`p`.`ValorAcordado` * `p`.`Cantidad`) + ((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`)) AS `TotalItem`,concat((`pv`.`IVA` * 100),'%') AS `PorcentajeIVA`,`pv`.`CostoUnitario` AS `PrecioCostoUnitario`,(`pv`.`CostoUnitario` * `p`.`Cantidad`) AS `SubtotalCosto`,(select `prod_departamentos`.`TipoItem` from `prod_departamentos` where (`prod_departamentos`.`idDepartamentos` = `pv`.`Departamento`)) AS `TipoItem`,`pv`.`CuentaPUC` AS `CuentaPUC`,`p`.`Updated` AS `Updated`,`p`.`Sync` AS `Sync` from (`preventa` `p` join `productosventa` `pv` on((`p`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`))) where (`p`.`TablaItem` = 'productosventa');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `vista_sistemas`
 --
 DROP TABLE IF EXISTS `vista_sistemas`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_sistemas` AS select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `servicios` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`))) union select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `productosventa` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_titulos_abonos`
+--
+DROP TABLE IF EXISTS `vista_titulos_abonos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_abonos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`Estado` AS `Estado`,`td`.`idComprobanteIngreso` AS `idComprobanteIngreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_abonos` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_titulos_comisiones`
+--
+DROP TABLE IF EXISTS `vista_titulos_comisiones`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_comisiones` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`td`.`idEgreso` AS `idEgreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_comisiones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vista_titulos_devueltos`
+--
+DROP TABLE IF EXISTS `vista_titulos_devueltos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_devueltos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`idVenta` AS `idVenta`,`td`.`Promocion` AS `Promocion`,`td`.`Mayor` AS `Mayor`,`td`.`Concepto` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_devoluciones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
