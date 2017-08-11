@@ -1568,7 +1568,7 @@ if(!empty($_REQUEST["TxtBuscarSeparado"])){
             $this->css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdSeparado","hidden","",$DatosSeparado["ID"],"","","","",0,0,0,0);
             $this->css->CrearInputText("TxtIdClientes","hidden","",$DatosSeparado["idCliente"],"","","","",0,0,0,0);
-            $this->css->CrearInputNumber("TxtAbonoSeparado$DatosSeparado[ID]", "number", "Abonar: ", $DatosSeparado["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosSeparado["Saldo"], 1);
+            $this->css->CrearInputNumber("TxtAbonoSeparado$DatosSeparado[ID]", "number", "Abonar: ", $DatosSeparado["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosSeparado["Saldo"], "any");
             $this->css->CrearBotonConfirmado("BtnAbono$DatosSeparado[ID]", "Abonar");
             $this->css->CerrarForm();
             print("</td>");
@@ -1660,7 +1660,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 $CarteraAct=1;
             }
             
-            $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Efectivo: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], 1);
+            $this->css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Efectivo: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], "any");
             print("<br>");
             if($CarteraAct==0){
                 print("<strong>Opciones de Pago:</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivCredito$DatosCredito[idCartera]');><br>");

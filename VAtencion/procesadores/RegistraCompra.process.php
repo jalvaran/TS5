@@ -28,6 +28,22 @@ if(!empty($_REQUEST["TxtAgregarItemCompra"])){
       
 }
 
+//Verificamos si se recibe la peticion de Agregar un item a la compra
+if(!empty($_REQUEST["BtnEditarFactura"])){
+      
+    $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
+    $Fecha=$obCompra->normalizar($_REQUEST["TxtFechaEdit"]);
+    $Tercero=$obCompra->normalizar($_REQUEST["CmbTerceroEdit"]);
+    $Concepto=$obCompra->normalizar($_REQUEST["TxtConceptoServicioEdit"]);
+    $NumFact=$obCompra->normalizar($_REQUEST["TxtNumFacturaEdit"]);
+    $obCompra->ActualizaRegistro("factura_compra", "Fecha", $Fecha, "ID", $idCompra);
+    $obCompra->ActualizaRegistro("factura_compra", "Tercero", $Tercero, "ID", $idCompra);
+    $obCompra->ActualizaRegistro("factura_compra", "Concepto", $Concepto, "ID", $idCompra);
+    $obCompra->ActualizaRegistro("factura_compra", "NumeroFactura", $NumFact, "ID", $idCompra);
+    header("location:$myPage?idCompra=$idCompra");
+      
+}
+
 //SI se recibe la solicitud de crear un proveedor
 
 if(!empty($_REQUEST['BtnCrearProveedor'])){

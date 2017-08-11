@@ -64,6 +64,11 @@ print("<body>");
                 print("<strong>Agregar Servicio: <strong>");
                 $css->ImageOcultarMostrar("ImgHidden", "Click: ", "DivAgregaServicio", 30, 30, "");
                 print("</td>");
+                print("<td>");
+                print("<strong>Datos Compra: <strong>");
+                $css->ImageOcultarMostrar("ImgHidden2", "Click: ", "DivEditFactura", 30, 30, "");
+                print("</td>");
+                
             $css->CierraFilaTabla();
             $css->FilaTabla(16);
                 print("<td>");
@@ -96,6 +101,37 @@ print("<body>");
                 $css->CrearSelectTable("CmbTipoIva", "porcentajes_iva", "", "Valor", "Nombre", "", "", "", "", 1);
                 print("<br>");
                 $css->CrearBotonConfirmado("BtnAgregarServicio", "Agregar");
+                $css->CerrarForm();
+                $css->CerrarDiv();
+                print("</td>");
+                print("<td>");
+                $DatosFacturaCompra=$obCompra->DevuelveValores("factura_compra", "ID", $idCompra);
+                $css->CrearDiv("DivEditFactura", "", "Center", 0, 1);
+                $css->CrearForm2("FrmEditarDatos", $myPage, "post", "_self");
+                $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", 1, 1);
+                $css->CrearInputFecha("", "TxtFechaEdit", $DatosFacturaCompra["Fecha"], 100, 30, "");
+                print("<strong>Tercero:</strong><br>");
+                $VarSelect["Required"]="1";
+                $VarSelect["Ancho"]="200";
+                $VarSelect["PlaceHolder"]="Seleccione un Tercero";
+                $css->CrearSelectChosen("CmbTerceroEdit", $VarSelect);
+                $consulta=$obVenta->ConsultarTabla("proveedores", "");
+                while($DatosCuenta=$obVenta->FetchArray($consulta)){
+                    $sel=0;
+                    if($DatosCuenta["Num_Identificacion"]==$DatosFacturaCompra["Tercero"]){
+                        $sel=1;
+                    }
+                    $css->CrearOptionSelect($DatosCuenta["Num_Identificacion"], $DatosCuenta["Num_Identificacion"]." ".$DatosCuenta["RazonSocial"] , $sel);
+                }
+                $css->CerrarSelect();
+                print("<br><strong>Num Factura:</strong><br>");
+                $css->CrearInputText("TxtNumFacturaEdit", "text", "", $DatosFacturaCompra["NumeroFactura"], "NumFactura", "", "", "", 200, 30, 0, 1);
+                //$css->CrearTextArea("TxtNumFacturaEdit", "", $DatosFacturaCompra["Concepto"], "Escriba el concepto", "", "", "", 200, 60, 0, 1);
+                
+                print("<br><strong>Concepto:</strong><br>");
+                $css->CrearTextArea("TxtConceptoServicioEdit", "", $DatosFacturaCompra["Concepto"], "Escriba el concepto", "", "", "", 200, 60, 0, 1);
+                print("<br>");
+                $css->CrearBotonConfirmado("BtnEditarFactura", "Editar");
                 $css->CerrarForm();
                 $css->CerrarDiv();
                 print("</td>");
@@ -542,6 +578,7 @@ print("<body>");
     $css->AnchoElemento("CmbCuentaReteIVAServicios_chosen", 200);
     $css->AnchoElemento("CmbCuentaReteICAServicios_chosen", 200);
     $css->AnchoElemento("CmbCuentaServicio_chosen", 200);
+    $css->AnchoElemento("CmbTerceroEdit_chosen", 200); 
     
     print("</body></html>");
 ?>
