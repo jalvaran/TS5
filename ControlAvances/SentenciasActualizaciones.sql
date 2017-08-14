@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Gramos` double NOT NULL,
   `idBascula` int(11) NOT NULL,
-  `Leido` bit(1) NOT NULL DEFAULT b'0',
+  `Leido` bit(1) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 

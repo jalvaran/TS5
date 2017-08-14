@@ -81,18 +81,18 @@ $obVenta->Query($sql);
 
 if(isset($_POST["BtnVistaPrevia"])){
     
-$sql="SELECT Departamento as idDepartamento, `PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
+$sql="SELECT Departamento as idDepartamento, SUM(ValorOtrosImpuestos) as TotalBolsas,`PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
         . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
 
 
 }else{
-   $sql="SELECT Departamento as idDepartamento, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
+   $sql="SELECT Departamento as idDepartamento,SUM(ValorOtrosImpuestos) as TotalBolsas, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
         . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
 }
 
 
 $Datos=$obVenta->Query($sql);
-
+$TotalBolsas=0;
 $Subtotal=0;
 $TotalIVA=0;
 $TotalVentas=0;
@@ -116,7 +116,7 @@ $DatosIVA["Exc"]["Valor"]=0;
 $DatosIVA["Exc"]["Base"]=0;
 $DatosIVAP[]=0;
 while($DatosVentas=$obVenta->FetchArray($Datos)){
-    
+        $TotalBolsas=$TotalBolsas+$DatosVentas["TotalBolsas"];
 	$i++;
         $flagQuery=1;
         $TipoIva=$DatosVentas["PorcentajeIVA"];
@@ -296,6 +296,30 @@ EOD;
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////BOLSAS////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+if($TotalBolsas>0){
+$tbl =' 
+<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Otros Impuestos:
+</em></strong></span><BR><BR>
+<table border="1" cellspacing="2" cellpadding="2" align="center" >
+  <tr> 
+    <th><h3>Nombre</h3></th>
+    <th><h3>Total</h3></th>
+    	
+  </tr >
+  <tr> 
+    <th>IMPUESTO AL CONSUMO DE BOLSAS</th>
+    <th>'.number_format($TotalBolsas).'</th>
+    	
+  </tr >
+</table>';
+
+
+$pdf->writeHTML($tbl, false, false, false, false, '');
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////TIPO VENTAS////////////////////////////
