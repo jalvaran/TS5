@@ -4182,9 +4182,9 @@ $this->PDF->MultiCell(92, 25, $tbl, 0, 'L', 1, 0, '', '', true,0, true, true, 10
                 
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Referencia</strong></td>
                 <td align="center" colspan="5" style="border-bottom: 2px solid #ddd;"><strong>Producto o Servicio</strong></td>
-                <!-- <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td> -->
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Precio Unitario</strong></td> 
                 <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Cantidad</strong></td>
-                <!-- <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Valor Total</strong></td> -->
+                <td align="center" style="border-bottom: 2px solid #ddd;"><strong>Valor Total</strong></td> 
             </tr>';
 
         $sql="SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
@@ -4234,9 +4234,9 @@ EOD;
     
     <td align="left" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Referencia]</td>
     <td align="left" colspan="5" style="border-bottom: 1px solid #ddd;background-color: $Back;">$DatosItemFactura[Descripcion]</td>
-    <!-- <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td> -->
+    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$ValorUnitario</td>
     <td align="center" style="border-bottom: 1px solid #ddd;background-color: $Back;">$Multiplicador</td>
-    <!-- <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td> -->
+    <td align="right" style="border-bottom: 1px solid #ddd;background-color: $Back;">$SubTotalItem</td>
 </tr>
           
 EOD;

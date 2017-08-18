@@ -52,7 +52,7 @@ $css->CabeceraIni("TS5 Ventas");
     $css->CerrarForm();
     if($idPreventa>=1){
         
-        $Page="Consultas/BuscarCreditos.php?myPage=$myPage&CmbPreVentaAct=$idPreventa&TxtBuscarSeparado=";
+        $Page="Consultas/BuscarSeparados.php?myPage=$myPage&CmbPreVentaAct=$idPreventa&TxtBuscarSeparado=";
         $css->CrearInputText("TxtBuscarSeparado","text","","","Buscar separado","black","onKeyUp","EnvieObjetoConsulta(`$Page`,`TxtBuscarSeparado`,`DivBusquedas`,`2`);return false;",200,30,0,0);
         
         $Page="Consultas/BuscarCreditos.php?myPage=$myPage&CmbPreVentaAct=$idPreventa&TxtBuscarCredito=";

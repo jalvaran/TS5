@@ -600,6 +600,9 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         if(verifique=="/PrintCodi"){
             document.getElementById(idTarget).innerHTML ='Conectando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
         }
+        if(BorrarId==5){
+            document.getElementById(idTarget).innerHTML ='Buscando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
+        }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();
