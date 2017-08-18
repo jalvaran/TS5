@@ -1613,10 +1613,16 @@ public function DibujaCredito($myPage,$idPreventa,$Vector) {
     $this->css=new CssIni("");
     //Dibujo una busqueda de un separado
 if(!empty($_REQUEST["TxtBuscarCredito"])){
+    
     $key=$this->obCon->normalizar($_REQUEST["TxtBuscarCredito"]);
+    if(strlen($key)<=3){
+        
+        $this->css->CrearNotificacionNaranja("Escriba mas de 4 caracteres", 16);
+        return;  
+    }
     $sql="SELECT cart.idCartera,cart.TipoCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
             . " INNER JOIN clientes cl ON cart.idCliente = cl.idClientes "
-            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 100";
+            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 40";
     $Datos=$this->obCon->Query($sql);
     if($this->obCon->NumRows($Datos)){
         $this->css->CrearTabla();
@@ -1704,10 +1710,11 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 $this->css->CierraFilaTabla();
             }           
             
-            
+          
             
         }
         $this->css->CerrarTabla();
+        
     }else{
         $this->css->CrearNotificacionRoja("No se encontraron datos", 16);
     }
@@ -3412,7 +3419,7 @@ $txt="<h3>".$DatosEmpresaPro["RazonSocial"]."<br>NIT ".$DatosEmpresaPro["NIT"]."
 $this->PDF->MultiCell(62, 5, $txt, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
 $txt=$DatosEmpresaPro["Direccion"]."<br>".$DatosEmpresaPro["Telefono"]."<br>".$DatosEmpresaPro["Ciudad"]."<br>".$DatosEmpresaPro["WEB"];
 $this->PDF->MultiCell(62, 5, $txt, 0, 'C', 1, 0, '', '', true,0, true, true, 10, 'M');
-$Documento="<strong>$NumeracionDocumento</strong><br><h5>Impreso por SOFTCONTECH, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
+$Documento="<strong>$NumeracionDocumento</strong><br><h5>Impreso por TS5, Techno Soluciones SAS <BR>NIT 900.833.180 3177740609</h5><br>";
 $this->PDF->MultiCell(62, 5, $Documento, 0, 'R', 1, 0, '', '', true,0, true ,true, 10, 'M');
 $this->PDF->writeHTML("<br>", true, false, false, false, '');
 //Close and output PDF document

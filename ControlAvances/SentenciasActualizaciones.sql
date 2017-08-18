@@ -151,10 +151,11 @@ INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `
 (23, 'Ingresos', 1, 'MnuIngresos.php', '_BLANK', 1, 'ingresos.png', 5, '2017-07-24 19:38:53', '2017-06-22 18:08:59');
 
 
-DROP TABLE IF EXISTS `menu_carpetas`;
 CREATE TABLE IF NOT EXISTS `menu_carpetas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Ruta` varchar(90) COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=4 ;
 
@@ -162,10 +163,10 @@ CREATE TABLE IF NOT EXISTS `menu_carpetas` (
 -- Volcado de datos para la tabla `menu_carpetas`
 --
 
-INSERT INTO `menu_carpetas` (`ID`, `Ruta`) VALUES
-(1, ''),
-(2, '../'),
-(3, '../VAtencion/');
+INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES
+(1, '', '2017-07-26 15:12:02', '0000-00-00 00:00:00'),
+(2, '../', '2017-07-26 15:12:02', '0000-00-00 00:00:00'),
+(3, '../VAtencion/', '2017-07-26 15:12:02', '0000-00-00 00:00:00');
 
 ALTER TABLE `facturas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 

@@ -107,15 +107,12 @@ class Barras extends ProcesoVenta{
         if(($handle = @fopen("$Puerto", "w")) === FALSE){
             die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
         }
-        if(!isset($DatosCB["CodigoBarras"])){
-            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
-            $Consulta =  $this->Query($sql);
-            $DatosCodigo=  $this->FetchArray($Consulta);  
-            $Codigo=$DatosCodigo["CodigoBarras"]; 
-        }else{
-            $Codigo=$DatosCB["CodigoBarras"]; 
-        }
         
+        $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $idProducto);
+        $Codigo= $DatosProducto["idProductosVenta"];
+        if($Codigo<1000){
+          $Codigo=str_pad($Codigo, 4, "0", STR_PAD_LEFT);
+        }
         $Cantidad=$Cantidad/3;
         $Numpages=ceil($Cantidad);
         $idEmpresaPro=$DatosCB["EmpresaPro"];

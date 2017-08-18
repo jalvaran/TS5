@@ -160,7 +160,7 @@ $css->AnchoElemento("CmbProveedores_chosen", 300);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 if($idPreventa>0){
-    $Page="Consultas/ItemsPreventa.php?myPage=$myPage&CmbPreVentaAct=";
+    $Page="Consultas/ItemsPreventa.php?myPage=$myPage&idClientes=$idClientes&CmbPreVentaAct=";
     //$Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=";
     print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivItemsPreventa`,`2`);</script>");
 }

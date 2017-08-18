@@ -306,7 +306,8 @@ $obVenta=new ProcesoVenta($idUser);
             $VectorItem["Servitorno"]=0;
             $idItem=$obVenta->CrearItemServicio($Tabla,$Nombre,$PrecioVenta,$CostoUnitario,$CostoUnitario,$CuentaPUC,$IVA,$Departamento,$VectorItem);
             $VectorPrecoti["F"]=0;
-            $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$Tabla,$VectorPrecoti);
+            
+            $obVenta->AgregaPrecotizacion($Cantidad,$idItem,$Tabla,$PrecioVenta,$VectorPrecoti);
             header("location:Cotizaciones.php?TxtIdCliente=$idClientes");
 			
 	}
