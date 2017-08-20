@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
   `ValorImpuesto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `CuentaPUC` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `NombreCuenta` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
 
@@ -100,8 +102,8 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
 -- Volcado de datos para la tabla `productos_impuestos_adicionales`
 --
 
-INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`) VALUES
-(1, 'Impoconsumo', '0', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS');
+INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
+(1, 'Impoconsumo', '0', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS', '2017-08-18 22:49:49', '0000-00-00 00:00:00');
 
 ALTER TABLE `egresos_pre` CHANGE `Abono` `Abono` DOUBLE NOT NULL;
 ALTER TABLE `cuentasxpagar_abonos` CHANGE `idCuentaXPagar` `idCuentaXPagar` TEXT NOT NULL;
@@ -172,6 +174,7 @@ ALTER TABLE `facturas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 
 ALTER TABLE `preventa` ADD `CostoUnitario` DOUBLE NOT NULL AFTER `ValorAcordado`, ADD `PrecioMayorista` DOUBLE NOT NULL AFTER `CostoUnitario`;
 ALTER TABLE `preventa` ADD `PorcentajeIVA` DOUBLE NOT NULL AFTER `Impuestos`;
+ALTER TABLE `preventa` ADD `idPorcentajeIVA` INT NOT NULL AFTER `PorcentajeIVA`;
 
 ALTER TABLE `preventa` CHANGE `ValorAcordado` `ValorAcordado` DOUBLE NOT NULL;
 ALTER TABLE `preventa` CHANGE `ValorUnitario` `ValorUnitario` DOUBLE NOT NULL;
@@ -211,3 +214,12 @@ CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+
+
+
+ALTER TABLE `cajas` ADD `CuentaPUCOtrosIngresos` BIGINT NOT NULL DEFAULT '220501' COMMENT 'Cuenta X pagar por ingresos de intereses de siste credito' AFTER `CuentaPUCIVAEgresos`;
+
+ALTER TABLE `cajas` ADD `idTerceroIntereses` BIGINT NOT NULL COMMENT 'Nit del Tercero al que se va a ir la cuent x parar de intereses' AFTER `CuentaPUCOtrosIngresos`;
+
+INSERT INTO `ts5`.`parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES ('19', 'Cuenta x pagar Intereses Siste Credito', '220505', 'PROVEEDORES NACIONALES', '2017-06-16 12:13:00', '2017-06-16 12:11:00');
+

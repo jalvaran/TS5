@@ -2125,7 +2125,7 @@ public function CalculePesoRemision($idCotizacion)
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Factura impresa por SoftConTech***");
+    fwrite($handle,"***Factura impresa por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
@@ -2345,7 +2345,7 @@ public function CalculePesoRemision($idCotizacion)
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle,"***Comprobante impreso por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
@@ -2586,7 +2586,7 @@ public function CalculePesoRemision($idCotizacion)
         $this->update("separados_abonos", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuarios='$idUser'");
         $this->update("facturas_abonos", "idCierre", $idCierre, "WHERE idCierre='' AND Usuarios_idUsuarios='$idUser'");
         $this->update("facturas_items", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuarios='$idUser'");
-         
+        $this->update("facturas_intereses_sistecredito", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuario='$idUser'"); 
          
         return ($idCierre);
         
@@ -3166,7 +3166,7 @@ public function CalculePesoRemision($idCotizacion)
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle,"***Comprobante impreso por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
@@ -4733,7 +4733,7 @@ public function VerificaPermisos($VectorPermisos) {
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
     fwrite($handle, chr(27). chr(100). chr(1));
     fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por SoftConTech***");
+    fwrite($handle,"***Comprobante impreso por TS5***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
     //fwrite($handle,"=================================");
@@ -7586,6 +7586,8 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             $AbonosCreditoOtros=$AbonosCreditoOtros+$DatosAbonos["Abono"];
         }
     }
+    $TotalInteresesSisteCredito=$this->Sume("facturas_intereses_sistecredito", "Valor", "WHERE idCierre='$idCierre'");
+        
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS CRED EFECTIVO ".str_pad("$".number_format($AbonosCreditoEfectivo),20," ",STR_PAD_LEFT));
     
@@ -7600,6 +7602,9 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"INTERESES SISTECREDITO  ".str_pad("$".number_format($TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"EGRESOS              ".str_pad("$".number_format($DatosCierre["TotalEgresos"]),20," ",STR_PAD_LEFT));
@@ -7621,10 +7626,10 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     fwrite($handle,"OTROS IMPUESTOS      ".str_pad("$".number_format($TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
+    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
+    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
     
     $this->SeparadorHorizontal($handle, "_", 37);
 
@@ -7683,6 +7688,33 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
             }
         }   
     
+    }
+    /* Registra el pago de intereses de siste credito
+     * 
+     */
+    public function RegistrePagoInteresesSisteCredito($fecha,$Hora,$Intereses,$idFactura,$idUser,$idTerceroInteres,$CuentaDestino,$CentroCosto,$Vector){
+    
+        $tab="facturas_intereses_sistecredito";
+        $NumRegistros=5;
+        $Columnas[0]="Fecha";               $Valores[0]=$fecha;
+        $Columnas[1]="Hora";                $Valores[1]=$Hora;
+        $Columnas[2]="idFactura";           $Valores[2]=$idFactura;
+        $Columnas[3]="Valor";               $Valores[3]=$Intereses;
+        $Columnas[4]="idUsuario";           $Valores[4]=$idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idInteres=$this->ObtenerMAX($tab, "ID", 1, "");
+        $Parametros=$this->DevuelveValores("parametros_contables", "ID", 19);
+        $DatosCuenta=$this->DevuelveValores("subcuentas", "PUC", $CuentaDestino);
+        $sql="SELECT ID FROM empresa_pro_sucursales WHERE Actual='1'";
+        $Consulta=$this->Query($sql);
+        $DatosSede= $this->FetchArray($Consulta);
+        //Partida Ingresa Dinero a la caja
+        $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $idFactura, "", $idTerceroInteres, $CuentaDestino, $DatosCuenta["Nombre"], "Intereses", "DB", $Intereses, "Intereses Factura SisteCredito", $CentroCosto, $DatosSede["ID"], "");
+        //Contra Partida Cuenta X Pagar a Siste Credito
+        $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $idFactura, "", $idTerceroInteres, $Parametros["CuentaPUC"], $Parametros["NombreCuenta"], "Intereses", "CR", $Intereses, "Intereses Factura SisteCredito", $CentroCosto, $DatosSede["ID"], "");
+        
+        $this->RegistrarCuentaXPagar($fecha, "NA", $fecha, "facturas_intereses_sistecredito", $idInteres, $Intereses, 0, $Intereses, 0, 0, 0, $idTerceroInteres, $DatosSede["ID"], $CentroCosto, "Intereses Factura SisteCredito", "", "");
     }
     
 //////////////////////////////Fin	
