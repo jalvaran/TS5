@@ -5318,14 +5318,14 @@ EOD;
         return($html);
     }
     //Funcion para armar el html de los abonos en el informe de administrador
-    public function HTML_Abonos_Admin($CondicionFecha2) {
+    public function HTML_Abonos_Facturas_Admin($CondicionFecha2) {
         $html="";
-        $sql="SELECT TipoAbono,idUsuario, SUM(Valor) as Subtotal, Tabla FROM vista_abonos
+        $sql="SELECT FormaPago,Usuarios_idUsuarios, SUM(Valor) as Subtotal FROM facturas_abonos
 	WHERE $CondicionFecha2
-	GROUP BY idUsuario,Tabla,TipoAbono";
+	GROUP BY Usuarios_idUsuarios,FormaPago";
 	$Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos:
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Creditos:
                 </em></strong></span><BR><BR>
                 <table border="1" cellspacing="2" align="center" >
                     <tr> 
@@ -5339,8 +5339,8 @@ EOD;
                 $TotalAbonos=$TotalAbonos+$DatosAbonos["Subtotal"];
                 $html.='<table border="1"  cellpadding="2" align="center">
                             <tr>
-                                <td>'.$DatosAbonos["idUsuario"].'</td>
-                                <td>'.$DatosAbonos["TipoAbono"].'</td>
+                                <td>'.$DatosAbonos["Usuarios_idUsuarios"].'</td>
+                                <td>'.$DatosAbonos["FormaPago"].'</td>
                                 <td>'.number_format($DatosAbonos["Subtotal"]).'</td>
 
                             </tr>
@@ -5358,46 +5358,229 @@ EOD;
         }
         return($html);
     }
-    //HTML Entregas
-    public function HTML_Entregas($CondicionFecha2) {
+    //Funcion para armar el html de los abonos de separados en el informe de administrador
+    public function HTML_Abonos_Separados_Admin($CondicionFecha2) {
         $html="";
-        
-        $sql="SELECT SUM(Total) as Total, Tabla, Tipo,idUsuario FROM vista_entregas WHERE $CondicionFecha2 GROUP BY idUsuario,Tabla,Tipo";
+        $sql="SELECT idUsuarios, SUM(Valor) as Subtotal FROM separados_abonos
+	WHERE $CondicionFecha2
+	GROUP BY idUsuarios";
+	$Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Separados:
+                </em></strong></span><BR><BR>
+                <table border="1" cellspacing="2" align="center" >
+                    <tr> 
+                      <th><h3>Usuario</h3></th>
+                      
+                      <th><h3>Total</h3></th>
+                    </tr >
+                </table>';
+            $TotalAbonos=0;
+            while($DatosAbonos=$this->obCon->FetchArray($Datos)){
+                $TotalAbonos=$TotalAbonos+$DatosAbonos["Subtotal"];
+                $html.='<table border="1"  cellpadding="2" align="center">
+                            <tr>
+                                <td>'.$DatosAbonos["idUsuarios"].'</td>
+                                
+                                <td>'.number_format($DatosAbonos["Subtotal"]).'</td>
+
+                            </tr>
+                        </table>';
+            }
+            $html.=' 
+            <table border="1" cellspacing="2" align="center">
+                <tr>
+                    <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                    
+                    <td><h3>'.number_format($TotalAbonos).'</h3></td>
+                </tr>
+            </table>
+            ';
+        }
+        return($html);
+    }
+    //Funcion para armar el html de los intereses del sistecredito informe de administrador
+    public function HTML_Intereses_SisteCredito_Admin($CondicionFecha2) {
+        $html="";
+        $sql="SELECT idUsuario, SUM(Valor) as Subtotal FROM facturas_intereses_sistecredito
+	WHERE $CondicionFecha2
+	GROUP BY idUsuario";
+	$Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Intereses SisteCredito:
+                </em></strong></span><BR><BR>
+                <table border="1" cellspacing="2" align="center" >
+                    <tr> 
+                      <th><h3>Usuario</h3></th>
+                      
+                      <th><h3>Total</h3></th>
+                    </tr >
+                </table>';
+            $TotalAbonos=0;
+            while($DatosAbonos=$this->obCon->FetchArray($Datos)){
+                $TotalAbonos=$TotalAbonos+$DatosAbonos["Subtotal"];
+                $html.='<table border="1"  cellpadding="2" align="center">
+                            <tr>
+                                <td>'.$DatosAbonos["idUsuario"].'</td>
+                                
+                                <td>'.number_format($DatosAbonos["Subtotal"]).'</td>
+
+                            </tr>
+                        </table>';
+            }
+            $html.=' 
+            <table border="1" cellspacing="2" align="center">
+                <tr>
+                    <td align="RIGHT"><h3>SUMATORIA</h3></td>
+                    
+                    <td><h3>'.number_format($TotalAbonos).'</h3></td>
+                </tr>
+            </table>
+            ';
+        }
+        return($html);
+    }
+    //HTML Entregas
+    public function HTML_Entregas($CondicionFecha1,$CondicionFecha2) {
+        $html="";
+        $Entregas[][]="";
+        $Usuarios_Entregas[]="";
+        $idUsuario="";
+        //Venta de contado
+        $sql="SELECT `idUsuarios`,SUM(`TotalItem`) AS Total, SUM(`ValorOtrosImpuestos`) AS Bolsas FROM `ori_facturas_items` fi INNER JOIN facturas f ON F.idFacturas=fi.idFactura "
+                . "WHERE f.FormaPago='Contado' AND $CondicionFecha2 GROUP BY `idUsuarios`";
         $Datos=$this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $idUsuario_Comp=0;
+            while($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                $idUsuario=$DatosEntregas["idUsuarios"];
+                $Usuarios_Entregas[$idUsuario]=$idUsuario;
+                $Entregas[$idUsuario]["Ventas_Contado"]=$DatosEntregas["Total"];
+                $Entregas[$idUsuario]["Bolsas"]=$DatosEntregas["Bolsas"];
+            }
+        }
+        //Abonos a Facturas
+        $sql="SELECT FormaPago,Usuarios_idUsuarios as idUsuarios, SUM(Valor) as Total FROM facturas_abonos
+	WHERE $CondicionFecha2
+	GROUP BY Usuarios_idUsuarios,FormaPago";
+        $Datos=$this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            while($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                $idUsuario=$DatosEntregas["idUsuarios"];
+                $Usuarios_Entregas[$idUsuario]=$idUsuario;
+                if($DatosEntregas["FormaPago"]=='SisteCredito'){
+                    $Entregas[$idUsuario]["AbonosSisteCredito"]=$DatosEntregas["Total"];
+                }else{
+                    $Entregas[$idUsuario]["AbonosCredito"]=$DatosEntregas["Total"];
+                }
+                
+                
+            }
+        }
+        
+        //Intereses SisteCredito
+        $sql="SELECT idUsuario as idUsuarios, SUM(Valor) as Total FROM facturas_intereses_sistecredito
+	WHERE $CondicionFecha2
+	GROUP BY idUsuario";
+        $Datos=$this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            while($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                $idUsuario=$DatosEntregas["idUsuarios"];
+                $Usuarios_Entregas[$idUsuario]=$idUsuario;
+                $Entregas[$idUsuario]["Intereses_SisteCredito"]=$DatosEntregas["Total"];
+            }
+        }
+        
+        //Abonos Separados
+        $sql="SELECT idUsuarios, SUM(Valor) as Total FROM separados_abonos
+	WHERE $CondicionFecha2
+	GROUP BY idUsuarios";
+	$Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            while($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                $idUsuario=$DatosEntregas["idUsuarios"];
+                $Usuarios_Entregas[$idUsuario]=$idUsuario;
+                $Entregas[$idUsuario]["AbonosSeparados"]=$DatosEntregas["Total"];
+            }
+        }
+        
+        //Egresos Ventas Rapidas
+        $sql="SELECT Usuario_idUsuario as idUsuarios, SUM(Valor) as Total FROM egresos
+	WHERE $CondicionFecha2 AND TipoEgreso='VentasRapidas' GROUP BY Usuario_idUsuario";	
+        $Datos= $this->obCon->Query($sql);
+        if($this->obCon->NumRows($Datos)){
+            while($DatosEntregas= $this->obCon->FetchArray($Datos)){
+                $idUsuario=$DatosEntregas["idUsuarios"];
+                $Usuarios_Entregas[$idUsuario]=$idUsuario;
+                $Entregas[$idUsuario]["Egresos"]=$DatosEntregas["Total"];
+            }
+        }
+        
+        if(!empty($idUsuario)){
+            
             $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Entregas:
                     </em></strong></span><BR><BR> <table border="1" CELLPADDING="5" align="center"> ';
             $Salto=0;
             $TotalEntrega=0;
             $Factor="+";
-            while ($DatosEntregas= $this->obCon->FetchArray($Datos)){
-                if($idUsuario_Comp<>$DatosEntregas["idUsuario"]){
-                    $Salto=1;
-                    if($idUsuario_Comp<>0){
-                        $html.='<tr> <td colspan="2" align="RIGHT"> <h2>Total Entrega Usuario '.$idUsuario_Comp.' : </h2></td><td><h2>'.number_format($TotalEntrega).'</h2></td></tr>';
-                   
+            foreach($Usuarios_Entregas as $idUsuario){
+                $Total=0;
+                if($idUsuario>0){
+                    $html.='<tr><td colspan="2"><strong>Usuario: '.$idUsuario.'</strong></td></tr>';
+                    if(isset($Entregas[$idUsuario]["Ventas_Contado"])){
+                        $html.='<tr><td><strong>(+) Ventas de Contado: </strong></td><td>'.number_format($Entregas[$idUsuario]["Ventas_Contado"]).'</td></tr>';
+                        $Total=$Total+$Entregas[$idUsuario]["Ventas_Contado"];
+                        
                     }
-                    $TotalEntrega=0;
+                    if(isset($Entregas[$idUsuario]["Bolsas"])){
+                        if($Entregas[$idUsuario]["Bolsas"]>0){
+                            $html.='<tr><td><strong>(+) Bolsas: </strong></td><td>'.number_format($Entregas[$idUsuario]["Bolsas"]).'</td></tr>';
+                            $Total=$Total+$Entregas[$idUsuario]["Bolsas"]; 
+                            
+                        }
+                    }
+                    if(isset($Entregas[$idUsuario]["AbonosSisteCredito"])){
+                        if($Entregas[$idUsuario]["AbonosSisteCredito"]>0){
+                            $html.='<tr><td><strong>(+) Abonos SisteCredito: </strong></td><td>'.number_format($Entregas[$idUsuario]["AbonosSisteCredito"]).'</td></tr>';
+                            $Total=$Total+$Entregas[$idUsuario]["AbonosSisteCredito"];  
+                                                   
+                        }
+                    }
+                    if(isset($Entregas[$idUsuario]["AbonosCredito"])){
+                        if($Entregas[$idUsuario]["AbonosCredito"]>0){
+                            $html.='<tr><td><strong>(+) Abonos Creditos: </strong></td><td>'.number_format($Entregas[$idUsuario]["AbonosCredito"]).'</td></tr>';
+                            $Total=$Total+$Entregas[$idUsuario]["AbonosCredito"];    
+                            
+                        }
+                    }
+                    if(isset($Entregas[$idUsuario]["Intereses_SisteCredito"])){
+                        if($Entregas[$idUsuario]["Intereses_SisteCredito"]>0){
+                            $html.='<tr><td><strong>(+) Intereses SisteCredito: </strong></td><td>'.number_format($Entregas[$idUsuario]["Intereses_SisteCredito"]).'</td></tr>';
+                            $Total=$Total+$Entregas[$idUsuario]["Intereses_SisteCredito"]; 
+                            
+                        }
+                    }
+                    if(isset($Entregas[$idUsuario]["AbonosSeparados"])){
+                        if($Entregas[$idUsuario]["AbonosSeparados"]>0){
+                            $html.='<tr><td><strong>(+) Abonos Separados: </strong></td><td>'.number_format($Entregas[$idUsuario]["AbonosSeparados"]).'</td></tr>';
+                            $Total=$Total+$Entregas[$idUsuario]["AbonosSeparados"]; 
+                            
+                        }
+                    }
+                    if(isset($Entregas[$idUsuario]["Egresos"])){
+                        if($Entregas[$idUsuario]["Egresos"]>0){
+                            $html.='<tr><td><strong>(-) Egresos: </strong></td><td>'.number_format($Entregas[$idUsuario]["Egresos"]).'</td></tr>';
+                            $Total=$Total-$Entregas[$idUsuario]["Egresos"]; 
+                            
+                        }
+                    }
+                    $html.='<tr><td align="RIGTH"><strong>Total Entrega:</strong></td><td>'.number_format($Total).'</td></tr>';
+                            
+                    $TotalEntrega=$TotalEntrega+$Total;
+                    
                 }
-                if($DatosEntregas["Tabla"]=="egresos"){
-                    $TotalEntrega=$TotalEntrega-$DatosEntregas["Total"];
-                    $Factor="(-) ";
-                }else{
-                    $TotalEntrega=$TotalEntrega+$DatosEntregas["Total"];
-                    $Factor="(+) ";
-                }
-                $idUsuario_Comp=$DatosEntregas["idUsuario"];
-                if($Salto==1){
-                    $html.='<tr> <td colspan="3"> <h2>Usuario: '.$DatosEntregas["idUsuario"].'</h2></td></tr>';
-                }
-                $html.='<tr> <td>'.$Factor.$DatosEntregas["Tabla"].'</td><td>'.$DatosEntregas["Tipo"].'</td><td>'.number_format($DatosEntregas["Total"]).'</td></tr>';
-            
-                $Salto=0;
-                
-            }
-            $html.='<tr> <td colspan="2" align="RIGHT"> <h2>Total Entrega Usuario '.$idUsuario_Comp.' : </h2></td><td><h2>'.number_format($TotalEntrega).'</h2></td></tr>';
-            $html.="</table>";
+            }   
+            $html.='<tr><td align="RIGTH"><strong>Gran Total:</strong></td><td>'.number_format($TotalEntrega).'</td></tr>';         
+            $html.='</table>';
         }
         return ($html);
     }
@@ -5432,12 +5615,16 @@ EOD;
         $this->PDF_Write($html);
         $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3);
         $this->PDF_Write("<br>".$html);
-        //$html= $this->HTML_Egresos_Admin($CondicionFecha2);
-        //$this->PDF_Write("<br>".$html);
-        //$html= $this->HTML_Abonos_Admin($CondicionFecha2);
-        //$this->PDF_Write("<br>".$html);
-        //$html= $this->HTML_Entregas($CondicionFecha2);
-        //$this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Egresos_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Abonos_Facturas_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Abonos_Separados_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Intereses_SisteCredito_Admin($CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Entregas($CondicionFecha1,$CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
         $this->PDF_Output("Informe_Ventas_");
         
     }

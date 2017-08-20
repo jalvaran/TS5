@@ -216,9 +216,6 @@ CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 
-
-ALTER TABLE `cajas` ADD `CuentaPUCOtrosIngresos` BIGINT NOT NULL DEFAULT '220501' COMMENT 'Cuenta X pagar por ingresos de intereses de siste credito' AFTER `CuentaPUCIVAEgresos`;
-
 ALTER TABLE `cajas` ADD `idTerceroIntereses` BIGINT NOT NULL COMMENT 'Nit del Tercero al que se va a ir la cuent x parar de intereses' AFTER `CuentaPUCOtrosIngresos`;
 
 INSERT INTO `ts5`.`parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES ('19', 'Cuenta x pagar Intereses Siste Credito', '220505', 'PROVEEDORES NACIONALES', '2017-06-16 12:13:00', '2017-06-16 12:11:00');
