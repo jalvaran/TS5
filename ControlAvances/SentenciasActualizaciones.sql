@@ -216,7 +216,24 @@ CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 
-ALTER TABLE `cajas` ADD `idTerceroIntereses` BIGINT NOT NULL COMMENT 'Nit del Tercero al que se va a ir la cuent x parar de intereses' AFTER `CuentaPUCOtrosIngresos`;
+ALTER TABLE `cajas` ADD `idTerceroIntereses` BIGINT NOT NULL COMMENT 'Nit del Tercero al que se va a ir la cuent x parar de intereses' AFTER `CuentaPUCIVAEgresos`;
 
-INSERT INTO `ts5`.`parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES ('19', 'Cuenta x pagar Intereses Siste Credito', '220505', 'PROVEEDORES NACIONALES', '2017-06-16 12:13:00', '2017-06-16 12:11:00');
+INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES ('19', 'Cuenta x pagar Intereses Siste Credito', '220505', 'PROVEEDORES NACIONALES', '2017-06-16 12:13:00', '2017-06-16 12:11:00');
+
+--
+-- Estructura de tabla para la tabla `facturas_intereses_sistecredito`
+--
+
+CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `idFactura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Valor` double NOT NULL,
+  `idCierre` bigint(20) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 

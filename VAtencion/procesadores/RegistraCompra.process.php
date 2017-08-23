@@ -298,4 +298,12 @@ if(isset($_REQUEST["BtnAplicaDescuento"])){
     $obCompra->ActualizaRegistro("factura_compra_items", "TotalCompra", $Total, "ID", $idFacturaItems); 
     header("location:$myPage?idCompra=$idCompra");
 }
+
+//Copiar una factura de compra
+
+if(isset($_REQUEST["BtnCopiarFactura"])){
+    $idCompra=$obCompra->normalizar($_REQUEST["BtnCopiarFactura"]);
+    $idCompraNew=$obCompra->CopiarFacturaCompra($idCompra,$idUser, "");
+    header("location:$myPage?idCompra=$idCompraNew");
+}
 ?>
