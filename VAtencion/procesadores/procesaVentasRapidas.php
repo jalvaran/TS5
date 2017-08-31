@@ -418,7 +418,7 @@
 		$Impresiones=1;
                 $VectorSeparados["Ft"]="";
                 $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$idPreventa,$CuentaDestino,$VectorSeparados);
+                $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$CuentaDestino,$VectorSeparados);
                if($DatosImpresora["Habilitado"]=="SI"){
                 $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
                }
@@ -661,6 +661,13 @@
 		
 	}
         
+        //////Si se pide facturar un items
+	if(isset($_REQUEST['BtnFacturarItemSeparado'])){
+            $idItemSeparado=$obVenta->normalizar($_REQUEST['idItemSeparado']);
+            $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+            $NumFactura=$obVenta->FacturarItemSeparado($idItemSeparado,"");
+            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
+        }
         
         ///////////////Fin
         

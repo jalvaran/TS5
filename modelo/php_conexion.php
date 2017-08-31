@@ -2625,7 +2625,7 @@ public function CalculePesoRemision($idCotizacion)
     
     ///Inserta items de un separado a una preventa
     //
-    public function CreaFacturaDesdeSeparado($idSeparado,$CuentaDestino,$idPreventa) {
+    public function CreaFacturaDesdeSeparado($idSeparado,$CuentaDestino,$Vector) {
         
         $DatosSeparado=$this->DevuelveValores("separados", "ID", $idSeparado);
         $sql="SELECT SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, SUM(SubtotalCosto) as Costo"
@@ -2734,8 +2734,9 @@ public function CalculePesoRemision($idCotizacion)
                 //////////////////////Agrego Items a la Factura desde la devolucion
                 /////
                 /////
-                
-                $CuentaDestino="1305";
+                $Parametros=$this->DevuelveValores("parametros_contables", "ID", 6);
+                       
+                $CuentaDestino=$Parametros["CuentaPUC"];
                 $Datos["idSeparado"]=$idSeparado;
                 $Datos["NumFactura"]=$idFactura;
                 $Datos["FechaFactura"]=$FechaFactura;
@@ -2746,7 +2747,7 @@ public function CalculePesoRemision($idCotizacion)
                 $this->InsertarItemsSeparadoAItemsFactura($Datos);///Relaciono los items de la factura
                 
                 $this->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
-                $CuentaDestino="1305";
+                
                 $Concepto="Cruce de anticipos por salida de separado No $idSeparado";
                 $VectorCruce["fut"]="";
                 $this->CruceAnticiposSeparados($FechaFactura,$CuentaDestino,$DatosSeparado["idCliente"],$DatosSeparadoItems["Total"],1,$Concepto,$this->idUser,$ID,$VectorCruce);
@@ -7716,7 +7717,47 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         
         $this->RegistrarCuentaXPagar($fecha, "NA", $fecha, "facturas_intereses_sistecredito", $idInteres, $Intereses, 0, $Intereses, 0, 0, 0, $idTerceroInteres, $DatosSede["ID"], $CentroCosto, "Intereses Factura SisteCredito", "", "");
     }
-    
+    //Facturar un item de un separado
+    public function FacturarItemSeparado($idItemSeparado,$Vector) {
+        $DatosItem=$this->DevuelveValores("separados_items", "ID", $idItemSeparado);
+        $idSeparadoOld=$DatosItem["idSeparado"];
+        $DatosSeparado=$this->DevuelveValores("separados", "ID", $idSeparadoOld);
+        $idSeparadoNew=$this->CrearSeparado($DatosSeparado["idCliente"],$DatosItem["TotalItem"], $Vector);
+        $this->ActualizaRegistro("separados_items", "idSeparado", $idSeparadoNew, "ID", $idItemSeparado);
+        $TotalAbonos=$DatosSeparado["Total"]-$DatosSeparado["Saldo"];
+        $TotalAbonos=$TotalAbonos-$DatosItem["TotalItem"];
+        $TotalSeparado=$DatosSeparado["Total"]-$DatosItem["TotalItem"];
+        $TotalSaldo=$TotalSeparado-$TotalAbonos;
+        $this->ActualizaRegistro("separados", "Total", $TotalSeparado, "ID", $idSeparadoOld);
+        $this->ActualizaRegistro("separados", "Saldo", $TotalSaldo, "ID", $idSeparadoOld);
+        $DatosCaja=$this->DevuelveValores("cajas", "idUsuario", $idUser);
+        $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
+        $NumFactura=$this->CreaFacturaDesdeSeparado($idSeparadoNew,$CuentaDestino,"");
+        return($NumFactura);
+    }
+    /*
+      * Crea un separado
+      */
+     
+     public function CrearSeparado($idCliente,$TotalSeparado,$Vector) {
+         ////Creo el Separado
+         
+        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
+        $tab="separados";
+        $NumRegistros=9;
+        $Columnas[0]="ID";                  $Valores[0]="";
+        $Columnas[1]="Fecha";               $Valores[1]=date("Y-m-d");
+        $Columnas[2]="Hora";                $Valores[2]=date("H:i:s");
+        $Columnas[3]="idCliente";           $Valores[3]=$idCliente;
+        $Columnas[4]="Saldo";               $Valores[4]=0;
+        $Columnas[5]="Estado";              $Valores[5]="Cerrado";
+        $Columnas[6]="Total";               $Valores[6]=$TotalSeparado;
+        $Columnas[7]="idUsuarios";          $Valores[7]= $this->idUser;
+        $Columnas[8]="idSucursal";          $Valores[8]=$DatosSucursal["ID"];
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $idSeparado=$this->ObtenerMAX($tab, "ID", 1, "");
+        return($idSeparado);
+     }
 //////////////////////////////Fin	
 }
 	
