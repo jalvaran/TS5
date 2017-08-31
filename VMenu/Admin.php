@@ -33,7 +33,7 @@ include_once("../sesiones/php_control.php");
 <!--==============================header=================================-->
 
  <?php 
-	
+	$obCon =  new ProcesoVenta($idUser);
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 
@@ -51,8 +51,35 @@ include_once("../sesiones/php_control.php");
   
     
 	<?php 
- 
+        
 	$css->IniciaMenu("Administar"); 
+        $i=0;
+        $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='1' AND Estado='1' ORDER BY Orden");
+        while($DatosPestanas=$obCon->FetchArray($Datos)){
+            $Submenus[$i]=$i;
+            if($i==0){
+            $css->MenuAlfaIni($DatosPestanas["Nombre"]);
+            }else{
+                $css->SubMenuAlfa($DatosPestanas["Nombre"],$DatosPestanas["Orden"]);
+            }
+            $i++;
+        }
+        $css->MenuAlfaFin();
+        $css->IniciaTabs();
+            foreach($Submenus as $idPestana){
+                $idPestana=$idPestana+1;
+                $css->NuevaTabs($idPestana);
+                    $Datos=$obCon->ConsultarTabla("menu_submenus", "WHERE idPestana='$idPestana' AND Estado='1' ORDER BY Orden");
+                    while ($DatosPaginas=$obCon->FetchArray($Datos)){
+                        $DatosCarpeta=$obCon->DevuelveValores("menu_carpetas", "ID", $DatosPaginas["idCarpeta"]);
+                        $css->SubTabs($DatosCarpeta["Ruta"].$DatosPaginas["Pagina"],$DatosPaginas["Target"],"../images/".$DatosPaginas["Image"],$DatosPaginas["Nombre"]);
+                        
+                    }
+                $css->FinTabs();
+            }
+        
+        $css->FinMenu();
+        /*
 	$css->MenuAlfaIni("Empresa");
 		$css->SubMenuAlfa("Usuarios",2);
 		$css->SubMenuAlfa("Impuestos",3);
@@ -108,7 +135,7 @@ include_once("../sesiones/php_control.php");
 		//	$css->SubTabs("../VAtencion/HabilitarUser.php","_blank","../images/CerrarCajas.png","Habilitar Cajas");
 		//$css->FinTabs();
 	$css->FinMenu(); 
-	
+	*/
 	?>
     
   

@@ -137,7 +137,7 @@ if($idPreventa>0){
     print("</td>");
     $css->CerrarTabla();
 }
-
+$css->DivNotificacionesJS();
 $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
 $css->CerrarDiv();//Cerramos contenedor Principal
 

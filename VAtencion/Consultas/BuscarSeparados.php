@@ -52,6 +52,7 @@ if(!empty($_REQUEST["TxtBuscarSeparado"])){
             $css->ColTabla("Nombre", 2);
             $css->ColTabla("Cantidad", 1);
             $css->ColTabla("TotalItem", 1);
+            $css->ColTabla("Opciones", 1);
             $css->CierraFilaTabla();
         
             $ConsultaItems=$obVenta->ConsultarTabla("separados_items", "WHERE idSeparado='$DatosSeparado[ID]'");
@@ -63,6 +64,13 @@ if(!empty($_REQUEST["TxtBuscarSeparado"])){
                 $css->ColTabla($DatosItemsSeparados["Nombre"], 2);
                 $css->ColTabla($DatosItemsSeparados["Cantidad"], 1);
                 $css->ColTabla($DatosItemsSeparados["TotalItem"], 1);
+                print("<td>");
+                    $idItemSeparado=$DatosItemsSeparados["ID"];
+                    $Page="Consultas/FacturarItemSeparado.php?FacturarItemSeparado=1&idItemSeparado=$idItemSeparado&CmbPreVentaAct=$idPreventa&";
+                    $css->CrearInputText("TxtIdSeparado".$idItemSeparado, "hidden", "", $idItemSeparado, "", "", "", "", "", "", 1, 1);
+                    $css->CrearBotonEvento("BtnFactItemSeparado$DatosItemsSeparados[ID]", "Facturar este Item", 1, "onClick", "EnvieObjetoConsulta(`$Page`,`TxtIdSeparado$idItemSeparado`,`DivRespuestasJS`,`1`);return false;", "naranja", "");
+            
+                print("</td>");
                 $css->CierraFilaTabla();
             }           
             
