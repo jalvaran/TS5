@@ -42,41 +42,53 @@ include_once("../sesiones/php_control.php");
   
     
 	<?php 
- 
+        $obCon =  new ProcesoVenta($idUser);
+        $sql="SELECT TipoUser,Role FROM usuarios WHERE idUsuarios='$idUser'";
+        $DatosUsuario=$obCon->Query($sql);
+        $DatosUsuario=$obCon->FetchArray($DatosUsuario);
+        $TipoUser=$DatosUsuario["TipoUser"];   
 	$css->IniciaMenu("Gestión de Ventas"); 
-	$css->MenuAlfaIni("Ventas");
-		$css->SubMenuAlfa("Cotizaciones", 2);
-                $css->SubMenuAlfa("Remisiones", 3);
-	$css->MenuAlfaFin();
-	
-	$css->IniciaTabs();
-
-		$css->NuevaTabs(1);
-                    $css->SubTabs("../VAtencion/VentasRapidasV2.php","_blank","../images/vender.png","Ventas Rapidas V2");
-                    //$css->SubTabs("../VAtencion/VentasRapidas.php","_blank","../images/vender.png","Ventas Rapidas");
-                    $css->SubTabs("../VAtencion/cajas_aperturas_cierres.php","_blank","../images/cierres_caja.jpg","Historial de Cierres");
-                    $css->SubTabs("../VAtencion/separados.php","_blank","../images/separados.png","Historial de Separados");
-                    $css->SubTabs("../VAtencion/facturas.php","_blank","../images/facturas.png","Buscar Factura");
-                    $css->SubTabs("../VAtencion/facturas_items.php","_blank","../images/buscar.png","Buscar Item");
-                    $css->SubTabs("../VAtencion/facturas_abonos.php","_blank","../images/abonar.jpg","Historial  de Abonos a Facturas");
-                    $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar codigos de barras");
-                    
-		$css->FinTabs();
-                
-                $css->NuevaTabs(2);
-                    $css->SubTabs("../VAtencion/Cotizaciones.php","_blank","../images/cotizacion.png","Cotizar");
-                    $css->SubTabs("../VAtencion/cotizacionesv5.php","_blank","../images/historial.png","Historial Cotizaciones");
-                    $css->SubTabs("../VAtencion/cot_itemscotizaciones.php","_blank","../images/historial2.png","Historial Cotizaciones Detallado");
-                    $css->SubTabs("../VAtencion/cotizaciones_anexos.php","_blank","../images/anexos2.png","Anexos de Cotizaciones");
+        $i=0;
+        $idMenu=2;
+        $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='$idMenu' AND Estado='1' ORDER BY Orden");
+        while($DatosPestanas=$obCon->FetchArray($Datos)){
+            $Submenus[$i]=$DatosPestanas["ID"];
+            if($i==0){
+            $css->MenuAlfaIni($DatosPestanas["Nombre"]);
+            }else{
+                $css->SubMenuAlfa($DatosPestanas["Nombre"],$DatosPestanas["Orden"]);
+            }
+            $i++;
+        }
+        $css->MenuAlfaFin();
+        $css->IniciaTabs();
+            $i=0;
+            foreach($Submenus as $idPestana){
+               $i++;
+                $css->NuevaTabs($i);
+                    $Datos=$obCon->ConsultarTabla("menu_submenus", "WHERE idPestana='$idPestana' AND Estado='1' ORDER BY Orden");
+                    while ($DatosPaginas=$obCon->FetchArray($Datos)){
+                        if($DatosUsuario["TipoUser"]=="administrador"){
+                        $Visible=1;
+                        }else{
+                            $Visible=0;
+                            $sql="SELECT ID FROM paginas_bloques WHERE TipoUsuario='$TipoUser' AND Pagina='$DatosPaginas[Pagina]' AND Habilitado='SI'";
+                            $DatosUser=$obCon->Query($sql);
+                            $DatosUser=$obCon->FetchArray($DatosUser);
+                            if($DatosUser["ID"]>0){
+                                $Visible=1;
+                            }
+                        }
+                        if($Visible==1){
+                            $DatosCarpeta=$obCon->DevuelveValores("menu_carpetas", "ID", $DatosPaginas["idCarpeta"]);
+                            $css->SubTabs($DatosCarpeta["Ruta"].$DatosPaginas["Pagina"],$DatosPaginas["Target"],"../images/".$DatosPaginas["Image"],$DatosPaginas["Nombre"]);
+                        }
+                    }
                 $css->FinTabs();
-                    
-                $css->NuevaTabs(3);
-                    $css->SubTabs("../VAtencion/Remisiones.php","_blank","../images/remision.png","Remisiones");
-                    $css->SubTabs("../VAtencion/Devoluciones.php","_blank","../images/devolucion2.png","Ajuste Remision");
-                $css->FinTabs();
-		
-	$css->FinMenu(); 
-	
+            }
+        
+        $css->FinMenu();
+        
 	?>
     
   
@@ -90,20 +102,6 @@ include_once("../sesiones/php_control.php");
 	
 ?>
 
-
-
-       <script>
-      $(document).ready(function(){ 
-         $(".bt-menu-trigger").toggle( 
-          function(){
-            $('.bt-menu').addClass('bt-menu-open'); 
-          }, 
-          function(){
-            $('.bt-menu').removeClass('bt-menu-open'); 
-          } 
-        ); 
-      }) 
-    </script>
 </body>
 
 </html>
