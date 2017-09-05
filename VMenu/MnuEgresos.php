@@ -42,26 +42,53 @@
   
     
 	<?php 
- 
+        $obCon =  new ProcesoVenta($idUser);
+        $sql="SELECT TipoUser,Role FROM usuarios WHERE idUsuarios='$idUser'";
+        $DatosUsuario=$obCon->Query($sql);
+        $DatosUsuario=$obCon->FetchArray($DatosUsuario);
+        $TipoUser=$DatosUsuario["TipoUser"];   
 	$css->IniciaMenu("Egresos"); 
-	$css->MenuAlfaIni("Egresos");
-		
-	$css->MenuAlfaFin();
-	
-	$css->IniciaTabs();
-
-            $css->NuevaTabs(1);
-                $css->SubTabs("../VAtencion/egresos.php","_blank","../images/historial.png","Historial Egresos");
-                $css->SubTabs("../VAtencion/notascontables.php","_blank","../images/historial3.png","Historial Notas Contables");
-                $css->SubTabs("../VAtencion/Egresos2.php","_blank","../images/compramercancias.png","Registrar Gasto o Compra");
-                $css->SubTabs("../VAtencion/compras_activas.php","_blank","../images/historial4.png","Historial de Compras Activas");
-                $css->SubTabs("../VAtencion/ComprobantesEgresoLibre.php","_blank","../images/precuenta.png","Realizar un comprobante de Egreso Libre");
-                //$css->SubTabs("../VAtencion/CompraMercancias.php","_blank","../images/compramercancias.png","Comprar Mercancias o Equipos");    //Uso Futuro
-                //$css->SubTabs("../VAtencion/CompraEquipos.php","_blank","../images/equipos.png","Comprar Equipos");//Uso Futuro
-            $css->FinTabs();
-		
-	$css->FinMenu(); 
-	
+        $i=0;
+        $idMenu=6;
+        $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='$idMenu' AND Estado='1' ORDER BY Orden");
+        while($DatosPestanas=$obCon->FetchArray($Datos)){
+            $Submenus[$i]=$DatosPestanas["ID"];
+            if($i==0){
+            $css->MenuAlfaIni($DatosPestanas["Nombre"]);
+            }else{
+                $css->SubMenuAlfa($DatosPestanas["Nombre"],$DatosPestanas["Orden"]);
+            }
+            $i++;
+        }
+        $css->MenuAlfaFin();
+        $css->IniciaTabs();
+            $i=0;
+            foreach($Submenus as $idPestana){
+               $i++;
+                $css->NuevaTabs($i);
+                    $Datos=$obCon->ConsultarTabla("menu_submenus", "WHERE idPestana='$idPestana' AND Estado='1' ORDER BY Orden");
+                    while ($DatosPaginas=$obCon->FetchArray($Datos)){
+                        if($DatosUsuario["TipoUser"]=="administrador"){
+                        $Visible=1;
+                        }else{
+                            $Visible=0;
+                            $sql="SELECT ID FROM paginas_bloques WHERE TipoUsuario='$TipoUser' AND Pagina='$DatosPaginas[Pagina]' AND Habilitado='SI'";
+                            $DatosUser=$obCon->Query($sql);
+                            $DatosUser=$obCon->FetchArray($DatosUser);
+                            if($DatosUser["ID"]>0){
+                                $Visible=1;
+                            }
+                        }
+                        if($Visible==1){
+                            $DatosCarpeta=$obCon->DevuelveValores("menu_carpetas", "ID", $DatosPaginas["idCarpeta"]);
+                            $css->SubTabs($DatosCarpeta["Ruta"].$DatosPaginas["Pagina"],$DatosPaginas["Target"],"../images/".$DatosPaginas["Image"],$DatosPaginas["Nombre"]);
+                        }
+                    }
+                $css->FinTabs();
+            }
+        
+        $css->FinMenu();
+        
 	?>
     
   

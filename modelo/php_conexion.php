@@ -2491,7 +2491,7 @@ public function CalculePesoRemision($idCotizacion)
         //Calculo las ventas a credito
         //
         $sql="SELECT SUM(Total) as Total FROM facturas "
-                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'Contado' AND FormaPago<>'SisteCredito' AND FormaPago<>'Separado'";
+                . "WHERE Usuarios_idUsuarios='$idUser' AND CerradoDiario = '' AND FormaPago<>'ANULADA' AND FormaPago<>'Contado' AND FormaPago<>'SisteCredito' AND FormaPago<>'Separado'";
         
         $Consulta=$this->Query($sql);
         $DatosSumatorias=$this->FetchArray($Consulta);

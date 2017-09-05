@@ -72,13 +72,13 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
                 $CarteraAct=1;
             }
            
-            $css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Efectivo: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 1, $DatosCredito["Saldo"], "any");
+            $css->CrearInputNumber("TxtAbonoCredito$DatosCredito[idCartera]", "number", "Efectivo: ", $DatosCredito["Saldo"], "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], "any");
             print("<br>");
             if($CarteraAct==0){
                 print("<strong>+ Opciones:</strong><image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivCredito$DatosCredito[idCartera]');><br>");
             }    
             $css->CrearDiv("DivCredito$DatosCredito[idCartera]", "", "left", 0, 1);
-                $css->CrearInputNumber("TxtInteresCredito$DatosCredito[idCartera]", "number", "Intereses: ", 0, "Interes", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], "any");
+                $css->CrearInputNumber("TxtInteresCredito$DatosCredito[idCartera]", "number", "Intereses: ", 0, "Interes", "black", "", "", 200, 30, 0, 1, 0, "", "any");
                 print("<br>");    
             
                 $css->CrearInputNumber("TxtAbonoTarjeta$DatosCredito[idCartera]", "number", "Tarjetas: ", 0, "Abonar", "black", "", "", 200, 30, 0, 1, 0, $DatosCredito["Saldo"], 1);  

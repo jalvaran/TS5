@@ -237,3 +237,117 @@ CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
+
+--
+-- Estructura de tabla para la tabla `menu_pestanas`
+--
+
+DROP TABLE IF EXISTS `menu_pestanas`;
+CREATE TABLE IF NOT EXISTS `menu_pestanas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idMenu` int(11) NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Estado` bit(1) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=16 ;
+
+--
+-- Volcado de datos para la tabla `menu_pestanas`
+--
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES
+(1, 'Empresa', 1, 1, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(2, 'Usuarios', 1, 2, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(3, 'Impuestos', 1, 3, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(4, 'Colaboradores', 1, 4, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(5, 'Descuentos', 1, 5, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(6, 'Finanzas', 1, 6, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(7, 'Informes', 1, 7, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(8, 'Hardware', 1, 8, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(9, 'Ventas', 2, 1, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(10, 'Cotizaciones', 2, 2, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(11, 'Remisiones', 2, 3, b'1', '2017-08-30 17:13:45', '0000-00-00 00:00:00'),
+(12, 'Facturacion', 3, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
+(13, 'Compras', 5, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
+(14, 'Egresos', 6, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
+(15, 'Cuentas X Pagar', 11, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00');
+
+
+--
+-- Estructura de tabla para la tabla `menu_submenus`
+--
+
+DROP TABLE IF EXISTS `menu_submenus`;
+CREATE TABLE IF NOT EXISTS `menu_submenus` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `idPestana` int(11) NOT NULL,
+  `idCarpeta` int(11) NOT NULL,
+  `Pagina` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Target` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `Estado` bit(1) NOT NULL,
+  `Image` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=48 ;
+
+--
+-- Volcado de datos para la tabla `menu_submenus`
+--
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES
+(1, 'Crear/Editar Empresa', 1, 3, 'empresapro.php', '_SELF', b'1', 'empresa.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(2, 'Crear/Editar Sucursal', 1, 3, 'empresa_pro_sucursales.php', '_SELF', b'1', 'sucursal.png', 2, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(3, 'Resoluciones de Facturacion', 1, 3, 'empresapro_resoluciones_facturacion.php', '_SELF', b'1', 'resolucion.png', 3, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(4, 'Formatos de Calidad', 1, 3, 'formatos_calidad.php', '_SELF', b'1', 'notacredito.png', 4, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(5, 'Centros de Costos', 1, 3, 'centrocosto.php', '_SELF', b'1', 'centrocostos.png', 5, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(6, 'Crear/Editar Cajas', 1, 3, 'cajas.php', '_SELF', b'1', 'cajas.png', 6, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(7, 'Configurar Tikete de Promocion', 1, 3, 'config_tiketes_promocion.php', '_SELF', b'1', 'tiketes.png', 7, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(8, 'Costos operativos', 1, 3, 'costos.php', '_SELF', b'1', 'costos.png', 8, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(9, 'Crear/Editar un Usuario', 2, 3, 'usuarios.php', '_SELF', b'1', 'usuarios.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(10, 'Crear/Editar un Tipo de Usuario', 2, 3, 'usuarios_tipo.php', '_SELF', b'1', 'usuariostipo.png', 2, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(11, 'Asignar usuarios a cajas', 2, 3, 'HabilitarUser.php', '_SELF', b'1', 'autorizarcajas.png', 2, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(12, 'Crear/Editar un impuesto o una retencion', 3, 3, 'impret.php', '_SELF', b'1', 'impuestos.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(13, 'Colaboradores', 4, 3, 'colaboradores.php', '_SELF', b'1', 'colaboradores.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(14, 'Fechas Descuentos', 5, 3, 'fechas_descuentos.php', '_SELF', b'1', 'descuentos.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(15, 'Libro Diario', 6, 3, 'librodiario.php', '_SELF', b'1', 'librodiario.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(16, 'Historial de Facturacion', 6, 3, 'facturas.php', '_SELF', b'1', 'facturas.png', 2, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(17, 'Cuentas', 6, 3, 'subcuentas.php', '_SELF', b'1', 'cuentas.png', 3, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(18, 'Cuentas Frecuentes', 6, 3, 'cuentasfrecuentes.php', '_SELF', b'1', 'cuentasfrecuentes.png', 4, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(19, 'Informe Administrador', 7, 3, 'InformeVentasAdmin.php', '_SELF', b'1', 'informes2.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(20, 'Hardware', 8, 3, 'config_puertos.php', '_SELF', b'1', 'configuracion.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(21, 'Ventas Rapidas', 9, 3, 'VentasRapidasV2.php', '_SELF', b'1', 'vender.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(22, 'Historial de Cierres', 9, 3, 'cajas_aperturas_cierres.php', '_SELF', b'1', 'cierres_caja.jpg', 2, '2017-08-31 20:08:55', '0000-00-00 00:00:00'),
+(23, 'Historial de Separados', 9, 3, 'separados.php', '_SELF', b'1', 'separados.png', 3, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(24, 'Historial de Abonos a Facturas', 9, 3, 'facturas_abonos.php', '_SELF', b'1', 'abonar.jpg', 4, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(25, 'Agregar Codigo de Barras', 9, 3, 'prod_codbarras.php', '_SELF', b'1', 'codigobarras.png', 5, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(26, 'Cotizar', 10, 3, 'Cotizaciones.php', '_SELF', b'1', 'cotizacion.png', 1, '2017-08-30 17:13:46', '0000-00-00 00:00:00'),
+(27, 'Historial de Cotizaciones', 10, 3, 'cotizacionesv5.php', '_SELF', b'1', 'historial.png', 2, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(28, 'Historial Cotizaciones Detallado', 10, 3, 'cot_itemscotizaciones.php', '_SELF', b'1', 'historial2.png', 3, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(29, 'Anexos a Cotizaciones', 10, 3, 'cotizaciones_anexos.php', '_SELF', b'1', 'anexos2.png', 4, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(30, 'Remisiones', 11, 3, 'Remisiones.php', '_SELF', b'1', 'remision.png', 1, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(31, 'Ajuste a Remision', 11, 3, 'Devoluciones.php', '_SELF', b'1', 'devolucion2.png', 2, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(32, 'Historial de Facturas', 12, 3, 'facturas.php', '_SELF', b'1', 'factura.png', 1, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(33, 'Historial de Facturas Detallado', 12, 3, 'facturas_items.php', '_SELF', b'1', 'detalle.png', 2, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(34, 'Historial de Notas Credito', 12, 3, 'notascredito.php', '_SELF', b'1', 'historial3.png', 3, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(35, 'Facturar desde Cotizacion', 12, 3, 'FactCoti.php', '_SELF', b'1', 'cotizacion.png', 4, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(36, 'Historial', 13, 3, 'factura_compra.php', '_SELF', b'1', 'historial2.png', 2, '2017-08-31 20:44:31', '0000-00-00 00:00:00'),
+(37, 'Historial de Productos Comprados', 13, 3, 'vista_compras_productos.php', '_SELF', b'1', 'historial.png', 3, '2017-08-31 20:44:37', '0000-00-00 00:00:00'),
+(38, 'Historial de Productos Devueltos', 13, 3, 'vista_compras_productos_devoluciones.php', '_SELF', b'1', 'devoluciones.png', 5, '2017-08-31 20:44:44', '0000-00-00 00:00:00'),
+(39, 'Historial de Compras Servicios', 13, 3, 'vista_compras_servicios.php', '_SELF', b'1', 'servicios_compras.png', 4, '2017-08-31 20:13:18', '0000-00-00 00:00:00'),
+(40, 'Registrar una Compra', 13, 3, 'RegistraCompra.php', '_SELF', b'1', 'compras.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(41, 'Historial Egresos', 14, 3, 'egresos.php', '_SELF', b'1', 'historial.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(42, 'Historial Notas Contables', 14, 3, 'notascontables.php', '_SELF', b'1', 'historial3.png', 2, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(43, 'Registrar Gasto o Compra', 14, 3, 'Egresos2.php', '_SELF', b'1', 'compramercancias.png', 3, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(44, 'Historial de Compras Activas', 14, 3, 'compras_activas.php', '_SELF', b'1', 'historial4.png', 4, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(45, 'Realizar un comprobante de Egreso Libre', 14, 3, 'ComprobantesEgresoLibre.php', '_SELF', b'1', 'precuenta.png', 5, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(46, 'Historial de Cuentas x Pagar', 15, 3, 'cuentasxpagar_all.php', '_SELF', b'1', 'historial.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(47, 'Pagar', 15, 3, 'cuentasxpagar.php', '_SELF', b'1', 'cuentasxpagar.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00');
+
+
+
