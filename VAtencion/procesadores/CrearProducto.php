@@ -21,6 +21,9 @@ if(!empty($_REQUEST["BtnCrearPV"])){
     $PrecioMayor=$obVenta->normalizar($_REQUEST["TxtPrecioMayorista"]);
     $Referencia="";
     $CodigoBarras="";
+    //print($PrecioMayor." sub5= ".$Sub5);
+    //print_r($_REQUEST["Sub5"]);
+   
     if(isset($_REQUEST["TxtReferencia"])){
         $Referencia=$obVenta->normalizar($_REQUEST["TxtReferencia"]);
         $Referencia=$obVenta->QuitarAcentos($Referencia);
@@ -29,8 +32,11 @@ if(!empty($_REQUEST["BtnCrearPV"])){
         $CodigoBarras=$obVenta->normalizar($_REQUEST["TxtCodigoBarras"]);
         $Referencia=$obVenta->QuitarAcentos($Referencia);
     }
+     
     $idProducto=$obVenta->CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,"");
     header("location:productosventa.php?idProducto=$idProducto");
-        
+    
+    
+    
 }
 ?>

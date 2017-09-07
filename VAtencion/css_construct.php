@@ -1424,6 +1424,25 @@ function Footer(){
             print('<a href="#" class="close" data-dismiss="alert" aria-label="close">X</a>');
 		
 	}
+        
+        //Multi Select
+        
+        public function CrearMultiSelectTable($Nombre,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Evento,$FuncionJS,$idSel,$Requerido) {
+            $obVenta=new ProcesoVenta(1);
+            
+            print('<select multiple class="form-control" id="'.$Nombre.'" name="'.$Nombre.'">');
+                        
+            
+            $consulta=$obVenta->ConsultarTabla($tabla, $Condicion);
+            while ($DatosConsulta=$obVenta->FetchAssoc($consulta)){
+                $Sel=0;
+                if($DatosConsulta[$idItemValue]==$idSel){
+                  $Sel=1;  
+                }
+                $this->CrearOptionSelect($DatosConsulta[$idItemValue], "$DatosConsulta[$OptionDisplay1] $DatosConsulta[$OptionDisplay2]", $Sel);
+            }
+            $this->CerrarSelect();
+        }
         //////////////////////////////////FIN
 }
 	

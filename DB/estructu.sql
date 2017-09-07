@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-08-2017 a las 07:19:08
+-- Tiempo de generación: 05-09-2017 a las 08:21:34
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -214,6 +214,7 @@ CREATE TABLE IF NOT EXISTS `cajas` (
   `CuentaPUCCheques` bigint(20) NOT NULL,
   `CuentaPUCOtros` bigint(20) NOT NULL,
   `CuentaPUCIVAEgresos` bigint(20) NOT NULL,
+  `idTerceroIntereses` bigint(20) NOT NULL COMMENT 'Nit del Tercero al que se va a ir la cuent x parar de intereses',
   `CentroCostos` int(11) NOT NULL,
   `idResolucionDian` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1034,7 +1035,7 @@ CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `idCliente` int(11) NOT NULL DEFAULT '0',
   `NumCotizacion` int(16) NOT NULL,
-  `Descripcion` varchar(300) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Descripcion` text CHARACTER SET utf8 COLLATE utf8_spanish_ci,
   `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `TablaOrigen` varchar(45) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `ValorUnitario` double NOT NULL,
@@ -1512,7 +1513,7 @@ CREATE TABLE IF NOT EXISTS `facturas_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -1577,16 +1578,35 @@ CREATE TABLE IF NOT EXISTS `facturas_formapago` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `facturas_intereses_sistecredito`
+--
+
+CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `idFactura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Valor` double NOT NULL,
+  `idCierre` bigint(20) NOT NULL,
+  `idUsuario` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `facturas_items`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_items` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `FechaFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `FechaFactura` date NOT NULL,
   `idFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `TablaItems` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
   `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
-  `Nombre` varchar(500) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
+  `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Departamento` int(11) NOT NULL,
   `SubGrupo1` int(11) NOT NULL,
   `SubGrupo2` int(11) NOT NULL,
@@ -1775,6 +1795,24 @@ CREATE TABLE IF NOT EXISTS `factura_compra` (
   `idUsuario` bigint(20) NOT NULL,
   `idCentroCostos` int(11) NOT NULL,
   `idSucursal` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_compra_anulaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
+  `idCompra` bigint(20) NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -2243,6 +2281,44 @@ CREATE TABLE IF NOT EXISTS `menu_carpetas` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `menu_pestanas`
+--
+
+CREATE TABLE IF NOT EXISTS `menu_pestanas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idMenu` int(11) NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Estado` bit(1) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `menu_submenus`
+--
+
+CREATE TABLE IF NOT EXISTS `menu_submenus` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `idPestana` int(11) NOT NULL,
+  `idCarpeta` int(11) NOT NULL,
+  `Pagina` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Target` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `Estado` bit(1) NOT NULL,
+  `Image` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
+  `Orden` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `notascontables`
 --
 
@@ -2586,7 +2662,7 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   `Referencia` varchar(45) NOT NULL,
   `ValorUnitario` double NOT NULL,
   `SubTotal` double NOT NULL,
-  `Descripcion` varchar(500) NOT NULL,
+  `Descripcion` text NOT NULL,
   `IVA` double NOT NULL,
   `Descuento` double NOT NULL,
   `ValorDescuento` double NOT NULL,

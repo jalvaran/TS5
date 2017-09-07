@@ -96,8 +96,12 @@ print("<body>");
                     $css->CrearSelectTable("Sub4", "prod_sub4", "$Consulta", "idSub4", "NombreSub4", "idSub3", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub4,0);
                 }
             print("</td>");
+            
             print("<td style='text-align:center'>");
-                $css->CrearSelectTable("Sub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub5,0);
+                if($idDepartamento>=1){
+                    
+                    $css->CrearSelectTable("Sub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub5,0);
+                }
             print("</td>");
         $css->CierraFilaTabla();
         $css->CerrarTabla();
