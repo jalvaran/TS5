@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `menu_pestanas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=35 ;
 
 --
 -- Volcado de datos para la tabla `menu_pestanas`
@@ -273,8 +273,26 @@ INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updat
 (12, 'Facturacion', 3, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
 (13, 'Compras', 5, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
 (14, 'Egresos', 6, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
-(15, 'Cuentas X Pagar', 11, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00');
-
+(15, 'Cuentas X Pagar', 11, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
+(16, 'Financieros', 17, 1, b'1', '2017-08-31 20:34:06', '0000-00-00 00:00:00'),
+(17, 'Auxiliares', 17, 2, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(18, 'Reporte de Ventas', 17, 3, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(19, 'Fiscales', 17, 4, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(20, 'Compras', 17, 5, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(21, 'Auditoria', 17, 6, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(22, 'Inventarios', 12, 1, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(23, 'Clasificacion de Inventarios', 12, 2, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(24, 'Bodegas', 12, 3, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(25, 'Movimientos', 12, 4, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(26, 'General', 12, 5, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(27, 'Sistemas', 12, 6, b'1', '2017-09-07 12:41:28', '0000-00-00 00:00:00'),
+(28, 'Conteo Fisico', 12, 7, b'1', '2017-09-07 16:01:31', '0000-00-00 00:00:00'),
+(29, 'Requerimientos', 18, 1, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00'),
+(30, 'Restaurante', 16, 1, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00'),
+(31, 'Configuracion', 16, 2, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00'),
+(32, 'Titulos', 15, 1, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00'),
+(33, 'Traslados', 24, 1, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00'),
+(34, 'Seguimiento', 24, 2, b'1', '2017-09-07 16:50:39', '0000-00-00 00:00:00');
 
 --
 -- Estructura de tabla para la tabla `menu_submenus`
@@ -347,7 +365,65 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 (44, 'Historial de Compras Activas', 14, 3, 'compras_activas.php', '_SELF', b'1', 'historial4.png', 4, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
 (45, 'Realizar un comprobante de Egreso Libre', 14, 3, 'ComprobantesEgresoLibre.php', '_SELF', b'1', 'precuenta.png', 5, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
 (46, 'Historial de Cuentas x Pagar', 15, 3, 'cuentasxpagar_all.php', '_SELF', b'1', 'historial.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
-(47, 'Pagar', 15, 3, 'cuentasxpagar.php', '_SELF', b'1', 'cuentasxpagar.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00');
+(47, 'Pagar', 15, 3, 'cuentasxpagar.php', '_SELF', b'1', 'cuentasxpagar.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(48, 'Balance General y Estado de Resultados', 16, 3, 'BalanceComprobacion.php', '_SELF', b'1', 'resultados.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(49, 'Cuentas Auxiliares', 17, 3, 'Auxiliares.php', '_SELF', b'1', 'auxiliar.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(50, 'Informe de Ventas', 18, 3, 'InformeVentas.php', '_SELF', b'1', 'infventas.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
+(51, 'Reporte de IVA', 19, 3, 'ReporteFiscalIVA.php', '_SELF', b'1', 'fiscales.png', 1, '2017-09-07 12:59:38', '0000-00-00 00:00:00'),
+(52, 'Informe de Compras', 20, 3, 'InformeCompras.php', '_SELF', b'1', 'otrosinformes.png', 1, '2017-09-07 12:49:20', '0000-00-00 00:00:00'),
+(53, 'Auditoria de Documentos', 21, 3, 'AuditoriaDocumentos.php', '_SELF', b'1', 'auditoria.png', 1, '2017-09-07 12:49:20', '0000-00-00 00:00:00'),
+(54, 'Historial de Ediciones', 21, 3, 'registra_ediciones.php', '_SELF', b'1', 'registros.png', 2, '2017-09-07 12:49:20', '0000-00-00 00:00:00'),
+(55, 'Productos para la venta', 22, 3, 'productosventa.php', '_SELF', b'1', 'productosventa.png', 1, '2017-09-07 12:49:20', '0000-00-00 00:00:00'),
+(56, 'Productos para alquilar', 22, 3, 'productosalquiler.php', '_SELF', b'1', 'alquiler.png', 2, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(57, 'Servicios para la venta', 22, 3, 'servicios.php', '_SELF', b'1', 'servicios.png', 3, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(58, 'Ordenes de Compra', 22, 3, 'ordenesdecompra.php', '_SELF', b'1', 'ordendecompra.png', 4, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(59, 'Kardex', 22, 3, 'vista_kardex.php', '_SELF', b'1', 'kardex.png', 5, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(60, 'Historial de Compras', 22, 3, 'relacioncompras.php', '_SELF', b'1', 'compras.png', 6, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(61, 'Agregar o Editar CB', 22, 3, 'prod_codbarras.php', '_SELF', b'1', 'codigobarras.png', 7, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(62, 'Traslados', 22, 1, 'MnuTraslados.php', '_SELF', b'1', 'traslados.png', 8, '2017-09-07 16:08:07', '0000-00-00 00:00:00'),
+(63, 'Crear Departamentos', 23, 3, 'prod_departamentos.php', '_SELF', b'1', 'departamentos.png', 1, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(64, 'Subgrupo 1', 23, 3, 'prod_sub1.php', '_SELF', b'1', 'uno.png', 2, '2017-09-07 16:03:21', '0000-00-00 00:00:00'),
+(65, 'Subgrupo 2', 23, 3, 'prod_sub2.php', '_SELF', b'1', 'dos.png', 3, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(66, 'Subgrupo 3', 23, 3, 'prod_sub3.php', '_SELF', b'1', 'tres.png', 4, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(67, 'Subgrupo 4', 23, 3, 'prod_sub4.php', '_SELF', b'1', 'cuatro.jpg', 5, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(68, 'Subgrupo 5', 23, 3, 'prod_sub5.php', '_SELF', b'1', 'cinco.png', 6, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(69, 'Ver/Crear/Editar Bodega', 24, 3, 'bodega.php', '_SELF', b'1', 'bodega.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(70, 'Ver Bodegas Externas', 24, 3, 'bodegas_externas.php', '_SELF', b'1', 'externas.png', 2, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(71, 'Ver el historial de las bajas y altas', 25, 3, 'prod_bajas_altas.php', '_SELF', b'1', 'historial.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(72, 'Dar de baja o alta a un producto', 25, 3, 'DarBajaAlta.php', '_SELF', b'1', 'baja.png', 2, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(73, 'Actualizaciones Generales', 26, 3, 'ActualizacionesGeneralesInventarios.php', '_SELF', b'1', 'actualizar.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(74, 'Consolidado Sistemas', 27, 3, 'vista_sistemas.php', '_SELF', b'1', 'sistema.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(75, 'Crear', 27, 3, 'CreaSistema.php', '_SELF', b'1', 'crearsistema.png', 2, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(76, 'Agregar Productos desde CSV', 28, 3, 'AgregarItemsXCB.php', '_SELF', b'1', 'csv.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(77, 'Preparar Conteo Fisico', 28, 3, 'inventario_preparacion.php', '_SELF', b'1', 'terminado.png', 2, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(78, 'Tabla Temporal', 28, 3, 'inventarios_temporal.php', '_SELF', b'1', 'pedidos.png', 3, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(79, 'Realizar Conteo Fisico', 28, 3, 'ConteoFisico.php', '_SELF', b'1', 'conteo_inventario.png', 4, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(80, 'Iniciar', 28, 3, 'ConteoFisicoPDA.php', '_SELF', b'1', 'PDA.png', 5, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(81, 'Diferencias en los inventarios', 28, 3, 'inventarios_diferencias.php', '_SELF', b'1', 'inventarios_diferencias.png', 6, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(82, 'Proyectos', 29, 3, 'requerimientos_proyectos.php', '_SELF', b'1', 'proyectos.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(83, 'Atencion Mesas', 30, 3, 'AtencionMeseros.php', '_SELF', b'1', 'mesero.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(84, 'Atencion Domicilios', 30, 3, 'AtencionDomicilios.php', '_SELF', b'1', 'atencion_domicilios.png', 2, '2017-09-07 16:56:36', '0000-00-00 00:00:00'),
+(85, 'Pedidos', 30, 3, 'Restaurante_Admin.php', '_SELF', b'1', 'pedidos.png', 3, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(86, 'Crear o Editar Mesas', 31, 3, 'mesas.php', '_SELF', b'1', 'mesas.png', 3, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(87, 'Promociones', 32, 3, 'titulos_promociones.php', '_SELF', b'1', 'promociones.png', 1, '2017-09-07 16:10:12', '0000-00-00 00:00:00'),
+(88, 'Inventario de Titulos', 32, 3, 'listados_titulos.php', '_SELF', b'1', 'inventarios_titulos.png', 2, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(89, 'Historial de Actas de Entrega', 32, 3, 'titulos_asignaciones.php', '_SELF', b'1', 'acta.png', 3, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(90, 'Venta de Titulos', 32, 3, 'VentasTitulos.php', '_SELF', b'1', 'ventastitulos.png', 4, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(91, 'Historial de Venta de Titulos', 32, 3, 'titulos_ventas.php', '_SELF', b'1', 'historial.png', 5, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(92, 'Historial de Abonos a Ventas', 32, 3, 'titulos_abonos.php', '_SELF', b'1', 'abonos.png', 6, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(93, 'Historial de Titulos Devueltos', 32, 3, 'titulos_devoluciones.php', '_SELF', b'1', 'historial2.png', 7, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(94, 'Cuentas X Cobrar', 32, 3, 'titulos_cuentasxcobrar.php', '_SELF', b'1', 'cuentasxcobrar.png', 8, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(95, 'Comisiones', 32, 3, 'titulos_comisiones.php', '_SELF', b'1', 'comisiones.png', 9, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(96, 'Historial de Traslados', 32, 3, 'titulos_traslados.php', '_SELF', b'1', 'traslado.png', 10, '2017-09-07 17:07:39', '0000-00-00 00:00:00'),
+(97, 'Historial de Anulacion de Abonos', 32, 3, 'comprobantes_ingreso_anulaciones.php', '_SELF', b'1', 'historial3.png', 11, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(98, 'Informes', 32, 3, 'InformeTitulos.php', '_SELF', b'1', 'informes.png', 12, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(99, 'Historial', 33, 3, 'traslados_mercancia.php', '_SELF', b'1', 'historial.png', 1, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(100, 'Nuevo', 33, 3, 'CreaTraslado.php', '_SELF', b'1', 'nuevo.png', 2, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(101, 'Subir Traslados', 33, 3, 'SubirTraslado.php', '_SELF', b'1', 'upload.png', 3, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(102, 'Descargar Traslados', 33, 3, 'DescargarTraslados.php', '_SELF', b'1', 'descargar.png', 4, '2017-09-07 17:12:07', '0000-00-00 00:00:00'),
+(103, 'Seguimiento', 34, 3, '_.php', '_SELF', b'1', 'departamentos.png', 1, '2017-09-07 17:12:07', '0000-00-00 00:00:00');
 
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES ('24', 'INFORME FISCAL DE IVA', '001', 'F-GF-005', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');
+
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('24', 'Traslados', '1', 'MnuTraslados.php', '_BLANK', '0', 'traslados.png', '1', '2017-07-24 14:38:53', '2017-06-22 18:08:59');
 

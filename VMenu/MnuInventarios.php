@@ -39,74 +39,53 @@ include_once("css_construct.php");
   
     
 	<?php 
- 
+        $obCon =  new ProcesoVenta($idUser);
+        $sql="SELECT TipoUser,Role FROM usuarios WHERE idUsuarios='$idUser'";
+        $DatosUsuario=$obCon->Query($sql);
+        $DatosUsuario=$obCon->FetchArray($DatosUsuario);
+        $TipoUser=$DatosUsuario["TipoUser"];   
 	$css->IniciaMenu("Inventarios"); 
-            $css->MenuAlfaIni("Inventarios");
-                
-                $css->SubMenuAlfa("Clasificacion de Inventarios",2);
-                $css->SubMenuAlfa("Bodegas",3);
-                $css->SubMenuAlfa("Movimientos",4);
-                $css->SubMenuAlfa("General",5);
-                $css->SubMenuAlfa("Sistemas",6);
-                $css->SubMenuAlfa("Conteo Físico",7);
-	$css->MenuAlfaFin();
-            
-	$css->IniciaTabs();
-
-            $css->NuevaTabs(1);
-                $css->SubTabs("../VAtencion/productosventa.php","_self","../images/productosventa.png","Productos para la venta");
-                $css->SubTabs("../VAtencion/productosalquiler.php","_self","../images/alquiler.png","Productos para alquilar");
-                $css->SubTabs("../VAtencion/servicios.php","_self","../images/servicios.png","Servicios para la venta");
-                $css->SubTabs("../VAtencion/ordenesdecompra.php","_self","../images/ordendecompra.png","Ordenes de Compra");
-                $css->SubTabs("../VAtencion/vista_kardex.php","_self","../images/kardex.png","Kardex");
-                $css->SubTabs("../VAtencion/relacioncompras.php","_self","../images/compras.png","Historial de Compras");
-                $css->SubTabs("../VAtencion/prod_codbarras.php","_blank","../images/codigobarras.png","Agregar o Editar CB");
-                $css->SubTabs("MnuTraslados.php","_self","../images/traslados.png","Traslados");
-                
-            $css->FinTabs();
-            $css->NuevaTabs(2);    
-                $css->SubTabs("../VAtencion/prod_departamentos.php","_blank","../images/departamentos.png","Crear Departamentos");
-                $css->SubTabs("../VAtencion/prod_sub1.php","_blank","../images/uno.png","Subgrupo 1");
-                $css->SubTabs("../VAtencion/prod_sub2.php","_blank","../images/dos.png","Subgrupo 2");
-                $css->SubTabs("../VAtencion/prod_sub3.php","_blank","../images/tres.png","Subgrupo 3");
-                $css->SubTabs("../VAtencion/prod_sub4.php","_blank","../images/cuatro.jpg","Subgrupo 4");
-                $css->SubTabs("../VAtencion/prod_sub5.php","_blank","../images/cinco.png","Subgrupo 5");
-                
-            $css->FinTabs();
-            
-            $css->NuevaTabs(3);    
-                $css->SubTabs("../VAtencion/bodega.php","_blank","../images/bodega.png","Ver/Crear/Editar Bodega");  
-                $css->SubTabs("../VAtencion/bodegas_externas.php","_blank","../images/externas.png","Ver Bodegas Externas");  
-            $css->FinTabs();
-            
-            $css->NuevaTabs(4);
-                $css->SubTabs("../VAtencion/prod_bajas_altas.php","_blank","../images/historial.png","Ver el historial de las bajas y altas");  
-                $css->SubTabs("../VAtencion/DarBajaAlta.php","_blank","../images/baja.png","Dar de baja o alta a un producto"); 
-                
-            $css->FinTabs();
-            $css->NuevaTabs(5);
-                $css->SubTabs("../VAtencion/ActualizacionesGeneralesInventarios.php","_blank","../images/actualizar.png","Actualizaciones Generales");  
-              
-            $css->FinTabs();
-            $css->NuevaTabs(6);
-                $css->SubTabs("../VAtencion/vista_sistemas.php","_blank","../images/sistema.png","Consolidado Sistemas");
-                //$css->SubTabs("../VAtencion/sistemas.php","_blank","../images/sistema.png","Editar Sistemas");
-                $css->SubTabs("../VAtencion/CreaSistema.php","_blank","../images/crearsistema.png","Crear");
-            $css->FinTabs();
-            
-            $css->NuevaTabs(7);
-                $css->SubTabs("../VAtencion/AgregarItemsXCB.php","_blank","../images/csv.png","Agregar Productos desde CSV");
-                $css->SubTabs("../VAtencion/inventario_preparacion.php","_blank","../images/terminado.png","Preparar Conteo Fisico");
-                $css->SubTabs("../VAtencion/inventarios_temporal.php","_blank","../images/pedidos.png","Tabla Temporal");
-                $css->SubTabs("../VAtencion/ConteoFisico.php","_blank","../images/conteo_inventario.png","Realizar Conteo Fisico");
-                $css->SubTabs("../VAtencion/ConteoFisicoPDA.php","_blank","../images/PDA.png","Iniciar");
-                $css->SubTabs("../VAtencion/inventarios_diferencias.php","_blank","../images/inventarios_diferencias.png","Diferencias en los inventarios");
-            $css->FinTabs();
-            
-            
-		
-	$css->FinMenu(); 
-	
+        $i=0;
+        $idMenu=12;
+        $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='$idMenu' AND Estado='1' ORDER BY Orden");
+        while($DatosPestanas=$obCon->FetchArray($Datos)){
+            $Submenus[$i]=$DatosPestanas["ID"];
+            if($i==0){
+            $css->MenuAlfaIni($DatosPestanas["Nombre"]);
+            }else{
+                $css->SubMenuAlfa($DatosPestanas["Nombre"],$DatosPestanas["Orden"]);
+            }
+            $i++;
+        }
+        $css->MenuAlfaFin();
+        $css->IniciaTabs();
+            $i=0;
+            foreach($Submenus as $idPestana){
+               $i++;
+                $css->NuevaTabs($i);
+                    $Datos=$obCon->ConsultarTabla("menu_submenus", "WHERE idPestana='$idPestana' AND Estado='1' ORDER BY Orden");
+                    while ($DatosPaginas=$obCon->FetchArray($Datos)){
+                        if($DatosUsuario["TipoUser"]=="administrador"){
+                        $Visible=1;
+                        }else{
+                            $Visible=0;
+                            $sql="SELECT ID FROM paginas_bloques WHERE TipoUsuario='$TipoUser' AND Pagina='$DatosPaginas[Pagina]' AND Habilitado='SI'";
+                            $DatosUser=$obCon->Query($sql);
+                            $DatosUser=$obCon->FetchArray($DatosUser);
+                            if($DatosUser["ID"]>0){
+                                $Visible=1;
+                            }
+                        }
+                        if($Visible==1){
+                            $DatosCarpeta=$obCon->DevuelveValores("menu_carpetas", "ID", $DatosPaginas["idCarpeta"]);
+                            $css->SubTabs($DatosCarpeta["Ruta"].$DatosPaginas["Pagina"],$DatosPaginas["Target"],"../images/".$DatosPaginas["Image"],$DatosPaginas["Nombre"]);
+                        }
+                    }
+                $css->FinTabs();
+            }
+        
+        $css->FinMenu();
+       
 	?>
     
   

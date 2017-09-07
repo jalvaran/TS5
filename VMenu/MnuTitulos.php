@@ -51,32 +51,54 @@ include_once("../sesiones/php_control.php");
   
     
 	<?php 
- 
+        $obCon =  new ProcesoVenta($idUser);
+        $sql="SELECT TipoUser,Role FROM usuarios WHERE idUsuarios='$idUser'";
+        $DatosUsuario=$obCon->Query($sql);
+        $DatosUsuario=$obCon->FetchArray($DatosUsuario);
+        $TipoUser=$DatosUsuario["TipoUser"];   
 	$css->IniciaMenu("Titulos, Rifas y concursos"); 
-	$css->MenuAlfaIni("Titulos");            
-               
-	$css->MenuAlfaFin();
-	
-	$css->IniciaTabs();
-	
-		$css->NuevaTabs(1);
-			
-                    $css->SubTabs("../VAtencion/titulos_promociones.php","_self","../images/promociones.png","Promociones");
-                    $css->SubTabs("../VAtencion/listados_titulos.php","_self","../images/inventarios_titulos.png","Inventario de Titulos");
-                    $css->SubTabs("../VAtencion/titulos_asignaciones.php","_self","../images/acta.png","Historial de Actas de Entrega");
-                    $css->SubTabs("../VAtencion/VentasTitulos.php","_blank","../images/ventastitulos.png","Venta de Titulos");
-                    $css->SubTabs("../VAtencion/titulos_ventas.php","_self","../images/historial.png","Historial de Venta de Titulos");
-                    $css->SubTabs("../VAtencion/titulos_abonos.php","_self","../images/abonos.png","Historial de Abonos a Ventas");
-                    $css->SubTabs("../VAtencion/titulos_devoluciones.php","_self","../images/historial2.png","Historial de Titulos Devueltos");
-                    $css->SubTabs("../VAtencion/titulos_cuentasxcobrar.php","_self","../images/cuentasxcobrar.png","Cuentas X Cobrar");
-                    $css->SubTabs("../VAtencion/titulos_comisiones.php","_self","../images/comisiones.png","Comisiones");
-                    $css->SubTabs("../VAtencion/titulos_traslados.php","_self","../images/traslado.png","Historial de Traslados");
-                    $css->SubTabs("../VAtencion/comprobantes_ingreso_anulaciones.php","_self","../images/historial3.png","Historial de Anulacion de Abonos");
-                    $css->SubTabs("../VAtencion/InformeTitulos.php","_self","../images/informes.png","Informes");
+        $i=0;
+        $idMenu=15;
+        $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='$idMenu' AND Estado='1' ORDER BY Orden");
+        while($DatosPestanas=$obCon->FetchArray($Datos)){
+            $Submenus[$i]=$DatosPestanas["ID"];
+            if($i==0){
+            $css->MenuAlfaIni($DatosPestanas["Nombre"]);
+            }else{
+                $css->SubMenuAlfa($DatosPestanas["Nombre"],$DatosPestanas["Orden"]);
+            }
+            $i++;
+        }
+        $css->MenuAlfaFin();
+        $css->IniciaTabs();
+            $i=0;
+            foreach($Submenus as $idPestana){
+               $i++;
+                $css->NuevaTabs($i);
+                    $Datos=$obCon->ConsultarTabla("menu_submenus", "WHERE idPestana='$idPestana' AND Estado='1' ORDER BY Orden");
+                    while ($DatosPaginas=$obCon->FetchArray($Datos)){
+                        if($DatosUsuario["TipoUser"]=="administrador"){
+                        $Visible=1;
+                        }else{
+                            $Visible=0;
+                            $sql="SELECT ID FROM paginas_bloques WHERE TipoUsuario='$TipoUser' AND Pagina='$DatosPaginas[Pagina]' AND Habilitado='SI'";
+                            $DatosUser=$obCon->Query($sql);
+                            $DatosUser=$obCon->FetchArray($DatosUser);
+                            if($DatosUser["ID"]>0){
+                                $Visible=1;
+                            }
+                        }
+                        if($Visible==1){
+                            $DatosCarpeta=$obCon->DevuelveValores("menu_carpetas", "ID", $DatosPaginas["idCarpeta"]);
+                            $css->SubTabs($DatosCarpeta["Ruta"].$DatosPaginas["Pagina"],$DatosPaginas["Target"],"../images/".$DatosPaginas["Image"],$DatosPaginas["Nombre"]);
+                        }
+                    }
                 $css->FinTabs();
-			
-	$css->FinMenu(); 
-	
+            }
+        
+        $css->FinMenu();
+        
+        
 	?>
     
   
