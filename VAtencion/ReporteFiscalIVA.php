@@ -1,6 +1,7 @@
 <?php 
 $myPage="ReporteFiscalIVA.php";
 include_once("../sesiones/php_control.php");
+
 include_once("css_construct.php");
 $obVenta = new ProcesoVenta($idUser);
 
@@ -11,8 +12,7 @@ $css =  new CssIni("Reporte Fiscal IVA");
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/ReporteFiscalIVA.process.php");
-    
+        
     $css->CabeceraIni("Reporte Fiscal IVA"); //Inicia la cabecera de la pagina
     
     $css->CabeceraFin(); 
@@ -28,7 +28,7 @@ print("<body>");
     $css->CrearDiv("Secundario", "container", "center",1,1);
    										
     $css->CrearNotificacionAzul("Generar Reporte Fiscal de IVA", 16);
-    $css->CrearForm2("FrmFiscalIVA", $myPage, "post", "_self");
+    $css->CrearForm2("FrmFiscalIVA", "PDF_Informes_Fiscales.php", "post", "_blank");
         $css->CrearTabla();
             $css->FilaTabla(16);
                 $css->ColTabla("<strong>Fecha Inicio</strong>", 1);
@@ -46,7 +46,7 @@ print("<body>");
                 print("</td>");
                 print("<td>");
                     $css->CrearSelect("CmbEmpresa", "");
-                        $css->CrearOptionSelect("ALL", "Todo", 0);
+                        
                         $consulta=$obVenta->ConsultarTabla("empresapro", "");
                         while($DatosEmpresa=$obVenta->FetchArray($consulta)){
                             $css->CrearOptionSelect($DatosEmpresa["idEmpresaPro"], $DatosEmpresa["RazonSocial"]." ".$DatosEmpresa["NIT"], 0);

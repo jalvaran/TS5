@@ -349,5 +349,5 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 (46, 'Historial de Cuentas x Pagar', 15, 3, 'cuentasxpagar_all.php', '_SELF', b'1', 'historial.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00'),
 (47, 'Pagar', 15, 3, 'cuentasxpagar.php', '_SELF', b'1', 'cuentasxpagar.png', 1, '2017-08-31 20:43:49', '0000-00-00 00:00:00');
 
-
+INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES ('24', 'INFORME FISCAL DE IVA', '001', 'F-GF-005', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');
 
