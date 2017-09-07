@@ -1430,7 +1430,7 @@ function Footer(){
         public function CrearMultiSelectTable($Nombre,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Evento,$FuncionJS,$idSel,$Requerido) {
             $obVenta=new ProcesoVenta(1);
             
-            print('<select multiple class="form-control" id="'.$Nombre.'" name="'.$Nombre.'">');
+            print('<select multiple class="form-control" id="'.$Nombre.'" name="'.$Nombre.'[]">');
                         
             
             $consulta=$obVenta->ConsultarTabla($tabla, $Condicion);
@@ -1439,10 +1439,13 @@ function Footer(){
                 if($DatosConsulta[$idItemValue]==$idSel){
                   $Sel=1;  
                 }
+                //print("<option>$DatosConsulta[ID]</option>");
                 $this->CrearOptionSelect($DatosConsulta[$idItemValue], "$DatosConsulta[$OptionDisplay1] $DatosConsulta[$OptionDisplay2]", $Sel);
             }
             $this->CerrarSelect();
         }
+        
+       
         //////////////////////////////////FIN
 }
 	

@@ -8,7 +8,7 @@ $Sub1=0;
 $Sub2=0;
 $Sub3=0;
 $Sub4=0;
-$Sub5=0;
+
 if(isset($_REQUEST["idDepartamento"])){
     $idDepartamento=$obVenta->normalizar($_REQUEST["idDepartamento"]);
 }
@@ -24,9 +24,7 @@ if(isset($_REQUEST["Sub3"])){
 if(isset($_REQUEST["Sub4"])){
     $Sub4=$obVenta->normalizar($_REQUEST["Sub4"]);
 }
-if(isset($_REQUEST["Sub5"])){
-    $Sub5=$obVenta->normalizar($_REQUEST["Sub5"]);
-}
+
 
 print("<html>");
 print("<head>");
@@ -90,19 +88,14 @@ print("<body>");
                     $css->CrearSelectTable("Sub3", "prod_sub3", "$Consulta", "idSub3", "NombreSub3", "idSub2", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub3,0);
                 }
             print("</td>");
-            print("<td style='text-align:center'>");
+            print("<td colspan='2' style='text-align:center'>");
                 if($Sub3>0){
                     $Consulta=" WHERE idSub3='$Sub3'";
                     $css->CrearSelectTable("Sub4", "prod_sub4", "$Consulta", "idSub4", "NombreSub4", "idSub3", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub4,0);
                 }
             print("</td>");
             
-            print("<td style='text-align:center'>");
-                if($idDepartamento>=1){
-                    
-                    $css->CrearSelectTable("Sub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "onChange", "EnviaForm(`FrmSelDepartamentos`)", $Sub5,0);
-                }
-            print("</td>");
+            
         $css->CierraFilaTabla();
         $css->CerrarTabla();
     $css->CerrarForm();
@@ -114,7 +107,7 @@ print("<body>");
     $css->CrearInputText("Sub2", "hidden","" , $Sub2, "", "", "", "", "", "", "", "");
     $css->CrearInputText("Sub3", "hidden","" , $Sub3, "", "", "", "", "", "", "", "");
     $css->CrearInputText("Sub4", "hidden","" , $Sub4, "", "", "", "", "", "", "", "");
-    $css->CrearInputText("Sub5", "hidden","" , $Sub5, "", "", "", "", "", "", "", "");
+    //$css->CrearInputText("Sub5", "hidden","" , $Sub5, "", "", "", "", "", "", "", "");
     //$css->CrearInputText($nombre, $type, $label, $value, $placeh, $color, $TxtEvento, $TxtFuncion, $Ancho, $Alto, $ReadOnly, $Required)
     $css->CrearTabla();
         $css->FilaTabla(16);
@@ -151,7 +144,8 @@ print("<body>");
         $css->ColTabla("<strong>IVA</strong>", 1);
         $css->ColTabla("<strong>CuentaPUC</strong>", 1);
         $css->ColTabla("<strong>Codigo Barras</strong>", 2);
-        $css->ColTabla("<strong>Guardar</strong>", 2);
+        $css->ColTabla("<strong>Unidad o Tallas</strong>", 1);
+        $css->ColTabla("<strong>Guardar</strong>", 1);
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
         print("<td style='text-align:center'>");
@@ -192,7 +186,13 @@ print("<body>");
         print("<td colspan='2' style='text-align:center'>");
             $css->CrearInputText("TxtCodigoBarras", "text", "", "", "Codigo de Barras", "", "", "", 200, 30, 0, 0);
             print("</td>");
-        print("<td colspan='2' style='text-align:center'>");
+        print("<td style='text-align:center'>");
+            $css->ImageOcultarMostrar("ImgMostraTalla", "", "DivTallas", 30, 30, "");
+            $css->CrearDiv("DivTallas", "", "center", 0, 1);
+                $css->CrearMultiSelectTable("Sub5", "prod_sub5", "", "idSub5", "NombreSub5", "", "", "", "",0);
+            $css->CerrarDiv();
+        print("</td>");
+        print("<td style='text-align:center'>");
         $css->CrearBotonConfirmado("BtnCrearPV", "Crear Producto");
         //$css->CrearBotonImagen("", "BtnGuardar", "_self", "../images/save.png", "onclick='Confirmar()'", 50, 100, "", "", "");
         print("</td>");
