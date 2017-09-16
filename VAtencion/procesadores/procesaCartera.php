@@ -19,7 +19,7 @@
             $CentroCosto=$DatosFactura["CentroCosto"];
             $Concepto="ABONO A FACTURA No $DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
             $VectorIngreso["fut"]="";
-            $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
+            $idComprobanteAbono=$obVenta->RegistreAbonoCarteraCliente($fecha,$Hora,$CuentaDestino,$idFactura,$Valor,"",$CentroCosto,$Concepto,$idUser,$VectorIngreso);
             $DatosComprobanteAbono=$obVenta->DevuelveValores("facturas_abonos", "ID", $idComprobanteAbono);
             $idComprobanteIngreso=$DatosComprobanteAbono["idComprobanteIngreso"];
             header("location:$myPage?TxtidIngreso=$idComprobanteIngreso");

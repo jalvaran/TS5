@@ -5447,7 +5447,7 @@ EOD;
         $Usuarios_Entregas[]="";
         $idUsuario="";
         //Venta de contado
-        $sql="SELECT `idUsuarios`,SUM(`TotalItem`) AS Total, SUM(`ValorOtrosImpuestos`) AS Bolsas FROM `ori_facturas_items` fi INNER JOIN facturas f ON F.idFacturas=fi.idFactura "
+        $sql="SELECT `idUsuarios`,SUM(`TotalItem`) AS Total, SUM(`ValorOtrosImpuestos`) AS Bolsas FROM `ori_facturas_items` fi INNER JOIN facturas f ON f.idFacturas=fi.idFactura "
                 . "WHERE f.FormaPago='Contado' AND $CondicionFecha2 GROUP BY `idUsuarios`";
         $Datos=$this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){

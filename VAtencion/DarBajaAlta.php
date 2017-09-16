@@ -56,7 +56,7 @@ print("<body>");
         $css->CrearTabla();
         $css->CrearNotificacionRoja("Datos Para Realizar la Baja o Alta de un producto", 16);
         print("<td style='text-align:center'>");
-        $css->CrearInputText("TxtFecha", "text", "Fecha de La Baja: <br>", date("Y-m-d"), "Fecha", "black", "", "", 100, 30, 0, 1);
+        $css->CrearInputText("TxtFecha", "text", "Fecha: <br>", date("Y-m-d"), "Fecha", "black", "", "", 100, 30, 0, 1);
         print("<br>");
         $VectorSel["Nombre"]="CmbTipoMovimiento";
         $VectorSel["Evento"]="";
@@ -80,7 +80,7 @@ print("<body>");
                while($DatosProducto=$obVenta->FetchArray($Consulta)){
                    
                    
-                   $css->CrearOptionSelect($DatosProducto["Referencia"], "$DatosProducto[Referencia] $DatosProducto[Nombre] $DatosProducto[idProductosVenta]" , $Sel);
+                   $css->CrearOptionSelect($DatosProducto["idProductosVenta"], "$DatosProducto[Referencia] $DatosProducto[Nombre] $DatosProducto[idProductosVenta]" , $Sel);
                }
             $css->CerrarSelect();
             print("<br>");  
@@ -90,7 +90,7 @@ print("<body>");
         print("<br>");
         
         
-            $css->CrearInputNumber("TxtCantidad", "number", "Cantidad:<br>", 1, "Cantidad", "black", "", "", 100, 30, 0, 1, 1, "", 1);
+            $css->CrearInputNumber("TxtCantidad", "number", "Cantidad:<br>", 1, "Cantidad", "black", "", "", 100, 30, 0, 1, 1, "", "any");
             print("<br>"); 
             $css->CrearBotonConfirmado("BtnBaja","Ejecutar");	
           

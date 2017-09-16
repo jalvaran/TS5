@@ -4292,7 +4292,7 @@ public function VerificaPermisos($VectorPermisos) {
       * Muestra la estructura de una tabla
       */
      public function DarDeBajaAltaProducto($TipoMovimiento,$fecha, $Observaciones,$RefProducto,$Cantidad,$VectorBA){
-         $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $RefProducto);
+         $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $RefProducto);
          $DatosSucursal=$this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
          $CostoTotal=$DatosProducto["CostoUnitario"]*$Cantidad;
          $tab="prod_bajas_altas";

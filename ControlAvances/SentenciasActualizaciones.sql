@@ -427,3 +427,10 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 
 INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('24', 'Traslados', '1', 'MnuTraslados.php', '_BLANK', '0', 'traslados.png', '1', '2017-07-24 14:38:53', '2017-06-22 18:08:59');
 
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (NULL, 'Marketing', '1', 'MnuPublicidad.php', '_BLANK', '1', 'publicidad.png', '17', '2017-07-24 14:38:53', '2017-06-22 18:08:59');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (NULL, 'Publicidad', '25', '1', b'1', '2017-09-07 11:50:39', '0000-00-00 00:00:00');
+
+ALTER TABLE `facturas_items` ADD INDEX(`idFactura`);
+ALTER TABLE `ori_facturas_items` ADD INDEX(`idFactura`);
+ALTER TABLE `factura_compra_items` ADD INDEX(`idFacturaCompra`);
