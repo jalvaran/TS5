@@ -434,3 +434,38 @@ INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updat
 ALTER TABLE `facturas_items` ADD INDEX(`idFactura`);
 ALTER TABLE `ori_facturas_items` ADD INDEX(`idFactura`);
 ALTER TABLE `factura_compra_items` ADD INDEX(`idFacturaCompra`);
+
+--
+-- Estructura de tabla para la tabla `publicidad_encabezado_cartel`
+--
+
+CREATE TABLE IF NOT EXISTS `publicidad_encabezado_cartel` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Titulo` text COLLATE latin1_spanish_ci NOT NULL,
+  `ColorTitulo` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `Desde` int(11) NOT NULL,
+  `Hasta` int(11) NOT NULL,
+  `Mes` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
+  `Anio` int(11) NOT NULL,
+  `ColorRazonSocial` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `ColorPrecios` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `ColorBordes` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `publicidad_paginas`
+--
+
+CREATE TABLE IF NOT EXISTS `publicidad_paginas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `idProducto` bigint(20) NOT NULL,
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=100 ;

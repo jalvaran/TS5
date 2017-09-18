@@ -3334,7 +3334,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
     }
         
     //Inicia la creacion de un pdf
-    public function PDF_Ini($TituloFormato,$FontSize,$VectorPDF) {
+    public function PDF_Ini($TituloFormato,$FontSize,$VectorPDF,$Margenes=1) {
         
         require_once('../tcpdf/examples/config/tcpdf_config_alt.php');
         $tcpdf_include_dirs = array(realpath('../tcpdf/tcpdf.php'), '/usr/share/php/tcpdf/tcpdf.php', '/usr/share/tcpdf/tcpdf.php', '/usr/share/php-tcpdf/tcpdf.php', '/var/www/tcpdf/tcpdf.php', '/var/www/html/tcpdf/tcpdf.php', '/usr/local/apache2/htdocs/tcpdf/tcpdf.php');
@@ -3360,9 +3360,12 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
         // set default monospaced font
         $this->PDF->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
         // set margins
-        $this->PDF->SetMargins(10, 10, PDF_MARGIN_RIGHT);
-        $this->PDF->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $this->PDF->SetFooterMargin(10);
+        if($Margenes==1){
+            $this->PDF->SetMargins(10, 10, PDF_MARGIN_RIGHT);
+            $this->PDF->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $this->PDF->SetFooterMargin(10);
+        }
+        
         // set auto page breaks
         $this->PDF->SetAutoPageBreak(TRUE, 10);
         // set image scale factor

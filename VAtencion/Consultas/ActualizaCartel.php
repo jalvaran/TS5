@@ -6,7 +6,7 @@ $obVenta = new ProcesoVenta(1);
 $idEspacio=$obVenta->normalizar($_REQUEST["idDiv"]);
 $idEspacio= str_replace("Esp", "", $idEspacio);
 $idProducto=$obVenta->normalizar($_REQUEST["idProducto"]);
-
+$obVenta->BorraReg("publicidad_paginas", "idProducto", $idProducto);
 $sql="REPLACE INTO publicidad_paginas (ID,idProducto) VALUES ($idEspacio,$idProducto)";
 $obVenta->Query($sql);
 
