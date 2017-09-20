@@ -4514,6 +4514,7 @@ EOD;
             $PorcentajeIVA=$TotalesFactura["PorcentajeIVA"];
             $TiposIVA[$PorcentajeIVA]=$TotalesFactura["PorcentajeIVA"];
             $IVA[$PorcentajeIVA]["Valor"]=$TotalesFactura["IVA"];
+            $Bases[$PorcentajeIVA]["Valor"]=$TotalesFactura["Subtotal"];
         }
         
 
@@ -4534,11 +4535,15 @@ EOD;
             $tbl.='<table cellspacing="1" cellpadding="2" border="1">'
                 . ' <tr>';
             foreach($TiposIVA as $PorcentajeIVA){
-                if($PorcentajeIVA<>'0%'){
+                if($PorcentajeIVA<>'0%' and $PorcentajeIVA<>'Exc'){
 
                    $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>IVA '.$PorcentajeIVA.': $ '.number_format($IVA[$PorcentajeIVA]["Valor"]).'</strong></td>';
 
-                }  
+                }
+                if($PorcentajeIVA=='0%' or $PorcentajeIVA=='Exc'){
+                    $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Base '.$PorcentajeIVA.': $ '.number_format($Bases[$PorcentajeIVA]["Valor"]).'</strong></td>';
+
+                }
             }
         
         $tbl.='</tr></table>';

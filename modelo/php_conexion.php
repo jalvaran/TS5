@@ -3595,11 +3595,11 @@ public function CalculePesoRemision($idCotizacion)
         while($DatosItems=  $this->FetchArray($consulta)){
             $fecha=$DatosItems["Fecha"];
             $Costo=$Costo+($DatosItems["CostoUnitario"]*$DatosItems["Cantidad"]);
-            $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
-            if(empty($DatosProducto["Referencia"])){
+            $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosItems["CodigoBarras"]);
+            if(empty($DatosProducto["idProductosVenta"])){
                 $VectorPTI["FUT"]="";
                 $idProducto=$this->CrearProductoFromItemTraslado($DatosItems["ID"],$VectorPTI);
-                
+                $idProducto=$DatosItems["CodigoBarras"];
             }else{
             
                 $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
