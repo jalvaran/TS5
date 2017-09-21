@@ -68,7 +68,7 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab";
+            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
             $css->CrearLink($target, "_self", "Agregar");
             print("</td>");
             $css->ColTabla($DatosProducto["idProductosVenta"], 1);
@@ -90,7 +90,7 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab";
+            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
             $css->CrearLink($target, "_self", "Agregar");
             print("</td>");
             $css->ColTabla($DatosProducto["idProductosVenta"], 1);

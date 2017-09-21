@@ -9,6 +9,8 @@ include_once("../css_construct.php");
 
 $css =  new CssIni("id");
 $obVenta = new ProcesoVenta($idUser);
+$DatosCajas=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+
 //$key=$obVenta->normalizar($_REQUEST['key']);
 $myPage=$obVenta->normalizar($_REQUEST['myPage']);
 $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
@@ -113,7 +115,7 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
     $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",150,30,0,0);
     $css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
     $css->CrearInputText("TxtTotalH","hidden","",$Total,"","","","",150,30,0,0);
-    $css->CrearInputText("TxtCuentaDestino","hidden","",11051001,"","","","",150,30,0,0);
+    $css->CrearInputText("TxtCuentaDestino","hidden","",$DatosCajas["CuentaPUCEfectivo"],"","","","",150,30,0,0);
     $css->CrearInputText("TxtGranTotalH","hidden","",$GranTotal,"","","","",150,30,0,0);
     $css->CrearTabla();
     $css->FilaTabla(16);

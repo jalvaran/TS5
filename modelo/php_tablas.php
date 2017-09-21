@@ -2677,11 +2677,11 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 $idTercero=$DatosLibro["Tercero_Identificacion"];
                 $Cuenta=$DatosLibro["CuentaPUC"];
                 $FechaMovimiento=$DatosLibro["Fecha"];
-                $sql="SELECT SUM(Neto) as Neto FROM librodiario WHERE Tercero_Identificacion='$idTercero' AND Fecha<'$FechaMovimiento' "
+                $sql="SELECT SUM(Neto) as Neto,SUM(Debito) Debito,SUM(Credito) Credito FROM librodiario WHERE Tercero_Identificacion='$idTercero' AND Fecha<'$FechaMovimiento' "
                         . " AND CuentaPUC='$Cuenta'";
                 $Datos=$this->obCon->Query($sql);
                 $Resultado=$this->obCon->FetchArray($Datos);
-                $Saldo=$Resultado["Neto"];
+                $Saldo=$Resultado["Neto"]; //Neto
             }
                         
             $TotalDebitos=$TotalDebitos+$DatosLibro["Debito"];
@@ -4573,7 +4573,7 @@ EOD;
     
     //Crear un PDF de una Factura
     public function PDF_Factura($idFactura,$TipoFactura,$Vector) {
-        $VistaFactura=1;
+        $VistaFactura=2;
         $DatosFactura=$this->obCon->DevuelveValores("facturas", "idFacturas", $idFactura);
         $CodigoFactura="$DatosFactura[Prefijo] - $DatosFactura[NumeroFactura]";
         $Documento="FACTURA DE VENTA No. $CodigoFactura<BR>$TipoFactura";
@@ -5592,6 +5592,54 @@ EOD;
         }
         return ($html);
     }
+    //HTML para movimiento librodiario en informe de ventas
+    public function HTML_LibroDiario_Informe_Admin($CondicionFecha2,$CentroCostos,$EmpresaPro,$Vector) {
+        $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:10px;"><strong><em>Movimiento Contable:
+                    </em></strong></span><BR><BR> <table border="1" CELLPADDING="5" align="center" > ';
+        
+        $sql="SELECT `Fecha`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`Num_Documento_Externo`,"
+                . "`Tercero_Identificacion`,`Tercero_Razon_Social`,`Concepto`,`CuentaPUC`,"
+                . "`NombreCuenta`,`Debito`,`Credito` "
+                . "FROM `librodiario` WHERE $CondicionFecha2 ORDER BY `Tercero_Identificacion` ";
+        $consulta=$this->obCon->Query($sql);
+        if($this->obCon->NumRows($consulta)){
+            $html.='<tr><td><strong>FECHA</strong></td>';
+            $html.='<td><strong>DOC</strong></td>';
+            $html.='<td><strong>NUM</strong></td>';
+            $html.='<td><strong>NUM_EXT</strong></td>';
+            $html.='<td><strong>NIT</strong></td>';
+            $html.='<td><strong>RAZON SOCIAL</strong></td>';
+            $html.='<td><strong>CONCEP</strong></td>';
+            $html.='<td><strong>CUENTA</strong></td>';
+            $html.='<td><strong>NOMBRE</strong></td>';
+            $html.='<td><strong>DEBITO</strong></td>';
+            $html.='<td><strong>CREDITO</strong></td>';
+            $html.='</tr>';
+            while ($DatosLibro=$this->obCon->FetchArray($consulta)){
+                $html.='<tr><td>'.$DatosLibro["Fecha"].'</td>';
+                $html.='<td>'.$DatosLibro["Tipo_Documento_Intero"].'</td>';
+                if($DatosLibro["Tipo_Documento_Intero"]=='FACTURA'){
+                    $DatosFactura= $this->obCon->DevuelveValores("facturas", "idFacturas", $DatosLibro["Num_Documento_Interno"]);
+                    $NumDoc=$DatosFactura["NumeroFactura"];
+                    
+                }else{
+                    $NumDoc=$DatosLibro["Num_Documento_Interno"];
+                }
+                $html.='<td>'.$NumDoc.'</td>';
+                $html.='<td>'.$DatosLibro["Num_Documento_Externo"].'</td>';
+                $html.='<td>'.$DatosLibro["Tercero_Identificacion"].'</td>';
+                $html.='<td>'.$DatosLibro["Tercero_Razon_Social"].'</td>';
+                $html.='<td>'.$DatosLibro["Concepto"].'</td>';
+                $html.='<td>'.$DatosLibro["CuentaPUC"].'</td>';
+                $html.='<td>'.$DatosLibro["NombreCuenta"].'</td>';
+                $html.='<td>'.number_format($DatosLibro["Debito"]).'</td>';
+                $html.='<td>'.number_format($DatosLibro["Credito"]).'</td>';
+                $html.='</tr>';
+            }
+        }
+        $html.='</table>';
+        return($html);
+    }
     ///Clases para hacer el informe de administrador
     public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
         $Condicion=" ori_facturas_items WHERE ";
@@ -5633,6 +5681,13 @@ EOD;
         $this->PDF_Write("<br>".$html);
         $html= $this->HTML_Entregas($CondicionFecha1,$CondicionFecha2);
         $this->PDF_Write("<br>".$html);
+        /*Solo Juan Car
+        $this->PDF_Add();
+        //$this->PDF->SetFont('helvetica', '', 6);
+        $html= $this->HTML_LibroDiario_Informe_Admin($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
+        $this->PDF_Write($html);
+         * 
+         */
         $this->PDF_Output("Informe_Ventas_");
         
     }

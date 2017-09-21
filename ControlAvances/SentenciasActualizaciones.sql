@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
-ALTER TABLE `porcentajes_iva` ADD `Factor` VARCHAR(10) NOT NULL DEFAULT 'M' AFTER `Valor`;
 
 DROP TABLE IF EXISTS `porcentajes_iva`;
 CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
@@ -545,3 +544,9 @@ CREATE TABLE IF NOT EXISTS `publicidad_paginas` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=100 ;
+
+ALTER TABLE `productosventa` ADD `CostoUnitarioPromedio` DOUBLE NOT NULL AFTER `CostoTotal`;
+ALTER TABLE `productosventa` CHANGE `PrecioMayorista` `PrecioMayorista` DOUBLE NOT NULL;
+ALTER TABLE `productosventa` CHANGE `CostoUnitario` `CostoUnitario` DOUBLE NULL DEFAULT NULL;
+ALTER TABLE `productosventa` CHANGE `CostoTotal` `CostoTotal` DOUBLE NULL DEFAULT NULL;
+ALTER TABLE `productosventa` ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;

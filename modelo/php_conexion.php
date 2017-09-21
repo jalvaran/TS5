@@ -422,7 +422,79 @@ public function ImprimeFactura($NumFactura,$COMPrinter,$PrintCuenta,$ruta){
 		
 	}	
 	
+
+        
+////////////////////////////////////////////////////////////////////
+//////////////////////Funcion agregar preventa
+///////////////////////////////////////////////////////////////////
+
+
+public function AgregaPreventaServicios($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem)
+  {
+        $fecha=$this->normalizar($fecha);
+        $Cantidad=$this->normalizar($Cantidad);
+        $idVentaActiva=$this->normalizar($idVentaActiva);
+        $idProducto=$this->normalizar($idProducto);
+        $TablaItem=$this->normalizar($TablaItem);
+        
+	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
+        if($DatosProductoGeneral["PrecioVenta"]<=0){
+            return("E1");
+        }
+        $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
+        $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
+        $TipoItem=$DatosDepartamento["TipoItem"];
+        $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' ORDER BY idPrecotizacion DESC");
+        $DatosProduto=$this->FetchArray($consulta);
+	if($DatosProduto["Cantidad"]>0){
+            if($DatosProductoGeneral["IVA"]=="E"){
+                $DatosProductoGeneral["IVA"]=0;
+            }
+            $Cantidad=$DatosProduto["Cantidad"]+$Cantidad;
+            $Subtotal=$DatosProduto["ValorAcordado"]*$Cantidad;
+            $Impuestos=$DatosProductoGeneral["IVA"]*$Subtotal;
+            $TotalVenta=$Subtotal+$Impuestos;
+            $sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE idPrecotizacion='$DatosProduto[idPrecotizacion]'";
+            //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
+            $this->Query($sql);
+        }else{
+            $reg=$this->Query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
+            $reg=$this->FetchArray($reg);
+            $Porcentaje=$reg["Porcentaje"];
+            $Departamento=$reg["Departamento"];
+            $FechaDescuento=$reg["Fecha"];
+            if($DatosProductoGeneral["IVA"]=="E"){
+                $DatosProductoGeneral["IVA"]=0;
+            }
+            $impuesto=$DatosProductoGeneral["IVA"];
+            $impuesto=$impuesto+1;
+            if($DatosTablaItem["IVAIncluido"]=="SI"){
+                $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
+                
+            }else{
+                $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
+                
+            }
+            if($Porcentaje>0 and $FechaDescuento==$fecha){
+
+                    $Porcentaje=(100-$Porcentaje)/100;
+                    $ValorUnitario=$ValorUnitario*$Porcentaje;
+
+            }
+
+            $Subtotal=$ValorUnitario*$Cantidad;
+            $impuesto=($impuesto-1)*$Subtotal;
+            $Total=$Subtotal+$impuesto;
+
+
+            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`)
+                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem');";
+
+            $this->Query($sql) or die('no se pudo guardar el item en preventa: ' . mysql_error());	
 	
+        }
+	}	        
+        
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion agregar preventa
 ///////////////////////////////////////////////////////////////////
@@ -500,8 +572,8 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             
             
             $Total=$Subtotal+$impuesto;
-
-
+            
+            
             $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`, `CostoUnitario`, `PrecioMayorista`, `PorcentajeIVA`)
                     VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem', '$CostoUnitario', '$PrecioMayor', '$PorcentajeIVA');";
 
