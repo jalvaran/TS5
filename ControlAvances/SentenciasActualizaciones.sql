@@ -550,3 +550,13 @@ ALTER TABLE `productosventa` CHANGE `PrecioMayorista` `PrecioMayorista` DOUBLE N
 ALTER TABLE `productosventa` CHANGE `CostoUnitario` `CostoUnitario` DOUBLE NULL DEFAULT NULL;
 ALTER TABLE `productosventa` CHANGE `CostoTotal` `CostoTotal` DOUBLE NULL DEFAULT NULL;
 ALTER TABLE `productosventa` ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
+UPDATE `productosventa` SET `CostoUnitarioPromedio`=`CostoUnitario`,`CostoTotalPromedio`=`CostoTotal` ;
+
+
+DROP VIEW IF EXISTS `vista_resumen_facturacion`;
+CREATE VIEW vista_resumen_facturacion AS
+SELECT ID,`FechaFactura`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,SUM(`TotalItem`) as TotalVenta,SUM(`SubtotalCosto`) as Costo
+  FROM `facturas_items` GROUP BY `Referencia`;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('105', 'Resumen de facturacion', '12', '3', 'vista_resumen_facturacion.php', '_SELF', b'1', 'resumen.png', '5', '2017-09-07 12:12:07', '0000-00-00 00:00:00');
+ALTER TABLE `facturas_items` ADD INDEX(`Referencia`);

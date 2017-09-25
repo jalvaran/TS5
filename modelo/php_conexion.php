@@ -516,16 +516,17 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         if(isset($DatosProductoGeneral["PrecioMayorista"])){
             $PrecioMayor=$DatosProductoGeneral["PrecioMayorista"];
         }
-        //if($DatosProductoGeneral["PrecioVenta"]<=0){
-          //  return("E1");
-        //}
+        $DatosImpuestosAdicionales=$this->DevuelveValores("productos_impuestos_adicionales", "idProducto", $idProducto);
+	
+        if($DatosProductoGeneral["PrecioVenta"]<=0 and $DatosImpuestosAdicionales["ValorImpuesto"]==''){
+          return("E1");
+        }
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];
         $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' ORDER BY idPrecotizacion DESC");
         $DatosProduto=$this->FetchArray($consulta);
-        $DatosImpuestosAdicionales=$this->DevuelveValores("productos_impuestos_adicionales", "idProducto", $idProducto);
-	if($DatosProduto["Cantidad"]>0){
+        if($DatosProduto["Cantidad"]>0){
             if($DatosProductoGeneral["IVA"]=="E"){
                 $DatosProductoGeneral["IVA"]=0;
             }

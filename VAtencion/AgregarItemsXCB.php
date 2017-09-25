@@ -116,7 +116,7 @@ if(!empty($_REQUEST['BtnCargarInventario'])){
                     //print($data[0]);
                     $DatosProducto=$obVenta->DevuelveValores("productosventa", "Referencia", $data[2]);
                     $Referencia=$data[2];
-                    if($DatosProducto["idProductosVenta">1]){
+                    if($DatosProducto["idProductosVenta"]>=1){
                         $Referencia="REF$data[0]";
                         
                     }
