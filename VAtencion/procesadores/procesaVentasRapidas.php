@@ -1,5 +1,6 @@
 <?php 
-
+include_once("../modelo/PrintPos.php");	
+$obPrint=new PrintPos($idUser);
 ////////////////////////////////////(///////////////////////////////
 //////////////////////FUNCIONES CALCULAR DIGITO DE VERIFICACION/////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -190,6 +191,7 @@
 	if(isset($_REQUEST['TxtGranTotalH'])){
             //print("<script>alert('Entra 2')</script>");
             $obVenta=new ProcesoVenta($idUser);
+            
             $fecha=date("Y-m-d");
             $TotalVenta=$_REQUEST['TxtGranTotalH'];
             $idCliente=$_REQUEST["TxtCliente"];
@@ -241,7 +243,7 @@
             $obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
+                $obPrint->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
                 $DatosTikete=$obVenta->DevuelveValores("config_tiketes_promocion", "ID", 1);
                 if($TotalVenta>=$DatosTikete["Tope"] AND $DatosTikete["Activo"]=="SI"){
                     $VectorTiket["F"]=0;
@@ -424,7 +426,7 @@
                 $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
                 $NumFactura=$obVenta->CreaFacturaDesdeSeparado($idSeparado,$CuentaDestino,$VectorSeparados);
                if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
+                $obPrint->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
                }
             }
             
@@ -673,6 +675,26 @@
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
         }
         
-        ///////////////Fin
+        /// Si se Cotiza
+       	
+	if(isset($_REQUEST['BtnCotizar'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+            $Observaciones=$obVenta->normalizar($_REQUEST['TxtObservaciones']);
+            $idCliente=$obVenta->normalizar($_REQUEST['CmbClienteCotizacion']);
+            $idCotizacion=$obVenta->CotizarDesdePreventa($idPreventa,$fecha,$idCliente,$Observaciones,"");
+            $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
+            $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
+            if($DatosImpresora["Habilitado"]=="SI"){
+                $obPrint->ImprimeCotizacionPOS($idCotizacion,$DatosImpresora["Puerto"],1);
+            }
+            
+            header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidCotizacion=$idCotizacion");	
+			
+	}
         
-	?>
+        
+        ///////////////Fin
+?>

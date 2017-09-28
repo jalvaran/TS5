@@ -88,6 +88,14 @@ if(!empty($_REQUEST["TxtIdEgreso"])){
     
 }
 
+//SI se recibe una cotizacion
+if(!empty($_REQUEST["TxtidCotizacion"])){
+    $idCotizacion=$obVenta->normalizar($_REQUEST["TxtidCotizacion"]);
+    $RutaPrintCot="ImprimirPDFCotizacion.php?ImgPrintCoti=".$idCotizacion;			
+    $css->CrearNotificacionAzul("Cotizacion almacenada Correctamente <a href='$RutaPrintCot' target='_blank'>Imprimir Cotizacion No. $idCotizacion</a>", 16);
+    
+}
+
 if(!empty($_REQUEST["CantidadCero"])){
     
     $css->CrearNotificacionRoja("No está permitido dejar cantidades en Cero", 18);
@@ -104,7 +112,7 @@ if($idPreventa>0){
     print("<td style='text-align:center'>");
 
     $Page="Consultas/AgregaItemXPeso.php?CmbPreVentaAct=$idPreventa&myPage=$myPage&key=";
-    $css->CrearInputText("TxtPesar","text","","","Digite el ID","black","onchange","EnvieObjetoConsulta(`$Page`,`TxtPesar`,`DivBusquedas`,`2`);return false ; document.getElementById('TxtCantidadBascula').focus();",200,30,0,0);
+    $css->CrearInputText("TxtPesar","text","","","Digite el ID","black","onchange","EnvieObjetoConsulta(`$Page`,`TxtPesar`,`DivBusquedas`,`2`);return false ; document.getElementById('TxtCantidadBascula').focus();",100,30,0,0);
 
     print("</td>");
 
@@ -135,6 +143,30 @@ if($idPreventa>0){
     $css->CrearBotonConfirmado("BtnCerrarTurno", "Cerrar Turno");
     $css->CerrarForm();
     print("</td>");
+    print("<td style='text-align:center'>");
+    $RutaImage="../images/cotizar.png";
+    $css->ImageOcultarMostrar("ImgCotizar", "", "DivCotizaciones", 50, 200, "", $RutaImage);
+    $css->CrearDiv("DivCotizaciones", "", "center", 0, 1);
+        $css->CrearForm2("FrmCotizar",$myPage,"post","_self");
+        $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+        
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione el Cliente";
+        $css->CrearSelectChosen("CmbClienteCotizacion", $VarSelect);
+
+        $sql="SELECT * FROM clientes";
+        $Consulta=$obVenta->Query($sql);
+           while($DatosClientes=$obVenta->FetchArray($Consulta)){
+               $css->CrearOptionSelect($DatosClientes["idClientes"], $DatosClientes["RazonSocial"]." ".$DatosClientes["Num_Identificacion"], 0);
+           }
+        $css->CerrarSelect();
+        print("<br>");       
+        $css->CrearTextArea("TxtObservaciones", "", "", "Observaciones", "", "", "", 200, 60, 0, 0);
+        print("<br>");
+        $css->CrearBotonVerde("BtnCotizar", "Cotizar");
+        $css->CerrarForm();
+    $css->CerrarDiv();
+    print("</td>");
     $css->CerrarTabla();
 }
 $css->DivNotificacionesJS();
@@ -157,6 +189,7 @@ $css->AnchoElemento("TxtCuentaDestino_chosen", 200);
 $css->AnchoElemento("TxtTipoPago_chosen", 200);
 $css->AnchoElemento("CmbCuentaDestino_chosen", 300);
 $css->AnchoElemento("CmbProveedores_chosen", 300);
+$css->AnchoElemento("CmbClienteCotizacion_chosen", 200);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 if($idPreventa>0){

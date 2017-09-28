@@ -1,7 +1,8 @@
 <?php 
 $myPage="PDF_Factura.php";
 include_once("../sesiones/php_control.php");
-
+include_once("../modelo/PrintPos.php");	
+$obPrint=new PrintPos($idUser);
 
 if(isset($_REQUEST["ImgPrintFactura"])){
     $obVenta = new ProcesoVenta($idUser);
@@ -17,7 +18,7 @@ if(isset($_REQUEST["ImgPrintFactura"])){
     
     $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
     if($DatosImpresora["Habilitado"]=="SI"){
-        $obVenta->ImprimeFacturaPOS($idFactura,$DatosImpresora["Puerto"],1);
+        $obPrint->ImprimeFacturaPOS($idFactura,$DatosImpresora["Puerto"],1);
     }
 }
 ?>

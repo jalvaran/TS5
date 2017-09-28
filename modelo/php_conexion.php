@@ -1,7 +1,7 @@
 <?php
 include_once 'php_serial.class.php';
 include_once 'php_mysql.php';
-	        
+        
 //////////////////////////////////////////////////////////////////////////
 ////////////Clase para manejar los procesos mas relevantes ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -1883,7 +1883,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[23]="NumeroIdentificador";$Valores[23]="";
             $Columnas[24]="FechaFactura";       $Valores[24]=$FechaFactura;
             $Columnas[25]="idUsuarios";         $Valores[25]= $this->idUser;
-            $Columnas[26]="idPorcentajeIVA";    $Valores[26]= $DatosCotizacion["idProcentajeIVA"];
+            $Columnas[26]="idPorcentajeIVA";    $Valores[26]= "";
             $Columnas[27]="idOtrosImpuestos";   $Valores[27]= $DatosOtrosImpuestos["ID"];
             $Columnas[28]="ValorOtrosImpuestos";$Valores[28]= $DatosOtrosImpuestos["ValorImpuesto"]*$DatosCotizacion['Cantidad'];
             
@@ -1976,245 +1976,7 @@ public function CalculePesoRemision($idCotizacion)
     } 
     
     
-    /*
-     * Imprime una factura pos
-     */
-    public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias){
-        $COMPrinter= $this->COMPrinter;
-        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
-            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
-        }
-       $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
-       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $DatosFactura["EmpresaPro_idEmpresaPro"]);
-       $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $DatosFactura["idResolucion"]);
-       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosFactura["Usuarios_idUsuarios"]);
-       $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
-        $RazonSocial=$DatosEmpresa["RazonSocial"];
-        $NIT=$DatosEmpresa["NIT"];
-        $Direccion=$DatosEmpresa["Direccion"];
-        $Ciudad=$DatosEmpresa["Ciudad"];
-        $Regimen=$DatosEmpresa["Regimen"];
-        $ResolucionDian1="RES DIAN: $DatosResolucion[NumResolucion] del $DatosResolucion[Fecha]";
-        $ResolucionDian2="FACTURA AUT. $DatosResolucion[Prefijo] - $DatosResolucion[Desde] HASTA $DatosResolucion[Prefijo] - $DatosResolucion[Hasta]";
-        $ResolucionDian3="Autoriza impresion en:  $DatosResolucion[Factura]";
-        $Telefono=$DatosEmpresa["Telefono"];
-
-        $impuesto=$DatosFactura["IVA"];
-        $Descuento=$DatosFactura["Descuentos"];
-        $TotalVenta=$DatosFactura["Total"];
-        $Subtotal=$DatosFactura["Subtotal"];
-        $TotalFinal=$DatosFactura["Total"];
-        
-
-        $Fecha=$DatosFactura["Fecha"];
-        $Hora=$DatosFactura["Hora"];
-        $NumFact=$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"];
-        for($i=1; $i<=$Copias;$i++){
-        fwrite($handle,chr(27). chr(64));//REINICIO
-        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
-        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
-        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
-        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        $InfoRegimen="REGIMEN SIMPLIFICADO";
-        if($Regimen<>"SIMPLIFICADO"){
-            $InfoRegimen="IVA REGIMEN COMUN";
-        }
-        fwrite($handle,"NIT: ".$NIT." ".$InfoRegimen);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		if($Regimen<>"SIMPLIFICADO"){
-        fwrite($handle,$ResolucionDian1);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$ResolucionDian2);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$ResolucionDian3);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-		}
-        fwrite($handle,$Direccion." ".$Ciudad);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        
-        fwrite($handle,"TEL: ".$Telefono);
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-
-        fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"Cliente: $DatosCliente[RazonSocial]");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"NIT: $DatosCliente[Num_Identificacion]");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
-        /////////////////////////////FECHA Y NUM FACTURA
-
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-        fwrite($handle,"FECHA: $Fecha      HORA: $Hora");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"FACTURA DE VENTA No $NumFact");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"TIPO DE FACTURA: $DatosFactura[FormaPago]");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"_____________________________________");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-        /////////////////////////////ITEMS VENDIDOS
-
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-        $sql = "SELECT * FROM facturas_items WHERE idFactura='$idFactura'";
-	
-        $consulta=$this->Query($sql);
-		$i=0;						
-	while($DatosVenta=$this->FetchArray($consulta)){
-		$i++;
-            $ProcentajeIVA=$DatosVenta["PorcentajeIVA"];
-            $Base[$i]=$DatosVenta["PorcentajeIVA"];
-                        
-            if(!isset($SubtotalP[$ProcentajeIVA])){
-                $SubtotalP[$ProcentajeIVA]=0;
-            }
-            if(!isset($SubtotalP[$ProcentajeIVA])){
-                $ImpuestosP[$ProcentajeIVA]=0;
-            }
-            $SubtotalP[$ProcentajeIVA]=$Subtotal[$ProcentajeIVA]+$DatosVenta["SubtotalItem"];
-            $ImpuestosP[$ProcentajeIVA]=$ImpuestosP[$ProcentajeIVA]+$DatosVenta["IVAItem"];
-            $SubTotalITem=$DatosVenta["TotalItem"];
-            //$SubTotalITem=$TotalVenta-$Impuestos;
-
-
-            fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
-
-            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,20),20," ",STR_PAD_BOTH)."   ");
-
-            fwrite($handle,str_pad("$".number_format($SubTotalITem),10," ",STR_PAD_LEFT));
-
-            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-}
-
-
-
-
-    /////////////////////////////TOTALES
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-    if($Regimen<>"SIMPLIFICADO"){
-        $sql="SELECT sum(SubtotalItem) as Subtotal, sum(ValorOtrosImpuestos) as OtrosImpuestos,sum(IVAItem) as IVA,sum(TotalItem) as TotalItem, PorcentajeIVA FROM facturas_items WHERE idFactura = '$idFactura' GROUP BY PorcentajeIVA";
-	$Consulta=$this->Query($sql);
-	while($DatosTotales=$this->FetchArray($Consulta)){
-            $TotalVenta=$DatosTotales["Subtotal"]+$DatosTotales["IVA"]+$DatosTotales["OtrosImpuestos"];
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Base $DatosTotales[PorcentajeIVA]         ".str_pad("$".number_format($DatosTotales["Subtotal"],2),20," ",STR_PAD_LEFT));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"],2),20," ",STR_PAD_LEFT));
-                if($DatosTotales["OtrosImpuestos"]>0){
-                    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                    fwrite($handle,"Impoconsumo      ".str_pad("$".number_format($DatosTotales["OtrosImpuestos"]),20," ",STR_PAD_LEFT));
-                  
-                }
-           
-        }
-
-        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        //fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
-
-        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        //fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
-    }
-    $Total=$this->Sume("facturas_items", "TotalItem", " WHERE idFactura='$idFactura'");
-    $Bolsa=$this->Sume("facturas_items", "ValorOtrosImpuestos", " WHERE idFactura='$idFactura'");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($Total+$Bolsa),20," ",STR_PAD_LEFT));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    /////////////////////////////Forma de PAGO
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-    fwrite($handle,"Formas de Pago");
-    if($DatosFactura["Efectivo"]>0){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"       Efectivo ----> $".str_pad(number_format($DatosFactura["Efectivo"]),10," ",STR_PAD_LEFT));
-    }
-    if($DatosFactura["Tarjetas"]>0){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"       Tarjetas ----> $".str_pad(number_format($DatosFactura["Tarjetas"]),10," ",STR_PAD_LEFT));
-    }
-    if($DatosFactura["Cheques"]>0){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"       Cheques  ----> $".str_pad(number_format($DatosFactura["Cheques"]),10," ",STR_PAD_LEFT));
-    }
-    if($DatosFactura["Otros"]>0){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"       Otros    ----> $".str_pad(number_format($DatosFactura["Otros"]),10," ",STR_PAD_LEFT));
-    }
-    if($DatosFactura["Devuelve"]>0){
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"       Cambio   ----> $".str_pad(number_format($DatosFactura["Devuelve"]),10," ",STR_PAD_LEFT));
-    }
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    //Se mira si hay observaciones
-    if($DatosFactura["ObservacionesFact"]<>""){
-        /////////////////////////////Forma de PAGO
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-
-    fwrite($handle,"Observaciones:");
     
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,$DatosFactura["ObservacionesFact"]);
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    }
-    
-    //Termina observaciones
-    
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
-    fwrite($handle,"***GRACIAS POR SU COMPRA***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
-    //fwrite($handle, chr(27). chr(100). chr(0));
-    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Factura impresa por TS5***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
-    //fwrite($handle,"=================================");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-
-    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
-    }
-    fclose($handle); // cierra el fichero PRN
-    $salida = shell_exec('lpr $COMPrinter');
-    
-    }
     
     
     //imprime un tikete de promo
@@ -7830,6 +7592,53 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         $idSeparado=$this->ObtenerMAX($tab, "ID", 1, "");
         return($idSeparado);
+     }
+     
+     //Crear Cotizacion desde una preventa
+     public function CotizarDesdePreventa($idPreventa,$fecha,$idCliente,$Observaciones,$Vector) {
+        $tab="cotizacionesv5";
+        $NumRegistros=7;  
+
+        $Columnas[0]="ID";					$Valores[0]="";
+        $Columnas[1]="Fecha";                                   $Valores[1]=$fecha;
+        $Columnas[2]="Clientes_idClientes";			$Valores[2]=$idCliente;
+        $Columnas[3]="Usuarios_idUsuarios";			$Valores[3]= $this->idUser;
+        $Columnas[4]="Observaciones";				$Valores[4]=$Observaciones;
+        $Columnas[5]="NumSolicitud";				$Valores[5]="";
+        $Columnas[6]="NumOrden";                                $Valores[6]="";
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $NumCotizacion=$this->ObtenerMAX("cotizacionesv5","ID", "1", "");
+        ///////////////////////////Ingresar a cot_itemscotizaciones 
+		
+        $Consulta=$this->ConsultarTabla("preventa","WHERE VestasActivas_idVestasActivas='$idPreventa'");
+		
+        while($DatosPrecoti=$this->FetchArray($Consulta)){
+            $DatosProducto=$this->DevuelveValores($DatosPrecoti["TablaItem"], "idProductosVenta", $DatosPrecoti["ProductosVenta_idProductosVenta"]);
+            $tab="cot_itemscotizaciones";
+            $NumRegistros=15;  
+
+            $Columnas[0]="NumCotizacion";			$Valores[0]=$NumCotizacion;
+            $Columnas[1]="Descripcion";				$Valores[1]=$DatosProducto["Nombre"];
+            $Columnas[2]="Referencia";				$Valores[2]=$DatosProducto["Referencia"];
+            $Columnas[3]="TablaOrigen";				$Valores[3]=$DatosPrecoti["TablaItem"];
+            $Columnas[4]="ValorUnitario";			$Valores[4]=$DatosPrecoti["ValorAcordado"];
+            $Columnas[5]="Cantidad";                            $Valores[5]=$DatosPrecoti["Cantidad"];
+            $Columnas[6]="Subtotal";				$Valores[6]=$DatosPrecoti["Subtotal"];
+            $Columnas[7]="IVA";					$Valores[7]=$DatosPrecoti["Impuestos"];
+            $Columnas[8]="Total";                               $Valores[8]=$DatosPrecoti["TotalVenta"];
+            $Columnas[9]="PrecioCosto";				$Valores[9]=$DatosPrecoti["CostoUnitario"];
+            $Columnas[10]="SubtotalCosto";                      $Valores[10]=$DatosPrecoti["CostoUnitario"]*$DatosPrecoti["Cantidad"];
+            $Columnas[11]="TipoItem";				$Valores[11]=$DatosPrecoti["TipoItem"];
+            $Columnas[12]="CuentaPUC";				$Valores[12]=$DatosProducto["CuentaPUC"];
+            $Columnas[13]="idCliente";				$Valores[13]=$idCliente;
+            $Columnas[14]="Multiplicador";                      $Valores[14]=1;
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);	
+
+        }
+		
+        return($NumCotizacion);
      }
 //////////////////////////////Fin	
 }

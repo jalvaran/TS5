@@ -180,8 +180,8 @@ $obVenta=new ProcesoVenta($idUser);
 		$tab="cotizacionesv5";
 		$NumRegistros=7;  
 							
-		$Columnas[0]="ID";							$Valores[0]=$NumCotizacion;
-		$Columnas[1]="Fecha";						$Valores[1]=$fecha;
+		$Columnas[0]="ID";					$Valores[0]=$NumCotizacion;
+		$Columnas[1]="Fecha";                                   $Valores[1]=$fecha;
 		$Columnas[2]="Clientes_idClientes";			$Valores[2]=$idCliente;
 		$Columnas[3]="Usuarios_idUsuarios";			$Valores[3]=$idUser;
 		$Columnas[4]="Observaciones";				$Valores[4]=$Observaciones;
@@ -201,20 +201,20 @@ $obVenta=new ProcesoVenta($idUser);
 			$NumRegistros=15;  
 								
 			$Columnas[0]="NumCotizacion";				$Valores[0]=$NumCotizacion;
-			$Columnas[1]="Descripcion";					$Valores[1]=$DatosPrecoti["Descripcion"];
-			$Columnas[2]="Referencia";					$Valores[2]=$DatosPrecoti["Referencia"];
-			$Columnas[3]="TablaOrigen";						$Valores[3]=$DatosPrecoti["Tabla"];
+			$Columnas[1]="Descripcion";				$Valores[1]=$DatosPrecoti["Descripcion"];
+			$Columnas[2]="Referencia";				$Valores[2]=$DatosPrecoti["Referencia"];
+			$Columnas[3]="TablaOrigen";				$Valores[3]=$DatosPrecoti["Tabla"];
 			$Columnas[4]="ValorUnitario";				$Valores[4]=$DatosPrecoti["ValorUnitario"];
-			$Columnas[5]="Cantidad";					$Valores[5]=$DatosPrecoti["Cantidad"];
-			$Columnas[6]="Subtotal";					$Valores[6]=$DatosPrecoti["SubTotal"];
-			$Columnas[7]="IVA";							$Valores[7]=$DatosPrecoti["IVA"];
-			$Columnas[8]="Total";						$Valores[8]=$DatosPrecoti["Total"];
-			$Columnas[9]="PrecioCosto";					$Valores[9]=$DatosPrecoti["PrecioCosto"];
+			$Columnas[5]="Cantidad";                                $Valores[5]=$DatosPrecoti["Cantidad"];
+			$Columnas[6]="Subtotal";				$Valores[6]=$DatosPrecoti["SubTotal"];
+			$Columnas[7]="IVA";					$Valores[7]=$DatosPrecoti["IVA"];
+			$Columnas[8]="Total";					$Valores[8]=$DatosPrecoti["Total"];
+			$Columnas[9]="PrecioCosto";				$Valores[9]=$DatosPrecoti["PrecioCosto"];
 			$Columnas[10]="SubtotalCosto";				$Valores[10]=$DatosPrecoti["SubtotalCosto"];
-			$Columnas[11]="TipoItem";					$Valores[11]=$DatosPrecoti["TipoItem"];
-			$Columnas[12]="CuentaPUC";					$Valores[12]=$DatosPrecoti["CuentaPUC"];
-			$Columnas[13]="idCliente";					$Valores[13]=$idCliente;
-                        $Columnas[14]="Multiplicador";					$Valores[14]=$DatosPrecoti["Multiplicador"];
+			$Columnas[11]="TipoItem";				$Valores[11]=$DatosPrecoti["TipoItem"];
+			$Columnas[12]="CuentaPUC";				$Valores[12]=$DatosPrecoti["CuentaPUC"];
+			$Columnas[13]="idCliente";				$Valores[13]=$idCliente;
+                        $Columnas[14]="Multiplicador";				$Valores[14]=$DatosPrecoti["Multiplicador"];
                         
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);	
 		
