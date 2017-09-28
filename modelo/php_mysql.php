@@ -216,12 +216,12 @@ public function ValorActual($tabla,$Columnas,$Condicion){
 //////////////////////Funcion borra registro
 ///////////////////////////////////////////////////////////////////
 
-	public function BorraReg($Tabla,$Filtro,$idFiltro){
-            $Tabla=  $this->normalizar($Tabla);
-            $Filtro=  $this->normalizar($Filtro);
-            $idFiltro=  $this->normalizar($idFiltro);
-            $this->Query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
-	}
+public function BorraReg($Tabla,$Filtro,$idFiltro){
+    $Tabla=  $this->normalizar($Tabla);
+    $Filtro=  $this->normalizar($Filtro);
+    $idFiltro=  $this->normalizar($idFiltro);
+    $this->Query("DELETE FROM $Tabla WHERE $Filtro='$idFiltro'");
+}
 	////////////////////////////////////////////////////////////////////
 //////////////////////Funcion Obtener Ultimo ID de una Tabla
 ///////////////////////////////////////////////////////////////////

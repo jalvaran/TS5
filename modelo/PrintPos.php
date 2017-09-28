@@ -41,7 +41,7 @@ class PrintPos extends ProcesoVenta{
 
         fwrite($handle, chr(27). chr(100). chr(1));
         fwrite($handle, chr(27). chr(100). chr(1));
-        fwrite($handle,"***Comprobante impreso por TS5***");
+        fwrite($handle,"***Documento impreso por TS5***");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"Techno Soluciones SAS, 3177740609");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
@@ -179,11 +179,17 @@ class PrintPos extends ProcesoVenta{
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
-       $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
-       $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $DatosFactura["EmpresaPro_idEmpresaPro"]);
-       $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $DatosFactura["idResolucion"]);
-       $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $DatosFactura["Usuarios_idUsuarios"]);
-       $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+        $AnchoSeparador=44;
+        $AnchoItems=28;
+        $idFormatoCalidad=2;
+        $DatosFormato= $this->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
+        $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $idFactura);
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $DatosFactura["EmpresaPro_idEmpresaPro"]);
+        $DatosResolucion=$this->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $DatosFactura["idResolucion"]);
+        $idUsuario=$DatosFactura["Usuarios_idUsuarios"];
+        $DatosUsuario=$this->ValorActual("usuarios", " Nombre , Apellido ", " idUsuarios='$idUsuario'");
+        
+        $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
         $RazonSocial=$DatosEmpresa["RazonSocial"];
         $NIT=$DatosEmpresa["NIT"];
         $Direccion=$DatosEmpresa["Direccion"];
@@ -210,8 +216,7 @@ class PrintPos extends ProcesoVenta{
         fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
         fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
         fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        $this->SeparadorHorizontal($handle, "*", 36);
         fwrite($handle,$RazonSocial); // ESCRIBO RAZON SOCIAL
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $InfoRegimen="REGIMEN SIMPLIFICADO";
@@ -236,25 +241,22 @@ class PrintPos extends ProcesoVenta{
 
         fwrite($handle,"Cajero:.$DatosUsuario[Nombre] $DatosUsuario[Apellido]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        $this->SeparadorHorizontal($handle, "*", 36);
         fwrite($handle,"Cliente: $DatosCliente[RazonSocial]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle,"NIT: $DatosCliente[Num_Identificacion]");
         fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
+        $this->SeparadorHorizontal($handle, "*", 36);
         /////////////////////////////FECHA Y NUM FACTURA
 
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
         fwrite($handle,"FECHA: $Fecha      HORA: $Hora");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"FACTURA DE VENTA No $NumFact");
+        fwrite($handle,"$DatosFormato[Nombre] No $NumFact");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         fwrite($handle,"TIPO DE FACTURA: $DatosFactura[FormaPago]");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"_____________________________________");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
 
         /////////////////////////////ITEMS VENDIDOS
 
@@ -278,25 +280,22 @@ class PrintPos extends ProcesoVenta{
             $SubtotalP[$ProcentajeIVA]=$Subtotal[$ProcentajeIVA]+$DatosVenta["SubtotalItem"];
             $ImpuestosP[$ProcentajeIVA]=$ImpuestosP[$ProcentajeIVA]+$DatosVenta["IVAItem"];
             $SubTotalITem=$DatosVenta["TotalItem"];
-            //$SubTotalITem=$TotalVenta-$Impuestos;
-
-
+            
             fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
 
-            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,20),20," ",STR_PAD_BOTH)."   ");
+            fwrite($handle,str_pad(substr($DatosVenta["Referencia"]." ".$DatosVenta["Nombre"],0,$AnchoItems),$AnchoItems," ",STR_PAD_BOTH)."   ");
 
             fwrite($handle,str_pad("$".number_format($SubTotalITem),10," ",STR_PAD_LEFT));
 
             fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-}
+        }
 
 
 
 
     /////////////////////////////TOTALES
 
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
     if($Regimen<>"SIMPLIFICADO"){
         $sql="SELECT sum(SubtotalItem) as Subtotal, sum(ValorOtrosImpuestos) as OtrosImpuestos,sum(IVAItem) as IVA,sum(TotalItem) as TotalItem, PorcentajeIVA FROM facturas_items WHERE idFactura = '$idFactura' GROUP BY PorcentajeIVA";
@@ -315,11 +314,7 @@ class PrintPos extends ProcesoVenta{
            
         }
 
-        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        //fwrite($handle,"SUBTOTAL         ".str_pad("$".number_format($Subtotal),20," ",STR_PAD_LEFT));
-
-        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        //fwrite($handle,"IVA              ".str_pad("$".number_format($impuesto),20," ",STR_PAD_LEFT));
+       
     }
     $Total=$this->Sume("facturas_items", "TotalItem", " WHERE idFactura='$idFactura'");
     $Bolsa=$this->Sume("facturas_items", "ValorOtrosImpuestos", " WHERE idFactura='$idFactura'");
@@ -327,13 +322,11 @@ class PrintPos extends ProcesoVenta{
     fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($Total+$Bolsa),20," ",STR_PAD_LEFT));
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
 
     /////////////////////////////Forma de PAGO
 
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
 
     fwrite($handle,"Formas de Pago");
@@ -359,52 +352,37 @@ class PrintPos extends ProcesoVenta{
     }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
 
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
     //Se mira si hay observaciones
     if($DatosFactura["ObservacionesFact"]<>""){
         /////////////////////////////Forma de PAGO
 
-    fwrite($handle,"_____________________________________");
+    $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+    if($DatosFactura["ObservacionesFact"]<>""){
+        fwrite($handle,"Observaciones:");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,$DatosFactura["ObservacionesFact"]);
+    }
 
-    fwrite($handle,"Observaciones:");
     
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,$DatosFactura["ObservacionesFact"]);
-
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-
-    fwrite($handle,"_____________________________________");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     }
     
     //Termina observaciones
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
-    fwrite($handle,"***GRACIAS POR SU COMPRA***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
-    //fwrite($handle, chr(27). chr(100). chr(0));
-    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Factura impresa por TS5***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Software disenado por Techno Soluciones SAS, 3177740609, www.technosoluciones.com.co");
-    //fwrite($handle,"=================================");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-
-    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+    if($DatosFormato["NotasPiePagina"]<>''){
+        $array = explode(";", $DatosFormato["NotasPiePagina"]);
+        $this->SeparadorHorizontal($handle, "*", $AnchoSeparador);
+        foreach ($array as $Nota) {
+            fwrite($handle,$Nota);
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        }
+        
+    }
+    $this->Footer($handle);
     }
     fclose($handle); // cierra el fichero PRN
     $salida = shell_exec('lpr $COMPrinter');
@@ -419,18 +397,26 @@ class PrintPos extends ProcesoVenta{
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
         }
+        $AnchoSeparador=44;
+        $AnchoItems=28;
+        $idFormatoCalidad=1;
+        $DatosFormato= $this->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
         $DatosCotizacion= $this->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
+        $idUsuario=$DatosCotizacion["Usuarios_idUsuarios"];
+        $DatosUsuario=$this->ValorActual("usuarios", " Nombre , Apellido ", " idUsuarios='$idUsuario'");
         $idEmpresa=1;
         $this->EncabezadoComprobantesPos($handle, $DatosCotizacion["Fecha"], $idEmpresa);
         
+        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"$DatosFormato[Nombre] No $idCotizacion");
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"COTIZACION No $idCotizacion");
+        fwrite($handle,"ATIENDE: $DatosUsuario[Nombre] $DatosUsuario[Apellido]");
         $this->SeparadorHorizontal($handle, "*", 37);
 
         /////////////////////////////ITEMS COTIZADOS
 
         fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-        $this->SeparadorHorizontal($handle, "_", 37);
+        $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
         $sql = "SELECT * FROM cot_itemscotizaciones WHERE NumCotizacion='$idCotizacion'";
 	
         $consulta=$this->Query($sql);
@@ -442,14 +428,14 @@ class PrintPos extends ProcesoVenta{
             $GranIVA=$GranIVA+$DatosItems["IVA"];
             $GranTotal=$GranTotal+$DatosItems["Total"];
             fwrite($handle,str_pad($DatosItems["Cantidad"],4," ",STR_PAD_RIGHT));
-            fwrite($handle,str_pad(substr($DatosItems["Referencia"]." ".$DatosItems["Descripcion"],0,20),20," ",STR_PAD_BOTH)."   ");
+            fwrite($handle,str_pad(substr($DatosItems["Referencia"]." ".$DatosItems["Descripcion"],0,$AnchoItems),$AnchoItems," ",STR_PAD_BOTH)."   ");
             fwrite($handle,str_pad("$".number_format($DatosItems["Total"]),10," ",STR_PAD_LEFT));
             fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         }
 
         /////////////////////////////TOTALES
 
-        $this->SeparadorHorizontal($handle, "_", 37);
+        $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
         
         fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
@@ -460,11 +446,20 @@ class PrintPos extends ProcesoVenta{
         fwrite($handle,"TOTAL       ".str_pad("$".number_format($GranTotal),20," ",STR_PAD_LEFT));
         fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
         if($DatosCotizacion["Observaciones"]<>''){
-            $this->SeparadorHorizontal($handle, "_", 37);
+            $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
             fwrite($handle,"Observaciones:");
             fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
             fwrite($handle,$DatosCotizacion["Observaciones"]);
         }    
+        if($DatosFormato["NotasPiePagina"]<>''){
+            $array = explode(";", $DatosFormato["NotasPiePagina"]);
+            $this->SeparadorHorizontal($handle, "*", $AnchoSeparador);
+            foreach ($array as $Nota) {
+                fwrite($handle,$Nota);
+                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            }
+        
+        }
         $this->Footer($handle);
         fclose($handle); // cierra el fichero PRN
         $salida = shell_exec('lpr $COMPrinter');
