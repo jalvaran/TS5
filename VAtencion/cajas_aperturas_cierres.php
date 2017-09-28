@@ -1,6 +1,8 @@
 <?php
 $myPage="cajas_aperturas_cierres.php";
 include_once("../sesiones/php_control.php");
+include_once("../modelo/PrintPos.php");	
+$obPrint=new PrintPos($idUser);
 
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
@@ -23,7 +25,7 @@ if(isset($_REQUEST["idCierre"])){
     $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
     if($DatosImpresora["Habilitado"]=="SI"){
         $VectorCierre["idCierre"]=$idCierre;
-        $obVenta->ImprimeCierre(1, $VectorCierre, $DatosImpresora["Puerto"], 1);
+        $obPrint->ImprimeCierre(1, $VectorCierre, $DatosImpresora["Puerto"], 1);
         
     }
 }

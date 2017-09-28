@@ -559,5 +559,5 @@ SELECT ID,`FechaFactura`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGr
   FROM `facturas_items` GROUP BY `Referencia`;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('105', 'Resumen de facturacion', '12', '3', 'vista_resumen_facturacion.php', '_SELF', b'1', 'resumen.png', '5', '2017-09-07 12:12:07', '0000-00-00 00:00:00');
-ALTER TABLE `facturas_items` ADD INDEX(`Referencia`);
 ALTER TABLE `cot_itemscotizaciones` ADD INDEX(`NumCotizacion`);
+ALTER TABLE `facturas_items` ADD INDEX(`idCierre`);

@@ -386,7 +386,7 @@ $obPrint=new PrintPos($idUser);
                         
                 if($DatosImpresora["Habilitado"]=="SI"){
                     
-                    $obVenta->ImprimeCierre($idUser,$VectorCierre,$DatosImpresora["Puerto"],1);
+                    $obPrint->ImprimeCierre($idUser,$VectorCierre,$DatosImpresora["Puerto"],1);
                 }
         }
         
@@ -577,7 +577,7 @@ $obPrint=new PrintPos($idUser);
                 $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
 
                 if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
+                    $obPrint->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
 
                 }
                 $css->CrearNotificacionVerde("Abono Registrado Exitosamente",16);
