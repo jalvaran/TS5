@@ -82,7 +82,7 @@ if(!empty($_REQUEST["TxtidFactura"])){
 }
 if(!empty($_REQUEST["TxtIdEgreso"])){
     $idEgreso=$_REQUEST["TxtIdEgreso"];
-    $RutaPrint="../tcpdf/examples/imprimircomp.php?ImgPrintComp=".$idEgreso;
+    $RutaPrint="PDF_Egresos.php?BtnPrintEgreso=".$idEgreso;
     
         $css->CrearNotificacionVerde("Egreso Creado Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Egreso No. $idEgreso</a>",16);
     

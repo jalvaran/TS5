@@ -1,7 +1,8 @@
 <?php
 $myPage="separados.php";
 include_once("../sesiones/php_control.php");
-
+include_once("../modelo/PrintPos.php");	
+$obPrint=new PrintPos($idUser);
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -24,7 +25,7 @@ if(isset($_REQUEST["idSeparado"])){
     if($DatosImpresora["Habilitado"]=="SI"){
         $VectorCierre["idSeparado"]=$idSeparado;
        
-        $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 1);
+        $obPrint->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 1);
         
     }
 }

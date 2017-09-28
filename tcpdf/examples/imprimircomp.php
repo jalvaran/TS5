@@ -117,7 +117,7 @@ $pdf->Output($nombre_file.'.pdf', 'I');
 /////////////////////IMPRESORA POS
 $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
 $VectorEgresos["Fut"]=1;
-print("<script>alert('Entra')</script>");
+
 if($DatosImpresora["Habilitado"]=="SI"){
     print("<script>alert('Entra')</script>");
     $obVenta->ImprimeEgresoPOS($idEgresos,$VectorEgresos,$DatosImpresora["Puerto"],1);

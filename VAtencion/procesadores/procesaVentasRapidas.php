@@ -251,7 +251,7 @@ $obPrint=new PrintPos($idUser);
                     if($DatosTikete["Multiple"]=="SI"){
                         $Copias=floor($TotalVenta/$DatosTikete["Tope"]);
                     }
-                    $obVenta->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
+                    $obPrint->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
                 }
             }
             
@@ -291,7 +291,7 @@ $obPrint=new PrintPos($idUser);
                         $idSeparado=$obVenta->RegistreSeparado($fecha,$Hora,$idPreventa,$idCliente,$Abono,$DatosSeparado);
                         $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
                         if($DatosImpresora["Habilitado"]=="SI"){
-                            $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
+                            $obPrint->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], 3);
                         }
 
 
@@ -431,7 +431,7 @@ $obPrint=new PrintPos($idUser);
             }
             
                 if($DatosImpresora["Habilitado"]=="SI"){
-                    $obVenta->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], $Impresiones);
+                    $obPrint->ImprimeSeparado($idSeparado, $DatosImpresora["Puerto"], $Impresiones);
                     
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtidFactura=$NumFactura");
@@ -500,7 +500,7 @@ $obPrint=new PrintPos($idUser);
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             $VectorEgresos["Fut"]=1;
             if($DatosImpresora["Habilitado"]=="SI"){
-                $obVenta->ImprimeEgresoPOS($idEgreso,$VectorEgresos,$DatosImpresora["Puerto"],1);
+                $obPrint->ImprimeEgresoPOS($idEgreso,$VectorEgresos,$DatosImpresora["Puerto"],1);
                     
             }
             header("location:$myPage?CmbPreVentaAct=$idPreventa&TxtIdEgreso=$idEgreso");
