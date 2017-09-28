@@ -461,7 +461,7 @@ print("<body>");
                             $css->CrearInputText("idCompra", "hidden", "", $idCompra, "", "", "", "", "", "", 0, 1);
                             $css->CrearInputText("idProducto", "hidden", "", $DatosItems["idProducto"], "", "", "", "", "", "", 0, 1);
                             $css->CrearInputText("idFacturaItems", "hidden", "", $DatosItems["ID"], "", "", "", "", "", "", 0, 1);
-                            $css->CrearInputNumber("TxtCantidadDev", "number", "", 0, "Dev", "", "", "", 100, 30, 0, 1, 0, $MaxCantidad, "any");
+                            $css->CrearInputNumber("TxtCantidadDev", "number", "", 0, "Dev", "", "", "", 100, 30, 0, 1, 0, "", "any");
                             $css->CrearBotonConfirmado("BtnDevolverItem", "Devolver");
                         $css->CerrarForm();
                     print("</td>");

@@ -275,6 +275,7 @@ foreach($DatosIVAP as $TipoIva){
 		
     $Base= number_format($DatosIVA[$TipoIva]["Base"]);
     $Valor=number_format($DatosIVA[$TipoIva]["Valor"]);
+    if($DatosIVA[$TipoIva]["Base"]<>0){
     $tbl = <<<EOD
 
 
@@ -293,6 +294,8 @@ foreach($DatosIVAP as $TipoIva){
 
 EOD;
     $pdf->writeHTML($tbl, false, false, false, false, '');
+    }
+    
 }
 
 

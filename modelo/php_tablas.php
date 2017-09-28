@@ -5640,6 +5640,82 @@ EOD;
         $html.='</table>';
         return($html);
     }
+    //Resolucion de facturacion 
+    public function HTML_Uso_Resoluciones($CondicionFecha2,$CentroCostos,$EmpresaPro,$Vector) {
+        $html=' 
+        <BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Informe de Numeracion Facturas:
+        </em></strong></span><BR><BR>
+
+
+        <table border="1" cellspacing="2" align="center" >
+          <tr> 
+            <th><h3>Resolucion</h3></th>
+            <th><h3>Factura Inicial</h3></th>
+            <th><h3>Factura Final</h3></th>
+            <th><h3>Total Clientes</h3></th>
+
+          </tr >
+
+        </table>';
+
+        $sql="SELECT idResolucion,MAX(NumeroFactura) as MaxFact, MIN(NumeroFactura) as MinFact FROM facturas
+                WHERE $CondicionFecha2 GROUP BY idResolucion";
+        $Consulta= $this->obCon->Query($sql);
+        while($DatosNumFact=$this->obCon->FetchArray($Consulta)){
+                $MinFact=$DatosNumFact["MinFact"];
+                $MaxFact=$DatosNumFact["MaxFact"];
+                $idResolucion=$DatosNumFact["idResolucion"];
+                $TotalFacts=$MaxFact-$MinFact+1;
+                $html.='
+
+                <table border="1"  cellpadding="2" align="center">
+                 <tr>
+                  <td>'.$idResolucion.'</td>
+                  <td>'.$MinFact.'</td>
+                  <td>'.$MaxFact.'</td>
+                  <td>'.$TotalFacts.'</td>
+
+                 </tr>
+                 </table>';
+
+        }
+        return ($html);
+    }
+    //Ventas Colaboradores
+    public function HTML_Ventas_Colaboradores($CondicionFecha2,$CentroCostos,$EmpresaPro,$Vector) {
+        $html=' 
+        <BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Ventas X Colaboradores:
+        </em></strong></span><BR><BR>
+
+
+        <table border="1" cellspacing="2" align="center" >
+          <tr> 
+            
+            <th><h3>Colaborador</h3></th>
+            <th><h3>Total</h3></th>
+            
+
+          </tr >
+
+        </table>';
+
+        $sql="SELECT SUM(Total) as Total, idColaborador FROM colaboradores_ventas
+                WHERE $CondicionFecha2 GROUP BY idColaborador";
+        $Consulta= $this->obCon->Query($sql);
+        while($DatosColaboradores=$this->obCon->FetchArray($Consulta)){
+                $DatosCol= $this->obCon->DevuelveValores("colaboradores", "Identificacion", $DatosColaboradores["idColaborador"]);
+                $html.='
+
+                <table border="1"  cellpadding="2" align="center">
+                 <tr>
+                  <td>'.$DatosCol["Nombre"]." ".$DatosCol["Identificacion"].'</td>
+                  <td>'.number_format($DatosColaboradores["Total"]).'</td>
+                 </tr>
+                 </table>';
+
+        }
+        return ($html);
+    }
     ///Clases para hacer el informe de administrador
     public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
         $Condicion=" ori_facturas_items WHERE ";
@@ -5671,6 +5747,8 @@ EOD;
         $this->PDF_Write($html);
         $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3);
         $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Uso_Resoluciones($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
+        $this->PDF_Write("<br>".$html);
         $html= $this->HTML_Egresos_Admin($CondicionFecha2);
         $this->PDF_Write("<br>".$html);
         $html= $this->HTML_Abonos_Facturas_Admin($CondicionFecha2);
@@ -5680,6 +5758,8 @@ EOD;
         $html= $this->HTML_Intereses_SisteCredito_Admin($CondicionFecha2);
         $this->PDF_Write("<br>".$html);
         $html= $this->HTML_Entregas($CondicionFecha1,$CondicionFecha2);
+        $this->PDF_Write("<br>".$html);
+        $html= $this->HTML_Ventas_Colaboradores($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
         $this->PDF_Write("<br>".$html);
         /*Solo Juan Car
         $this->PDF_Add();
