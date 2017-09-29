@@ -38,10 +38,10 @@ print("<body>");
      * 
      */
     if(!empty($_REQUEST["TxtidIngreso"])){
-        $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
-        $css->CrearTabla();
-        $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
-        $css->CerrarTabla();
+        $RutaPrintIngreso="PDF_Documentos.php?idDocumento=4&idIngreso=".$_REQUEST["TxtidIngreso"];			
+        
+        $css->CrearNotificacionVerde("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
+        
     }
             
     $css->CrearNotificacionAzul("Ingrese los datos para registrar el Anticipo", 16);

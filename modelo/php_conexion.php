@@ -793,19 +793,37 @@ public function InicializarPreventas()
             //////Creo el comprobante de Ingreso
             
             $tab="comprobantes_ingreso";
-            $NumRegistros=6;
+            $NumRegistros=7;
 
             $Columnas[0]="Fecha";		$Valores[0]=$fecha;
-            $Columnas[1]="Clientes_idClientes"; $Valores[1]=$idCliente;
+            $Columnas[1]="Tercero";             $Valores[1]=$DatosCliente["Num_Identificacion"];
             $Columnas[2]="Valor";               $Valores[2]=$Total;
-            $Columnas[3]="Tipo";		$Valores[3]="EFECTIVO";
+            $Columnas[3]="Tipo";		$Valores[3]="ANTICIPO";
             $Columnas[4]="Concepto";		$Valores[4]=$Concepto;
             $Columnas[5]="Usuarios_idUsuarios";	$Valores[5]=$idUser;
-            
+            $Columnas[6]="Estado";              $Valores[6]="ABIERTO";
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
+            /*
+            //////Registro en la tabla anticipos
             
+            $tab="anticipos_recibidos";
+            $NumRegistros=8;
+
+            $Columnas[0]="Fecha";		$Valores[0]=$fecha;
+            $Columnas[1]="Tercero";             $Valores[1]=$NIT;
+            $Columnas[2]="Valor";               $Valores[2]=$Total;
+            $Columnas[3]="Imagen";		$Valores[3]="";
+            $Columnas[4]="Observaciones";	$Valores[4]=$Concepto;
+            $Columnas[5]="idUsuario";           $Valores[5]=$idUser;
+            $Columnas[6]="idComprobanteIngreso";$Valores[6]=$idIngreso;
+            $Columnas[7]="Estado";              $Valores[7]="ABIERTO";
+            
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            
+             * 
+             */
             ////Registro el anticipo en el libro diario
             $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
             
@@ -813,10 +831,9 @@ public function InicializarPreventas()
             $NumRegistros=27;
             $CuentaPUC=$CuentaDestino;
             $NombreCuenta=$DatosCuentasFrecuentes["Nombre"];
-            $CuentaPUCContraPartida="238020";
-            $NombreCuentaContraPartida="Anticipos recibidos Cliente: $RazonSocialC NIT $NIT";
-            
-
+            $Parametros=$this->DevuelveValores("parametros_contables", "ID", 20);
+            $CuentaPUCContraPartida=$Parametros["CuentaPUC"];
+            $NombreCuentaContraPartida=$Parametros["NombreCuenta"];
 
             $Columnas[0]="Fecha";			$Valores[0]=$fecha;
             $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="ComprobanteIngreso";

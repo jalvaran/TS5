@@ -11,7 +11,7 @@ class Documento extends Tabla{
         $idFormato=11;
         $DatosEgreso=$this->obCon->DevuelveValores("egresos","idEgresos",$idEgreso);
         $fecha=$DatosEgreso["Fecha"];
-        
+        $Concepto=$DatosEgreso["Concepto"];
         $Tercero=$DatosEgreso["NIT"];
         $idUsuario=$DatosEgreso["Usuario_idUsuario"];
         
@@ -28,7 +28,7 @@ class Documento extends Tabla{
         $this->PDF_Ini("Egreso", 8, "");
         $DatosEgreso= $this->obCon->DevuelveValores("egresos", "idEgresos", $idEgreso);
         $this->PDF_Encabezado($fecha,1, $idFormato, "",$Documento);
-        $this->Datos_Tercero_Egresos($fecha, $DatosEgreso, $DatosTercero, $DatosUsuario, "");
+        $this->Datos_Generales($fecha, $Concepto, $DatosTercero, $DatosUsuario, "");
         
         $html= $this->HTML_Movimiento_Contable("CompEgreso",$idEgreso,"");
         $this->PDF_Write("<br><br><br><br><br><br><br><br><br>".$html);
@@ -66,6 +66,7 @@ class Documento extends Tabla{
                     <td><strong>Documento</strong></td>
                     <td><strong>Cuenta PUC</strong></td>
                     <td><strong>Nombre Cuenta</strong></td>
+                    <td><strong>Concepto</strong></td>
                     <td><strong>Débitos</strong></td>
                     <td><strong>Créditos</strong></td>
                 </tr>
@@ -92,6 +93,7 @@ class Documento extends Tabla{
                     <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Num_Documento_Externo"].'</td>
                     <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["CuentaPUC"].'</td>
                     <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["NombreCuenta"].'</td>
+                    <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Concepto"].'</td>
                     <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Debito"]).'</td>
                     <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Credito"]).'</td>
                 </tr>
@@ -102,7 +104,7 @@ class Documento extends Tabla{
         }
         $Back='#F7F8E0';
         $html.='<tr > '
-                . '<td align="rigth" colspan="4" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">Totales:</td>'
+                . '<td align="rigth" colspan="5" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">Totales:</td>'
                 . '<td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Debitos).'</td>
                    <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Creditos).'</td>'
                 . '</tr>';
@@ -110,7 +112,7 @@ class Documento extends Tabla{
         return($html);
     }
     //HTML Datos Tercero Egresos
-    public function Datos_Tercero_Egresos($fecha,$DatosEgreso,$DatosTercero,$DatosUsuario,$Vector) {
+    public function Datos_Generales($fecha,$Concepto,$DatosTercero,$DatosUsuario,$Vector) {
         $html ='       
             <table cellpadding="1" border="1">
                 <tr>
@@ -139,7 +141,7 @@ class Documento extends Tabla{
 
             </table>       
         ';
-        $this->PDF->MultiCell(90, 25, $html, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+        $this->PDF->MultiCell(93, 25, $html, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
         $html = '        
             <table cellpadding="1" border="1">
                 <tr>
@@ -148,7 +150,7 @@ class Documento extends Tabla{
 
                 </tr>
                 <tr>
-                    <td colspan="3" height="36">'.$DatosEgreso["Concepto"].' </td>
+                    <td colspan="3" height="36">'.$Concepto.' </td>
 
                 </tr>
                 <tr>
@@ -160,8 +162,66 @@ class Documento extends Tabla{
             </table>       
         ';
 
-    $this->PDF->MultiCell(90, 25, $html, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
+    $this->PDF->MultiCell(92, 25, $html, 0, 'L', 1, 0, '', '', true,0, true, true, 10, 'M');
     }
+    
+    //Comprobante de ingreso
+    
+     public function PDF_CompIngreso($idIngreso) {
+        $idFormato=4;
+        $DatosIngreso=$this->obCon->DevuelveValores("comprobantes_ingreso","ID",$idIngreso);
+        $fecha=$DatosIngreso["Fecha"];
+        $Concepto=$DatosIngreso["Concepto"];
+        $idCliente=$DatosIngreso["Clientes_idClientes"];
+        $Tercero=$DatosIngreso["Tercero"];
+        $idUsuario=$DatosIngreso["Usuarios_idUsuarios"];
+        
+        $DatosUsuario=$this->obCon->ValorActual("usuarios", " Nombre , Apellido ", " idUsuarios='$idUsuario'");
+        $Valor=  $DatosIngreso["Valor"];
+        $DatosTercero[]="";
+        if($Tercero>0){
+            $DatosTercero=$this->obCon->DevuelveValores("clientes","Num_Identificacion",$Tercero);
+            if($DatosTercero["Num_Identificacion"]==''){
+                $DatosTercero=$this->obCon->DevuelveValores("proveedores","Num_Identificacion",$Tercero);
+            }
+        }
+        if($idCliente>0){
+            $DatosTercero=$this->obCon->DevuelveValores("clientes","idClientes",$idCliente);
+        }
+        $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
+        
+        $Documento="$DatosFormatos[Nombre] $idIngreso";
+        
+        $this->PDF_Ini("ComprobanteIngreso", 8, "");
+        
+        $this->PDF_Encabezado($fecha,1, $idFormato, "",$Documento);
+        
+        $this->Datos_Generales($fecha, $Concepto, $DatosTercero, $DatosUsuario, "");
+        
+        $html= $this->HTML_Movimiento_Contable("ComprobanteIngreso",$idIngreso,"");
+        
+        $this->PDF_Write("<br><br><br><br><br><br><br><br><br>".$html);
+        $html=$this->HTML_Firmas_Documentos();
+        $this->PDF_Write("<br>".$html);
+        /*
+        $html= $this->HTML_Movimiento_Firmas_Egresos($Valor);
+        $this->PDF_Write("<br><br>".$html);
+         * 
+         */
+        $this->PDF_Output("ComprobanteIngreso_$idIngreso");
+    }
+    
+    //html firmas
+    
+    public function HTML_Firmas_Documentos() {
+        $html='<pre>
+        ________________________            __________________________           ________________________
+        Recibe:                             Entrega:                             Revisa:
+                </pre>';
+        return($html);
+    }
+    
+    
     
    //Fin Clases
 }

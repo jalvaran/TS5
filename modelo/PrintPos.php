@@ -1253,5 +1253,82 @@ class PrintPos extends ProcesoVenta{
     
     }
     
+    //Imprime comprobante de ingreso pos
+    
+    public function ComprobanteIngresoPOS($idIngreso,$COMPrinter,$Copias){
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
+        $COMPrinter= $this->COMPrinter;
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+        $AnchoSeparador=44;
+        $AnchoItems=28;
+        $idFormatoCalidad=4;
+        $DatosFormato= $this->DevuelveValores("formatos_calidad", "ID", $idFormatoCalidad);
+        $DatosIngreso=$this->DevuelveValores("comprobantes_ingreso","ID",$idIngreso);
+        $idCliente=$DatosIngreso["Clientes_idClientes"];
+        $Tercero=$DatosIngreso["Tercero"];
+        $idUsuario=$DatosIngreso["Usuarios_idUsuarios"];
+        $DatosUsuario=$this->ValorActual("usuarios", " Nombre , Apellido ", " idUsuarios='$idUsuario'");
+        $DatosTercero[]="";
+        if($Tercero>0){
+            $DatosTercero=$this->DevuelveValores("clientes","Num_Identificacion",$Tercero);
+            if($DatosTercero["Num_Identificacion"]==''){
+                $DatosTercero=$this->DevuelveValores("proveedores","Num_Identificacion",$Tercero);
+            }
+        }
+        if($idCliente>0){
+            $DatosTercero=$this->DevuelveValores("clientes","idClientes",$idCliente);
+        }
+        
+        $idEmpresa=1;
+        $this->EncabezadoComprobantesPos($handle, $DatosCotizacion["Fecha"], $idEmpresa);
+        
+        //fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"$DatosFormato[Nombre] No $idIngreso");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"REALIZA: $DatosUsuario[Nombre] $DatosUsuario[Apellido]");
+        $this->SeparadorHorizontal($handle, "*", 37);
+        
+        fwrite($handle,"Cliente: $DatosTercero[RazonSocial]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"NIT: $DatosTercero[Num_Identificacion]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        $this->SeparadorHorizontal($handle, "*", 37);
+        
+        if($DatosIngreso["Concepto"]<>''){
+            $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
+            fwrite($handle,"Concepto:");
+            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            fwrite($handle,$DatosIngreso["Concepto"]);
+        }  
+        /////////////////////////////TOTALES
+
+        $this->SeparadorHorizontal($handle, "_", $AnchoSeparador);
+        
+        
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"VALOR    ".str_pad("$".number_format($DatosIngreso["Valor"]),20," ",STR_PAD_LEFT));
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        
+          
+        if($DatosFormato["NotasPiePagina"]<>''){
+            $array = explode(";", $DatosFormato["NotasPiePagina"]);
+            $this->SeparadorHorizontal($handle, "*", $AnchoSeparador);
+            foreach ($array as $Nota) {
+                fwrite($handle,$Nota);
+                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+            }
+        
+        }
+        $this->Footer($handle);
+        fclose($handle); // cierra el fichero PRN
+        $salida = shell_exec('lpr $COMPrinter');
+    
+    }
+    
     //Fin Clases
 }
