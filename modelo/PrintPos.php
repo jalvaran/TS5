@@ -1180,8 +1180,6 @@ class PrintPos extends ProcesoVenta{
     $this->ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias);
     }
     
-    
-    
      //Imprime el dato de los departamentos en un cierre
       public function ImprimeCierreDepartamentos($idUser,$VectorCierre,$COMPrinter,$Copias){
         $COMPrinter= $this->COMPrinter;    

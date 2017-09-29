@@ -41,10 +41,11 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Gramos` double NOT NULL,
   `idBascula` int(11) NOT NULL,
-  `Leido` bit(1) NOT NULL,
+  `Leido` bit(1) NOT NULL DEFAULT b'0',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=1;
 
 DROP TABLE IF EXISTS `porcentajes_iva`;
 CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
@@ -151,7 +152,7 @@ INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `
 (22, 'Visualizar Tiempo', 3, 'crono.php', '_BLANK', 0, 'crono.png', 22, '2017-07-24 19:10:11', '2017-06-22 18:08:59'),
 (23, 'Ingresos', 1, 'MnuIngresos.php', '_BLANK', 1, 'ingresos.png', 5, '2017-07-24 19:38:53', '2017-06-22 18:08:59');
 
-
+DROP TABLE IF EXISTS `menu_carpetas`;
 CREATE TABLE IF NOT EXISTS `menu_carpetas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Ruta` varchar(90) COLLATE latin1_spanish_ci NOT NULL,
