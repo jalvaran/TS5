@@ -27,7 +27,7 @@ if($idCartera<>""){
         $css->ColTabla("<strong>IVA</strong>", 1);
         $css->ColTabla("<strong>TOTAL</strong>", 1);
     $css->CierraFilaTabla();
-    $sql="SELECT Facturas_idFacturas FROM Cartera WHERE idCartera='$idCartera'";
+    $sql="SELECT Facturas_idFacturas FROM cartera WHERE idCartera='$idCartera'";
     $Consulta=$obVenta->Query($sql);
     $DatosCartera=$obVenta->FetchArray($Consulta);
     $idFactura=$DatosCartera["Facturas_idFacturas"];

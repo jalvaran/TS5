@@ -88,12 +88,8 @@ $obPrint=new PrintPos($idUser);
                 
 
                 $obVenta=new ProcesoVenta($idUser);
-
-                if($TablaItem=="productosventa"){
-                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
-                }else{
-                    $obVenta->AgregaPreventaServicios($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
-                }
+                $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
+                
                 
                 if(isset($_REQUEST['Bascula'])){
                     $obVenta->update("registro_basculas", "Leido", 1, "WHERE idBascula='1'");

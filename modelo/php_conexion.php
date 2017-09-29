@@ -541,12 +541,10 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $impuesto=$DatosProductoGeneral["IVA"];
             $PorcentajeIVA=$impuesto;
             $DatosImpuestosAdicionales["ValorImpuesto"];
-            
+            $impuesto=$impuesto+1;
             if($DatosTablaItem["IVAIncluido"]=="SI"){
                 
-                    $impuesto=$impuesto+1;
-                    $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
-                
+                $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
                 
             }else{
                 $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
@@ -561,7 +559,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 
             $Subtotal=$ValorUnitario*$Cantidad;
             
-                $impuesto=($impuesto-1)*$Subtotal +($DatosImpuestosAdicionales["ValorImpuesto"]*$Cantidad);
+            $impuesto=($impuesto-1)*$Subtotal +($DatosImpuestosAdicionales["ValorImpuesto"]*$Cantidad);
             
             
             $Total=$Subtotal+$impuesto;
