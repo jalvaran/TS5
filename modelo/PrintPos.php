@@ -1103,6 +1103,8 @@ class PrintPos extends ProcesoVenta{
         }
     }
     $TotalInteresesSisteCredito=$this->Sume("facturas_intereses_sistecredito", "Valor", "WHERE idCierre='$idCierre'");
+    $TotalAnticiposRecibidos=$this->Sume("comprobantes_ingreso", "Valor", "WHERE idCierre='$idCierre' AND Estado='ABIERTO' AND Tipo='ANTICIPO'");
+    $TotalAnticiposCruzados=$this->Sume("comprobantes_ingreso", "Valor", "WHERE idCierre='$idCierre' AND Estado='CERRADO' AND Tipo='ANTICIPO'");
         
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"ABONOS CRED EFECTIVO ".str_pad("$".number_format($AbonosCreditoEfectivo),20," ",STR_PAD_LEFT));
@@ -1120,13 +1122,20 @@ class PrintPos extends ProcesoVenta{
     fwrite($handle,"ABONOS SISTECREDITO  ".str_pad("$".number_format($DatosCierre["AbonosSisteCredito"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"INTERESES SISTECREDITO  ".str_pad("$".number_format($TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
-    
+    fwrite($handle,"INTERESES SISTECREDITO  ".str_pad("$".number_format($TotalInteresesSisteCredito),17," ",STR_PAD_LEFT));
+    if($TotalAnticiposRecibidos>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"ANTICIPOS RECIBIDOS  ".str_pad("$".number_format($TotalAnticiposRecibidos),20," ",STR_PAD_LEFT));
+     
+    }
+    if($TotalAnticiposCruzados>0){
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle,"ANTICIPOS CRUZADOS   ".str_pad("$".number_format($TotalAnticiposCruzados),20," ",STR_PAD_LEFT));
+     
+    }
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"EGRESOS              ".str_pad("$".number_format($DatosCierre["TotalEgresos"]),20," ",STR_PAD_LEFT));
-        
-    
-    
+     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"TOTAL TARJETAS       ".str_pad("$".number_format($DatosCierre["TotalTarjetas"]),20," ",STR_PAD_LEFT));
     
@@ -1142,38 +1151,14 @@ class PrintPos extends ProcesoVenta{
     fwrite($handle,"OTROS IMPUESTOS      ".str_pad("$".number_format($TotalOtrosImpuestos),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
+    fwrite($handle,"TOTAL ENTREGA        ".str_pad("$".number_format($DatosCierre["TotalEntrega"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito+$TotalAnticiposRecibidos-$TotalAnticiposCruzados),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito),20," ",STR_PAD_LEFT));
+    fwrite($handle,"SALDO EN CAJA        ".str_pad("$".number_format($DatosCierre["TotalEfectivo"]+$TotalOtrosImpuestos+$TotalInteresesSisteCredito+$TotalAnticiposRecibidos-$TotalAnticiposCruzados),20," ",STR_PAD_LEFT));
     
     $this->SeparadorHorizontal($handle, "_", 37);
 
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
-   
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
-    //fwrite($handle, chr(27). chr(100). chr(0));
-    //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle,"***Comprobante impreso por TS5***");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"Techno Soluciones SAS, 3177740609");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle,"www.technosoluciones.com.co");
-    //fwrite($handle,"=================================");
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(27). chr(100). chr(1));
-
-    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    $this->Footer($handle);
     }
     fclose($handle); // cierra el fichero PRN
     $salida = shell_exec('lpr $COMPrinter');

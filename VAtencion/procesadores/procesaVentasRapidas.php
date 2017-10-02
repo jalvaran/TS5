@@ -201,7 +201,13 @@ $obPrint=new PrintPos($idUser);
             $Devuelta=$_REQUEST["TxtDevuelta"];
             $CuentaDestino=$_REQUEST["TxtCuentaDestino"];
             $TipoPago=$_REQUEST["TxtTipoPago"];
+            $Anticipo=$obVenta->normalizar($_REQUEST["TxtAnticipo"]);
+            $idAnticipo=$obVenta->normalizar($_REQUEST["CmbAnticipo"]);
             $Observaciones=$_REQUEST["TxtObservacionesFactura"];
+            if($idAnticipo>0){
+                $Observaciones.=$Observaciones." Anticipo por $Anticipo con id: $idAnticipo Cruzado con esta Factura";
+            }
+            
             $DatosVentaRapida["PagaCheque"]=$Cheque;
             $DatosVentaRapida["PagaTarjeta"]=$Tarjeta;
             $DatosVentaRapida["idTarjeta"]=$idTarjeta;
@@ -236,7 +242,10 @@ $obPrint=new PrintPos($idUser);
             $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
             //print("<script>alert('Entra 2')</script>");
             $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
-            $obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
+            //$obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
+            if($idAnticipo>0){
+                $obVenta->CruceAnticipoFactura($fecha,$idAnticipo,$NumFactura,$CuentaDestino,"");
+            }
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
             if($DatosImpresora["Habilitado"]=="SI"){
                 $obPrint->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);

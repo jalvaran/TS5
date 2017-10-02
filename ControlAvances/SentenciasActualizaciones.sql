@@ -565,3 +565,7 @@ ALTER TABLE `facturas_items` ADD INDEX(`idCierre`);
 
 INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
 (20, 'Anticipos realizados por clientes', 280505, 'ANTICIPOS REALIZADOS POR CLIENTES', '2017-09-29 15:24:03', '2017-06-06 12:13:00');
+
+
+ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`;
+UPDATE `comprobantes_ingreso` SET `idCierre`=1

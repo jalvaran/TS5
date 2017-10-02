@@ -22,6 +22,12 @@ if(isset($_REQUEST['idClientes'])){
         $idClientes=$_REQUEST['idClientes'];
 }
 
+//////Si recibo un anticipo
+$idAnticipo=0;
+if(isset($_REQUEST['CmbAnticipo'])){
+    $idAnticipo=$_REQUEST['CmbAnticipo'];
+}
+
 $css =  new CssIni("TS5 Ventas");
 $obVenta=new ProcesoVenta($idUser);  
 $css->CabeceraIni("TS5 Ventas"); 
@@ -193,8 +199,8 @@ $css->AnchoElemento("CmbClienteCotizacion_chosen", 200);
 $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 if($idPreventa>0){
-    $Page="Consultas/ItemsPreventa.php?myPage=$myPage&idClientes=$idClientes&CmbPreVentaAct=";
-    //$Page2="Consultas/TotalesVentasRapidas.php?idClientes=$idClientes&myPage=$myPage&CmbPreVentaAct=";
+    $Page="Consultas/ItemsPreventa.php?myPage=$myPage&idClientes=$idClientes&idAnticipo=$idAnticipo&CmbPreVentaAct=";
+    
     print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivItemsPreventa`,`2`);</script>");
 }
 ?>

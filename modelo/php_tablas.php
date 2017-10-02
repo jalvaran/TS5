@@ -3750,6 +3750,7 @@ $this->PDF->writeHTML("<br>", true, false, false, false, '');
         //print("</pre>");
         
         $htmlBG=$this->ArmeHTMLBalanceGeneral($TotalClases,$FechaCorte);
+        //print($htmlBG);
         $htmlER=$this->ArmeHTMLEstadoResultados($TotalClases,$FechaCorte);
         $Back="#f2f2f2";
         $htmlFirmas='<table cellspacing="1" cellpadding="1" border="0"  align="center" >';

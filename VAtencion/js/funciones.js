@@ -22,7 +22,7 @@ function EnviaFormVentasRapidas() {
         tarjeta =  parseInt(document.getElementById("TxtPagaTarjeta").value);
         cheque =  parseInt(document.getElementById("TxtPagaCheque").value);
         otros =  parseInt(document.getElementById("TxtPagaOtros").value);
-        
+        Anticipo =  parseInt(document.getElementById("TxtAnticipo").value);
         if(document.getElementById("TxtPaga").length <= 0 ){
             efectivo=0;
         }
@@ -35,7 +35,7 @@ function EnviaFormVentasRapidas() {
         if(document.getElementById("TxtPagaOtros").length <= 0){
             otros=0;
         }
-	TotalPago=efectivo+tarjeta+cheque+otros;
+	TotalPago=efectivo+tarjeta+cheque+otros+Anticipo;
         if(TotalPago >= total){
             
             document.getElementById('FrmGuarda').submit();
@@ -111,6 +111,7 @@ function CalculeDevuelta() {
         tarjeta =  parseInt(document.getElementById("TxtPagaTarjeta").value);
         cheque =  parseInt(document.getElementById("TxtPagaCheque").value);
         otros =  parseInt(document.getElementById("TxtPagaOtros").value);
+        anticipos =  parseInt(document.getElementById("TxtAnticipo").value);
         
         if(document.getElementById("TxtPaga").length <= 0 ){
             efectivo=0;
@@ -124,7 +125,7 @@ function CalculeDevuelta() {
         if(document.getElementById("TxtPagaOtros").length <= 0){
             otros=0;
         }
-	TotalPago=efectivo+tarjeta+cheque+otros;
+	TotalPago=efectivo+tarjeta+cheque+otros+anticipos;
        
 	devuelta = TotalPago - total;
 	

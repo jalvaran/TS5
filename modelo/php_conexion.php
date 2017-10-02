@@ -2208,6 +2208,7 @@ public function CalculePesoRemision($idCotizacion)
         $this->update("facturas_abonos", "idCierre", $idCierre, "WHERE idCierre='' AND Usuarios_idUsuarios='$idUser'");
         $this->update("facturas_items", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuarios='$idUser'");
         $this->update("facturas_intereses_sistecredito", "idCierre", $idCierre, "WHERE idCierre='' AND idUsuario='$idUser'"); 
+        $this->update("comprobantes_ingreso", "idCierre", $idCierre, "WHERE idCierre='' AND Usuarios_idUsuarios='$idUser'"); 
          
         return ($idCierre);
         
@@ -6859,6 +6860,18 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
 		
         return($NumCotizacion);
      }
+     //Cruza un anticipo
+    public function CruceAnticipoFactura($fecha,$idAnticipo,$NumFactura,$CuentaDestino,$Vector) {
+        $DatosFactura=$this->DevuelveValores("facturas", "idFacturas", $NumFactura);
+        $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
+        $DatosAnticipos=$this->DevuelveValores("comprobantes_ingreso","ID",$idAnticipo);
+        $DatosCuenta=$this->DevuelveValores("subcuentas", "PUC", $CuentaDestino);
+        $Parametros=$this->DevuelveValores("parametros_contables", "ID", 20);
+        $Concepto="Cruce de Anticipo en comprobante de ingreso: $idAnticipo con la factura $DatosFactura[NumeroFactura]";
+        $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $NumFactura, "", $DatosCliente["Num_Identificacion"], $Parametros["CuentaPUC"], $Parametros["NombreCuenta"], "CRUCE DE ANTICIPO", "DB", $DatosAnticipos["Valor"], $Concepto, $DatosFactura["CentroCosto"], $DatosFactura["idSucursal"], "");
+        $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $NumFactura, "", $DatosCliente["Num_Identificacion"], $CuentaDestino, $DatosCuenta["Nombre"], "CRUCE DE ANTICIPO", "CR", $DatosAnticipos["Valor"], $Concepto, $DatosFactura["CentroCosto"], $DatosFactura["idSucursal"], "");
+        $this->ActualizaRegistro("comprobantes_ingreso", "Estado", "CERRADO", "ID", $idAnticipo);
+    }
 //////////////////////////////Fin	
 }
 	

@@ -31,6 +31,7 @@ $obVenta = new ProcesoVenta($idUser);
             $css->ColTabla("<strong>Cupo</strong>", 1);
             $css->ColTabla("<strong>Debe</strong>", 1);
             $css->ColTabla("<strong>Cupo Disponible</strong>", 1);
+            $css->ColTabla("<strong>Anticipos</strong>", 1);
             $css->CierraFilaTabla();
             while($DatosCliente=$obVenta->FetchArray($Consulta)){  
                 $css->FilaTabla(16);
@@ -38,26 +39,37 @@ $obVenta = new ProcesoVenta($idUser);
                 $CupoDisponible=$DatosCliente["Cupo"]-$Deuda;
                 $Aplica=$CupoDisponible-$TotalVenta;
                 $Link=$myPage."?CmbPreVentaAct=$idPreventa&idClientes=$DatosCliente[idClientes]";
-                if($Aplica >= 0){                    
+                $Color="black";
+                if($Aplica >= 0){  
+                    $Color="blue";
+                }    
                     print("<td>");
                     $css->CrearLink($Link, "_self", "Asignar");
                     print("</td>");
-                    $css->ColTabla("<strong style='color:blue'>$DatosCliente[RazonSocial]</strong>", 1);
-                    $css->ColTabla("<strong style='color:blue'>$DatosCliente[Num_Identificacion]</strong>", 1);
-                    $css->ColTabla("<strong style='color:blue'>".number_format($DatosCliente["Cupo"])."</strong>", 1);
-                    $css->ColTabla("<strong style='color:blue'>".number_format($Deuda)."</strong>", 1);
-                    $css->ColTabla("<strong style='color:blue'>".number_format($CupoDisponible)."</strong>", 1);
-                    
-                }else{
+                    $css->ColTabla("<strong style='color:$Color'>$DatosCliente[RazonSocial]</strong>", 1);
+                    $css->ColTabla("<strong style='color:$Color'>$DatosCliente[Num_Identificacion]</strong>", 1);
+                    $css->ColTabla("<strong style='color:$Color'>".number_format($DatosCliente["Cupo"])."</strong>", 1);
+                    $css->ColTabla("<strong style='color:$Color'>".number_format($Deuda)."</strong>", 1);
+                    $css->ColTabla("<strong style='color:$Color'>".number_format($CupoDisponible)."</strong>", 1);
                     print("<td>");
-                    $css->CrearLink($Link, "_self", "Asignar");
+                    $idCliente=$DatosCliente["idClientes"];
+                    $css->CrearForm2("FrmAnticipos", $myPage, "post", "_SELF");
+                        $css->CrearInputText("CmbPreVentaAct", "hidden", "",$idPreventa , "", "", "", "", "", "", 0, 0);
+                        $css->CrearInputText("idClientes", "hidden", "",$DatosCliente["idClientes"] , "", "", "", "", "", "", 0, 0);
+                        $DatosClienteSelect=$obVenta->ValorActual("clientes", "Num_Identificacion", " idClientes='$idCliente'");
+                        $Tercero=$DatosClienteSelect["Num_Identificacion"];
+                        $css->CrearSelect("CmbAnticipo", "");
+                            $css->CrearOptionSelect("", "Seleccione Anticipo", 0);
+                            $ConsultaSel=$obVenta->ConsultarTabla("comprobantes_ingreso", " WHERE Tercero='$Tercero' AND Tipo='ANTICIPO' AND Estado='ABIERTO'");
+                            while($DatosAnticipos=$obVenta->FetchArray($ConsultaSel)){
+                                $css->CrearOptionSelect($DatosAnticipos["ID"], $DatosAnticipos["Fecha"]." ".$DatosAnticipos["Valor"]." ".$DatosAnticipos["Concepto"], 0);
+                            }
+                        $css->CerrarSelect();
+                        print("<br>");
+                        $css->CrearBotonConfirmado("BtnAnticipo", "Cruzar Anticipo");
+                    $css->CerrarForm();
                     print("</td>");
-                    $css->ColTabla("$DatosCliente[RazonSocial]", 1);
-                    $css->ColTabla("$DatosCliente[Num_Identificacion]", 1);
-                    $css->ColTabla("".number_format($DatosCliente["Cupo"])."", 1);
-                    $css->ColTabla("".number_format($Deuda)."", 1);
-                    $css->ColTabla("".number_format($CupoDisponible)."", 1);
-                }
+                
             }
             $css->CerrarTabla();
             $css->CerrarDiv();

@@ -14,17 +14,16 @@ $DatosCajas=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
 //$key=$obVenta->normalizar($_REQUEST['key']);
 $myPage=$obVenta->normalizar($_REQUEST['myPage']);
 $idPreventa=$obVenta->normalizar($_REQUEST['CmbPreVentaAct']);
+$idAnticipo=0;
+if(isset($_REQUEST['idAnticipo'])){
+    $idAnticipo=$obVenta->normalizar($_REQUEST['idAnticipo']);
+}
+
 if(isset($_REQUEST['idClientes'])){
     $idClientes=$obVenta->normalizar($_REQUEST['idClientes']);
 }else{
     $idClientes=1;
 }
-//////Si recibo un cliente
-if(isset($_REQUEST['idClientes'])){
-
-    $idClientes=$_REQUEST['idClientes'];
-}
-
 
 //Si se recibe un codigo de barras
 if(isset($_REQUEST['key'])){
@@ -117,6 +116,7 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
     $css->CrearInputText("TxtTotalH","hidden","",$Total,"","","","",150,30,0,0);
     $css->CrearInputText("TxtCuentaDestino","hidden","",$DatosCajas["CuentaPUCEfectivo"],"","","","",150,30,0,0);
     $css->CrearInputText("TxtGranTotalH","hidden","",$GranTotal,"","","","",150,30,0,0);
+    $css->CrearInputText("CmbAnticipo","hidden","",$idAnticipo,"","","","",150,30,0,0);
     $css->CrearTabla();
     $css->FilaTabla(16);
         $css->ColTabla("<strong>Ultima Devuelta: </strong>", 1);
@@ -127,6 +127,18 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
         $css->ColTabla("<strong>$ ".number_format($DatosDevuelta["Devuelve"])."<strong>", 1);
         $css->ColTabla("<strong>".number_format($SumaItemsPreventa["NumItems"])."<strong>", 1); 
         print("<td>");
+        $Visible=0;
+        $Anticipo=0;
+        if($idAnticipo>0){
+            $Visible=1;
+            $DatosAnticipos=$obVenta->DevuelveValores("comprobantes_ingreso", "ID", $idAnticipo);
+            $Anticipo=$DatosAnticipos["Valor"];
+        }
+        $css->CrearDiv("DivAnticipo", "", "center", $Visible, 1);
+            
+            $css->CrearInputNumber("TxtAnticipo","number","Anticipos:<br>",$Anticipo,"Efectivo","","onkeyup","CalculeDevuelta()",150,30,1,1,"","",1);
+        
+        $css->CerrarDiv();
         $css->CrearInputNumber("TxtPaga","number","",round($Total),"Efectivo","","onkeyup","CalculeDevuelta()",150,30,0,1,"","",1);
         print("</td>");
     $css->CierraFilaTabla();
@@ -209,7 +221,7 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
                 $css->CerrarDiv();
         print("</td>");
         print("<td>");
-            $css->CrearInputText("TxtDevuelta","text","Devuelta : ",0,"Devuelta","black","","",150,50,1,0,$ToolTip='Esta es la Devuelta');
+            $css->CrearInputText("TxtDevuelta","text","Devuelta : ",$Anticipo,"Devuelta","black","","",150,50,1,0,$ToolTip='Esta es la Devuelta');
             
 	print("</td>");
     $css->CierraFilaTabla(); 
