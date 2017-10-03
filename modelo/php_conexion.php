@@ -803,25 +803,7 @@ public function InicializarPreventas()
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             
             $idIngreso=$this->ObtenerMAX($tab,"ID", 1,"");
-            /*
-            //////Registro en la tabla anticipos
             
-            $tab="anticipos_recibidos";
-            $NumRegistros=8;
-
-            $Columnas[0]="Fecha";		$Valores[0]=$fecha;
-            $Columnas[1]="Tercero";             $Valores[1]=$NIT;
-            $Columnas[2]="Valor";               $Valores[2]=$Total;
-            $Columnas[3]="Imagen";		$Valores[3]="";
-            $Columnas[4]="Observaciones";	$Valores[4]=$Concepto;
-            $Columnas[5]="idUsuario";           $Valores[5]=$idUser;
-            $Columnas[6]="idComprobanteIngreso";$Valores[6]=$idIngreso;
-            $Columnas[7]="Estado";              $Valores[7]="ABIERTO";
-            
-            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-            
-             * 
-             */
             ////Registro el anticipo en el libro diario
             $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
             

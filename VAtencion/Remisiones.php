@@ -73,7 +73,7 @@ include_once("procesaRemision.php");
             $css->CrearFilaNotificacion("Remision almacenada Correctamente <a href='$RutaPrintCot' target='_blank'>Imprimir Remision No. $_REQUEST[TxtidRemision]</a>",16);
             $css->CerrarTabla();
             if(!empty($_REQUEST["TxtidIngreso"])){
-                $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
+                $RutaPrintIngreso="PDF_Documentos.php?idDocumento=4&idIngreso=".$_REQUEST["TxtidIngreso"];			
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Comprobante de Ingreso Creado Correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Ingreso No. $_REQUEST[TxtidIngreso]</a>",16);
                 $css->CerrarTabla();
@@ -95,8 +95,8 @@ include_once("procesaRemision.php");
 	if(!empty($_REQUEST["TxtBuscarCotizacion"])){
 		
 		$Key=$_REQUEST["TxtBuscarCotizacion"];
-		$pa=mysql_query("SELECT * FROM cotizacionesv5 c INNER JOIN clientes cl ON c.Clientes_idClientes = cl.idClientes WHERE cl.RazonSocial LIKE '%$Key%' OR c.ID = '$Key' ORDER BY c.ID DESC LIMIT 20") or die(mysql_error());
-		if(mysql_num_rows($pa)){
+		$pa=$obVenta->Query("SELECT * FROM cotizacionesv5 c INNER JOIN clientes cl ON c.Clientes_idClientes = cl.idClientes WHERE cl.RazonSocial LIKE '%$Key%' OR c.ID = '$Key' ORDER BY c.ID DESC LIMIT 20");
+		if($obVenta->NumRows($pa)){
 			print("<br>");
 			$css->CrearTabla();
 			$css->FilaTabla(18);
@@ -114,7 +114,7 @@ include_once("procesaRemision.php");
 				$css->ColTabla('Visualizar',1);
 				$css->ColTabla('Asociar',1);
 			$css->CierraFilaTabla();
-			while($DatosCotizacion=mysql_fetch_array($pa)){
+			while($DatosCotizacion=$obVenta->FetchArray($pa)){
 				$css->FilaTabla(14);
 				$css->ColTabla($DatosCotizacion['ID'],1);
 				$css->ColTabla($DatosCotizacion['Fecha'],1);
@@ -227,7 +227,7 @@ include_once("procesaRemision.php");
 			$Total=0;
 			$Subtotal=0;
 			$IVA=0;
-			while($DatosItems=mysql_fetch_array($Consulta)){
+			while($DatosItems=$obVenta->FetchArray($Consulta)){
 				
 				
 				$Subtotal=$Subtotal+$DatosItems["Subtotal"];
@@ -284,7 +284,7 @@ include_once("procesaRemision.php");
                         print("<br>Seleccione una Cuenta destino para el anticipo:<br>");
                         $css->CrearSelect("CmbCuentaDestino", "");
                             $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes","WHERE ClaseCuenta='ACTIVOS'");
-                            while($DatosCuentasFrecuentes=mysql_fetch_array($Consulta)){
+                            while($DatosCuentasFrecuentes=$obVenta->FetchArray($Consulta)){
                                 if($DatosCuentasFrecuentes["CuentaPUC"]=='110510')
                                     $Sel=1;
                                 else
@@ -296,7 +296,7 @@ include_once("procesaRemision.php");
                         print("<br>Seleccione un Centro de Costos:<br>");
                         $css->CrearSelect("CmbCentroCostos", "");
                             $Consulta=$obVenta->ConsultarTabla("centrocosto","");
-                            while($DatosCentroCostos=mysql_fetch_array($Consulta)){
+                            while($DatosCentroCostos=$obVenta->FetchArray($Consulta)){
                                
                                 $css->CrearOptionSelect($DatosCentroCostos["ID"], $DatosCentroCostos["Nombre"], 0);
                                 

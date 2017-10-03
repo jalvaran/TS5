@@ -34,19 +34,6 @@ $Vector["VerRegistro"]["ColumnaLink"]="ID";
  * Selecciono las Columnas que tendran valores de otras tablas
  */
 
-
-$Vector["Clientes_idClientes"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["Clientes_idClientes"]["TablaVinculo"]="clientes";  //tabla de donde se vincula
-$Vector["Clientes_idClientes"]["IDTabla"]="idClientes"; //id de la tabla que se vincula
-$Vector["Clientes_idClientes"]["Display"]="RazonSocial"; 
-$Vector["Clientes_idClientes"]["Predeterminado"]=1;
-
-$Vector["Tercero"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
-$Vector["Tercero"]["TablaVinculo"]="proveedores";  //tabla de donde se vincula
-$Vector["Tercero"]["IDTabla"]="Num_Identificacion"; //id de la tabla que se vincula
-$Vector["Tercero"]["Display"]="RazonSocial"; 
-$Vector["Tercero"]["Predeterminado"]=1;
-
 $Vector["Usuarios_idUsuarios"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
 $Vector["Usuarios_idUsuarios"]["TablaVinculo"]="usuarios";  //tabla de donde se vincula
 $Vector["Usuarios_idUsuarios"]["IDTabla"]="idUsuarios"; //id de la tabla que se vincula
