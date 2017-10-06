@@ -568,4 +568,5 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 
 
 ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`;
-UPDATE `comprobantes_ingreso` SET `idCierre`=1
+UPDATE `comprobantes_ingreso` SET `idCierre`=1;
+ALTER TABLE `empresapro` ADD `CXPAutomaticas` BIT(1) NOT NULL DEFAULT b'1' AFTER `FacturaSinInventario`;

@@ -175,6 +175,7 @@ class Compra extends ProcesoVenta{
     }
     //Guarde una Compra
     public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
+        $DatosEmpresa=$this->ValorActual("empresapro", "CXPAutomaticas", "idEmpresaPro='1'");
         $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
         $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
         $TotalRetenciones= $TotalesCompra["Total_Retenciones"];
@@ -201,7 +202,7 @@ class Compra extends ProcesoVenta{
         $this->IngreseRetireProductosInventarioCompra($idCompra,"SALIDA");   //Retiro los productos del inventario
         //Si es credito se ingresa a cuentas X Pagar
         
-        if($TipoPago=="Credito"){
+        if($TipoPago=="Credito" AND $DatosEmpresa["CXPAutomaticas"]==1){
             $SubtotalCuentaXPagar=$TotalesCompra["Gran_Subtotal"];
             $TotalIVACXP=$TotalesCompra["Gran_Impuestos"];
             $TotalCompraCXP=$TotalesCompra["Gran_Total"];

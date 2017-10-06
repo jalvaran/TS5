@@ -20,8 +20,8 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
  */
           
 $Vector["VerRegistro"]["Deshabilitado"]=1;       
-$Vector["NuevoRegistro"]["Deshabilitado"]=1;                                 
-$Vector["EditarRegistro"]["Deshabilitado"]=1;
+//$Vector["NuevoRegistro"]["Deshabilitado"]=1;                                 
+//$Vector["EditarRegistro"]["Deshabilitado"]=1;
 
 // Nueva Accion
 $Ruta="$myPage?idCuentaXPagar=";
@@ -30,6 +30,18 @@ $Vector["NuevaAccion"]["AgregarPreEgreso"]["Titulo"]="Agregar a PreEgreso";
 $Vector["NuevaAccion"]["AgregarPreEgreso"]["Link"]=$Ruta;
 $Vector["NuevaAccion"]["AgregarPreEgreso"]["ColumnaLink"]="ID";
 $Vector["NuevaAccion"]["AgregarPreEgreso"]["Target"]="_self";
+
+$Vector["idSucursal"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector["idSucursal"]["TablaVinculo"]="empresa_pro_sucursales";  //tabla de donde se vincula
+$Vector["idSucursal"]["IDTabla"]="ID"; //id de la tabla que se vincula
+$Vector["idSucursal"]["Display"]="Nombre";                    //Columna que quiero mostrar
+$Vector["idSucursal"]["Predeterminado"]=1;
+
+$Vector["idCentroCostos"]["Vinculo"]=1;   //Indico que esta columna tendra un vinculo
+$Vector["idCentroCostos"]["TablaVinculo"]="centrocosto";  //tabla de donde se vincula
+$Vector["idCentroCostos"]["IDTabla"]="ID"; //id de la tabla que se vincula
+$Vector["idCentroCostos"]["Display"]="Nombre";                    //Columna que quiero mostrar
+$Vector["idCentroCostos"]["Predeterminado"]=1;
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>

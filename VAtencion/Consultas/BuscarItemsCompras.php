@@ -21,8 +21,9 @@ $TipoBusqueda=$obVenta->normalizar($_REQUEST['TipoItem']);
 $PageReturn=$myPage."?TipoItem=1&idCompra=$idCompra&TxtAgregarItemCompra=";
 if($key<>""){
     $css->CrearTabla();
-
+    $DatosCompraGeneral=$obVenta->DevuelveValores("factura_compra", "ID", $idCompra);
     if($TipoBusqueda==1){    
+        
         $sql="SELECT * FROM `productosventa` pv 
 		WHERE pv.`idProductosVenta`='$key' OR pv.Nombre LIKE '%$key%' or pv.Referencia = '$key'  LIMIT 50";
         $consulta=$obVenta->Query($sql);
@@ -55,7 +56,18 @@ if($key<>""){
                             $css->CrearOptionSelect("", "Seleccione un tipo de IVA", 0);
                             $Consulta=$obVenta->ConsultarTabla("porcentajes_iva", "");
                             while($DatosIVA=$obVenta->FetchArray($Consulta)){
-                                $css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], 0);
+                                $sel=0;
+                                if($DatosCompraGeneral["TipoCompra"]=='RM'){
+                                    if($DatosIVA["Valor"]=='0'){
+                                        $sel=1;
+                                    }
+                                }
+                                if($DatosCompraGeneral["TipoCompra"]=='FC'){
+                                    if($DatosIVA["Valor"]=='0.19'){
+                                        $sel=1;
+                                    }
+                                }
+                                $css->CrearOptionSelect($DatosIVA["Valor"], $DatosIVA["Nombre"], $sel);
                             }
                         $css->CerrarSelect();
                        
