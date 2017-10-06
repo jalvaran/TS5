@@ -3435,6 +3435,7 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
         $ObservacionesFactura=$DatosFactura["TxtObservacionesFactura"];
         $FechaFactura=$DatosFactura["TxtFechaFactura"];
         $NumeroForzado=$DatosFactura["TxtNumeroFactura"];
+        $Colaborador=$DatosFactura["CmbColaborador"];
         $Consulta=$this->DevuelveValores("centrocosto", "ID", $CentroCostos);
         
         $EmpresaPro=$Consulta["EmpresaPro"];
@@ -3561,7 +3562,10 @@ public function AgregaPrecotizacion($Cantidad,$idProducto,$TablaItem,$ValorUnita
                     $Datos["idCliente"]=$idCliente;
                     $this->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
                 }
-                 return ($ID);
+                if($Colaborador<>"NO"){
+                    $this->AgregueVentaColaborador($ID, $Colaborador);
+                }
+                return ($ID);
             }    
            
         }
@@ -6853,6 +6857,60 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
         $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $NumFactura, "", $DatosCliente["Num_Identificacion"], $Parametros["CuentaPUC"], $Parametros["NombreCuenta"], "CRUCE DE ANTICIPO", "DB", $DatosAnticipos["Valor"], $Concepto, $DatosFactura["CentroCosto"], $DatosFactura["idSucursal"], "");
         $this->IngreseMovimientoLibroDiario($fecha, "FACTURA", $NumFactura, "", $DatosCliente["Num_Identificacion"], $CuentaDestino, $DatosCuenta["Nombre"], "CRUCE DE ANTICIPO", "CR", $DatosAnticipos["Valor"], $Concepto, $DatosFactura["CentroCosto"], $DatosFactura["idSucursal"], "");
         $this->ActualizaRegistro("comprobantes_ingreso", "Estado", "CERRADO", "ID", $idAnticipo);
+    }
+    
+    //Editar un item de una precotizacion
+    public function EditarItemPrecotizacion($idItem,$Cantidad,$Multiplicador,$ValorAcordado,$Vector) {
+        $DatosPreventa= $this->DevuelveValores('precotizacion',"ID",$idItem);
+        $DatosProductos=$this->DevuelveValores($DatosPreventa["Tabla"],"Referencia",$DatosPreventa["Referencia"]);
+        $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $DatosPreventa["Tabla"]);
+        $DescuentoPorcentaje=$DatosPreventa["Descuento"];
+        $ValorDescuento=$DatosPreventa["ValorDescuento"];
+        if($ValorAcordado<>$DatosPreventa["ValorUnitario"]){
+            $DescuentoPorcentaje=(100/$DatosProductos["PrecioVenta"])*$ValorAcordado;
+            $DescuentoPorcentaje= 100-(round($DescuentoPorcentaje, 2));
+            $ValorDescuento=($DatosProductos["PrecioVenta"]-$ValorAcordado)*$Cantidad;
+        }
+        if($Cantidad<>$DatosPreventa["Cantidad"]){
+            $ValorDescuentoUnitario=$DatosPreventa["ValorDescuento"]/$DatosPreventa["Cantidad"];
+            $ValorDescuento=$ValorDescuentoUnitario*$Cantidad;
+        }
+        /*
+        if($DatosTablaItem["IVAIncluido"]=="SI"){
+            $ValorAcordado=round($ValorAcordado/($DatosProductos["IVA"]+1));
+
+        }
+
+         * 
+         */
+        $Subtotal=$ValorAcordado*$Cantidad*$Multiplicador;
+        $IVA=round($Subtotal*$DatosProductos["IVA"]);
+        $SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
+        $Total=$Subtotal+$IVA;
+        $filtro="ID";
+
+        $this->ActualizaRegistro("precotizacion","SubTotal", $Subtotal, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","IVA", $IVA, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","SubtotalCosto", $SubtotalCosto, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","Total", $Total, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","ValorUnitario", $ValorAcordado, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","Cantidad", $Cantidad, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","Multiplicador", $Multiplicador, $filtro, $idItem);
+        
+        $this->ActualizaRegistro("precotizacion","Descuento", $DescuentoPorcentaje, $filtro, $idItem);
+        $this->ActualizaRegistro("precotizacion","ValorDescuento", $ValorDescuento, $filtro, $idItem);
+        
+    }
+    
+    //Aplicar descuento general a cotizacion
+    public function DescuentoGeneralPrecotizacion($Descuento,$idUser,$Vector) {
+        $Consulta=$this->ConsultarTabla("precotizacion", "WHERE idUsuario='$idUser'");
+        while($DatosItem=$this->FetchArray($Consulta)){
+            $DatosProductos=$this->DevuelveValores($DatosItem["Tabla"],"Referencia",$DatosItem["Referencia"]);
+            $ValorDescuento=$DatosProductos["PrecioVenta"]*($Descuento/100);
+            $ValorAcordado=$DatosProductos["PrecioVenta"]-$ValorDescuento;
+            $this->EditarItemPrecotizacion($DatosItem["ID"], $DatosItem["Cantidad"], $DatosItem["Multiplicador"], $ValorAcordado, "");
+        }
     }
 //////////////////////////////Fin	
 }

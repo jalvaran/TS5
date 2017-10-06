@@ -35,11 +35,6 @@ $obVenta=new ProcesoVenta($idUser);
     }
     
     
-	
-	if(!empty($_REQUEST['TxtAsociarCliente'])){
-		$idCliente=$obVenta->normalizar($_REQUEST['TxtAsociarCliente']);		
-		header("location:Cotizaciones.php?TxtIdCliente=$idCliente");
-	}
 		
 	
 	if(!empty($_REQUEST['del'])){
@@ -48,11 +43,11 @@ $obVenta=new ProcesoVenta($idUser);
 		$IdTabla=$obVenta->normalizar($_REQUEST['TxtIdTabla']);
 		$IdPre=$obVenta->normalizar($_REQUEST['TxtIdPre']);
 		$obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
-		header("location:Cotizaciones.php?TxtIdCliente=$IdPre");
+		header("location:Cotizaciones.php");
 	}
 		
 	if(!empty($_REQUEST['BtnAgregarItem'])){
-		$idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
+		//$idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
 		$idItem=$obVenta->normalizar($_REQUEST['idProducto']);
                 $Cantidad=$obVenta->normalizar($_REQUEST['TxtCantidad']);
                 $ValorUnitario=$obVenta->normalizar($_REQUEST['TxtValor']);
@@ -101,7 +96,7 @@ $obVenta=new ProcesoVenta($idUser);
                     }
                     
                 }
-		header("location:Cotizaciones.php?TxtIdCliente=$idClientes");
+		header("location:Cotizaciones.php");
 			
 	}
 	
@@ -110,41 +105,11 @@ $obVenta=new ProcesoVenta($idUser);
 	if(!empty($_REQUEST['TxtEditar'])){
 		
 		$idItem=$obVenta->normalizar($_REQUEST['TxtPrecotizacion']);
-		$idClientes=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
-		$Tabla=$obVenta->normalizar($_REQUEST['TxtTabla']);
 		$Cantidad=$obVenta->normalizar($_REQUEST['TxtEditar']);
                 $Multiplicador=$obVenta->normalizar($_REQUEST['TxtMultiplicador']);
 		$ValorAcordado=$obVenta->normalizar($_REQUEST['TxtValorUnitario']);
-                $flagMult=0;
-		
-		$DatosPreventa=$obVenta->DevuelveValores('precotizacion',"ID",$idItem);
-                $DatosProductos=$obVenta->DevuelveValores($Tabla,"Referencia",$DatosPreventa["Referencia"]);
-                $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $DatosPreventa["Tabla"]);
-                /*
-                if($DatosTablaItem["IVAIncluido"]=="SI"){
-                    $ValorAcordado=round($ValorAcordado/($DatosProductos["IVA"]+1));
-
-                }
-                
-                 * 
-                 */
-		$Subtotal=$ValorAcordado*$Cantidad*$Multiplicador;
-		
-		$IVA=round($Subtotal*$DatosProductos["IVA"]);
-		$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
-		$Total=$Subtotal+$IVA;
-		$filtro="ID";
-		
-		$obVenta->ActualizaRegistro("precotizacion","SubTotal", $Subtotal, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("precotizacion","IVA", $IVA, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("precotizacion","SubtotalCosto", $SubtotalCosto, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("precotizacion","Total", $Total, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("precotizacion","ValorUnitario", $ValorAcordado, $filtro, $idItem);
-		$obVenta->ActualizaRegistro("precotizacion","Cantidad", $Cantidad, $filtro, $idItem);
-                
-                $obVenta->ActualizaRegistro("precotizacion","Multiplicador", $Multiplicador, $filtro, $idItem);
-		
-		header("location:Cotizaciones.php?TxtIdCliente=$idClientes");
+		$obVenta->EditarItemPrecotizacion($idItem, $Cantidad, $Multiplicador, $ValorAcordado, "");
+		header("location:Cotizaciones.php");
 			
 	}
 	
@@ -186,7 +151,7 @@ $obVenta=new ProcesoVenta($idUser);
 		$Columnas[3]="Usuarios_idUsuarios";			$Valores[3]=$idUser;
 		$Columnas[4]="Observaciones";				$Valores[4]=$Observaciones;
 		$Columnas[5]="NumSolicitud";				$Valores[5]=$NumSolicitud;
-		$Columnas[6]="NumOrden";					$Valores[6]=$NumOrden;
+		$Columnas[6]="NumOrden";				$Valores[6]=$NumOrden;
 		
 		$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
 			
@@ -198,7 +163,7 @@ $obVenta=new ProcesoVenta($idUser);
 		
 			
 			$tab="cot_itemscotizaciones";
-			$NumRegistros=15;  
+			$NumRegistros=17;  
 								
 			$Columnas[0]="NumCotizacion";				$Valores[0]=$NumCotizacion;
 			$Columnas[1]="Descripcion";				$Valores[1]=$DatosPrecoti["Descripcion"];
@@ -215,6 +180,8 @@ $obVenta=new ProcesoVenta($idUser);
 			$Columnas[12]="CuentaPUC";				$Valores[12]=$DatosPrecoti["CuentaPUC"];
 			$Columnas[13]="idCliente";				$Valores[13]=$idCliente;
                         $Columnas[14]="Multiplicador";				$Valores[14]=$DatosPrecoti["Multiplicador"];
+                        $Columnas[15]="Descuento";				$Valores[15]=$DatosPrecoti["Descuento"];
+                        $Columnas[16]="ValorDescuento";				$Valores[16]=$DatosPrecoti["ValorDescuento"];
                         
 			$obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);	
 		
@@ -347,6 +314,14 @@ $obVenta=new ProcesoVenta($idUser);
            
        }
 
+////Se recibe porcentaje general
+	
+if(!empty($_REQUEST['BtnDescuentoGeneral'])){
 
+        $DescuentoGeneral=$obVenta->normalizar($_REQUEST['TxtDescuentoPorcentaje']);
+        $obVenta->DescuentoGeneralPrecotizacion($DescuentoGeneral, $idUser, "");
+        header("location:Cotizaciones.php");
+
+}
         
-	?>
+?>

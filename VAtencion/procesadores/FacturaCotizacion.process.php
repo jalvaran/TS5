@@ -75,17 +75,17 @@ if(!empty($_REQUEST['BtnEditar'])){
 if(!empty($_REQUEST["BtnGenerarFactura"])){
         $obVenta=new ProcesoVenta($idUser);
         
-        $DatosFactura["CmbCliente"]=$_REQUEST['CmbCliente'];        
-        $DatosFactura["CmbCentroCostos"]=$_REQUEST["CmbCentroCostos"];
-        $DatosFactura["CmbResolucion"]=$_REQUEST["CmbResolucion"];
-        $DatosFactura["CmbFormaPago"]=$_REQUEST["CmbFormaPago"];
-        $DatosFactura["CmbCuentaDestino"]=$_REQUEST["CmbCuentaDestino"];
-        $DatosFactura["TxtOrdenCompra"]=$_REQUEST["TxtOrdenCompra"];
-        $DatosFactura["TxtOrdenSalida"]=$_REQUEST["TxtOrdenSalida"];
-        $DatosFactura["TxtObservacionesFactura"]=$_REQUEST["TxtObservacionesFactura"];
-        $DatosFactura["TxtFechaFactura"]=$_REQUEST["TxtFechaFactura"];
-        $DatosFactura["TxtNumeroFactura"]=$_REQUEST["TxtNumeroFactura"];
-        
+        $DatosFactura["CmbCliente"]=$obVenta->normalizar($_REQUEST['CmbCliente']);        
+        $DatosFactura["CmbCentroCostos"]=$obVenta->normalizar($_REQUEST["CmbCentroCostos"]);
+        $DatosFactura["CmbResolucion"]=$obVenta->normalizar($_REQUEST["CmbResolucion"]);
+        $DatosFactura["CmbFormaPago"]=$obVenta->normalizar($_REQUEST["CmbFormaPago"]);
+        $DatosFactura["CmbCuentaDestino"]=$obVenta->normalizar($_REQUEST["CmbCuentaDestino"]);
+        $DatosFactura["TxtOrdenCompra"]=$obVenta->normalizar($_REQUEST["TxtOrdenCompra"]);
+        $DatosFactura["TxtOrdenSalida"]=$obVenta->normalizar($_REQUEST["TxtOrdenSalida"]);
+        $DatosFactura["TxtObservacionesFactura"]=$obVenta->normalizar($_REQUEST["TxtObservacionesFactura"]);
+        $DatosFactura["TxtFechaFactura"]=$obVenta->normalizar($_REQUEST["TxtFechaFactura"]);
+        $DatosFactura["TxtNumeroFactura"]=$obVenta->normalizar($_REQUEST["TxtNumeroFactura"]);
+        $DatosFactura["CmbColaborador"]=$obVenta->normalizar($_REQUEST["CmbColaborador"]);
         
         
         $ID=$obVenta->CrearFacturaDesdePrefactura($DatosFactura);
@@ -94,4 +94,5 @@ if(!empty($_REQUEST["BtnGenerarFactura"])){
         header("location:FacturaCotizacion.php?TxtidFactura=$ID");
         
     }
+    
 ?>

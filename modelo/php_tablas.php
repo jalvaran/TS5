@@ -3412,7 +3412,7 @@ $tbl = <<<EOD
     </tr>
     <tr>
        <td style="text-align: center;" >Fecha<br></td>
-       <td> $Fecha</td> 
+       <td style="font-size:6px;"> $DatosFormatoCalidad[Fecha]</td> 
     </tr>
 </table>
 EOD;
@@ -4279,18 +4279,22 @@ EOD;
     public function ArmeHTMLTotalesCotizacion($idCotizacion) {
         $DatosCotizacion= $this->obCon->DevuelveValores("cotizacionesv5", "ID", $idCotizacion);
         $Observaciones= $this->obCon->QuitarAcentos($DatosCotizacion["Observaciones"]);
-        $sql="SELECT SUM(Subtotal) as Subtotal, SUM(IVA) as IVA, SUM(Total) as Total FROM cot_itemscotizaciones "
+        $sql="SELECT SUM(Subtotal) as Subtotal,SUM(ValorDescuento) as ValorDescuento, SUM(IVA) as IVA, SUM(Total) as Total FROM cot_itemscotizaciones "
                 . " WHERE NumCotizacion='$idCotizacion'";
         $Datos=$this->obCon->Query($sql);
         $TotalesCotizacion= $this->obCon->FetchArray($Datos);
         $Subtotal= number_format($TotalesCotizacion["Subtotal"]);
         $IVA= number_format($TotalesCotizacion["IVA"]);
         $Total= number_format($TotalesCotizacion["Total"]);
+        if($TotalesCotizacion["ValorDescuento"]>0){
+            $ValorDescuento= number_format($TotalesCotizacion["ValorDescuento"]);
+            $Observaciones.=" <br>Descuento otorgado: $<strong>$ValorDescuento</strong>";
+        }
         $html = <<<EOD
         
 <table  cellpadding="2" border="1">
     <tr>
-        <td rowspan="3" colspan="4" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Observaciones:</strong> $Observaciones</td> 
+        <td rowspan="5" colspan="3" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Observaciones:</strong> $Observaciones</td> 
         
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>SUBTOTAL:</h3></td>
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $Subtotal</h3></td>
@@ -4305,6 +4309,7 @@ EOD;
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>TOTAL:</h3></td>
         <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><h3>$ $Total</h3><br><br><br></td>
     </tr>
+    
      
 </table>
 <table  cellpadding="2" border="1">

@@ -16,7 +16,7 @@ $css =  new CssIni("");
 $obVenta = new ProcesoVenta($idUser);
 $key=$obVenta->normalizar($_REQUEST['key']);
 $myPage=$obVenta->normalizar($_REQUEST['myPage']);
-$idCliente=$obVenta->normalizar($_REQUEST['TxtIdCliente']);
+
 $TipoBusqueda=$obVenta->normalizar($_REQUEST['TipoItem']);
 
 if($key<>""){
@@ -77,7 +77,7 @@ if($key<>""){
                     }
                     print("<td>");
                         $css->CrearForm2("FrmAgregaItemCotizacion$idProducto", $myPage, "post", "_self");
-                        $css->CrearInputText("TxtIdCliente", "hidden", "", $idCliente, "", "", "", "", "", "", 0, 0);
+                        //$css->CrearInputText("TxtIdCliente", "hidden", "", $idCliente, "", "", "", "", "", "", 0, 0);
                         $css->CrearInputText("idProducto", "hidden", "", $idProducto, "", "", "", "", "", "", 0, 0);
                         $css->CrearInputText("TipoItem", "hidden", "", $TipoBusqueda, "", "", "", "", "", "", 0, 0);
                         $css->CrearInputNumber("TxtCantidad", "number", "Cantidad: <br>", 1, "Cantidad", "Black", "", "", 100, 30, 0, 1, 1, "", "any");

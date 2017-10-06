@@ -197,6 +197,20 @@ print("<body>");
                 print("<script>alert('No hay cuentas frecuentes creadas debe crear al menos una')</script>");
             }
         $css->CerrarSelect();
+        print("<br>");
+        
+        print("Asignar Factura a Colaborador: <br>");
+        $css->CrearSelect("CmbColaborador", "");
+            $css->CrearOptionSelect("NO", "Seleccione un colaborador", 1);
+                
+            $Consulta=$obVenta->ConsultarTabla("colaboradores", "WHERE Activo='1'");
+            
+            if($obVenta->NumRows($Consulta)){
+                while($DatosCuentasColaboradores=$obVenta->FetchArray($Consulta)){
+                    $css->CrearOptionSelect($DatosCuentasColaboradores["Identificacion"], $DatosCuentasColaboradores["Nombre"]." ".$DatosCuentasColaboradores["Identificacion"], 0);
+                }
+            }
+        $css->CerrarSelect();
         print("<br>Fecha de la Factura: <br>");
         $css->CrearInputText("TxtFechaFactura","text","",date("Y-m-d"),"FechaFactura","black","","",130,30,0,1);
         print("<br>");
