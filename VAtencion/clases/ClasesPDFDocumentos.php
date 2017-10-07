@@ -221,7 +221,30 @@ class Documento extends Tabla{
         return($html);
     }
     
+    //Comprobante de ingreso
     
+     public function PDF_CompBajasAltas($idComprobante) {
+        $idFormato=25;
+        $fecha=date("Y-m-d");
+        $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
+        
+        $Documento="$DatosFormatos[Nombre] No. $idComprobante";
+        
+        $this->PDF_Ini("ComprobanteBajasAltas", 8, "");
+        $DatosComprobante= $this->obCon->DevuelveValores("prod_bajas_altas", "ID", $idComprobante);
+        $DatosUsuarios= $this->obCon->DevuelveValores("usuarios", "idUsuarios", $DatosComprobante["Usuarios_idUsuarios"]);
+               
+        $this->PDF_Encabezado($fecha,1, $idFormato, "",$Documento);
+        $html="<br><br><br><br><pre>";
+        $html.="<strong>El día $DatosComprobante[Fecha], se realiza por parte del Colaborador(a) $DatosUsuarios[Nombre] $DatosUsuarios[Apellido], Identificado con Documento $DatosUsuarios[Identificacion],"
+             . "Un movimiento de $DatosComprobante[Movimiento] en inventarios de $DatosComprobante[Cantidad] Unidades del producto $DatosComprobante[Nombre] con Referencia:  $DatosComprobante[Referencia],"
+             . "Para Constancia se firma por las partes:</strong> </pre>"; 
+        $this->PDF_Write("<br>".$html);
+        $html=$this->HTML_Firmas_Documentos();
+        $this->PDF_Write("<br><br><br><br>".$html);
+        
+        $this->PDF_Output("ComprobanteAltasBajas_$idComprobante");
+    }
     
    //Fin Clases
 }

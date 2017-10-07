@@ -46,7 +46,8 @@ print("<body>");
                     
                     $Sel=0;
                 }
-                $css->CrearOptionSelect($DatosComprobante['ID'],$DatosComprobante['ID']." ".$DatosComprobante['Concepto']." ".$DatosComprobante['NumeroFactura'],$Sel);							
+                $DatosTercero=$obCompra->DevuelveValores("proveedores", "Num_Identificacion", $DatosComprobante['Tercero']);
+                $css->CrearOptionSelect($DatosComprobante['ID'],$DatosComprobante['ID']." ".$DatosTercero["RazonSocial"]." ".$DatosComprobante['Concepto']." ".$DatosComprobante['NumeroFactura'],$Sel);							
             }
         $css->CerrarSelect();
     $css->CerrarForm();

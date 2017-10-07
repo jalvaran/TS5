@@ -22,13 +22,13 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
  */
 
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;            
-$Vector["VerRegistro"]["Deshabilitado"]=1;                      
+//$Vector["VerRegistro"]["Deshabilitado"]=1;                      
 $Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
 //Link para la accion ver
-$Ruta="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=";
+$Ruta="PDF_Documentos.php?idDocumento=25&idComprobante=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
-$Vector["VerRegistro"]["ColumnaLink"]="idFacturas";
+$Vector["VerRegistro"]["ColumnaLink"]="ID";
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas

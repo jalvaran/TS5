@@ -6906,10 +6906,13 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     public function DescuentoGeneralPrecotizacion($Descuento,$idUser,$Vector) {
         $Consulta=$this->ConsultarTabla("precotizacion", "WHERE idUsuario='$idUser'");
         while($DatosItem=$this->FetchArray($Consulta)){
-            $DatosProductos=$this->DevuelveValores($DatosItem["Tabla"],"Referencia",$DatosItem["Referencia"]);
-            $ValorDescuento=$DatosProductos["PrecioVenta"]*($Descuento/100);
-            $ValorAcordado=$DatosProductos["PrecioVenta"]-$ValorDescuento;
-            $this->EditarItemPrecotizacion($DatosItem["ID"], $DatosItem["Cantidad"], $DatosItem["Multiplicador"], $ValorAcordado, "");
+            if($DatosItem["Tabla"]<>"sistemas"){
+                $DatosProductos=$this->DevuelveValores($DatosItem["Tabla"],"Referencia",$DatosItem["Referencia"]);
+                $ValorDescuento=$DatosProductos["PrecioVenta"]*($Descuento/100);
+                $ValorAcordado=$DatosProductos["PrecioVenta"]-$ValorDescuento;
+                $this->EditarItemPrecotizacion($DatosItem["ID"], $DatosItem["Cantidad"], $DatosItem["Multiplicador"], $ValorAcordado, "");
+        
+            }    
         }
     }
 //////////////////////////////Fin	

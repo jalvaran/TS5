@@ -571,3 +571,4 @@ ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`
 UPDATE `comprobantes_ingreso` SET `idCierre`=1;
 ALTER TABLE `empresapro` ADD `CXPAutomaticas` BIT(1) NOT NULL DEFAULT b'1' AFTER `FacturaSinInventario`;
 ALTER TABLE `colaboradores` ADD `Activo` BIT(1) NOT NULL DEFAULT b'1' AFTER `SalarioBasico`;
+INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (25, 'COMPROBANTE DE BAJAS O ALTAS', '001', 'F-GI-006', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');

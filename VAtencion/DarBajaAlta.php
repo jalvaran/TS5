@@ -35,7 +35,7 @@ print("<body>");
     /////
     /////
     if(!empty($_REQUEST["TxtidComprobante"])){
-        $RutaPrintIngreso="../tcpdf/examples/comprobanteBaja.php?idComprobante=".$_REQUEST["TxtidComprobante"];			
+        $RutaPrintIngreso="PDF_Documentos.php?idDocumento=25&idComprobante=".$_REQUEST["TxtidComprobante"];			
         $css->CrearTabla();
         $css->CrearFilaNotificacion("Comprobante Creado correctamente <a href='$RutaPrintIngreso' target='_blank'>Imprimir Comprobante de Baja No. $_REQUEST[TxtidComprobante]</a>",16);
         $css->CerrarTabla();

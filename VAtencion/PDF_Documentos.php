@@ -17,6 +17,11 @@ if(isset($_REQUEST["idDocumento"])){
             $obDoc->PDF_CompIngreso($idIngreso);
             $obPrint->ComprobanteIngresoPOS($idIngreso, $DatosImpresora["Puerto"], 1);
             break;
+        case 25: //Comprobante de altas y bajas
+            $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
+            $obDoc->PDF_CompBajasAltas($idComprobante);
+            
+            break;
     }
 }else{
     print("No se recibió parametro de documento");
