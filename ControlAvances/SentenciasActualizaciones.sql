@@ -572,3 +572,10 @@ UPDATE `comprobantes_ingreso` SET `idCierre`=1;
 ALTER TABLE `empresapro` ADD `CXPAutomaticas` BIT(1) NOT NULL DEFAULT b'1' AFTER `FacturaSinInventario`;
 ALTER TABLE `colaboradores` ADD `Activo` BIT(1) NOT NULL DEFAULT b'1' AFTER `SalarioBasico`;
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (25, 'COMPROBANTE DE BAJAS O ALTAS', '001', 'F-GI-006', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');
+
+ALTER TABLE `productosalquiler` CHANGE `Existencias` `Existencias` INT NOT NULL;
+ALTER TABLE `productosalquiler` CHANGE `PrecioVenta` `PrecioVenta` DOUBLE NOT NULL;
+ALTER TABLE `productosalquiler` CHANGE `PrecioMayorista` `PrecioMayorista` DOUBLE NOT NULL;
+ALTER TABLE `productosalquiler` CHANGE `CostoUnitario` `CostoUnitario` DOUBLE NOT NULL;
+ALTER TABLE `productosalquiler` ADD `EnAlquiler` INT NOT NULL AFTER `Existencias`, ADD `EnBodega` INT NOT NULL AFTER `EnAlquiler`;
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('106', 'Kardex Alquiler', '22', '3', 'kardex_alquiler.php', '_SELF', b'1', 'kardex_alquiler.png', '5', '2017-09-07 11:03:21', '0000-00-00 00:00:00');

@@ -5,6 +5,7 @@
 
 $myPage="Remisiones.php";
 include_once("../sesiones/php_control.php");
+include_once("clases/ClasesRemisiones.php");	
 include_once("css_construct.php");
 	
 $idCotizacion="";
@@ -26,7 +27,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 /////////
 
 include_once ('funciones/function.php');
-include_once("procesaRemision.php");
+include_once("procesadores/Remisiones.process.php");
 	
 	
 ?>
@@ -44,7 +45,7 @@ include_once("procesaRemision.php");
 	 <?php 
 	 
 	 
-	 $css->CabeceraIni("SoftConTech Remisiones"); 
+	 $css->CabeceraIni("TS5 Remisiones"); 
 	 
 	 	
 	 $css->CrearForm("FrmBuscarCotizacion",$myPage,"post","_self");

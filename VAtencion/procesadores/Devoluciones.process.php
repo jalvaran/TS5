@@ -1,16 +1,14 @@
 <?php 
-
-//print("<script>alert('entra');</script>");		
+$obRemision=new Remision($idUser);		
 if(!empty($_REQUEST["TxtDias"])){
-    //print("<script>alert('entra');</script>");
-    $obVenta=new ProcesoVenta($idUser);
-    $idItem=$_REQUEST["TxtIdItem"];
-    $FechaDevolucion=$_REQUEST["TxtFechaDevolucion"];
-    $HoraDevolucion=$_REQUEST["TxtHoraDevolucion"];
-    $CantidadDevolucion=$_REQUEST["TxtCantidadDevolucion"];
-    $idRemision=$_REQUEST["TxtAsociarRemision"];
-    $Dias=$_REQUEST["TxtDias"];
-    $ValorUnitario=$_REQUEST["TxtSubtotalUnitario"];
+    
+    $idItem=$obRemision->normalizar($_REQUEST["TxtIdItem"]);
+    $FechaDevolucion=$obRemision->normalizar($_REQUEST["TxtFechaDevolucion"]);
+    $HoraDevolucion=$obRemision->normalizar($_REQUEST["TxtHoraDevolucion"]);
+    $CantidadDevolucion=$obRemision->normalizar($_REQUEST["TxtCantidadDevolucion"]);
+    $idRemision=$obRemision->normalizar($_REQUEST["TxtAsociarRemision"]);
+    $Dias=$obRemision->normalizar($_REQUEST["TxtDias"]);
+    $ValorUnitario=$obRemision->normalizar($_REQUEST["TxtSubtotalUnitario"]);
     $SubTotal=$ValorUnitario*$CantidadDevolucion;
     $Total=$SubTotal*$Dias;
     
@@ -25,7 +23,7 @@ if(!empty($_REQUEST["TxtDias"])){
     $Columnas[6]="Dias";                $Valores[6]=$Dias;
     $Columnas[7]="Total";               $Valores[7]=$Total;
     
-    $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    $obRemision->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
    
     header("location:Devoluciones.php?TxtAsociarRemision=$idRemision");
 }
@@ -36,24 +34,24 @@ if(!empty($_REQUEST["TxtDias"])){
 ////
 
 if(!empty($_REQUEST['del'])){
-    $id=$_REQUEST['del'];
-    $Tabla=$_REQUEST['TxtTabla'];
-    $IdTabla=$_REQUEST['TxtIdTabla'];
-    $IdPre=$_REQUEST['TxtIdPre'];
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+    $id=$obRemision->normalizar($_REQUEST['del']);
+    $Tabla=$obRemision->normalizar($_REQUEST['TxtTabla']);
+    $IdTabla=$obRemision->normalizar($_REQUEST['TxtIdTabla']);
+    $IdPre=$obRemision->normalizar($_REQUEST['TxtIdPre']);
+    $obRemision->BorraReg($Tabla, $IdTabla, $id);
+    
     header("location:Devoluciones.php?TxtAsociarRemision=$IdPre");
 }
 	
 if(!empty($_REQUEST["BtnGuardarDevolucion"])){
    
-    $obVenta=new ProcesoVenta($idUser);
-    $FechaDevolucion=$_REQUEST["TxtFechaDevolucion"];
-    $HoraDevolucion=$_REQUEST["TxtHoraDevolucion"];
-    $idRemision=$_REQUEST["TxtIdRemision"];
-    $Observaciones=$_REQUEST["TxtObservacionesDevolucion"];
-    $TotalDevolucion=$_REQUEST["TxtTotalDevolucion"];
+    $FechaDevolucion=$obRemision->normalizar($_REQUEST["TxtFechaDevolucion"]);
+    $HoraDevolucion=$obRemision->normalizar($_REQUEST["TxtHoraDevolucion"]);
+    $idRemision=$obRemision->normalizar($_REQUEST["TxtIdRemision"]);
+    $Observaciones=$obRemision->normalizar($_REQUEST["TxtObservacionesDevolucion"]);
+    $TotalDevolucion=$obRemision->normalizar($_REQUEST["TxtTotalDevolucion"]);
     
-    $DatosRemision=$obVenta->DevuelveValores("remisiones", "ID", $idRemision);
+    $DatosRemision=$obRemision->DevuelveValores("remisiones", "ID", $idRemision);
     $idCliente=$DatosRemision["Clientes_idClientes"];
     ////Guardamos en la tabla devoluciones
     ////
@@ -70,13 +68,13 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
     $Columnas[6]="Facturas_idFacturas";     $Valores[6]="";
     $Columnas[7]="HoraDevolucion";          $Valores[7]=$HoraDevolucion;
     
-    $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+    $obRemision->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     
-    $idDevolucion=$obVenta->ObtenerMAX("rem_devoluciones_totalizadas", "ID", 1, "");
+    $idDevolucion=$obRemision->ObtenerMAX("rem_devoluciones_totalizadas", "ID", 1, "");
     
-    $Consulta=$obVenta->ConsultarTabla("rem_pre_devoluciones", " WHERE idRemision='$idRemision'");
+    $Consulta=$obRemision->ConsultarTabla("rem_pre_devoluciones", " WHERE idRemision='$idRemision'");
     
-    while($DatosPreDevolucion= mysql_fetch_array($Consulta)){
+    while($DatosPreDevolucion= $obRemision->FetchArray($Consulta)){
         
         $tab="rem_devoluciones";
         $NumRegistros=11; 
@@ -92,7 +90,13 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
         $Columnas[9]="HoraDevolucion";      $Valores[9]=$HoraDevolucion;
         $Columnas[10]="Usuarios_idUsuarios";$Valores[10]=$DatosPreDevolucion["Usuarios_idUsuarios"];
         
-        $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $obRemision->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        $DatosItemsCotizacion=$obRemision->DevuelveValores("cot_itemscotizaciones", "ID", $DatosPreDevolucion["idItemCotizacion"]);
+        if($DatosItemsCotizacion["TablaOrigen"]=="productosalquiler"){
+            $DatosProducto= $obRemision->DevuelveValores("productosalquiler", "Referencia", $DatosItemsCotizacion["Referencia"]);
+            $DatosClientes= $obRemision->DevuelveValores("clientes","idClientes",$DatosItemsCotizacion["idCliente"]);
+            $obRemision->KardexAlquiler($FechaDevolucion, "ENTRADA", $DatosPreDevolucion["Cantidad"], $DatosProducto["Nombre"],$DatosProducto["idProductosVenta"],$DatosProducto["Existencias"],$DatosProducto["EnAlquiler"],$DatosProducto["EnBodega"], $DatosClientes["Num_Identificacion"], $DatosClientes["RazonSocial"],"Devolucion", $idDevolucion,$DatosProducto["CostoUnitario"], $DatosProducto["CostoUnitario"]*$DatosPreDevolucion["Cantidad"],$idUser, "");
+        }
     }
    
     
@@ -102,15 +106,15 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
     
     if($_REQUEST["CmbFactura"]=="SI"){
         
-        $CentroCostos=$_REQUEST["CmbCentroCostos"];
-        $ResolucionDian=$_REQUEST["CmbResolucion"];
-        $TipoPago=$_REQUEST["CmbFormaPago"];
-        $CuentaDestino=$_REQUEST["CmbCuentaDestino"];
-        $OrdenCompra=$_REQUEST["TxtOrdenCompra"];
-        $OrdenSalida=$_REQUEST["TxtOrdenSalida"];
-        $ObservacionesFactura=$_REQUEST["TxtObservacionesFactura"];
-        $FechaFactura=$_REQUEST["TxtFechaFactura"];
-        $Consulta=$obVenta->DevuelveValores("centrocosto", "ID", $CentroCostos);
+        $CentroCostos=$obRemision->normalizar($_REQUEST["CmbCentroCostos"]);
+        $ResolucionDian=$obRemision->normalizar($_REQUEST["CmbResolucion"]);
+        $TipoPago=$obRemision->normalizar($_REQUEST["CmbFormaPago"]);
+        $CuentaDestino=$obRemision->normalizar($_REQUEST["CmbCuentaDestino"]);
+        $OrdenCompra=$obRemision->normalizar($_REQUEST["TxtOrdenCompra"]);
+        $OrdenSalida=$obRemision->normalizar($_REQUEST["TxtOrdenSalida"]);
+        $ObservacionesFactura=$obRemision->normalizar($_REQUEST["TxtObservacionesFactura"]);
+        $FechaFactura=$obRemision->normalizar($_REQUEST["TxtFechaFactura"]);
+        $Consulta=$obRemision->DevuelveValores("centrocosto", "ID", $CentroCostos);
         $EmpresaPro=$Consulta["EmpresaPro"];
         if($TipoPago=="Contado"){
             $SumaDias=0;
@@ -121,33 +125,32 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
         ///////////
         ///////////
         $ID="";
-        $DatosResolucion=$obVenta->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+        $DatosResolucion=$obRemision->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
         if($DatosResolucion["Completada"]=="NO"){           ///Pregunto si la resolucion ya fue completada
             $Disponibilidad=$DatosResolucion["Estado"];
                                               //si entra a verificar es porque estaba ocupada y cambiará a 1
             while($Disponibilidad=="OC"){                   //miro que esté disponible para facturar, esto para no crear facturas dobles
                 print("Esperando disponibilidad<br>");
                 usleep(300);
-                $DatosResolucion=$obVenta->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+                $DatosResolucion=$obRemision->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
                 $Disponibilidad=$DatosResolucion["Estado"];
                 
             }
             
-            $DatosResolucion=$obVenta->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
+            $DatosResolucion=$obRemision->DevuelveValores("empresapro_resoluciones_facturacion", "ID", $ResolucionDian);
             if($DatosResolucion["Completada"]<>"SI"){
-                $obVenta->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "OC", "ID", $ResolucionDian); //Ocupo la resolucion
+                $obRemision->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "OC", "ID", $ResolucionDian); //Ocupo la resolucion
                 $Datos["NumDevolucion"]=$idDevolucion;
                 
-                //$obVenta->InserteItemsDevolucionAFacturas($idRemision);
                 $sql="SELECT MAX(NumeroFactura) as FacturaActual FROM facturas WHERE Prefijo='$DatosResolucion[Prefijo]' "
                         . "AND TipoFactura='$DatosResolucion[Tipo]' AND idResolucion='$ResolucionDian'";
-                $Consulta=$obVenta->Query($sql);
-                $Consulta=$obVenta->FetchArray($Consulta);
+                $Consulta=$obRemision->Query($sql);
+                $Consulta=$obRemision->FetchArray($Consulta);
                 $FacturaActual=$Consulta["FacturaActual"];
                 $idFactura=$FacturaActual+1;
                 //Verificamos si ya se completó el numero de la resolucion y si es así se cambia su estado
                 if($DatosResolucion["Hasta"]==$idFactura){ 
-                    $obVenta->ActualizaRegistro("empresapro_resoluciones_facturacion", "Completada", "SI", "ID", $ResolucionDian);
+                    $obRemision->ActualizaRegistro("empresapro_resoluciones_facturacion", "Completada", "SI", "ID", $ResolucionDian);
                 }
                 //Verificamos si es la primer factura que se creará con esta resolucion
                 //Si es así se inicia desde el numero autorizado
@@ -192,10 +195,10 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
                 $Columnas[23]="idFacturas";                 $Valores[23]=$ID;
                 $Columnas[24]="Hora";                       $Valores[24]=date("H:i:s");
                 
-                $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                $obRemision->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
                 
                 //libero la resolucion
-                $obVenta->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "", "ID", $ResolucionDian);
+                $obRemision->ActualizaRegistro("empresapro_resoluciones_facturacion", "Estado", "", "ID", $ResolucionDian);
                 
                 //////////////////////Agrego Items a la Factura desde la devolucion
                 /////
@@ -207,19 +210,19 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
                 $Datos["CuentaDestino"]=$CuentaDestino;
                 $Datos["EmpresaPro"]=$EmpresaPro;
                 $Datos["CentroCostos"]=$CentroCostos;
-                $obVenta->InsertarItemsDevolucionAItemsFactura($Datos);///Relaciono los items de la factura
-                $obVenta->ActualizaRegistro("rem_devoluciones_totalizadas", "Facturas_idFacturas", $ID, "ID", $idDevolucion);
-                $obVenta->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
+                $obRemision->InsertarItemsDevolucionAItemsFactura($Datos);///Relaciono los items de la factura
+                $obRemision->ActualizaRegistro("rem_devoluciones_totalizadas", "Facturas_idFacturas", $ID, "ID", $idDevolucion);
+                $obRemision->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
                
                 if($TipoPago<>"Contado"){                   //Si es a Credito
                     $Datos["Fecha"]=$FechaFactura; 
                     $Datos["Dias"]=$SumaDias;
-                    $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
+                    $FechaVencimiento=$obRemision->SumeDiasFecha($Datos);
                     $Datos["idFactura"]=$Datos["ID"]; 
                     $Datos["FechaFactura"]=$FechaFactura; 
                     $Datos["FechaVencimiento"]=$FechaVencimiento;
                     $Datos["idCliente"]=$idCliente;
-                    $obVenta->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
+                    $obRemision->InsertarFacturaEnCartera($Datos);///Inserto La factura en la cartera
                 }
                 
             }    
@@ -230,7 +233,7 @@ if(!empty($_REQUEST["BtnGuardarDevolucion"])){
         
     }
     
-    $obVenta->BorraReg("rem_pre_devoluciones", "idRemision", $idRemision);
+    $obRemision->BorraReg("rem_pre_devoluciones", "idRemision", $idRemision);
     header("location:Devoluciones.php?TxtidDevolucion=$idDevolucion&TxtidFactura=$ID");
 }        
 

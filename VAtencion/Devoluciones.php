@@ -2,7 +2,9 @@
 $myPage="Devoluciones.php";
 include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
+include_once("clases/ClasesRemisiones.php");
 $obVenta = new ProcesoVenta($idUser);	
+
 $idRemision="";
 //////Si recibo un cliente
 if(!empty($_REQUEST['TxtAsociarRemision'])){
@@ -18,9 +20,9 @@ $css =  new CssIni("Ajuste Remision");
 print("</head>");
 print("<body>");
     
-    include_once("procesaDevolucion.php");
+    include_once("procesadores/Devoluciones.process.php");
     
-    $css->CabeceraIni("SoftConTech Ajuste a Remision"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("TS5 Ajuste a Remision"); //Inicia la cabecera de la pagina
     
     //////////Creamos el formulario de busqueda de remisiones
     /////
@@ -54,7 +56,7 @@ print("<body>");
             
             $idFactura=$_REQUEST["TxtidFactura"];
             if($idFactura<>""){
-                $RutaPrint="../tcpdf/examples/imprimirFactura.php?ImgPrintFactura=".$idFactura;
+                $RutaPrint="PDF_Factura.php?ImgPrintFactura=".$idFactura;
                 $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
                 $css->CrearTabla();
                 $css->CrearFilaNotificacion("Factura Creada Correctamente <a href='$RutaPrint' target='_blank'>Imprimir Factura No. $DatosFactura[NumeroFactura]</a>",16);
@@ -76,7 +78,7 @@ print("<body>");
     /////
     if(!empty($_REQUEST["TxtBuscarRemision"])){
 
-        $Key=$_REQUEST["TxtBuscarRemision"];
+        $Key=$obVenta->normalizar($_REQUEST["TxtBuscarRemision"]);
         $pa=$obVenta->Query("SELECT * FROM remisiones r INNER JOIN clientes cl ON r.Clientes_idClientes = cl.idClientes "
                 . "WHERE r.Estado<>'C' AND(cl.RazonSocial LIKE '%$Key%' OR r.ID = '$Key' OR r.Obra LIKE '%$Key%' OR r.FechaDespacho LIKE '%$Key%') ORDER BY r.ID DESC LIMIT 20");
         if($obVenta->NumRows($pa)){
@@ -192,23 +194,7 @@ print("<body>");
 
                 $css->CierraFilaTabla();
             }
-    /////Creamos el boton para agregar toda la remision a la devolucion
-    ///  Pensado a futuro
-    ///
-            /*
-    print("<tr>");
-    print("<td colspan='6' style='text-align: center;'>");
-    $css->CrearFormularioEvento("FrmAgregarTodo",$myPage,"post","_self","");
-    $css->CrearInputText("TxtIdRemision","hidden","",$idRemision,"","black","","",150,30,0,0);
-    $css->CrearInputNumber("TxtDias","number","Agregar Todo a Dias: ",$DatosRemision["Dias"],"Dias","black","","",70,30,0,1,1,1000,"any");
-    print("<br>");
-    $css->CrearBotonNaranja("BtnEditar","+ Todo");
-    $css->CerrarForm();
-    print("</td>");
-    print("</tr>");
-             * 
-             * 
-             */
+    
     $css->CerrarTabla();
 			
     ///////////////////////////////////////////
