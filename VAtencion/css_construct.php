@@ -714,8 +714,8 @@ class CssIni{
 	function CrearImageLink($page,$imagerute,$target,$Alto,$Ancho){
 		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'" style="height:'.$Alto.'px; width:'.$Ancho.'px"></a>');
 	}
-        function CrearImage($Nombre,$imagerute,$Alterno,$Alto,$Ancho){
-		print('<img id="'.$Nombre.'"  nombre="'.$Nombre.'"  src="'.$imagerute.'" onerror="this.src=`'.$Alterno.'`;" style="height:'.$Alto.'px; width:'.$Ancho.'px">');
+        function CrearImage($Nombre,$imagerute,$Alterno,$Alto,$Ancho,$Javascript=""){
+		print('<img id="'.$Nombre.'"  nombre="'.$Nombre.'" '.$Javascript.'  src="'.$imagerute.'" onerror="this.src=`'.$Alterno.'`;" style="height:'.$Alto.'px; width:'.$Ancho.'px">');
 	}
 	function CrearLink($link,$target,$Titulo){
 		print('<a href="'.$link.'" target="'.$target.'" >'.$Titulo.'</a>');
@@ -1327,14 +1327,14 @@ function Footer(){
             
 	} 
         
-        public function CrearSelectTable($Nombre,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Evento,$FuncionJS,$idSel,$Requerido) {
+        public function CrearSelectTable($Nombre,$tabla,$Condicion,$idItemValue,$OptionDisplay1,$OptionDisplay2,$Evento,$FuncionJS,$idSel,$Requerido,$LeyendaInicial="Seleccione un Item") {
             $obVenta=new ProcesoVenta(1);
-            $nombre=$Vector["Nombre"]=$Nombre;
-            $evento=$Vector["Evento"]=$Evento;
-            $funcion=$Vector["Funcion"]=$FuncionJS;
+            $Vector["Nombre"]=$Nombre;
+            $Vector["Evento"]=$Evento;
+            $Vector["Funcion"]=$FuncionJS;
             $Vector["Required"]=$Requerido;
             $this->CrearSelect2($Vector);
-            $this->CrearOptionSelect("", "Seleccione un Item", 0);
+            $this->CrearOptionSelect("", $LeyendaInicial, 0);
             $consulta=$obVenta->ConsultarTabla($tabla, $Condicion);
             while ($DatosConsulta=$obVenta->FetchAssoc($consulta)){
                 $Sel=0;

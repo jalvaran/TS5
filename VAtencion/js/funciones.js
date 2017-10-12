@@ -438,7 +438,7 @@ function MostrarDialogo() {
 }
 
 function MostrarDialogoID(id) {
-
+    //alert("entra "+id);
     document.getElementById(id).click();
 		
 }
@@ -593,6 +593,29 @@ function EditeRegistro(Tab,Columna,idTabla,idEdit,idElement){
     }
 }
 
+//Funcion para enviar el contenido de un texto a editar sin confirmar
+function EditeRegistroSinConfirmar(Tab,Columna,idTabla,idEdit,idElement){
+    ValorEdit=document.getElementById(idElement).value;
+    
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                httpEdicion = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                httpEdicion = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpEdicion.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    //document.getElementById("DivRespuestasJS").innerHTML = this.responseText;
+                    //MuestraOculta('ventana-flotante');
+                }
+            };
+        
+        httpEdicion.open("GET","ProcesadoresJS/ProcesaUpdateJS.php?BtnEditarRegistro=1&NoConfirma=1&TxtTabla="+Tab+"&TxtIDEdit="+idEdit+"&TxtIdTabla="+idTabla+"&TxtValorEdit="+ValorEdit+"&TxtColumna="+Columna,true);
+        httpEdicion.send();
+    
+}
+
 //Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
 function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
     
@@ -607,6 +630,20 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         }
         if(BorrarId==6){
             ValorElement = ValorElement.substring(1, 10);
+        }
+        if(BorrarId==7){
+            idMesa=document.getElementById('idMesa').value;
+            ValorElement = ValorElement+"&idMesa="+idMesa;
+        }
+        if(BorrarId==8){
+            idMesa=document.getElementById('idMesa').value;
+            Cantidad=document.getElementById('TxtCantidadItem').value;
+            Observaciones=document.getElementById('TxtObservacionesItem').value;
+            ValorElement = ValorElement+"&idMesa="+idMesa+"&TxtCantidad="+Cantidad+"&TxtObservaciones="+Observaciones;
+            document.getElementById('TxtCantidadItem').value=1;
+            document.getElementById('TxtObservacionesItem').value=""; 
+            document.getElementById('ImgBuscar').click(); 
+            
         }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari

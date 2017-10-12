@@ -25,7 +25,7 @@
 		 $css->CrearInputText("TxtTelefono","text","","","Telefono","black","","",200,30,0,1);
                  
 		 $css->CrearInputText("TxtEmail","text","","","Email","black","","",200,30,0,1);
-                 $css->CrearInputText("TxtCupo","text","","","Cupo Credito","black","","",200,30,0,1);
+                 $css->CrearInputText("TxtCupo","text","",0,"Cupo Credito","black","","",200,30,0,1);
                  $VarSelect["Ancho"]="200";
                  $VarSelect["PlaceHolder"]="Seleccione el municipio";
                  $css->CrearSelectChosen("CmbCodMunicipio", $VarSelect);

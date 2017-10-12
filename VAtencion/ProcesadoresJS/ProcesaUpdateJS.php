@@ -15,10 +15,17 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     $idTabla=$obVenta->normalizar($_REQUEST["TxtIdTabla"]);
     $Edicion=$obVenta->normalizar($_REQUEST["TxtValorEdit"]);
     $NombreCol=$obVenta->normalizar($_REQUEST["TxtColumna"]);
+    $MuestraNotificacion=1;
+    $ProcesoInterno=0;
     $css =  new CssIni($tab);
-    $obVenta->ActualizaRegistro($tab, $NombreCol, $Edicion, $idTabla, $IDEdit,0);
+    if(isset($_REQUEST["NoConfirma"])){
+        $MuestraNotificacion=0;
+        $ProcesoInterno=1;
+    }
+    $obVenta->ActualizaRegistro($tab, $NombreCol, $Edicion, $idTabla, $IDEdit,$ProcesoInterno);
       
     //$sql=substr($sql, 0, -1);
+    
     
     if($tab=="facturas"){
        
@@ -45,7 +52,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     
    $Fecha=date("Y-m-d H:i:s");
    $obVenta->ActualizaRegistro($tab, "Updated", $Fecha, $idTabla, $IDEdit);
-   $css->VentanaFlotante("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion");
+   if($MuestraNotificacion==1){
+        $css->VentanaFlotante("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion");
+   }
    //$css->CrearNotificacionAzul("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion",16);
      
 }
