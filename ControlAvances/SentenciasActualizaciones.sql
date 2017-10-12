@@ -582,3 +582,22 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 ALTER TABLE `restaurante_pedidos_items` ADD INDEX(`idPedido`);
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('107', 'Historial de Cierres', '30', '3', 'restaurante_cierres.php', '_SELF', b'1', 'historial.png', '4', '2017-10-11 20:22:44', '0000-00-00 00:00:00');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('108', 'Historial de Pedidos', '30', '3', 'restaurante_pedidos.php', '_SELF', b'1', 'historial2.png', '5', '2017-10-11 23:03:06', '0000-00-00 00:00:00');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('109', 'Historial de Eliminaciones', '21', '3', 'registra_eliminaciones.php', '_SELF', b'1', 'papelera.png', '3', '2017-09-07 07:49:20', '0000-00-00 00:00:00');
+
+DROP TABLE IF EXISTS `registra_eliminaciones`;
+CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Hora` time NOT NULL,
+  `Campo` text COLLATE latin1_spanish_ci NOT NULL,
+  `Valor` text COLLATE latin1_spanish_ci NOT NULL,
+  `Causal` text COLLATE latin1_spanish_ci NOT NULL,
+  `TablaOrigen` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `idTabla` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idItemEliminado` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`),
+  KEY `TablaOrigen` (`TablaOrigen`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;

@@ -278,7 +278,22 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
             }
         }
 }
-        
+ //Registre Eliminaciones
+ public function RegistraEliminacion($tabla,$idTabla,$idItemEliminado,$campo,$Valor,$Observaciones,$Vector) {
+    $tab="registra_eliminaciones";
+    $NumRegistros=9;
+    $Columnas[0]="Fecha";               $Valores[0]=date("Y-m-d");
+    $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");
+    $Columnas[2]="TablaOrigen";         $Valores[2]=$tabla;
+    $Columnas[3]="Campo";               $Valores[3]=$campo;
+    $Columnas[4]="Valor";               $Valores[4]=$Valor;
+    $Columnas[5]="Causal";		$Valores[5]=$Observaciones;
+    $Columnas[6]="idUsuario";           $Valores[6]=$_SESSION["idUser"];
+    $Columnas[7]="idTabla";		$Valores[7]=$idTabla;
+    $Columnas[8]="idItemEliminado";     $Valores[8]=$idItemEliminado;
+    
+    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+ }       
 //Fin Clases
 }
 ?>

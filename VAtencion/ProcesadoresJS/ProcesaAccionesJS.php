@@ -47,6 +47,25 @@ if(isset($_REQUEST["idAccion"])){
             $obPrint->ImprimePrecuentaRestaurante($idPedido,"",1,"");
             Print("Se ha impreso la Precuenta $idPedido");
             break;
+        case 6: //Eliminar un item y guardar el registro de su eliminacion
+            $Tabla=$obVenta->normalizar($_REQUEST["Tbl"]);
+            $idTabla=$obVenta->normalizar($_REQUEST["idTbl"]);
+            $idItemDel=$obVenta->normalizar($_REQUEST["idItemDel"]);
+            $Observaciones="";
+            if(isset($_REQUEST["TxtCausal"])){
+                $Observaciones=$obVenta->normalizar($_REQUEST["TxtCausal"]);
+            }
+            $DatosItemBorrar=$obVenta->DevuelveValores($Tabla, $idTabla, $idItemDel);
+            
+            foreach ($DatosItemBorrar as $key => $value) {
+                if(!is_numeric($key)){
+                    $obVenta->RegistraEliminacion($Tabla,$idTabla,$idItemDel, $key, $value, $Observaciones, "");
+                    
+                }
+            }
+            $obVenta->BorraReg($Tabla, $idTabla, $idItemDel);
+            print("Se ha eliminado el Registro $idItemDel de la tabla $Tabla");
+            break;
     }
 }else{
     print("No se recibió parametro de documento");

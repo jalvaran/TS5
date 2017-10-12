@@ -86,6 +86,7 @@ if($Valida==1){
                 $IVA=0;
                 $Total=0;
                 while($ItemsPedido=$obVenta->FetchArray($Datos)){
+                    $idItem=$ItemsPedido["ID"];
                     $SubTotal=$SubTotal+$ItemsPedido["Subtotal"];
                     $IVA=$IVA+$ItemsPedido["IVA"];
                     $Total=$Total+$ItemsPedido["Total"];
@@ -94,7 +95,14 @@ if($Valida==1){
                     $css->ColTabla($ItemsPedido["Observaciones"], 1);
                     $css->ColTabla($ItemsPedido["Cantidad"], 1);
                     $css->ColTabla(number_format($ItemsPedido["Total"]), 1,"R");
-                    $css->ColTablaDel($myPage, "restaurante_pedidos_items", "ID", $ItemsPedido["ID"], "");
+                    print("<td style='text-align:center'>");
+                        $ImageAlterna="../images/eliminar.png";
+                        $RutaImage=$ImageAlterna;
+                        $Nombre="ImgBorrar".$DatosPedido["ID"];
+                        $Page="ProcesadoresJS/ProcesaAccionesJS.php?idAccion=6&idTbl=ID&Tbl=restaurante_pedidos_items&idItemDel=$idItem&Carry=";
+                        $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivMensajes`,`10`);return false ;'";
+                        $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 20, 20,$FuncionJS);
+                    print("</td>");
                     $css->CierraFilaTabla();
                 }
             

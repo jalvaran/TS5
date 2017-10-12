@@ -655,6 +655,15 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             
             ValorElement = ValorElement+"&TxtObservaciones="+Observaciones;
         }
+        if(BorrarId==10){
+            var Observaciones = prompt("Por favor ingrese la Razon por la que se elimina el item", "");
+            if (Observaciones.length < 3) {
+                alert("Debe Digitar una razon para eliminar el item");
+                return;
+            }
+                       
+            ValorElement = ValorElement+"&TxtCausal="+Observaciones;
+        }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();
