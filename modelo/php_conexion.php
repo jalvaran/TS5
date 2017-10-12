@@ -5346,79 +5346,7 @@ public function VerificaPermisos($VectorPermisos) {
         return($idCierre);
     }
     
-    //imprime un cierre de restaurante
-    public function ImprimirCierreRestaurante($idCierre,$COMPrinter,$Copias,$Vector) {
-        $COMPrinter= $this->COMPrinter;
-        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
-            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
-        }
-        $Titulo="Comprobante de Cierre No. $idCierre";
-        $DatosCierre=$this->DevuelveValores("restaurante_cierres", "ID", $idCierre);
-        $Fecha=$DatosCierre["Fecha"];
-        $Hora=$DatosCierre["Hora"];
-        $idUsuario=$DatosCierre["idUsuario"];
-        $Usuarios[]="";
-        $sql="SELECT Estado,sum(`Total`) as Total, idUsuario FROM `restaurante_pedidos_items` "
-                . "WHERE `idCierre`='$idCierre' GROUP BY `Estado`,`idUsuario` ";
-        $Consulta=$this->Query($sql);
-        while($DatosCierre=$this->FetchArray($Consulta)){
-            $Estado=$DatosCierre["Estado"];
-            $idUsuario=$DatosCierre["idUsuario"];
-            $Usuarios[$idUsuario]=$DatosCierre["idUsuario"];
-            $TotalesPedidos[$idUsuario][$Estado]=$DatosCierre["Total"];            
-        }
-        for($i=1; $i<=$Copias;$i++){
-        fwrite($handle,chr(27). chr(64));//REINICIO
-        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
-        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
-        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
-        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,$Titulo); // Titulo
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle,"*************************************");
         
-        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
-        fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
-        fwrite($handle,"FECHA: $Fecha      HORA: $Hora");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle,"*************************************");
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        foreach($Usuarios as $idUser){
-            $DatosUsuario=$this->DevuelveValores("usuarios", "idUsuarios", $idUser);
-            fwrite($handle,"USUARIO $DatosUsuario[Nombre] $DatosUsuario[Apellido]:");
-            fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            if(isset($TotalesPedidos[$idUser]["FAPE"])){
-                fwrite($handle,"PEDIDOS FACTURADOS: ".number_format($TotalesPedidos[$idUser]["FAPE"]));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            }
-            if(isset($TotalesPedidos[$idUser]["DEPE"])){
-                fwrite($handle,"PEDIDOS DESCARTADOS: ".number_format($TotalesPedidos[$idUser]["DEPE"]));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            }
-            if(isset($TotalesPedidos[$idUser]["FADO"])){
-                fwrite($handle,"DOMICILIOS FACTURADOS: ".number_format($TotalesPedidos[$idUser]["FADO"]));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            }
-            if(isset($TotalesPedidos[$idUser]["DEDO"])){
-                fwrite($handle,"DOMICILIOS DESCARTADOS: ".number_format($TotalesPedidos[$idUser]["DEDO"]));
-                fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-            }
-            
-        }
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
-    }
-    fclose($handle); // cierra el fichero PRN
-    $salida = shell_exec('lpr $COMPrinter');
-    }
-    
     //Quitar acentos y eñes
     public function QuitarAcentos($str) {
         $no_permitidas= array ('"',"`","´","á","é","í","ó","ú","Á","É","Í","Ó","Ú","ñ","Ñ","À","Ã","Ì","Ò","Ù","Ã™","Ã ","Ã¨","Ã¬","Ã²","Ã¹","ç","Ç","Ã¢","ê","Ã®","Ã´","Ã»","Ã‚","ÃŠ","ÃŽ","Ã”","Ã›","ü","Ã¶","Ã–","Ã¯","Ã¤","«","Ò","Ã","Ã„","Ã‹");

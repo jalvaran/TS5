@@ -580,3 +580,5 @@ ALTER TABLE `productosalquiler` CHANGE `CostoUnitario` `CostoUnitario` DOUBLE NO
 ALTER TABLE `productosalquiler` ADD `EnAlquiler` INT NOT NULL AFTER `Existencias`, ADD `EnBodega` INT NOT NULL AFTER `EnAlquiler`;
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('106', 'Kardex Alquiler', '22', '3', 'kardex_alquiler.php', '_SELF', b'1', 'kardex_alquiler.png', '5', '2017-09-07 11:03:21', '0000-00-00 00:00:00');
 ALTER TABLE `restaurante_pedidos_items` ADD INDEX(`idPedido`);
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('107', 'Historial de Cierres', '30', '3', 'restaurante_cierres.php', '_SELF', b'1', 'historial.png', '4', '2017-10-11 20:22:44', '0000-00-00 00:00:00');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('108', 'Historial de Pedidos', '30', '3', 'restaurante_pedidos.php', '_SELF', b'1', 'historial2.png', '5', '2017-10-11 23:03:06', '0000-00-00 00:00:00');

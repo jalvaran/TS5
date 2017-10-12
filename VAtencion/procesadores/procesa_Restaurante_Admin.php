@@ -57,7 +57,7 @@ $obTabla = new Tabla($db);
         
         $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
         if($DatosImpresora["Habilitado"]=="SI"){
-            $obVenta->ImprimirCierreRestaurante($idCierre,$DatosImpresora["Puerto"],1,"");
+            $obPrint->ImprimirCierreRestaurante($idCierre,$DatosImpresora["Puerto"],1,"");
         }
         header("location:$myPage?idCierre=$idCierre");
     }
