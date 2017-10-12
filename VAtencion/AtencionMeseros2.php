@@ -24,6 +24,8 @@
     $target="#DialBusquedaItems";
     $css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",50,50,"fixed","right:10px;bottom:80",$VectorBim);
     $css->CrearDiv("principal", "container", "center",1,1);
+    $css->CrearDiv("DivMensajes", "", "center", 1, 1);
+    $css->CerrarDiv();
     $css->DivNotificacionesJS();
     $css->CrearCuadroDeDialogo("DialBusquedaItems","Buscar Producto");
         $css->CrearTabla();

@@ -34,7 +34,8 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("principal", "container", "center",1,1);
-    
+    $css->CrearDiv("DivMensajes", "", "center",1,1);
+    $css->CerrarDiv();
     //$obTabla->DialVerDomicilios("");
     $idPreventa=1;
     include_once 'CuadroDialogoCrearCliente.php';

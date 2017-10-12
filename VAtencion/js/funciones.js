@@ -645,6 +645,16 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             document.getElementById('ImgBuscar').click(); 
             
         }
+        if(BorrarId==9){
+            var Observaciones = prompt("Por favor ingrese la Razon por la que se descarta", "");
+            if (Observaciones.length < 3) {
+                alert("Debe Digitar una razon para descartar el Pedido");
+                return;
+            }
+            Observaciones="Descartado por "+Observaciones;
+            
+            ValorElement = ValorElement+"&TxtObservaciones="+Observaciones;
+        }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();

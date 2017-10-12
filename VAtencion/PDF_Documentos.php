@@ -19,8 +19,7 @@ if(isset($_REQUEST["idDocumento"])){
             break;
         case 25: //Comprobante de altas y bajas
             $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
-            $obDoc->PDF_CompBajasAltas($idComprobante);
-            
+            $obDoc->PDF_CompBajasAltas($idComprobante);            
             break;
     }
 }else{

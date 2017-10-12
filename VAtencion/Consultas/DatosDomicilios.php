@@ -43,9 +43,12 @@ if($Valida==1){
                 $css->ColTabla($DatosPedido["DireccionEnvio"], 1);
                 
                 print("<td style='text-align:center'>");
-                $RutaImage="../images/anular.png";
-                $Link=$myPage."?BtnDescartarDomicilio=$DatosPedido[ID]";
-                $css->CrearImageLink($Link, $RutaImage, "_self", 50, 50);
+                $ImageAlterna="../images/anular.png";
+                $RutaImage=$ImageAlterna;
+                $Nombre="ImgDescartar".$DatosPedido["ID"];
+                $Page="ProcesadoresJS/ProcesaAccionesJS.php?idAccion=2&idPedido=$idPedido&Carry=";
+                $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivMensajes`,`9`);return false ;'";
+                $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 50, 50,$FuncionJS);
                 print("</td>");
                 print("<td style='text-align:center'>");
                 $RutaImage="../images/print.png";

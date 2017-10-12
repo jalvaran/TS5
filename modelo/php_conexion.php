@@ -5298,6 +5298,10 @@ public function VerificaPermisos($VectorPermisos) {
     
     //imprime un pedido de restaurante
     public function ImprimePedidoRestaurante($idPedido,$COMPrinter,$Copias,$Vector){
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
         $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
