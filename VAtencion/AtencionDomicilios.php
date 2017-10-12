@@ -3,7 +3,7 @@ $myPage="AtencionDomicilios.php";
 include_once("../sesiones/php_control.php");
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
-$limit = 20;
+$limit = 10;
 $startpoint = ($page * $limit) - $limit;
 include_once ('funciones/function.php');  //En esta funcion está la paginacion		
 /////////
@@ -104,13 +104,14 @@ print("<body>");
         }
             
     }
-    $css->CrearForm2("FrmSelDomicilio", $myPage, "post", "_self");
+    
     $css->CrearTabla();
     $css->FilaTabla(16);
     $css->ColTabla("<strong>Seleccione un Domicilio para agregar items</strong>", 1);
     $css->CierraFilaTabla();
     $css->FilaTabla(16);
     print("<td style='text-align:center;'>");
+    $css->CrearForm2("FrmSelDomicilio", $myPage, "post", "_self");
     $css->CrearSelect("idDomicilio", "EnviaForm('FrmSelDomicilio')");
     $css->CrearOptionSelect("", "Seleccione un Domicilio", 0);
     $consulta=$obVenta->ConsultarTabla("restaurante_pedidos", " WHERE Estado='DO'");
@@ -123,14 +124,62 @@ print("<body>");
         $css->CrearOptionSelect($DatosDomicilio["ID"],$DatosDomicilio["ID"]." ".$DatosDomicilio["NombreCliente"], $sel);
     }
     $css->CerrarSelect();
+    $css->CerrarForm();
     print("</td>");
     $css->CierraFilaTabla();
     $css->CerrarTabla();
+    if($idDomicilio>0){
+    $css->CrearTabla();
+    $css->FilaTabla(16);
+    print("<td style='text-align:center;'>");
+        $DatosDomicilio=$obVenta->DevuelveValores("restaurante_pedidos", "ID", $idDomicilio);
+        $css->CrearForm2("FrmEditarDatos", $myPage, "post", "_self");
+        $css->CrearInputText("idDomicilio", "hidden", "", $idDomicilio, "", "", "", "", "", "", 1, 1);
+        print("<strong>Fecha:</strong><br>");
+        $css->CrearInputFecha("", "TxtFechaEdit", $DatosDomicilio["Fecha"], 100, 30, "");
+        print("</td>");
+        print("<td style='text-align:center;'>");
+        $VarSelect["Required"]="1";
+        $VarSelect["Ancho"]="200";
+        $VarSelect["PlaceHolder"]="Seleccione un Cliente";
+        $css->CrearSelectChosen("CmbTerceroEdit", $VarSelect);
+        $consulta=$obVenta->ConsultarTabla("clientes", "");
+        while($DatosClientes=$obVenta->FetchArray($consulta)){
+            $sel=0;
+            if($DatosClientes["idClientes"]==$DatosDomicilio["idCliente"]){
+                $sel=1;
+            }
+            $css->CrearOptionSelect($DatosClientes["idClientes"], $DatosClientes["Telefono"]." ".$DatosClientes["RazonSocial"]." ".$DatosClientes["Num_Identificacion"] , $sel);
+        }
+        $css->CerrarSelect();
+        print("<td style='text-align:center;'>");
+        print("<strong>Direccion de Envio:</strong><br>");
+        $css->CrearInputText("TxtDireccionEnvioEdit", "text", "", $DatosDomicilio["DireccionEnvio"], "DireccionEnvio", "", "", "", 200, 30, 0, 0);
+        print("</td>");
+        print("<td style='text-align:center;'>");
+        print("<strong>Telefono Confirmacion:</strong><br>");
+        $css->CrearInputText("TxtTelefonoConfirmacionEdit", "text", "", $DatosDomicilio["TelefonoConfirmacion"], "TelefonoConfirmacion", "", "", "", 200, 30, 0, 0);
+        print("</td>");
+        print("<td style='text-align:center;'>");
+        print("<strong>Observaciones:</strong><br>");
+        $css->CrearTextArea("TxtObservacionesEdit", "", $DatosDomicilio["Observaciones"], "Observaciones", "", "", "", 200, 60, 0, 0);
+        print("</td>");
+        print("<td style='text-align:center;'>");
+        $css->CrearBotonVerde("BtnEditarDomicilioGeneral", "Editar");
+        print("</td>");
+        
+    
+    $css->CierraFilaTabla();
+    $css->CerrarTabla();
     $css->CerrarForm();
+    }
+    
+    
     
     $css->CrearDiv("secundario", "", "center",1,1);
     
     if($idDomicilio>0){
+        $css->CrearDivBusquedas("DivBusqueda", "", "center", 1, 1);
         $obTabla->CrearSubtotalCuentaDomicilio($idDomicilio,$idDepartamento,$idUser,$myPage,"");
         $css->CrearNotificacionRoja("Lista de Productos para agregar al domicilio $idDomicilio", 16);
         ////Paginacion
@@ -198,6 +247,7 @@ print("<body>");
             $css->CierraFilaTabla();
         }
         $css->CerrarTabla();
+        $css->CerrarDiv();
     }  
     
     $css->CerrarDiv();//Cerramos contenedor secundario

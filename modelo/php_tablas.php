@@ -3909,13 +3909,13 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
             $DatosDomicilio=  $this->obCon->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
             $htmlItems="<tr><td colspan=4><strong>ITEMS EN DOMICILIO $idPedido para el Sr(a)$DatosDomicilio[NombreCliente]</strong></td></tr>";
             $htmlItems.="<tr><td><strong>Producto</strong></td><td><strong>Cantidad</strong></td>"
-                    . "<td><strong>Total</strong></td><td><strong>Borrar</strong></td></tr>";
+                    . "</tr>";
             
             $consulta2=  $this->obCon->ConsultarTabla("restaurante_pedidos_items", " WHERE idPedido='$idPedido'");
             
             while($DatosItems=$this->obCon->FetchArray($consulta2)){
                 $htmlItems.="<tr><td>$DatosItems[NombreProducto]<br>$DatosItems[Observaciones]</td><td>$DatosItems[Cantidad]</td><td>$DatosItems[Total]</td>";
-                $htmlItems.="<td><a href='$myPage?idDomicilio=$idDomicilio&idDepartamento=$idDepartamento&idDel=$DatosItems[ID]'>X</td>";
+                //$htmlItems.="<td><a href='$myPage?idDomicilio=$idDomicilio&idDepartamento=$idDepartamento&idDel=$DatosItems[ID]'>X</td>";
                 $htmlItems.="</tr>";
                 $Subtotal=$Subtotal+$DatosItems["Subtotal"];
                 $IVA=$IVA+$DatosItems["IVA"];

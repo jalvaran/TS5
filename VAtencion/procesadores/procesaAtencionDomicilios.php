@@ -238,5 +238,23 @@ if(isset($_REQUEST['TxtTotalH'])){
     }
     header("location:$myPage?TxtidFactura=$NumFactura");
 
-}        
+}
+//Si se pide editar un domicilio
+
+if(isset($_REQUEST["BtnEditarDomicilioGeneral"])){
+    $Fecha=$obVenta->normalizar($_REQUEST["TxtFechaEdit"]);
+    $idCliente=$obVenta->normalizar($_REQUEST["CmbTerceroEdit"]);
+    $DireccionEnvio=$obVenta->normalizar($_REQUEST["TxtDireccionEnvioEdit"]);
+    $TelefonoConfirmacion=$obVenta->normalizar($_REQUEST["TxtTelefonoConfirmacionEdit"]);
+    $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesEdit"]);
+    $idPedido=$obVenta->normalizar($_REQUEST["idDomicilio"]);
+    $DatosCliente=$obVenta->DevuelveValores("clientes", "idClientes", $idCliente);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "Fecha", $Fecha, "ID", $idPedido,0);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "DireccionEnvio", $DireccionEnvio, "ID", $idPedido,0);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "TelefonoConfirmacion", $TelefonoConfirmacion, "ID", $idPedido,0);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "Observaciones", $Observaciones, "ID", $idPedido,0);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "NombreCliente", $DatosCliente["RazonSocial"], "ID", $idPedido,0);
+    $obVenta->ActualizaRegistro("restaurante_pedidos", "idCliente", $idCliente, "ID", $idPedido,0);
+    header("location:$myPage?idDomicilio=$idPedido");
+}
 ?>
