@@ -1315,5 +1315,282 @@ class PrintPos extends ProcesoVenta{
     
     }
     
+    
+    //imprime un domicilio de restaurante
+    public function ImprimeDomicilioRestaurante($idPedido,$COMPrinter,$Copias,$Vector){
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
+        $COMPrinter= $this->COMPrinter;
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosPedido=$this->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
+       $DatosCliente=$this->DevuelveValores("clientes", "idClientes", $DatosPedido["idCliente"]);
+        $Fecha=$DatosPedido["Fecha"];
+        $Hora=$DatosPedido["Hora"];
+        $DatosMesa=$this->DevuelveValores("restaurante_mesas", "ID", $DatosPedido["idMesa"]);
+        $idUserR=$DatosPedido["idUsuario"];
+        $sql="SELECT Nombre, Apellido FROM usuarios WHERE idUsuarios='$idUserR'";
+        $consulta=$this->Query($sql);
+        $DatosUsuario=$this->FetchArray($consulta);
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        //fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        //fwrite($handle, chr(27). chr(33). chr(32));// DOBLE ANCHO
+        //fwrite($handle, chr(27). chr(33). chr(48));// MUY GRANDE
+        
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"DOMICILIO No $idPedido"); // Titulo
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        fwrite($handle,"$DatosPedido[FechaCreacion]");
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"CLIENTE:  $DatosPedido[NombreCliente]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        $DireccionEnvio=$DatosPedido["DireccionEnvio"];
+        $TelefonoConfirmacion=$DatosPedido["TelefonoConfirmacion"];
+        if($DatosPedido["DireccionEnvio"]==""){
+            $DireccionEnvio=$DatosCliente["Direccion"];
+        }
+        if($TelefonoConfirmacion==''){
+            $TelefonoConfirmacion=$DatosCliente["Telefono"];
+        }
+        fwrite($handle,"DIRECCION: $DireccionEnvio ");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"TELEFONO:  $TelefonoConfirmacion");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        
+        fwrite($handle,"*************************************");
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        $sql = "SELECT * FROM restaurante_pedidos_items WHERE idPedido='$idPedido'";
+	
+        $consulta=$this->Query($sql);
+								
+	while($DatosPedido=$this->FetchArray($consulta)){
+		
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            fwrite($handle,$DatosPedido["Cantidad"]."/ ");
+            fwrite($handle,substr($DatosPedido["idProducto"]." ".$DatosPedido["NombreProducto"],0,50)."   ");
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            if($DatosPedido["Observaciones"]<>""){
+                fwrite($handle,$DatosPedido["Observaciones"]);
+                fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            }
+            fwrite($handle,"____________________________________________");
+
+        }
+
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    }
+    
+     //imprime un pedido de restaurante
+    public function ImprimePedidoRestaurante($idPedido,$COMPrinter,$Copias,$Vector){
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
+        $COMPrinter= $this->COMPrinter;
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosPedido=$this->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
+        $Fecha=$DatosPedido["Fecha"];
+        $Hora=$DatosPedido["Hora"];
+        $DatosMesa=$this->DevuelveValores("restaurante_mesas", "ID", $DatosPedido["idMesa"]);
+        $idUserR=$DatosPedido["idUsuario"];
+        $sql="SELECT Nombre, Apellido FROM usuarios WHERE idUsuarios='$idUserR'";
+        $consulta=$this->Query($sql);
+        $DatosUsuario=$this->FetchArray($consulta);
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        //fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        //fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        //fwrite($handle, chr(27). chr(33). chr(32));// DOBLE ANCHO
+        fwrite($handle, chr(27). chr(33). chr(48));// DOBLE ALTO
+        
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"ORDEN DE PEDIDO No $idPedido"); // Titulo
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        fwrite($handle,"$DatosPedido[FechaCreacion]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"$DatosMesa[Nombre]");
+        
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"SOLICITA:  $DatosUsuario[Nombre] $DatosUsuario[Apellido]");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        
+        fwrite($handle,"*************************************");
+        /////////////////////////////FECHA Y NUM FACTURA
+
+        $sql = "SELECT * FROM restaurante_pedidos_items WHERE idPedido='$idPedido'";
+	
+        $consulta=$this->Query($sql);
+								
+	while($DatosPedido=$this->FetchArray($consulta)){
+		
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            fwrite($handle,$DatosPedido["Cantidad"]."/ ");
+            fwrite($handle,substr($DatosPedido["idProducto"]." ".$DatosPedido["NombreProducto"],0,50)."   ");
+            fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            if($DatosPedido["Observaciones"]<>""){
+                fwrite($handle,$DatosPedido["Observaciones"]);
+                fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            }
+            fwrite($handle,"____________________________________________");
+
+        }
+
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+        
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    }
+    
+    
+    //Imprime la precuenta
+    //
+    
+    public function ImprimePrecuentaRestaurante($idPedido,$COMPrinter,$Copias){
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
+        $COMPrinter= $this->COMPrinter;
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
+        }
+       $DatosPedido=$this->DevuelveValores("restaurante_pedidos", "ID", $idPedido);
+       $idUserR=$DatosPedido["idUsuario"];
+        $sql="SELECT Nombre, Apellido FROM usuarios WHERE idUsuarios='$idUserR'";
+        $consulta=$this->Query($sql);
+        $DatosUsuario=$this->FetchArray($consulta);
+        $DatosMesa=$this->DevuelveValores("restaurante_mesas", "ID", $DatosPedido["idMesa"]);
+        $Fecha=$DatosPedido["FechaCreacion"];
+        
+        for($i=1; $i<=$Copias;$i++){
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        //fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"PRECUENTA No. $idPedido"); // ESCRIBO RAZON SOCIAL
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        
+        fwrite($handle,"$Fecha, $DatosMesa[Nombre] ");
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+	fwrite($handle,"Atiende: $DatosUsuario[Nombre] $DatosUsuario[Apellido]");	
+        fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+        fwrite($handle,"*************************************");
+        
+        //fwrite($handle, chr(27). chr(97). chr(0));// CENTRADO
+        /////////////////////////////ITEMS VENDIDOS
+
+       
+
+        $sql = "SELECT * FROM restaurante_pedidos_items WHERE idPedido='$idPedido'";
+	
+        $consulta=$this->Query($sql);
+	$Subtotal=0;
+        $IVA=0;
+        $Total=0;
+	while($DatosVenta=$this->FetchArray($consulta)){
+		 fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+            $Subtotal=$Subtotal+$DatosVenta["Subtotal"];
+            $IVA=$IVA+$DatosVenta["IVA"];
+            $Total=$Total+$DatosVenta["Total"];
+             fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+            fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));
+
+            fwrite($handle,str_pad(substr($DatosVenta["NombreProducto"],0,26),20," ",STR_PAD_BOTH)."   ");
+
+            fwrite($handle,str_pad("$".number_format($DatosVenta["Total"]),10," ",STR_PAD_LEFT));
+
+}
+
+
+
+fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
+    /////////////////////////////TOTALES
+
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(0));// IZQUIERDA
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"TOTAL A PAGAR    ".str_pad("$".number_format($Total),20," ",STR_PAD_LEFT));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    fwrite($handle,"_____________________________________");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
+    fwrite($handle,"***NO VALIDO COMO FACTURA***");
+    
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle, chr(27). chr(100). chr(1));
+
+    fwrite($handle, chr(29). chr(86). chr(49));//CORTA PAPEL
+    }
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    
+    }
     //Fin Clases
 }

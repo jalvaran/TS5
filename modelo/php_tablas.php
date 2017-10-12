@@ -3961,7 +3961,7 @@ ASUNTO:    <strong>TRASLADO DE TITULO $DatosTraslado[Mayor1] </strong>
     $GranTotal=$Total;
     $this->css->CrearForm2("FrmGuarda",$myPage,"post","_self");
     $this->css->CrearInputText("idPedido","hidden","",$idPedido,"","","","",150,30,0,0);
-    $this->css->CrearInputText("TxtSaldoFavor","hidden","",$SaldoFavor,"","","","",150,30,0,0);
+    $this->css->CrearInputText("TxtAnticipo","hidden","",0,"","","","",150,30,0,0);
     $this->css->CrearInputText("TxtDomicilio","hidden","",$Domicilio,"","","","",150,30,0,0);
     $this->css->ColTablaInputText("TxtTotalH","hidden",$Total,"","","","","",150,30,0,0);
     $this->css->ColTablaInputText("TxtCuentaDestino","hidden",11051001,"","","","","",150,30,0,0);

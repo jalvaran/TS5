@@ -34,13 +34,13 @@ if(isset($_REQUEST['idMesa'])){
         $IVA=$obVenta->SumeColumna("restaurante_pedidos_items", "IVA", "idPedido", $idPedido);
         $Total=$obVenta->SumeColumna("restaurante_pedidos_items", "Total", "idPedido", $idPedido);
         $css->FilaTabla(16);
-            print("<td rowspan=3 colspan=2 style='text-align:right'>");
+            print("<td rowspan=3 colspan=2 style='text-align:center'>");
                 $ImageAlterna="../images/print.png";
                 $RutaImage=$ImageAlterna;
-                $Nombre="ImgPrint";
-                $Page="ProcesadoresJS/PrintDocumentosPos.php?idDocumento=1&idPedido=$idPedido&Carry=";
-                $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`ImgPrint`,`DivMensajes`,`7`);return false ;'";
-                $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 100, 130,$FuncionJS);
+                $Nombre="ImgDescartar".$idPedido;
+                $Page="ProcesadoresJS/ProcesaAccionesJS.php?idAccion=4&idPedido=$idPedido&Carry=";
+                $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivMensajes`,`NO`);return false ;'";
+                $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 100, 100,$FuncionJS);
                 
             print("</td>");
             print("<td colspan=2 style='text-align:right'>");

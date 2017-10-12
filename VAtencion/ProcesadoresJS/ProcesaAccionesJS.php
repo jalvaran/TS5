@@ -32,7 +32,21 @@ if(isset($_REQUEST["idAccion"])){
             $obVenta->ActualizaRegistro("restaurante_pedidos_items", "Estado", "DEDO", "idPedido", $idPedido);
             Print("Pedido $idPedido descartado");
             break;
-        
+        case 3: //Imprime un domicilio
+            $idPedido=$obVenta->normalizar($_REQUEST["idPedido"]);
+            $obPrint->ImprimeDomicilioRestaurante($idPedido,"",1,"");
+            Print("Se ha impreso el Domicilio $idPedido");
+            break;
+        case 4: //Imprime un Pedido
+            $idPedido=$obVenta->normalizar($_REQUEST["idPedido"]);
+            $obPrint->ImprimePedidoRestaurante($idPedido,"",1,"");
+            Print("Se ha impreso el Pedido $idPedido");
+            break;
+        case 5: //Imprime una precuenta
+            $idPedido=$obVenta->normalizar($_REQUEST["idPedido"]);
+            $obPrint->ImprimePrecuentaRestaurante($idPedido,"",1,"");
+            Print("Se ha impreso la Precuenta $idPedido");
+            break;
     }
 }else{
     print("No se recibió parametro de documento");

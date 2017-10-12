@@ -52,14 +52,20 @@ if($Valida==1){
                 
                 print("</td>");
                 print("<td style='text-align:center'>");
-                $RutaImage="../images/print.png";
-                $Link=$myPage."?BtnImprimirPedido=$DatosPedido[ID]";
-                $css->CrearImageLink($Link, $RutaImage, "_self", 50, 50);
+                $ImageAlterna="../images/print.png";
+                $RutaImage=$ImageAlterna;
+                $Nombre="ImgDescartar".$DatosPedido["ID"];
+                $Page="ProcesadoresJS/ProcesaAccionesJS.php?idAccion=4&idPedido=$idPedido&Carry=";
+                $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivMensajes`,`NO`);return false ;'";
+                $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 50, 50,$FuncionJS);
                 print("</td>");
                 print("<td style='text-align:center'>");
-                $RutaImage="../images/precuenta.png";
-                $Link=$myPage."?BtnImprimirPrecuenta=$DatosPedido[ID]";
-                $css->CrearImageLink($Link, $RutaImage, "_self", 50, 50);
+                $ImageAlterna="../images/precuenta.png";
+                $RutaImage=$ImageAlterna;
+                $Nombre="ImgDescartar".$DatosPedido["ID"];
+                $Page="ProcesadoresJS/ProcesaAccionesJS.php?idAccion=5&idPedido=$idPedido&Carry=";
+                $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivMensajes`,`NO`);return false ;'";
+                $css->CrearImage($Nombre, $RutaImage, $ImageAlterna, 50, 50,$FuncionJS);
                 print("</td>");
                 print("<td style='text-align:center'>");
                 $RutaImage="../images/facturar2.png";

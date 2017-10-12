@@ -1,4 +1,6 @@
 <?php 
+include_once("../modelo/PrintPos.php");	
+$obPrint=new PrintPos($idUser);
 $obVenta=new ProcesoVenta($idUser);
 $css =  new CssIni("Atencion");
 ////////////////////////////////////(///////////////////////////////
@@ -219,7 +221,7 @@ if(isset($_REQUEST['TxtTotalH'])){
     $obVenta->ActualizaRegistro("restaurante_pedidos_items","Estado", $Marca, "idPedido", $idPedido);
     $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
     if($DatosImpresora["Habilitado"]=="SI"){
-        $obVenta->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
+        $obPrint->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
         $DatosTikete=$obVenta->DevuelveValores("config_tiketes_promocion", "ID", 1);
         if($TotalVenta>=$DatosTikete["Tope"] AND $DatosTikete["Activo"]=="SI"){
             $VectorTiket["F"]=0;
@@ -227,7 +229,7 @@ if(isset($_REQUEST['TxtTotalH'])){
             if($DatosTikete["Multiple"]=="SI"){
                 $Copias=floor($TotalVenta/$DatosTikete["Tope"]);
             }
-            $obVenta->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
+            $obPrint->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
         }
     }
 
