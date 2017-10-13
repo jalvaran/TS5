@@ -5154,8 +5154,8 @@ EOD;
                 . "WHERE $CondicionFecha3 GROUP BY fi.idUsuarios,fa.FormaPago";
         $Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<br><br><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Usuarios y Tipo de Venta:
-                </em></strong></span><BR><BR>
+            $html='<br><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Usuarios y Tipo de Venta:
+                </em></strong></span><BR>
 
 
                 <table border="1" cellspacing="2" align="center" >
@@ -5278,8 +5278,8 @@ EOD;
 	WHERE $CondicionFecha2 GROUP BY Usuario_idUsuario";	
         $Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Egresos:
-                    </em></strong></span><BR><BR>
+            $html='<BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Egresos:
+                    </em></strong></span><BR>
                     <table border="1" cellspacing="2" align="center" >
                       <tr> 
                         <th><h3>Usuario</h3></th>
@@ -5339,8 +5339,8 @@ EOD;
 	GROUP BY Usuarios_idUsuarios,FormaPago";
 	$Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Creditos:
-                </em></strong></span><BR><BR>
+            $html='<BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Creditos:
+                </em></strong></span><BR>
                 <table border="1" cellspacing="2" align="center" >
                     <tr> 
                       <th><h3>Usuario</h3></th>
@@ -5380,8 +5380,8 @@ EOD;
 	GROUP BY idUsuarios";
 	$Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Separados:
-                </em></strong></span><BR><BR>
+            $html='<BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Abonos Separados:
+                </em></strong></span><BR>
                 <table border="1" cellspacing="2" align="center" >
                     <tr> 
                       <th><h3>Usuario</h3></th>
@@ -5421,8 +5421,8 @@ EOD;
 	GROUP BY idUsuario";
 	$Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Intereses SisteCredito:
-                </em></strong></span><BR><BR>
+            $html='<BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total Intereses SisteCredito:
+                </em></strong></span><BR>
                 <table border="1" cellspacing="2" align="center" >
                     <tr> 
                       <th><h3>Usuario</h3></th>
@@ -5531,8 +5531,8 @@ EOD;
         
         if(!empty($idUsuario)){
             
-            $html='<BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Entregas:
-                    </em></strong></span><BR><BR> <table border="1" CELLPADDING="5" align="center"> ';
+            $html='<BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Entregas:
+                    </em></strong></span><BR> <table border="1" CELLPADDING="5" align="center"> ';
             $Salto=0;
             $TotalEntrega=0;
             $Factor="+";
@@ -5649,8 +5649,8 @@ EOD;
     //Resolucion de facturacion 
     public function HTML_Uso_Resoluciones($CondicionFecha2,$CentroCostos,$EmpresaPro,$Vector) {
         $html=' 
-        <BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Informe de Numeracion Facturas:
-        </em></strong></span><BR><BR>
+        <BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Informe de Numeracion Facturas:
+        </em></strong></span><BR>
 
 
         <table border="1" cellspacing="2" align="center" >
@@ -5690,8 +5690,8 @@ EOD;
     //Ventas Colaboradores
     public function HTML_Ventas_Colaboradores($CondicionFecha2,$CentroCostos,$EmpresaPro,$Vector) {
         $html=' 
-        <BR><BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Ventas X Colaboradores:
-        </em></strong></span><BR><BR>
+        <BR><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Ventas X Colaboradores:
+        </em></strong></span><BR>
 
 
         <table border="1" cellspacing="2" align="center" >
@@ -5752,21 +5752,21 @@ EOD;
         $html= $this->HTML_VentasXDepartamentos($CondicionItems);
         $this->PDF_Write($html);
         $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Uso_Resoluciones($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Egresos_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Abonos_Facturas_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Abonos_Separados_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Intereses_SisteCredito_Admin($CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Entregas($CondicionFecha1,$CondicionFecha2);
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         $html= $this->HTML_Ventas_Colaboradores($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
-        $this->PDF_Write("<br>".$html);
+        $this->PDF_Write($html);
         /*Solo Juan Car
         $this->PDF_Add();
         //$this->PDF->SetFont('helvetica', '', 6);
