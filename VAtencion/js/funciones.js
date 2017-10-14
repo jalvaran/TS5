@@ -626,7 +626,7 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             document.getElementById(idTarget).innerHTML ='Conectando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
         }
         if(BorrarId==5){
-            document.getElementById(idTarget).innerHTML ='Buscando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
         }
         if(BorrarId==6){
             ValorElement = ValorElement.substring(1, 10);

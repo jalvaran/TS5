@@ -41,11 +41,7 @@ print("<body>");
      
      
     $Mensaje="No se encontraron mas datos para sincronizar";
-     
-    //$VectorBackup["Tabla"]="productosventa";
-    //$Mensaje=$obVenta->CrearBackup(2,$VectorBackup);
-    //$css->CrearNotificacionVerde($Mensaje, 16);
-//header("location:$myPage");
+    
 }	
     
     $css->CabeceraIni("Realizar Backup en la Nube"); //Inicia la cabecera de la pagina
@@ -59,6 +55,9 @@ print("<body>");
      
      
     $css->CrearDiv("principal", "container", "center",1,1);
+    $css->CrearDiv("DivNotificaciones", "", "center", 1, 1);
+        
+    $css->CerrarDiv();
     $DatosServer=$obVenta->DevuelveValores("servidores", "ID", 1);
     $VectorCon["Fut"]=0;  //$DatosServer["IP"]
     
@@ -66,7 +65,12 @@ print("<body>");
     $css->CrearNotificacionAzul($Mensaje, 16);
     //$css->CrearNotificacionAzul($sql, 16);
     print("<strong>Click para Realizar el procedimiento</strong><br>");
-    $css->CrearImageLink($myPage."?LkSubir=1", "../images/backup.png", "_self", 200, 200);
+    $RutaImage="../images/backup.png";
+    $Page="Consultas/BackupsConstruct.php?LkSubir=1&Carry=";
+    $Nombre="ImgBackups";
+    $FuncionJS="onclick='EnvieObjetoConsulta(`$Page`,`ImgBackups`,`DivNotificaciones`,`5`);return false ;'";
+    $css->CrearImage($Nombre, $RutaImage, $RutaImage, 200, 200,$FuncionJS);
+     
     $obVenta->ConToServer($host,$user,$pw,$db,$VectorCon);
     $css->CrearDiv("Secundario", "container", "center",1,1);
     $css->Creartabla();

@@ -240,6 +240,7 @@ $obPrint=new PrintPos($idUser);
             }
             //print("<script>alert('Entra 1')</script>");
             $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
+            $obVenta->FacturaKardex($NumFactura, $idUser, "");
             //print("<script>alert('Entra 2')</script>");
             $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
             //$obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);

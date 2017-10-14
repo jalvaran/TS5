@@ -601,3 +601,6 @@ CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
   PRIMARY KEY (`ID`),
   KEY `TablaOrigen` (`TablaOrigen`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+ALTER TABLE `colaboradores` CHANGE `Activo` `Activo` VARCHAR(2) NOT NULL DEFAULT 'SI';
+ALTER TABLE `empresapro` CHANGE `CXPAutomaticas` `CXPAutomaticas` VARCHAR(2) NOT NULL DEFAULT 'SI';

@@ -16,6 +16,7 @@ if(!empty($_REQUEST['CmbPreVentaAct'])){
         $idPreventa=$_REQUEST['CmbPreVentaAct'];
 }
 $idClientes=1;
+$idFactura="";
 //////Si recibo un cliente
 if(isset($_REQUEST['idClientes'])){
 
@@ -111,6 +112,7 @@ if(!empty($_REQUEST["NoAutorizado"])){
     $css->CrearNotificacionRoja("Clave Incorrecta !", 18);
 }
 $css->CrearDiv("DivPrincipal", "container", "left", 1, 1);
+
 include_once("procesadores/procesaVentasRapidas.php");
 if($idPreventa>0){
     $css->CrearTabla();
@@ -177,10 +179,13 @@ if($idPreventa>0){
 }
 $css->DivNotificacionesJS();
 $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
-$css->CerrarDiv();//Cerramos contenedor Principal
-
+$css->CerrarDiv();
+        
         $css->CrearDiv("DivItemsPreventa", "", "center", 1, 1);
         
+        $css->CerrarDiv();
+        
+        $css->CrearDiv("DivProcesosInternos", "", "center", 1, 1); //Muestra los resultados de los procesos background
         $css->CerrarDiv();
     $css->CerrarDiv();
     
@@ -200,7 +205,10 @@ $css->AgregaSubir();
 $css->AgregaJSVentaRapida();
 if($idPreventa>0){
     $Page="Consultas/ItemsPreventa.php?myPage=$myPage&idClientes=$idClientes&idAnticipo=$idAnticipo&CmbPreVentaAct=";
-    
     print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivItemsPreventa`,`2`);</script>");
+    
+    $Page="Consultas/KardexFacturas.php?Autorizado=1&idPreventa=";
+    print("<script>EnvieObjetoConsulta(`$Page`,`CmbPreVentaAct`,`DivProcesosInternos`,`NO`);</script>");
 }
+
 ?>

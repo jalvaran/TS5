@@ -202,7 +202,7 @@ class Compra extends ProcesoVenta{
         $this->IngreseRetireProductosInventarioCompra($idCompra,"SALIDA");   //Retiro los productos del inventario
         //Si es credito se ingresa a cuentas X Pagar
         
-        if($TipoPago=="Credito" AND $DatosEmpresa["CXPAutomaticas"]==1){
+        if($TipoPago=="Credito" AND $DatosEmpresa["CXPAutomaticas"]=="SI"){
             $SubtotalCuentaXPagar=$TotalesCompra["Gran_Subtotal"];
             $TotalIVACXP=$TotalesCompra["Gran_Impuestos"];
             $TotalCompraCXP=$TotalesCompra["Gran_Total"];

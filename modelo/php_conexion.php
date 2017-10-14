@@ -1877,7 +1877,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[28]="ValorOtrosImpuestos";$Valores[28]= $DatosOtrosImpuestos["ValorImpuesto"]*$DatosCotizacion['Cantidad'];
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-           
+            /*
             if($DatosCotizacion["TipoItem"]=="PR"){
                 
                 $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
@@ -1891,6 +1891,9 @@ public function CalculePesoRemision($idCotizacion)
                 
                 $this->InserteKardex($DatosKardex);
             }
+            *
+             * 
+             */ 
              
         }
         $ID=$Datos["ID"]; 
@@ -3589,7 +3592,7 @@ public function VerificaPermisos($VectorPermisos) {
     return true;
 }
 
-
+    
 //Funcion para Crear los backups
      public function CrearBackup($idServer,$VectorBackup){
         $host=$VectorBackup["LocalHost"];
@@ -6588,6 +6591,42 @@ public function VerificaPermisos($VectorPermisos) {
             }    
         }
     }
+    
+    // Ingresa una factura pendiente por descargar de inventarios
+     
+     public function FacturaKardex($idFactura,$idUser,$Vector) {
+         
+        $tab="facturas_kardex";
+        $NumRegistros=3;
+        $Columnas[0]="idFacturas";          $Valores[0]=$idFactura;
+        $Columnas[1]="Kardex";              $Valores[1]="NO";
+        $Columnas[2]="idUsuario";          $Valores[2]=$idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+     }
+     //descarga una factura del inventario
+     public function DescargueFacturaInventarios($idFactura,$Vector) {
+        $consulta=$this->ConsultarTabla("facturas_items", "WHERE idFactura='$idFactura'");
+        while($DatosItems=$this->FetchArray($consulta)){
+            
+            if($DatosItems["TipoItem"]=="PR"){
+                $DatosProducto=$this->DevuelveValores($DatosItems["TablaItems"], "Referencia", $DatosItems["Referencia"]);
+            
+                $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
+                $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+                $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
+                $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+                $DatosKardex["Detalle"]="Factura";
+                $DatosKardex["idDocumento"]=$idFactura;
+                $DatosKardex["TotalCosto"]=$DatosItems["SubtotalCosto"];
+                $DatosKardex["Movimiento"]="SALIDA";
+
+                $this->InserteKardex($DatosKardex);
+               }
+        }
+        $this->ActualizaRegistro("facturas_kardex", "Kardex", "SI", "idFacturas", $idFactura);
+     }
 //////////////////////////////Fin	
 }
 	

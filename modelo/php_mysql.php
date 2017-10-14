@@ -3,9 +3,13 @@
  * 
  * Clase con todas las acciones requeridas para la conexion a la base de datos
  */
-include_once("php_settings.php");
+include_once 'php_settings.php';
+$con = mysql_connect($host,$user,$pw);
+mysql_select_db($db,$con) or die(mysql_error());
+date_default_timezone_set("America/Bogota");
+
 class db_conexion{
-    
+       
    // evita la injeccion de codigo sql
     public function normalizar($string){		
         $str=str_ireplace("'", "", $string);
