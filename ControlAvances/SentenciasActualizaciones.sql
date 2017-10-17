@@ -616,3 +616,8 @@ CREATE TABLE IF NOT EXISTS `facturas_kardex` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 UPDATE `menu` SET `Image` = 'pub.png' WHERE `menu`.`ID` = 25;
+
+ALTER TABLE `librodiario` ADD INDEX(`Tipo_Documento_Intero`);
+ALTER TABLE `librodiario` ADD INDEX(`Num_Documento_Interno`);
+ALTER TABLE `librodiario` ADD INDEX(`Tercero_Identificacion`);
+ALTER TABLE `librodiario` ADD INDEX(`CuentaPUC`);

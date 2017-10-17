@@ -2,16 +2,18 @@
 $myPage="BalanceComprobacion.php";
 include_once("../sesiones/php_control.php");
 include_once("../modelo/php_tablas.php");
+include_once("clases/ClasesDocumentosExcel.php");
 $obTabla = new Tabla($db);
 $obVenta = new ProcesoVenta($idUser);
-if(isset($_REQUEST["BtnVerInforme"])){
-    $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIni"]);
-    $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinal"]);
-    $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorte"]);
-    $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporte"]);
-    $idEmpresa=$obVenta->normalizar($_REQUEST["CmbEmpresaPro"]);
-    $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCostos"]);
-    $obTabla->GenerarBalanceComprobacionExcel($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$idEmpresa,$CentroCosto,"");
+if(isset($_REQUEST["BtnCrearBalanceComprobacion"])){
+    $obExcel=new TS5_Excel($db);
+    $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIniBC"]);
+    $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinalBC"]);
+    $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorteBC"]);
+    $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporteBC"]);
+    $idEmpresa=$obVenta->normalizar($_REQUEST["CmbEmpresaProBC"]);
+    $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCostosBC"]);
+    $obExcel->GenerarBalanceComprobacionExcel($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$idEmpresa,$CentroCosto,"");
 }
 
 include_once("css_construct.php");
@@ -43,21 +45,21 @@ function CrearFormularioInformes($VectorInformes) {
             $css->CierraFilaTabla();
             $css->FilaTabla(14);
                 print("<td>");
-                $css->CrearSelect("CmbTipoReporte", "");
-                    $css->CrearOptionSelect("Corte", "Fecha de Corte", 1);
-                    $css->CrearOptionSelect("Rango", "Por Rango de Fechas", 0);
+                $css->CrearSelect("CmbTipoReporteBC", "");
+                    $css->CrearOptionSelect("Corte", "Fecha de Corte", 0);
+                    $css->CrearOptionSelect("Rango", "Por Rango de Fechas", 1);
                 $css->CerrarSelect();
                 print("<br>");
-                $css->CrearInputText("TxtFechaCorte", "date", "Fecha de Corte:<br>", date("Y-m-d"), "Fecha Corte", "black", "", "", 150, 30, 0, 1);
+                $css->CrearInputText("TxtFechaCorteBC", "date", "Fecha de Corte:<br>", date("Y-m-d"), "Fecha Corte", "black", "", "", 150, 30, 0, 1);
                 print("</td>");
                 print("<td>");
-                $css->CrearInputText("TxtFechaIni", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
+                $css->CrearInputText("TxtFechaIniBC", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
                 print("</td>");   
                 print("<td>");
-                $css->CrearInputText("TxtFechaFinal", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
+                $css->CrearInputText("TxtFechaFinalBC", "date", "", date("Y-m-d"), "Fecha Inicial", "black", "", "", 150, 30, 0, 1);
                 print("</td>"); 
                 print("<td>");
-                $css->CrearSelect("CmbEmpresaPro", "");
+                $css->CrearSelect("CmbEmpresaProBC", "");
                 $css->CrearOptionSelect("ALL", "COMPLETO", 0);                  
                 $consulta=$obVenta->ConsultarTabla("empresapro", "");
               
@@ -67,7 +69,7 @@ function CrearFormularioInformes($VectorInformes) {
                 $css->CerrarSelect();
                 print("</td>"); 
                 print("<td>");
-                $css->CrearSelect("CmbCentroCostos", "");                
+                $css->CrearSelect("CmbCentroCostosBC", "");                
                 $consulta=$obVenta->ConsultarTabla("centrocosto", "");
                 $css->CrearOptionSelect("ALL", "COMPLETO", 0);                
                 while($DatosEmpresa=$obVenta->FetchArray($consulta)){
@@ -77,7 +79,10 @@ function CrearFormularioInformes($VectorInformes) {
                 print("</td>"); 
             $css->FilaTabla(16);
             print("<td colspan='5' style='text-align:center'>");
-            $css->CrearBotonVerde("BtnVerInforme", "Generar Informe");
+            $Nombre="BtnCrearBalanceComprobacion";
+            $Page="ProcesadoresJS/GeneradorExcel.php?idDocumento=1&Carry="; //SIn uso por error al generar
+            $FuncionJS="EnvieObjetoConsulta2(`$Page`,`$Nombre`,`_blank`,`2`);return false ;";
+            $css->CrearBotonEvento($Nombre,"Generar",1,"","","verde","");
             print("</td>");
             $css->CierraFilaTabla();
         $css->CerrarTabla();
@@ -235,7 +240,8 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("Secundario", "container", "center",1,1);
-    
+    $css->CrearDiv("DivProcesos", "", "center", 1, 1);
+    $css->CerrarDiv();
     $css->CrearNotificacionAzul("GENERAR BALANCE DE COMPROBACION", 16);
     
     $VectorInformes["FormName"]="FormBalanceComprobacion";

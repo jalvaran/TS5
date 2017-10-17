@@ -722,6 +722,50 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         //alert("Sale");
 }
 
+//Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
+function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
+    
+    ValorElement=document.getElementById(idElement).value;  
+    
+        if(BorrarId==2){
+            TxtFechaIniBC =document.getElementById('TxtFechaIniBC').value;
+            TxtFechaFinalBC =document.getElementById('TxtFechaFinalBC').value;
+            TxtFechaCorteBC =document.getElementById('TxtFechaCorteBC').value;
+            CmbTipoReporteBC  =document.getElementById('CmbTipoReporteBC').value;
+            CmbEmpresaProBC  =document.getElementById('CmbEmpresaProBC').value;
+            CmbCentroCostosBC  =document.getElementById('CmbCentroCostosBC').value;
+            
+            VC="&TxtFechaIniBC="+TxtFechaIniBC+"&TxtFechaFinalBC="+TxtFechaFinalBC+"&TxtFechaCorteBC="+TxtFechaCorteBC;
+            VC=VC+"&CmbTipoReporteBC="+CmbTipoReporteBC+"&CmbEmpresaProBC="+CmbEmpresaProBC+"&CmbCentroCostosBC="+CmbCentroCostosBC;
+           
+            ValorElement = ValorElement+VC;
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/processing.gif" alt="Cargando" height="100" width="100">';
+            
+        }
+        
+        if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                httpEdicion = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                httpEdicion = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpEdicion.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById(idTarget).innerHTML = this.responseText;
+                    
+                }
+            };
+        
+        httpEdicion.open("GET",Page+ValorElement,true);
+        httpEdicion.send();
+        //document.getElementById(idElement).value='Limpiando';
+        if(BorrarId==1){
+            document.getElementById(idElement).value='';
+        }
+        
+        //alert("Sale");
+}
 //Calcule la retefuente en una compra segun porcentaje
 
 

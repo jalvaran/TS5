@@ -20,7 +20,7 @@ $Valida=$obVenta->normalizar($_GET['Valida']);
 if($Valida==1){
     
     $sql="SELECT SUM(`Neto`) as Total, `Tipo_Documento_Intero`,`Num_Documento_Interno` FROM `librodiario` "
-            . " GROUP BY `Tipo_Documento_Intero`,`Num_Documento_Interno` ORDER BY SUM(`Neto`) DESC";
+            . " GROUP BY `Tipo_Documento_Intero`,`Num_Documento_Interno` ORDER BY SUM(`Neto`) DESC LIMIT 100";
     $consulta=$obVenta->Query($sql);
     if($obVenta->NumRows($consulta)){
         $css->CrearNotificacionRoja("Documentos encontrados", 16);
