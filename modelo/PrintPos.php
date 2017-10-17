@@ -209,7 +209,7 @@ class PrintPos extends ProcesoVenta{
         $ResolucionDian2="FACTURA AUT. $DatosResolucion[Prefijo] - $DatosResolucion[Desde] HASTA $DatosResolucion[Prefijo] - $DatosResolucion[Hasta]";
         $ResolucionDian3="Autoriza impresion en:  $DatosResolucion[Factura]";
         $Telefono=$DatosEmpresa["Telefono"];
-
+        $ImpuestosP[]="";
         $impuesto=$DatosFactura["IVA"];
         $Descuento=$DatosFactura["Descuentos"];
         $TotalVenta=$DatosFactura["Total"];
@@ -278,17 +278,7 @@ class PrintPos extends ProcesoVenta{
 		$i=0;						
 	while($DatosVenta=$this->FetchArray($consulta)){
 		$i++;
-            $ProcentajeIVA=$DatosVenta["PorcentajeIVA"];
-            $Base[$i]=$DatosVenta["PorcentajeIVA"];
-                        
-            if(!isset($SubtotalP[$ProcentajeIVA])){
-                $SubtotalP[$ProcentajeIVA]=0;
-            }
-            if(!isset($SubtotalP[$ProcentajeIVA])){
-                $ImpuestosP[$ProcentajeIVA]=0;
-            }
-            $SubtotalP[$ProcentajeIVA]=$Subtotal[$ProcentajeIVA]+$DatosVenta["SubtotalItem"];
-            $ImpuestosP[$ProcentajeIVA]=$ImpuestosP[$ProcentajeIVA]+$DatosVenta["IVAItem"];
+            
             $SubTotalITem=$DatosVenta["TotalItem"];
             
             fwrite($handle,str_pad($DatosVenta["Cantidad"],4," ",STR_PAD_RIGHT));

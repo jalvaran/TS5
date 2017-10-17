@@ -604,3 +604,15 @@ CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
 
 ALTER TABLE `colaboradores` CHANGE `Activo` `Activo` VARCHAR(2) NOT NULL DEFAULT 'SI';
 ALTER TABLE `empresapro` CHANGE `CXPAutomaticas` `CXPAutomaticas` VARCHAR(2) NOT NULL DEFAULT 'SI';
+
+CREATE TABLE IF NOT EXISTS `facturas_kardex` (
+  `idFacturas` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `CuentaDestino` bigint(20) NOT NULL,
+  `Kardex` varchar(2) COLLATE latin1_spanish_ci NOT NULL DEFAULT 'NO',
+  `idUsuario` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`idFacturas`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+UPDATE `menu` SET `Image` = 'pub.png' WHERE `menu`.`ID` = 25;

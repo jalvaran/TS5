@@ -1,18 +1,15 @@
- <link rel="icon" href="../images/technoIco.png">
-     <link rel="shortcut icon" href="../images/technoIco.ico" />
-     <link rel="stylesheet" href="css/touchTouch.css">
-     <link rel="stylesheet" href="css/style.css">
-     <script src="js/jquery.js"></script>
-     <script src="js/jquery-migrate-1.1.1.js"></script>
-     <script src="js/jquery.equalheights.js"></script>
-     <script src="js/jquery.ui.totop.js"></script>
-     <script src="js/jquery.tabs.min.js"></script>
-     <script src="js/touchTouch.jquery.js"></script>
-     <script src="js/jquery.easing.1.3.js"></script>
-	 
-	
-		
-		
+<link rel="icon" href="../images/technoIco.png">
+<link rel="shortcut icon" href="../images/technoIco.ico" />
+<link rel="stylesheet" href="css/touchTouch.css">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/jquery.js"></script>
+<script src="js/jquery-migrate-1.1.1.js"></script>
+<script src="js/jquery.equalheights.js"></script>
+<script src="js/jquery.ui.totop.js"></script>
+<script src="js/jquery.tabs.min.js"></script>
+<script src="js/touchTouch.jquery.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/funciones.js"></script>
      
 <?php
 
@@ -21,8 +18,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 class CssIni{
-	//private $Titulo;
-	
 	
 	function __construct(){
 		
@@ -459,6 +454,28 @@ function Footer(){
 	function CrearImageLink($page,$imagerute,$target){
 		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'"></a>');
 	}
+        /////////////////////Crear un DIV
+	
+	function CrearDiv($ID, $Class, $Alineacion,$Visible, $Habilitado){
+            if($Visible==1)
+                $V="block";
+            else
+                $V="none";
+            
+            if($Habilitado==1) ///pensado a futuro, aun no esta en uso
+                $H="true";
+            else
+                $H="false";
+            print("<div id='$ID' class='$Class' align='$Alineacion' style='display:$V;' >");
+		
+	}
+         /////////////////////Crear un DIV
+	
+	function CerrarDiv(){
+            print("</div>");
+		
+	}
+//Fin Clases        
 }
 	
 ?>

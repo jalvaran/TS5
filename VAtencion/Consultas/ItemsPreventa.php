@@ -228,8 +228,10 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
         $css->FilaTabla(14);
         
         print("<td colspan='3' style='text-align:center'>");
-            
-            $css->CrearBotonEvento("BtnGuardar","Guardar",1,"onclick","EnviaFormVentasRapidas()","naranja","");
+            $Nombre="BtnGuardar";
+            $Page="Consultas/PreventaProcess.php?myPage=$myPage&CmbPreVentaAct=$idPreventa&TxtCliente=$idClientes&Carry=";
+            $FuncionJS="EnvieObjetoConsulta(`$Page`,`$Nombre`,`DivItemsPreventa`,`11`);return false ;";
+            $css->CrearBotonEvento($Nombre,"Guardar",1,"onclick",$FuncionJS,"naranja","");
 	print("</td>");
         $css->CierraFilaTabla(); 
         

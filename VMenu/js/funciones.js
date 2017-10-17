@@ -121,3 +121,33 @@ function CreaRazonSocial() {
 
 }
 
+//Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
+function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
+    
+    ValorElement=document.getElementById(idElement).value;  
+    
+   
+        if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                httpEdicion = new XMLHttpRequest();
+            } else {
+                // code for IE6, IE5
+                httpEdicion = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpEdicion.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById(idTarget).innerHTML = this.responseText;
+                    
+                }
+            };
+        
+        httpEdicion.open("GET",Page+ValorElement,true);
+        httpEdicion.send();
+        
+        //alert("Sale");
+}
+
+function myTimer(page) {
+    
+    EnvieObjetoConsulta(page,`tab-1`,`DivProcesosInternos`,`NO`);
+}

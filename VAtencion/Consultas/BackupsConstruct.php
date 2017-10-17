@@ -34,7 +34,7 @@ if(isset($_REQUEST["LkSubir"])){
     $VectorTraslado["PW"]=$pw;
     $VectorTraslado["DB"]=$db;
     $VectorTraslado["AutoIncrement"]=0;  
-    register_shutdown_function(Backup($db,$VectorTraslado));
+    Backup($db,$VectorTraslado);
         
 }	
 ?>

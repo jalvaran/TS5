@@ -661,9 +661,34 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
                 alert("Debe Digitar una razon para eliminar el item");
                 return;
             }
-                       
+               
             ValorElement = ValorElement+"&TxtCausal="+Observaciones;
         }
+        
+        if(BorrarId==11){
+            
+            TxtGranTotalH =document.getElementById('TxtGranTotalH').value;
+            TxtidColaborador =document.getElementById('TxtidColaborador').value;
+            TxtPaga =document.getElementById('TxtPaga').value;
+            TxtPagaCheque  =document.getElementById('TxtPagaCheque').value;
+            TxtPagaTarjeta  =document.getElementById('TxtPagaTarjeta').value;
+            CmbIdTarjeta  =document.getElementById('CmbIdTarjeta').value;
+            TxtPagaOtros  =document.getElementById('TxtPagaOtros').value;
+            TxtDevuelta  =document.getElementById('TxtDevuelta').value;
+            TxtCuentaDestino  =document.getElementById('TxtCuentaDestino').value;
+            TxtTipoPago  =document.getElementById('TxtTipoPago').value;
+            TxtAnticipo  =document.getElementById('TxtAnticipo').value;
+            CmbAnticipo  =document.getElementById('CmbAnticipo').value;
+            TxtObservacionesFactura   =document.getElementById('TxtObservacionesFactura').value;
+            VC="&TxtGranTotalH="+TxtGranTotalH+"&TxtidColaborador="+TxtidColaborador;
+            VC=VC+"&TxtPaga="+TxtPaga+"&TxtPagaCheque="+TxtPagaCheque+"&TxtPagaTarjeta="+TxtPagaTarjeta;
+            VC=VC+"&CmbIdTarjeta="+CmbIdTarjeta+"&TxtPagaOtros="+TxtPagaOtros+"&TxtDevuelta="+TxtDevuelta;
+            VC=VC+"&TxtCuentaDestino="+TxtCuentaDestino+"&TxtTipoPago="+TxtTipoPago+"&TxtAnticipo="+TxtAnticipo;
+            VC=VC+"&CmbAnticipo="+CmbAnticipo+"&TxtObservacionesFactura="+TxtObservacionesFactura;
+            ValorElement = ValorElement+VC;
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/processing.gif" alt="Procesando" height="100" width="100">';           
+        }
+        
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();
@@ -687,6 +712,11 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
         if(BorrarId==2){
             //alert('entra');
             setTimeout("posiciona('TxtCantidad')",500);
+            //document.getElementById('TxtCantidadBascula').select();
+        }
+        if(BorrarId==11){
+            //alert('entra');
+            posiciona('TxtCodigoBarras');
             //document.getElementById('TxtCantidadBascula').select();
         }
         //alert("Sale");

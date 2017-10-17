@@ -238,15 +238,16 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 
             $idFact=$Datos["ID"];		
             $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$idFact);
-            $fecha=	$DatosFactura["Fecha"];	
+            $fecha=$DatosFactura["Fecha"];	
             $CuentaDestino=$Datos["CuentaDestino"];
             $DatosCliente=$this->DevuelveValores("clientes","idClientes",$DatosFactura['Clientes_idClientes']);
             $idCliente=$DatosFactura['Clientes_idClientes'];
             $NIT=$DatosCliente["Num_Identificacion"];
             $RazonSocialC=$DatosCliente["RazonSocial"];
-            $EmpresaPro=$Datos["EmpresaPro"];
-            $CentroCostos=$Datos["CentroCostos"];
-            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1);
+            $EmpresaPro=$DatosFactura["EmpresaPro_idEmpresaPro"];
+            $CentroCostos=$DatosFactura["CentroCosto"];
+            $idSucursal=$DatosFactura["idSucursal"];
+            $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", $idSucursal);
             $sql="SELECT PorcentajeIVA,CuentaPUC, TipoItem, sum(SubtotalItem) as SubtotalItem,sum(TotalItem) as TotalItem,sum(IVAItem) as IVAItem ,sum(SubtotalCosto) as SubtotalCosto  "
                     . "FROM facturas_items WHERE idFactura='$idFact' GROUP BY CuentaPUC, PorcentajeIVA";
             $Consulta=$this->Query($sql);
@@ -256,9 +257,10 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
             $NumRegistros=27;
             while($DatosItems=$this->FetchArray($Consulta)){
                 
-		$Subtotal=$DatosItems["SubtotalItem"];
-                $Total=$DatosItems["TotalItem"];
-                $Impuestos=$DatosItems["IVAItem"];
+		$Subtotal=round($DatosItems["SubtotalItem"],2);
+                //$Total=round($DatosItems["TotalItem"],2);
+                $Impuestos=round($DatosItems["IVAItem"],2);
+                $Total=$Subtotal+$Impuestos;
                 $TotalCostosM=$DatosItems["SubtotalCosto"];
 		if($DatosFactura['FormaPago']=="Contado"){    //Si es pago de contado
 			$CuentaPUC=$CuentaDestino;
@@ -342,7 +344,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                     $Valores[15]=$CuentaPUC;
                     $Valores[16]=$NombreCuenta;
                     $Valores[18]="0";
-                    $Valores[19]=round($Impuestos); 			//Credito se escribe el total de la venta
+                    $Valores[19]=$Impuestos; 			//Credito se escribe el total de la venta
                     $Valores[20]=$Valores[19]*(-1);  	//para la sumatoria contemplar el balance
 
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
@@ -1626,7 +1628,7 @@ public function CalculePesoRemision($idCotizacion)
         $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa'";
         $Consulta=$this->Query($sql);
         if($this->NumRows($Consulta)<1){
-            header("location:$myPage?CmbPreVentaAct=$idPreventa");
+            print("No hay articulos en la preventa");
             exit();    
         }
         
@@ -1761,7 +1763,7 @@ public function CalculePesoRemision($idCotizacion)
                 $Datos["CentroCostos"]=$CentroCostos;
                 $this->InsertarItemsPreventaAItemsFactura($Datos);///Relaciono los items de la factura
                 
-                $this->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
+                //$this->InsertarFacturaLibroDiario($Datos);///Inserto Items en el libro diario
                
                 if($TipoPago<>"Contado"){                   //Si es a Credito
                     if($TipoPago=="SisteCredito"){
@@ -1897,9 +1899,9 @@ public function CalculePesoRemision($idCotizacion)
              
         }
         $ID=$Datos["ID"]; 
-        //$TotalSubtotal=$TotalSubtotal;
-        //$TotalIVA=round($TotalIVA);
-        //$GranTotal=round($GranTotal);
+        $TotalSubtotal=$TotalSubtotal;
+        $TotalIVA=round($TotalIVA);
+        $GranTotal=round($GranTotal);
         $TotalCostos=round($TotalCostos);
         $sql="UPDATE facturas SET Subtotal='$TotalSubtotal', IVA='$TotalIVA', Total='$GranTotal', "
                 . "SaldoFact='$GranTotal', TotalCostos='$TotalCostos' WHERE idFacturas='$ID'";
@@ -3061,7 +3063,10 @@ public function CalculePesoRemision($idCotizacion)
         while($DatosItems=  $this->FetchArray($consulta)){
             $fecha=$DatosItems["Fecha"];
             $Costo=$Costo+($DatosItems["CostoUnitario"]*$DatosItems["Cantidad"]);
-            $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosItems["CodigoBarras"]);
+            $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosItems["Referencia"]);
+            if($DatosProducto["idProductosVenta"]==''){
+                $DatosProducto=$this->DevuelveValores("productosventa", "idProductosVenta", $DatosItems["CodigoBarras"]);
+            }
             if(empty($DatosProducto["idProductosVenta"])){
                 $VectorPTI["FUT"]="";
                 $idProducto=$this->CrearProductoFromItemTraslado($DatosItems["ID"],$VectorPTI);
@@ -6594,13 +6599,14 @@ public function VerificaPermisos($VectorPermisos) {
     
     // Ingresa una factura pendiente por descargar de inventarios
      
-     public function FacturaKardex($idFactura,$idUser,$Vector) {
+     public function FacturaKardex($idFactura,$CuentaDestino,$idUser,$Vector) {
          
         $tab="facturas_kardex";
-        $NumRegistros=3;
+        $NumRegistros=4;
         $Columnas[0]="idFacturas";          $Valores[0]=$idFactura;
         $Columnas[1]="Kardex";              $Valores[1]="NO";
         $Columnas[2]="idUsuario";          $Valores[2]=$idUser;
+        $Columnas[3]="CuentaDestino";       $Valores[3]=$CuentaDestino;
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
