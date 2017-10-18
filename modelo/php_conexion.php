@@ -418,77 +418,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 	
 
         
-////////////////////////////////////////////////////////////////////
-//////////////////////Funcion agregar preventa
-///////////////////////////////////////////////////////////////////
 
-
-public function AgregaPreventaServicios($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem)
-  {
-        $fecha=$this->normalizar($fecha);
-        $Cantidad=$this->normalizar($Cantidad);
-        $idVentaActiva=$this->normalizar($idVentaActiva);
-        $idProducto=$this->normalizar($idProducto);
-        $TablaItem=$this->normalizar($TablaItem);
-        
-	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
-        if($DatosProductoGeneral["PrecioVenta"]<=0){
-            return("E1");
-        }
-        $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
-        $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
-        $TipoItem=$DatosDepartamento["TipoItem"];
-        $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' ORDER BY idPrecotizacion DESC");
-        $DatosProduto=$this->FetchArray($consulta);
-	if($DatosProduto["Cantidad"]>0){
-            if($DatosProductoGeneral["IVA"]=="E"){
-                $DatosProductoGeneral["IVA"]=0;
-            }
-            $Cantidad=$DatosProduto["Cantidad"]+$Cantidad;
-            $Subtotal=$DatosProduto["ValorAcordado"]*$Cantidad;
-            $Impuestos=$DatosProductoGeneral["IVA"]*$Subtotal;
-            $TotalVenta=$Subtotal+$Impuestos;
-            $sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE idPrecotizacion='$DatosProduto[idPrecotizacion]'";
-            //$sql="UPDATE preventa SET Subtotal='$Subtotal', Impuestos='$Impuestos', TotalVenta='$TotalVenta', Cantidad='$Cantidad' WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva'";
-            $this->Query($sql);
-        }else{
-            $reg=$this->Query("select * from fechas_descuentos where (Departamento = '$DatosProductoGeneral[Departamento]' OR Departamento ='0') AND (Sub1 = '$DatosProductoGeneral[Sub1]' OR Sub1 ='0') AND (Sub2 = '$DatosProductoGeneral[Sub2]' OR Sub2 ='0')  ORDER BY idFechaDescuentos DESC LIMIT 1") or die('no se pudo consultar los valores de fechas descuentos en AgregaPreventa: ' . mysql_error());
-            $reg=$this->FetchArray($reg);
-            $Porcentaje=$reg["Porcentaje"];
-            $Departamento=$reg["Departamento"];
-            $FechaDescuento=$reg["Fecha"];
-            if($DatosProductoGeneral["IVA"]=="E"){
-                $DatosProductoGeneral["IVA"]=0;
-            }
-            $impuesto=$DatosProductoGeneral["IVA"];
-            $impuesto=$impuesto+1;
-            if($DatosTablaItem["IVAIncluido"]=="SI"){
-                $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
-                
-            }else{
-                $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
-                
-            }
-            if($Porcentaje>0 and $FechaDescuento==$fecha){
-
-                    $Porcentaje=(100-$Porcentaje)/100;
-                    $ValorUnitario=$ValorUnitario*$Porcentaje;
-
-            }
-
-            $Subtotal=$ValorUnitario*$Cantidad;
-            $impuesto=($impuesto-1)*$Subtotal;
-            $Total=$Subtotal+$impuesto;
-
-
-            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`)
-                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem');";
-
-            $this->Query($sql) or die('no se pudo guardar el item en preventa: ' . mysql_error());	
-	
-        }
-	}	        
-        
 ////////////////////////////////////////////////////////////////////
 //////////////////////Funcion agregar preventa
 ///////////////////////////////////////////////////////////////////
@@ -506,6 +436,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
 	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
         if(isset($DatosProductoGeneral["CostoUnitario"])){
             $CostoUnitario=$DatosProductoGeneral["CostoUnitario"];
+        }
+        if($TablaItem=="productosventa"){
+            $CostoUnitario=$DatosProductoGeneral["CostoUnitarioPromedio"];
         }
         if(isset($DatosProductoGeneral["PrecioMayorista"])){
             $PrecioMayor=$DatosProductoGeneral["PrecioMayorista"];
@@ -1294,8 +1227,13 @@ public function CalculePesoRemision($idCotizacion)
             $GranTotal=$GranTotal+$TotalItem;//se realiza la sumatoria del total
             
             $SubtotalCosto=$DatosCotizacion['SubtotalCosto'];
+            $CostoUnitario=$DatosCotizacion['PrecioCostoUnitario'];
+            if($DatosCotizacion["TablaItems"]=="productosventa"){
+                $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $DatosCotizacion["Referencia"]);
+                $CostoUnitario=$DatosProducto["CostoUnitarioPromedio"];
+                $SubtotalCosto=$CostoUnitario*$DatosCotizacion['Cantidad'];
+            }
             $TotalCostos=$TotalCostos+$SubtotalCosto;//se realiza la sumatoria de los costos
-            
             //$ID=date("YmdHis").microtime(false);
             $tab="facturas_items";
             $NumRegistros=26;
@@ -1317,8 +1255,8 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[15]="IVAItem";		$Valores[15]=$DatosCotizacion['IVAItem'];
             $Columnas[16]="TotalItem";		$Valores[16]=$DatosCotizacion['TotalItem'];
             $Columnas[17]="PorcentajeIVA";	$Valores[17]=$DatosCotizacion['PorcentajeIVA'];
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosCotizacion['PrecioCostoUnitario'];
-            $Columnas[19]="SubtotalCosto";	$Valores[19]=$DatosCotizacion['SubtotalCosto'];
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$CostoUnitario;
+            $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion["TipoItem"];
             $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosCotizacion['CuentaPUC'];
             $Columnas[22]="GeneradoDesde";	$Valores[22]="cotizacionesv5";
@@ -1328,7 +1266,7 @@ public function CalculePesoRemision($idCotizacion)
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             if($DatosCotizacion["TipoItem"]=="PR"){
-                $DatosProducto=  $this->DevuelveValores($DatosCotizacion["TablaItems"], "Referencia", $DatosCotizacion["Referencia"]);
+                $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaItems"], "Referencia", $DatosCotizacion["Referencia"]);
                 $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
                 $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
                 $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
@@ -1853,7 +1791,7 @@ public function CalculePesoRemision($idCotizacion)
             $TotalItem=$SubtotalItem+$IVAItem;
             $GranTotal=$GranTotal+$TotalItem;//se realiza la sumatoria del total
             
-            $SubtotalCosto=$DatosCotizacion['Cantidad']*$DatosProducto["CostoUnitario"];
+            $SubtotalCosto=$DatosCotizacion['Cantidad']*$DatosCotizacion["CostoUnitario"];
             $TotalCostos=$TotalCostos+$SubtotalCosto;//se realiza la sumatoria de los costos
             if($DatosProducto["IVA"]<>"E"){
                 $PorcentajeIVA=($DatosProducto["IVA"]*100)."%";
@@ -1881,7 +1819,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[15]="IVAItem";		$Valores[15]=$IVAItem;
             $Columnas[16]="TotalItem";		$Valores[16]=$TotalItem;
             $Columnas[17]="PorcentajeIVA";	$Valores[17]=$PorcentajeIVA;
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosCotizacion['CostoUnitario'];
             $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion["TipoItem"];
             $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
@@ -2021,7 +1959,7 @@ public function CalculePesoRemision($idCotizacion)
             
             $DatosProducto= $this->DevuelveValores($DatosPreventa["TablaItem"], "idProductosVenta", $DatosPreventa["ProductosVenta_idProductosVenta"]);
             $Total=$Total+$DatosPreventa['TotalVenta'];
-            $SubtotalCosto=$DatosProducto['CostoUnitario']*$DatosPreventa['Cantidad'];
+            $SubtotalCosto=$DatosPreventa['CostoUnitario']*$DatosPreventa['Cantidad'];
             
             $Columnas[2]="TablaItems";          $Valores[2]=$DatosPreventa["TablaItem"];
             $Columnas[3]="Referencia";          $Valores[3]=$DatosProducto["Referencia"];
@@ -2039,7 +1977,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[15]="IVAItem";            $Valores[15]=$DatosPreventa['Impuestos'];
             $Columnas[16]="TotalItem";          $Valores[16]=$DatosPreventa['TotalVenta'];
             $Columnas[17]="PorcentajeIVA";	$Valores[17]=($DatosProducto['IVA']*100)."%";
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosPreventa['CostoUnitario'];
             $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosPreventa["TipoItem"];
             $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
