@@ -14,7 +14,7 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
         
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
-include_once("Configuraciones/cuentasxpagar.ini.php");  //Clases de donde se escribirán las tablas
+include_once("Configuraciones/cuentasxpagar2.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
 
 $idComprobante=0;
@@ -30,7 +30,7 @@ if(isset($_REQUEST["ImprimeCC"])){
 }
 
 
-include_once("procesadores/ProcesaCuentasXPagar.php");
+include_once("procesadores/ProcesaCuentasXPagar2.php");
 $statement = $obTabla->CreeFiltroCuentas($Vector);
 //print($statement);
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
@@ -59,7 +59,7 @@ $css->CierraMenuBasico();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-$css->DivNotificacionesJS();
+
 if($ImprimeCC>0){
         $RutaPrintCot="../tcpdf/examples/comprobantecontable.php?idComprobante=$ImprimeCC";			
        

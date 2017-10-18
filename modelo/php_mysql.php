@@ -297,7 +297,13 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
     $Columnas[8]="idItemEliminado";     $Valores[8]=$idItemEliminado;
     
     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
- }       
+ }    
+ 
+ //Last Insert ID
+ public function Last_Insert_ID() {
+    $id= mysql_insert_id();
+    return($id);
+ }
 //Fin Clases
 }
 ?>

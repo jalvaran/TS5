@@ -2,7 +2,7 @@
 
 $myTabla="librodiario";
 $idTabla="Fecha";
-$myPage="CuentasXPagar.php";
+$myPage="CuentasXPagar2.php";
 $myTitulo="Cuentas X Pagar";
 
 

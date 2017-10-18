@@ -1337,7 +1337,8 @@ public function CalculePesoRemision($idCotizacion)
                 $DatosKardex["idDocumento"]=$NumFactura;
                 $DatosKardex["TotalCosto"]=$SubtotalCosto;
                 $DatosKardex["Movimiento"]="SALIDA";
-                
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $this->InserteKardex($DatosKardex);
             }
         }
@@ -1363,12 +1364,13 @@ public function CalculePesoRemision($idCotizacion)
             $Saldo=0;
         }
         $TotalCostoSaldo=$Saldo*$DatosKardex["CostoUnitario"];
-        
+        $TotalCostoPromedioSaldo=$Saldo*$DatosKardex["CostoUnitarioPromedio"];
+        $CostoUnitarioPromedio=$DatosKardex["CostoUnitarioPromedio"];
         /*
          * Inserto el kardex del producto primer movimiento 
          */
         $tab="kardexmercancias";
-        $NumRegistros=8;
+        $NumRegistros=10;
         $Columnas[0]="Fecha";                           $Valores[0]=$Fecha;
         $Columnas[1]="Movimiento";                      $Valores[1]=$DatosKardex["Movimiento"];
         $Columnas[2]="Detalle";                         $Valores[2]=$DatosKardex["Detalle"];
@@ -1377,9 +1379,20 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[5]="ValorUnitario";                   $Valores[5]=$DatosKardex["CostoUnitario"];
         $Columnas[6]="ValorTotal";                      $Valores[6]=$DatosKardex["TotalCosto"];
         $Columnas[7]="ProductosVenta_idProductosVenta"; $Valores[7]=$DatosKardex['idProductosVenta'];
+        $Columnas[8]="CostoUnitarioPromedio";           $Valores[8]=$CostoUnitarioPromedio;
+        $Columnas[9]="CostoTotalPromedio";              $Valores[9]=$DatosKardex['CostoTotalPromedio'];
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-        
+        if(isset($DatosKardex["CalcularCostoPromedio"])){
+            
+            $idKardex= $this->Last_Insert_ID();
+            $CostoUnitarioPromedio=$this->ObtengaCostoPromedioProducto($DatosKardex['idProductosVenta'], "");
+            $TotalCostoPromedioSaldo=$Saldo*$CostoUnitarioPromedio;
+            $CostoTotalPromedio=$DatosKardex["Cantidad"]*$CostoUnitarioPromedio;
+            $this->ActualizaRegistro("kardexmercancias", "CostoUnitarioPromedio", $CostoUnitarioPromedio, "idKardexMercancias", $idKardex, 1);
+            $this->ActualizaRegistro("kardexmercancias", "CostoTotalPromedio", $CostoTotalPromedio, "idKardexMercancias", $idKardex, 1);
+            $Valores[8]=$CostoUnitarioPromedio;
+        }
         /*
          * Inserto el kardex del producto segundo movimiento SALDOS 
          */
@@ -1387,12 +1400,13 @@ public function CalculePesoRemision($idCotizacion)
         $Columnas[1]="Movimiento";                      $Valores[1]="SALDOS";
         $Columnas[4]="Cantidad";                        $Valores[4]=$Saldo;
         $Columnas[6]="ValorTotal";                      $Valores[6]=$TotalCostoSaldo;
-              
+        $Columnas[9]="CostoTotalPromedio";              $Valores[9]=$TotalCostoPromedioSaldo;      
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         /*
          * Actualizo inventarios
          */
-        $sql="UPDATE productosventa SET Existencias='$Saldo', CostoTotal='$TotalCostoSaldo',CostoUnitario='$DatosKardex[CostoUnitario]'"
+        $sql="UPDATE productosventa SET Existencias='$Saldo', CostoTotal='$TotalCostoSaldo',CostoUnitario='$DatosKardex[CostoUnitario]',"
+                . " CostoUnitarioPromedio='$CostoUnitarioPromedio',CostoTotalPromedio='$TotalCostoPromedioSaldo'"
                 . " WHERE idProductosVenta=$DatosKardex[idProductosVenta]";
         $this->Query($sql);
         
@@ -1449,7 +1463,7 @@ public function CalculePesoRemision($idCotizacion)
         $this->ActualizaRegistro("comprobantes_contabilidad", "Estado", "C", "ID", $idComprobante);
         $this->ActualizaRegistro("comprobantes_pre", "Estado", "C", "idComprobanteContabilidad", $idComprobante);
     }
-    
+    //Funcion para ingresar los items en caso de anulacion de una factura
     public function ReingreseItemsInventario($idFactura){
         $Consulta=$this->ConsultarTabla("facturas_items", "WHERE idFactura='$idFactura'");
         while($DatosItems=$this->FetchArray($Consulta)){
@@ -1464,7 +1478,8 @@ public function CalculePesoRemision($idCotizacion)
                 $DatosKardex["idDocumento"]=$idFactura;
                 $DatosKardex["TotalCosto"]=$DatosKardex["CostoUnitario"]*$DatosKardex["Cantidad"];
                 $DatosKardex["Movimiento"]="SALIDA";
-                
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $this->InserteKardex($DatosKardex);
             }
         }
@@ -2045,7 +2060,8 @@ public function CalculePesoRemision($idCotizacion)
                 $DatosKardex["idDocumento"]=$idSeparado;
                 $DatosKardex["TotalCosto"]=$SubtotalCosto;
                 $DatosKardex["Movimiento"]="SALIDA";
-                
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $this->InserteKardex($DatosKardex);
             }
         }
@@ -3046,6 +3062,8 @@ public function CalculePesoRemision($idCotizacion)
             $DatosKardex["idDocumento"]=$idComprobante;
             $DatosKardex["TotalCosto"]=$DatosItems['Cantidad']*$DatosProducto['CostoUnitario'];
             $DatosKardex["Movimiento"]="SALIDA";
+            $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
             $this->InserteKardex($DatosKardex);
         }
         
@@ -3081,9 +3099,11 @@ public function CalculePesoRemision($idCotizacion)
                 $DatosKardex["idDocumento"]=$idTraslado;
                 $DatosKardex["TotalCosto"]=$DatosItems['Cantidad']*$DatosProducto['CostoUnitario'];
                 $DatosKardex["Movimiento"]="ENTRADA";
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $this->InserteKardex($DatosKardex);                
                 $idProducto=$DatosProducto["idProductosVenta"];
-                $sql="UPDATE productosventa SET PrecioVenta='$DatosItems[PrecioVenta]',PrecioMayorista='$DatosItems[PrecioMayorista]', Departamento='$DatosItems[Departamento]',Sub1='$DatosItems[Sub1]',Sub2='$DatosItems[Sub2]',"
+                $sql="UPDATE productosventa SET PrecioVenta='$DatosItems[PrecioVenta]',PrecioMayorista='$DatosItems[PrecioMayorista]', Departamento='$DatosItems[Departamento]',Sub1='$DatosItems[Sub1]',Sub2='$DatosItems[Sub2]',"                        
                         . " Sub3='$DatosItems[Sub3]',Sub4='$DatosItems[Sub4]' ,Sub5='$DatosItems[Sub5]' WHERE idProductosVenta='$idProducto'";
                 $this->Query($sql);
             }
@@ -3270,6 +3290,8 @@ public function CalculePesoRemision($idCotizacion)
         $DatosKardex["idDocumento"]="NA";
         $DatosKardex["TotalCosto"]=$Cantidad*$DatosProducto['CostoUnitario'];
         $DatosKardex["Movimiento"]="ENTRADA";
+        $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
         $this->InserteKardex($DatosKardex);
         return($DatosProducto);
     }
@@ -3799,6 +3821,8 @@ public function VerificaPermisos($VectorPermisos) {
         $DatosKardex["idDocumento"]=$idBaja;
         $DatosKardex["TotalCosto"]=$CostoTotal;
         $DatosKardex["Movimiento"]=$MovientoKardex;
+        $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
         $this->InserteKardex($DatosKardex);
         
         ///////////////////////Ajustamos el inventario
@@ -5248,7 +5272,8 @@ public function VerificaPermisos($VectorPermisos) {
         $DatosKardex["idDocumento"]=$NumFactura;
         $DatosKardex["TotalCosto"]=$SubtotalCosto;
         $DatosKardex["Movimiento"]="SALIDA";
-
+        $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+        $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
         $this->InserteKardex($DatosKardex);
             
         }
@@ -6226,7 +6251,8 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosKardex["idDocumento"]="NA";
             $DatosKardex["TotalCosto"]=$Cantidad*$DatosProductoConteo['CostoUnitario'];
             $DatosKardex["Movimiento"]="ENTRADA";
-            
+            $DatosKardex["CostoUnitarioPromedio"]=$DatosProductoConteo["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProductoConteo["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
             $this->InserteKardex($DatosKardex);
             //$this->RegistrarDiferenciaInventarios($idProducto, "");
             $Saldo=$DatosProductoConteo['Existencias']+$Cantidad;            
@@ -6406,7 +6432,8 @@ public function VerificaPermisos($VectorPermisos) {
                 $DatosKardex["idDocumento"]=$idFactura;
                 $DatosKardex["TotalCosto"]=$DatosFactura["SubtotalCosto"];
                 $DatosKardex["Movimiento"]="SALIDA";
-                
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $this->InserteKardex($DatosKardex);
             }
         }   
@@ -6626,13 +6653,24 @@ public function VerificaPermisos($VectorPermisos) {
                 $DatosKardex["Detalle"]="Factura";
                 $DatosKardex["idDocumento"]=$idFactura;
                 $DatosKardex["TotalCosto"]=$DatosItems["SubtotalCosto"];
+                $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+                $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
                 $DatosKardex["Movimiento"]="SALIDA";
-
+                
                 $this->InserteKardex($DatosKardex);
                }
         }
         $this->ActualizaRegistro("facturas_kardex", "Kardex", "SI", "idFacturas", $idFactura);
      }
+     //Obtener promedio de costo de un producto
+    public function ObtengaCostoPromedioProducto($idProducto,$Vector) {
+        $sql="SELECT AVG(`ValorUnitario`) AS CostoPromedioU FROM `kardexmercancias` "
+                . "WHERE `ProductosVenta_idProductosVenta`='$idProducto' AND `Movimiento` ='ENTRADA'";
+        $Consulta=$this->Query($sql);
+        $DatosCosto= $this->FetchArray($Consulta);
+        $CostoPromedio=round($DatosCosto["CostoPromedioU"],2);
+        return($CostoPromedio);
+    }
 //////////////////////////////Fin	
 }
 	

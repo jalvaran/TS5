@@ -4385,13 +4385,14 @@ EOD;
     public function DibujeAgregaMovimientoContable($myPage,$Visible,$idComprobante) {
         $this->css=new CssIni("");
         $this->css->CrearForm2("FrmAgregaItemE", $myPage, "post", "_self");
-        
+        $MultiTercero="";
         if($myPage=='ComprobantesIngreso.php'){
             $DatosComprobante=$this->obCon->DevuelveValores("comprobantes_ingreso", "ID", $idComprobante);
             $Tercero=$DatosComprobante["Tercero"];
         }else{
             $DatosComprobante=$this->obCon->DevuelveValores("egresos", "idEgresos", $idComprobante);
             $Tercero=$DatosComprobante["NIT"];
+            $MultiTercero=1;  //Habilitar multiples terceros en el egreso libre para alturas
         }
         $this->css->CrearDiv("DivAgregaMov", "", "center", $Visible, 1);
         $this->css->CrearTabla();
@@ -4433,8 +4434,8 @@ EOD;
                 $this->css->CerrarSelect();
             print("</td>");
             print("<td>");
-            $this->css->CrearInputText("CmbTerceroItem", "text", "", $Tercero, "", "","" , "", 200, 30, 1, 1);
-            /*    
+            //$this->css->CrearInputText("CmbTerceroItem", "text", "", $Tercero, "", "","" , "", 200, 30, 1, 1);
+               
             $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Seleccione el tercero";
                 $this->css->CrearSelectChosen("CmbTerceroItem", $VarSelect);
@@ -4456,8 +4457,7 @@ EOD;
                        $this->css->CrearOptionSelect($DatosProveedores["Num_Identificacion"], "$DatosProveedores[RazonSocial] $DatosProveedores[Num_Identificacion]" , $Sel);
                    }
                 $this->css->CerrarSelect();
-             * 
-             */
+             
             print("</td>");
             print("<td>");
                 $VarSelect["Ancho"]="200";

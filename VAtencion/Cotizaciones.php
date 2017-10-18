@@ -19,6 +19,7 @@ print("</head><body align='center'>");
          $obTabla = new Tabla($db);
 	 $myPage="Cotizaciones.php";
 	 $css->CabeceraIni("TS5 Cotizaciones"); 
+	 $css->CreaBotonDesplegable("DialCliente","Tercero");
 	 $css->CabeceraFin();
          //Espacio para Crear Botonos y Cuadros de dialogo
          $css->CrearDiv("principal", "container", "center", 1, 1);

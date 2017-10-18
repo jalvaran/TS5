@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Gramos` double NOT NULL,
   `idBascula` int(11) NOT NULL,
-  `Leido` bit(1) NOT NULL DEFAULT b'0',
+  `Leido` bit(1) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -569,8 +569,8 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 
 ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`;
 UPDATE `comprobantes_ingreso` SET `idCierre`=1;
-ALTER TABLE `empresapro` ADD `CXPAutomaticas` BIT(1) NOT NULL DEFAULT b'1' AFTER `FacturaSinInventario`;
-ALTER TABLE `colaboradores` ADD `Activo` BIT(1) NOT NULL DEFAULT b'1' AFTER `SalarioBasico`;
+ALTER TABLE `empresapro` ADD `CXPAutomaticas` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `FacturaSinInventario`;
+ALTER TABLE `colaboradores` ADD `Activo` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `SalarioBasico`;
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (25, 'COMPROBANTE DE BAJAS O ALTAS', '001', 'F-GI-006', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');
 
 ALTER TABLE `productosalquiler` CHANGE `Existencias` `Existencias` INT NOT NULL;
@@ -621,3 +621,7 @@ ALTER TABLE `librodiario` ADD INDEX(`Tipo_Documento_Intero`);
 ALTER TABLE `librodiario` ADD INDEX(`Num_Documento_Interno`);
 ALTER TABLE `librodiario` ADD INDEX(`Tercero_Identificacion`);
 ALTER TABLE `librodiario` ADD INDEX(`CuentaPUC`);
+
+ALTER TABLE `kardexmercancias` ADD `CostoUnitarioPromedio` DOUBLE NOT NULL AFTER `ValorTotal`, ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
+ALTER TABLE `kardexmercancias_temporal` ADD `CostoUnitarioPromedio` DOUBLE NOT NULL AFTER `ValorTotal`, ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
+UPDATE `kardexmercancias` SET `CostoUnitarioPromedio`=`ValorUnitario`,`CostoTotalPromedio`=`ValorTotal`;

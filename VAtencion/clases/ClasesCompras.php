@@ -136,6 +136,7 @@ class Compra extends ProcesoVenta{
     public function IngreseRetireProductosInventarioCompra($idCompra,$Movimiento) {
         if($Movimiento=="ENTRADA"){
             $consulta= $this->ConsultarTabla("factura_compra_items", "WHERE idFacturaCompra='$idCompra'");
+            $DatosKardex["CalcularCostoPromedio"]=1;
         }else{
             $consulta= $this->ConsultarTabla("factura_compra_items_devoluciones", "WHERE idFacturaCompra='$idCompra'");
         } 
@@ -145,11 +146,12 @@ class Compra extends ProcesoVenta{
             $DatosKardex["idProductosVenta"]=$DatosProductos["idProducto"];
             $DatosKardex["CostoUnitario"]=$DatosProductos['CostoUnitarioCompra'];
             $DatosKardex["Existencias"]=$DatosProductoGeneral['Existencias'];
-            $DatosKardex["Detalle"]="FacturaCompra";
+            $DatosKardex["Detalle"]="FacturaCompra";   //No cambiar, con este valor se calcula el costo promedio
             $DatosKardex["idDocumento"]=$idCompra;
-            $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
+            $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitarioCompra'];
             $DatosKardex["Movimiento"]=$Movimiento;
-            
+            $DatosKardex["CostoUnitarioPromedio"]=$DatosProductoGeneral["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProductoGeneral["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
             $this->InserteKardex($DatosKardex);
         }
     }
@@ -343,9 +345,10 @@ class Compra extends ProcesoVenta{
             $DatosKardex["Existencias"]=$DatosProductoGeneral['Existencias'];
             $DatosKardex["Detalle"]="FacturaCompra";
             $DatosKardex["idDocumento"]=$idCompra;
-            $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitario'];
+            $DatosKardex["TotalCosto"]=$DatosProductos["Cantidad"]*$DatosProductos['CostoUnitarioCompra'];
             $DatosKardex["Movimiento"]=$Movimiento;
-            
+            $DatosKardex["CostoUnitarioPromedio"]=$DatosProductoGeneral["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProductoGeneral["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
             $this->InserteKardex($DatosKardex);
         }
     }
@@ -428,5 +431,6 @@ class Compra extends ProcesoVenta{
         }
         return($idCompraNew);
     }
+    
     //Fin Clases
 }
