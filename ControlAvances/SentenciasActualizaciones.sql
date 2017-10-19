@@ -625,3 +625,7 @@ ALTER TABLE `librodiario` ADD INDEX(`CuentaPUC`);
 ALTER TABLE `kardexmercancias` ADD `CostoUnitarioPromedio` DOUBLE NOT NULL AFTER `ValorTotal`, ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
 ALTER TABLE `kardexmercancias_temporal` ADD `CostoUnitarioPromedio` DOUBLE NOT NULL AFTER `ValorTotal`, ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
 UPDATE `kardexmercancias` SET `CostoUnitarioPromedio`=`ValorUnitario`,`CostoTotalPromedio`=`ValorTotal`;
+INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES ('26', 'ESTADO DE RESULTADO INTEGRAL', '001', 'F-GF-002', '2017-08-09', '', '2017-10-13 14:10:40', '2017-10-13 14:10:40');
+ALTER TABLE `estadosfinancieros_mayor_temporal` ADD `SaldoAnterior` DOUBLE NOT NULL AFTER `NombreCuenta`;
+ALTER TABLE `estadosfinancieros_mayor_temporal` ADD `SaldoFinal` DOUBLE NOT NULL AFTER `Neto`;
+ALTER TABLE `estadosfinancieros_mayor_temporal` CHANGE `Neto` `Neto` DOUBLE NOT NULL;
