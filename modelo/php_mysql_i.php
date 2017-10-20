@@ -41,7 +41,7 @@ class db_conexion{
      public function ConToServer($ip,$User,$Pass,$db,$VectorCon){
         $this->mysqli = new mysqli($ip, $User, $Pass, $db);
         if ($this->mysqli->connect_errno) {
-            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".$this->mysqli->connect_error;
+            $Mensaje="No se pudo conectar al servidor en la ip: $ip ".$this->mysqli->connect_errno;
             exit();
         }
         $Mensaje="Conexion satisfactoria";
@@ -59,7 +59,7 @@ class db_conexion{
 public function Query($sql)
   {	
     $this->Conectar();
-    $Consul=$this->mysqli->query($sql);				
+    $Consul=$this->mysqli->query($sql) or die ($this->mysqli->error);			
     $this->CerrarCon();
     return($Consul);
 }
@@ -71,7 +71,7 @@ public function VaciarTabla($tabla)
 	$tabla=$this->normalizar($tabla);
 	$sql="TRUNCATE `$tabla`";
 	
-	$this->Query($sql) or die('no se pudo vaciar la tabla $tabla: ' . $this->mysqli->connect_error);	
+	$this->Query($sql) or die('no se pudo vaciar la tabla $tabla: ' . $this->mysqli->error);	
 		
 	}
 
@@ -81,7 +81,7 @@ public function VaciarTabla($tabla)
 
     public function update($tabla,$campo, $value, $condicion){
 	$sql="UPDATE `$tabla` SET `$campo` = '$value' $condicion";
-	$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->connect_error);
+	$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->error);
     }
     
     ////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ public function FetchArray($Datos){
 		
     public function Count($Tabla,$NombreColumna, $Condicion){
 	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
-	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . $this->mysqli->connect_error);
+	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . $this->mysqli->error);
 	$reg=$this->FetchArray($reg);
 	return($reg["Cuenta"]);
 
@@ -139,7 +139,7 @@ public function FetchArray($Datos){
 		
 	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla WHERE $NombreColumnaFiltro = '$filtro'";
 	
-	$reg= $this->Query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . $this->mysqli->connect_error);
+	$reg= $this->Query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . $this->mysqli->error);
 	$reg=$this->FetchArray($reg);
 	
 	return($reg["suma"]);
@@ -151,7 +151,7 @@ public function FetchArray($Datos){
     function Sume($Tabla,$NombreColumnaSuma, $Condicion){
         $sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla $Condicion";
 
-        $reg=$this->Query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . $this->mysqli->connect_error);
+        $reg=$this->Query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . $this->mysqli->error);
         $reg=$this->FetchArray($reg);
 
         return($reg["suma"]);
@@ -187,7 +187,7 @@ public function FetchArray($Datos){
 	}
 	
 	
-	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . $this->mysqli->connect_error);	
+	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . $this->mysqli->error);	
 		
 }
 
@@ -199,7 +199,7 @@ public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
         $tabla=$this->normalizar($tabla);
         $ColumnaFiltro=$this->normalizar($ColumnaFiltro);
         $idItem=$this->normalizar($idItem);
-        $reg= $this->Query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . $this->mysqli->connect_error);
+        $reg= $this->Query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . $this->mysqli->error);
         $reg=$this->FetchArray($reg);	
         return ($reg);
 }
@@ -210,7 +210,7 @@ public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
 
 public function ValorActual($tabla,$Columnas,$Condicion){
 
-        $reg=$this->Query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . $this->mysqli->connect_error);
+        $reg=$this->Query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . $this->mysqli->error);
         $reg=$this->FetchArray($reg);	
         return ($reg);
 }
@@ -241,7 +241,7 @@ public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
 		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla` WHERE `$filtro` = '$idItem'";
 	}
 		
-	$Reg=$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->connect_error);	
+	$Reg=$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->error);	
 	$MN=$this->FetchArray($Reg);
 	return($MN["MaxNum"]);	
 	}

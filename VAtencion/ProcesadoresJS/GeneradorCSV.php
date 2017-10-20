@@ -8,7 +8,8 @@ if(isset($_REQUEST["Opcion"])){
     $obVenta = new ProcesoVenta($idUser);
     $OuputFile="../../htdocs/sctv5/exports/tabla.csv";
     $Link='../../exports/tabla.csv';
-    $Enclosed=`OPTIONALLY ENCLOSED BY '"'`;
+    $a='"';
+    $Enclosed=" ENCLOSED BY '$a' ";
     unlink($Link);
     $Opcion=$_REQUEST["Opcion"];
     
@@ -23,8 +24,8 @@ if(isset($_REQUEST["Opcion"])){
             }
             $sqlColumnas=substr($sqlColumnas, 0, -1);
             $sqlColumnas.=" UNION ALL ";
-            
-            $sql=$sqlColumnas."SELECT * FROM $statement INTO OUTFILE '$OuputFile' FIELDS TERMINATED BY ';' LINES TERMINATED BY '\r\n';";
+            $Indice=$Columnas["Field"][0];
+            $sql=$sqlColumnas."SELECT * FROM $statement ORDER BY $Indice DESC INTO OUTFILE '$OuputFile' FIELDS TERMINATED BY ';' $Enclosed LINES TERMINATED BY '\r\n';";
             $obVenta->Query($sql);
             print("Tabla $Tabla exportada exitosamente <a href='$Link'>Abrir</a>");
             break;
