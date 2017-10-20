@@ -127,7 +127,7 @@ print("<body>");
     $sql="SELECT * FROM ordenesdetrabajo_items WHERE idOT='$idOT'";
     $consulta=$obVenta->Query($sql);              
 
-    if(mysql_affected_rows()){
+    if($obVenta->NumRows(consulta)){
 
         
         
@@ -138,7 +138,7 @@ print("<body>");
         $css->ColTabla("<strong>Observaciones</strong>", 1);
         $css->CierraFilaTabla();
 
-        while($DatosItemsCotizacion=mysql_fetch_array($consulta)){
+        while($DatosItemsCotizacion=$obVenta->FetchArray($consulta)){
             $idItem=$DatosItemsCotizacion["ID"];
             $css->FilaTabla(16);
             $css->ColTabla($DatosItemsCotizacion["Actividad"], 1);

@@ -63,8 +63,8 @@ print("<body>");
         print("<td>");
         $css->CrearSelect("CmbCuentaDestino", "");
         $Consulta=$obVenta->ConsultarTabla("cuentasfrecuentes", "WHERE ClaseCuenta='ACTIVOS'");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCuentasFrecuentes=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCuentasFrecuentes=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCuentasFrecuentes["CuentaPUC"], $DatosCuentasFrecuentes["Nombre"], 0);
             }
             }else{
@@ -75,8 +75,8 @@ print("<body>");
         print("<td>");
         $css->CrearSelect("CmbCentroCostos", "");
         $Consulta=$obVenta->ConsultarTabla("centrocosto", "");
-            if(mysql_num_rows($Consulta)){
-            while($DatosCentroCosto=  mysql_fetch_array($Consulta)){
+            if($obVenta->NumRows($Consulta)){
+            while($DatosCentroCosto=  $obVenta->FetchArray($Consulta)){
                 $css->CrearOptionSelect($DatosCentroCosto["ID"], $DatosCentroCosto["Nombre"], 0);
             }
             }else{

@@ -6,7 +6,7 @@ if(!empty($_REQUEST['del'])){
     $IdTabla=$obVenta->normalizar($_REQUEST['TxtIdTabla']);
     $IdPre=$obVenta->normalizar($_REQUEST['TxtIdPre']);
     
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+    $obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
     header("location:$myPage?CmbConcepto=$IdPre");
 }
 

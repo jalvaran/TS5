@@ -285,7 +285,7 @@ if($obVenta->NumRows($sel1)){
 	$TotalItems=0;
 	
 	$i=0;
-	while($DatosVentas=mysql_fetch_array($sel1)){
+	while($DatosVentas=$obVenta->FetchArray($sel1)){
 			
 		
 		$Total=number_format($DatosVentas["Total"]);

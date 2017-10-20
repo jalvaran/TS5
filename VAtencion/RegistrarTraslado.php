@@ -74,7 +74,7 @@ print("<body>");
             $css->CierraFilaTabla();
             $Consulta=$obVenta->ConsultarTabla("traslados_items","WHERE idTraslado='$idTraslado'");
             
-            while($DatosItemTraslado=mysql_fetch_array($Consulta)){
+            while($DatosItemTraslado=$obVenta->FetchArray($Consulta)){
 
                 ///////////////Creo Formulario para edicion
                 $css->FilaTabla(14);

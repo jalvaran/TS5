@@ -107,7 +107,7 @@ $css->CrearForm2("FrmSeleccionaCom", $myPage, "post", "_self");
             $css->CrearOptionSelect("","Selecciona un Comprobante",0);
             
             $consulta = $obVenta->ConsultarTabla("comprobantes_pre","WHERE Estado<>'C'");
-            while($DatosPreEgreso=mysql_fetch_array($consulta)){
+            while($DatosPreEgreso=$obVenta->FetchArray($consulta)){
                 if($idComprobante==$DatosPreEgreso['idComprobanteContabilidad']){
                     $Sel=1;
                     
@@ -191,7 +191,7 @@ $css->CrearTabla();
             $css->CrearOptionSelect("","Seleccionar Centro de Costos",0);
 
             $Consulta = $obVenta->ConsultarTabla("centrocosto","");
-            while($CentroCosto=mysql_fetch_array($Consulta)){
+            while($CentroCosto=$obVenta->FetchArray($Consulta)){
                             $css->CrearOptionSelect($CentroCosto['ID'],$CentroCosto['Nombre'],0);							
             }
             $css->CerrarSelect();

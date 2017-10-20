@@ -129,7 +129,7 @@ $css->CrearDiv("TipoEgresos", "container", "center", 1, 1);
             $css->CrearSelect("CmbCuentaOrigen"," Cuenta Origen:<br>","black","",1);
             $css->CrearOptionSelect("","Seleccionar Cuenta Origen",0);
             $DatosCuentaOrigen = $obVenta->ConsultarTabla("cuentasfrecuentes","WHERE ClaseCuenta = 'ACTIVOS'");
-            while($CuentaOrigen=mysql_fetch_array($DatosCuentaOrigen)){
+            while($CuentaOrigen=$obVenta->FetchArray($DatosCuentaOrigen)){
                             $css->CrearOptionSelect($CuentaOrigen['CuentaPUC'],$CuentaOrigen['Nombre'],0);							
             }
             $css->CerrarSelect();
@@ -302,7 +302,7 @@ $css->CrearDiv("TipoEgresos", "container", "center", 1, 1);
     if(!empty($_REQUEST["TxtBuscarProveedor"])){
 
     $Key=$_REQUEST["TxtBuscarProveedor"];
-    $pa=$obVenta->Query("SELECT * FROM proveedores WHERE RazonSocial LIKE '%$Key%' OR Num_Identificacion LIKE '%$Key%' LIMIT 10") or die(mysql_error());
+    $pa=$obVenta->Query("SELECT * FROM proveedores WHERE RazonSocial LIKE '%$Key%' OR Num_Identificacion LIKE '%$Key%' LIMIT 10");
     if($obVenta->NumRows($pa)){
     print("<br>");
     $css->CrearTabla();

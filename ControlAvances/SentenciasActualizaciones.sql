@@ -556,8 +556,8 @@ UPDATE `productosventa` SET `CostoUnitarioPromedio`=`CostoUnitario`,`CostoTotalP
 
 DROP VIEW IF EXISTS `vista_resumen_facturacion`;
 CREATE VIEW vista_resumen_facturacion AS
-SELECT ID,`FechaFactura`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,SUM(`TotalItem`) as TotalVenta,SUM(`SubtotalCosto`) as Costo
-  FROM `facturas_items` GROUP BY `Referencia`;
+SELECT ID,`FechaFactura` as FechaInicial,`FechaFactura` as FechaFinal,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,round(SUM(`SubtotalCosto`),2) as Costo
+  FROM `facturas_items` GROUP BY `Referencia`,`FechaFactura`;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('105', 'Resumen de facturacion', '12', '3', 'vista_resumen_facturacion.php', '_SELF', b'1', 'resumen.png', '5', '2017-09-07 12:12:07', '0000-00-00 00:00:00');
 ALTER TABLE `cot_itemscotizaciones` ADD INDEX(`NumCotizacion`);
@@ -629,3 +629,10 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 ALTER TABLE `estadosfinancieros_mayor_temporal` ADD `SaldoAnterior` DOUBLE NOT NULL AFTER `NombreCuenta`;
 ALTER TABLE `estadosfinancieros_mayor_temporal` ADD `SaldoFinal` DOUBLE NOT NULL AFTER `Neto`;
 ALTER TABLE `estadosfinancieros_mayor_temporal` CHANGE `Neto` `Neto` DOUBLE NOT NULL;
+
+
+DROP VIEW IF EXISTS `vista_resumen_facturacion`;
+CREATE VIEW vista_resumen_facturacion AS
+SELECT ID,`FechaFactura` as FechaInicial,`FechaFactura` as FechaFinal,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,round(SUM(`SubtotalCosto`),2) as Costo
+  FROM `facturas_items` GROUP BY `Referencia`,`FechaFactura`;
+

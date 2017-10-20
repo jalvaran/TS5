@@ -101,7 +101,7 @@ print("<body>");
             $css->CrearOptionSelect("","Obtener Valores de:",0);
             
             $consulta = $obVenta->ConsultarTabla("bodega","");
-            while($DatosBodegas=mysql_fetch_array($consulta)){
+            while($DatosBodegas=$obVenta->FetchArray($consulta)){
                 
                 $css->CrearOptionSelect($DatosBodegas['idBodega'],$DatosBodegas['Nombre'],0);							
             }
@@ -130,7 +130,7 @@ print("<body>");
             $css->CrearOptionSelect("","Selecciona un Traslado",0);
             
             $consulta = $obVenta->ConsultarTabla("traslados_mercancia","WHERE Estado='EN DESARROLLO'");
-            while($DatosTraslado=mysql_fetch_array($consulta)){
+            while($DatosTraslado=$obVenta->FetchArray($consulta)){
                 if($idComprobante==$DatosTraslado['ID']){
                     $Sel=1;
                     

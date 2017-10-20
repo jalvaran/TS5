@@ -2,7 +2,7 @@
 $obVenta = new ProcesoVenta($idUser);
 $DatosEmpresa=$obVenta->DevuelveValores("empresapro", "idEmpresaPro", 1);
 $myTabla="vista_resumen_facturacion";
-$idTabla="FechaFactura";
+$idTabla="FechaInicial";
 $myPage="vista_resumen_facturacion.php";
 $myTitulo="Resumen de Facturacion agrupado por Referencia";
 

@@ -73,7 +73,7 @@ $Consulta=$obVenta->ConsultarTabla("librodiario", "WHERE Tipo_Documento_Intero='
 $TotalDebitos=0;
 $TotalCreditos=0;
 $h=0;
-while($DatosLibro=  mysql_fetch_array($Consulta)){
+while($DatosLibro=  $obVenta->FetchArray($Consulta)){
     if($h==0){
         $Back="#f2f2f2";
         $h=1;

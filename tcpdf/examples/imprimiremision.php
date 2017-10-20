@@ -103,7 +103,7 @@ $IVA=0;
 $Total=0;
   $h=0;
   
-while($registros2=mysql_fetch_array($Consulta)){
+while($registros2=$obVenta->FetchArray($Consulta)){
 		 
 $Subtotal=$Subtotal+($registros2["Subtotal"]);
 $IVA=$IVA+($registros2["IVA"]);

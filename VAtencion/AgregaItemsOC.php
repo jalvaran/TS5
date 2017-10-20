@@ -137,7 +137,7 @@ print("<body>");
     $sql="SELECT * FROM ordenesdecompra_items WHERE NumOrden='$idOT'";
     $consulta=$obVenta->Query($sql);              
 
-    if(mysql_affected_rows()){
+    if($obVenta->NumRows($consulta)){
 
         
         
@@ -150,7 +150,7 @@ print("<body>");
         $css->ColTabla("<strong>Total</strong>", 1);
         $css->CierraFilaTabla();
 
-        while($DatosItemsOC=mysql_fetch_array($consulta)){
+        while($DatosItemsOC=$obVenta->FetchArray($consulta)){
             $idItem=$DatosItemsOC["ID"];
             $css->FilaTabla(16);
             $css->ColTabla($DatosItemsOC["Descripcion"], 1);

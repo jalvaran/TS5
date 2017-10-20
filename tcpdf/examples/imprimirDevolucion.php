@@ -186,7 +186,7 @@ $sql="SELECT rr.CantidadEntregada,rr.idItemCotizacion,rr.idRemision, ci.Referenc
 $Consulta=$obVenta->Query($sql);
  $BanderaFaltantes=0; 
  $h=0;
-while($DatosItemRemision=mysql_fetch_array($Consulta)){
+while($DatosItemRemision=$obVenta->FetchArray($Consulta)){
 
     if($h==0){
         $Back="#f2f2f2";

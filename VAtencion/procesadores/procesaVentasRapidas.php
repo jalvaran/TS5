@@ -75,7 +75,7 @@ $obPrint=new PrintPos($idUser);
 		$Tabla=$_REQUEST['TxtTabla'];
 		$IdTabla=$_REQUEST['TxtIdTabla'];
 		$IdPre=$_REQUEST['TxtIdPre'];
-		mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+		$obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
 		header("location:$myPage?CmbPreVentaAct=$IdPre");
 	}
 		
@@ -290,7 +290,8 @@ $obPrint=new PrintPos($idUser);
                         $CentroCosto=$DatosCaja["CentroCostos"];
                         $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
                         $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
-                        $VectorIngreso["fut"]="";
+                        $VectorIngreso["Separado"]=1;
+                        
                         $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
 
                         $DatosSeparado["idCompIngreso"]=$idComprobanteIngreso;
@@ -414,7 +415,7 @@ $obPrint=new PrintPos($idUser);
             $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
             $CentroCosto=$DatosCaja["CentroCostos"];
             $Concepto="ABONO A SEPARADO No $idSeparado";
-            $VectorIngreso["fut"]="";
+            $VectorIngreso["Separado"]=1;
             $idIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
             
             

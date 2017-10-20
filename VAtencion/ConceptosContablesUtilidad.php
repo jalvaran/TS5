@@ -45,7 +45,7 @@ $css->CrearForm2("FrmSeleccionaConcepto", $myPage, "post", "_self");
             $css->CrearOptionSelect("","Selecciona un Concepto",0);
             
             $consulta = $obVenta->ConsultarTabla("conceptos","WHERE Completo='SI' AND Activo='SI'");
-            while($DatosConcepto=mysql_fetch_array($consulta)){
+            while($DatosConcepto=$obVenta->FetchArray($consulta)){
                 if($idConcepto==$DatosConcepto['ID']){
                     $Sel=1;
                     

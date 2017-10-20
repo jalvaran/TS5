@@ -11,7 +11,7 @@ include_once("../sesiones/php_control.php");
 	 <?php
 	 
 
-	include_once("../modelo/php_mysql.php");
+	include_once("../modelo/php_conexion.php");
 	include_once("css_construct.php");
 
 	if (!isset($_SESSION['username']))
@@ -31,7 +31,7 @@ include_once("../sesiones/php_control.php");
 <!--==============================header=================================-->
 
  <?php 
-        $obCon = new db_conexion();
+    $obCon = new db_conexion();
 	$css =  new CssIni();
 
 	$css->CabeceraIni(); 

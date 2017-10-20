@@ -62,9 +62,9 @@ print("<body>");
     if(!empty($_REQUEST["TxtBuscarFactura"])){
 
         $Key=$_REQUEST["TxtBuscarFactura"];
-        $pa=mysql_query("SELECT * FROM cartera c INNER JOIN facturas fac ON c.Facturas_idFacturas = fac.idFacturas "
+        $pa=$obVenta->Query("SELECT * FROM cartera c INNER JOIN facturas fac ON c.Facturas_idFacturas = fac.idFacturas "
                 . "WHERE c.RazonSocial LIKE '%$Key%' OR fac.NumeroFactura = '$Key' ORDER BY fac.idFacturas DESC LIMIT 20") or die(mysql_error());
-        if(mysql_num_rows($pa)){
+        if($obVenta->NumRows($pa)){
             print("<br>");
             $css->CrearTabla();
             $css->FilaTabla(18);
@@ -82,7 +82,7 @@ print("<body>");
                 $css->ColTabla('Seleccionar',1);
                 
             $css->CierraFilaTabla();
-            while($DatosFactura=mysql_fetch_array($pa)){
+            while($DatosFactura=$obVenta->FetchArray($pa)){
                 $css->FilaTabla(14);
                 $css->ColTabla($DatosFactura['Prefijo'].$DatosFactura['NumeroFactura'],1);
                 $css->ColTabla($DatosFactura['FechaIngreso'],1);

@@ -146,7 +146,7 @@ print("<body>");
             $css->CrearOptionSelect("","Seleccionar Centro de Costos",0);
 
             $Consulta = $obVenta->ConsultarTabla("centrocosto","");
-            while($CentroCosto=mysql_fetch_array($Consulta)){
+            while($CentroCosto=$obVenta->FetchArray($Consulta)){
                             $css->CrearOptionSelect($CentroCosto['ID'],$CentroCosto['Nombre'],0);							
             }
             $css->CerrarSelect();

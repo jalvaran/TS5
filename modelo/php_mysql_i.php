@@ -11,7 +11,7 @@ class db_conexion{
     public  $pw="pirlo1985";
     public  $db="ts5";
     
-    // evita la injeccion de codigo sql
+    // conectar
     public function Conectar(){
         $this->mysqli = new mysqli($this->host, $this->user, $this->pw, $this->db);
         if ($this->mysqli->connect_errno) {
@@ -71,7 +71,7 @@ public function VaciarTabla($tabla)
 	$tabla=$this->normalizar($tabla);
 	$sql="TRUNCATE `$tabla`";
 	
-	$this->Query($sql) or die('no se pudo vaciar la tabla $tabla: ' . mysql_error());	
+	$this->Query($sql) or die('no se pudo vaciar la tabla $tabla: ' . $this->mysqli->connect_error);	
 		
 	}
 
@@ -81,7 +81,7 @@ public function VaciarTabla($tabla)
 
     public function update($tabla,$campo, $value, $condicion){
 	$sql="UPDATE `$tabla` SET `$campo` = '$value' $condicion";
-	$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());
+	$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->connect_error);
     }
     
     ////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ public function ConsultarTabla($tabla,$Condicion)
 //////////////////////Funcion fetcharray mysql
 ///////////////////////////////////////////////////////////////////
 public function FetchArray($Datos){					
-    $Vector=  $Datos->fetch_array(MYSQLI_BOTH);
+    $Vector=  $Datos->fetch_array();
     return($Vector);
 }
 
@@ -122,7 +122,7 @@ public function FetchArray($Datos){
 		
     public function Count($Tabla,$NombreColumna, $Condicion){
 	$sql="SELECT COUNT($NombreColumna) AS Cuenta FROM $Tabla $Condicion";
-	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . mysql_error());
+	$reg=$this->Query($sql) or die('no se pudo obtener la cuenta de '.$NombreColumna.' para la tabla '.$Tabla.' en Count: ' . $this->mysqli->connect_error);
 	$reg=$this->FetchArray($reg);
 	return($reg["Cuenta"]);
 
@@ -139,7 +139,7 @@ public function FetchArray($Datos){
 		
 	$sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla WHERE $NombreColumnaFiltro = '$filtro'";
 	
-	$reg= $this->Query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . mysql_error());
+	$reg= $this->Query($sql) or die('no se pudo obtener la suma de $NombreColumnaSuma para la tabla $Tabla en SumeColumna: ' . $this->mysqli->connect_error);
 	$reg=$this->FetchArray($reg);
 	
 	return($reg["suma"]);
@@ -151,7 +151,7 @@ public function FetchArray($Datos){
     function Sume($Tabla,$NombreColumnaSuma, $Condicion){
         $sql="SELECT SUM($NombreColumnaSuma) AS suma FROM $Tabla $Condicion";
 
-        $reg=$this->Query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . mysql_error());
+        $reg=$this->Query($sql) or die('no se pudo obtener la suma de '.$sql.' '.$NombreColumnaSuma.' para la tabla '.$Tabla.' en SumeColumna: ' . $this->mysqli->connect_error);
         $reg=$this->FetchArray($reg);
 
         return($reg["suma"]);
@@ -187,7 +187,7 @@ public function FetchArray($Datos){
 	}
 	
 	
-	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . mysql_error());	
+	$this->Query($sql) or die("no se pudo ingresar el registro en la tabla $tabla desde la funcion Insertar Registro: " . $this->mysqli->connect_error);	
 		
 }
 
@@ -199,7 +199,7 @@ public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
         $tabla=$this->normalizar($tabla);
         $ColumnaFiltro=$this->normalizar($ColumnaFiltro);
         $idItem=$this->normalizar($idItem);
-        $reg= $this->Query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . mysql_error());
+        $reg= $this->Query("select * from $tabla where $ColumnaFiltro = '$idItem'") or die("no se pudo consultar los valores de la tabla $tabla en DevuelveValores: " . $this->mysqli->connect_error);
         $reg=$this->FetchArray($reg);	
         return ($reg);
 }
@@ -210,7 +210,7 @@ public function DevuelveValores($tabla,$ColumnaFiltro, $idItem){
 
 public function ValorActual($tabla,$Columnas,$Condicion){
 
-        $reg=$this->Query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . mysql_error());
+        $reg=$this->Query("SELECT $Columnas FROM $tabla WHERE $Condicion") or die("no se pudo consultar los valores de la tabla $tabla en ValorActual: " . $this->mysqli->connect_error);
         $reg=$this->FetchArray($reg);	
         return ($reg);
 }
@@ -241,7 +241,7 @@ public function ObtenerMAX($tabla,$campo, $filtro, $idItem)
 		$sql="SELECT MAX($campo) AS MaxNum FROM `$tabla` WHERE `$filtro` = '$idItem'";
 	}
 		
-	$Reg=$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . mysql_error());	
+	$Reg=$this->Query($sql) or die('no se pudo actualizar el registro en la $tabla: ' . $this->mysqli->connect_error);	
 	$MN=$this->FetchArray($Reg);
 	return($MN["MaxNum"]);	
 	}
@@ -281,7 +281,67 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
             }
         }
 }
+
+//Registre Eliminaciones
+ public function RegistraEliminacion($tabla,$idTabla,$idItemEliminado,$campo,$Valor,$Observaciones,$Vector) {
+    $tab="registra_eliminaciones";
+    $NumRegistros=9;
+    $Columnas[0]="Fecha";               $Valores[0]=date("Y-m-d");
+    $Columnas[1]="Hora";                $Valores[1]=date("H:i:s");
+    $Columnas[2]="TablaOrigen";         $Valores[2]=$tabla;
+    $Columnas[3]="Campo";               $Valores[3]=$campo;
+    $Columnas[4]="Valor";               $Valores[4]=$Valor;
+    $Columnas[5]="Causal";		$Valores[5]=$Observaciones;
+    $Columnas[6]="idUsuario";           $Valores[6]=$_SESSION["idUser"];
+    $Columnas[7]="idTabla";		$Valores[7]=$idTabla;
+    $Columnas[8]="idItemEliminado";     $Valores[8]=$idItemEliminado;
+    
+    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+ } 
+ /*   Sin Uso, se debe revisar porque no funciona
+ //Last Insert ID
+ public function Last_Insert_ID() {
+    
+    $id= $this->mysqli->insert_id;
+    return($id);
+ }
+ */
+ /*
+ *Funcion devolver todas los atributos de las columnas de una tablas
+ */
+    
+public function ShowColums($Tabla){
+    
+    
+    $sql="SHOW COLUMNS FROM `$Tabla`;";
+    $Results=$this->Query($sql);
+    $i=0;
+    while($Columnas = $this->FetchArray($Results) ){
+        $Nombres["Field"][$i]=$Columnas["Field"];
+        $Nombres["Type"][$i]=$Columnas["Type"];
+        $Nombres["Null"][$i]=$Columnas["Null"];
+        $Nombres["Key"][$i]=$Columnas["Key"];
+        $Nombres["Default"][$i]=$Columnas["Default"];
+        $Nombres["Extra"][$i]=$Columnas["Extra"];
+        $i++;
         
+    }
+    return($Nombres);
+}
+
+//Fetch Objet convierte los resultados de una consulta en un objeto
+    public function fetch_object($Consulta) {
+        $Objeto=$Consulta->fetch_object();
+        return($Objeto);
+    }
 //Fin Clases
 }
+
+$con = new mysqli($host, $user, $pw, $db);
+if ($con->connect_errno) {
+    $Mensaje="No se pudo conectar al servidor en la ip: $ip ".$con->connect_error;
+    exit();
+}
+date_default_timezone_set("America/Bogota");
+
 ?>

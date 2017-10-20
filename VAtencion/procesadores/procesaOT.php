@@ -15,7 +15,7 @@ if(!empty($_REQUEST['del'])){
     $Tabla=$_REQUEST['TxtTabla'];
     $IdTabla=$_REQUEST['TxtIdTabla'];
     $IdPre=$_REQUEST['TxtIdPre'];
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+    $obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
     header("location:AgregaItemsOT.php?idOT=$IdPre");
 }
 

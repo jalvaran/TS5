@@ -755,7 +755,7 @@ public function VerifiqueExport($Vector)  {
     $sql="SELECT * FROM $statement ";
  
         $Consulta=  $this->obCon->Query($sql);
-        while($DatosTabla=mysql_fetch_object($Consulta)){
+        while($DatosTabla=$this->obCon->fetch_object($Consulta)){
             foreach($Columnas as $NombreCol){
                 if(isset($VisualizarRegistro[$i])){
                     if(!isset($VinculoRegistro[$i]["Vinculado"])){
@@ -769,7 +769,7 @@ public function VerifiqueExport($Vector)  {
                         //print("datos: $TablaVinculo $ColDisplay $idTablaVinculo $ID");                    
                         $sql1="SELECT $ColDisplay  FROM $TablaVinculo WHERE $idTablaVinculo ='$ID'";
                         $Consul=$this->obCon->Query($sql1);
-                        $DatosVinculo=  mysql_fetch_array($Consul);
+                        $DatosVinculo=  $this->obCon->FetchArray($Consul);
                         $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue($this->Campos[$a].$c,$DatosVinculo[$ColDisplay]);
                     }

@@ -1,4 +1,5 @@
 <?php 
+$obVenta=new ProcesoVenta($idUser);
 if(!empty($_REQUEST['del'])){
     $id=$_REQUEST['del'];
     $Tabla=$_REQUEST['TxtTabla'];
@@ -6,13 +7,11 @@ if(!empty($_REQUEST['del'])){
     $IdPre=$_REQUEST['TxtIdPre'];
     $DatosItem=$obVenta->DevuelveValores($Tabla, $IdTabla, $id);
     $obVenta->ActualizaRegistro("librodiario", "Estado", "", "idLibroDiario", $DatosItem["idLibroDiario"]);
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+    $obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
     header("location:CreaComprobanteCont.php?idComprobante=$IdPre");
 }
 
 if(!empty($_REQUEST["BtnCrearComC"])){
-    
-    $obVenta=new ProcesoVenta($idUser);
     
     $fecha=$_REQUEST["TxtFecha"];
     $hora=date("H:i");

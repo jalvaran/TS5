@@ -8,8 +8,9 @@ if(isset($_REQUEST["Opcion"])){
     $obVenta = new ProcesoVenta($idUser);
     $OuputFile="../../htdocs/sctv5/exports/tabla.csv";
     $Link='../../exports/tabla.csv';
+    $Enclosed=`OPTIONALLY ENCLOSED BY '"'`;
     unlink($Link);
-    $Opcion=$obVenta->normalizar($_REQUEST["Opcion"]);
+    $Opcion=$_REQUEST["Opcion"];
     
     switch ($Opcion){
         case 1: //Balance de comprobacion
@@ -30,7 +31,7 @@ if(isset($_REQUEST["Opcion"])){
         
     }
 }else{
-    print("No se recibió parametro de documento");
+    print("No se recibió parametro de opcion");
 }
 
 ?>

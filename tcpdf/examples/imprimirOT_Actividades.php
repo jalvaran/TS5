@@ -24,7 +24,7 @@ $sql="SELECT * FROM ordenesdetrabajo_items WHERE idOT='$idOT'";
 $Consulta=$obVenta->Query($sql);
  $h=1;  
  
-while($DatosItemOT=mysql_fetch_array($Consulta)){
+while($DatosItemOT=$obVenta->FetchArray($Consulta)){
     
     if($h==0){
         $Back="#f2f2f2";

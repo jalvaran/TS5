@@ -9,13 +9,13 @@
 ////////Si se solicita borrar algo
 ////
 ////
-
+$obVenta=new ProcesoVenta($idUser);
 if(!empty($_REQUEST['del'])){
     $id=$_REQUEST['del'];
     $Tabla=$_REQUEST['TxtTabla'];
     $IdTabla=$_REQUEST['TxtIdTabla'];
     $IdPre=$_REQUEST['TxtIdPre'];
-    mysql_query("DELETE FROM $Tabla WHERE $IdTabla='$id'") or die(mysql_error());
+    $obVenta->Query("DELETE FROM $Tabla WHERE $IdTabla='$id'");
     header("location:FacturaCotizacion.php");
 }
 
@@ -27,7 +27,7 @@ if(!empty($_REQUEST['del'])){
 
 if(!empty($_REQUEST["TxtAsociarCotizacion"])){
     $idCotizacion=$_REQUEST["TxtAsociarCotizacion"];
-    $obVenta=new ProcesoVenta($idUser);
+    
     $Error=$obVenta->AgregarCotizacionPrefactura($idCotizacion);
     if(is_array($Error)){
         foreach ($Error as $Productos){

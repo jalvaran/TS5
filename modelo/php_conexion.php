@@ -1,6 +1,6 @@
 <?php
 include_once 'php_serial.class.php';
-include_once 'php_mysql.php';
+include_once 'php_mysql_i.php';
         
 //////////////////////////////////////////////////////////////////////////
 ////////////Clase para manejar los procesos mas relevantes ///////////////////////////////////
@@ -716,7 +716,10 @@ public function InicializarPreventas()
 
 
 	public function RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Total,$CentroCosto,$Concepto,$idUser,$VectorIngreso){
-            
+            $Tipo="ANTICIPO";
+            if(isset($VectorIngreso["Separado"])){
+                $Tipo="SEPARADO";
+            }
             $DatosCentro=$this->DevuelveValores("centrocosto","ID",$CentroCosto);
             $DatosCliente=$this->DevuelveValores("clientes","idClientes",$idCliente);
             $DatosCuentasFrecuentes=$this->DevuelveValores("cuentasfrecuentes","CuentaPUC",$CuentaDestino);
@@ -731,7 +734,7 @@ public function InicializarPreventas()
             $Columnas[0]="Fecha";		$Valores[0]=$fecha;
             $Columnas[1]="Tercero";             $Valores[1]=$DatosCliente["Num_Identificacion"];
             $Columnas[2]="Valor";               $Valores[2]=$Total;
-            $Columnas[3]="Tipo";		$Valores[3]="ANTICIPO";
+            $Columnas[3]="Tipo";		$Valores[3]=$Tipo;
             $Columnas[4]="Concepto";		$Valores[4]=$Concepto;
             $Columnas[5]="Usuarios_idUsuarios";	$Valores[5]=$idUser;
             $Columnas[6]="Estado";              $Valores[6]="ABIERTO";
@@ -1323,7 +1326,7 @@ public function CalculePesoRemision($idCotizacion)
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         if(isset($DatosKardex["CalcularCostoPromedio"])){
             
-            $idKardex= $this->Last_Insert_ID();
+            $idKardex= $this->ObtenerMAX($tab,"idKardexMercancias",1,"");
             $CostoUnitarioPromedio=$this->ObtengaCostoPromedioProducto($DatosKardex['idProductosVenta'], "");
             $TotalCostoPromedioSaldo=$Saldo*$CostoUnitarioPromedio;
             $CostoTotalPromedio=$DatosKardex["Cantidad"]*$CostoUnitarioPromedio;
