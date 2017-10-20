@@ -79,8 +79,8 @@ print("<body>");
             $Sel=0;
                while($DatosProducto=$obVenta->FetchArray($Consulta)){
                    
-                   
-                   $css->CrearOptionSelect($DatosProducto["idProductosVenta"], "$DatosProducto[Referencia] $DatosProducto[Nombre] $DatosProducto[idProductosVenta]" , $Sel);
+                   $Nombre=str_replace(" ", "_", $DatosProducto["Nombre"]);
+                   $css->CrearOptionSelect($DatosProducto["idProductosVenta"], " $DatosProducto[idProductosVenta] $DatosProducto[Referencia] $Nombre $DatosProducto[CostoUnitario] $DatosProducto[PrecioVenta]" , $Sel);
                }
             $css->CerrarSelect();
             print("<br>");  

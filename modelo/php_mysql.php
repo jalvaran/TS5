@@ -304,6 +304,29 @@ public function ActualizaRegistro($tabla,$campo, $value, $filtro, $idItem,$Proce
     $id= mysql_insert_id();
     return($id);
  }
+ 
+ /*
+ *Funcion devolver todas los atributos de las columnas de una tablas
+ */
+    
+public function ShowColums($Tabla){
+    
+    
+    $sql="SHOW COLUMNS FROM `$Tabla`;";
+    $Results=$this->Query($sql);
+    $i=0;
+    while($Columnas = $this->FetchArray($Results) ){
+        $Nombres["Field"][$i]=$Columnas["Field"];
+        $Nombres["Type"][$i]=$Columnas["Type"];
+        $Nombres["Null"][$i]=$Columnas["Null"];
+        $Nombres["Key"][$i]=$Columnas["Key"];
+        $Nombres["Default"][$i]=$Columnas["Default"];
+        $Nombres["Extra"][$i]=$Columnas["Extra"];
+        $i++;
+        
+    }
+    return($Nombres);
+}
 //Fin Clases
 }
 ?>
