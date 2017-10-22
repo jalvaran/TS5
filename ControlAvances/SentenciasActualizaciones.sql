@@ -634,5 +634,13 @@ ALTER TABLE `estadosfinancieros_mayor_temporal` CHANGE `Neto` `Neto` DOUBLE NOT 
 DROP VIEW IF EXISTS `vista_resumen_facturacion`;
 CREATE VIEW vista_resumen_facturacion AS
 SELECT ID,`FechaFactura` as FechaInicial,`FechaFactura` as FechaFinal,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,round(SUM(`SubtotalCosto`),2) as Costo
-  FROM `facturas_items` GROUP BY `Referencia`,`FechaFactura`;
+  FROM `facturas_items` GROUP BY `FechaFactura`,`Referencia`;
 
+
+
+ALTER TABLE `librodiario` ENGINE = MyISAM;
+ALTER TABLE `facturas_items` ENGINE = MyISAM;
+ALTER TABLE `facturas_items` ADD INDEX(`FechaFactura`);
+ALTER TABLE `librodiario` ADD INDEX(`Fecha`);
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('110', 'Resumen de facturacion X Fecha', '12', '3', 'facturacionxfecha.php', '_SELF', b'1', 'fecha.png', '4', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
