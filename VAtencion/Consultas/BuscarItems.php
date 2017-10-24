@@ -38,12 +38,16 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $css->CrearForm2("FrmAgregaItem$DatosProducto[idProductosVenta]", $myPage, "post", "_self");
+            $css->CrearForm2("Frm$tab$DatosProducto[idProductosVenta]", $myPage, "post", "_self");
             $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
             
             $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            
+            if($myPage<>'VentasRapidasV2.php'){
+                $css->CrearInputNumber("TxtMultiplicador", "number", "X", 1, "Dias", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            }
             $css->CrearBotonNaranja("BtnAgregar", "Agregar");
             $css->CerrarForm();
             //$target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab";
@@ -68,8 +72,19 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
-            $css->CrearLink($target, "_self", "Agregar");
+            //$target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
+            //$css->CrearLink($target, "_self", "Agregar");
+			$css->CrearForm2("Frm$tab$DatosProducto[idProductosVenta]", $myPage, "post", "_self");
+            $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
+            
+            $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            if($myPage<>'VentasRapidasV2.php'){
+                $css->CrearInputNumber("TxtMultiplicador", "number", "X", 1, "Dias", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            }
+            $css->CrearBotonNaranja("BtnAgregar", "Agregar");
+            $css->CerrarForm();
             print("</td>");
             $css->ColTabla($DatosProducto["idProductosVenta"], 1);
             $css->ColTabla($DatosProducto["Referencia"], 1);
@@ -90,8 +105,22 @@ if($key<>""){
         while($DatosProducto=$obVenta->FetchArray($consulta)){
             $css->FilaTabla(16);
              print("<td>");
-            $target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
-            $css->CrearLink($target, "_self", "Agregar");
+            //$target="$PageReturn$DatosProducto[idProductosVenta]&TxtTablaItem=$tab&TxtCantidad=1";
+            //$css->CrearLink($target, "_self", "Agregar");
+			
+            $css->CrearForm2("Frm$tab$DatosProducto[idProductosVenta]", $myPage, "post", "_self");
+            $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
+            $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
+            
+            $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            if($myPage<>'VentasRapidasV2.php'){
+                $css->CrearInputNumber("TxtMultiplicador", "number", "X", 1, "Dias", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            }
+            $css->CrearBotonNaranja("BtnAgregar", "Agregar");
+            $css->CerrarForm();
+			
+			
             print("</td>");
             $css->ColTabla($DatosProducto["idProductosVenta"], 1);
             $css->ColTabla($DatosProducto["Referencia"], 1);

@@ -6612,6 +6612,82 @@ public function VerificaPermisos($VectorPermisos) {
         $CostoPromedio=round($DatosCosto["CostoPromedioU"],2);
         return($CostoPromedio);
     }
+    //Agrega un item a prefactura
+    public function AgregarItemPrefactura($TablaItem,$idProducto,$Cantidad,$Multiplicador,$Vector) {
+        
+        $CostoUnitario=0;
+        
+	$DatosProductoGeneral=$this->DevuelveValores($TablaItem, "idProductosVenta", $idProducto);
+        if(isset($DatosProductoGeneral["CostoUnitario"])){
+            $CostoUnitario=$DatosProductoGeneral["CostoUnitario"];
+        }
+        if($TablaItem=="productosventa"){
+            $CostoUnitario=$DatosProductoGeneral["CostoUnitarioPromedio"];
+        }
+        
+        if($DatosProductoGeneral["PrecioVenta"]<=0){
+          return("E1");
+        }
+        $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
+        $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
+        $TipoItem=$DatosDepartamento["TipoItem"];
+        
+        
+        if($DatosProductoGeneral["IVA"]=="E"){
+            $DatosProductoGeneral["IVA"]=0;
+        }
+        $impuesto=$DatosProductoGeneral["IVA"];
+        $PorcentajeIVA=$impuesto;
+        
+        $impuesto=$impuesto+1;
+        if($DatosTablaItem["IVAIncluido"]=="SI"){
+
+            $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
+
+        }else{
+            $ValorUnitario=$DatosProductoGeneral["PrecioVenta"];
+
+        }
+        
+
+        $Subtotal=round($ValorUnitario*$Cantidad*$Multiplicador,2);
+
+        $impuesto=round(($impuesto-1)*$Subtotal,2);
+
+        $Total=$Subtotal+$impuesto;
+
+        $tab="facturas_pre";
+        $NumRegistros=26;
+        $Columnas[0]="ID";                  $Valores[0]="";
+        $Columnas[1]="idFactura";           $Valores[1]="";
+        $Columnas[2]="TablaItems";          $Valores[2]=$TablaItem;
+        $Columnas[3]="Referencia";          $Valores[3]=$DatosProductoGeneral["Referencia"];
+        $Columnas[4]="Nombre";              $Valores[4]=$DatosProductoGeneral["Nombre"];
+        $Columnas[5]="Departamento";        $Valores[5]=$DatosProductoGeneral["Departamento"];
+        $Columnas[6]="SubGrupo1";           $Valores[6]=$DatosProductoGeneral['Sub1'];
+        $Columnas[7]="SubGrupo2";           $Valores[7]=$DatosProductoGeneral['Sub2'];
+        $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProductoGeneral['Sub3'];
+        $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProductoGeneral['Sub4'];
+        $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProductoGeneral['Sub5'];
+        $Columnas[11]="ValorUnitarioItem";  $Valores[11]=$DatosProductoGeneral['PrecioVenta'];
+        $Columnas[12]="Cantidad";	    $Valores[12]=$Cantidad;
+        $Columnas[13]="Dias";               $Valores[13]=$Multiplicador;
+        $Columnas[14]="SubtotalItem";       $Valores[14]=$Subtotal;
+        $Columnas[15]="IVAItem";            $Valores[15]=$impuesto;
+        $Columnas[16]="TotalItem";          $Valores[16]=$Total;
+        $Columnas[17]="PorcentajeIVA";      $Valores[17]=($DatosProductoGeneral['IVA']*100)."%";
+        $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$CostoUnitario;
+        $Columnas[19]="SubtotalCosto";      $Valores[19]=$CostoUnitario*$Cantidad*$Multiplicador;
+        $Columnas[20]="TipoItem";		$Valores[20]=$TipoItem;
+        $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProductoGeneral['CuentaPUC'];
+        $Columnas[22]="GeneradoDesde";      $Valores[22]="prefacturas";
+        $Columnas[23]="NumeroIdentificador";$Valores[23]="";
+        $Columnas[24]="FechaFactura";       $Valores[24]="";
+        $Columnas[25]="idUsuarios";         $Valores[25]= $this->idUser;
+
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        
+    }
 //////////////////////////////Fin	
 }
 	

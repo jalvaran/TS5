@@ -140,6 +140,16 @@ print("<body>");
             $css->ColTabla($DatosCliente["RazonSocial"],1);
             $css->ColTabla('OBRA:',1);
             $css->ColTabla($DatosRemision["Obra"],1);
+            //$css->ColTabla('FACTURAR SIN AJUSTAR:',1);
+            print("<td>");
+                $css->CrearForm2("FrmFacturarSinAjuste", 'FacturaCotizacion.php', "post", "_blank");
+                    $css->CrearInputText("idRemision","hidden","",$idRemision,"","black","","",150,30,0,0);
+                    print("<strong>Facturar con multiplicador:</strong><br>");
+                    $css->CrearInputNumber("TxtMultiplicador", "number", "", 1, "Multiplicador", "black", "", "", 100, 30, 0, 1, 1, "", "any");
+                    print("<br>");
+                    $css->CrearBotonConfirmado("BtnFacturarSinAjuste", "Facturar Diferencias Sin Devolucion");
+                $css->CerrarForm();
+            print("</td>");
             $css->CierraFilaTabla();
             $css->CerrarTabla();
             $css->CrearTabla();
@@ -162,9 +172,9 @@ print("<body>");
             while($DatosItemRemision=$obVenta->FetchArray($Consulta)){
 
                 $DatosItems=$obVenta->DevuelveValores("cot_itemscotizaciones", "ID", $DatosItemRemision["idItemCotizacion"]);
-                $Entregas=$obVenta->Sume('rem_relaciones', "CantidadEntregada", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision=$idRemision");
-                $Salidas=$obVenta->Sume("rem_pre_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision=$idRemision");
-                $Salidas2=$obVenta->Sume("rem_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision=$idRemision");
+                $Entregas=$obVenta->Sume('rem_relaciones', "CantidadEntregada", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
+                $Salidas=$obVenta->Sume("rem_pre_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
+                $Salidas2=$obVenta->Sume("rem_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
                 $PendienteDevolver=$Entregas-$Salidas-$Salidas2;
                 ///////////////Creo Formulario para edicion
                 $css->FilaTabla(14);

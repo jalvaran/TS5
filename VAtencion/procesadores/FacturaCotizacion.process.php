@@ -37,6 +37,25 @@ if(!empty($_REQUEST["TxtAsociarCotizacion"])){
     }
     //header("location:FacturaCotizacion.php");
 }
+if(isset($_REQUEST["BtnFacturarSinAjuste"])){
+    $idRemision=$obVenta->normalizar($_REQUEST["idRemision"]);
+    $Multiplicador=$obVenta->normalizar($_REQUEST["TxtMultiplicador"]);
+    //print("$idRemision $Multiplicador");
+    $Consulta=$obVenta->ConsultarTabla("rem_relaciones", "WHERE idRemision='$idRemision' GROUP BY idItemCotizacion");
+    while($DatosItemRemision=$obVenta->FetchArray($Consulta)){
+        $DatosItems=$obVenta->DevuelveValores("cot_itemscotizaciones", "ID", $DatosItemRemision["idItemCotizacion"]);
+        $Entregas=$obVenta->Sume('rem_relaciones', "CantidadEntregada", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
+        $Salidas=$obVenta->Sume("rem_pre_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
+        $Salidas2=$obVenta->Sume("rem_devoluciones", "Cantidad", " WHERE idItemCotizacion=$DatosItemRemision[idItemCotizacion] AND idRemision='$idRemision'");
+        $PendienteDevolver=$Entregas-$Salidas-$Salidas2;
+        $Referencia=$DatosItems["Referencia"];
+        $Tabla=$DatosItems["TablaOrigen"];
+        $DatosProducto=$obVenta->ValorActual($Tabla, "idProductosVenta", " Referencia='$Referencia'");
+        $obVenta->AgregarItemPrefactura($Tabla, $DatosProducto["idProductosVenta"], $PendienteDevolver, $Multiplicador, "");
+    }
+    
+    //header("location:FacturaCotizacion.php");
+}
 ////Se recibe edicion
 	
 if(!empty($_REQUEST['BtnEditar'])){
@@ -46,10 +65,10 @@ if(!empty($_REQUEST['BtnEditar'])){
         //$Tabla=$_REQUEST['TxtTabla'];
         $Cantidad=$_REQUEST['TxtCantidad'];
         $ValorAcordado=$_REQUEST['TxtValorUnitario'];
-
+        $Multiplicador=$_REQUEST['TxtMultiplicador'];
         $obVenta=new ProcesoVenta($idUser);
         $DatosPreventa=$obVenta->DevuelveValores('facturas_pre',"ID",$idItem);
-        $Subtotal=round($ValorAcordado*$Cantidad);
+        $Subtotal=round($ValorAcordado*$Cantidad*$Multiplicador);
         $DatosProductos=$obVenta->DevuelveValores($DatosPreventa["TablaItems"],"Referencia",$DatosPreventa["Referencia"]);
         $IVA=round($Subtotal*$DatosProductos["IVA"]);
         $SubtotalCosto=round($DatosProductos["CostoUnitario"]*$Cantidad);
@@ -62,6 +81,7 @@ if(!empty($_REQUEST['BtnEditar'])){
         $obVenta->ActualizaRegistro("facturas_pre","TotalItem", $Total, $filtro, $idItem);
         $obVenta->ActualizaRegistro("facturas_pre","ValorUnitarioItem", $ValorAcordado, $filtro, $idItem);
         $obVenta->ActualizaRegistro("facturas_pre","Cantidad", $Cantidad, $filtro, $idItem);
+        $obVenta->ActualizaRegistro("facturas_pre","Dias", $Multiplicador, $filtro, $idItem);
 
         header("location:FacturaCotizacion.php");
 
@@ -95,4 +115,17 @@ if(!empty($_REQUEST["BtnGenerarFactura"])){
         
     }
     
+    //Si se agrega un item
+    if(isset($_REQUEST["BtnAgregar"])){
+        $Tabla=$obVenta->normalizar($_REQUEST['TxtTablaItem']); 
+        $idProducto=$obVenta->normalizar($_REQUEST['TxtAgregarItemPreventa']);   
+        $Cantidad=$obVenta->normalizar($_REQUEST['TxtCantidad']); 
+        $Multiplicador=1;
+        if(isset($_REQUEST['TxtMultiplicador'])){
+            $Multiplicador=$obVenta->normalizar($_REQUEST['TxtMultiplicador']); 
+        }
+        $obVenta->AgregarItemPrefactura($Tabla,$idProducto,$Cantidad,$Multiplicador,"");
+    }
+    
+
 ?>

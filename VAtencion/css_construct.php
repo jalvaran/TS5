@@ -175,7 +175,7 @@ class CssIni{
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>	
 		<script type="text/javascript" src="js/DateTimePicker.js"></script>
                 <script src="../plugins/ckeditor/ckeditor.js"></script>
-                <script src="../plugins/ckeditor/js/sample.js"></script>
+                <script src="../plugins/ckeditor/samples/js/sample.js"></script>
 ');
 	}
 	

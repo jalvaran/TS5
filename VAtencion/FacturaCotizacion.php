@@ -13,14 +13,14 @@ $idRemision="";
 	
 print("<html>");
 print("<head>");
-$css =  new CssIni("Asociar una cotizacion a una factura");
+$css =  new CssIni("Pre Factura");
 $obVenta=new ProcesoVenta($idUser);
 print("</head>");
 print("<body>");
     
     include_once("procesadores/FacturaCotizacion.process.php");
     
-    $css->CabeceraIni("TS5 Facturar una Cotización"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("TS5 Pre Factura"); //Inicia la cabecera de la pagina
        
     $css->CabeceraFin(); 
     ///////////////Creamos el contenedor
@@ -32,11 +32,24 @@ print("<body>");
     /////
     /////
     $css->CrearTabla();
-    $css->CrearForm2("FrmAgregaCotizacion", $myPage, "post", "_self");
-    $css->CrearInputNumber("TxtAsociarCotizacion", "number", "Agregue una cotizacion:<br>", "", "Cotizacion a Asociar", "black", "", "", 300, 30, 0, 1, 1, "", 1);
-    $css->CerrarForm();
+    $css->FilaTabla(16);
+        $css->ColTabla("<strong>Agregar una cotizacion</strong>", 1);
+        $css->ColTabla("<strong>Agregar un Item</strong>", 1);
+        
+    $css->CierraFilaTabla();
+    $css->FilaTabla(16);
+    print("<td>");
+        $css->CrearForm2("FrmAgregaCotizacion", $myPage, "post", "_self");
+        $css->CrearInputNumber("TxtAsociarCotizacion", "number", "", "", "Cotizacion a Asociar", "black", "", "", 300, 30, 0, 1, 1, "", 1);
+        $css->CerrarForm();
+    print("</td>");
+    print("<td style='text-align:center'>");    
+        $Page="Consultas/BuscarItems.php?CmbPreVentaAct=1&myPage=$myPage&key=";
+        $css->CrearInputText("BuscarItems","text","","","Buscar Items","black","onKeyUp","EnvieObjetoConsulta(`$Page`,`BuscarItems`,`DivBusquedas`,`99`);return false ;",200,30,0,0);
+    print("</td>");
+    $css->CierraFilaTabla();
     $css->CerrarTabla();
-    $css->CrearImageLink("FactCoti.php", "../images/cotizacion.png", "_self",200,200);
+    //$css->CrearImageLink("FactCoti.php", "../images/cotizacion.png", "_self",200,200);
     
     ///////////////Si se crea una devolucion o una factura
     /////
@@ -61,10 +74,11 @@ print("<body>");
     ///////////////Se crea el DIV que servirá de contenedor secundario
     /////
     /////
+    $css->CrearDiv("DivBusquedas", "container", "center",1,1);
+    $css->CerrarDiv();
     $css->CrearDiv("Secundario", "container", "center",1,1);
-   
-    $consulta=$obVenta->ConsultarTabla("facturas_pre"," WHERE idUsuarios='$idUser' ORDER BY ID desc");
-          
+    $css->CrearDiv("DivPreFactura","","Center",1,1);
+    $consulta=$obVenta->ConsultarTabla("facturas_pre"," WHERE idUsuarios='$idUser' ORDER BY ID desc");        
 
     if($obVenta->NumRows($consulta)){
 
@@ -74,7 +88,7 @@ print("<body>");
         $css->FilaTabla(16);
         $css->ColTabla("<strong>Referencia</strong>", 1);
         $css->ColTabla("<strong>Descripcion</strong>", 1);
-        $css->ColTabla("<strong>Valor Unitario / Cantidad</strong>", 1);
+        $css->ColTabla("<strong>Valor Unitario / Cantidad / Multiplicador</strong>", 1);
         $css->ColTabla("<strong>Total Item</strong>", 1);
         $css->ColTabla("<strong>Borrar</strong>", 1);
         $css->CierraFilaTabla();
@@ -91,6 +105,8 @@ print("<body>");
                 $css->CrearInputText("TxtIdItemCotizacion", "hidden", "", $idItem, "", "", "", "", "", "", 0, 0);
                 $css->CrearInputNumber("TxtValorUnitario", "number", "", $DatosItemsCotizacion["ValorUnitarioItem"], "ValorUnitario", "black", "", "", 120, 30, 0, 1, $DatosItemsCotizacion["PrecioCostoUnitario"], $DatosItemsCotizacion["ValorUnitarioItem"]."0", "any");
                 $css->CrearInputNumber("TxtCantidad", "number", "", $DatosItemsCotizacion["Cantidad"], "ValorUnitario", "black", "", "", 80, 30, 0, 1, 0.00001, "", "any");
+                $css->CrearInputNumber("TxtMultiplicador", "number", "", $DatosItemsCotizacion["Dias"], "ValorUnitario", "black", "", "", 80, 30, 0, 1, 0.00001, "", "any");
+                
                 $css->CrearBotonVerde("BtnEditar", "E");
                 $css->CerrarForm();
             print("</td>");
@@ -230,7 +246,7 @@ print("<body>");
     }
 
 
-    
+    $css->CerrarDiv();//Cerramos div de los items a facturar
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->Footer();
