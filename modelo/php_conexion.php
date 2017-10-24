@@ -6688,6 +6688,15 @@ public function VerificaPermisos($VectorPermisos) {
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
     }
+    
+    public function CalculeDiferenciaFechas($FechaInicial,$FechaFinal,$Vector) {
+        $datetime1 = date_create($FechaInicial);
+        $datetime2 = date_create($FechaFinal);
+        $interval = date_diff($datetime1, $datetime2);
+        $Resultados["Dias"]=$interval->format('%d');
+        
+        return($Resultados);
+    }
 //////////////////////////////Fin	
 }
 	

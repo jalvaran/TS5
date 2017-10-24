@@ -159,6 +159,7 @@ print("<body>");
             $css->ColTabla('<strong>REFERENCIA</strong>',1);
             $css->ColTabla('<strong>DESCRIPCION</strong>',1);
             $css->ColTabla('<strong>FECHA ENTREGA</strong>',1);
+            $css->ColTabla('<strong>DIAS TRANSCURRIDOS</strong>',1);
             $css->ColTabla('<strong>CANTIDAD ENTREGADA</strong>',1);
             $css->ColTabla('<strong>AJUSTE</strong>',1);
 
@@ -181,8 +182,12 @@ print("<body>");
                 $css->ColTabla($DatosItems["Referencia"],1);
                 $css->ColTabla($DatosItems["Descripcion"],1);
                 $css->ColTabla($DatosItemRemision["FechaEntrega"],1);
+                $Resultado=$obVenta->CalculeDiferenciaFechas($DatosItemRemision["FechaEntrega"], date("Y-m-d"), "");
+                
+                $css->ColTabla($Resultado["Dias"]+1,1);
                 $css->ColTabla($Entregas,1);
                 print("<td width='40%'>");
+                
                 $css->CrearFormularioEvento("FrmEditar$DatosItems[ID]",$myPage,"post","_self","");
                 $css->CrearInputText("TxtIdItem","hidden","",$DatosItems["ID"],"","black","","",150,30,0,0);
                 $css->CrearInputText("TxtAsociarRemision","hidden","",$idRemision,"","black","","",150,30,0,0);
