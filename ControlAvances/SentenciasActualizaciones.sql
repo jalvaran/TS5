@@ -644,3 +644,23 @@ ALTER TABLE `facturas_items` ADD INDEX(`FechaFactura`);
 ALTER TABLE `librodiario` ADD INDEX(`Fecha`);
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES ('110', 'Resumen de facturacion X Fecha', '12', '3', 'facturacionxfecha.php', '_SELF', b'1', 'fecha.png', '4', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
+
+
+--
+-- Estructura de tabla para la tabla `configuracion_general`
+--
+
+CREATE TABLE IF NOT EXISTS `configuracion_general` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
+  `Valor` text COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `configuracion_general`
+--
+
+INSERT INTO `configuracion_general` (`ID`, `Descripcion`, `Valor`) VALUES
+(1, 'RUTA PARA EXPORTAR TABLAS EN CSV', '../../htdocs/sctv5/exports/tabla.csv');
+

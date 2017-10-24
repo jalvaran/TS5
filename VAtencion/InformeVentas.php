@@ -217,7 +217,7 @@ print("<body>");
     $css->CerrarForm();
     
     
-        $css->CrearNotificacionRoja("GENERAR INFORME DE VENTAS 2", 16);
+        $css->CrearNotificacionRoja("GENERAR PRESUPUESTO", 16);
         $css->CrearForm2("FormFiscal", "../tcpdf/examples/InformeVentasTotalPor.php", "post", "_blank");
         $css->CrearTabla();
         $css->FilaTabla(16);
@@ -251,7 +251,7 @@ print("<body>");
         
         print("<br>");
         
-        $css->CrearNotificacionAzul("GENERAR INFORME DE VENTAS EXACTAS", 16);
+        $css->CrearNotificacionAzul("GENERAR INFORME DE VENTAS 2", 16);
     
         $VectorInformes["FormName"]="FrmInformeVentasR";
         $VectorInformes["ActionForm"]="../tcpdf/examples/InformeVentasAdminTotal.php";
