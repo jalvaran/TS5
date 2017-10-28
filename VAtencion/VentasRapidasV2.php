@@ -146,10 +146,15 @@ if($idPreventa>0){
     $css->CrearInputText("BuscarCupo","text","","","Buscar Clientes","black","onKeyUp","EnvieObjetoConsulta(`$Page`,`BuscarCupo`,`DivBusquedas`,`99`);return false ;",200,30,0,0);
     print("</td>");
     print("<td style='text-align:center'>");
+    $RutaImage="../images/opciones.png";
+    $css->ImageOcultarMostrar("ImgOpciones", "", "DivOpciones", 50, 50, "", $RutaImage);
+    $css->CrearDiv("DivOpciones", "", "center", 0, 1);
     $css->CrearForm2("FrmCerrarTurno",$myPage,"post","_self");
     $css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
     $css->CrearBotonConfirmado("BtnCerrarTurno", "Cerrar Turno");
     $css->CerrarForm();
+    
+    $css->CerrarDiv();
     print("</td>");
     print("<td style='text-align:center'>");
     $RutaImage="../images/cotizar.png";

@@ -163,7 +163,7 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
         $css->CrearDiv("DivOtrasOpcionesPago", "", "left", $Visible, 1);
                 print("<br>");
                 $css->CrearInputNumber("TxtPagaTarjeta","number","Tarjeta: <br>",0,"Tarjeta","","onkeyup","CalculeDevuelta()",150,30,0,0,0,"",1);
-
+                
                 $VectorSelect["Nombre"]="CmbIdTarjeta";
                 $VectorSelect["Evento"]="";
                 $VectorSelect["Funcion"]="";
@@ -188,7 +188,18 @@ $css->CrearForm2("FrmGuarda",$myPage,"post","_self");
         print("<td>");
         print("<strong>+ Opciones: </strong> <image name='imgHidde' id='imgHidde' src='../images/hidde.png' onclick=MuestraOculta('DivOtrasOpciones');>");
         $css->CrearDiv("DivOtrasOpciones", "", "center", $Visible, 1);
-
+                $css->CrearSelect("CmbPrint", "");
+                $sel=0;
+                    if($PrintAutomatico=="SI"){
+                        $sel=1;
+                    }
+                    $css->CrearOptionSelect("SI", "Imprimir", $sel);
+                    $sel=0;
+                    if($PrintAutomatico=="NO"){
+                        $sel=1;
+                    }
+                    $css->CrearOptionSelect("NO", "NO Imprimir", $sel);
+                $css->CerrarSelect();
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Colaborador";
                 $VarSelect["Title"]="";

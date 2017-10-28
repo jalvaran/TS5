@@ -679,12 +679,13 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             TxtTipoPago  =document.getElementById('TxtTipoPago').value;
             TxtAnticipo  =document.getElementById('TxtAnticipo').value;
             CmbAnticipo  =document.getElementById('CmbAnticipo').value;
+            CmbPrint  =document.getElementById('CmbPrint').value;
             TxtObservacionesFactura   =document.getElementById('TxtObservacionesFactura').value;
             VC="&TxtGranTotalH="+TxtGranTotalH+"&TxtidColaborador="+TxtidColaborador;
             VC=VC+"&TxtPaga="+TxtPaga+"&TxtPagaCheque="+TxtPagaCheque+"&TxtPagaTarjeta="+TxtPagaTarjeta;
             VC=VC+"&CmbIdTarjeta="+CmbIdTarjeta+"&TxtPagaOtros="+TxtPagaOtros+"&TxtDevuelta="+TxtDevuelta;
             VC=VC+"&TxtCuentaDestino="+TxtCuentaDestino+"&TxtTipoPago="+TxtTipoPago+"&TxtAnticipo="+TxtAnticipo;
-            VC=VC+"&CmbAnticipo="+CmbAnticipo+"&TxtObservacionesFactura="+TxtObservacionesFactura;
+            VC=VC+"&CmbAnticipo="+CmbAnticipo+"&TxtObservacionesFactura="+TxtObservacionesFactura+"&CmbPrint="+CmbPrint;
             ValorElement = ValorElement+VC;
             document.getElementById(idTarget).innerHTML ='<br><img src="../images/processing.gif" alt="Procesando" height="100" width="100">';           
         }

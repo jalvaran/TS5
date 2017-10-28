@@ -12,5 +12,5 @@ $db="ts5";
  */
 $TipoPC="Caja";             // Server para que al abrir el menu un timer registre las facturas en el libro diario y en el kardex
 $TipoKardex="Automatico"; // Automatico Para que registre automaticamente las facturas en el kardex
-
+$PrintAutomatico="SI";    //IMPRIME LAS FACTURAS POS AUTOMATICAMENTE SI ES SI, SI ES NO NO IMPRIME FACTURA POR POR DEFECTO
 ?>

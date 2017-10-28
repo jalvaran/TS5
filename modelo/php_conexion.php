@@ -1,6 +1,6 @@
 <?php
 include_once 'php_serial.class.php';
-include_once 'php_mysql_i.php';
+include_once 'php_mysql.php';
         
 //////////////////////////////////////////////////////////////////////////
 ////////////Clase para manejar los procesos mas relevantes ///////////////////////////////////

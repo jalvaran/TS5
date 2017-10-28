@@ -46,6 +46,7 @@ $CuentaDestino=$obVenta->normalizar($_REQUEST["TxtCuentaDestino"]);
 $TipoPago=$_REQUEST["TxtTipoPago"];
 $Anticipo=$obVenta->normalizar($_REQUEST["TxtAnticipo"]);
 $idAnticipo=$obVenta->normalizar($_REQUEST["CmbAnticipo"]);
+$CmbPrint=$obVenta->normalizar($_REQUEST["CmbPrint"]);
 $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesFactura"]);
 $myPage=$obVenta->normalizar($_REQUEST["myPage"]);
 if($idAnticipo>0){
@@ -92,7 +93,7 @@ if($idAnticipo>0){
     $obVenta->CruceAnticipoFactura($fecha,$idAnticipo,$NumFactura,$CuentaDestino,"");
 }
 $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-if($DatosImpresora["Habilitado"]=="SI"){
+if($DatosImpresora["Habilitado"]=="SI" AND $CmbPrint=='SI'){
     $obPrint->ImprimeFacturaPOS($NumFactura,$DatosImpresora["Puerto"],1);
     $DatosTikete=$obVenta->DevuelveValores("config_tiketes_promocion", "ID", 1);
     if($TotalVenta>=$DatosTikete["Tope"] AND $DatosTikete["Activo"]=="SI"){
