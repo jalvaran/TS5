@@ -424,7 +424,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 ///////////////////////////////////////////////////////////////////
 
 
-public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem)
+public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem,$ValorAcordado=0)
   {
         $fecha=$this->normalizar($fecha);
         $Cantidad=$this->normalizar($Cantidad);
@@ -457,6 +457,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             if($DatosProductoGeneral["IVA"]=="E"){
                 $DatosProductoGeneral["IVA"]=0;
             }
+            
             $Cantidad=$DatosProduto["Cantidad"]+$Cantidad;
             $Subtotal=$DatosProduto["ValorAcordado"]*$Cantidad;
             $Impuestos=$DatosProductoGeneral["IVA"]*$Subtotal+$DatosImpuestosAdicionales["ValorImpuesto"];
@@ -477,6 +478,9 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $PorcentajeIVA=$impuesto;
             $DatosImpuestosAdicionales["ValorImpuesto"];
             $impuesto=$impuesto+1;
+            if($ValorAcordado>0){
+                $DatosProductoGeneral["PrecioVenta"]=$ValorAcordado;
+            }
             if($DatosTablaItem["IVAIncluido"]=="SI"){
                 
                 $ValorUnitario=$DatosProductoGeneral["PrecioVenta"]/$impuesto;
@@ -6584,9 +6588,9 @@ public function VerificaPermisos($VectorPermisos) {
         $consulta=$this->ConsultarTabla("facturas_items", "WHERE idFactura='$idFactura'");
         while($DatosItems=$this->FetchArray($consulta)){
             
-            if($DatosItems["TipoItem"]=="PR"){
+            if($DatosItems["TipoItem"]=="PR" AND $DatosItems["TablaItems"]=="productosventa"){
                 $DatosProducto=$this->DevuelveValores($DatosItems["TablaItems"], "Referencia", $DatosItems["Referencia"]);
-            
+                
                 $DatosKardex["Cantidad"]=$DatosItems['Cantidad'];
                 $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
                 $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
@@ -6696,6 +6700,14 @@ public function VerificaPermisos($VectorPermisos) {
         $Resultados["Dias"]=$interval->format('%d');
         
         return($Resultados);
+    }
+    //Agregue un sistema a una preventa
+    public function AgregueSistemaPreventa($idPreventa,$idSistema,$Cantidad,$Vector) {
+        $consulta=$this->ConsultarTabla("sistemas_relaciones", "WHERE idSistema='$idSistema'");
+        while($ItemsSistema=$this->FetchArray($consulta)){
+            $DatosProducto=$this->DevuelveValores($ItemsSistema["TablaOrigen"], "Referencia", $ItemsSistema["Referencia"]);
+            $this->AgregaPreventa(date("Y-m-d"), $ItemsSistema["Cantidad"], $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"]);
+        }
     }
 //////////////////////////////Fin	
 }
