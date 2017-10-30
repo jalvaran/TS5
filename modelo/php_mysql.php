@@ -327,6 +327,11 @@ public function ShowColums($Tabla){
     }
     return($Nombres);
 }
+
+public function fetch_object($Consulta) {
+    $Objeto=mysql_fetch_object($Consulta);
+    return($Objeto);
+}
 //Fin Clases
 }
 ?>
