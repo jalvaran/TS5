@@ -32,6 +32,8 @@ if(isset($_REQUEST['key'])){
         $obVenta=new ProcesoVenta($idUser);
         $TablaItem="productosventa";
         $Cantidad=1;
+        $Salte=0;
+        $idSistema=0;
         //$DatosCodigo=$obVenta->DevuelveValores('prod_codbarras',"CodigoBarras",$CodBar);
                 
         if(isset($_REQUEST['Pesaje'])){
@@ -40,6 +42,22 @@ if(isset($_REQUEST['key'])){
             $Cantidad=str_replace(' ', '', $Cantidad);            
         }
         $fecha=date("Y-m-d");
+        $Comando="";
+        
+        $Comando=strtolower(substr($CodBar, 0,1));
+        
+        if($Comando=="s"){
+            $CodBar= lcfirst($CodBar);   //Convierte el primer caracter en minusculas
+            $idSistema=str_replace("s", '', $CodBar);
+            
+            $idSistema=ltrim($idSistema, "0");
+            $DatosSistema=$obVenta->DevuelveValores("sistemas", "ID", $idSistema);
+            if($DatosSistema["ID"]>0){
+                $obVenta->AgregueSistemaPreventa($idPreventa,$idSistema,$Cantidad,"");
+                goto sale;
+            }
+            
+        }
         if($Cantidad>0){
             $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar'";
             $consulta=$obVenta->Query($sql);
@@ -50,22 +68,7 @@ if(isset($_REQUEST['key'])){
                 $consulta=$obVenta->Query($sql);
                 $DatosProducto=$obVenta->FetchArray($consulta);
             }
-            /*
-            $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
-                . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
-                . " WHERE pv.`idProductosVenta`='$CodBar' "
-                . " OR pv.`CodigoBarras`='$CodBar' "
-                . " OR k.`CodigoBarras`='$CodBar' LIMIT 1 ";
             
-            $sql="SELECT pv.`idProductosVenta` FROM `productosventa` pv "
-                . " INNER JOIN prod_codbarras k ON pv.`idProductosVenta`=k.ProductosVenta_idProductosVenta "
-                . " WHERE k.`CodigoBarras`='$CodBar' "
-                . " OR pv.`CodigoBarras`='$CodBar' "
-                . " OR pv.`idProductosVenta`='$CodBar' ORDER BY pv.`idProductosVenta` DESC LIMIT 1";
-            $Consulta=$obVenta->Query($sql);
-            $DatosProducto=$obVenta->FetchArray($Consulta);
-             * 
-             */
             if($DatosProducto["idProductosVenta"]){
                 $Error=$obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$DatosProducto['idProductosVenta'],$TablaItem);
                 if($Error=="E1"){
@@ -80,10 +83,10 @@ if(isset($_REQUEST['key'])){
         }
 }
 
-
+sale:
 
 $css->DivGrid("DivTotales", "", "left", 1, 1, 1, 90, 40,5,"transparent");
-
+//$css->CrearNotificacionAzul("Id $Comando", 16);
     //Dibujo cuadro de totales
 $DatosPersonalesCliente=$obVenta->DevuelveValores("clientes", "idClientes", $idClientes);
 if($idClientes==1){
