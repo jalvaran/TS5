@@ -6705,8 +6705,9 @@ public function VerificaPermisos($VectorPermisos) {
     public function AgregueSistemaPreventa($idPreventa,$idSistema,$Cantidad,$Vector) {
         $consulta=$this->ConsultarTabla("sistemas_relaciones", "WHERE idSistema='$idSistema'");
         while($ItemsSistema=$this->FetchArray($consulta)){
+            $CantidadTotal=$Cantidad*$ItemsSistema["Cantidad"];
             $DatosProducto=$this->DevuelveValores($ItemsSistema["TablaOrigen"], "Referencia", $ItemsSistema["Referencia"]);
-            $this->AgregaPreventa(date("Y-m-d"), $ItemsSistema["Cantidad"], $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"]);
+            $this->AgregaPreventa(date("Y-m-d"), $CantidadTotal, $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"]);
         }
     }
 //////////////////////////////Fin	

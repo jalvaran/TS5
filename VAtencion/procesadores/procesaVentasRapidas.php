@@ -88,7 +88,12 @@ $obPrint=new PrintPos($idUser);
                 
 
                 $obVenta=new ProcesoVenta($idUser);
-                $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
+                if($TablaItem=="sistemas"){
+                    $obVenta->AgregueSistemaPreventa($idPreventa, $idItem, $Cantidad, "");
+                }else{
+                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
+                }
+                
                 
                 
                 if(isset($_REQUEST['Bascula'])){
