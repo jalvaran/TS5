@@ -24,19 +24,24 @@ if(!empty($_REQUEST["TipoCodigo"])){
         switch ($_REQUEST["TipoCodigo"]){
             case 1:
                     //Impresora de codigos de barras Monarch
-                //$obPrintBarras->ConfigPrintMonarch(1, $DatosPuerto["Puerto"], $DatosCB); //0 marca negra 1 gap
+                
                 $obPrintBarras->ImprimirCodigoBarrasMonarch9416TM($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 
                 //$obPrintBarras->ImprimirCBZebraLP2814($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 
                 break;
             case 2:
-                //$obPrintBarras->ConfigPrintMonarch(0, $DatosPuerto["Puerto"], $DatosCB); //0 marca negra 1 gap
+                
                 $obPrintBarras->ImprimirLabelMonarch($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 break;
             case 3:
-                //$obPrintBarras->ConfigPrintMonarch(1, $DatosPuerto["Puerto"], $DatosCB); //0 marca negra 1 gap
+                
                 $obPrintBarras->ImprimirTiketCortoMonarch($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                break;
+            case 4:
+                //print("id $idProducto cantidad: $Cantidad");
+                $Tabla="sistemas";
+                $obPrintBarras->CodigoBarrasSistemaMonarch9416TM($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 break;
         }
         

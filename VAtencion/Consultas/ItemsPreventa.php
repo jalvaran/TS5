@@ -49,8 +49,14 @@ if(isset($_REQUEST['key'])){
         if($Comando=="s"){
             $CodBar= lcfirst($CodBar);   //Convierte el primer caracter en minusculas
             $idSistema=str_replace("s", '', $CodBar);
+            $Datos=$obVenta->ConsultarTabla("prod_codbarras", " WHERE TablaOrigen='sistemas' and CodigoBarras='$idSistema'");
+            $DatosCodigoBarras=$obVenta->FetchArray($Datos);
+            if($DatosCodigoBarras["ProductosVenta_idProductosVenta"]>0){
+                $idSistema=$DatosCodigoBarras["ProductosVenta_idProductosVenta"];
+            }else{
+                $idSistema=ltrim($idSistema, "0");
+            }
             
-            $idSistema=ltrim($idSistema, "0");
             $DatosSistema=$obVenta->DevuelveValores("sistemas", "ID", $idSistema);
             if($DatosSistema["ID"]>0){
                 $obVenta->AgregueSistemaPreventa($idPreventa,$idSistema,$Cantidad,"");
@@ -59,7 +65,7 @@ if(isset($_REQUEST['key'])){
             
         }
         if($Cantidad>0){
-            $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar'";
+            $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar' AND TablaOrigen='productosventa'";
             $consulta=$obVenta->Query($sql);
             $DatosProducto=$obVenta->FetchArray($consulta);
             if($DatosProducto["idProductosVenta"]==''){
