@@ -1,7 +1,7 @@
 <?php
 $myPage="productosventa.php";
 include_once("../sesiones/php_control.php");
-
+$Diana=0;  //Exclusivo Diana Carvajal, habilita con 1 la impresion de un label de importacion
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -50,13 +50,18 @@ $css->DivNotificacionesJS();
     /////	
 $css->CrearImageLink("CrearProductoVenta.php", "../images/agregar.png", "_self",200,200);
 
-
 ////Paginacion
 ////
 $Ruta="";
 print("<div style='height: 50px;'>");   //Dentro de un DIV para no hacerlo tan grande
 print(pagination($Ruta,$statement,$limit,$page));
 print("</div>");
+if($Diana==1){
+    print("<br>");
+    $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=5&idProducto=Import&TxtCantidad=";
+    $css->CrearInputNumber("TxtCantidadImport", "number", "Cantidad", 1, "Cantidad", "black", "", "", 100, 30, 0, 0, 1, "", 1);
+    $css->CrearBotonEvento("BtnPrintImport", "Imprimir label import", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadImport`,`DivRespuestasJS`,`0`)", "verde", "");
+}
 ////
 ///Dibujo la tabla
 ////

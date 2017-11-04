@@ -43,6 +43,10 @@ if(!empty($_REQUEST["TipoCodigo"])){
                 $Tabla="sistemas";
                 $obPrintBarras->CodigoBarrasSistemaMonarch9416TM($Tabla,$idProducto,$Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 break;
+            case 5:   //Exclusivo Diana Carvajal
+                
+                $obPrintBarras->LabelImport($Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                break;
         }
         
         //$css->CrearNotificacionAzul("Impreso", 16);

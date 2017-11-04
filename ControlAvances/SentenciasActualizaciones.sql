@@ -633,7 +633,7 @@ ALTER TABLE `estadosfinancieros_mayor_temporal` CHANGE `Neto` `Neto` DOUBLE NOT 
 
 DROP VIEW IF EXISTS `vista_resumen_facturacion`;
 CREATE VIEW vista_resumen_facturacion AS
-SELECT ID,`FechaFactura` as FechaInicial,`FechaFactura` as FechaFinal,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,round(SUM(`SubtotalCosto`),2) as Costo
+SELECT ID,`FechaFactura` as FechaInicial,`FechaFactura` as FechaFinal,`Referencia`,(SELECT idProductosVenta FROM productosventa WHERE productosventa.Referencia=facturas_items.Referencia) as idProducto,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,round(SUM(`SubtotalCosto`),2) as Costo
   FROM `facturas_items` GROUP BY `FechaFactura`,`Referencia`;
 
 
@@ -649,11 +649,13 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 --
 -- Estructura de tabla para la tabla `configuracion_general`
 --
-
+DROP TABLE IF EXISTS `configuracion_general`;
 CREATE TABLE IF NOT EXISTS `configuracion_general` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
   `Valor` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
 
@@ -662,5 +664,5 @@ CREATE TABLE IF NOT EXISTS `configuracion_general` (
 --
 
 INSERT INTO `configuracion_general` (`ID`, `Descripcion`, `Valor`) VALUES
-(1, 'RUTA PARA EXPORTAR TABLAS EN CSV', '../../htdocs/sctv5/exports/tabla.csv');
+(1, 'RUTA PARA EXPORTAR TABLAS EN CSV', '../../htdocs/ts5/exports/tabla.csv');
 

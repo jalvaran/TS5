@@ -30,6 +30,7 @@ print("<body>");
     ///////////////Creamos el contenedor
     /////
     /////
+    //$css->CrearCuadroDeDialogo("CrearSistema", "Crear Sistema");
     $css->CrearCuadroDeDialogoAmplio("CrearSistema", "Crear un Sistema");
      
         $css->CrearForm2("FrmCrearSistema", $myPage, "post", "_self");
@@ -73,6 +74,7 @@ print("<body>");
     
     $css->CerrarForm();
     $css->CerrarCuadroDeDialogoAmplio();
+    //$css->CerrarCuadroDeDialogo();
        
     $css->CrearDiv("principal", "container", "center",1,1);
     ////Menu de historial

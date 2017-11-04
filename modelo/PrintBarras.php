@@ -503,5 +503,87 @@ class Barras extends ProcesoVenta{
         $salida = shell_exec('lpr $Puerto');
         
      }
+     
+       //Exclusivo Diana Carvajal
+    
+   public function LabelImport($Cantidad,$Puerto,$DatosCB){
+        $Left1=300;
+        
+        $Config="{I,B,1,1,0,0 | }";  //Se configura para GAP
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        
+        $Numpages=$Cantidad;
+        $Linea1="Traduccion de Material";
+        $Linea2="Polyuretane(Poliuretano)";
+        $Linea3="Rayon(Viscosa)";
+        $Linea4="Linen(Lino)";
+        $Linea5="Slik(Seda)";
+        $Linea6="Polyester(Poliester)";
+        $Linea7="Nylon(Nailon)";
+        $Linea8="Acrylic(Acrilico)";
+        $Linea9="Spandex(Elastico)";
+        $Linea10="Cotton(Algodon)";
+        $Linea11="Style(Traduccion de Origen)";
+        $Linea12="Made in (Hecho en)";
+        $Linea13="Traduccion de Tallas";
+        $Linea14="S-M-L-XL CH-M-G-EXG";
+        $Linea15="  One Size (Talla Unica)";
+        $Linea16="________________________";
+        $Linea17="IMPORTADO POR";
+        $Linea18="DIANA ISABEL";
+        $Linea19="CARVAJAL MURILLO";
+        $Linea20="NIT: 65709480-3";
+        //fwrite($handle,$Config);
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        T,1,30,V,10,'.$Left1.',1,2,1,1,B,L,0,1,1 |
+			T,2,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,3,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,4,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,5,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,6,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,7,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,8,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,9,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,10,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,11,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,12,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,13,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,14,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,15,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,16,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,17,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,18,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,19,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |
+			T,20,30,V,10,'.($Left1=$Left1+27).',1,2,1,1,B,L,0,1,1 |}
+                        {B,25,N,'.$Numpages.' |
+			1,"'.$Linea1.'" | 
+			2,"'.$Linea2.'" | 
+			3,"'.$Linea3.'" | 
+			4,"'.$Linea4.'" | 
+			5,"'.$Linea5.'" | 
+			6,"'.$Linea6.'" | 
+			7,"'.$Linea7.'" | 
+			8,"'.$Linea8.'" | 
+			9,"'.$Linea9.'" | 
+			10,"'.$Linea10.'" |
+			11,"'.$Linea11.'" | 
+			12,"'.$Linea12.'" | 
+			13,"'.$Linea13.'" | 
+			14,"'.$Linea14.'" | 
+			15,"'.$Linea15.'" |
+			16,"'.$Linea16.'" | 
+			17,"'.$Linea17.'" | 
+			18,"'.$Linea18.'" | 
+			19,"'.$Linea19.'" | 
+                        20,"'.$Linea20.'" |}');
+        
+
+        $salida = shell_exec('lpr $Puerto');
+        
+     }
     //Fin Clases
 }

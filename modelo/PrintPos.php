@@ -1060,6 +1060,9 @@ class PrintPos extends ProcesoVenta{
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"TOTAL VENTAS CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasCredito"]),20," ",STR_PAD_LEFT));
+    //Calculo las ventas x separado
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"RETIROS SEPARADOS    ".str_pad("$".number_format($DatosCierre["TotalRetiroSeparados"]),20," ",STR_PAD_LEFT));
     
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     fwrite($handle,"TOTAL VENTAS SISTE CREDITO ".str_pad("$".number_format($DatosCierre["TotalVentasSisteCredito"]),14," ",STR_PAD_LEFT));

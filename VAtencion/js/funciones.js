@@ -619,8 +619,9 @@ function EditeRegistroSinConfirmar(Tab,Columna,idTabla,idEdit,idElement){
 //Funcion para enviar el contenido de una caja de texto a una pagina y dibujarlo en un div
 function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
     
+    //alert("entra");
     ValorElement=document.getElementById(idElement).value;  
-    //alert(ValorElement);
+    
         verifique=Page.substr(14,10);
         if(verifique=="/PrintCodi"){
             document.getElementById(idTarget).innerHTML ='Conectando...<br><img src="../images/process.gif" alt="Cargando" height="100" width="100">';
