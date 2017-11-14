@@ -6185,7 +6185,7 @@ public function VerificaPermisos($VectorPermisos) {
              $sql="DELETE FROM `prod_codbarras` WHERE `ProductosVenta_idProductosVenta`='$idProducto' ORDER BY idCodBarras DESC LIMIT 1 ";
              $this->Query($sql);
              //$this->RegistrarDiferenciaInventarios($idProducto, "");
-             $Respuestas["Creado"]="el codigo $idProducto Se ha creado satisfactoriamente con Existencias = $Cantidad";
+             $Respuestas["Creado"]="el codigo $idProducto, $DatosProducto[Nombre] Se ha creado satisfactoriamente con Existencias = $Cantidad";
              return($Respuestas);
          }else{
             $DatosKardex["Cantidad"]=$Cantidad;
@@ -6519,23 +6519,13 @@ public function VerificaPermisos($VectorPermisos) {
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $DatosPreventa["Tabla"]);
         $DescuentoPorcentaje=$DatosPreventa["Descuento"];
         $ValorDescuento=$DatosPreventa["ValorDescuento"];
+        
         if($ValorAcordado<>$DatosPreventa["ValorUnitario"]){
-            $DescuentoPorcentaje=(100/$DatosProductos["PrecioVenta"])*$ValorAcordado;
-            $DescuentoPorcentaje= 100-(round($DescuentoPorcentaje, 2));
-            $ValorDescuento=($DatosProductos["PrecioVenta"]-$ValorAcordado)*$Cantidad;
+            $DescuentoPorcentaje=100-((100/$DatosPreventa["ValorUnitario"])*$ValorAcordado);
+            $DescuentoPorcentaje= round($DescuentoPorcentaje, 2);
+            $ValorDescuento=($DatosPreventa["ValorUnitario"]-$ValorAcordado)*$Cantidad;
         }
-        if($Cantidad<>$DatosPreventa["Cantidad"]){
-            $ValorDescuentoUnitario=$DatosPreventa["ValorDescuento"]/$DatosPreventa["Cantidad"];
-            $ValorDescuento=$ValorDescuentoUnitario*$Cantidad;
-        }
-        /*
-        if($DatosTablaItem["IVAIncluido"]=="SI"){
-            $ValorAcordado=round($ValorAcordado/($DatosProductos["IVA"]+1));
-
-        }
-
-         * 
-         */
+        
         $Subtotal=$ValorAcordado*$Cantidad*$Multiplicador;
         $IVA=round($Subtotal*$DatosProductos["IVA"]);
         $SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
@@ -6560,9 +6550,9 @@ public function VerificaPermisos($VectorPermisos) {
         $Consulta=$this->ConsultarTabla("precotizacion", "WHERE idUsuario='$idUser'");
         while($DatosItem=$this->FetchArray($Consulta)){
             if($DatosItem["Tabla"]<>"sistemas"){
-                $DatosProductos=$this->DevuelveValores($DatosItem["Tabla"],"Referencia",$DatosItem["Referencia"]);
-                $ValorDescuento=$DatosProductos["PrecioVenta"]*($Descuento/100);
-                $ValorAcordado=$DatosProductos["PrecioVenta"]-$ValorDescuento;
+                
+                $ValorDescuento=$DatosItem["ValorUnitario"]*($Descuento/100);
+                $ValorAcordado=round($DatosItem["ValorUnitario"]-$ValorDescuento,1);
                 $this->EditarItemPrecotizacion($DatosItem["ID"], $DatosItem["Cantidad"], $DatosItem["Multiplicador"], $ValorAcordado, "");
         
             }    
