@@ -28,7 +28,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     }
     $sql="SELECT cart.idCartera,cart.TipoCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
             . " INNER JOIN clientes cl ON cart.idCliente = cl.idClientes "
-            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') LIMIT 40";
+            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') AND cart.Saldo>0 LIMIT 40";
     $Datos=$obVenta->Query($sql);
     if($obVenta->NumRows($Datos)){
         $css->CrearTabla();
@@ -54,7 +54,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
             $css->CrearInputText("TxtIdFactura","hidden","",$DatosCredito["Facturas_idFacturas"],"","","","",0,0,0,0);
             $css->CrearInputText("TxtIdCartera","hidden","",$DatosCredito["idCartera"],"","","","",0,0,0,0);
             $CarteraAct=0;
-            if(isset($Vector["HabilitaCmbCuentaDestino"])){
+            if(isset($_REQUEST["HabilitaCmbCuentaDestino"])){
                 $css->CrearInputFecha("Fecha: ", "TxtFecha", date("Y-m-d"), 100, 30, "");
                 $VectorCuentas["Nombre"]="CmbCuentaDestino";
                 $VectorCuentas["Evento"]="";

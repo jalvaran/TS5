@@ -1107,6 +1107,12 @@ public function CalculePesoRemision($idCotizacion)
             $Telefono=$DatosCliente["Telefono"];
             $Contacto=$DatosCliente["Contacto"];
             $TelContacto=$DatosCliente["TelContacto"];
+            $SaldoFactura=$DatosFactura["Total"];
+            $TotalAbonos=0;
+            if(isset($Datos["SaldoFactura"])){
+                $SaldoFactura=$Datos["SaldoFactura"];
+                $TotalAbonos=$DatosFactura["Total"]-$Datos["SaldoFactura"];
+            }
             $TotalFactura=$DatosFactura["Total"];
             $tab="cartera";       
             $NumRegistros=14; 
@@ -1121,8 +1127,8 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[7]="Contacto";                    $Valores[7]=$Contacto;
             $Columnas[8]="TelContacto";                 $Valores[8]=$TelContacto;
             $Columnas[9]="TotalFactura";                $Valores[9]=$TotalFactura;
-            $Columnas[10]="TotalAbonos";                $Valores[10]=0;
-            $Columnas[11]="Saldo";                      $Valores[11]=$TotalFactura;
+            $Columnas[10]="TotalAbonos";                $Valores[10]=$TotalAbonos;
+            $Columnas[11]="Saldo";                      $Valores[11]=$SaldoFactura;
             $Columnas[12]="idUsuarios";                 $Valores[12]= $this->idUser;
             $Columnas[13]="TipoCartera";                $Valores[13]= $TipoCartera;
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
@@ -4021,12 +4027,10 @@ public function VerificaPermisos($VectorPermisos) {
             $NuevoSaldo=$DatosFactura["SaldoFact"]-$Total;
             $TotalAbonos=$DatosFactura["Total"]-$NuevoSaldo;
             $this->ActualizaRegistro("facturas", "SaldoFact", $NuevoSaldo, "idFacturas", $idFactura);
-            if($NuevoSaldo<=0){
-                $this->BorraReg("cartera", "Facturas_idFacturas", $idFactura);
-            }else{
+            
                 $this->ActualizaRegistro("cartera", "Saldo", $NuevoSaldo, "Facturas_idFacturas", $idFactura);
                 $this->ActualizaRegistro("cartera", "TotalAbonos", $TotalAbonos, "Facturas_idFacturas", $idFactura);
-            }
+            
             
             //////Creo el comprobante de Ingreso
             

@@ -1,7 +1,7 @@
 <?php
 $myPage="cartera.php";
 include_once("../sesiones/php_control.php");
-
+$Restaurar=1;
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -35,15 +35,22 @@ print("<body>");
 //Cabecera
 $css->CabeceraIni($myTitulo); //Inicia la cabecera de la pagina
 
-$css->CrearForm("FrmBuscarCreditos",$myPage,"post","_self");
-$css->CrearInputText("TxtBuscarCredito", "text", " ", "", "Buscar Credito", "white", "", "", 200, 30, 0, 1);
-$css->CerrarForm();
+     
 $css->CabeceraFin(); 
 
 ///////////////Creamos el contenedor
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$Page="Consultas/BuscarCreditos.php?myPage=$myPage&CmbPreVentaAct=0&HabilitaCmbCuentaDestino=1&TxtBuscarCredito=";
+$css->CrearInputText("TxtBuscarCredito","text","","","Buscar Credito","black","onKeyUp","EnvieObjetoConsulta(`$Page`,`TxtBuscarCredito`,`DivBusquedas`,`2`);return false;",200,30,0,0);
+  
+if($Restaurar==1){
+    $css->CrearNotificacionRoja("Esta opcion borrará esta tabla y la realizará a partir de las facturas", 16);
+    $css->CrearForm2("FrmRestarurar", $myPage, "post", "_self");
+        $css->CrearBotonConfirmado("BtnRestaurarCartera", "Restaurar Cartera");
+    $css->CerrarForm();
+}
 $css->DivNotificacionesJS();
 if(!empty($_REQUEST["TxtidIngreso"])){
         $RutaPrintIngreso="../tcpdf/examples/imprimiringreso.php?ImgPrintIngreso=".$_REQUEST["TxtidIngreso"];			
@@ -52,9 +59,10 @@ if(!empty($_REQUEST["TxtidIngreso"])){
         $css->CerrarTabla();
     }
     
-$VectorCredito["HabilitaCmbCuentaDestino"]=1;
-$obTabla->DibujaCredito($myPage,0,$VectorCredito);
-
+//$VectorCredito["HabilitaCmbCuentaDestino"]=1;
+//$obTabla->DibujaCredito($myPage,0,$VectorCredito);
+$css->CrearDiv("DivBusquedas", "", "center", 1, 1);
+$css->CerrarDiv();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
