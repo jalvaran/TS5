@@ -90,7 +90,7 @@ print("<body>");
         print("<br>");
         
         
-            $css->CrearInputNumber("TxtCantidad", "number", "Cantidad:<br>", 1, "Cantidad", "black", "", "", 100, 30, 0, 1, 1, "", "any");
+            $css->CrearInputNumber("TxtCantidad", "number", "Cantidad:<br>", 1, "Cantidad", "black", "", "", 100, 30, 0, 1, 0, "", "any");
             print("<br>"); 
             $css->CrearBotonConfirmado("BtnBaja","Ejecutar");	
           

@@ -51,7 +51,8 @@ if(isset($_REQUEST["BtnFacturarSinAjuste"])){
         $Referencia=$DatosItems["Referencia"];
         $Tabla=$DatosItems["TablaOrigen"];
         $DatosProducto=$obVenta->ValorActual($Tabla, "idProductosVenta", " Referencia='$Referencia'");
-        $obVenta->AgregarItemPrefactura($Tabla, $DatosProducto["idProductosVenta"], $PendienteDevolver, $Multiplicador, "");
+		$VectorFacturaCoti["PrecioAcordado"]=$DatosItems["ValorUnitario"];
+        $obVenta->AgregarItemPrefactura($Tabla, $DatosProducto["idProductosVenta"], $PendienteDevolver, $Multiplicador, $VectorFacturaCoti);
     }
     
     //header("location:FacturaCotizacion.php");

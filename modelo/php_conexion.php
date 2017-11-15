@@ -6647,7 +6647,9 @@ public function VerificaPermisos($VectorPermisos) {
 
         }
         
-
+		if(isset($Vector["PrecioAcordado"])){
+			$ValorUnitario=$Vector["PrecioAcordado"];
+		}
         $Subtotal=round($ValorUnitario*$Cantidad*$Multiplicador,2);
 
         $impuesto=round(($impuesto-1)*$Subtotal,2);
@@ -6667,7 +6669,7 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[8]="SubGrupo3";           $Valores[8]=$DatosProductoGeneral['Sub3'];
         $Columnas[9]="SubGrupo4";           $Valores[9]=$DatosProductoGeneral['Sub4'];
         $Columnas[10]="SubGrupo5";          $Valores[10]=$DatosProductoGeneral['Sub5'];
-        $Columnas[11]="ValorUnitarioItem";  $Valores[11]=$DatosProductoGeneral['PrecioVenta'];
+        $Columnas[11]="ValorUnitarioItem";  $Valores[11]=$ValorUnitario;
         $Columnas[12]="Cantidad";	    $Valores[12]=$Cantidad;
         $Columnas[13]="Dias";               $Valores[13]=$Multiplicador;
         $Columnas[14]="SubtotalItem";       $Valores[14]=$Subtotal;
