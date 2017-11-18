@@ -47,6 +47,10 @@ if(!empty($_REQUEST["TipoCodigo"])){
                 
                 $obPrintBarras->LabelImport($Cantidad,$DatosPuerto["Puerto"],$DatosCB);
                 break;
+            case 6:   //Exclusivo Diana Carvajal
+                
+                $obPrintBarras->ImprimirLabelZapatos($Cantidad,$DatosPuerto["Puerto"],$DatosCB);
+                break;
         }
         
         //$css->CrearNotificacionAzul("Impreso", 16);

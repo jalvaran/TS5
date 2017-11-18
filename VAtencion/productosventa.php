@@ -60,7 +60,13 @@ if($Diana==1){
     print("<br>");
     $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=5&idProducto=Import&TxtCantidad=";
     $css->CrearInputNumber("TxtCantidadImport", "number", "Cantidad", 1, "Cantidad", "black", "", "", 100, 30, 0, 0, 1, "", 1);
+    print("<br>");
     $css->CrearBotonEvento("BtnPrintImport", "Imprimir label import", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadImport`,`DivRespuestasJS`,`0`)", "verde", "");
+    $RutaPrint="ProcesadoresJS/PrintCodigoBarras.php?TipoCodigo=6&idProducto=Import&TxtCantidad=";
+    
+    $css->CrearBotonEvento("BtnPrintZapatos", "Imprimir label import", 1, "onclick", "EnvieObjetoConsulta(`$RutaPrint`,`TxtCantidadImport`,`DivRespuestasJS`,`0`)", "naranja", "");
+
+    
 }
 ////
 ///Dibujo la tabla

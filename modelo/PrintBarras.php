@@ -585,5 +585,65 @@ class Barras extends ProcesoVenta{
         $salida = shell_exec('lpr $Puerto');
         
      }
+     
+     //imprime etiqueta zapatos
+    
+    public function ImprimirLabelZapatos($Cantidad,$Puerto,$DatosCB){
+        $Left1=45;
+        $Left2=385;
+        $Left3=733;
+        $Config="{I,B,1,1,0,0 | }";  //Se configura para GAP
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        
+        
+        
+        $Numpages=$Cantidad;
+        $Linea1="IMPORTADO POR:";
+        $Linea2="DIANA ISABEL";
+	$Linea3="CARVAJAL";
+	$Linea4="MURILLO";
+	$Linea5="NIT: 65709480-3";
+        
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        T,1,18,V,165,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        T,2,18,V,130,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        T,3,18,V,95,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        T,4,18,V,60,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        T,5,18,V,25,'.$Left1.',1,1,1,1,B,C,0,0,1 | 
+			T,6,18,V,165,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        T,7,18,V,130,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        T,8,18,V,95,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        T,9,18,V,60,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        T,10,18,V,25,'.$Left2.',1,1,1,1,B,C,0,0,1 | 
+			T,11,18,V,165,'.$Left3.',1,1,1,1,B,C,0,0,1 |
+                        T,12,18,V,130,'.$Left3.',1,1,1,1,B,C,0,0,1 |
+                        T,13,18,V,95,'.$Left3.',1,1,1,1,B,C,0,0,1 |
+                        T,14,18,V,60,'.$Left3.',1,1,1,1,B,C,0,0,1 |
+                        T,15,18,V,25,'.$Left3.',1,1,1,1,B,C,0,0,1 | }
+                        {B,25,N,'.$Numpages.' |
+                        1,"'.$Linea1.'" | 
+                        2,"'.$Linea2.'" |
+                        3,"'.$Linea3.'" |
+                        4,"'.$Linea4.'"|
+                        5,"'.$Linea5.'" | 
+			6,"'.$Linea1.'" | 
+                        7,"'.$Linea2.'" |
+                        8,"'.$Linea3.'" |
+                        9,"'.$Linea4.'"|
+                        10,"'.$Linea5.'" |
+			11,"'.$Linea1.'" | 
+                        12,"'.$Linea2.'" |
+                        13,"'.$Linea3.'" |
+                        14,"'.$Linea4.'"|
+                        15,"'.$Linea5.'" | }');
+        
+
+        $salida = shell_exec('lpr $Puerto');
+        
+     }
     //Fin Clases
 }
