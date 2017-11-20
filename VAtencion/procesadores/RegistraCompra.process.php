@@ -228,7 +228,8 @@ if(isset($_REQUEST["BtnGuardarCompra"])){
     $idCompra=$obCompra->normalizar($_REQUEST["idCompra"]);
     $TipoPago=$obCompra->normalizar($_REQUEST["CmbTipoPago"]);
     $CuentaOrigen=$obCompra->normalizar($_REQUEST["CmbCuentaOrigen"]);
-    $obCompra->GuardarFacturaCompra($idCompra, $TipoPago, $CuentaOrigen, "");
+    $CuentaPUCCXP=$obCompra->normalizar($_REQUEST["CmbCuentaPUCCXP"]);
+    $obCompra->GuardarFacturaCompra($idCompra, $TipoPago, $CuentaOrigen,$CuentaPUCCXP, "");
     //$css->CrearNotificacionVerde("Compra Registrada Correctamente", 16);
     header("location:$myPage");
 }

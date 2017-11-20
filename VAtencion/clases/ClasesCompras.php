@@ -176,7 +176,7 @@ class Compra extends ProcesoVenta{
         }
     }
     //Guarde una Compra
-    public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$Vector) {
+    public function GuardarFacturaCompra($idCompra,$TipoPago,$CuentaOrigen,$CuentaPUCCXP,$Vector) {
         $DatosEmpresa=$this->ValorActual("empresapro", "CXPAutomaticas", "idEmpresaPro='1'");
         $DatosFacturaCompra= $this->DevuelveValores("factura_compra", "ID", $idCompra);
         $TotalesCompra=$this->CalculeTotalesCompra($idCompra);
@@ -186,9 +186,12 @@ class Compra extends ProcesoVenta{
         $this->ContabilizarRetencionesCompra($idCompra);   //Contabilizo las Retenciones
         //Contabilizo salida de dinero o cuenta X Pagar
         if($TipoPago=="Credito"){
-            $ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
-            $CuentaDestino=$ParametrosContables["CuentaPUC"];
-            $NombreCuenta=$ParametrosContables["NombreCuenta"];
+            //$ParametrosContables=$this->DevuelveValores("parametros_contables", "ID", 14);
+            //$CuentaDestino=$ParametrosContables["CuentaPUC"];
+            //$NombreCuenta=$ParametrosContables["NombreCuenta"];
+            $ParametrosContables=$this->DevuelveValores("subcuentas", "PUC", $CuentaPUCCXP);
+            $CuentaDestino=$CuentaPUCCXP;
+            $NombreCuenta=$ParametrosContables["Nombre"];
         }else{
             $DatosSubcuentas= $this->DevuelveValores("subcuentas", "PUC", $CuentaOrigen);
             $CuentaDestino=$CuentaOrigen;
@@ -208,7 +211,8 @@ class Compra extends ProcesoVenta{
             $SubtotalCuentaXPagar=$TotalesCompra["Gran_Subtotal"];
             $TotalIVACXP=$TotalesCompra["Gran_Impuestos"];
             $TotalCompraCXP=$TotalesCompra["Gran_Total"];
-            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $SubtotalCuentaXPagar, $TotalIVACXP, $TotalCompraCXP, $TotalesCompra["Total_Retenciones"], 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], "");
+            $VectorCuentas["CuentaPUC"]=$CuentaPUCCXP;
+            $this->RegistrarCuentaXPagar($DatosFacturaCompra["Fecha"], $DatosFacturaCompra["NumeroFactura"], $DatosFacturaCompra["Fecha"], "factura_compra", $idCompra, $SubtotalCuentaXPagar, $TotalIVACXP, $TotalCompraCXP, $TotalesCompra["Total_Retenciones"], 0, 0, $DatosFacturaCompra["Tercero"], $DatosFacturaCompra["idSucursal"], $DatosFacturaCompra["idCentroCostos"], $DatosFacturaCompra["Concepto"], $DatosFacturaCompra["Soporte"], $VectorCuentas);
         }
         $this->ActualizaRegistro("factura_compra", "Estado", "CERRADA", "ID", $idCompra);
     }

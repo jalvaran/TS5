@@ -5643,9 +5643,13 @@ public function VerificaPermisos($VectorPermisos) {
         $Retenciones=$ReteFuente+$ReteIVA+$ReteICA;
         $Total=$Total-$Retenciones;
         $DatosProveedor= $this->DevuelveValores("proveedores", "Num_Identificacion", $NIT_Proveedor);
-        
+        $CuentaPUC="";
+        if(isset($Vector["CuentaPUC"])){
+            $CuentaPUC=$Vector["CuentaPUC"];
+        }
+            
         $tab="cuentasxpagar";
-        $NumRegistros=26;
+        $NumRegistros=27;
         
         $Columnas[0]="Fecha";                   $Valores[0]=$Fecha;
         $Columnas[1]="DocumentoReferencia";	$Valores[1]=$DocumentoReferencia;
@@ -5672,7 +5676,8 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[22]="idSucursal";             $Valores[22]=$idSucursal; 
         $Columnas[23]="idCentroCostos";         $Valores[23]=$CentroCostos;  
         $Columnas[24]="Concepto";               $Valores[24]=$Concepto; 
-        $Columnas[25]="Soporte";                $Valores[25]=$Destino;  
+        $Columnas[25]="Soporte";                $Valores[25]=$Destino; 
+        $Columnas[26]="CuentaPUC";              $Valores[26]=$CuentaPUC;  
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     
@@ -5717,7 +5722,7 @@ public function VerificaPermisos($VectorPermisos) {
         
         // SE crean los egresos
         
-        $sql="SELECT ep.ID as idPre , GROUP_CONCAT(cp.ID SEPARATOR ';') AS ID ,cp.Soporte,cp.idCentroCostos,cp.idSucursal,GROUP_CONCAT(cp.Concepto SEPARATOR ';') AS Concepto, "
+        $sql="SELECT ep.ID as idPre ,cp.CuentaPUC as CuentaPUC, GROUP_CONCAT(cp.ID SEPARATOR ';') AS ID ,cp.Soporte,cp.idCentroCostos,cp.idSucursal,GROUP_CONCAT(cp.Concepto SEPARATOR ';') AS Concepto, "
                 . "SUM(ep.Abono) AS Abono,SUM(ep.Descuento) AS Descuento, GROUP_CONCAT(cp.DocumentoReferencia SEPARATOR ';') AS DocumentoReferencia,"
                 . "SUM(cp.Subtotal) as Subtotal,SUM(cp.IVA) as IVA,SUM(cp.Total) as Total,SUM(cp.Retenciones) as Retenciones,SUM(cp.Saldo) as Saldo,"
                 . "SUM(cp.Abonos) as Abonos,cp.idProveedor,cp.RazonSocial FROM egresos_pre ep "
@@ -5761,8 +5766,9 @@ public function VerificaPermisos($VectorPermisos) {
             
             $TotalPagoProveedor=$DatosEgresos["Abono"]+$DatosEgresos["Descuento"];
             $NumEgreso=$this->ObtenerMAX("egresos","idEgresos", 1, ""); 
-            $ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 14);  //Parametro donde alberga la cuenta de proveedores
-            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $ParametroContable["CuentaPUC"],$ParametroContable["NombreCuenta"], "Pago de Cuenta X Pagar", "DB", $TotalPagoProveedor, $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
+            //$ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 14);  //Parametro donde alberga la cuenta de proveedores
+            $ParametroContable=$this->DevuelveValores("subcuentas", "PUC", $DatosEgresos["CuentaPUC"]);
+            $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $DatosEgresos["CuentaPUC"],$ParametroContable["Nombre"], "Pago de Cuenta X Pagar", "DB", $TotalPagoProveedor, $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
             $this->IngreseMovimientoLibroDiario($Fecha, "CompEgreso", $NumEgreso, $DatosEgresos["DocumentoReferencia"], $DatosEgresos["idProveedor"], $CuentaOrigen, $DatosCuentaOrigen["Nombre"], "Pago de Cuenta X Pagar", "CR", $DatosEgresos["Abono"], $DatosEgresos["Concepto"], $DatosEgresos["idCentroCostos"], $DatosEgresos["idSucursal"], "");
             if($DatosEgresos["Descuento"]>0){
                 $ParametroContable=$this->DevuelveValores("parametros_contables", "ID", 15);
@@ -6705,6 +6711,31 @@ public function VerificaPermisos($VectorPermisos) {
             $DatosProducto=$this->DevuelveValores($ItemsSistema["TablaOrigen"], "Referencia", $ItemsSistema["Referencia"]);
             $this->AgregaPreventa(date("Y-m-d"), $CantidadTotal, $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"]);
         }
+    }
+    //Anule un separado
+    public function AnularSeparado($fecha, $ConceptoAnulacion, $idSeparado, $Vector){
+        $fecha=date("Y-m-d h-i-s");
+        $ConceptoAnulacion="$fecha, el Usuario $this->idUser, anula por: ".$ConceptoAnulacion;
+        $consulta=$this->ConsultarTabla("separados_items", " WHERE idSeparado='$idSeparado'");
+        while($DatosItems=$this->FetchArray($consulta)){
+            
+            $Referencia=$DatosItems["Referencia"];
+            $DatosProducto=$this->DevuelveValores("productosventa", "Referencia", $Referencia);
+            $DatosKardex["Cantidad"]=$DatosItems['Cantidad']*(-1);
+            $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+            $DatosKardex["CostoUnitario"]=$DatosItems['PrecioCostoUnitario'];
+            $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+            $DatosKardex["Detalle"]="Anulacion de Separado";
+            $DatosKardex["idDocumento"]=$idSeparado;
+            $DatosKardex["TotalCosto"]=$DatosKardex["CostoUnitario"]*$DatosKardex["Cantidad"];
+            $DatosKardex["Movimiento"]="SALIDA";
+            $DatosKardex["CostoUnitarioPromedio"]=$DatosProducto["CostoUnitarioPromedio"];
+            $DatosKardex["CostoTotalPromedio"]=$DatosProducto["CostoUnitarioPromedio"]*$DatosKardex["Cantidad"];
+            $this->InserteKardex($DatosKardex);
+            
+        }
+        $this->ActualizaRegistro("separados", "Estado", "ANULADO", "ID", $idSeparado,0);
+        $this->ActualizaRegistro("separados", "Observaciones", $ConceptoAnulacion, "ID", $idSeparado,0);
     }
 //////////////////////////////Fin	
 }

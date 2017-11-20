@@ -23,13 +23,21 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
 
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;            
 //$Vector["VerRegistro"]["Deshabilitado"]=1;                      
-//$Vector["EditarRegistro"]["Deshabilitado"]=1;  
+$Vector["EditarRegistro"]["Deshabilitado"]=1;  
 
 
 //Link para la accion ver
 $Ruta="$myPage?idSeparado=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="ID";
+
+// Nueva Accion
+$Ruta="AnularSeparado.php?idSeparado=";
+$Vector["NuevaAccionLink"][0]="Anular";
+$Vector["NuevaAccion"]["Anular"]["Titulo"]=" Anular Separado ";
+$Vector["NuevaAccion"]["Anular"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Anular"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Anular"]["Target"]="_self";
 
 /*
  * 

@@ -19,8 +19,6 @@ if(isset($_REQUEST["idCompra"])){
 print("</head>");
 print("<body>");
     
-    
-    
     $css->CabeceraIni("Registrar Compra"); //Inicia la cabecera de la pagina
     $css->CreaBotonDesplegable("Proveedor","Crear Tercero");
     $css->CreaBotonDesplegable("CrearCompra","Nueva");  
@@ -352,7 +350,7 @@ print("<body>");
                     $css->ColTabla(number_format($TotalesCompra["Impuestos_Productos_Dev"]), 1);
                     $css->ColTabla(number_format($TotalesCompra["Total_Pago"]), 1);
                     print("<td>");
-                        $css->CrearSelect("CmbTipoPago", "MuestraOculta('DivCuentaOrigen')");
+                        $css->CrearSelect("CmbTipoPago", "MuestraOculta('DivCuentaOrigen');MuestraOculta('DivCuentaXPagar')");
                             $css->CrearOptionSelect("Contado", "Contado", 1);
                             $css->CrearOptionSelect("Credito", "Credito", 0);
                         $css->CerrarSelect();
@@ -363,6 +361,21 @@ print("<body>");
                             while($DatosCuenta=$obVenta->FetchArray($consulta)){
                                 $sel=0;
                                 if($DatosCuenta["PUC"]==1105){
+                                    $sel=1;
+                                }
+                                $css->CrearOptionSelect($DatosCuenta["PUC"], $DatosCuenta["Nombre"]." ".$DatosCuenta["PUC"], $sel);
+                            }
+                            
+                        $css->CerrarSelect();
+                        $css->CerrarDiv();
+                        $css->CrearDiv("DivCuentaXPagar", "", "left", 0, 1);
+                            
+                            print("<strong>Llevar Cuenta X Pagar a: </strong><br>");
+                            $css->CrearSelect("CmbCuentaPUCCXP", "");
+                            $consulta=$obVenta->ConsultarTabla("subcuentas", " WHERE PUC LIKE '22%' or PUC LIKE '23%' or PUC LIKE '24%'");
+                            while($DatosCuenta=$obVenta->FetchArray($consulta)){
+                                $sel=0;
+                                if($DatosCuenta["PUC"]==220505){
                                     $sel=1;
                                 }
                                 $css->CrearOptionSelect($DatosCuenta["PUC"], $DatosCuenta["Nombre"]." ".$DatosCuenta["PUC"], $sel);
