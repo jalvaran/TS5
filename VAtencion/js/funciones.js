@@ -676,6 +676,11 @@ function EnvieObjetoConsulta(Page,idElement,idTarget,BorrarId=1){
             CmbIdTarjeta  =document.getElementById('CmbIdTarjeta').value;
             TxtPagaOtros  =document.getElementById('TxtPagaOtros').value;
             TxtDevuelta  =document.getElementById('TxtDevuelta').value;
+            if(TxtDevuelta<0){
+                alert("el dinero recibido debe ser igual o mayor al total");
+                return;
+            }
+                
             TxtCuentaDestino  =document.getElementById('TxtCuentaDestino').value;
             TxtTipoPago  =document.getElementById('TxtTipoPago').value;
             TxtAnticipo  =document.getElementById('TxtAnticipo').value;

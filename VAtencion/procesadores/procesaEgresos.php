@@ -66,7 +66,7 @@
                 $NumFact=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
                 $DatosProveedores=$obVenta->DevuelveValores("proveedores", "idProveedores", $idProveedor);
                 $NIT_Proveedor=$DatosProveedores["Num_Identificacion"];
-                $CuentaPUCIVA=2408;
+                $CuentaPUCIVA=24081205;
 		$idUsuario=$idUser;
 		$IVA=0;
                 $Sanciones=0;

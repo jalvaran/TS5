@@ -32,3 +32,12 @@ WHERE s.Estado='Abierto' GROUP BY si.`Referencia`;
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (113, 'Inventario de Separados', '22', '3', 'vista_inventario_separados.php', '_SELF', b'1', 'inventario_separados.png', '3', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 ALTER TABLE `separados` ADD `Observaciones` TEXT NOT NULL AFTER `Estado`;
+
+INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `Factor`, `CuentaPUC`, `CuentaPUCIVAGenerado`, `NombreCuenta`, `Habilitado`, `Updated`, `Sync`) VALUES ('8', 'impuesto del 1.9%', '0.019', 'M', '24080505', '24081005', 'Impuestos del 10% del 19%', 'SI', '2017-10-13 14:28:50', '2017-10-13 14:28:50');
+
+ALTER TABLE `comprobantes_contabilidad_items` CHANGE `Tercero` `Tercero` VARCHAR(45) NOT NULL;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (114, 'Comparacion Anual', '9', '5', 'YearsComparison.php', '_SELF', b'1', 'anualcomp.jpg', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (115, 'Comparacion Diaria', '9', '5', 'DiasComparacion.php', '_SELF', b'1', 'diascomp.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES (5, '../Graficos/', '2017-10-13 14:16:51', '2017-10-13 14:16:51');

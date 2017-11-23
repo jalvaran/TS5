@@ -179,7 +179,7 @@ print("<body>");
                     $VarSelect["Ancho"]="200";
                     $VarSelect["PlaceHolder"]="Seleccione la cuenta de la retencion";
                     $css->CrearSelectChosen("CmbCuentaReteFuente", $VarSelect);
-                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2365%'");
+                    $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '2365%' ");
                     while($DatosCuentaRete=$obVenta->FetchArray($consulta)){
                         $sel=0;
                         if($DatosCuentaRete["PUC"]=="236540"){
