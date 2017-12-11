@@ -18,9 +18,13 @@ if(!empty($_REQUEST["BtnGuardarPago"])){
         $CuentaDestino=$obVenta->normalizar($_REQUEST["CmbCuentaDestino"]);
         $ReteICA=$obVenta->normalizar($_REQUEST["TxtReteICA"]);
         $ReteIVA=$obVenta->normalizar($_REQUEST["TxtReteIVA"]);
+        $Anticipos=$obVenta->normalizar($_REQUEST["TxtAnticipos"]);
         $OtrosDescuentos=$obVenta->normalizar($_REQUEST["TxtOtrosDescuentos"]);
         $Pago=$obVenta->normalizar($_REQUEST["TxtPagoH"]);
-        
+        $Parametros=$obVenta->DevuelveValores("parametros_contables", "ID", 20);
+        $VectorIngresos["Anticipos"]=$Anticipos;
+        $VectorIngresos["CuentaAnticipos"]=$Parametros["CuentaPUC"];
+        $VectorIngresos["NombreCuentaAntipos"]=$Parametros["NombreCuenta"];
         $VectorIngresos["OtrosDescuentos"]=$OtrosDescuentos;
         $VectorIngresos["CuentaReteFuente"]=$obVenta->normalizar($_REQUEST["CmbCuentaReteFuente"]);
         $VectorIngresos["CuentaReteICA"]=$obVenta->normalizar($_REQUEST["CmbCuentaReteICA"]);

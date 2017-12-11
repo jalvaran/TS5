@@ -894,7 +894,7 @@ public function InicializarPreventas()
         if(isset($Vector["OtrosDescuentos"])){
             $OtrosDescuentos=$Vector["OtrosDescuentos"];
         }
-        $ValorIngreso=$Pago-$Retefuente-$ReteIVA-$ReteICA-$OtrosDescuentos;
+        $ValorIngreso=$Pago-$Retefuente-$ReteIVA-$ReteICA-$OtrosDescuentos-$Vector["Anticipos"];
         //////Creo el comprobante de Ingreso
 
         $tab="comprobantes_ingreso";
@@ -1018,6 +1018,21 @@ public function InicializarPreventas()
             $Valores[18]=$OtrosDescuentos;
             $Valores[19]=0; 						
             $Valores[20]=$OtrosDescuentos;  											//Credito se escribe el total de la venta menos los impuestos
+
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
+        }
+        //Si hay retefuente se registra
+        if($Vector["Anticipos"]>0){
+            
+            $CuentaPUC=$Vector["CuentaAnticipos"];
+            
+            $NombreCuenta=$Vector["NombreCuentaAntipos"];
+
+            $Valores[15]=$CuentaPUC;
+            $Valores[16]=$NombreCuenta;
+            $Valores[18]=$Vector["Anticipos"];
+            $Valores[19]=0; 						
+            $Valores[20]=$Vector["Anticipos"];  											//Credito se escribe el total de la venta menos los impuestos
 
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); //Registro el credito
         }

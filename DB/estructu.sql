@@ -2,10 +2,10 @@
 -- version 4.1.12
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2017 a las 09:01:30
--- Versión del servidor: 5.6.16
--- Versión de PHP: 5.5.11
+-- Host: 127.0.0.1
+-- Generation Time: Nov 24, 2017 at 09:14 AM
+-- Server version: 5.6.16
+-- PHP Version: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `ts5`
+-- Database: `ts5`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `abonos_libro`
+-- Table structure for table `abonos_libro`
 --
 
 CREATE TABLE IF NOT EXISTS `abonos_libro` (
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `abonos_libro` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `activos`
+-- Table structure for table `activos`
 --
 
 CREATE TABLE IF NOT EXISTS `activos` (
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `activos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `act_movimientos`
+-- Table structure for table `act_movimientos`
 --
 
 CREATE TABLE IF NOT EXISTS `act_movimientos` (
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `act_movimientos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `act_ordenes`
+-- Table structure for table `act_ordenes`
 --
 
 CREATE TABLE IF NOT EXISTS `act_ordenes` (
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `act_ordenes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `act_pre_movimientos`
+-- Table structure for table `act_pre_movimientos`
 --
 
 CREATE TABLE IF NOT EXISTS `act_pre_movimientos` (
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `act_pre_movimientos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `act_pre_ordenes`
+-- Table structure for table `act_pre_ordenes`
 --
 
 CREATE TABLE IF NOT EXISTS `act_pre_ordenes` (
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `act_pre_ordenes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `alertas`
+-- Table structure for table `alertas`
 --
 
 CREATE TABLE IF NOT EXISTS `alertas` (
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `alertas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `autorizaciones_generales`
+-- Table structure for table `autorizaciones_generales`
 --
 
 CREATE TABLE IF NOT EXISTS `autorizaciones_generales` (
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `autorizaciones_generales` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `bodega`
+-- Table structure for table `bodega`
 --
 
 CREATE TABLE IF NOT EXISTS `bodega` (
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `bodega` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cajas`
+-- Table structure for table `cajas`
 --
 
 CREATE TABLE IF NOT EXISTS `cajas` (
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `cajas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cajas_aperturas_cierres`
+-- Table structure for table `cajas_aperturas_cierres`
 --
 
 CREATE TABLE IF NOT EXISTS `cajas_aperturas_cierres` (
@@ -260,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `cajas_aperturas_cierres` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cartera`
+-- Table structure for table `cartera`
 --
 
 CREATE TABLE IF NOT EXISTS `cartera` (
@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `cartera` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `centrocosto`
+-- Table structure for table `centrocosto`
 --
 
 CREATE TABLE IF NOT EXISTS `centrocosto` (
@@ -303,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `centrocosto` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cierres_contables`
+-- Table structure for table `cierres_contables`
 --
 
 CREATE TABLE IF NOT EXISTS `cierres_contables` (
@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS `cierres_contables` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ciuu`
+-- Table structure for table `ciuu`
 --
 
 CREATE TABLE IF NOT EXISTS `ciuu` (
@@ -332,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `ciuu` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clasecuenta`
+-- Table structure for table `clasecuenta`
 --
 
 CREATE TABLE IF NOT EXISTS `clasecuenta` (
@@ -347,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `clasecuenta` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clientes`
+-- Table structure for table `clientes`
 --
 
 CREATE TABLE IF NOT EXISTS `clientes` (
@@ -380,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cod_departamentos`
+-- Table structure for table `cod_departamentos`
 --
 
 CREATE TABLE IF NOT EXISTS `cod_departamentos` (
@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `cod_departamentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cod_documentos`
+-- Table structure for table `cod_documentos`
 --
 
 CREATE TABLE IF NOT EXISTS `cod_documentos` (
@@ -409,7 +409,7 @@ CREATE TABLE IF NOT EXISTS `cod_documentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cod_municipios_dptos`
+-- Table structure for table `cod_municipios_dptos`
 --
 
 CREATE TABLE IF NOT EXISTS `cod_municipios_dptos` (
@@ -426,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `cod_municipios_dptos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cod_paises`
+-- Table structure for table `cod_paises`
 --
 
 CREATE TABLE IF NOT EXISTS `cod_paises` (
@@ -440,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `cod_paises` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `colaboradores`
+-- Table structure for table `colaboradores`
 --
 
 CREATE TABLE IF NOT EXISTS `colaboradores` (
@@ -465,7 +465,7 @@ CREATE TABLE IF NOT EXISTS `colaboradores` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `colaboradores_ventas`
+-- Table structure for table `colaboradores_ventas`
 --
 
 CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
@@ -482,7 +482,7 @@ CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `col_registrohoras`
+-- Table structure for table `col_registrohoras`
 --
 
 CREATE TABLE IF NOT EXISTS `col_registrohoras` (
@@ -499,7 +499,7 @@ CREATE TABLE IF NOT EXISTS `col_registrohoras` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comisiones`
+-- Table structure for table `comisiones`
 --
 
 CREATE TABLE IF NOT EXISTS `comisiones` (
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `comisiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comisionesporventas`
+-- Table structure for table `comisionesporventas`
 --
 
 CREATE TABLE IF NOT EXISTS `comisionesporventas` (
@@ -535,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `comisionesporventas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `compras`
+-- Table structure for table `compras`
 --
 
 CREATE TABLE IF NOT EXISTS `compras` (
@@ -559,7 +559,7 @@ CREATE TABLE IF NOT EXISTS `compras` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `compras_activas`
+-- Table structure for table `compras_activas`
 --
 
 CREATE TABLE IF NOT EXISTS `compras_activas` (
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `compras_activas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `compras_precompra`
+-- Table structure for table `compras_precompra`
 --
 
 CREATE TABLE IF NOT EXISTS `compras_precompra` (
@@ -607,7 +607,7 @@ CREATE TABLE IF NOT EXISTS `compras_precompra` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_contabilidad`
+-- Table structure for table `comprobantes_contabilidad`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad` (
@@ -625,7 +625,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_contabilidad_items`
+-- Table structure for table `comprobantes_contabilidad_items`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad_items` (
@@ -633,7 +633,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad_items` (
   `idComprobante` int(16) NOT NULL,
   `Fecha` date NOT NULL,
   `CentroCostos` int(11) NOT NULL,
-  `Tercero` int(11) NOT NULL,
+  `Tercero` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `CuentaPUC` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `NombreCuenta` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Debito` int(16) NOT NULL,
@@ -650,7 +650,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_egreso_items`
+-- Table structure for table `comprobantes_egreso_items`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_egreso_items` (
@@ -678,7 +678,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_egreso_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_ingreso`
+-- Table structure for table `comprobantes_ingreso`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_ingreso` (
@@ -700,7 +700,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_ingreso_anulaciones`
+-- Table structure for table `comprobantes_ingreso_anulaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_anulaciones` (
@@ -719,7 +719,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_anulaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_ingreso_items`
+-- Table structure for table `comprobantes_ingreso_items`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_items` (
@@ -747,7 +747,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comprobantes_pre`
+-- Table structure for table `comprobantes_pre`
 --
 
 CREATE TABLE IF NOT EXISTS `comprobantes_pre` (
@@ -764,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `comprobantes_pre` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `concejales`
+-- Table structure for table `concejales`
 --
 
 CREATE TABLE IF NOT EXISTS `concejales` (
@@ -781,7 +781,7 @@ CREATE TABLE IF NOT EXISTS `concejales` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `concejales_intervenciones`
+-- Table structure for table `concejales_intervenciones`
 --
 
 CREATE TABLE IF NOT EXISTS `concejales_intervenciones` (
@@ -800,7 +800,7 @@ CREATE TABLE IF NOT EXISTS `concejales_intervenciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `concejo_sesiones`
+-- Table structure for table `concejo_sesiones`
 --
 
 CREATE TABLE IF NOT EXISTS `concejo_sesiones` (
@@ -816,7 +816,7 @@ CREATE TABLE IF NOT EXISTS `concejo_sesiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `concejo_tipo_sesiones`
+-- Table structure for table `concejo_tipo_sesiones`
 --
 
 CREATE TABLE IF NOT EXISTS `concejo_tipo_sesiones` (
@@ -830,7 +830,7 @@ CREATE TABLE IF NOT EXISTS `concejo_tipo_sesiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `conceptos`
+-- Table structure for table `conceptos`
 --
 
 CREATE TABLE IF NOT EXISTS `conceptos` (
@@ -850,7 +850,7 @@ CREATE TABLE IF NOT EXISTS `conceptos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `conceptos_montos`
+-- Table structure for table `conceptos_montos`
 --
 
 CREATE TABLE IF NOT EXISTS `conceptos_montos` (
@@ -869,7 +869,7 @@ CREATE TABLE IF NOT EXISTS `conceptos_montos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `conceptos_movimientos`
+-- Table structure for table `conceptos_movimientos`
 --
 
 CREATE TABLE IF NOT EXISTS `conceptos_movimientos` (
@@ -888,7 +888,7 @@ CREATE TABLE IF NOT EXISTS `conceptos_movimientos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `configuracion_general`
+-- Table structure for table `configuracion_general`
 --
 
 CREATE TABLE IF NOT EXISTS `configuracion_general` (
@@ -901,7 +901,7 @@ CREATE TABLE IF NOT EXISTS `configuracion_general` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `config_codigo_barras`
+-- Table structure for table `config_codigo_barras`
 --
 
 CREATE TABLE IF NOT EXISTS `config_codigo_barras` (
@@ -924,7 +924,7 @@ CREATE TABLE IF NOT EXISTS `config_codigo_barras` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `config_puertos`
+-- Table structure for table `config_puertos`
 --
 
 CREATE TABLE IF NOT EXISTS `config_puertos` (
@@ -940,7 +940,7 @@ CREATE TABLE IF NOT EXISTS `config_puertos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `config_tiketes_promocion`
+-- Table structure for table `config_tiketes_promocion`
 --
 
 CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
@@ -957,7 +957,7 @@ CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `costos`
+-- Table structure for table `costos`
 --
 
 CREATE TABLE IF NOT EXISTS `costos` (
@@ -972,7 +972,7 @@ CREATE TABLE IF NOT EXISTS `costos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cotizacionesv5`
+-- Table structure for table `cotizacionesv5`
 --
 
 CREATE TABLE IF NOT EXISTS `cotizacionesv5` (
@@ -992,7 +992,7 @@ CREATE TABLE IF NOT EXISTS `cotizacionesv5` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cotizaciones_anexos`
+-- Table structure for table `cotizaciones_anexos`
 --
 
 CREATE TABLE IF NOT EXISTS `cotizaciones_anexos` (
@@ -1010,7 +1010,7 @@ CREATE TABLE IF NOT EXISTS `cotizaciones_anexos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cot_itemscotizaciones`
+-- Table structure for table `cot_itemscotizaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
@@ -1042,7 +1042,7 @@ CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `crono_controles`
+-- Table structure for table `crono_controles`
 --
 
 CREATE TABLE IF NOT EXISTS `crono_controles` (
@@ -1060,7 +1060,7 @@ CREATE TABLE IF NOT EXISTS `crono_controles` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cuentas`
+-- Table structure for table `cuentas`
 --
 
 CREATE TABLE IF NOT EXISTS `cuentas` (
@@ -1076,7 +1076,7 @@ CREATE TABLE IF NOT EXISTS `cuentas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cuentasfrecuentes`
+-- Table structure for table `cuentasfrecuentes`
 --
 
 CREATE TABLE IF NOT EXISTS `cuentasfrecuentes` (
@@ -1092,7 +1092,7 @@ CREATE TABLE IF NOT EXISTS `cuentasfrecuentes` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cuentasxpagar`
+-- Table structure for table `cuentasxpagar`
 --
 
 CREATE TABLE IF NOT EXISTS `cuentasxpagar` (
@@ -1124,6 +1124,7 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar` (
   `DocumentoCruce` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
+  `CuentaPUC` varchar(20) COLLATE utf8_spanish2_ci NOT NULL DEFAULT '220505',
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -1132,7 +1133,7 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cuentasxpagar_abonos`
+-- Table structure for table `cuentasxpagar_abonos`
 --
 
 CREATE TABLE IF NOT EXISTS `cuentasxpagar_abonos` (
@@ -1151,7 +1152,7 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `devolucionesventas`
+-- Table structure for table `devolucionesventas`
 --
 
 CREATE TABLE IF NOT EXISTS `devolucionesventas` (
@@ -1170,7 +1171,7 @@ CREATE TABLE IF NOT EXISTS `devolucionesventas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `documentos_generados`
+-- Table structure for table `documentos_generados`
 --
 
 CREATE TABLE IF NOT EXISTS `documentos_generados` (
@@ -1187,7 +1188,7 @@ CREATE TABLE IF NOT EXISTS `documentos_generados` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos`
+-- Table structure for table `egresos`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos` (
@@ -1227,7 +1228,7 @@ CREATE TABLE IF NOT EXISTS `egresos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos_activos`
+-- Table structure for table `egresos_activos`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos_activos` (
@@ -1243,7 +1244,7 @@ CREATE TABLE IF NOT EXISTS `egresos_activos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos_anulaciones`
+-- Table structure for table `egresos_anulaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
@@ -1261,7 +1262,7 @@ CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos_items`
+-- Table structure for table `egresos_items`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos_items` (
@@ -1284,7 +1285,7 @@ CREATE TABLE IF NOT EXISTS `egresos_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos_pre`
+-- Table structure for table `egresos_pre`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos_pre` (
@@ -1301,7 +1302,7 @@ CREATE TABLE IF NOT EXISTS `egresos_pre` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `egresos_tipo`
+-- Table structure for table `egresos_tipo`
 --
 
 CREATE TABLE IF NOT EXISTS `egresos_tipo` (
@@ -1317,7 +1318,7 @@ CREATE TABLE IF NOT EXISTS `egresos_tipo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresapro`
+-- Table structure for table `empresapro`
 --
 
 CREATE TABLE IF NOT EXISTS `empresapro` (
@@ -1346,7 +1347,7 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresapro_resoluciones_facturacion`
+-- Table structure for table `empresapro_resoluciones_facturacion`
 --
 
 CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
@@ -1372,7 +1373,7 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresa_pro_sucursales`
+-- Table structure for table `empresa_pro_sucursales`
 --
 
 CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
@@ -1392,7 +1393,7 @@ CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `estadosfinancieros_mayor_temporal`
+-- Table structure for table `estadosfinancieros_mayor_temporal`
 --
 
 CREATE TABLE IF NOT EXISTS `estadosfinancieros_mayor_temporal` (
@@ -1412,7 +1413,7 @@ CREATE TABLE IF NOT EXISTS `estadosfinancieros_mayor_temporal` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas`
+-- Table structure for table `facturas`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas` (
@@ -1454,7 +1455,7 @@ CREATE TABLE IF NOT EXISTS `facturas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Disparadores `facturas`
+-- Triggers `facturas`
 --
 DROP TRIGGER IF EXISTS `Actualiza_OriFacturas`;
 DELIMITER //
@@ -1482,7 +1483,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_abonos`
+-- Table structure for table `facturas_abonos`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_abonos` (
@@ -1504,7 +1505,7 @@ CREATE TABLE IF NOT EXISTS `facturas_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_anticipos`
+-- Table structure for table `facturas_anticipos`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_anticipos` (
@@ -1524,7 +1525,7 @@ CREATE TABLE IF NOT EXISTS `facturas_anticipos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_autoretenciones`
+-- Table structure for table `facturas_autoretenciones`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_autoretenciones` (
@@ -1546,7 +1547,7 @@ CREATE TABLE IF NOT EXISTS `facturas_autoretenciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_formapago`
+-- Table structure for table `facturas_formapago`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_formapago` (
@@ -1564,7 +1565,7 @@ CREATE TABLE IF NOT EXISTS `facturas_formapago` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_intereses_sistecredito`
+-- Table structure for table `facturas_intereses_sistecredito`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
@@ -1583,7 +1584,7 @@ CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_items`
+-- Table structure for table `facturas_items`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_items` (
@@ -1627,7 +1628,7 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
--- Disparadores `facturas_items`
+-- Triggers `facturas_items`
 --
 DROP TRIGGER IF EXISTS `InsertFacturasItems`;
 DELIMITER //
@@ -1643,7 +1644,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_kardex`
+-- Table structure for table `facturas_kardex`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_kardex` (
@@ -1659,7 +1660,7 @@ CREATE TABLE IF NOT EXISTS `facturas_kardex` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_pre`
+-- Table structure for table `facturas_pre`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_pre` (
@@ -1693,12 +1694,12 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_reten_aplicadas`
+-- Table structure for table `facturas_reten_aplicadas`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_reten_aplicadas` (
@@ -1718,7 +1719,7 @@ CREATE TABLE IF NOT EXISTS `facturas_reten_aplicadas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Disparadores `facturas_reten_aplicadas`
+-- Triggers `facturas_reten_aplicadas`
 --
 DROP TRIGGER IF EXISTS `ActualizaSaldoFact`;
 DELIMITER //
@@ -1769,7 +1770,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas_tipo_pago`
+-- Table structure for table `facturas_tipo_pago`
 --
 
 CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
@@ -1784,7 +1785,7 @@ CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra`
+-- Table structure for table `factura_compra`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra` (
@@ -1808,7 +1809,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_anulaciones`
+-- Table structure for table `factura_compra_anulaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
@@ -1826,7 +1827,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_descuentos`
+-- Table structure for table `factura_compra_descuentos`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_descuentos` (
@@ -1843,7 +1844,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_descuentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_items`
+-- Table structure for table `factura_compra_items`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_items` (
@@ -1868,7 +1869,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_items_devoluciones`
+-- Table structure for table `factura_compra_items_devoluciones`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_items_devoluciones` (
@@ -1889,7 +1890,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_items_devoluciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_retenciones`
+-- Table structure for table `factura_compra_retenciones`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_retenciones` (
@@ -1907,7 +1908,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_retenciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_compra_servicios`
+-- Table structure for table `factura_compra_servicios`
 --
 
 CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
@@ -1928,7 +1929,7 @@ CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `fechas_descuentos`
+-- Table structure for table `fechas_descuentos`
 --
 
 CREATE TABLE IF NOT EXISTS `fechas_descuentos` (
@@ -1948,7 +1949,7 @@ CREATE TABLE IF NOT EXISTS `fechas_descuentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `formatos_calidad`
+-- Table structure for table `formatos_calidad`
 --
 
 CREATE TABLE IF NOT EXISTS `formatos_calidad` (
@@ -1966,7 +1967,7 @@ CREATE TABLE IF NOT EXISTS `formatos_calidad` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `gupocuentas`
+-- Table structure for table `gupocuentas`
 --
 
 CREATE TABLE IF NOT EXISTS `gupocuentas` (
@@ -1982,7 +1983,7 @@ CREATE TABLE IF NOT EXISTS `gupocuentas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `impret`
+-- Table structure for table `impret`
 --
 
 CREATE TABLE IF NOT EXISTS `impret` (
@@ -2001,7 +2002,7 @@ CREATE TABLE IF NOT EXISTS `impret` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ingresos`
+-- Table structure for table `ingresos`
 --
 
 CREATE TABLE IF NOT EXISTS `ingresos` (
@@ -2023,7 +2024,7 @@ CREATE TABLE IF NOT EXISTS `ingresos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ingresosvarios`
+-- Table structure for table `ingresosvarios`
 --
 
 CREATE TABLE IF NOT EXISTS `ingresosvarios` (
@@ -2039,7 +2040,7 @@ CREATE TABLE IF NOT EXISTS `ingresosvarios` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `inventarios_diferencias`
+-- Table structure for table `inventarios_diferencias`
 --
 
 CREATE TABLE IF NOT EXISTS `inventarios_diferencias` (
@@ -2068,7 +2069,7 @@ CREATE TABLE IF NOT EXISTS `inventarios_diferencias` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `inventarios_temporal`
+-- Table structure for table `inventarios_temporal`
 --
 
 CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
@@ -2103,7 +2104,7 @@ CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kardexmercancias`
+-- Table structure for table `kardexmercancias`
 --
 
 CREATE TABLE IF NOT EXISTS `kardexmercancias` (
@@ -2127,7 +2128,7 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kardexmercancias_temporal`
+-- Table structure for table `kardexmercancias_temporal`
 --
 
 CREATE TABLE IF NOT EXISTS `kardexmercancias_temporal` (
@@ -2151,7 +2152,7 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias_temporal` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kardex_alquiler`
+-- Table structure for table `kardex_alquiler`
 --
 
 CREATE TABLE IF NOT EXISTS `kardex_alquiler` (
@@ -2178,7 +2179,7 @@ CREATE TABLE IF NOT EXISTS `kardex_alquiler` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kits`
+-- Table structure for table `kits`
 --
 
 CREATE TABLE IF NOT EXISTS `kits` (
@@ -2193,7 +2194,7 @@ CREATE TABLE IF NOT EXISTS `kits` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `kits_relaciones`
+-- Table structure for table `kits_relaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `kits_relaciones` (
@@ -2210,7 +2211,7 @@ CREATE TABLE IF NOT EXISTS `kits_relaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `librodiario`
+-- Table structure for table `librodiario`
 --
 
 CREATE TABLE IF NOT EXISTS `librodiario` (
@@ -2258,7 +2259,7 @@ CREATE TABLE IF NOT EXISTS `librodiario` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `libromayorbalances`
+-- Table structure for table `libromayorbalances`
 --
 
 CREATE TABLE IF NOT EXISTS `libromayorbalances` (
@@ -2276,7 +2277,7 @@ CREATE TABLE IF NOT EXISTS `libromayorbalances` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `maquinas`
+-- Table structure for table `maquinas`
 --
 
 CREATE TABLE IF NOT EXISTS `maquinas` (
@@ -2291,7 +2292,7 @@ CREATE TABLE IF NOT EXISTS `maquinas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menu`
+-- Table structure for table `menu`
 --
 
 CREATE TABLE IF NOT EXISTS `menu` (
@@ -2311,7 +2312,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menu_carpetas`
+-- Table structure for table `menu_carpetas`
 --
 
 CREATE TABLE IF NOT EXISTS `menu_carpetas` (
@@ -2325,7 +2326,7 @@ CREATE TABLE IF NOT EXISTS `menu_carpetas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menu_pestanas`
+-- Table structure for table `menu_pestanas`
 --
 
 CREATE TABLE IF NOT EXISTS `menu_pestanas` (
@@ -2342,7 +2343,7 @@ CREATE TABLE IF NOT EXISTS `menu_pestanas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `menu_submenus`
+-- Table structure for table `menu_submenus`
 --
 
 CREATE TABLE IF NOT EXISTS `menu_submenus` (
@@ -2363,7 +2364,7 @@ CREATE TABLE IF NOT EXISTS `menu_submenus` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notascontables`
+-- Table structure for table `notascontables`
 --
 
 CREATE TABLE IF NOT EXISTS `notascontables` (
@@ -2388,7 +2389,7 @@ CREATE TABLE IF NOT EXISTS `notascontables` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notascontables_anulaciones`
+-- Table structure for table `notascontables_anulaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
@@ -2406,7 +2407,7 @@ CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notascredito`
+-- Table structure for table `notascredito`
 --
 
 CREATE TABLE IF NOT EXISTS `notascredito` (
@@ -2425,7 +2426,7 @@ CREATE TABLE IF NOT EXISTS `notascredito` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ordenesdecompra`
+-- Table structure for table `ordenesdecompra`
 --
 
 CREATE TABLE IF NOT EXISTS `ordenesdecompra` (
@@ -2447,7 +2448,7 @@ CREATE TABLE IF NOT EXISTS `ordenesdecompra` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ordenesdecompra_items`
+-- Table structure for table `ordenesdecompra_items`
 --
 
 CREATE TABLE IF NOT EXISTS `ordenesdecompra_items` (
@@ -2469,7 +2470,7 @@ CREATE TABLE IF NOT EXISTS `ordenesdecompra_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ordenesdetrabajo`
+-- Table structure for table `ordenesdetrabajo`
 --
 
 CREATE TABLE IF NOT EXISTS `ordenesdetrabajo` (
@@ -2493,7 +2494,7 @@ CREATE TABLE IF NOT EXISTS `ordenesdetrabajo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ordenesdetrabajo_items`
+-- Table structure for table `ordenesdetrabajo_items`
 --
 
 CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_items` (
@@ -2514,7 +2515,7 @@ CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ordenesdetrabajo_tipo`
+-- Table structure for table `ordenesdetrabajo_tipo`
 --
 
 CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_tipo` (
@@ -2528,7 +2529,7 @@ CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_tipo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ori_facturas`
+-- Table structure for table `ori_facturas`
 --
 
 CREATE TABLE IF NOT EXISTS `ori_facturas` (
@@ -2572,7 +2573,7 @@ CREATE TABLE IF NOT EXISTS `ori_facturas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ori_facturas_items`
+-- Table structure for table `ori_facturas_items`
 --
 
 CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
@@ -2614,7 +2615,7 @@ CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `paginas`
+-- Table structure for table `paginas`
 --
 
 CREATE TABLE IF NOT EXISTS `paginas` (
@@ -2630,7 +2631,7 @@ CREATE TABLE IF NOT EXISTS `paginas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `paginas_bloques`
+-- Table structure for table `paginas_bloques`
 --
 
 CREATE TABLE IF NOT EXISTS `paginas_bloques` (
@@ -2646,7 +2647,7 @@ CREATE TABLE IF NOT EXISTS `paginas_bloques` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `parametros_contables`
+-- Table structure for table `parametros_contables`
 --
 
 CREATE TABLE IF NOT EXISTS `parametros_contables` (
@@ -2662,7 +2663,7 @@ CREATE TABLE IF NOT EXISTS `parametros_contables` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `parametros_generales`
+-- Table structure for table `parametros_generales`
 --
 
 CREATE TABLE IF NOT EXISTS `parametros_generales` (
@@ -2676,7 +2677,7 @@ CREATE TABLE IF NOT EXISTS `parametros_generales` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `plataforma_tablas`
+-- Table structure for table `plataforma_tablas`
 --
 
 CREATE TABLE IF NOT EXISTS `plataforma_tablas` (
@@ -2690,7 +2691,7 @@ CREATE TABLE IF NOT EXISTS `plataforma_tablas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `porcentajes_iva`
+-- Table structure for table `porcentajes_iva`
 --
 
 CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
@@ -2710,7 +2711,7 @@ CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `precotizacion`
+-- Table structure for table `precotizacion`
 --
 
 CREATE TABLE IF NOT EXISTS `precotizacion` (
@@ -2735,12 +2736,12 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `preventa`
+-- Table structure for table `preventa`
 --
 
 CREATE TABLE IF NOT EXISTS `preventa` (
@@ -2765,12 +2766,12 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_actividades`
+-- Table structure for table `produccion_actividades`
 --
 
 CREATE TABLE IF NOT EXISTS `produccion_actividades` (
@@ -2801,7 +2802,7 @@ CREATE TABLE IF NOT EXISTS `produccion_actividades` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_horas_cronograma`
+-- Table structure for table `produccion_horas_cronograma`
 --
 
 CREATE TABLE IF NOT EXISTS `produccion_horas_cronograma` (
@@ -2815,7 +2816,7 @@ CREATE TABLE IF NOT EXISTS `produccion_horas_cronograma` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_ordenes_trabajo`
+-- Table structure for table `produccion_ordenes_trabajo`
 --
 
 CREATE TABLE IF NOT EXISTS `produccion_ordenes_trabajo` (
@@ -2845,7 +2846,7 @@ CREATE TABLE IF NOT EXISTS `produccion_ordenes_trabajo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_pausas_predefinidas`
+-- Table structure for table `produccion_pausas_predefinidas`
 --
 
 CREATE TABLE IF NOT EXISTS `produccion_pausas_predefinidas` (
@@ -2861,7 +2862,7 @@ CREATE TABLE IF NOT EXISTS `produccion_pausas_predefinidas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `produccion_registro_tiempos`
+-- Table structure for table `produccion_registro_tiempos`
 --
 
 CREATE TABLE IF NOT EXISTS `produccion_registro_tiempos` (
@@ -2879,7 +2880,7 @@ CREATE TABLE IF NOT EXISTS `produccion_registro_tiempos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosalquiler`
+-- Table structure for table `productosalquiler`
 --
 
 CREATE TABLE IF NOT EXISTS `productosalquiler` (
@@ -2914,7 +2915,7 @@ CREATE TABLE IF NOT EXISTS `productosalquiler` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa`
+-- Table structure for table `productosventa`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa` (
@@ -2948,7 +2949,7 @@ CREATE TABLE IF NOT EXISTS `productosventa` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Disparadores `productosventa`
+-- Triggers `productosventa`
 --
 DROP TRIGGER IF EXISTS `insKardex`;
 DELIMITER //
@@ -2978,7 +2979,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa_bodega_1`
+-- Table structure for table `productosventa_bodega_1`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa_bodega_1` (
@@ -3012,7 +3013,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_1` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa_bodega_2`
+-- Table structure for table `productosventa_bodega_2`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa_bodega_2` (
@@ -3046,7 +3047,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_2` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa_bodega_3`
+-- Table structure for table `productosventa_bodega_3`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa_bodega_3` (
@@ -3080,7 +3081,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_3` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa_bodega_4`
+-- Table structure for table `productosventa_bodega_4`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa_bodega_4` (
@@ -3114,7 +3115,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_4` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productosventa_bodega_5`
+-- Table structure for table `productosventa_bodega_5`
 --
 
 CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
@@ -3148,7 +3149,7 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productos_impuestos_adicionales`
+-- Table structure for table `productos_impuestos_adicionales`
 --
 
 CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
@@ -3166,7 +3167,7 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_bajas_altas`
+-- Table structure for table `prod_bajas_altas`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
@@ -3188,7 +3189,7 @@ CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_bodega`
+-- Table structure for table `prod_bodega`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_bodega` (
@@ -3204,7 +3205,7 @@ CREATE TABLE IF NOT EXISTS `prod_bodega` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras`
+-- Table structure for table `prod_codbarras`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras` (
@@ -3220,7 +3221,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras_bodega_1`
+-- Table structure for table `prod_codbarras_bodega_1`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_1` (
@@ -3235,7 +3236,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_1` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras_bodega_2`
+-- Table structure for table `prod_codbarras_bodega_2`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_2` (
@@ -3250,7 +3251,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_2` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras_bodega_3`
+-- Table structure for table `prod_codbarras_bodega_3`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_3` (
@@ -3265,7 +3266,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_3` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras_bodega_4`
+-- Table structure for table `prod_codbarras_bodega_4`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_4` (
@@ -3280,7 +3281,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_4` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_codbarras_bodega_5`
+-- Table structure for table `prod_codbarras_bodega_5`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_5` (
@@ -3295,7 +3296,7 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_5` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_comisiones`
+-- Table structure for table `prod_comisiones`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_comisiones` (
@@ -3313,7 +3314,7 @@ CREATE TABLE IF NOT EXISTS `prod_comisiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_departamentos`
+-- Table structure for table `prod_departamentos`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_departamentos` (
@@ -3330,7 +3331,7 @@ CREATE TABLE IF NOT EXISTS `prod_departamentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_kits`
+-- Table structure for table `prod_kits`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_kits` (
@@ -3346,7 +3347,7 @@ CREATE TABLE IF NOT EXISTS `prod_kits` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sinc`
+-- Table structure for table `prod_sinc`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sinc` (
@@ -3360,7 +3361,7 @@ CREATE TABLE IF NOT EXISTS `prod_sinc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Disparadores `prod_sinc`
+-- Triggers `prod_sinc`
 --
 DROP TRIGGER IF EXISTS `Productos_Sinc`;
 DELIMITER //
@@ -3378,7 +3379,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub1`
+-- Table structure for table `prod_sub1`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub1` (
@@ -3393,7 +3394,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub1` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub2`
+-- Table structure for table `prod_sub2`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub2` (
@@ -3408,7 +3409,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub2` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub3`
+-- Table structure for table `prod_sub3`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub3` (
@@ -3423,7 +3424,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub3` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub4`
+-- Table structure for table `prod_sub4`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub4` (
@@ -3438,7 +3439,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub4` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub5`
+-- Table structure for table `prod_sub5`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub5` (
@@ -3453,7 +3454,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub5` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `prod_sub6`
+-- Table structure for table `prod_sub6`
 --
 
 CREATE TABLE IF NOT EXISTS `prod_sub6` (
@@ -3468,7 +3469,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub6` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `proveedores`
+-- Table structure for table `proveedores`
 --
 
 CREATE TABLE IF NOT EXISTS `proveedores` (
@@ -3505,7 +3506,7 @@ CREATE TABLE IF NOT EXISTS `proveedores` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `publicidad_encabezado_cartel`
+-- Table structure for table `publicidad_encabezado_cartel`
 --
 
 CREATE TABLE IF NOT EXISTS `publicidad_encabezado_cartel` (
@@ -3527,7 +3528,7 @@ CREATE TABLE IF NOT EXISTS `publicidad_encabezado_cartel` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `publicidad_paginas`
+-- Table structure for table `publicidad_paginas`
 --
 
 CREATE TABLE IF NOT EXISTS `publicidad_paginas` (
@@ -3542,7 +3543,7 @@ CREATE TABLE IF NOT EXISTS `publicidad_paginas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `registra_apertura_documentos`
+-- Table structure for table `registra_apertura_documentos`
 --
 
 CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
@@ -3560,7 +3561,7 @@ CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `registra_ediciones`
+-- Table structure for table `registra_ediciones`
 --
 
 CREATE TABLE IF NOT EXISTS `registra_ediciones` (
@@ -3581,7 +3582,7 @@ CREATE TABLE IF NOT EXISTS `registra_ediciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `registra_eliminaciones`
+-- Table structure for table `registra_eliminaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
@@ -3604,7 +3605,7 @@ CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `registro_basculas`
+-- Table structure for table `registro_basculas`
 --
 
 CREATE TABLE IF NOT EXISTS `registro_basculas` (
@@ -3620,7 +3621,7 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `relacioncompras`
+-- Table structure for table `relacioncompras`
 --
 
 CREATE TABLE IF NOT EXISTS `relacioncompras` (
@@ -3640,7 +3641,7 @@ CREATE TABLE IF NOT EXISTS `relacioncompras` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Disparadores `relacioncompras`
+-- Triggers `relacioncompras`
 --
 DROP TRIGGER IF EXISTS `KardexCompras`;
 DELIMITER //
@@ -3681,7 +3682,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `remisiones`
+-- Table structure for table `remisiones`
 --
 
 CREATE TABLE IF NOT EXISTS `remisiones` (
@@ -3710,7 +3711,7 @@ CREATE TABLE IF NOT EXISTS `remisiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rem_devoluciones`
+-- Table structure for table `rem_devoluciones`
 --
 
 CREATE TABLE IF NOT EXISTS `rem_devoluciones` (
@@ -3734,7 +3735,7 @@ CREATE TABLE IF NOT EXISTS `rem_devoluciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rem_devoluciones_totalizadas`
+-- Table structure for table `rem_devoluciones_totalizadas`
 --
 
 CREATE TABLE IF NOT EXISTS `rem_devoluciones_totalizadas` (
@@ -3755,7 +3756,7 @@ CREATE TABLE IF NOT EXISTS `rem_devoluciones_totalizadas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rem_pre_devoluciones`
+-- Table structure for table `rem_pre_devoluciones`
 --
 
 CREATE TABLE IF NOT EXISTS `rem_pre_devoluciones` (
@@ -3776,7 +3777,7 @@ CREATE TABLE IF NOT EXISTS `rem_pre_devoluciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rem_relaciones`
+-- Table structure for table `rem_relaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `rem_relaciones` (
@@ -3795,7 +3796,7 @@ CREATE TABLE IF NOT EXISTS `rem_relaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `repuestas_forma_pago`
+-- Table structure for table `repuestas_forma_pago`
 --
 
 CREATE TABLE IF NOT EXISTS `repuestas_forma_pago` (
@@ -3810,7 +3811,7 @@ CREATE TABLE IF NOT EXISTS `repuestas_forma_pago` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `requerimientos_proyectos`
+-- Table structure for table `requerimientos_proyectos`
 --
 
 CREATE TABLE IF NOT EXISTS `requerimientos_proyectos` (
@@ -3829,7 +3830,7 @@ CREATE TABLE IF NOT EXISTS `requerimientos_proyectos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `respuestas_condicional`
+-- Table structure for table `respuestas_condicional`
 --
 
 CREATE TABLE IF NOT EXISTS `respuestas_condicional` (
@@ -3843,7 +3844,7 @@ CREATE TABLE IF NOT EXISTS `respuestas_condicional` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `respuestas_tipo_item`
+-- Table structure for table `respuestas_tipo_item`
 --
 
 CREATE TABLE IF NOT EXISTS `respuestas_tipo_item` (
@@ -3857,7 +3858,7 @@ CREATE TABLE IF NOT EXISTS `respuestas_tipo_item` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `restaurante_cierres`
+-- Table structure for table `restaurante_cierres`
 --
 
 CREATE TABLE IF NOT EXISTS `restaurante_cierres` (
@@ -3873,7 +3874,7 @@ CREATE TABLE IF NOT EXISTS `restaurante_cierres` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `restaurante_mesas`
+-- Table structure for table `restaurante_mesas`
 --
 
 CREATE TABLE IF NOT EXISTS `restaurante_mesas` (
@@ -3889,7 +3890,7 @@ CREATE TABLE IF NOT EXISTS `restaurante_mesas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `restaurante_pedidos`
+-- Table structure for table `restaurante_pedidos`
 --
 
 CREATE TABLE IF NOT EXISTS `restaurante_pedidos` (
@@ -3915,7 +3916,7 @@ CREATE TABLE IF NOT EXISTS `restaurante_pedidos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `restaurante_pedidos_items`
+-- Table structure for table `restaurante_pedidos_items`
 --
 
 CREATE TABLE IF NOT EXISTS `restaurante_pedidos_items` (
@@ -3950,7 +3951,7 @@ CREATE TABLE IF NOT EXISTS `restaurante_pedidos_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `separados`
+-- Table structure for table `separados`
 --
 
 CREATE TABLE IF NOT EXISTS `separados` (
@@ -3961,6 +3962,7 @@ CREATE TABLE IF NOT EXISTS `separados` (
   `Total` int(11) NOT NULL,
   `Saldo` int(11) NOT NULL,
   `Estado` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
+  `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
   `idUsuarios` int(11) NOT NULL,
   `idSucursal` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -3971,7 +3973,7 @@ CREATE TABLE IF NOT EXISTS `separados` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `separados_abonos`
+-- Table structure for table `separados_abonos`
 --
 
 CREATE TABLE IF NOT EXISTS `separados_abonos` (
@@ -3992,7 +3994,7 @@ CREATE TABLE IF NOT EXISTS `separados_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `separados_items`
+-- Table structure for table `separados_items`
 --
 
 CREATE TABLE IF NOT EXISTS `separados_items` (
@@ -4029,7 +4031,7 @@ CREATE TABLE IF NOT EXISTS `separados_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `servicios`
+-- Table structure for table `servicios`
 --
 
 CREATE TABLE IF NOT EXISTS `servicios` (
@@ -4058,7 +4060,7 @@ CREATE TABLE IF NOT EXISTS `servicios` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `servidores`
+-- Table structure for table `servidores`
 --
 
 CREATE TABLE IF NOT EXISTS `servidores` (
@@ -4076,7 +4078,7 @@ CREATE TABLE IF NOT EXISTS `servidores` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sistemas`
+-- Table structure for table `sistemas`
 --
 
 CREATE TABLE IF NOT EXISTS `sistemas` (
@@ -4094,7 +4096,7 @@ CREATE TABLE IF NOT EXISTS `sistemas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sistemas_relaciones`
+-- Table structure for table `sistemas_relaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
@@ -4112,7 +4114,7 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `subcuentas`
+-- Table structure for table `subcuentas`
 --
 
 CREATE TABLE IF NOT EXISTS `subcuentas` (
@@ -4128,7 +4130,7 @@ CREATE TABLE IF NOT EXISTS `subcuentas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `subcuentas_equivalencias_niif`
+-- Table structure for table `subcuentas_equivalencias_niif`
 --
 
 CREATE TABLE IF NOT EXISTS `subcuentas_equivalencias_niif` (
@@ -4144,7 +4146,7 @@ CREATE TABLE IF NOT EXISTS `subcuentas_equivalencias_niif` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tablas_ventas`
+-- Table structure for table `tablas_ventas`
 --
 
 CREATE TABLE IF NOT EXISTS `tablas_ventas` (
@@ -4162,7 +4164,7 @@ CREATE TABLE IF NOT EXISTS `tablas_ventas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tarjetas_forma_pago`
+-- Table structure for table `tarjetas_forma_pago`
 --
 
 CREATE TABLE IF NOT EXISTS `tarjetas_forma_pago` (
@@ -4180,7 +4182,7 @@ CREATE TABLE IF NOT EXISTS `tarjetas_forma_pago` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tiposretenciones`
+-- Table structure for table `tiposretenciones`
 --
 
 CREATE TABLE IF NOT EXISTS `tiposretenciones` (
@@ -4198,7 +4200,7 @@ CREATE TABLE IF NOT EXISTS `tiposretenciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_abonos`
+-- Table structure for table `titulos_abonos`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_abonos` (
@@ -4220,7 +4222,7 @@ CREATE TABLE IF NOT EXISTS `titulos_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_asignaciones`
+-- Table structure for table `titulos_asignaciones`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_asignaciones` (
@@ -4240,7 +4242,7 @@ CREATE TABLE IF NOT EXISTS `titulos_asignaciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_comisiones`
+-- Table structure for table `titulos_comisiones`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_comisiones` (
@@ -4262,7 +4264,7 @@ CREATE TABLE IF NOT EXISTS `titulos_comisiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_cuentasxcobrar`
+-- Table structure for table `titulos_cuentasxcobrar`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_cuentasxcobrar` (
@@ -4292,7 +4294,7 @@ CREATE TABLE IF NOT EXISTS `titulos_cuentasxcobrar` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_devoluciones`
+-- Table structure for table `titulos_devoluciones`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_devoluciones` (
@@ -4313,7 +4315,7 @@ CREATE TABLE IF NOT EXISTS `titulos_devoluciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_listados_promocion_1`
+-- Table structure for table `titulos_listados_promocion_1`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_1` (
@@ -4338,7 +4340,7 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_1` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_listados_promocion_6`
+-- Table structure for table `titulos_listados_promocion_6`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_6` (
@@ -4362,7 +4364,7 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_6` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_listados_promocion_7`
+-- Table structure for table `titulos_listados_promocion_7`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_7` (
@@ -4387,7 +4389,7 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_7` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_promociones`
+-- Table structure for table `titulos_promociones`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_promociones` (
@@ -4411,7 +4413,7 @@ CREATE TABLE IF NOT EXISTS `titulos_promociones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_traslados`
+-- Table structure for table `titulos_traslados`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_traslados` (
@@ -4432,7 +4434,7 @@ CREATE TABLE IF NOT EXISTS `titulos_traslados` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `titulos_ventas`
+-- Table structure for table `titulos_ventas`
 --
 
 CREATE TABLE IF NOT EXISTS `titulos_ventas` (
@@ -4461,7 +4463,7 @@ CREATE TABLE IF NOT EXISTS `titulos_ventas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `traslados_estados`
+-- Table structure for table `traslados_estados`
 --
 
 CREATE TABLE IF NOT EXISTS `traslados_estados` (
@@ -4476,7 +4478,7 @@ CREATE TABLE IF NOT EXISTS `traslados_estados` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `traslados_items`
+-- Table structure for table `traslados_items`
 --
 
 CREATE TABLE IF NOT EXISTS `traslados_items` (
@@ -4514,7 +4516,7 @@ CREATE TABLE IF NOT EXISTS `traslados_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `traslados_mercancia`
+-- Table structure for table `traslados_mercancia`
 --
 
 CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
@@ -4539,7 +4541,7 @@ CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Table structure for table `usuarios`
 --
 
 CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -4561,7 +4563,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios_ip`
+-- Table structure for table `usuarios_ip`
 --
 
 CREATE TABLE IF NOT EXISTS `usuarios_ip` (
@@ -4575,7 +4577,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_ip` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios_keys`
+-- Table structure for table `usuarios_keys`
 --
 
 CREATE TABLE IF NOT EXISTS `usuarios_keys` (
@@ -4589,7 +4591,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_keys` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios_tipo`
+-- Table structure for table `usuarios_tipo`
 --
 
 CREATE TABLE IF NOT EXISTS `usuarios_tipo` (
@@ -4603,7 +4605,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_tipo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ventas`
+-- Table structure for table `ventas`
 --
 
 CREATE TABLE IF NOT EXISTS `ventas` (
@@ -4637,7 +4639,7 @@ CREATE TABLE IF NOT EXISTS `ventas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Disparadores `ventas`
+-- Triggers `ventas`
 --
 DROP TRIGGER IF EXISTS `UpdateProductos`;
 DELIMITER //
@@ -4678,7 +4680,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ventas_devoluciones`
+-- Table structure for table `ventas_devoluciones`
 --
 
 CREATE TABLE IF NOT EXISTS `ventas_devoluciones` (
@@ -4708,7 +4710,7 @@ CREATE TABLE IF NOT EXISTS `ventas_devoluciones` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ventas_nota_credito`
+-- Table structure for table `ventas_nota_credito`
 --
 
 CREATE TABLE IF NOT EXISTS `ventas_nota_credito` (
@@ -4728,7 +4730,7 @@ CREATE TABLE IF NOT EXISTS `ventas_nota_credito` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ventas_separados`
+-- Table structure for table `ventas_separados`
 --
 
 CREATE TABLE IF NOT EXISTS `ventas_separados` (
@@ -4745,7 +4747,7 @@ CREATE TABLE IF NOT EXISTS `ventas_separados` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `vestasactivas`
+-- Table structure for table `vestasactivas`
 --
 
 CREATE TABLE IF NOT EXISTS `vestasactivas` (
@@ -4762,7 +4764,7 @@ CREATE TABLE IF NOT EXISTS `vestasactivas` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_abonos`
+-- Stand-in structure for view `vista_abonos`
 --
 CREATE TABLE IF NOT EXISTS `vista_abonos` (
 `Tabla` varchar(16)
@@ -4775,7 +4777,7 @@ CREATE TABLE IF NOT EXISTS `vista_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_compras_productos`
+-- Stand-in structure for view `vista_compras_productos`
 --
 CREATE TABLE IF NOT EXISTS `vista_compras_productos` (
 `ID` bigint(20)
@@ -4812,7 +4814,7 @@ CREATE TABLE IF NOT EXISTS `vista_compras_productos` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_compras_productos_devueltos`
+-- Stand-in structure for view `vista_compras_productos_devueltos`
 --
 CREATE TABLE IF NOT EXISTS `vista_compras_productos_devueltos` (
 `ID` bigint(20)
@@ -4849,7 +4851,7 @@ CREATE TABLE IF NOT EXISTS `vista_compras_productos_devueltos` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_compras_servicios`
+-- Stand-in structure for view `vista_compras_servicios`
 --
 CREATE TABLE IF NOT EXISTS `vista_compras_servicios` (
 `ID` bigint(20)
@@ -4877,7 +4879,7 @@ CREATE TABLE IF NOT EXISTS `vista_compras_servicios` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_entregas`
+-- Stand-in structure for view `vista_entregas`
 --
 CREATE TABLE IF NOT EXISTS `vista_entregas` (
 `Tabla` varchar(16)
@@ -4889,7 +4891,24 @@ CREATE TABLE IF NOT EXISTS `vista_entregas` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_kardex`
+-- Stand-in structure for view `vista_inventario_separados`
+--
+CREATE TABLE IF NOT EXISTS `vista_inventario_separados` (
+`ID` bigint(20) unsigned
+,`Referencia` varchar(45)
+,`Nombre` text
+,`Cantidad` decimal(32,0)
+,`Departamento` int(11)
+,`SubGrupo1` int(11)
+,`SubGrupo2` int(11)
+,`SubGrupo3` int(11)
+,`SubGrupo4` int(11)
+,`SubGrupo5` int(11)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_kardex`
 --
 CREATE TABLE IF NOT EXISTS `vista_kardex` (
 `ID` bigint(20)
@@ -4919,7 +4938,7 @@ CREATE TABLE IF NOT EXISTS `vista_kardex` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_ori_facturas`
+-- Stand-in structure for view `vista_ori_facturas`
 --
 CREATE TABLE IF NOT EXISTS `vista_ori_facturas` (
 `Fecha` date
@@ -4965,7 +4984,7 @@ CREATE TABLE IF NOT EXISTS `vista_ori_facturas` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_preventa`
+-- Stand-in structure for view `vista_preventa`
 --
 CREATE TABLE IF NOT EXISTS `vista_preventa` (
 `VestasActivas_idVestasActivas` int(11)
@@ -4996,7 +5015,7 @@ CREATE TABLE IF NOT EXISTS `vista_preventa` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_sistemas`
+-- Stand-in structure for view `vista_sistemas`
 --
 CREATE TABLE IF NOT EXISTS `vista_sistemas` (
 `ID` bigint(20)
@@ -5024,7 +5043,7 @@ CREATE TABLE IF NOT EXISTS `vista_sistemas` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_titulos_abonos`
+-- Stand-in structure for view `vista_titulos_abonos`
 --
 CREATE TABLE IF NOT EXISTS `vista_titulos_abonos` (
 `ID` bigint(20)
@@ -5050,7 +5069,7 @@ CREATE TABLE IF NOT EXISTS `vista_titulos_abonos` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_titulos_comisiones`
+-- Stand-in structure for view `vista_titulos_comisiones`
 --
 CREATE TABLE IF NOT EXISTS `vista_titulos_comisiones` (
 `ID` bigint(20)
@@ -5076,7 +5095,7 @@ CREATE TABLE IF NOT EXISTS `vista_titulos_comisiones` (
 -- --------------------------------------------------------
 
 --
--- Estructura Stand-in para la vista `vista_titulos_devueltos`
+-- Stand-in structure for view `vista_titulos_devueltos`
 --
 CREATE TABLE IF NOT EXISTS `vista_titulos_devueltos` (
 `ID` bigint(20)
@@ -5099,7 +5118,7 @@ CREATE TABLE IF NOT EXISTS `vista_titulos_devueltos` (
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_abonos`
+-- Structure for view `vista_abonos`
 --
 DROP TABLE IF EXISTS `vista_abonos`;
 
@@ -5108,7 +5127,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_compras_productos`
+-- Structure for view `vista_compras_productos`
 --
 DROP TABLE IF EXISTS `vista_compras_productos`;
 
@@ -5117,7 +5136,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_compras_productos_devueltos`
+-- Structure for view `vista_compras_productos_devueltos`
 --
 DROP TABLE IF EXISTS `vista_compras_productos_devueltos`;
 
@@ -5126,7 +5145,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_compras_servicios`
+-- Structure for view `vista_compras_servicios`
 --
 DROP TABLE IF EXISTS `vista_compras_servicios`;
 
@@ -5135,7 +5154,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_entregas`
+-- Structure for view `vista_entregas`
 --
 DROP TABLE IF EXISTS `vista_entregas`;
 
@@ -5144,7 +5163,16 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_kardex`
+-- Structure for view `vista_inventario_separados`
+--
+DROP TABLE IF EXISTS `vista_inventario_separados`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_inventario_separados` AS select `si`.`ID` AS `ID`,`si`.`Referencia` AS `Referencia`,`si`.`Nombre` AS `Nombre`,sum(`si`.`Cantidad`) AS `Cantidad`,`si`.`Departamento` AS `Departamento`,`si`.`SubGrupo1` AS `SubGrupo1`,`si`.`SubGrupo2` AS `SubGrupo2`,`si`.`SubGrupo3` AS `SubGrupo3`,`si`.`SubGrupo4` AS `SubGrupo4`,`si`.`SubGrupo5` AS `SubGrupo5` from (`separados_items` `si` join `separados` `s` on((`s`.`ID` = `si`.`idSeparado`))) where (`s`.`Estado` = 'Abierto') group by `si`.`Referencia`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_kardex`
 --
 DROP TABLE IF EXISTS `vista_kardex`;
 
@@ -5153,7 +5181,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_ori_facturas`
+-- Structure for view `vista_ori_facturas`
 --
 DROP TABLE IF EXISTS `vista_ori_facturas`;
 
@@ -5162,7 +5190,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_preventa`
+-- Structure for view `vista_preventa`
 --
 DROP TABLE IF EXISTS `vista_preventa`;
 
@@ -5171,7 +5199,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_sistemas`
+-- Structure for view `vista_sistemas`
 --
 DROP TABLE IF EXISTS `vista_sistemas`;
 
@@ -5180,7 +5208,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_titulos_abonos`
+-- Structure for view `vista_titulos_abonos`
 --
 DROP TABLE IF EXISTS `vista_titulos_abonos`;
 
@@ -5189,7 +5217,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_titulos_comisiones`
+-- Structure for view `vista_titulos_comisiones`
 --
 DROP TABLE IF EXISTS `vista_titulos_comisiones`;
 
@@ -5198,7 +5226,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `vista_titulos_devueltos`
+-- Structure for view `vista_titulos_devueltos`
 --
 DROP TABLE IF EXISTS `vista_titulos_devueltos`;
 

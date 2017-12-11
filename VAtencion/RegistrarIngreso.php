@@ -112,6 +112,7 @@ print("<body>");
         $css->CrearTabla();
             $DatosCartera=$obVenta->DevuelveValores("cartera", "Facturas_idFacturas", $idFactura);
             $DatosFactura=$obVenta->DevuelveValores("facturas", "idFacturas", $idFactura);
+            $DatosCliente=$obVenta->DevuelveValores("clientes", "idClientes", $DatosFactura["Clientes_idClientes"]);
                 if(empty($DatosCartera)){
                     $css->CrearNotificacionRoja("Error Esta factura no está en cartera", 16);
                     exit();
@@ -235,8 +236,22 @@ print("<body>");
             print("<br>");
         $css->CerrarDiv();
         print("<br>");
+       
+        $Parametros=$obVenta->DevuelveValores("parametros_contables", "ID", 20);
+        $CuentaAntipos=$Parametros["CuentaPUC"];
+        $Tercero=$DatosCliente["Num_Identificacion"];
+        $AntiposRecibidos=$obVenta->Sume("librodiario", "Neto", " WHERE `CuentaPUC` = '$CuentaAntipos' AND Tercero_Identificacion ='$Tercero'");
+        if($AntiposRecibidos<0){
+            $AntiposRecibidos=$AntiposRecibidos*(-1);
+        }else{
+            $AntiposRecibidos=0;
+        }
+        $css->CrearInputNumber("TxtAnticipos", "number", "Anticipos recibidos de este Cliente: $". number_format($AntiposRecibidos)."<br>", $AntiposRecibidos, "", "black", "onkeyup","CalculeTotalPagoIngreso()", 200,30, 0, 0, 1, $AntiposRecibidos, 1);
+        
+        //print("<br>");
+        print("<br>");
         $css->CrearInputNumber("TxtPagoH", "hidden", "", $DatosCartera["Saldo"], "", "", "","", "", 30,1, 1, 1, 1, "", "any");
-        $css->CrearInputNumber("TxtPago", "number", "Total Pago: <br>", $DatosCartera["Saldo"], "", "black", "","", 200,30, 0, 0, 1, $DatosCartera["Saldo"], 1);
+        $css->CrearInputNumber("TxtPago", "number", "Total Pago: <br>", $DatosCartera["Saldo"]-$AntiposRecibidos, "", "black", "","", 200,30, 0, 0, 1, $DatosCartera["Saldo"], 1);
         print("<br>");
         $css->CrearBotonConfirmado("BtnGuardarPago","Guardar");	
             

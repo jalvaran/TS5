@@ -2,10 +2,10 @@
 -- version 4.1.12
 -- http://www.phpmyadmin.net
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2017 a las 09:07:06
--- Versión del servidor: 5.6.16
--- Versión de PHP: 5.5.11
+-- Host: 127.0.0.1
+-- Generation Time: Nov 24, 2017 at 09:23 AM
+-- Server version: 5.6.16
+-- PHP Version: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,18 +17,45 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `ts5`
+-- Database: `ts5`
 --
 
 --
--- Volcado de datos para la tabla `centrocosto`
+-- Dumping data for table `autorizaciones_generales`
+--
+
+INSERT INTO `autorizaciones_generales` (`ID`, `Proceso`, `Clave`, `Updated`, `Sync`) VALUES
+(1, 'Ventas Rapidas', '1234', '2017-10-13 18:07:53', '2017-10-13 13:07:53');
+
+--
+-- Dumping data for table `bodega`
+--
+
+INSERT INTO `bodega` (`idBodega`, `Nombre`, `Direccion`, `Ciudad`, `Telefono`, `idServidor`, `Updated`, `Sync`) VALUES
+(1, 'BODEGA LOCAL ', '', 'BUGA', '', 2, '2017-10-13 18:07:55', '2017-10-13 13:07:55'),
+(2, 'BODEGA YOTOCO', '', 'YOTOCO', '', 4, '2017-10-13 18:07:55', '2017-10-13 13:07:55'),
+(3, 'BODEGA BUGA', '', 'BUGA', '', 3, '2017-10-13 18:07:55', '2017-10-13 13:07:55'),
+(4, 'BODEGA GINEBRA', '', 'GINEBRA', '', 5, '2017-10-13 18:07:55', '2017-10-13 13:07:55'),
+(5, 'BODEGA SAN PEDRO', '', 'SAN PEDRO', '', 6, '2017-10-13 18:07:55', '2017-10-13 13:07:55');
+
+--
+-- Dumping data for table `cajas`
+--
+
+INSERT INTO `cajas` (`ID`, `Nombre`, `Base`, `idUsuario`, `Estado`, `CuentaPUCEfectivo`, `CuentaPUCCheques`, `CuentaPUCOtros`, `CuentaPUCIVAEgresos`, `idTerceroIntereses`, `CentroCostos`, `idResolucionDian`, `Updated`, `Sync`) VALUES
+(1, 'CAJA 1', '200000', 3, 'ABIERTA', 110510, 11100502, 11100503, 240801, 900833180, 1, 1, '2017-10-13 18:07:57', '2017-10-13 13:07:57'),
+(2, 'CAJA 2', '200000', 1, 'ABIERTA', 11051002, 11100502, 11100503, 240801, 900833180, 1, 2, '2017-10-13 18:07:57', '2017-10-13 13:07:57'),
+(3, 'CAJA 3', '150000', 0, 'ABIERTA', 11051002, 11100502, 11100503, 240801, 900833180, 1, 1, '2017-10-13 18:07:57', '2017-10-13 13:07:57');
+
+--
+-- Dumping data for table `centrocosto`
 --
 
 INSERT INTO `centrocosto` (`ID`, `Nombre`, `EmpresaPro`, `Updated`, `Sync`) VALUES
 (1, 'PRINCIPAL', 1, '2017-10-13 18:08:07', '2017-10-13 13:08:07');
 
 --
--- Volcado de datos para la tabla `ciuu`
+-- Dumping data for table `ciuu`
 --
 
 INSERT INTO `ciuu` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
@@ -759,7 +786,7 @@ INSERT INTO `ciuu` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
 (9900, ' Actividades de organizaciones y entidades extraterritoriales.', '2017-10-13 18:08:11', '2017-10-13 13:08:11');
 
 --
--- Volcado de datos para la tabla `clasecuenta`
+-- Dumping data for table `clasecuenta`
 --
 
 INSERT INTO `clasecuenta` (`PUC`, `Clase`, `Valor`, `Updated`, `Sync`) VALUES
@@ -774,7 +801,7 @@ INSERT INTO `clasecuenta` (`PUC`, `Clase`, `Valor`, `Updated`, `Sync`) VALUES
 ('9', 'Cuentas de orden Acreedoras', '0', '2017-10-13 18:08:16', '2017-10-13 13:08:16');
 
 --
--- Volcado de datos para la tabla `cod_departamentos`
+-- Dumping data for table `cod_departamentos`
 --
 
 INSERT INTO `cod_departamentos` (`Cod_dpto`, `Nombre`, `Updated`, `Sync`) VALUES
@@ -813,7 +840,7 @@ INSERT INTO `cod_departamentos` (`Cod_dpto`, `Nombre`, `Updated`, `Sync`) VALUES
 (99, 'VICHADA', '2017-10-13 18:08:27', '2017-10-13 13:08:27');
 
 --
--- Volcado de datos para la tabla `cod_documentos`
+-- Dumping data for table `cod_documentos`
 --
 
 INSERT INTO `cod_documentos` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
@@ -833,7 +860,7 @@ INSERT INTO `cod_documentos` (`Codigo`, `Descripcion`, `Updated`, `Sync`) VALUES
 (46, 'Carn? Diplom?tico: Documento expedido por el Ministerio de relaciones Exteriores a los miembros de la misiones diplom?ticas y consulares, con el que se deben identificar ente las autoridades nacionale', '2017-10-13 18:08:29', '2017-10-13 13:08:29');
 
 --
--- Volcado de datos para la tabla `cod_municipios_dptos`
+-- Dumping data for table `cod_municipios_dptos`
 --
 
 INSERT INTO `cod_municipios_dptos` (`ID`, `Cod_mcipio`, `Cod_Dpto`, `Departamento`, `Ciudad`, `Updated`, `Sync`) VALUES
@@ -1961,7 +1988,7 @@ INSERT INTO `cod_municipios_dptos` (`ID`, `Cod_mcipio`, `Cod_Dpto`, `Departament
 ('ID', 'idMcipio', 0, 'depat', 'muni', '2017-10-13 18:08:32', '2017-10-13 13:08:32');
 
 --
--- Volcado de datos para la tabla `cod_paises`
+-- Dumping data for table `cod_paises`
 --
 
 INSERT INTO `cod_paises` (`Codigo`, `Pais`, `Updated`, `Sync`) VALUES
@@ -2213,21 +2240,21 @@ INSERT INTO `cod_paises` (`Codigo`, `Pais`, `Updated`, `Sync`) VALUES
 (999, 'NO DECLARADOS', '2017-10-13 18:08:36', '2017-10-13 13:08:36');
 
 --
--- Volcado de datos para la tabla `configuracion_general`
+-- Dumping data for table `configuracion_general`
 --
 
 INSERT INTO `configuracion_general` (`ID`, `Descripcion`, `Valor`) VALUES
 (1, 'RUTA PARA EXPORTAR TABLAS EN CSV', '../../htdocs/sctv5/exports/tabla.csv');
 
 --
--- Volcado de datos para la tabla `config_codigo_barras`
+-- Dumping data for table `config_codigo_barras`
 --
 
 INSERT INTO `config_codigo_barras` (`ID`, `TituloEtiqueta`, `DistaciaEtiqueta1`, `DistaciaEtiqueta2`, `DistaciaEtiqueta3`, `AlturaLinea1`, `AlturaLinea2`, `AlturaLinea3`, `AlturaLinea4`, `AlturaLinea5`, `AlturaCodigoBarras`, `Updated`, `Sync`) VALUES
 (1, 'TRAKI', 10, 280, 560, 1, 20, 40, 60, 120, 30, '2017-10-13 18:09:32', '2017-10-13 13:09:32');
 
 --
--- Volcado de datos para la tabla `config_puertos`
+-- Dumping data for table `config_puertos`
 --
 
 INSERT INTO `config_puertos` (`ID`, `Puerto`, `Utilizacion`, `Habilitado`, `Updated`, `Sync`) VALUES
@@ -2235,14 +2262,14 @@ INSERT INTO `config_puertos` (`ID`, `Puerto`, `Utilizacion`, `Habilitado`, `Upda
 (2, 'COM5', 'IMPRESORA CODIGO DE BARRAS', 'SI', '2017-10-13 18:09:34', '2017-10-13 13:09:34');
 
 --
--- Volcado de datos para la tabla `config_tiketes_promocion`
+-- Dumping data for table `config_tiketes_promocion`
 --
 
 INSERT INTO `config_tiketes_promocion` (`ID`, `NombreTiket`, `Tope`, `Multiple`, `Activo`, `Updated`, `Sync`) VALUES
 (1, 'PROMOCION DEL MES', '10000', 'NO', 'NO', '2017-10-13 18:09:36', '2017-10-13 13:09:36');
 
 --
--- Volcado de datos para la tabla `costos`
+-- Dumping data for table `costos`
 --
 
 INSERT INTO `costos` (`idCostos`, `NombreCosto`, `ValorCosto`, `Updated`, `Sync`) VALUES
@@ -2275,7 +2302,7 @@ INSERT INTO `costos` (`idCostos`, `NombreCosto`, `ValorCosto`, `Updated`, `Sync`
 (27, 'ARRIENDO', 50000, '2017-10-13 18:09:38', '2017-10-13 13:09:38');
 
 --
--- Volcado de datos para la tabla `cuentas`
+-- Dumping data for table `cuentas`
 --
 
 INSERT INTO `cuentas` (`idPUC`, `Nombre`, `Valor`, `GupoCuentas_PUC`, `Updated`, `Sync`) VALUES
@@ -2616,7 +2643,7 @@ INSERT INTO `cuentas` (`idPUC`, `Nombre`, `Valor`, `GupoCuentas_PUC`, `Updated`,
 ('9399', 'Ajustes por inflaci?n patrimonio', '0', '93', '2017-10-13 18:09:54', '2017-10-13 13:09:54');
 
 --
--- Volcado de datos para la tabla `cuentasfrecuentes`
+-- Dumping data for table `cuentasfrecuentes`
 --
 
 INSERT INTO `cuentasfrecuentes` (`CuentaPUC`, `Nombre`, `ClaseCuenta`, `UsoFuturo`, `Updated`, `Sync`) VALUES
@@ -2627,7 +2654,7 @@ INSERT INTO `cuentasfrecuentes` (`CuentaPUC`, `Nombre`, `ClaseCuenta`, `UsoFutur
 ('523505', 'Aseo y vigilacia', 'EGRESOS', '', '2017-10-13 18:09:57', '2017-10-13 13:09:57');
 
 --
--- Volcado de datos para la tabla `documentos_generados`
+-- Dumping data for table `documentos_generados`
 --
 
 INSERT INTO `documentos_generados` (`ID`, `Nombre`, `Abreviatura`, `Libro`, `Updated`, `Sync`) VALUES
@@ -2640,7 +2667,7 @@ INSERT INTO `documentos_generados` (`ID`, `Nombre`, `Abreviatura`, `Libro`, `Upd
 (7, 'VENTA DE TITULO', 'VT', 'VentaTitulo', '2017-10-13 18:10:11', '2017-10-13 13:10:11');
 
 --
--- Volcado de datos para la tabla `egresos_activos`
+-- Dumping data for table `egresos_activos`
 --
 
 INSERT INTO `egresos_activos` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Updated`, `Sync`) VALUES
@@ -2650,7 +2677,7 @@ INSERT INTO `egresos_activos` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `
 (4, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-10-13 18:10:18', '2017-10-13 13:10:18');
 
 --
--- Volcado de datos para la tabla `egresos_tipo`
+-- Dumping data for table `egresos_tipo`
 --
 
 INSERT INTO `egresos_tipo` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Updated`, `Sync`) VALUES
@@ -2672,22 +2699,22 @@ INSERT INTO `egresos_tipo` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Upd
 (53, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-10-13 18:10:28', '2017-10-13 13:10:28');
 
 --
--- Volcado de datos para la tabla `empresapro`
+-- Dumping data for table `empresapro`
 --
 
 INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Telefono`, `Celular`, `Ciudad`, `ResolucionDian`, `Regimen`, `Email`, `WEB`, `ObservacionesLegales`, `PuntoEquilibrio`, `DatosBancarios`, `RutaImagen`, `FacturaSinInventario`, `CXPAutomaticas`, `Updated`, `Sync`) VALUES
-(1, 'TECHNO SOLUCIONES SAS', '900833180-7', 'CARRERA 17 7 18', '3177740609', '3177740609', 'BUGA', 'IVA REGIMEN COMUN\r\nACTIVIDAD ECONOMICA CIIU 8020\r\n', 'COMUN', 'info@technosoluciones.com', 'www.technosoluciones.com', 'Esta Factura de Venta se asimila en todos sus efectos a una letra de cambio (Art. 621 y siguientes del Codigo de Comercio). En caso de mora se causaran los intereses legales Vigentes. Cuenta', '5000000', 'DATOS BANCARIOS: BANCOLOMBIA CUENTA DE AHORROS 848-232213-03 A NOMBRE DE TECNOAGRO R.L. SAS ', 'LogosEmpresas/logotipo1.png', 'SI', '1', '2017-10-13 18:10:34', '2017-10-13 13:10:34');
+(1, 'TECHNO SOLUCIONES SAS', '900833180-7', 'CARRERA 17 7 18', '3177740609', '3177740609', 'BUGA', 'IVA REGIMEN COMUN\r\nACTIVIDAD ECONOMICA CIIU 8020\r\n', 'COMUN', 'info@technosoluciones.com', 'www.technosoluciones.com', 'Esta Factura de Venta se asimila en todos sus efectos a una letra de cambio (Art. 621 y siguientes del Codigo de Comercio). En caso de mora se causaran los intereses legales Vigentes. Cuenta', '5000000', 'DATOS BANCARIOS: BANCOLOMBIA CUENTA DE AHORROS 848-232213-03 A NOMBRE DE TECNOAGRO R.L. SAS ', 'LogosEmpresas/logotipo1.png', 'SI', 'SI', '2017-11-20 13:53:16', '2017-10-13 13:10:34');
 
 --
--- Volcado de datos para la tabla `empresapro_resoluciones_facturacion`
+-- Dumping data for table `empresapro_resoluciones_facturacion`
 --
 
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`, `Updated`, `Sync`) VALUES
-(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-10-30 21:10:18', '2017-10-20 10:29:51'),
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2017-11-21 17:36:51', '2017-10-20 10:29:51'),
 (2, 'Facturas por POS', '1555431', '2016-03-28', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2017-10-13 18:10:36', '2017-10-13 13:10:36');
 
 --
--- Volcado de datos para la tabla `empresa_pro_sucursales`
+-- Dumping data for table `empresa_pro_sucursales`
 --
 
 INSERT INTO `empresa_pro_sucursales` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `idEmpresaPro`, `Visible`, `Actual`, `idServidor`, `Updated`, `Sync`) VALUES
@@ -2697,7 +2724,7 @@ INSERT INTO `empresa_pro_sucursales` (`ID`, `Nombre`, `Ciudad`, `Direccion`, `id
 (4, 'TECHNO SAN PEDRO', 'SAN PEDRO', '', 1, 'SI', '0', 0, '2017-10-13 18:10:31', '2017-10-13 13:10:31');
 
 --
--- Volcado de datos para la tabla `facturas_tipo_pago`
+-- Dumping data for table `facturas_tipo_pago`
 --
 
 INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`) VALUES
@@ -2709,7 +2736,7 @@ INSERT INTO `facturas_tipo_pago` (`ID`, `TipoPago`, `Leyenda`, `Updated`, `Sync`
 (6, 'SisteCredito', 'SisteCredito', '2017-10-13 19:10:35', '2017-10-13 14:10:35');
 
 --
--- Volcado de datos para la tabla `formatos_calidad`
+-- Dumping data for table `formatos_calidad`
 --
 
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES
@@ -2741,7 +2768,7 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 (26, 'ESTADO DE RESULTADO INTEGRAL', '001', 'F-GF-002', '2017-08-09', '', '2017-10-20 15:30:00', '2017-10-20 10:30:00');
 
 --
--- Volcado de datos para la tabla `gupocuentas`
+-- Dumping data for table `gupocuentas`
 --
 
 INSERT INTO `gupocuentas` (`PUC`, `Nombre`, `Valor`, `ClaseCuenta_PUC`, `Updated`, `Sync`) VALUES
@@ -2799,7 +2826,7 @@ INSERT INTO `gupocuentas` (`PUC`, `Nombre`, `Valor`, `ClaseCuenta_PUC`, `Updated
 ('96', 'Acreedoras de control por contra (DB)', '0', '9', '2017-10-13 19:10:42', '2017-10-13 14:10:42');
 
 --
--- Volcado de datos para la tabla `impret`
+-- Dumping data for table `impret`
 --
 
 INSERT INTO `impret` (`idImpRet`, `Nombre`, `Tipo`, `Valor`, `CuentaRetFavor`, `CuentaRetRealizadas`, `Aplicable_A`, `Updated`, `Sync`) VALUES
@@ -2814,7 +2841,7 @@ INSERT INTO `impret` (`idImpRet`, `Nombre`, `Tipo`, `Valor`, `CuentaRetFavor`, `
 (9, 'Impuesto de industria y comercio retenido, las tarifas dependen de la ciudad y actividad', 'RetencionAplicada', '0.009', '', '2368', 'Subtotal', '2017-10-13 19:10:46', '2017-10-13 14:10:46');
 
 --
--- Volcado de datos para la tabla `menu`
+-- Dumping data for table `menu`
 --
 
 INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES
@@ -2845,17 +2872,18 @@ INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `
 (25, 'Marketing', 1, 'MnuPublicidad.php', '_BLANK', 1, 'pub.png', 17, '2017-10-17 01:26:13', '2017-10-13 14:16:49');
 
 --
--- Volcado de datos para la tabla `menu_carpetas`
+-- Dumping data for table `menu_carpetas`
 --
 
 INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES
 (1, '', '2017-10-13 19:16:51', '2017-10-13 14:16:51'),
 (2, '../', '2017-10-13 19:16:51', '2017-10-13 14:16:51'),
 (3, '../VAtencion/', '2017-10-13 19:16:51', '2017-10-13 14:16:51'),
-(4, '../VMenu/', '2017-10-13 19:16:51', '2017-10-13 14:16:51');
+(4, '../VMenu/', '2017-10-13 19:16:51', '2017-10-13 14:16:51'),
+(5, '../Graficos/', '2017-10-13 19:16:51', '2017-10-13 14:16:51');
 
 --
--- Volcado de datos para la tabla `menu_pestanas`
+-- Dumping data for table `menu_pestanas`
 --
 
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES
@@ -2896,7 +2924,7 @@ INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updat
 (35, 'Publicidad', 25, 1, b'1', '2017-10-13 19:16:55', '2017-10-13 14:16:55');
 
 --
--- Volcado de datos para la tabla `menu_submenus`
+-- Dumping data for table `menu_submenus`
 --
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES
@@ -3011,10 +3039,13 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 (109, 'Historial de Eliminaciones', 21, 3, 'registra_eliminaciones.php', '_SELF', b'1', 'papelera.png', 3, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (110, 'Resumen de facturacion X Fecha', 12, 3, 'facturacionxfecha.php', '_SELF', b'1', 'fecha.png', 4, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (111, 'Historial detallado', 33, 3, 'traslados_items.php', '_SELF', b'1', 'historial2.png', 4, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
-(112, 'Sistemas', 27, 3, 'sistemas.php', '_SELF', b'1', 'sistem.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57');
+(112, 'Sistemas', 27, 3, 'sistemas.php', '_SELF', b'1', 'sistem.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
+(113, 'Inventario de Separados', 22, 3, 'vista_inventario_separados.php', '_SELF', b'1', 'inventario_separados.png', 4, '2017-11-20 20:41:49', '2017-10-13 14:16:57'),
+(114, 'Comparacion Anual', 9, 5, 'YearsComparison.php', '_SELF', b'1', 'anualcomp.jpg', 6, '2017-11-23 18:19:43', '2017-10-13 14:16:57'),
+(115, 'Comparacion Diaria', 9, 5, 'DiasComparacion.php', '_SELF', b'1', 'diascomp.png', 6, '2017-10-13 19:16:57', '2017-10-13 14:16:57');
 
 --
--- Volcado de datos para la tabla `paginas`
+-- Dumping data for table `paginas`
 --
 
 INSERT INTO `paginas` (`ID`, `Nombre`, `TipoPagina`, `Visible`, `Updated`, `Sync`) VALUES
@@ -3118,7 +3149,7 @@ INSERT INTO `paginas` (`ID`, `Nombre`, `TipoPagina`, `Visible`, `Updated`, `Sync
 (98, 'facturas_abonos.php', 'Vista', 1, '2017-10-13 19:28:37', '2017-10-13 14:28:37');
 
 --
--- Volcado de datos para la tabla `paginas_bloques`
+-- Dumping data for table `paginas_bloques`
 --
 
 INSERT INTO `paginas_bloques` (`ID`, `TipoUsuario`, `Pagina`, `Habilitado`, `Updated`, `Sync`) VALUES
@@ -3181,7 +3212,7 @@ INSERT INTO `paginas_bloques` (`ID`, `TipoUsuario`, `Pagina`, `Habilitado`, `Upd
 (58, 'bodega', 'EditarRegistro.php', 'SI', '2017-10-13 19:28:40', '2017-10-13 14:28:40');
 
 --
--- Volcado de datos para la tabla `parametros_contables`
+-- Dumping data for table `parametros_contables`
 --
 
 INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
@@ -3207,7 +3238,7 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 (20, 'Anticipos realizados por clientes', 280505, 'ANTICIPOS REALIZADOS POR CLIENTES', '2017-09-29 20:24:03', '2017-06-06 12:13:00');
 
 --
--- Volcado de datos para la tabla `plataforma_tablas`
+-- Dumping data for table `plataforma_tablas`
 --
 
 INSERT INTO `plataforma_tablas` (`ID`, `Nombre`, `Updated`, `Sync`) VALUES
@@ -3423,7 +3454,7 @@ INSERT INTO `plataforma_tablas` (`ID`, `Nombre`, `Updated`, `Sync`) VALUES
 (210, 'vestasactivas', '2017-10-13 23:45:47', '2017-10-13 18:45:47');
 
 --
--- Volcado de datos para la tabla `porcentajes_iva`
+-- Dumping data for table `porcentajes_iva`
 --
 
 INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `Factor`, `CuentaPUC`, `CuentaPUCIVAGenerado`, `NombreCuenta`, `Habilitado`, `Updated`, `Sync`) VALUES
@@ -3433,17 +3464,63 @@ INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `Factor`, `CuentaPUC`, `
 (4, 'IVA del 8%', '0.08', 'M', 24080502, 24081002, 'Impuestos del 8%', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
 (5, 'IVA del 16%', '0.16', 'M', 24080504, 24081004, 'Impuestos del 16%', 'NO', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
 (6, 'IVA del 19%', '0.19', 'M', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
-(7, 'ImpoConsumo Bolsas', '20', 'S', 24080511, 24081011, 'IMPUESTO AL CONSUMO DE BOLSAS', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50');
+(7, 'ImpoConsumo Bolsas', '20', 'S', 24080511, 24081011, 'IMPUESTO AL CONSUMO DE BOLSAS', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
+(8, 'impuesto del 1.9%', '0.019', 'M', 24080505, 24081005, 'Impuestos del 10% del 19%', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50');
 
 --
--- Volcado de datos para la tabla `publicidad_encabezado_cartel`
+-- Dumping data for table `productos_impuestos_adicionales`
+--
+
+INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
+(1, 'Impoconsumo', '216776', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS', '2017-10-13 19:30:39', '2017-10-13 14:30:39');
+
+--
+-- Dumping data for table `publicidad_encabezado_cartel`
 --
 
 INSERT INTO `publicidad_encabezado_cartel` (`ID`, `Titulo`, `ColorTitulo`, `Desde`, `Hasta`, `Mes`, `Anio`, `ColorRazonSocial`, `ColorPrecios`, `ColorBordes`, `Updated`, `Sync`) VALUES
 (1, 'DIA DEL PADRE', '#ff0000', 1, 30, 'Julio', 2017, '#ff0000', '#ff0000', '#58f1fa', '2017-10-13 19:37:10', '2017-10-13 14:37:10');
 
 --
--- Volcado de datos para la tabla `repuestas_forma_pago`
+-- Dumping data for table `publicidad_paginas`
+--
+
+INSERT INTO `publicidad_paginas` (`ID`, `idProducto`, `Observaciones`, `Updated`, `Sync`) VALUES
+(1, 216789, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(2, 216796, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(3, 216764, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(4, 216774, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(5, 216778, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(6, 216729, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(7, 216770, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(8, 216765, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(9, 216763, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(10, 216758, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(11, 216761, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(12, 216760, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(13, 216759, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(14, 216762, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(15, 216772, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(16, 216754, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(17, 216752, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(18, 216749, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(19, 216748, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(20, 216747, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(21, 216745, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(22, 216743, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(23, 216742, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(24, 216741, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(25, 216740, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(26, 216737, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(27, 216732, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(28, 216731, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(29, 216730, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(31, 216728, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(32, 216727, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
+(34, 1, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13');
+
+--
+-- Dumping data for table `repuestas_forma_pago`
 --
 
 INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, `Sync`) VALUES
@@ -3455,7 +3532,7 @@ INSERT INTO `repuestas_forma_pago` (`ID`, `DiasCartera`, `Etiqueta`, `Updated`, 
 (6, 'SisteCredito', 'SisteCredito', '2017-10-13 19:42:39', '2017-10-13 14:42:39');
 
 --
--- Volcado de datos para la tabla `respuestas_condicional`
+-- Dumping data for table `respuestas_condicional`
 --
 
 INSERT INTO `respuestas_condicional` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
@@ -3463,7 +3540,7 @@ INSERT INTO `respuestas_condicional` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
 (2, 'SI', '2017-10-13 19:42:43', '2017-10-13 14:42:43');
 
 --
--- Volcado de datos para la tabla `respuestas_tipo_item`
+-- Dumping data for table `respuestas_tipo_item`
 --
 
 INSERT INTO `respuestas_tipo_item` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
@@ -3472,19 +3549,7 @@ INSERT INTO `respuestas_tipo_item` (`ID`, `Valor`, `Updated`, `Sync`) VALUES
 (3, 'AQ', '2017-10-13 19:42:45', '2017-10-13 14:42:45');
 
 --
--- Volcado de datos para la tabla `servidores`
---
-
-INSERT INTO `servidores` (`ID`, `IP`, `Nombre`, `Usuario`, `Password`, `DataBase`, `Updated`, `Sync`) VALUES
-(1, '213.239.232.149', 'SERVIDOR GRUPO GENERAL', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_replica', '2017-10-13 19:43:12', '2017-10-13 14:43:12'),
-(2, '213.239.232.149', 'SERVIDOR PARA BACKUPS', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_replica', '2017-10-13 19:43:12', '2017-10-13 14:43:12'),
-(3, '213.239.232.149', 'SERVIDOR SUCURSAL BUGA', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_buga', '2017-10-13 19:43:12', '2017-10-13 14:43:12'),
-(4, '213.239.232.149', 'SERVIDOR SUCURSAL YOTOCO', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_yotoco', '2017-10-13 19:43:12', '2017-10-13 14:43:12'),
-(5, '213.239.232.149', 'SERVIDOR SUCURSAL GINEBRA', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_ginebra', '2017-10-13 19:43:12', '2017-10-13 14:43:12'),
-(6, '213.239.232.149', 'SERVIDOR SUCURSAL SAN PEDRO', 'kpenqfpg_root', 'pirlo1985', 'kpenqfpg_infinito_sanpedro', '2017-10-13 19:43:12', '2017-10-13 14:43:12');
-
---
--- Volcado de datos para la tabla `subcuentas`
+-- Dumping data for table `subcuentas`
 --
 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
@@ -3552,6 +3617,7 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (219525, ' Fondos y cooperativas', '0', '2195', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (219530, ' Directores', '0', '2195', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (219595, ' Otras', '0', '2195', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
+(220505, 'PROVEEDORES NACIONALES', NULL, '2205', '2017-11-20 13:33:20', '0000-00-00 00:00:00'),
 (233505, ' Gastos financieros', '0', '2335', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (233510, ' Gastos legales', '0', '2335', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (233515, ' Libros suscripciones periodicos y revistas', '0', '2335', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
@@ -3997,9 +4063,9 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (414005, 'Hoteler', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (414010, 'Campamento y otros tipos de hospedaje', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (414015, 'Restaurantes', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(414020, 'Bares y cantinas', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(414095, 'Actividades conexas', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
+(414020, 'Bares y cantinas', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
+(414095, 'Actividades conexas', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (414099, 'Ajustes por inflaci', '0', '4140', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (414505, 'Servicio de transporte por carretera', '0', '4145', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (414510, 'Servicio de transporte por v?a f?rrea', '0', '4145', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
@@ -4540,9 +4606,9 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (522060, 'Acueductos, plantas y redes', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (522065, 'Aer?dromos', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (522070, 'Semovientes', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(522095, 'Otros', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(522099, 'Ajustes por inflaci', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
+(522095, 'Otros', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
+(522099, 'Ajustes por inflaci', '0', '5220', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (522505, 'Contribuciones', '0', '5225', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (522510, 'Afiliaciones y sostenimiento', '0', '5225', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (522599, 'Ajustes por inflaci', '0', '5225', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
@@ -5054,16 +5120,16 @@ INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, 
 (11100501, 'CUENTA DE AHORROS DAVIVIENDA', '0', '1110', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (11100502, 'CHEQUES RECIBIDOS', NULL, '1110', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (11100503, 'BONOS U OTROS RECIBIDOS', NULL, '1110', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(13050517, 'CLIENTES NACIONALES SEGURIDAD ATLAS LTDA', '0', '1305', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
-(13559503, 'CUENTAS X COBRAR ANTICIPOS X GASTOS', NULL, '1355', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
+(13050517, 'CLIENTES NACIONALES SEGURIDAD ATLAS LTDA', '0', '1305', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES
+(13559503, 'CUENTAS X COBRAR ANTICIPOS X GASTOS', NULL, '1355', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (23657502, 'Autorretenciones (CREE)', '0', '2365', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (24080218, 'IVA DESCONTABLE X SERVICIOS Y GASTOS', NULL, '2408', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (24081004, 'IMPUESTO AL CONSUMO DE BOLSAS PLASTICAS', NULL, '2408', '2017-10-13 19:43:19', '2017-10-13 14:43:19'),
 (51950101, 'Peajes', '0', '5195', '2017-10-13 19:43:19', '2017-10-13 14:43:19');
 
 --
--- Volcado de datos para la tabla `tablas_ventas`
+-- Dumping data for table `tablas_ventas`
 --
 
 INSERT INTO `tablas_ventas` (`ID`, `NombreTabla`, `idTabla`, `TipoVenta`, `IVAIncluido`, `CuentaPUCDefecto`, `Updated`, `Sync`) VALUES
@@ -5072,7 +5138,7 @@ INSERT INTO `tablas_ventas` (`ID`, `NombreTabla`, `idTabla`, `TipoVenta`, `IVAIn
 (3, 'productosalquiler', 'idProductosVenta', 'ALQUILER DE SERVICIOS', 'SI', '4135', '2017-10-13 19:43:29', '2017-10-13 14:43:29');
 
 --
--- Volcado de datos para la tabla `tarjetas_forma_pago`
+-- Dumping data for table `tarjetas_forma_pago`
 --
 
 INSERT INTO `tarjetas_forma_pago` (`ID`, `Tipo`, `Nombre`, `PorcentajeComision`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
@@ -5081,16 +5147,7 @@ INSERT INTO `tarjetas_forma_pago` (`ID`, `Tipo`, `Nombre`, `PorcentajeComision`,
 (3, 'DEBITO', 'TARJETAS DEBITO', 0, 11100501, 'CUENTA DE AHORROS DAVIVIENDA', '2017-10-13 19:43:32', '2017-10-13 14:43:32');
 
 --
--- Volcado de datos para la tabla `tiposretenciones`
---
-
-INSERT INTO `tiposretenciones` (`ID`, `Nombre`, `CuentaPasivo`, `NombreCuentaPasivo`, `CuentaActivo`, `NombreCuentaActivo`, `Updated`, `Sync`) VALUES
-(1, 'RETENCION EN LA FUENTE', '236540', 'Rete Fuente x compras', '135515', 'Anticipo de Impuestos Retefuente', '2017-10-13 19:43:34', '2017-10-13 14:43:34'),
-(2, 'RETEIVA', '236701', 'IVA retenido', '135517', 'Anticipo de Impuestos ReteIVA', '2017-10-13 19:43:34', '2017-10-13 14:43:34'),
-(3, 'RETE-ICA', '2368', 'Rete Fuente x ICA', '135518', 'Anticipo de Impuestos ReteICA', '2017-10-13 19:43:34', '2017-10-13 14:43:34');
-
---
--- Volcado de datos para la tabla `traslados_estados`
+-- Dumping data for table `traslados_estados`
 --
 
 INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`, `Updated`, `Sync`) VALUES
@@ -5102,7 +5159,7 @@ INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`, `Updated`, `Sync
 (6, 'EN DESARROLLO', 'estado inicial mientras se agregan items ', '2017-10-13 19:44:43', '2017-10-13 14:44:43');
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`idUsuarios`, `Nombre`, `Apellido`, `Identificacion`, `Telefono`, `Login`, `Password`, `TipoUser`, `Email`, `Role`, `Updated`, `Sync`) VALUES
@@ -5110,17 +5167,6 @@ INSERT INTO `usuarios` (`idUsuarios`, `Nombre`, `Apellido`, `Identificacion`, `T
 (2, 'ADMINISTRADOR', 'SOFTCONTECH', '1', '1', 'administrador', 'administrador', 'operador', 'no@no.com', 'SUPERVISOR', '2017-10-13 19:44:50', '2017-10-13 14:44:50'),
 (3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2017-10-13 19:44:50', '2017-10-13 14:44:50'),
 (4, 'OPERADOR', 'OPERADOR ', '11111', '1', 'operador', 'demo', 'administrador', 'operador', 'prueba', '2017-10-13 19:44:50', '2017-10-13 14:44:50');
-
---
--- Volcado de datos para la tabla `usuarios_tipo`
---
-
-INSERT INTO `usuarios_tipo` (`ID`, `Tipo`, `Updated`, `Sync`) VALUES
-(1, 'administrador', '2017-10-13 19:44:56', '2017-10-13 14:44:56'),
-(2, 'operador', '2017-10-13 19:44:56', '2017-10-13 14:44:56'),
-(3, 'comercial', '2017-10-13 19:44:56', '2017-10-13 14:44:56'),
-(4, 'cajero', '2017-10-13 19:44:56', '2017-10-13 14:44:56'),
-(5, 'bodega', '2017-10-13 19:44:56', '2017-10-13 14:44:56');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

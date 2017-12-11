@@ -359,6 +359,7 @@ function CalculeTotalPagoIngreso() {
 	var ReteIVA;
 	var ReteICA;
         var Otros;
+        var Anticipos;
 	var Total;
 	var TotalPago;
         
@@ -367,8 +368,8 @@ function CalculeTotalPagoIngreso() {
 	ReteICA = document.getElementById("TxtReteICA").value;
         Otros = document.getElementById("TxtOtrosDescuentos").value;
         Total = document.getElementById("TxtPagoH").value;
-        
-	TotalPago= Total - Retefuente - ReteIVA - ReteICA - Otros;
+        Anticipos = document.getElementById("TxtAnticipos").value;
+	TotalPago= Total - Retefuente - ReteIVA - ReteICA - Otros - Anticipos;
 	
 	document.getElementById("TxtPago").value = TotalPago;
 

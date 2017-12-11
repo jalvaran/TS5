@@ -127,7 +127,8 @@ print("<body>");
             $css->CrearInputText("TxtNombre", "text", "", "", "Nombre", "", "", "", 300, 30, 0, 1);
             print("</td>");
             print("<td style='text-align:center'>");
-            $css->CrearInputNumber("TxtExistencias", "number", "", 0, "Existencias", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            
+            $css->CrearInputNumber("TxtExistencias", "number", "", 0, "Existencias", "", "", "", 100, 30, 1, 1, 0, "", "any");
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 100, 30, 0, 1, 0, "", "any");
