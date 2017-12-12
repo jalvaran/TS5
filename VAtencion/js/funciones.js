@@ -879,3 +879,236 @@ function CalculePorcentajeICACompra(Subtotal,Servicios=0){
         document.getElementById('TxtPorReteICAServicios').value=Porcentaje;
     }    
 }
+
+
+function ValidarUploads() {
+    //Valida Archivo de Consultas
+    flag_envia=1;
+    if(document.getElementById("UpAC").value){
+        NombreAC = document.getElementById("UpAC").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AC'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAC').value="";
+           document.getElementById('DivAC').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Consultas debe empezar por AC</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAC').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>"; 
+        }
+        
+    }else{
+        document.getElementById('DivAC').value="";
+        document.getElementById('DivAC').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    //Valida Archivo de Hospitalizaciones
+    
+    if(document.getElementById("UpAH").value){
+        NombreAC = document.getElementById("UpAH").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AH'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAH').value="";
+           document.getElementById('DivAH').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Hospitalizaciones debe empezar por AH</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAH').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAH').value="";
+        document.getElementById('DivAH').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    //Valida Archivo de Medicamentos
+    
+    if(document.getElementById("UpAM").value){
+        NombreAC = document.getElementById("UpAM").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AM'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAM').value="";
+           document.getElementById('DivAM').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Medicamentos debe empezar por AM</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAM').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAM').value="";
+        document.getElementById('DivAM').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+      
+    //Valida Archivo de Procedimientos
+    
+    if(document.getElementById("UpAP").value){
+        NombreAC = document.getElementById("UpAP").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AP'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAP').value="";
+           document.getElementById('DivAP').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Procedimientos debe empezar por AP</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAP').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAP').value="";
+        document.getElementById('DivAP').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    
+    //Valida Archivo de Otros Servicios
+    
+    if(document.getElementById("UpAT").value){
+        NombreAC = document.getElementById("UpAT").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AT'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAT').value="";
+           document.getElementById('DivAT').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Otros Procedimientos debe empezar por AT</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAT').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAT').value="";
+        document.getElementById('DivAT').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    
+    //Valida Archivo de Usuarios
+    
+    if(document.getElementById("UpUS").value){
+        NombreAC = document.getElementById("UpUS").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='US'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivUS').value="";
+           document.getElementById('DivUS').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Usuarios debe empezar por US</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivUS').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivUS').value="";
+        document.getElementById('DivUS').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    
+    //Valida Archivo de Facturas
+    
+    if(document.getElementById("UpAF").value){
+        NombreAC = document.getElementById("UpAF").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AF'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAF').value="";
+           document.getElementById('DivAF').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Facturas debe empezar por AF</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAF').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAF').value="";
+        document.getElementById('DivAF').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    
+    
+    //Valida Archivo de Errores
+    
+    if(document.getElementById("UpAD").value){
+        NombreAC = document.getElementById("UpAD").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AD'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAD').value="";
+           document.getElementById('DivAD').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Errores debe empezar por AD</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAD').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAD').value="";
+        document.getElementById('DivAD').innerHTML = "<FONT COLOR='orange'>Este Archivo No Es Obligatorio!</FONT>";
+           
+        
+    }
+    
+    if(flag_envia==1){
+        EnviaForm('FrmArchivos');
+    }else{
+        alert("Faltan archivos o algunos no son correctos");
+    }
+    
+   
+}
+
+
+function ValidaRIPSPagos(){
+    //Valida Archivo de Pagos
+    flag_envia=1;
+    if(document.getElementById("UpAR").value){
+        NombreAC = document.getElementById("UpAR").files[0].name;
+        Inicial=NombreAC.substring(0,2);
+        
+        if(Inicial!='AR'){
+           //alert("El nombre del archivo seleccionado para Consultas debe empezar por AC");
+           document.getElementById('DivAR').value="";
+           document.getElementById('DivAR').innerHTML = "<FONT COLOR='red'>Archivo incorrecto!, El nombre del archivo seleccionado para Pagos debe empezar por AR</FONT>";
+           flag_envia=0;
+        }else{
+           document.getElementById('DivAR').innerHTML="<FONT COLOR='green'>Nombre de Archivo Correcto!</FONT>";
+     
+        }
+        
+    }else{
+        document.getElementById('DivAR').value="";
+        document.getElementById('DivAR').innerHTML = "<FONT COLOR='red'>Archivo Obligatorio!</FONT>";
+           
+        flag_envia=0;
+    }
+    
+    if(flag_envia==1){
+        EnviaForm('FrmRipsPagos');
+        //alert("Enviado");
+    }else{
+        alert("No se hay ningun archivo o no es valido");
+    }
+    
+}

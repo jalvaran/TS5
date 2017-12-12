@@ -41,3 +41,11 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (115, 'Comparacion Diaria', '9', '5', 'DiasComparacion.php', '_SELF', b'1', 'diascomp.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES (5, '../Graficos/', '2017-10-13 14:16:51', '2017-10-13 14:16:51');
+
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (26, 'Salud', '1', 'MnuSalud.php', '_BLANK', '0', 'salud.png', '18', '2017-10-16 20:26:13', '2017-10-13 14:16:49');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (116, 'Subir RIPS Generados', '36', '5', 'Salud_SubirRips.php', '_SELF', b'1', 'upload2.png', '1', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (36, 'RIPS', '26', '1', b'1', '2017-10-13 14:16:55', '2017-10-13 14:16:55');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (117, 'Subir RIPS de pago', '36', '3', 'Salud_SubirRipsPagos.php', '_SELF', b'1', 'upload.png', '1', '2017-12-11 10:44:06', '2017-10-13 14:16:57');
