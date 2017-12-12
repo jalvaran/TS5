@@ -10,7 +10,7 @@ $obRips = new Rips($idUser);
 	
 print("<html>");
 print("<head>");
-$css =  new CssIni("Subir Rips");
+$css =  new CssIni("Archivos Internos");
 
 print("</head>");
 print("<body>");

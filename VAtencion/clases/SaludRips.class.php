@@ -162,5 +162,84 @@ class Rips extends ProcesoVenta{
         }
         
     }
+    
+    // insertar Rips de Medicamentos generados a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsMedicamentos($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        if(!empty($_FILES['UpAM']['type'])){
+            $TipoArchivo=$_FILES['UpAM']['type'];
+            $NombreArchivo=$_FILES['UpAM']['name'];
+            $handle = fopen($_FILES['UpAM']['tmp_name'], "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_archivo_medicamentos_temp` "
+              . "(`id_medicamentos`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `cod_medicamento`,  `tipo_medicamento`, `forma_farmaceutica`, `nom_medicamento`,`concentracion_medic`, `um_medicamento`, `num_und_medic`, `valor_unit_medic`, `valor_total_medic`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                    
+                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            $sql="";
+            fclose($handle); 
+        }
+        
+    }
+    
+    // insertar Rips de procedimientos generados a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsProcedimientos($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        if(!empty($_FILES['UpAP']['type'])){
+            $TipoArchivo=$_FILES['UpAP']['type'];
+            $NombreArchivo=$_FILES['UpAP']['name'];
+            $handle = fopen($_FILES['UpAP']['tmp_name'], "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_archivo_procedimientos_temp` "
+              . "(`id_procedimiento`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `fecha_procedimiento`, `num_autorizacion`, `cod_procedimiento`, `ambito_reali_procedimiento`, `finalidad_procedimiento`, `personal_atiende`, `cod_diagn_princ_procedimiento`, `cod_diagn_relac_procedimiento`, `complicaciones`, `realizacion_quirurgico`, `valor_procedimiento`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                    
+                    
+                    if($data[4]<>""){
+                       $FechaArchivo= explode("/", $data[4]);
+                       if(count($FechaArchivo)>1){
+                           $FechaConsulta= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{
+                           $FechaConsulta=$data[4];
+                       }
+                       
+                    }else{
+                       $FechaConsulta="0000-00-00";
+                    }
+                    
+                    
+                    
+                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$FechaConsulta', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]','$data[14]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            fclose($handle); 
+            $sql="";
+        }
+        
+    }
     //Fin Clases
 }
