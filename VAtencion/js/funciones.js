@@ -884,6 +884,11 @@ function CalculePorcentajeICACompra(Subtotal,Servicios=0){
 function ValidarUploads() {
     //Valida Archivo de Consultas
     flag_envia=1;
+    if(document.getElementById("CmbTipoNegociacion").value==''){
+        alert("Debe seleccionar un tipo de negociacion");
+        document.getElementById("CmbTipoNegociacion").focus();
+        return;
+    }
     if(document.getElementById("UpAC").value){
         NombreAC = document.getElementById("UpAC").files[0].name;
         Inicial=NombreAC.substring(0,2);

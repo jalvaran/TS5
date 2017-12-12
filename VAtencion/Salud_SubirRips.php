@@ -1,8 +1,10 @@
 <?php 
 $myPage="Salud_SubirRips.php";
 include_once("../sesiones/php_control.php");
+include_once("clases/SaludRips.class.php");
 include_once("css_construct.php");
 $obVenta = new ProcesoVenta($idUser);
+$obRips = new Rips($idUser);
 //////Si recibo un cliente
 
 	
@@ -12,9 +14,7 @@ $css =  new CssIni("Subir Rips");
 
 print("</head>");
 print("<body>");
-    
-    include_once("procesadores/Salud_SubirRips.process.php");
-    
+       
     $css->CabeceraIni("Subir RIPS"); //Inicia la cabecera de la pagina
     
     //////////Creamos el formulario de busqueda de remisiones
@@ -28,6 +28,7 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("principal", "container", "center",1,1);
+    include_once("procesadores/Salud_SubirRips.process.php");
     print("<br>");
     
     
@@ -43,9 +44,9 @@ print("<body>");
     $css->CrearNotificacionNaranja("Suba los archivos", 16);
     $css->CrearForm2("FrmArchivos", $myPage, "post", "_self");
     $css->CrearSelect("CmbTipoNegociacion", "");
-        $css->CrearOptionSelect("", "Selecciones el Tipo de Negociacion", 0);
-        $css->CrearOptionSelect(1, "Evento", 0);
-        $css->CrearOptionSelect(2, "Capita", 0);
+        $css->CrearOptionSelect("", "Tipo de Negociacion", 0);
+        $css->CrearOptionSelect("evento", "Evento", 0);
+        $css->CrearOptionSelect("capita", "Capita", 0);
     $css->CerrarSelect();
     print("<br>");
     $css->CrearSelect("CmbSeparador", "");

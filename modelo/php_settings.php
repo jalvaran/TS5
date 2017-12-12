@@ -2,10 +2,19 @@
 /* 
  * Aqui se establecen los datos de conexion a la base de datos
  */
+/*
+$host="213.239.232.149";
+$user="kpenqfpg_root";
+$pw="pirlo1985";
+$db="kpenqfpg_crmtechno2017";
+ * 
+ */
+
 $host="localhost";
 $user="root";
 $pw="pirlo1985";
 $db="ts5";
+ 
 /* Para un servidor la combinacion deberá ser $TipoPC="Server"; $TipoKardex="Caja";
  * Para una Caja la combinacion deberá ser $TipoPC="Caja"; $TipoKardex="Caja";
  * Para un ServidorCaja la combinacion deberá ser $TipoPC="Caja"; $TipoKardex="Automatico";
