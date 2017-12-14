@@ -3,89 +3,154 @@
 /* 
  * Este procesador sube los archivos RIPS generados por la IPS
  */
+$obRips = new Rips($idUser);
+if(isset($_REQUEST["CmbSeparador"])){
+    $Separador=$obRips->normalizar($_REQUEST["CmbSeparador"]);
+}
 
+if(isset($_REQUEST["CmbTipoNegociacion"])){
+    $TipoNegociacion=$obRips->normalizar($_REQUEST["CmbTipoNegociacion"]);
+}
+
+
+$FechaCargue=date("Y-m-d H:i:s");
 //Archivo de consultas
 
 if(!empty($_FILES['UpAC']['name'])){ 
-   
-    $obRips = new Rips($idUser);
-    $Separador=$obRips->normalizar($_REQUEST["CmbSeparador"]);
-    $TipoNegociacion=$obRips->normalizar($_REQUEST["CmbTipoNegociacion"]);
-    if($TipoNegociacion==''){
-        $css->CrearNotificacionRoja(" Por favor seleccione un tipo de negociacion",16);
-        exit();
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAC']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpAC';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_consultas_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsConsultas($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros Consultas AC cargados correctamente",16);
     }
-    $FechaCargue=date("Y-m-d H:i:s");
-    $FileName='UpAC';
-    $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
-    
-    $obRips->VaciarTabla("salud_archivo_consultas_temp"); //Vacío la tabla de subida temporal
-    $obRips->InsertarRipsConsultas($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
-    $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros Consultas AC cargados correctamente",16);
-   
 }
 
 //Archivo de Hospitalizacion
 
 if(!empty($_FILES['UpAH']['name'])){ 
-   
-    $obRips = new Rips($idUser);
-    $Separador=$obRips->normalizar($_REQUEST["CmbSeparador"]);
-    $TipoNegociacion=$obRips->normalizar($_REQUEST["CmbTipoNegociacion"]);
-    if($TipoNegociacion==''){
-        $css->CrearNotificacionRoja(" Por favor seleccione un tipo de negociacion",16);
-        exit();
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAH']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpAH';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_hospitalizaciones_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsHospitalizaciones($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionAzul(number_format($NumRegistros)." Registros Hospitalizaciones AH cargados correctamente",16);
     }
-    $FechaCargue=date("Y-m-d H:i:s");
-    $FileName='UpAH';
-    $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
-    
-    $obRips->VaciarTabla("salud_archivo_hospitalizaciones_temp"); //Vacío la tabla de subida temporal
-    $obRips->InsertarRipsHospitalizaciones($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
-    $css->CrearNotificacionAzul(number_format($NumRegistros)." Registros Hospitalizaciones AH cargados correctamente",16);
-   
 }
 
 //Archivo de Medicamentos
 
 if(!empty($_FILES['UpAM']['name'])){ 
-   
-    $obRips = new Rips($idUser);
-    $Separador=$obRips->normalizar($_REQUEST["CmbSeparador"]);
-    $TipoNegociacion=$obRips->normalizar($_REQUEST["CmbTipoNegociacion"]);
-    if($TipoNegociacion==''){
-        $css->CrearNotificacionRoja(" Por favor seleccione un tipo de negociacion",16);
-        exit();
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAM']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpAM';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_medicamentos_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsMedicamentos($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros Medicamentos AM cargados correctamente",16);
     }
-    $FechaCargue=date("Y-m-d H:i:s");
-    $FileName='UpAM';
-    $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
-    
-    $obRips->VaciarTabla("salud_archivo_medicamentos_temp"); //Vacío la tabla de subida temporal
-    $obRips->InsertarRipsMedicamentos($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
-    $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros Medicamentos AM cargados correctamente",16);
-   
 }
 
 //Archivo de Procedimientos
 
 if(!empty($_FILES['UpAP']['name'])){ 
-   
-    $obRips = new Rips($idUser);
-    $Separador=$obRips->normalizar($_REQUEST["CmbSeparador"]);
-    $TipoNegociacion=$obRips->normalizar($_REQUEST["CmbTipoNegociacion"]);
-    if($TipoNegociacion==''){
-        $css->CrearNotificacionRoja(" Por favor seleccione un tipo de negociacion",16);
-        exit();
-    }
-    $FechaCargue=date("Y-m-d H:i:s");
-    $FileName='UpAP';
-    $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAP']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
     
-    $obRips->VaciarTabla("salud_archivo_procedimientos_temp"); //Vacío la tabla de subida temporal
-    $obRips->InsertarRipsProcedimientos($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
-    $css->CrearNotificacionAzul(number_format($NumRegistros)." Registros Procedimientos AP cargados correctamente",16);
+        $FileName='UpAP';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_procedimientos_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsProcedimientos($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionAzul(number_format($NumRegistros)." Registros Procedimientos AP cargados correctamente",16);
+    }
+}
+
+//Archivo de Otros Servicios
+
+if(!empty($_FILES['UpAT']['name'])){ 
    
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAT']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpAT';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_otros_servicios_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsOtrosServicios($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros Otros Servicios AT cargados correctamente",16);
+    }
+}
+
+//Archivo de Usuarios
+
+if(!empty($_FILES['UpUS']['name'])){ 
+   
+    $NombreArchivo=$obRips->normalizar($_FILES['UpUS']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpUS';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_archivo_usuarios_temp"); //Vacío la tabla de subida temporal
+        $obRips->InsertarRipsUsuarios($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+        $css->CrearNotificacionAzul(number_format($NumRegistros)." Registros de Usuarios US cargados correctamente",16);
+    }
+}
+
+//Archivo de Usuarios
+
+if(!empty($_FILES['UpAF']['name'])){ 
+    $NombreArchivo=$obRips->normalizar($_FILES['UpAF']['name']);
+    $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
+    if($DatosUploads["nom_cargue"]==$NombreArchivo){
+        $css->CrearNotificacionRoja("El archivo $NombreArchivo ya fue cargado el $DatosUploads[fecha_cargue] por el Usuario: $DatosUploads[idUser]",16);
+    } else {
+        $FileName='UpAF';
+        $NumRegistros=$obRips->CalculeRegistros($FileName,$Separador); // se calculan cuantos registros tiene el archivo
+
+        $obRips->VaciarTabla("salud_rips_facturas_generadas_temp"); //Vacío la tabla de subida temporal
+        $Mensaje=$obRips->InsertarRipsFacturacionGenerada($TipoNegociacion,$Separador,$FechaCargue, $idUser, "");
+
+        $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros de Facturas Generadas AF cargados correctamente",16);
+
+    }
+    
+    
+}
+
+if(isset($_REQUEST["AnaliceArchivos"])){
+    $obRips->AnaliceInsercionConsultas(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
+    $css->CrearNotificacionNaranja("Tabla de Consultas Analizada",16);
+    
+    $obRips->AnaliceInsercionHospitalizaciones(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
+    $css->CrearNotificacionNaranja("Tabla de Hospitalizaciones Analizada",16);
+    
+    $obRips->AnaliceInsercionUsuarios("");
+    $css->CrearNotificacionNaranja("Tabla de Usuarios Analizada",16);
+    
+
 }
        
 ?>

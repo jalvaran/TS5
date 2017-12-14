@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2017 at 09:14 AM
+-- Generation Time: Dec 13, 2017 at 02:46 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -1694,7 +1694,7 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -2736,7 +2736,7 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -5069,55 +5069,6 @@ CREATE TABLE IF NOT EXISTS `vista_titulos_abonos` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `vista_titulos_comisiones`
---
-CREATE TABLE IF NOT EXISTS `vista_titulos_comisiones` (
-`ID` bigint(20)
-,`Fecha` date
-,`Hora` time
-,`Monto` double
-,`idVenta` bigint(20)
-,`Promocion` int(11)
-,`Mayor` int(11)
-,`Concepto` text
-,`idColaborador` bigint(20)
-,`NombreColaborador` varchar(90)
-,`idUsuario` int(11)
-,`idEgreso` bigint(20)
-,`Mayor2` int(11)
-,`Adicional` int(11)
-,`Valor` bigint(20)
-,`TotalAbonos` bigint(20)
-,`Saldo` bigint(20)
-,`idCliente` bigint(20)
-,`NombreCliente` varchar(90)
-);
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `vista_titulos_devueltos`
---
-CREATE TABLE IF NOT EXISTS `vista_titulos_devueltos` (
-`ID` bigint(20)
-,`Fecha` date
-,`idVenta` bigint(20)
-,`Promocion` int(11)
-,`Mayor` bigint(20)
-,`Concepto` text
-,`idColaborador` bigint(20)
-,`NombreColaborador` varchar(90)
-,`idUsuario` int(11)
-,`Mayor2` int(11)
-,`Adicional` int(11)
-,`Valor` bigint(20)
-,`TotalAbonos` bigint(20)
-,`Saldo` bigint(20)
-,`idCliente` bigint(20)
-,`NombreCliente` varchar(90)
-);
--- --------------------------------------------------------
-
---
 -- Structure for view `vista_abonos`
 --
 DROP TABLE IF EXISTS `vista_abonos`;
@@ -5213,24 +5164,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_titulos_abonos`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_abonos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`Estado` AS `Estado`,`td`.`idComprobanteIngreso` AS `idComprobanteIngreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_abonos` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
-
--- --------------------------------------------------------
-
---
--- Structure for view `vista_titulos_comisiones`
---
-DROP TABLE IF EXISTS `vista_titulos_comisiones`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_comisiones` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`td`.`idEgreso` AS `idEgreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_comisiones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
-
--- --------------------------------------------------------
-
---
--- Structure for view `vista_titulos_devueltos`
---
-DROP TABLE IF EXISTS `vista_titulos_devueltos`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_titulos_devueltos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`idVenta` AS `idVenta`,`td`.`Promocion` AS `Promocion`,`td`.`Mayor` AS `Mayor`,`td`.`Concepto` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_devoluciones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

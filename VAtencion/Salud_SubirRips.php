@@ -41,8 +41,9 @@ print("<body>");
     //////////////////////////Se dibujan los campos para la anulacion de la factura
     /////
     /////
-    $css->CrearNotificacionNaranja("Suba los archivos", 16);
+    $css->CrearNotificacionAzul("Suba los archivos", 16);
     $css->CrearForm2("FrmArchivos", $myPage, "post", "_self");
+    $css->CrearInputText("AnaliceArchivos", "hidden", "", 1, "", "", "", "", "", "", 0, 0);
     $css->CrearSelect("CmbTipoNegociacion", "");
         $css->CrearOptionSelect("", "Tipo de Negociacion", 0);
         $css->CrearOptionSelect("evento", "Evento", 0);

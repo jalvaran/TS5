@@ -33,6 +33,7 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             fclose($handle); 
             $sql="";
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
         }
         
     }
@@ -100,6 +101,7 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             fclose($handle); 
             $sql="";
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
         }
         
     }
@@ -158,7 +160,8 @@ class Rips extends ProcesoVenta{
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
             $sql="";
-            fclose($handle); 
+            fclose($handle);
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
         }
         
     }
@@ -191,6 +194,7 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             $sql="";
             fclose($handle); 
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
         }
         
     }
@@ -238,8 +242,188 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             fclose($handle); 
             $sql="";
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
         }
         
+    }
+    
+    // insertar Rips de Otros Servicios generados a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsOtrosServicios($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        if(!empty($_FILES['UpAT']['type'])){
+            $TipoArchivo=$_FILES['UpAT']['type'];
+            $NombreArchivo=$_FILES['UpAT']['name'];
+            $handle = fopen($_FILES['UpAT']['tmp_name'], "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_archivo_otros_servicios_temp` "
+              . "(`id_otro_servicios`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `tipo_servicio`, `cod_servicio`, `nom_servicio`, `cantidad`, `valor_unit_material`, `valor_total_material`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                    
+                $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            $sql="";
+            fclose($handle);
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
+        }
+        
+    }
+    
+    // insertar Rips de usuarios generados a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsUsuarios($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        if(!empty($_FILES['UpUS']['type'])){
+            $TipoArchivo=$_FILES['UpUS']['type'];
+            $NombreArchivo=$_FILES['UpUS']['name'];
+            $handle = fopen($_FILES['UpUS']['tmp_name'], "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_archivo_usuarios_temp` "
+              . "(`id_usuarios_salud`, `tipo_ident_usuario`, `num_ident_usuario`, `cod_ident_adm_pb`, `tipo_usuario`, `primer_ape_usuario`, `segundo_ape_usuario`, `primer_nom_usuario`, `segundo_nom_usuario`, `edad`, `unidad_medida_edad`, `sexo`, `cod_depa_residencial`, `cod_muni_residencial`, `zona_residencial`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                    
+                $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]','$data[11]','$data[12]','$data[13]','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            $sql="";
+            fclose($handle); 
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
+        }
+        
+    }
+    
+    // insertar Rips de facturas generadas a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsFacturacionGenerada($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        if(!empty($_FILES['UpAF']['type'])){
+            $TipoArchivo=$_FILES['UpAF']['type'];
+            $NombreArchivo=$_FILES['UpAF']['name'];
+            
+            $handle = fopen($_FILES['UpAF']['tmp_name'], "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_rips_facturas_generadas_temp` "
+              . "(`id_temp_rips_generados`, `cod_prest_servicio`, `razon_social`, `tipo_ident_prest_servicio`, `num_ident_prest_servicio`, `num_factura`, `fecha_factura`, `fecha_inicio`, `fecha_final`, `cod_enti_administradora`, `nom_enti_administradora`, `num_contrato`, `plan_beneficios`, `num_poliza`, `valor_total_pago`, `valor_comision`, `valor_descuentos`, `valor_neto_pagar`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                    
+                    //Convertimos la fecha de ingreso en formato 0000-00-00
+                    if($data[5]<>""){
+                       $FechaArchivo= explode("/", $data[5]);
+                       if(count($FechaArchivo)>1){
+                           $FechaFactura= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{
+                           $FechaFactura=$data[5];
+                       }
+                       
+                    }else{
+                       $FechaFactura="0000-00-00";
+                    }
+                    
+                    if($data[6]<>""){
+                       $FechaArchivo= explode("/", $data[6]);
+                       if(count($FechaArchivo)>1){ //Si tiene formato dd/mm/año
+                           $FechaInicio= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{ //Si no tiene ese formato se espera que tenga el 0000-00-00
+                           $FechaInicio=$data[6];
+                       }
+                       
+                    }else{
+                       $FechaInicio="0000-00-00";
+                    }
+                    
+                    if($data[7]<>""){
+                       $FechaArchivo= explode("/", $data[7]);
+                       if(count($FechaArchivo)>1){ //Si tiene formato dd/mm/año
+                           $FechaFinal= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{ //Si no tiene ese formato se espera que tenga el 0000-00-00
+                           $FechaFinal=$data[7];
+                       }
+                       
+                    }else{
+                       $FechaFinal="0000-00-00";
+                    }
+                    
+                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$FechaFactura', '$FechaInicio', '$FechaFinal', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]', '$data[14]', '$data[15]', '$data[16]', '$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            $sql="";
+            fclose($handle); 
+            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
+            
+        }
+        
+    }
+    //Registra los nombres de los archivos subidos
+    public function RegistreUpload($NombreArchivo,$Fecha,$idUser,$Vector) {
+        $sql="INSERT INTO `salud_upload_control` (`id_upload_control`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES "
+                . "(NULL, '$NombreArchivo', '$Fecha', '$idUser');";
+        $this->Query($sql);
+    }
+    //Copia los registros de la tabla temporal consultas que no existan en la principal y los inserta
+    public function AnaliceInsercionConsultas($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_consultas` "
+                . "SELECT * FROM `salud_archivo_consultas_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_consultas` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+    }
+    //Copia los registros de la tabla temporal consultas que no existan en la principal y los inserta
+    public function AnaliceInsercionHospitalizaciones($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_hospitalizaciones` "
+                . "SELECT * FROM `salud_archivo_hospitalizaciones_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_hospitalizaciones` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+    }
+    //Copia los registros de la tabla temporal usuarios que no existan en la principal y los inserta
+    public function AnaliceInsercionUsuarios($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_usuarios` "
+                . "SELECT * FROM `salud_archivo_usuarios_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_usuarios` as t2 "
+                . "WHERE t1.`num_ident_usuario`=t2.`num_ident_usuario` "
+                . "AND t1.`primer_ape_usuario`=t2.`primer_ape_usuario` "
+                . "AND t1.`segundo_ape_usuario`=t2.`segundo_ape_usuario` "
+                . "AND t1.`primer_nom_usuario`=t2.`primer_nom_usuario` "
+                . "AND t1.`segundo_nom_usuario`=t2.`segundo_nom_usuario`);";
+        
+        $this->Query($sql);
     }
     //Fin Clases
 }

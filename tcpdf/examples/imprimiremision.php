@@ -8,7 +8,9 @@ include("../../modelo/php_conexion.php");
 ////////////////////////////////////////////
 /////////////Obtengo el ID de la cotizacion a que se imprimirá 
 ////////////////////////////////////////////
-$idRemision = $_REQUEST["ImgPrintRemi"];
+
+$obVenta=new ProcesoVenta(1);
+$idRemision = $obVenta->normalizar($_REQUEST["ImgPrintRemi"]);
 
 $idFormatoCalidad=7;
 
@@ -18,7 +20,7 @@ require_once('Encabezado.php');
 /////////////Obtengo valores de la Remision
 ////////////////////////////////////////////
 			
-$obVenta=new ProcesoVenta(1);
+
 $DatosRemision=$obVenta->DevuelveValores("remisiones","ID",$idRemision);
 $fecha=$DatosRemision["Fecha"];
 $observaciones=$DatosRemision["ObservacionesRemision"];
@@ -89,6 +91,7 @@ $tbl = <<<EOD
   <th><h3>Cantidad</h3></th>
   <!-- <th><h3>Dias</h3></th>
   <th><h3>Total</h3></th> -->
+  <th><h3>Peso</h3></th>      
   <th><h3>F. Dev.</h3></th>
   <th><h3>C. Dev.</h3></th>      
  </tr>
@@ -119,6 +122,11 @@ if($h==0){
         $Back="white";
         $h=0;
     }
+    $PesoItem="";
+    if($registros2["TablaOrigen"]=="productosalquiler"){
+        $DatosProducto=$obVenta->DevuelveValores("productosalquiler", "Referencia",$registros2["Referencia"] );
+        $PesoItem=$DatosProducto["PesoUnitario"]*$registros2["Cantidad"];
+    }
     
 			
 $tbl = <<<EOD
@@ -130,6 +138,7 @@ $tbl = <<<EOD
   <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$registros2[Cantidad]</td>
   <!-- <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$registros2[Multiplicador]</td>
    <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$$registros2[Subtotal]</td> -->
+    <td style="border-bottom: 1px solid #ddd;background-color: $Back;">$PesoItem Kg</td>    
     <td style="border-bottom: 1px solid #ddd;background-color: $Back;"> </td>
     <td style="border-bottom: 1px solid #ddd;background-color: $Back;"> </td>
  </tr>
