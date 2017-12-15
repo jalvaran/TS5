@@ -382,6 +382,24 @@ class Rips extends ProcesoVenta{
         }
         
     }
+    //Actualiza Autoincrementables
+    public function AjusteAutoIncrement($tabla,$id,$Vector) {
+        $Increment=$this->ObtenerMAX($tabla, $id, 1, "");
+        $Increment=$Increment+1;
+        $sql="ALTER TABLE $tabla AUTO_INCREMENT=$Increment";
+        $this->Query($sql);
+    }
+    //Actualiza todos los autoincrementables de las tablas que se utilizan (Esto se debe a que en la importacion
+    // el autoincremental no corresponde al ultimo registro
+    public function ModifiqueAutoIncrementables($Vector) {
+        $this->AjusteAutoIncrement("salud_archivo_consultas", "id_consultas", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_hospitalizaciones", "id_hospitalizacion", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_usuarios", "id_usuarios_salud", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_medicamentos", "id_medicamentos", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_procedimientos", "id_procedimiento", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_otros_servicios", "id_otro_servicios", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_generados", "id_fac_mov_generados", $Vector);
+    }
     //Registra los nombres de los archivos subidos
     public function RegistreUpload($NombreArchivo,$Fecha,$idUser,$Vector) {
         $sql="INSERT INTO `salud_upload_control` (`id_upload_control`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES "
@@ -410,6 +428,42 @@ class Rips extends ProcesoVenta{
         
         $this->Query($sql);
     }
+    //Copia los registros de la tabla temporal Medicamentos que no existan en la principal y los inserta
+    public function AnaliceInsercionMedicamentos($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_medicamentos` "
+                . "SELECT * FROM `salud_archivo_medicamentos_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_medicamentos` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+    }
+    
+    //Copia los registros de la tabla temporal Procedimientos que no existan en la principal y los inserta
+    public function AnaliceInsercionProcedimientos($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_procedimientos` "
+                . "SELECT * FROM `salud_archivo_procedimientos_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_procedimientos` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+    }
+    
+    //Copia los registros de la tabla temporal Otros Servicios que no existan en la principal y los inserta
+    public function AnaliceInsercionOtrosServicios($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_otros_servicios` "
+                . "SELECT * FROM `salud_archivo_otros_servicios_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_otros_servicios` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+    }
+    
     //Copia los registros de la tabla temporal usuarios que no existan en la principal y los inserta
     public function AnaliceInsercionUsuarios($Vector) {
         //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
@@ -422,6 +476,25 @@ class Rips extends ProcesoVenta{
                 . "AND t1.`segundo_ape_usuario`=t2.`segundo_ape_usuario` "
                 . "AND t1.`primer_nom_usuario`=t2.`primer_nom_usuario` "
                 . "AND t1.`segundo_nom_usuario`=t2.`segundo_nom_usuario`);";
+        
+        $this->Query($sql);
+    }
+    
+    //Copia los registros de la tabla temporal facturas que no existan en la principal y los inserta
+    public function AnaliceInsercionFacturasGeneradas($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_generados` 
+            (`cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,
+            `num_factura`,`fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,
+            `nom_enti_administradora`,`num_contrato`,`plan_beneficios`,`num_poliza`,`valor_total_pago`,
+            `valor_comision`,`valor_descuentos`,`valor_neto_pagar`,`tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser`)
+            SELECT `cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,`num_factura`,
+            `fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,`nom_enti_administradora`,`num_contrato`,
+            `plan_beneficios`,`num_poliza`,`valor_total_pago`,`valor_comision`,`valor_descuentos`,`valor_neto_pagar`,
+            `tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser` 
+            FROM salud_rips_facturas_generadas_temp as t1 WHERE NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_generados` as t2 
+            WHERE t1.`num_factura`=t2.`num_factura`); ";
         
         $this->Query($sql);
     }

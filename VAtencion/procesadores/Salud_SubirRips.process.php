@@ -147,10 +147,22 @@ if(isset($_REQUEST["AnaliceArchivos"])){
     $obRips->AnaliceInsercionHospitalizaciones(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
     $css->CrearNotificacionNaranja("Tabla de Hospitalizaciones Analizada",16);
     
+    $obRips->AnaliceInsercionMedicamentos(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
+    $css->CrearNotificacionNaranja("Tabla de Medicamentos Analizada",16);
+    
+    $obRips->AnaliceInsercionProcedimientos(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
+    $css->CrearNotificacionNaranja("Tabla de Procedimientos Analizada",16);
+    
+    $obRips->AnaliceInsercionOtrosServicios(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
+    $css->CrearNotificacionNaranja("Tabla de Otros Servicios Analizada",16);
+    
     $obRips->AnaliceInsercionUsuarios("");
     $css->CrearNotificacionNaranja("Tabla de Usuarios Analizada",16);
     
-
+    $obRips->AnaliceInsercionFacturasGeneradas("");
+    $css->CrearNotificacionNaranja("Tabla de Facturas Analizada",16);
+    
+    $obRips->ModifiqueAutoIncrementables(""); // Se realiza para ajustar los autoincrementables de las tablas tras la importaciosn
 }
        
 ?>
