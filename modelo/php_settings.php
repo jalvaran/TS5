@@ -2,13 +2,6 @@
 /* 
  * Aqui se establecen los datos de conexion a la base de datos
  */
-/*
-$host="213.239.232.149";
-$user="kpenqfpg_root";
-$pw="pirlo1985";
-$db="kpenqfpg_crmtechno2017";
- * 
- */
 
 $host="localhost";
 $user="root";

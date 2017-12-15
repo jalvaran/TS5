@@ -18,14 +18,26 @@ class Rips extends ProcesoVenta{
             $NombreArchivo=$_FILES['UpAR']['name'];
             $handle = fopen($_FILES['UpAR']['tmp_name'], "r");
             $i=0;
-            $tab="salud_temp_rips_pagados";
-            $sql="INSERT INTO `salud_temp_rips_pagados` (`id_temp_rips_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `idUser`) VALUES";
+            $tab="salud_archivo_facturacion_mov_pagados_temp";
+            $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
             
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
+                if($data[1]<>""){
+                    $FechaArchivo= explode("/", $data[1]);
+                    if(count($FechaArchivo)>1){
+                        $FechaFactura= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                    }else{
+                        $FechaFactura=$data[1];
+                    }
+
+                 }else{
+                    $FechaFactura="0000-00-00";
+                 }
+                    
                 if($i==1){
                     
-                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$idUser'),";
+                    $sql.="('', '$data[0]', '$FechaFactura', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$NombreArchivo','$FechaCargue','$idUser'),";
                 }
                 $i=1;
             }
@@ -497,6 +509,18 @@ class Rips extends ProcesoVenta{
             WHERE t1.`num_factura`=t2.`num_factura`); ";
         
         $this->Query($sql);
+    }
+    //Copia los registros de la tabla temporal Otros Servicios que no existan en la principal y los inserta
+    public function AnaliceInsercionFacturasPagadas($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_pagados` "
+                . "SELECT * FROM `salud_archivo_facturacion_mov_pagados_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_facturacion_mov_pagados` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+        $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_pagados", "id_pagados", $Vector);
     }
     //Fin Clases
 }
