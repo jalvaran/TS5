@@ -524,9 +524,19 @@ class Rips extends ProcesoVenta{
     }
     //Actualiza el estado de las facturas pagas con el mismo valor
     public function EncuentreFacturasPagadas($Vector) {
-        $sql="UPDATE salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 "
+        $sql="UPDATE salud_archivo_facturacion_mov_generados t1 "
+                . "INNER JOIN salud_archivo_facturacion_mov_pagados t2 "
                 . "SET t1.estado='PAGADA' "
-                . "WHERE t1.`num_factura`=t2.`num_factura` AND t1.`valor_neto_pagar`=t2.`valor_pagado` ";
+                . "WHERE t1.`num_factura`=t2.`num_factura` AND "
+                . "(SELECT SUM(`valor_pagado`) FROM salud_archivo_facturacion_mov_pagados "
+                . "WHERE `num_factura`=t1.`num_factura`)>=t1.`valor_neto_pagar` ";
+        $this->Query($sql);
+    }
+    //Actualiza el estado de las facturas pagas con diferencia
+    public function EncuentreFacturasPagadasConDiferencia($Vector) {
+        $sql="UPDATE salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 "
+                . "SET t1.estado='DIFERENCIA' "
+                . "WHERE t1.`num_factura`=t2.`num_factura` AND t2.`valor_pagado`<t1.`valor_neto_pagar` ";
         $this->Query($sql);
     }
     //Fin Clases

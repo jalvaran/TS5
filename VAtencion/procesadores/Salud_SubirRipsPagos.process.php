@@ -25,7 +25,9 @@ if(!empty($_FILES['UpAR']['type'])){
     $obRips->AnaliceInsercionFacturasPagadas("");
     
     $css->CrearNotificacionNaranja("Tabla de Facturas Pagadas Analizada",16);
-    $obRips->EncuentreFacturasPagadas($Vector);
-    $css->CrearNotificacionVerde("Facturas pagadas con igual valor verificadas",16);
+    $obRips->EncuentreFacturasPagadasConDiferencia("");
+    $css->CrearNotificacionVerde("Facturas pagadas con diferencias verificadas",16);
+    $obRips->EncuentreFacturasPagadas("");
+    $css->CrearNotificacionAzul("Facturas pagadas con igual valor verificadas",16);
 }
 ?>
