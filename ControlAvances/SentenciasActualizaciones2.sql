@@ -64,6 +64,13 @@ WHERE t1.estado='PAGADA';
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (119, 'Historial de Facturas Pagas', '36', '3', 'vista_salud_facturas_pagas.php', '_SELF', b'1', 'historial.png', '4', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
+DROP VIEW IF EXISTS `vista_salud_facturas_no_pagas`;
+CREATE VIEW vista_salud_facturas_no_pagas AS 
+SELECT t1.`id_fac_mov_generados` as id_factura_generada, 
+(SELECT DATEDIFF(now(),t1.`fecha_radicado` ) - t1.`dias_pactados`) as DiasMora ,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,
+t1.`fecha_factura`, t1.`fecha_radicado`,t1.`numero_radicado`,t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar` ,t1.`tipo_negociacion`, 
+t1.`dias_pactados`,t1.`Soporte`
+FROM salud_archivo_facturacion_mov_generados t1 WHERE t1.estado='RADICADO' OR t1.estado=''; 
 
-
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (120, 'Historial de Facturas NO Pagadas', '36', '3', 'vista_salud_facturas_no_pagas.php', '_SELF', b'1', 'historial2.png', '5', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
