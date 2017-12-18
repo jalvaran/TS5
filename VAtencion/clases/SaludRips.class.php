@@ -522,5 +522,12 @@ class Rips extends ProcesoVenta{
         $this->Query($sql);
         $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_pagados", "id_pagados", $Vector);
     }
+    //Actualiza el estado de las facturas pagas con el mismo valor
+    public function EncuentreFacturasPagadas($Vector) {
+        $sql="UPDATE salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 "
+                . "SET t1.estado='PAGADA' "
+                . "WHERE t1.`num_factura`=t2.`num_factura` AND t1.`valor_neto_pagar`=t2.`valor_pagado` ";
+        $this->Query($sql);
+    }
     //Fin Clases
 }
