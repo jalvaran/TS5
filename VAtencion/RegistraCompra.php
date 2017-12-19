@@ -382,6 +382,7 @@ print("<body>");
                             }
                             
                         $css->CerrarSelect();
+                        $css->CrearInputText("TxtFechaProgramada", "date", "Fecha Programada <br>", date("Y-m-d"), "Fecha Programada", "", "", "", 150, 30, 0, 0);
                         $css->CerrarDiv();
                     print("</td>");
                     print("<td>");

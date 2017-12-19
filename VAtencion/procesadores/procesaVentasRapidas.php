@@ -592,7 +592,9 @@ $obPrint=new PrintPos($idUser);
                     $obPrint->ImprimeComprobanteAbonoFactura($idComprobanteAbono, $DatosImpresora["Puerto"], 2);
 
                 }
-                $css->CrearNotificacionVerde("Abono Registrado Exitosamente",16);
+                $DatosAbono=$obVenta->DevuelveValores("facturas_abonos", "ID", $idComprobanteAbono);
+                $idComprobanteIngreso=$DatosAbono["idComprobanteIngreso"];
+                $css->CrearNotificacionVerde("Abono Registrado Exitosamente <a href='PDF_Documentos.php?idDocumento=4&idIngreso=$idComprobanteIngreso' target='_blank'> Imprimir</a>",16);
            
             }else{
                 $css->CrearNotificacionRoja("El Saldo de la Factura es inferior a los abonos digitados, vuelva a intentarlo",16);
