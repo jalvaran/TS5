@@ -85,3 +85,37 @@ WHERE t1.estado='DIFERENCIA';
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (121, 'Historial de Facturas Con Diferencias', '36', '3', 'vista_salud_facturas_diferencias.php', '_SELF', b'1', 'historial3.png', '6', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
+CREATE TABLE IF NOT EXISTS `productos_lista_precios` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `productos_lista_precios`
+--
+
+INSERT INTO `productos_lista_precios` (`ID`, `Nombre`, `Descripcion`, `idUser`, `Updated`, `Sync`) VALUES
+(1, 'Distribuidor', 'Precio dado para un distribuidor', 3, '2017-12-19 13:27:55', '0000-00-00 00:00:00'),
+(2, 'Intermediario', '', 3, '2017-12-19 13:27:55', '0000-00-00 00:00:00'),
+(3, 'Morosos', '', 3, '2017-12-19 13:27:55', '0000-00-00 00:00:00');
+
+
+CREATE TABLE IF NOT EXISTS `productos_precios_adicionales` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idProducto` bigint(20) NOT NULL,
+  `idListaPrecios` int(11) NOT NULL,
+  `PrecioVenta` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='tabla para agregar precios a los productos' AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE `productos_precios_adicionales` ADD `TablaVenta` VARCHAR(45) NOT NULL AFTER `PrecioVenta`;
+
+ALTER TABLE `productos_precios_adicionales` ADD `idUser` INT NOT NULL AFTER `TablaVenta`;

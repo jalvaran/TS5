@@ -39,10 +39,29 @@ if(!empty($_REQUEST["BtnCrearPV"])){
             $ReferenciaTalla=$Referencia."-".$DatosSub5["NombreSub5"];
             $NombreTalla=$Nombre." ".$DatosSub5["NombreSub5"];
             $idProducto=$obVenta->CrearProductoVenta($NombreTalla,"",$ReferenciaTalla,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,"");
-    
+            $consulta=$obVenta->ConsultarTabla("productos_lista_precios", "");
+            while($DatosListas=$obVenta->FetchArray($consulta)){
+                $Lista="TxtLista".$DatosListas["ID"];
+                if (isset($_POST[$Lista])){
+                    $PrecioLista=$obVenta->normalizar($_POST[$Lista]);
+                    $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                }
+                    
+            }
         }
     }else{
         $idProducto=$obVenta->CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,"");
+        
+        $consulta=$obVenta->ConsultarTabla("productos_lista_precios", "");
+            while($DatosListas=$obVenta->FetchArray($consulta)){
+                $Lista="TxtLista".$DatosListas["ID"];
+                if (isset($_POST[$Lista])){
+                    $PrecioLista=$obVenta->normalizar($_POST[$Lista]);
+                    $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                }
+                    
+            }
+        
     }
         header("location:productosventa.php?idProducto=$idProducto");
     

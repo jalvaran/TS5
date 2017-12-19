@@ -33,7 +33,7 @@ $css =  new CssIni("Crear Producto");
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/CrearProducto.php");
+    include_once("procesadores/CrearProducto.process.php");
     
     $css->CabeceraIni("Crear Producto para la Venta"); //Inicia la cabecera de la pagina
        
@@ -132,9 +132,19 @@ print("<body>");
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearInputNumber("TxtPrecioVenta", "number", "", "", "PrecioVenta", "", "", "", 100, 30, 0, 1, 0, "", "any");
+                
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearInputNumber("TxtPrecioMayorista", "number", "", "", "PrecioMayor", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            print("<br><strong>+ Precios:</strong>");
+                $css->ImageOcultarMostrar("ImgMostrarPrecios", "", "DivPrecios", 30, 30, "");
+                $css->CrearDiv("DivPrecios", "", "center", 0, 1);
+                    $consulta=$obVenta->ConsultarTabla("productos_lista_precios", "");
+                    while($DatosListas=$obVenta->FetchArray($consulta)){
+                        $css->CrearInputNumber("TxtLista".$DatosListas["ID"], "number", $DatosListas["Nombre"]."<br>", 0, "", "", "", "", 100, 30, 0, 0, 0, "", "any");
+                        print("<br>");
+                    }
+                $css->CerrarDiv();
             print("</td>");
             print("<td style='text-align:center'>");
             $css->CrearInputNumber("TxtCostoUnitario", "number", "", "", "CostoUnitario", "", "", "", 100, 30, 0, 1, 0, "", "any");

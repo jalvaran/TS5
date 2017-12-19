@@ -6033,7 +6033,7 @@ public function VerificaPermisos($VectorPermisos) {
      public function CrearProductoVenta($Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector,$idProductoVenta='',$RutaImagen='') {
         
         $tab="productosventa";	
-        $NumRegistros=19;
+        $NumRegistros=21;
         
         $Columnas[0]="idProductosVenta";$Valores[0]=$idProductoVenta;
         $Columnas[1]="CodigoBarras";	$Valores[1]=$idProductoVenta;
@@ -6054,6 +6054,8 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[16]="Sub5";		$Valores[16]=$Sub5;
         $Columnas[17]="CuentaPUC";	$Valores[17]=$CuentaPUC;	
         $Columnas[18]="RutaImagen";	$Valores[18]=$RutaImagen;
+        $Columnas[19]="CostoUnitarioPromedio";	$Valores[19]=$CostoUnitario;
+        $Columnas[20]="CostoTotalPromedio";	$Valores[20]=$CostoUnitario*$Existencias;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         if($idProductoVenta==""){
             $ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
@@ -6111,7 +6113,7 @@ public function VerificaPermisos($VectorPermisos) {
      public function CrearProductoVentaXCSV($ID,$Nombre,$CodigoBarras,$Referencia,$PrecioVenta,$PrecioMayor,$Existencias,$CostoUnitario,$IVA,$idDepartamento,$Sub1,$Sub2,$Sub3,$Sub4,$Sub5,$CuentaPUC,$Vector) {
         
         $tab="productosventa";	
-        $NumRegistros=18;
+        $NumRegistros=21;
         
         $Columnas[0]="idProductosVenta";$Valores[0]=$ID;
         $Columnas[1]="CodigoBarras";	$Valores[1]=$ID;
@@ -6131,7 +6133,9 @@ public function VerificaPermisos($VectorPermisos) {
         $Columnas[15]="Sub4";		$Valores[15]=$Sub4;
         $Columnas[16]="Sub5";		$Valores[16]=$Sub5;
         $Columnas[17]="CuentaPUC";	$Valores[17]=$CuentaPUC;	
-        
+        $Columnas[18]="RutaImagen";	$Valores[18]="";
+        $Columnas[19]="CostoUnitarioPromedio";	$Valores[19]=$CostoUnitario;
+        $Columnas[20]="CostoTotalPromedio";	$Valores[20]=$CostoUnitario*$Existencias;
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         //$ID=$this->ObtenerMAX($tab,"idProductosVenta", 1,"");
         
@@ -6751,6 +6755,19 @@ public function VerificaPermisos($VectorPermisos) {
         }
         $this->ActualizaRegistro("separados", "Estado", "ANULADO", "ID", $idSeparado,0);
         $this->ActualizaRegistro("separados", "Observaciones", $ConceptoAnulacion, "ID", $idSeparado,0);
+    }
+    //Agregar un precio adicional a un producto
+    public function AgregaPrecioProducto($idProducto,$PrecioVenta,$Tabla,$idLista,$idUser,$Vector) {
+        $tab="productos_precios_adicionales";	
+        $NumRegistros=5;
+        
+        $Columnas[0]="idProducto";      $Valores[0]=$idProducto;
+        $Columnas[1]="idListaPrecios";	$Valores[1]=$idLista;
+        $Columnas[2]="PrecioVenta";	$Valores[2]=$PrecioVenta;
+        $Columnas[3]="TablaVenta";      $Valores[3]=$Tabla;
+        $Columnas[4]="idUser";          $Valores[4]=$idUser;
+        
+        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
 //////////////////////////////Fin	
 }
