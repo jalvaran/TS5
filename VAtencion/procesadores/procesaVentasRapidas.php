@@ -707,6 +707,48 @@ $obPrint=new PrintPos($idUser);
 			
 	}
         
-        
+        //Si se recibe cambiar precio de venta por listado
+        if(!empty($_REQUEST['BtnListados'])){
+            
+            $obVenta=new ProcesoVenta($idUser);
+            $fecha=date("Y-m-d");
+            $Hora=date("H:i:s");
+            $Listado=$obVenta->normalizar($_REQUEST['CmbListaPrecio']);
+            $idPreventa=$obVenta->normalizar($_REQUEST['TxtidPreventa']);
+            $consulta=$obVenta->ConsultarTabla("preventa", " WHERE VestasActivas_idVestasActivas='$idPreventa'");
+            while ($DatosPreventa=$obVenta->FetchArray($consulta)){
+                $Cantidad=$DatosPreventa["Cantidad"];
+                $idProducto=$DatosPreventa["ProductosVenta_idProductosVenta"];
+                $idItem=$DatosPreventa["idPrecotizacion"];
+                $Tabla=$DatosPreventa["TablaItem"];
+                $Datos=$obVenta->ConsultarTabla("productos_precios_adicionales", " WHERE idProducto='$idProducto' AND idListaPrecios='$Listado' AND TablaVenta='$Tabla'");
+                $DatosListado=$obVenta->FetchArray($Datos);
+                if($DatosListado["PrecioVenta"]>0){
+                    $DatosProductos=$obVenta->DevuelveValores($Tabla,"idProductosVenta",$idProducto);
+                    $ValorAcordado=$DatosListado["PrecioVenta"];
+                    $DatosTablaItem=$obVenta->DevuelveValores("tablas_ventas", "NombreTabla", $Tabla);
+                    if($DatosTablaItem["IVAIncluido"]=="SI"){
+
+                        $ValorAcordado=$ValorAcordado/($DatosProductos["IVA"]+1);
+
+                    }
+                    $Subtotal=$ValorAcordado*$Cantidad;
+
+
+                    $IVA=$Subtotal*$DatosProductos["IVA"];
+                    //$SubtotalCosto=$DatosProductos["CostoUnitario"]*$Cantidad;
+                    $Total=$Subtotal+$IVA;
+                    $filtro="idPrecotizacion";
+
+                    $obVenta->ActualizaRegistro("preventa","Subtotal", $Subtotal, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","Impuestos", $IVA, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","TotalVenta", $Total, $filtro, $idItem);
+                    $obVenta->ActualizaRegistro("preventa","ValorAcordado", $ValorAcordado, $filtro, $idItem);
+                }
+                
+            }
+                            
+            header("location:$myPage?CmbPreVentaAct=$idPreventa");
+        }
         ///////////////Fin
 ?>

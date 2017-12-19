@@ -285,7 +285,9 @@ if(isset($_REQUEST['TxtAutorizacion'])){
         $css->FilaTabla(16);
         $css->ColTabla("<strong>DESCUENTO GENERAL POR PORCENTAJE</strong>", 1);
         $css->ColTabla("<strong>DESCUENTO GENERAL AL POR MAYOR</strong>", 1);
+        $css->ColTabla("<strong>LISTAS DE PRECIOS</strong>", 1);
         $css->ColTabla("<strong>DESCUENTO GENERAL A COSTO</strong>", 1);
+        
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
         print("<td style='text-align:center;'>");
@@ -306,7 +308,13 @@ if(isset($_REQUEST['TxtAutorizacion'])){
 
         $css->CerrarForm();
         print("</td>");
-        
+        print("<td>");
+            $css->CrearForm2("FrmListados", $myPage, "post", "_self");
+            $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
+            $css->CrearSelectTable("CmbListaPrecio", "productos_lista_precios", "", "ID", "Nombre", "", "", "", "", 1);
+            $css->CrearBotonConfirmado("BtnListados", "Aplicar");
+            $css->CerrarForm();
+        print("</td>");
         print("<td style='text-align:center;'>");
         $css->CrearForm2("FrmAutorizacionDescuento", $myPage, "post", "_self");
         $css->CrearInputText("TxtidPreventa", "hidden", "", $idPreventa, "", "", "", "", "", "", "", "");
@@ -315,6 +323,7 @@ if(isset($_REQUEST['TxtAutorizacion'])){
 
         $css->CerrarForm();
         print("</td>");
+        
 
         $css->CierraFilaTabla();
         $css->CerrarTabla();
