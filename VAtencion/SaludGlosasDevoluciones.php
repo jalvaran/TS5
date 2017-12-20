@@ -1,107 +1,95 @@
 <?php 
-$myPage="AbrirDocumento.php";
+$myPage="SaludGlosasDevoluciones.php";
 include_once("../sesiones/php_control.php");
+include_once("clases/Glosas.class.php");
 include_once("css_construct.php");
-$obVenta = new ProcesoVenta($idUser);
+$obGlosas = new Glosas($idUser);
 //////Si recibo un cliente
-if(!empty($_REQUEST['Doc'])){
-
-    $Documento=$obVenta->normalizar($_REQUEST['Doc']);
-    $idDoc=$obVenta->normalizar($_REQUEST['idDoc']);
-}
-
 	
 print("<html>");
 print("<head>");
-$css =  new CssIni("Reabrir un documento");
+$css =  new CssIni("Glosas y Devoluciones");
 
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/AbrirDocumento.process.php");
+    include_once("procesadores/SaludGlosasDevoluciones.process.php");
     
-    $css->CabeceraIni("Reabrir un documento"); //Inicia la cabecera de la pagina
-    
-    //////////Creamos el formulario de busqueda de remisiones
-    /////
-    /////
-    
-   
-    
+    $css->CabeceraIni("Glosas y Devoluciones"); //Inicia la cabecera de la pagina
+      
     $css->CabeceraFin(); 
     ///////////////Creamos el contenedor
     /////
     /////
     $css->CrearDiv("principal", "container", "center",1,1);
-    print("<br>");
-    ///////////////Creamos la imagen representativa de la pagina
-    /////
-    /////	
-    $css->CrearImageLink("comprobantes_contabilidad_items.php", "../images/abir_doc.jpg", "_self",100,100);
+    //Modal Glosas
+    $Titulo="Buscar";
+    $Nombre="ImgBuscar";
+    $RutaImage="../images/buscar.png";
+    $javascript="";
+    $VectorBim["f"]=0;
+    $target="#DialBusquedaGlosas";
+    $css->CrearBotonImagen($Titulo,$Nombre,$target,"","",1,1,"fixed","right:10px;bottom:80",$VectorBim);
     
-    
-    ///////////////Se crea el DIV que servirá de contenedor secundario
-    /////
-    /////
-    $css->CrearDiv("Secundario", "container", "center",1,1);
-   										
-    
-    //////////////////////////Se dibujan los campos para la anulacion de la factura
-    /////
-    /////
-    if(!empty($idDoc)){
+    $css->CrearCuadroDeDialogo("DialBusquedaGlosas","Buscar Glosa");
+    $css->CrearTabla();
+        $css->FilaTabla(16);
+            print("<td>");
+            $css->CrearInputText("CajaAsigna", "hidden", "", "", "", "", "", "", 100, 30, 0, 0);
+                $VarSelect["Ancho"]="200";
+                $VarSelect["PlaceHolder"]="Conceptos Glosas";
+                $VarSelect["Required"]=1;
+                $css->CrearSelectChosen("CmbGlosas", $VarSelect);
+                $css->CrearOptionSelect("", "Seleccione una Glosas" , 1);
+                    $sql="SELECT * FROM salud_archivo_conceptos_glosas";
+                    $Consulta=$obGlosas->Query($sql);
+                    while($DatosGlosas=$obGlosas->FetchArray($Consulta)){
+
+                           $css->CrearOptionSelect("$DatosGlosas[cod_glosa]", "$DatosGlosas[cod_glosa] / $DatosGlosas[aplicacion]" , 0);
+                       }
+
+                $css->CerrarSelect();
+            print("</td>");
+            print("<td>");
+                $funcion="CopiarCodigoGlosa();ClickElement('ImgBuscar');";
+                $css->CrearBotonEvento("BtnAsignar", "Asignar", 1, "onClick", $funcion, "naranja", "");    
+            print("</td>");
+        $css->CierraFilaTabla();
+    $css->CerrarTabla();
+       
         
-        $css->CrearTabla();
-            if($Documento=="CC"){
-                $DatosDocumento=$obVenta->DevuelveValores("comprobantes_contabilidad", "ID", $idDoc);
-            }
-            
-            
-            $css->CrearNotificacionAzul("Datos del documento $Documento $idDoc", 18);
-            $css->FilaTabla(14);
-            
-            $css->ColTabla("<strong>ID</strong>", 1);
-            $css->ColTabla("<strong>Fecha</strong>", 1);
-            $css->ColTabla("<strong>Concepto</strong>", 1);
-            
-            
-            $css->CierraFilaTabla();
-            
-            $css->FilaTabla(14);
-            
-            $css->ColTabla($DatosDocumento["ID"], 1);
-            $css->ColTabla($DatosDocumento["Fecha"], 1);
-            $css->ColTabla($DatosDocumento["Concepto"], 1);
-                        
-            $css->CierraFilaTabla();
-            
-        $css->CerrarTabla();
-        $css->CrearForm2("FrmRegistraApertura", $myPage, "post", "_self");
-        $css->CrearInputText("Documento", "hidden", "", $Documento, "", "", "", "", "", "", "", "");
-        $css->CrearInputText("idDoc", "hidden", "", $idDoc, "", "", "", "", "", "", "", "");
-        $css->CrearTabla();
-        $css->CrearNotificacionNaranja("Datos Para Realizar la Apertura", 16);
-        print("<td style='text-align:center'>");
-        $css->CrearInputFecha("Fecha:<br>", "TxtFechaApertura", date("Y-m-d"), 100, 30, "");
-        print("<br>");
-        $css->CrearTextArea("TxtConceptoApertura", "", "", "Escriba el por qué se abrirá el documento", "black", "", "", 200, 100, 0, 1);
-        print("<br>");
-        $css->CrearBotonConfirmado("BtnAbrir","Abrir");	
-            
+        print("<br> <br> <br> <br> <br> <br> <br> <br><br><br><br><br><br>");
+    $css->CerrarCuadroDeDialogo();
+    
+    $css->CrearTabla();
+        $css->FilaTabla(16);
+            $css->ColTabla("<strong>EPS</strong>", 1);
+            $css->ColTabla("<strong>FACTURA</strong>", 1);
+        $css->CierraFilaTabla();
+        $css->FilaTabla(16);
+        print("<td>");
+            $css->CrearDiv2("DivF", "container", "center", 2, 1, 130, 200, 1, 1, "", "");
+                $Page="Consultas/BuscarFacturasDiferencias.php?idEPS=";
+                $FuncionJS="EnvieObjetoConsulta(`$Page`,`idEps`,`DivFacturasDif`,`5`);return false ;";
+                $css->CrearSelectTable("idEps", "salud_eps", " ORDER BY nombre_completo", "cod_pagador_min", "nombre_completo", "cod_pagador_min", "onchange", $FuncionJS, "", 1,"Seleccione una EPS");
+            $css->CerrarDiv();
+        print("</td>"); 
+        print("<td>");
+            $css->CrearDiv2("DivF", "container", "center", 2, 1, 500, 200, 1, 1, "", "");
+            $css->DivGrid("DivFacturasDif", "container", "left", 1, 1, 3, 90, 175,5,"transparent");
+            $css->CerrarDiv();
+            $css->CerrarDiv();
         print("</td>");
-        
-        $css->CerrarTabla();
-        $css->CerrarForm();
-        
-        
-    }else{
-        $css->CrearTabla();
-        $css->CrearFilaNotificacion("Por favor busque y asocie un documento",16);
-        $css->CerrarTabla();
-    }
-    $css->CerrarDiv();//Cerramos contenedor Secundario
+       $css->CierraFilaTabla();
+    $css->CerrarTabla();
+    
+    $css->CrearDiv("DivDatosFactura", "", "center", 1, 1);
+    
+    $css->CerrarDiv();
+            
     $css->CerrarDiv();//Cerramos contenedor Principal
     $css->AgregaJS(); //Agregamos javascripts
+    $css->AnchoElemento("CmbGlosas_chosen", 420);
     $css->AgregaSubir();
     $css->Footer();
     print("</body></html>");

@@ -1117,3 +1117,13 @@ function ValidaRIPSPagos(){
     }
     
 }
+
+function EscribaValor(id,Valor){
+    document.getElementById(id).value=Valor;
+}
+
+function CopiarCodigoGlosa(){
+    idCajaGlosa=document.getElementById('CajaAsigna').value;
+    Valor=document.getElementById('CmbGlosas').value;
+    document.getElementById(idCajaGlosa).value=Valor;
+}

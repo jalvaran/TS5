@@ -6718,7 +6718,7 @@ public function VerificaPermisos($VectorPermisos) {
         $datetime1 = date_create($FechaInicial);
         $datetime2 = date_create($FechaFinal);
         $interval = date_diff($datetime1, $datetime2);
-        $Resultados["Dias"]=$interval->format('%d');
+        $Resultados["Dias"]=$interval->format('%a');
         
         return($Resultados);
     }
