@@ -18,11 +18,13 @@ class Rips extends ProcesoVenta{
             $NombreArchivo=$_FILES['UpAR']['name'];
             $handle = fopen($_FILES['UpAR']['tmp_name'], "r");
             $i=0;
+            $z=0;
             $tab="salud_archivo_facturacion_mov_pagados_temp";
             $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
             
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
+                $i++;
                 if($data[1]<>""){
                     $FechaArchivo= explode("/", $data[1]);
                     if(count($FechaArchivo)>1){
@@ -35,11 +37,18 @@ class Rips extends ProcesoVenta{
                     $FechaFactura="0000-00-00";
                  }
                     
-                if($i==1){
+                if($z==1){
                     
                     $sql.="('', '$data[0]', '$FechaFactura', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$NombreArchivo','$FechaCargue','$idUser'),";
                 }
-                $i=1;
+                $z=1;
+                
+                if($i==10000){
+                    $sql=substr($sql, 0, -1);
+                    $this->Query($sql);
+                    $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                    $i=0;
+                }
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
@@ -326,6 +335,7 @@ class Rips extends ProcesoVenta{
     // insertar Rips de facturas generadas a tabla temporal, despues por medio de un trigger se llevará a la general
     public function InsertarRipsFacturacionGenerada($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
+        
         if($Separador==1){
            $Separador=";"; 
         }else{
@@ -343,7 +353,7 @@ class Rips extends ProcesoVenta{
             
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
-                    
+                $i++;    
                     //Convertimos la fecha de ingreso en formato 0000-00-00
                     if($data[5]<>""){
                        $FechaArchivo= explode("/", $data[5]);
@@ -382,7 +392,14 @@ class Rips extends ProcesoVenta{
                     }
                     
                     $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$FechaFactura', '$FechaInicio', '$FechaFinal', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]', '$data[14]', '$data[15]', '$data[16]', '$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
+                    
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_rips_facturas_generadas_temp` "
+                        . "(`id_temp_rips_generados`, `cod_prest_servicio`, `razon_social`, `tipo_ident_prest_servicio`, `num_ident_prest_servicio`, `num_factura`, `fecha_factura`, `fecha_inicio`, `fecha_final`, `cod_enti_administradora`, `nom_enti_administradora`, `num_contrato`, `plan_beneficios`, `num_poliza`, `valor_total_pago`, `valor_comision`, `valor_descuentos`, `valor_neto_pagar`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                        $i=0;
+                    }
                 
             }
             $sql=substr($sql, 0, -1);

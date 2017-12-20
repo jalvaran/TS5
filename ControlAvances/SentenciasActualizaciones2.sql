@@ -123,3 +123,11 @@ ALTER TABLE `productos_precios_adicionales` ADD `idUser` INT NOT NULL AFTER `Tab
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (122, 'Listas de precios', '22', '3', 'productos_lista_precios.php', '_SELF', b'1', 'listasprecios.png', '5', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (123, 'Precios Adicionales', '22', '3', 'productos_precios_adicionales.php', '_SELF', b'1', 'productos_precios.png', '5', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES
+(39, 'Legal', 26, 3, b'1', '2017-12-20 15:06:39', '2017-10-13 14:16:55'),
+(38, 'Archivos', 26, 4, b'1', '2017-12-20 15:06:39', '2017-10-13 14:16:55'),
+(37, 'Auditoria', 26, 2, b'1', '2017-12-20 15:07:49', '2017-10-13 14:16:55');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (124, 'Glosas y Devoluciones', '37', '3', 'SaludGlosasDevoluciones.php', '_SELF', b'1', 'glosas.png', '1', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
+
+

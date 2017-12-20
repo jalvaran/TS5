@@ -19,6 +19,15 @@ include_once("Configuraciones/vista_salud_facturas_diferencias.ini.php");  //Cla
 $obTabla = new Tabla($db);
 
 $statement = $obTabla->CreeFiltro($Vector);
+$Vector2["Tabla"]="salud_archivo_facturacion_mov_generados";
+$statement2 = $obTabla->CreeFiltro($Vector2);
+$pos = strpos($statement2, "WHERE");
+if($pos === FALSE){
+    $statement2 .=" WHERE estado='DIFERENCIA'";
+}else{
+    $statement2 .=" AND estado='DIFERENCIA'";
+}
+
 //print($statement);
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
@@ -50,7 +59,8 @@ $css->CrearImageLink("../VMenu/MnuInventarios.php", "../images/historial3.png", 
 
 
 if($TipoUser=="administrador"){
-    $Consulta=$obVenta->Query("SELECT SUM(valor_neto_pagar) as Total,SUM(valor_pagado) as ValorPagado FROM $statement");
+    $stament2= str_replace ("vista_salud_facturas_diferencias","",$statement);
+    $Consulta=$obVenta->Query("SELECT  (SELECT SUM(`valor_neto_pagar`) FROM $statement2) as Total,SUM(valor_pagado) as ValorPagado FROM $statement  ");
     $DatosFacturacion=$obVenta->FetchArray($Consulta);
     $Total=  number_format($DatosFacturacion["Total"]);
     $ValorPagado=  number_format($DatosFacturacion["ValorPagado"]);
