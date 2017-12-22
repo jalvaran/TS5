@@ -40,12 +40,15 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+
 $css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-$css->CrearImageLink("../VMenu/MnuInventarios.php", "../images/historial.png", "_self",100,100);
+$obTabla->FormularioRangoFechas($myPage,$statement, "");
+$statement=$obTabla->FiltroRangoFechas("fecha_factura", $statement, "");
+$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 
 if($TipoUser=="administrador"){
     $Consulta=$obVenta->Query("SELECT SUM(valor_neto_pagar) as Total FROM $statement");

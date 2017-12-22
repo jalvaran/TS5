@@ -5787,6 +5787,63 @@ $tbl.= "</table>";
         return($tbl);
 
     }
+    //Se agrega un rango de fechas a un filtro
+    public function FiltroRangoFechas($NombreCampo,$statement,$Vector) {
+        if(isset($_REQUEST["BtnEnviarRango"])){
+            
+            $FechaInicial=$this->obCon->normalizar($_REQUEST["TxtFechaInicialRango"]);
+            $FechaFinal=$this->obCon->normalizar($_REQUEST["TxtFechaFinalRango"]);
+            if (strpos($statement, 'WHERE') !== false) {
+                $statement.=" AND $NombreCampo >='$FechaInicial' AND $NombreCampo <='$FechaFinal'";
+            }else{
+                $statement.=" WHERE $NombreCampo >='$FechaInicial' AND $NombreCampo <='$FechaFinal'";
+            }
+            
+        }
+        return($statement);
+    }
+    
+    //Agrega un rango de fechas
+    public function FormularioRangoFechas($myPage,$st,$Vector) {
+        $FechaIni=date("Y-m-d");
+        $FechaFin=date("Y-m-d");
+        if(isset($_REQUEST["TxtFechaInicialRango"])){
+            $FechaIni=$_REQUEST["TxtFechaInicialRango"];
+            
+        }
+        if(isset($_REQUEST["TxtFechaFinalRango"])){
+            $FechaFin=$_REQUEST["TxtFechaFinalRango"];
+            
+        }
+        $this->css=new CssIni("");
+        $this->css->CrearForm2("FrmRangos", $myPage, "post", "_self");
+        $this->css->CrearInputText("st", "hidden", "", base64_encode($st), "", "", "", "", 150, 30, 0, 1);
+                
+        $this->css->CrearTabla();
+            $this->css->FilaTabla(16);
+                $this->css->ColTabla("<strong>FILTRAR POR RANGOS</strong>", 4);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(16);
+
+                $this->css->ColTabla("<strong>Fecha Inicial</strong>", 1);
+                $this->css->ColTabla("<strong>Fecha Final</strong>", 1);
+                $this->css->ColTabla("<strong>Enviar</strong>", 1);
+            $this->css->CierraFilaTabla();
+            $this->css->FilaTabla(16);
+
+                print("<td>");
+                    $this->css->CrearInputText("TxtFechaInicialRango", "date", "", $FechaIni, "", "", "", "", 150, 30, 0, 1);
+                print("</td>");
+                print("<td>");
+                    $this->css->CrearInputText("TxtFechaFinalRango", "date", "", $FechaFin, "", "", "", "", 150, 30, 0, 1);
+                print("</td>");
+                print("<td>");
+                    $this->css->CrearBotonNaranja("BtnEnviarRango", "Enviar");
+                print("</td>");
+            $this->css->CierraFilaTabla();
+        $this->css->CerrarTabla();
+    $this->css->CerrarForm();
+    }
         // FIN Clases	
 }
 ?>

@@ -43,13 +43,18 @@ $css->CabeceraFin();
     /////
 $css->CrearDiv("DivPrincipal", "container", "center", 1, 1);
 $css->DivNotificacionesJS();
-
+$obTabla->FormularioRangoFechas($myPage,$statement, "");
+$statement=$obTabla->FiltroRangoFechas("fecha_factura", $statement, "");
+$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 $css->CrearDiv("DivBusquedas", "", "center", 1, 1);
 $css->CerrarDiv();
 
 $css->CrearDiv("DivRadicacion", "", "center", 1, 1);
     $css->CrearForm2("FrmRadicacion", $myPage, "post", "_self");
         $css->CrearTabla();
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>RADICAR FACTURAS</strong>", 6);
+            $css->CierraFilaTabla();
             $css->FilaTabla(16);
                 $css->ColTabla("<strong>EPS</strong>", 1);
                 $css->ColTabla("<strong>Fecha de Radicado</strong>", 1);

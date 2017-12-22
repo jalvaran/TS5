@@ -17,15 +17,22 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
 include_once("Configuraciones/vista_salud_facturas_diferencias.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-
+$obVenta=new ProcesoVenta($idUser);
 $statement = $obTabla->CreeFiltro($Vector);
 $Vector2["Tabla"]="salud_archivo_facturacion_mov_generados";
 $statement2 = $obTabla->CreeFiltro($Vector2);
 $pos = strpos($statement2, "WHERE");
+$FitroAdicional="";
+if(isset($_REQUEST["TxtFechaInicialRango"])){
+    $FechaIni=$obVenta->normalizar($_REQUEST["TxtFechaInicialRango"]);
+    $FechaFin=$obVenta->normalizar($_REQUEST["TxtFechaFinalRango"]);
+    $FitroAdicional=" AND fecha_factura >= '$FechaIni' AND fecha_factura <= '$FechaFin'";
+}
 if($pos === FALSE){
-    $statement2 .=" WHERE estado='DIFERENCIA'";
+    
+    $statement2 .=" WHERE estado='DIFERENCIA' $FitroAdicional";
 }else{
-    $statement2 .=" AND estado='DIFERENCIA'";
+    $statement2 .=" AND estado='DIFERENCIA' $FitroAdicional";
 }
 
 //print($statement);
@@ -49,6 +56,9 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$obTabla->FormularioRangoFechas($myPage,$statement, "");
+$statement=$obTabla->FiltroRangoFechas("fecha_factura", $statement, "");
+$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 $css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
@@ -56,10 +66,10 @@ $css->DivNotificacionesJS();
     /////	
 $css->CrearImageLink("../VMenu/MnuInventarios.php", "../images/historial3.png", "_self",100,100);
 
-
+//print($statement."<br>".$statement2);
 
 if($TipoUser=="administrador"){
-    $stament2= str_replace ("vista_salud_facturas_diferencias","",$statement);
+    $statement2= str_replace ("vista_salud_facturas_diferencias","salud_archivo_facturacion_mov_generados",$statement2);
     $Consulta=$obVenta->Query("SELECT  (SELECT SUM(`valor_neto_pagar`) FROM $statement2) as Total,SUM(valor_pagado) as ValorPagado FROM $statement  ");
     $DatosFacturacion=$obVenta->FetchArray($Consulta);
     $Total=  number_format($DatosFacturacion["Total"]);

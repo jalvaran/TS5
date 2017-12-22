@@ -40,6 +40,9 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
+$obTabla->FormularioRangoFechas($myPage,$statement, "");
+$statement=$obTabla->FiltroRangoFechas("fecha_factura", $statement, "");
+$Vector["statement"]=$statement;   //Filtro necesario para la paginacion
 $css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
