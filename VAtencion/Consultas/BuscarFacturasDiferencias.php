@@ -8,11 +8,19 @@ include_once("../../modelo/php_conexion.php");
 
 include_once("../css_construct.php");
 
-if(!empty($_REQUEST["idEPS"])){
+if(!empty($_REQUEST["idEPS"]) or !empty($_REQUEST["idFactura"])){
     $css =  new CssIni("id");
     $obGlosas = new ProcesoVenta($idUser);
-    $idEPS=$obGlosas->normalizar($_REQUEST['idEPS']);
-    $consulta=$obGlosas->ConsultarTabla("vista_salud_facturas_diferencias", " WHERE cod_enti_administradora='$idEPS' ORDER BY fecha_radicado ASC LIMIT 50");
+    if(isset($_REQUEST["idEPS"])){
+        $idEPS=$obGlosas->normalizar($_REQUEST['idEPS']);
+        $condicion="WHERE cod_enti_administradora='$idEPS' ORDER BY fecha_radicado ASC LIMIT 50";
+    }
+    if(isset($_REQUEST["idFactura"])){
+        $NumFactura=$obGlosas->normalizar($_REQUEST['idFactura']);
+        $css->CrearNotificacionAzul("Resultados de la Busqueda ".$NumFactura, 16);
+        $condicion=" WHERE num_factura='$NumFactura' ORDER BY fecha_radicado ASC LIMIT 50";
+    }
+    $consulta=$obGlosas->ConsultarTabla("vista_salud_facturas_diferencias",$condicion);
     if($obGlosas->NumRows($consulta)){
         $css->CrearTabla();
         $css->FilaTabla(12);

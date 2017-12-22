@@ -5,22 +5,25 @@ include_once("clases/Glosas.class.php");
 include_once("css_construct.php");
 $obGlosas = new Glosas($idUser);
 //////Si recibo un cliente
-	
+$NumFactura="";
+
 print("<html>");
 print("<head>");
-$css =  new CssIni("Glosas y Devoluciones");
+$css =  new CssIni("Glosas");
 
 print("</head>");
 print("<body>");
     
-    include_once("procesadores/SaludGlosasDevoluciones.process.php");
+    include_once("procesadores/SaludGlosas.process.php");
     
-    $css->CabeceraIni("Glosas y Devoluciones"); //Inicia la cabecera de la pagina
+    $css->CabeceraIni("Glosas"); //Inicia la cabecera de la pagina
       
     $css->CabeceraFin(); 
     ///////////////Creamos el contenedor
     /////
     /////
+    
+
     $css->CrearDiv("principal", "container", "center",1,1);
     //Modal Glosas
     $Titulo="Buscar";
@@ -69,7 +72,10 @@ print("<body>");
         $css->FilaTabla(16);
         print("<td>");
             $css->CrearDiv2("DivF", "container", "center", 2, 1, 130, 200, 1, 1, "", "");
-                $Page="Consultas/BuscarFacturasDiferencias.php?idEPS=";
+                $Page="Consultas/BuscarFacturasDiferencias.php?idFactura=";
+                $css->CrearInputText("TxtBuscarFact","text","","","Buscar separado","black","onKeyUp","EnvieObjetoConsulta(`$Page`,`TxtBuscarFact`,`DivFacturasDif`,`5`);return false;",200,30,0,0);
+        
+                $Page="Consultas/BuscarFacturasDiferencias.php?st= &idEPS=";
                 $FuncionJS="EnvieObjetoConsulta(`$Page`,`idEps`,`DivFacturasDif`,`5`);return false ;";
                 $css->CrearSelectTable("idEps", "salud_eps", " ORDER BY nombre_completo", "cod_pagador_min", "nombre_completo", "cod_pagador_min", "onchange", $FuncionJS, "", 1,"Seleccione una EPS");
             $css->CerrarDiv();
@@ -92,6 +98,13 @@ print("<body>");
     $css->AnchoElemento("CmbGlosas_chosen", 420);
     $css->AgregaSubir();
     $css->Footer();
+    if(isset($_REQUEST["idFactura"])){
+        $idFactura=$obGlosas->normalizar($_REQUEST["idFactura"]);
+        
+        $Page="Consultas/SaludFacturasGlosas.php?idFactura=$idFactura&t=";
+        print("<script>EnvieObjetoConsulta(`$Page`,`idEps`,`DivDatosFactura`,``);</script>");
+
+    }
     print("</body></html>");
     ob_end_flush();
 ?>

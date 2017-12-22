@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2017 at 05:35 PM
+-- Generation Time: Dec 21, 2017 at 10:27 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -895,6 +895,8 @@ CREATE TABLE IF NOT EXISTS `configuracion_general` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
   `Valor` text COLLATE latin1_spanish_ci NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
@@ -3167,6 +3169,40 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `productos_lista_precios`
+--
+
+CREATE TABLE IF NOT EXISTS `productos_lista_precios` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productos_precios_adicionales`
+--
+
+CREATE TABLE IF NOT EXISTS `productos_precios_adicionales` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idProducto` bigint(20) NOT NULL,
+  `idListaPrecios` int(11) NOT NULL,
+  `PrecioVenta` double NOT NULL,
+  `TablaVenta` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='tabla para agregar precios a los productos';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `prod_bajas_altas`
 --
 
@@ -3961,6 +3997,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_conceptos_glosas` (
   `cod_concepto_especifico` int(2) unsigned zerofill NOT NULL COMMENT 'Concepto especifico de la glosa',
   `descrpcion_concep_especifico` text CHARACTER SET utf8 NOT NULL COMMENT 'Descripción de la glosa ',
   `aplicacion` text CHARACTER SET utf8 NOT NULL COMMENT 'Aplica cuando:',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_concepto_glosa`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='manual unico glosas,devoluciones y resp Ver Anexo tecn #6';
 
@@ -3993,6 +4031,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_consultas` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_consultas`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
@@ -4027,6 +4067,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_consultas_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_consultas` (`id_consultas`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
@@ -4074,6 +4116,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_control_glosas` (
   `cod_glosa_definitiva` int(3) DEFAULT NULL COMMENT 'Código glosa definitiva',
   `observ_glosa_defin` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Observaciones a glosas definitivas',
   `valor_glosa_definitiva` double(15,2) DEFAULT NULL COMMENT 'Valor glosa definitiva',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_glosa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='reg conj trazabilidad de la factura Ver Anexo tecn #8';
 
@@ -4109,11 +4153,15 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_generados` (
   `eps_radicacion` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Eps en la que se radico la factura',
   `dias_pactados` int(2) DEFAULT NULL COMMENT 'Dias que se pactaron para el pago de la factura con eps',
   `fecha_radicado` date DEFAULT NULL COMMENT 'Fecha de la radicacion de la factura',
-  `numero_radicado` varchar(10) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Numero con que se radico la factura',
+  `numero_radicado` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero con que se radico la factura',
   `Soporte` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Ruta de Archivo de comprobación de radicado',
-  `estado` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Indica en que tabla esta el registro en un momento dado ',
+  `estado` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Indica en que tabla esta el registro en un momento dado ',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_fac_mov_generados`),
-  UNIQUE KEY `num_factura` (`num_factura`)
+  UNIQUE KEY `num_factura` (`num_factura`),
+  KEY `estado` (`estado`),
+  KEY `tipo_negociacion` (`tipo_negociacion`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de transacciones_AF_generadas';
 
 -- --------------------------------------------------------
@@ -4141,6 +4189,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados` (
   `fecha_cargue` datetime NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_pagados`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
@@ -4171,6 +4221,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados_temp` (
   `fecha_cargue` datetime NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_temp_rips_pagados` (`id_pagados`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
@@ -4207,6 +4259,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_hospitalizacion`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
@@ -4243,6 +4297,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_hospitalizacion` (`id_hospitalizacion`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
@@ -4274,6 +4330,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_medicamentos`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`),
@@ -4307,6 +4365,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_medicamentos` (`id_medicamentos`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`),
@@ -4338,6 +4398,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos` (
   `hora_muerte_rc` time NOT NULL COMMENT 'Hora de muerte del recién nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
   `nom_cargue` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_recien_nacido`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
 
@@ -4364,6 +4426,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_otro_servicios`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
@@ -4392,6 +4456,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_otro_servicios` (`id_otro_servicios`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
@@ -4424,6 +4490,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_procedimiento`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
@@ -4456,6 +4524,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_procedimiento` (`id_procedimiento`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
@@ -4488,6 +4558,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_urgencias` (
   `hora_salida` time NOT NULL COMMENT 'Hora de la salida del usuario en observación " Ver Alineamientos tecnicos para ips ver pag 31"',
   `nom_cargue` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_urgencias`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de urgencias AU';
 
@@ -4516,6 +4588,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_usuarios_salud`),
   KEY `num_ident_usuario` (`num_ident_usuario`),
   KEY `primer_ape_usuario` (`primer_ape_usuario`),
@@ -4549,6 +4623,8 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_usuarios_salud` (`id_usuarios_salud`),
   KEY `num_ident_usuario` (`num_ident_usuario`),
   KEY `primer_ape_usuario` (`primer_ape_usuario`),
@@ -4585,6 +4661,8 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_1` (
   `saldo_factura` double(15,2) NOT NULL COMMENT 'Saldo pendiente de la cancelacion de la factura o recobro debe ser igual al valor de la factura o recobro menos la glosa aceptada y menos los pagos aplicados "Ver circulra 030 anexo tecnico 2"',
   `cobro_juridico` enum('SI','NO') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Factura o recobro se encuentra en cobro juridico" Ver circulra 030 anexo tecnico 2"',
   `etapa_proceso` enum('0','1','2','3','4','5','6','7','8') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Etapa en que se encuentra el proceso "Ver circulra 030 anexo tecnico 2"',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_circular030_1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
@@ -4616,6 +4694,8 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_2` (
   `saldo_factura` double(15,2) NOT NULL COMMENT 'Saldo pendiente de la cancelacion de la factura o recobro debe ser igual al valor de la factura o recobro menos la glosa aceptada y menos los pagos aplicados "Ver circulra 030 anexo tecnico 2"',
   `cobro_juridico` enum('SI','NO') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Factura o recobro se encuentra en cobro juridico" Ver circulra 030 anexo tecnico 2"',
   `etapa_proceso` enum('0','1','2','3','4','5','6','7','8') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Etapa en que se encuentra el proceso "Ver circulra 030 anexo tecnico 2"',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_circular030_2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
@@ -4647,6 +4727,8 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_3` (
   `saldo_factura` double(15,2) NOT NULL COMMENT 'Saldo pendiente de la cancelacion de la factura o recobro debe ser igual al valor de la factura o recobro menos la glosa aceptada y menos los pagos aplicados "Ver circulra 030 anexo tecnico 2"',
   `cobro_juridico` enum('SI','NO') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Factura o recobro se encuentra en cobro juridico" Ver circulra 030 anexo tecnico 2"',
   `etapa_proceso` enum('0','1','2','3','4','5','6','7','8') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Etapa en que se encuentra el proceso "Ver circulra 030 anexo tecnico 2"',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_circular030_3`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
@@ -4678,23 +4760,29 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_4` (
   `saldo_factura` double(15,2) NOT NULL COMMENT 'Saldo pendiente de la cancelacion de la factura o recobro debe ser igual al valor de la factura o recobro menos la glosa aceptada y menos los pagos aplicados "Ver circulra 030 anexo tecnico 2"',
   `cobro_juridico` enum('SI','NO') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Factura o recobro se encuentra en cobro juridico" Ver circulra 030 anexo tecnico 2"',
   `etapa_proceso` enum('0','1','2','3','4','5','6','7','8') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Etapa en que se encuentra el proceso "Ver circulra 030 anexo tecnico 2"',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_circular030_4`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salud_directorios_pagadores`
+-- Table structure for table `salud_eps`
 --
 
-CREATE TABLE IF NOT EXISTS `salud_directorios_pagadores` (
-  `id_pagador` int(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `salud_eps` (
+  `ID` int(20) NOT NULL AUTO_INCREMENT,
   `cod_pagador_min` varchar(6) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Codigo del pagador ante el ministerio de salud ',
+  `nit` bigint(20) NOT NULL,
   `sigla_nombre` varchar(120) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre corto del pagador del servicio salud',
-  `nombre_competo` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre completo del pagador del servicio',
+  `nombre_completo` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre completo del pagador del servicio',
   `tipo_regimen` enum('CONTRIBUTIVO','SUBSIDIADO','','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de regimen',
+  `dias_convenio` int(11) NOT NULL,
   `Nombre_gerente` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del gerente del pagador',
-  PRIMARY KEY (`id_pagador`),
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`),
   UNIQUE KEY `cod_pagador_min` (`cod_pagador_min`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='directorio de empresas promotoras de salud (EPS)';
 
@@ -4732,6 +4820,8 @@ CREATE TABLE IF NOT EXISTS `salud_rips_diferencias` (
   `fecha_radicado` date DEFAULT NULL COMMENT 'Fecha de la radicacion de la factura',
   `numero_radicado` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Numero con que se radico la factura',
   `fecha_ult_validacion` datetime DEFAULT NULL COMMENT 'Fecha de ultima validacion',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_rips_diferencias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de diferencias de validacion';
 
@@ -4764,6 +4854,8 @@ CREATE TABLE IF NOT EXISTS `salud_rips_facturas_generadas_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `id_temp_rips_generados` (`id_temp_rips_generados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo temporal de rips generados';
 
@@ -4799,6 +4891,8 @@ CREATE TABLE IF NOT EXISTS `salud_rips_nopagados` (
   `fecha_radicado` date DEFAULT NULL COMMENT 'Fecha de la radicacion de la factura',
   `numero_radicado` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Numero con que se radico la factura',
   `fecha_ult_validacion` datetime DEFAULT NULL COMMENT 'Fecha de ultima validacion',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_rips_nopagados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='archivos de rips no pagados';
 
@@ -4835,6 +4929,8 @@ CREATE TABLE IF NOT EXISTS `salud_rips_pagos_validados` (
   `dias_pactados` int(2) DEFAULT NULL COMMENT 'Dias que se pactaron para el pago de la factura con eps',
   `fecha_radicado` date DEFAULT NULL COMMENT 'Fecha de la radicacion de la factura',
   `numero_radicado` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Numero con que se radico la factura',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_rips_pagos_validados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de pagos validados';
 
@@ -4871,6 +4967,8 @@ CREATE TABLE IF NOT EXISTS `salud_rips_vencidos` (
   `numero_radicado` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Numero con que se radico la factura',
   `fecha_vencimiento` date NOT NULL COMMENT 'Fecha de vencimiento de la facrura ',
   `fecha_ult_validacion` datetime DEFAULT NULL COMMENT 'Fecha de ultima validacion',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_rips_vencidos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='archivos de rips vencidos';
 
@@ -4885,6 +4983,8 @@ CREATE TABLE IF NOT EXISTS `salud_upload_control` (
   `nom_cargue` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
   `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_upload_control`),
   KEY `nom_cargue` (`nom_cargue`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -5956,6 +6056,76 @@ CREATE TABLE IF NOT EXISTS `vista_preventa` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `vista_salud_facturas_diferencias`
+--
+CREATE TABLE IF NOT EXISTS `vista_salud_facturas_diferencias` (
+`id_factura_generada` int(20)
+,`cod_prest_servicio` bigint(12)
+,`razon_social` varchar(60)
+,`num_factura` varchar(20)
+,`fecha_factura` date
+,`cod_enti_administradora` varchar(6)
+,`nom_enti_administradora` varchar(30)
+,`valor_neto_pagar` double(15,2)
+,`id_factura_pagada` bigint(20)
+,`fecha_pago_factura` date
+,`valor_pagado` double(15,2)
+,`num_pago` int(10)
+,`DiferenciaEnPago` double(19,2)
+,`tipo_negociacion` enum('evento','capita')
+,`dias_pactados` int(2)
+,`fecha_radicado` date
+,`numero_radicado` varchar(20)
+,`Soporte` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_salud_facturas_no_pagas`
+--
+CREATE TABLE IF NOT EXISTS `vista_salud_facturas_no_pagas` (
+`id_factura_generada` int(20)
+,`DiasMora` bigint(12)
+,`cod_prest_servicio` bigint(12)
+,`razon_social` varchar(60)
+,`num_factura` varchar(20)
+,`fecha_factura` date
+,`fecha_radicado` date
+,`numero_radicado` varchar(20)
+,`cod_enti_administradora` varchar(6)
+,`nom_enti_administradora` varchar(30)
+,`valor_neto_pagar` double(15,2)
+,`tipo_negociacion` enum('evento','capita')
+,`dias_pactados` int(2)
+,`Soporte` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_salud_facturas_pagas`
+--
+CREATE TABLE IF NOT EXISTS `vista_salud_facturas_pagas` (
+`id_factura_generada` int(20)
+,`cod_prest_servicio` bigint(12)
+,`razon_social` varchar(60)
+,`num_factura` varchar(20)
+,`fecha_factura` date
+,`cod_enti_administradora` varchar(6)
+,`nom_enti_administradora` varchar(30)
+,`valor_neto_pagar` double(15,2)
+,`id_factura_pagada` bigint(20)
+,`fecha_pago_factura` date
+,`valor_pagado` double(15,2)
+,`num_pago` int(10)
+,`tipo_negociacion` enum('evento','capita')
+,`dias_pactados` int(2)
+,`fecha_radicado` date
+,`numero_radicado` varchar(20)
+,`Soporte` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `vista_sistemas`
 --
 CREATE TABLE IF NOT EXISTS `vista_sistemas` (
@@ -6136,6 +6306,33 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_preventa`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_preventa` AS select `p`.`VestasActivas_idVestasActivas` AS `VestasActivas_idVestasActivas`,'productosventa' AS `TablaItems`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `SubGrupo1`,`pv`.`Sub2` AS `SubGrupo2`,`pv`.`Sub3` AS `SubGrupo3`,`pv`.`Sub4` AS `SubGrupo4`,`pv`.`Sub5` AS `SubGrupo5`,`p`.`ValorAcordado` AS `ValorUnitarioItem`,`p`.`Cantidad` AS `Cantidad`,'1' AS `Dias`,(`p`.`ValorAcordado` * `p`.`Cantidad`) AS `SubtotalItem`,((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`) AS `IVAItem`,((select `productos_impuestos_adicionales`.`ValorImpuesto` from `productos_impuestos_adicionales` where (`productos_impuestos_adicionales`.`idProducto` = `p`.`ProductosVenta_idProductosVenta`)) * `p`.`Cantidad`) AS `ValorOtrosImpuestos`,((`p`.`ValorAcordado` * `p`.`Cantidad`) + ((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`)) AS `TotalItem`,concat((`pv`.`IVA` * 100),'%') AS `PorcentajeIVA`,`pv`.`CostoUnitario` AS `PrecioCostoUnitario`,(`pv`.`CostoUnitario` * `p`.`Cantidad`) AS `SubtotalCosto`,(select `prod_departamentos`.`TipoItem` from `prod_departamentos` where (`prod_departamentos`.`idDepartamentos` = `pv`.`Departamento`)) AS `TipoItem`,`pv`.`CuentaPUC` AS `CuentaPUC`,`p`.`Updated` AS `Updated`,`p`.`Sync` AS `Sync` from (`preventa` `p` join `productosventa` `pv` on((`p`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`))) where (`p`.`TablaItem` = 'productosventa');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_salud_facturas_diferencias`
+--
+DROP TABLE IF EXISTS `vista_salud_facturas_diferencias`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_diferencias` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,(select (`t1`.`valor_neto_pagar` - `t2`.`valor_pagado`)) AS `DiferenciaEnPago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'DIFERENCIA');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_salud_facturas_no_pagas`
+--
+DROP TABLE IF EXISTS `vista_salud_facturas_no_pagas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_no_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,(select ((to_days(now()) - to_days(`t1`.`fecha_radicado`)) - `t1`.`dias_pactados`)) AS `DiasMora`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`Soporte` AS `Soporte` from `salud_archivo_facturacion_mov_generados` `t1` where ((`t1`.`estado` = 'RADICADO') or (`t1`.`estado` = ''));
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_salud_facturas_pagas`
+--
+DROP TABLE IF EXISTS `vista_salud_facturas_pagas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'PAGADA');
 
 -- --------------------------------------------------------
 
