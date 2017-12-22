@@ -125,7 +125,7 @@ if(!empty($_REQUEST["idFactura"])){
                                     print("<br>");
                                     $NombreCajaText="CodigoGlosa".$i;
                                     $funcion="EscribaValor('CajaAsigna','$NombreCajaText');ClickElement('ImgBuscar');";
-                                    $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 1, 1);
+                                    $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 0, 1);
                             
                                 print("</td>");
                         
@@ -232,7 +232,7 @@ if(!empty($_REQUEST["idFactura"])){
                                 print("<br>");
                                 $NombreCajaText="CodigoGlosa".$i;
                                 $funcion="EscribaValor('CajaAsigna','$NombreCajaText');ClickElement('ImgBuscar');";
-                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 1, 1);
+                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 0, 1);
                             
                             print("</td>");
                         
@@ -340,7 +340,7 @@ if(!empty($_REQUEST["idFactura"])){
                                 print("<br>");
                                 $NombreCajaText="CodigoGlosa".$i;
                                 $funcion="EscribaValor('CajaAsigna','$NombreCajaText');ClickElement('ImgBuscar');";
-                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 1, 1);
+                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 0, 1);
                             
                             print("</td>");
                         
@@ -447,7 +447,7 @@ if(!empty($_REQUEST["idFactura"])){
                                 print("<br>");
                                 $NombreCajaText="CodigoGlosa".$i;
                                 $funcion="EscribaValor('CajaAsigna','$NombreCajaText');ClickElement('ImgBuscar');";
-                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 1, 1);
+                                $css->CrearInputText($NombreCajaText, "text", "Click para buscar el codigo:<br>", $DatosGlosas["CodigoGlosa"], $DatosGlosas["CodigoGlosa"], "black", "onclick", "$funcion", 150, 30, 0, 1);
                             
                             print("</td>");
                         

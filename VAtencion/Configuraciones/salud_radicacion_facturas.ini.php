@@ -14,6 +14,7 @@ $Vector["Tabla"]=$myTabla;          //Tabla
 $Vector["Titulo"]=$myTitulo;        //Titulo
 $Vector["VerDesde"]=$startpoint;    //Punto desde donde empieza
 $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
+$Vector["MyPage"]=$myPage;
 /*
  * Deshabilito Acciones
  * 

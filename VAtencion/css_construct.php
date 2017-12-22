@@ -266,8 +266,8 @@ class CssIni{
 	
 	/////////////////////Crea un Select
 	
-	function CrearSelect($nombre,$evento){
-		print('<select id="'.$nombre.'" required name="'.$nombre.'" onchange="'.$evento.'" >');
+	function CrearSelect($nombre,$evento,$ancho=100){
+		print('<select id="'.$nombre.'" required name="'.$nombre.'" style="width:'.$ancho.'px" onchange="'.$evento.'" >');
 		
 	}
         
