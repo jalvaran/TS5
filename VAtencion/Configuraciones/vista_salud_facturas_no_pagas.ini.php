@@ -24,6 +24,13 @@ $Vector["VerDesde"]=$startpoint;    //Punto desde donde empieza
 $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
 $Vector["MyPage"]=$myPage;            //pagina
 ///Columnas excluidas
+// Nueva Accion
+$Ruta="SaludDevolverFactura.php?idFactura=";
+$Vector["NuevaAccionLink"][2]="Devolucion";
+$Vector["NuevaAccion"]["Devolucion"]["Titulo"]=" Devolucion ";
+$Vector["NuevaAccion"]["Devolucion"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Devolucion"]["ColumnaLink"]=$idTabla;
+$Vector["NuevaAccion"]["Devolucion"]["Target"]="_blank";
 
 $Vector["Soporte"]["Link"]=1;   //Indico que esta columna tendra un vinculo
 ///Filtros y orden

@@ -7,6 +7,7 @@
 //include_once '../../php_conexion.php';
 class Glosas extends ProcesoVenta{
     public function RegistreGlosa($TipoGlosa,$CodigoGlosa,$FechaReporte,$ValorEPS,$ValorAceptado,$Observaciones,$TablaOrigen,$idArchivo,$NumFactura,$idEps,$idUser,$Vector) {
+        $DatosFactura= $this->DevuelveValores("salud_archivo_facturacion_mov_generados", "num_factura", $NumFactura);
         //Miro si se recibe un archivo
         //
         if(!empty($_FILES['Soporte']['name'])){
@@ -20,7 +21,7 @@ class Glosas extends ProcesoVenta{
 	}
         
         if($TablaOrigen=="salud_archivo_consultas"){
-        $Prefijo="AC";
+            $Prefijo="AC";
         }
         if($TablaOrigen=="salud_archivo_procedimientos"){
             $Prefijo="AP";
@@ -31,10 +32,13 @@ class Glosas extends ProcesoVenta{
         if($TablaOrigen=="salud_archivo_otros_servicios"){
             $Prefijo="AT";
         }
+        if($TablaOrigen=="salud_archivo_facturacion_mov_generados"){
+            $Prefijo="AF";
+        }
     
         //////Creo la compra            
         $tab="salud_registro_glosas";
-        $NumRegistros=12;
+        $NumRegistros=14;
 
         $Columnas[0]="num_factura";		$Valores[0]=$NumFactura;
         $Columnas[1]="PrefijoArchivo";          $Valores[1]=$Prefijo;
@@ -48,9 +52,94 @@ class Glosas extends ProcesoVenta{
         $Columnas[9]="Observaciones";           $Valores[9]=$Observaciones;
         $Columnas[10]="idUser";                 $Valores[10]=$idUser;
         $Columnas[11]="TablaOrigen";            $Valores[11]=$TablaOrigen;
+        $Columnas[12]="fecha_factura";          $Valores[12]=$DatosFactura["fecha_factura"];
+        $Columnas[13]="cod_enti_administradora";$Valores[13]=$DatosFactura["cod_enti_administradora"];
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         
+    }
+    
+    //Informe detallado de glosas
+    public function DetalleRips($idEPS,$Mes,$Year,$Vector) {
+        $YearMes="$Year-$Mes";
+        //Total de facturas generadas
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(valor_neto_pagar) as Total FROM salud_archivo_facturacion_mov_generados "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND tipo_negociacion='evento'";
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        $TotalesRips["RG"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RG"]["V"]=$DatosRips["Total"];
+        //Total de facturas Pagadas
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(valor_neto_pagar) as Total FROM salud_archivo_facturacion_mov_generados "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND Estado='PAGADA' AND tipo_negociacion='evento'";
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        $TotalesRips["RP"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RP"]["V"]=$DatosRips["Total"];
+        //SIN PAGAR NO VENCIDOS
+        
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(valor_neto_pagar) as Total FROM vista_salud_facturas_no_pagas "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND (DiasMora<=1 or DiasMora IS NULL) AND tipo_negociacion='evento'";
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        $TotalesRips["RCNV"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RCNV"]["V"]=$DatosRips["Total"];
+        
+        //SIN PAGAR VENCIDOS
+        
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(valor_neto_pagar) as Total FROM vista_salud_facturas_no_pagas "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND DiasMora>=1  AND tipo_negociacion='evento'";
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        $TotalesRips["RCV"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RCV"]["V"]=$DatosRips["Total"];
+        
+        //Glosa Aceptada
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(GlosaAceptada) as Total FROM salud_registro_glosas "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND TipoGlosa='3'";
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $TotalesRips["RGA"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RGA"]["V"]=$DatosRips["Total"];
+        
+        //Glosa Devuelta
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(GlosaAceptada) as Total FROM salud_registro_glosas "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND TipoGlosa='5'";
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $TotalesRips["RD"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RD"]["V"]=$DatosRips["Total"];
+        
+        //Rips Con Diferencias Sin Conciliar
+       
+        $sql="SELECT COUNT(num_factura) as NumFacturas, SUM(GlosaAceptada) as Total FROM salud_registro_glosas "
+                . "WHERE SUBSTRING(`fecha_factura`,1,7)='$YearMes' AND TipoGlosa='4'";
+        $consulta=$this->Query($sql);
+        $DatosRips= $this->FetchArray($consulta);
+        if($idEPS<>'ALL'){
+           $sql.=" AND cod_enti_administradora='$idEPS'"; 
+        }
+        $TotalesRips["RDSC"]["C"]=$DatosRips["NumFacturas"];
+        $TotalesRips["RDSC"]["V"]=$DatosRips["Total"];
+        return($TotalesRips);
     }
     
     //Fin Clases

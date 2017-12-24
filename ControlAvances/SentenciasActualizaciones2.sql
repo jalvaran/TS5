@@ -130,4 +130,7 @@ INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updat
 (37, 'Auditoria', 26, 2, b'1', '2017-12-20 15:07:49', '2017-10-13 14:16:55');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (124, 'Glosas y Devoluciones', '37', '3', 'SaludGlosasDevoluciones.php', '_SELF', b'1', 'glosas.png', '1', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (40, 'Informes', '26', '5', b'1', '2017-12-20 10:06:39', '2017-10-13 14:16:55');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (125, 'Informe de Estado de Rips', '40', '3', 'SaludInformeEstadoRips.php', '_SELF', b'1', 'estadorips.png', '1', '2017-12-20 10:14:35', '2017-10-13 14:16:57');
 
