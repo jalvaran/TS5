@@ -149,3 +149,15 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (136, 'Facturacion Recaudada AR', '38', '3', 'salud_archivo_facturacion_mov_pagados.php', '_SELF', b'1', 'ar.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (137, 'Listado de EPS', '36', '3', 'salud_eps.php', '_SELF', b'1', 'eps.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
+
+-- Vista para seleccionar lo que se pagó pero no fue generado
+DROP VIEW IF EXISTS `vista_salud_pagas_no_generadas`;
+CREATE VIEW vista_salud_pagas_no_generadas AS 
+Select T1.* From salud_archivo_facturacion_mov_pagados T1 
+Left Outer Join salud_archivo_facturacion_mov_generados T2 ON T1.num_factura = T2.num_factura 
+where T2.num_factura is null ;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (138, 'Facturas Pagas No Generadas', '37', '3', 'vista_salud_pagas_no_generadas.php', '_SELF', b'1', 'factura3.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
+
+
+
