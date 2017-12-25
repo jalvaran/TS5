@@ -133,4 +133,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (40, 'Informes', '26', '5', b'1', '2017-12-20 10:06:39', '2017-10-13 14:16:55');
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (125, 'Informe de Estado de Rips', '40', '3', 'SaludInformeEstadoRips.php', '_SELF', b'1', 'estadorips.png', '1', '2017-12-20 10:14:35', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (126, 'Cartera X Edades', '40', '3', 'salud_edad_cartera.php', '_SELF', b'1', 'cartera.png', '2', '2017-12-20 10:14:35', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (127, 'Registro de Glosas', '36', '3', 'salud_registro_glosas.php', '_SELF', b'1', 'glosas2.png', '7', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
