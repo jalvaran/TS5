@@ -159,5 +159,19 @@ where T2.num_factura is null ;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (138, 'Facturas Pagas No Generadas', '37', '3', 'vista_salud_pagas_no_generadas.php', '_SELF', b'1', 'factura3.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
-
+DROP TABLE IF EXISTS `libromayorbalances`;
+CREATE TABLE IF NOT EXISTS `libromayorbalances` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `FechaInicial` date NOT NULL,
+  `FechaFinal` date NOT NULL,
+  `CuentaPUC` bigint(20) DEFAULT NULL,
+  `NombreCuenta` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `SaldoAnterior` double NOT NULL,
+  `Debito` double DEFAULT NULL,
+  `Credito` double DEFAULT NULL,
+  `NuevoSaldo` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 

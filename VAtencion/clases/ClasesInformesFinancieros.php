@@ -230,6 +230,7 @@ class InformesFinancieros extends Tabla{
              
         return($TotalClases);
     }
+       
    //Fin Clases
 }
     
