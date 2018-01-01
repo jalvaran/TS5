@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 21, 2017 at 10:27 AM
+-- Generation Time: Dec 26, 2017 at 10:28 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -4077,53 +4077,6 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_consultas_temp` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salud_archivo_control_glosas`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_control_glosas` (
-  `id_glosa` bigint(20) NOT NULL AUTO_INCREMENT,
-  `nit_pagadora_servi` bigint(10) NOT NULL COMMENT 'NIT de la entidad responsable del pago',
-  `razon_social_pagador` varchar(150) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón Social de la entidad responsable del pago',
-  `nit_prestadora_servi` bigint(12) NOT NULL COMMENT 'NIT del prestador de servicios de salud',
-  `razon_social_prestador` varchar(250) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre o razón social del prestador de servicios de salud',
-  `prefijo_factura` varchar(6) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Prefijo de la factura',
-  `num_factura` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de Factura',
-  `fecha_prest_servicio` date NOT NULL COMMENT 'Fecha de prestación del servicio o egreso',
-  `fecha_emis_factuara` date NOT NULL COMMENT 'Fecha de emisión de la factur',
-  `num_autorizacion` int(10) NOT NULL COMMENT 'Número de autorización',
-  `fecha_autorizacion` date NOT NULL COMMENT 'Fecha de la autorización',
-  `valor_factura` double(15,2) NOT NULL COMMENT 'Valor de la factura',
-  `fecha_prese_factura` date NOT NULL COMMENT 'Fecha de presentación de la factura',
-  `cod_devolucion` int(3) DEFAULT NULL COMMENT 'Código devolución',
-  `observ_devolucion` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Observaciones de la devolucion',
-  `fecha_devolucion` date DEFAULT NULL COMMENT 'Fecha devolución',
-  `valor_pago_antic` double(15,2) DEFAULT NULL COMMENT 'Valor pago anticipado',
-  `fecha_pago_antic` date DEFAULT NULL COMMENT 'Fecha de pago anticipado',
-  `valor_glosa_inic` double(15,2) DEFAULT NULL COMMENT 'Valor glosa inicial',
-  `cod_glosa_inic` int(3) DEFAULT NULL COMMENT 'Código de glosa inicial',
-  `observ_glosa` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Observaciones de la glosa',
-  `fecha_glosa` date DEFAULT NULL COMMENT 'Fecha glosa inicial',
-  `valor_pag_no_gosado` double(15,2) DEFAULT NULL COMMENT 'Valor pago no glosado',
-  `fecha_pag_no_glosado` date DEFAULT NULL COMMENT 'Fecha pago no glosado',
-  `cod_respu_glosa` int(3) DEFAULT NULL COMMENT 'Código respuesta a glosa inicial',
-  `observ_respu_glosa` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Observaciones de la respuesta a la glosa',
-  `valor_suste_respu_glosa` double(15,2) DEFAULT NULL COMMENT 'Valor sustentado respuesta a glosa inicial',
-  `fecha_respue_glosa` date DEFAULT NULL COMMENT 'Fecha respuesta a glosa inicial',
-  `valor_levantado` double(15,2) DEFAULT NULL COMMENT 'Valor levantado por la entidad responsable del pago',
-  `fecha_decision` date DEFAULT NULL COMMENT 'Fecha decisión de la entidad responsable del pago',
-  `valor_pag_glosa_levan` double(15,2) DEFAULT NULL COMMENT 'Valor pagado por glosa levantada',
-  `fecha_pag_glosa_levan` date DEFAULT NULL COMMENT 'Fecha pago por glosa levantada',
-  `cod_glosa_definitiva` int(3) DEFAULT NULL COMMENT 'Código glosa definitiva',
-  `observ_glosa_defin` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Observaciones a glosas definitivas',
-  `valor_glosa_definitiva` double(15,2) DEFAULT NULL COMMENT 'Valor glosa definitiva',
-  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id_glosa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='reg conj trazabilidad de la factura Ver Anexo tecn #8';
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `salud_archivo_facturacion_mov_generados`
 --
 
@@ -4789,6 +4742,31 @@ CREATE TABLE IF NOT EXISTS `salud_eps` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `salud_registro_glosas`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_registro_glosas` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `num_factura` varchar(30) COLLATE latin1_spanish_ci NOT NULL,
+  `PrefijoArchivo` enum('AC','AM','AP','AT','AF') COLLATE latin1_spanish_ci NOT NULL COMMENT 'AC, AM, AP, AT,AF',
+  `idArchivo` bigint(20) NOT NULL COMMENT 'id de la tabla',
+  `TipoGlosa` enum('1','2','3','4','5') COLLATE latin1_spanish_ci NOT NULL COMMENT '1 inicial, 2 levantada, 3 aceptada, 4 X Conciliar,5 Devuelta',
+  `CodigoGlosa` int(11) NOT NULL COMMENT 'Codigo de la glosa',
+  `FechaReporte` date NOT NULL COMMENT 'Fecha de reporte o gestion',
+  `GlosaEPS` double NOT NULL COMMENT 'Valor que La EPS dice que hay Glosa',
+  `GlosaAceptada` double NOT NULL COMMENT 'Valor que la IPS esta dispuesta a perder',
+  `Soporte` varchar(100) COLLATE latin1_spanish_ci NOT NULL COMMENT 'Documento que soporta la decision o gestion',
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL COMMENT 'Lo que el gestor gestionó',
+  `cod_enti_administradora` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
+  `fecha_factura` date NOT NULL,
+  `idUser` int(11) NOT NULL COMMENT 'usuario que ingresó el registro',
+  `TablaOrigen` varchar(45) COLLATE latin1_spanish_ci NOT NULL COMMENT 'tabla donde esta el archiv',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `salud_rips_diferencias`
 --
 
@@ -4971,6 +4949,18 @@ CREATE TABLE IF NOT EXISTS `salud_rips_vencidos` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_rips_vencidos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='archivos de rips vencidos';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_tipo_glosas`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_tipo_glosas` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `TipoGlosa` varchar(15) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -6126,6 +6116,33 @@ CREATE TABLE IF NOT EXISTS `vista_salud_facturas_pagas` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `vista_salud_pagas_no_generadas`
+--
+CREATE TABLE IF NOT EXISTS `vista_salud_pagas_no_generadas` (
+`id_pagados` bigint(20)
+,`num_factura` varchar(20)
+,`fecha_pago_factura` date
+,`num_pago` int(10)
+,`valor_bruto_pagar` double(15,2)
+,`valor_descuento` double(15,2)
+,`valor_iva` double(15,2)
+,`valor_retefuente` double(15,2)
+,`valor_reteiva` double(15,2)
+,`valor_reteica` double(15,2)
+,`valor_otrasretenciones` double(15,2)
+,`valor_cruces` double(15,2)
+,`valor_anticipos` double(15,2)
+,`valor_pagado` double(15,2)
+,`nom_cargue` varchar(20)
+,`fecha_cargue` datetime
+,`Estado` varchar(10)
+,`idUser` int(11)
+,`Updated` timestamp
+,`Sync` datetime
+);
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `vista_sistemas`
 --
 CREATE TABLE IF NOT EXISTS `vista_sistemas` (
@@ -6333,6 +6350,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_salud_facturas_pagas`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'PAGADA');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_salud_pagas_no_generadas`
+--
+DROP TABLE IF EXISTS `vista_salud_pagas_no_generadas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_pagas_no_generadas` AS select `t1`.`id_pagados` AS `id_pagados`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_pago_factura` AS `fecha_pago_factura`,`t1`.`num_pago` AS `num_pago`,`t1`.`valor_bruto_pagar` AS `valor_bruto_pagar`,`t1`.`valor_descuento` AS `valor_descuento`,`t1`.`valor_iva` AS `valor_iva`,`t1`.`valor_retefuente` AS `valor_retefuente`,`t1`.`valor_reteiva` AS `valor_reteiva`,`t1`.`valor_reteica` AS `valor_reteica`,`t1`.`valor_otrasretenciones` AS `valor_otrasretenciones`,`t1`.`valor_cruces` AS `valor_cruces`,`t1`.`valor_anticipos` AS `valor_anticipos`,`t1`.`valor_pagado` AS `valor_pagado`,`t1`.`nom_cargue` AS `nom_cargue`,`t1`.`fecha_cargue` AS `fecha_cargue`,`t1`.`Estado` AS `Estado`,`t1`.`idUser` AS `idUser`,`t1`.`Updated` AS `Updated`,`t1`.`Sync` AS `Sync` from (`salud_archivo_facturacion_mov_pagados` `t1` left join `salud_archivo_facturacion_mov_generados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where isnull(`t2`.`num_factura`);
 
 -- --------------------------------------------------------
 

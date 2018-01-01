@@ -48,7 +48,7 @@ print("<body>");
                     $Consulta=$obGlosas->Query($sql);
                     while($DatosGlosas=$obGlosas->FetchArray($Consulta)){
 
-                           $css->CrearOptionSelect("$DatosGlosas[cod_glosa]", "$DatosGlosas[cod_glosa] / $DatosGlosas[aplicacion]" , 0);
+                           $css->CrearOptionSelect("$DatosGlosas[cod_glosa]", "$DatosGlosas[cod_glosa] / $DatosGlosas[descrpcion_concep_especifico] / $DatosGlosas[aplicacion]" , 0);
                        }
 
                 $css->CerrarSelect();

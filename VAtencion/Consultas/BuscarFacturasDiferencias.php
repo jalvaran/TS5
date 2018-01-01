@@ -20,6 +20,7 @@ if(!empty($_REQUEST["idEPS"]) or !empty($_REQUEST["idFactura"]) or !empty($_REQU
         $statement= base64_decode($_REQUEST['st']);
         //print($statement);
     }
+    
     //Paginacion
     if(isset($_REQUEST['Page'])){
         $NumPage=$obGlosas->normalizar($_REQUEST['Page']);
@@ -31,24 +32,25 @@ if(!empty($_REQUEST["idEPS"]) or !empty($_REQUEST["idFactura"]) or !empty($_REQU
 
     if(isset($_REQUEST["idEPS"])){
         $idEPS=$obGlosas->normalizar($_REQUEST['idEPS']);
-        $statement=" vista_salud_facturas_diferencias WHERE cod_enti_administradora='$idEPS' ORDER BY fecha_radicado ASC";
+        $statement=" vista_salud_facturas_diferencias WHERE cod_enti_administradora='$idEPS' ORDER BY DiferenciaEnPago DESC";
     }
     if(isset($_REQUEST["idFactura"])){
         $NumFactura=$obGlosas->normalizar($_REQUEST['idFactura']);
         $css->CrearNotificacionAzul("Resultados de la Busqueda ".$NumFactura, 16);
-        $statement=" vista_salud_facturas_diferencias WHERE num_factura='$NumFactura' ORDER BY fecha_radicado ASC";
+        $statement=" vista_salud_facturas_diferencias WHERE num_factura='$NumFactura' ORDER BY DiferenciaEnPago DESC";
     }
     //Paginacion
     $limit = 20;
     $startpoint = ($NumPage * $limit) - $limit;
-    
+    $VectorST = explode("LIMIT", $statement);
+    $statement = $VectorST[0]; 
     $query = "SELECT COUNT(*) as `num` FROM {$statement}";
     $row = $obGlosas->FetchArray($obGlosas->Query($query));
     $ResultadosTotales = $row['num'];
-    //
-    if(empty($_REQUEST["Page"])){
-        $statement.=" LIMIT $startpoint,$limit";
-    }
+        
+    $statement.=" LIMIT $startpoint,$limit";
+    
+    //print("st:$statement");
     $consulta=$obGlosas->Query("SELECT * FROM $statement");
     if($obGlosas->NumRows($consulta)){
         $Resultados=$obGlosas->NumRows($consulta);

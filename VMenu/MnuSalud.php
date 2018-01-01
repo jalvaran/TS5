@@ -56,7 +56,7 @@ include_once("../sesiones/php_control.php");
         $DatosUsuario=$obCon->Query($sql);
         $DatosUsuario=$obCon->FetchArray($DatosUsuario);
         $TipoUser=$DatosUsuario["TipoUser"];   
-	$css->IniciaMenu("Gestion de Servicios y Facturacion de la Salud"); 
+	$css->IniciaMenu("Gestión de Cartera en la Salud"); 
         $i=0;
         $idMenu=26;
         $Datos=$obCon->ConsultarTabla("menu_pestanas", "WHERE idMenu='$idMenu' AND Estado='1' ORDER BY Orden");
