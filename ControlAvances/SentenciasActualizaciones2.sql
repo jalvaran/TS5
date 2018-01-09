@@ -175,3 +175,8 @@ CREATE TABLE IF NOT EXISTS `libromayorbalances` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (139, 'Libro Mayor y Balances', '16', '3', 'libromayorbalances.php', '_SELF', b'1', 'libromayor.png', '1', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+
+INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES (6, '../Salud/', '2017-10-13 14:16:51', '2017-10-13 14:16:51');
