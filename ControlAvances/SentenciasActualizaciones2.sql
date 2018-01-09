@@ -180,3 +180,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 
 INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES (6, '../Salud/', '2017-10-13 14:16:51', '2017-10-13 14:16:51');
+
+ALTER TABLE `salud_archivo_facturacion_mov_pagados` ADD `Soporte` VARCHAR(45) NOT NULL AFTER `Estado`;
+ALTER TABLE `salud_archivo_facturacion_mov_pagados_temp` ADD `Soporte` VARCHAR(45) NOT NULL AFTER `Estado`;

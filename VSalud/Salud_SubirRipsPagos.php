@@ -51,24 +51,30 @@ print("<body>");
     $css->CerrarSelect();
         $css->CrearTabla();
             $css->FilaTabla(16);
-                $css->ColTabla("<strong>Pagos (AR)</strong>", 1);
-                
+                $css->ColTabla("<strong>Pagos (AR) en .zip</strong>", 1);
+                $css->ColTabla("<strong>Soporte de Pago</strong>", 1);
+                $css->ColTabla("<strong>Enviar</strong>", 1);
             $css->CierraFilaTabla();
             
             
             $css->FilaTabla(16);
                 
                 print("<td>");
-                    $css->CrearUpload("UpAR");
-                    $css->CrearDiv("DivAR", "", "left", 1, 1);
-                $css->CerrarDiv();
+                    $css->CrearUpload("UpZipPagos");
+                    
                 print("</td>");
-                
+                print("<td>");
+                    $css->CrearUpload("UpSoporte");
+                    
+                print("</td>");
+                print("<td>");
+                    $css->CrearBotonConfirmado("BtnEnviar", "Subir");
+                    
+                print("</td>");
                 
             $css->CierraFilaTabla();
             
         $css->CerrarTabla();
-    $css->CrearBotonEvento("BtnEnviar", "Enviar y Analizar", 1, "OnClick", "ValidaRIPSPagos()", "naranja", "");    
     $css->CerrarForm();   
     
     

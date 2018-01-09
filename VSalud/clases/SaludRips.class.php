@@ -28,7 +28,7 @@ class Rips extends ProcesoVenta{
         return $i;
     }
     //Rips de pagos AR
-    public function InsertarRipsPagos($NombreArchivo,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsPagos($NombreArchivo,$Separador,$FechaCargue, $idUser,$destino, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
@@ -41,7 +41,7 @@ class Rips extends ProcesoVenta{
             $i=0;
             $z=0;
             $tab="salud_archivo_facturacion_mov_pagados_temp";
-            $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`, `Soporte`) VALUES";
             
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
@@ -60,14 +60,14 @@ class Rips extends ProcesoVenta{
                     
                 if($z==1){
                     
-                    $sql.="('', '$data[0]', '$FechaFactura', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$NombreArchivo','$FechaCargue','$idUser'),";
+                    $sql.="('', '$data[0]', '$FechaFactura', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$NombreArchivo','$FechaCargue','$idUser','$destino'),";
                 }
                 $z=1;
                 
                 if($i==10000){
                     $sql=substr($sql, 0, -1);
                     $this->Query($sql);
-                    $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                    $sql="INSERT INTO `$tab` (`id_pagados`, `num_factura`, `fecha_pago_factura`, `num_pago`, `valor_bruto_pagar`, `valor_descuento`, `valor_iva`, `valor_retefuente`, `valor_reteiva`, `valor_reteica`, `valor_otrasretenciones`, `valor_cruces`, `valor_anticipos`, `valor_pagado`, `nom_cargue`, `fecha_cargue`, `idUser`, `Soporte`) VALUES";
                     $i=0;
                 }
             }
@@ -428,6 +428,75 @@ class Rips extends ProcesoVenta{
         $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
         
     }
+     // archivo de nacidos
+    public function InsertarRipsNacidos($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        $handle = fopen("archivos/".$NombreArchivo, "r");
+            $i=0;
+            
+            $sql="INSERT INTO `salud_archivo_nacidos_temp` (`id_recien_nacido`, `num_factura`, "
+                    . "`cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, "
+                    . "`fecha_nacimiento_rn`, `hora_nacimiento_rc`, `edad_gestacional`, "
+                    . "`control_prenatal`, `sexo_rc`, `peso_rc`, `diagn_rc`, `causa_muerte_rc`, "
+                    . "`fecha_muerte_rc`, `hora_muerte_rc`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, "
+                    . "`idUser`) VALUES ";
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                $i++;    
+                    //Convertimos la fecha de ingreso en formato 0000-00-00
+                    if($data[4]<>""){
+                       $FechaArchivo= explode("/", $data[4]);
+                       if(count($FechaArchivo)>1){
+                           $FechaNacimiento= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{
+                           $FechaNacimiento=$data[4];
+                       }
+                       
+                    }else{
+                       $FechaNacimiento="0000-00-00";
+                    }
+                    
+                    if($data[12]<>""){
+                       $FechaArchivo= explode("/", $data[12]);
+                       if(count($FechaArchivo)>1){ //Si tiene formato dd/mm/año
+                           $FechaMuerte= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                       }else{ //Si no tiene ese formato se espera que tenga el 0000-00-00
+                           $FechaMuerte=$data[12];
+                       }
+                       
+                    }else{
+                       $FechaMuerte="0000-00-00";
+                    }
+                    
+                                       
+                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$FechaNacimiento', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$FechaMuerte', '$data[13]',  '$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                    
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_nacidos_temp` (`id_recien_nacido`, `num_factura`, "
+                            . "`cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, "
+                            . "`fecha_nacimiento_rn`, `hora_nacimiento_rc`, `edad_gestacional`, "
+                            . "`control_prenatal`, `sexo_rc`, `peso_rc`, `diagn_rc`, `causa_muerte_rc`, "
+                            . "`fecha_muerte_rc`, `hora_muerte_rc`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, "
+                            . "`idUser`) VALUES ";
+                        $i=0;
+                    }
+                
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            $sql="";
+            fclose($handle); 
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
+    }
     //Actualiza Autoincrementables
     public function AjusteAutoIncrement($tabla,$id,$Vector) {
         $Increment=$this->ObtenerMAX($tabla, $id, 1, "");
@@ -445,6 +514,7 @@ class Rips extends ProcesoVenta{
         $this->AjusteAutoIncrement("salud_archivo_procedimientos", "id_procedimiento", $Vector);
         $this->AjusteAutoIncrement("salud_archivo_otros_servicios", "id_otro_servicios", $Vector);
         $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_generados", "id_fac_mov_generados", $Vector);
+        $this->AjusteAutoIncrement("salud_archivo_nacidos", "id_recien_nacido", $Vector);
     }
     //Registra los nombres de los archivos subidos
     public function RegistreUpload($NombreArchivo,$Fecha,$idUser,$Vector) {
@@ -555,6 +625,17 @@ class Rips extends ProcesoVenta{
         
         $this->Query($sql);
         $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_pagados", "id_pagados", $Vector);
+    }
+    //Copia los registros de la tabla temporal nacidos que no existan en la principal y los inserta
+    public function AnaliceInsercionNacidos($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_nacidos` "
+                . "SELECT * FROM `salud_archivo_nacidos_temp` as t1 "
+                . "WHERE NOT EXISTS "
+                . "(SELECT 1 FROM `salud_archivo_nacidos` as t2 "
+                . "WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`num_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
     }
     //Actualiza el estado de las facturas pagas con el mismo valor
     public function EncuentreFacturasPagadas($Vector) {
