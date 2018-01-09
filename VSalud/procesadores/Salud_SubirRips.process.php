@@ -140,7 +140,80 @@ if(!empty($_FILES['UpAF']['name'])){
     
 }
 
-if(isset($_REQUEST["AnaliceArchivos"])){
+
+//Archivo ZIP con los archivos cargados
+
+if(isset($_REQUEST["BtnSubirZip"])){ 
+    
+    if(!empty($_FILES['ArchivosZip']['type'])){
+        
+        if($_FILES['ArchivosZip']['type']=='application/x-zip-compressed'){
+            $carpeta="archivos/";
+            opendir($carpeta);
+            $NombreArchivo=str_replace(' ','_',$_FILES['ArchivosZip']['name']);  
+            //$destino=$carpeta.$NombreArchivo;
+            //move_uploaded_file($_FILES['ArchivosZip']['tmp_name'],$destino);
+            
+            $obRips->VerificarZip($_FILES['ArchivosZip']['tmp_name'],$idUser, "");
+        }
+            
+        $consulta= $obRips->ConsultarTabla("salud_upload_control", " WHERE Analizado='0'");
+        while($DatosArchivos= $obRips->FetchArray($consulta)){
+            $NombreArchivo=$DatosArchivos["nom_cargue"]; 
+            $Prefijo=substr($NombreArchivo, 0, 2); 
+            //Si hay medicamentos
+            if($Prefijo=="AM"){
+                $obRips->VaciarTabla("salud_archivo_medicamentos_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsMedicamentos($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            //Si hay consultas
+            if($Prefijo=="AC"){
+                $obRips->VaciarTabla("salud_archivo_consultas_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsConsultas($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            //Si hay hospitalizaciones 
+            if($Prefijo=="AH"){
+                $obRips->VaciarTabla("salud_archivo_hospitalizaciones_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsHospitalizaciones($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            //Si hay procedimientos 
+            if($Prefijo=="AP"){
+                $obRips->VaciarTabla("salud_archivo_procedimientos_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsProcedimientos($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            
+            //otros servicios
+            if($Prefijo=="AT"){
+                $obRips->VaciarTabla("salud_archivo_otros_servicios_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsOtrosServicios($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            
+            //USUARIOS
+            if($Prefijo=="US"){
+                $obRips->VaciarTabla("salud_archivo_usuarios_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsUsuarios($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            //facturacion generada
+            if($Prefijo=="AF"){
+                $obRips->VaciarTabla("salud_rips_facturas_generadas_temp"); //Vacío la tabla de subida temporal
+                $obRips->InsertarRipsFacturacionGenerada($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
+                
+            }
+            $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
+            $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
+
+        }    
+    }
+    
+}
+
+if(isset($_REQUEST["BtnSubirZip"])){
     $obRips->AnaliceInsercionConsultas(""); //Analizamos la tabla temporal que se sube y se inserta en la principal
     $css->CrearNotificacionNaranja("Tabla de Consultas Analizada",16);
     

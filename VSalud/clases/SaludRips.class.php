@@ -6,17 +6,38 @@
  */
 //include_once '../../php_conexion.php';
 class Rips extends ProcesoVenta{
-    public function InsertarRipsPagos($Separador,$FechaCargue, $idUser, $Vector) {
+    //Calculamos el numero de registros
+    public function CalculeRegistros($FileName,$Separador) {
+        $i=0;
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        
+            
+            $handle = fopen($FileName, "r");
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                
+                $i++;
+            }
+            
+            fclose($handle); 
+        
+        return $i;
+    }
+    //Rips de pagos AR
+    public function InsertarRipsPagos($NombreArchivo,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAR']['type'])){
-            $TipoArchivo=$_FILES['UpAR']['type'];
-            $NombreArchivo=$_FILES['UpAR']['name'];
-            $handle = fopen($_FILES['UpAR']['tmp_name'], "r");
+        
+            
+            $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             $z=0;
             $tab="salud_archivo_facturacion_mov_pagados_temp";
@@ -54,43 +75,20 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             fclose($handle); 
             $sql="";
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
         
     }
-    //Calculamos el numero de registros
-    public function CalculeRegistros($FileName,$Separador) {
-        $i=0;
-        if($Separador==1){
-           $Separador=";"; 
-        }else{
-           $Separador=",";  
-        }
-        if(!empty($_FILES[$FileName]['type'])){
-            
-            $handle = fopen($_FILES[$FileName]['tmp_name'], "r");
-            
-            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
-                
-                $i++;
-            }
-            
-            fclose($handle); 
-        }
-        return $i;
-    }
+    
     // insertar Rips de consultas generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsConsultas($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsConsultas($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAC']['type'])){
-            $TipoArchivo=$_FILES['UpAC']['type'];
-            $NombreArchivo=$_FILES['UpAC']['name'];
-            $handle = fopen($_FILES['UpAC']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_archivo_consultas_temp` "
@@ -99,7 +97,7 @@ class Rips extends ProcesoVenta{
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
                     
-                    
+                  $i++;  
                     if($data[4]<>""){
                        $FechaArchivo= explode("/", $data[4]);
                        if(count($FechaArchivo)>1){
@@ -115,30 +113,32 @@ class Rips extends ProcesoVenta{
                     
                     
                     $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$FechaConsulta', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]', '$data[14]', '$data[15]', '$data[16]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_consultas_temp` "
+                            . "(`id_consultas`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `fecha_consulta`, `num_autorizacion`, `cod_consulta`, `finalidad_consulta`, `causa_externa`, `cod_diagnostico_principal`, `cod_diagnostico_relacionado1`, `cod_diagnostico_relacionado2`, `cod_diagnostico_relacionado3`, `tipo_diagn_principal`, `valor_consulta`, `valor_cuota_moderadora`, `valor_neto_pagar_consulta`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`,`idUser`) VALUES";
+                        $i=0;
+                    }
                 
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
             fclose($handle); 
             $sql="";
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
-        
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+                
     }
     
     // insertar Rips de consultas generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsHospitalizaciones($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsHospitalizaciones($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAH']['type'])){
-            $TipoArchivo=$_FILES['UpAH']['type'];
-            $NombreArchivo=$_FILES['UpAH']['name'];
-            $handle = fopen($_FILES['UpAH']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_archivo_hospitalizaciones_temp` "
@@ -146,7 +146,7 @@ class Rips extends ProcesoVenta{
             
             while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
                 //////Inserto los datos en la tabla  
-                    
+                    $i++;
                     //Convertimos la fecha de ingreso en formato 0000-00-00
                     if($data[5]<>""){
                        $FechaArchivo= explode("/", $data[5]);
@@ -175,63 +175,34 @@ class Rips extends ProcesoVenta{
                     
                     
                     $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$FechaIngreso', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]', '$data[14]', '$data[15]', '$data[16]','$FechaSalida', '$data[18]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_hospitalizaciones_temp` "
+                        . "(`id_hospitalizacion`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `via_ingreso`, `fecha_ingreso_hospi`, `hora_ingreso`, `num_autorizacion`, `causa_externa`, `diagn_princ_ingreso`, `diagn_princ_egreso`, `diagn_relac1_egreso`, `diagn_relac2_egreso`, `diagn_relac3_egreso`, `diagn_complicacion`, `estado_salida_hospi`, `diagn_causa_muerte`, `fecha_salida_hospi`, `hora_salida_hospi`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                    $i=0;
+                    }
                 
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
             $sql="";
             fclose($handle);
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+            
         
     }
     
-    // insertar Rips de Medicamentos generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsMedicamentos($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
-        // si se recibe el archivo
-        if($Separador==1){
-           $Separador=";"; 
-        }else{
-           $Separador=",";  
-        }
-        if(!empty($_FILES['UpAM']['type'])){
-            $TipoArchivo=$_FILES['UpAM']['type'];
-            $NombreArchivo=$_FILES['UpAM']['name'];
-            $handle = fopen($_FILES['UpAM']['tmp_name'], "r");
-            $i=0;
-            
-            $sql="INSERT INTO `salud_archivo_medicamentos_temp` "
-              . "(`id_medicamentos`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `cod_medicamento`,  `tipo_medicamento`, `forma_farmaceutica`, `nom_medicamento`,`concentracion_medic`, `um_medicamento`, `num_und_medic`, `valor_unit_medic`, `valor_total_medic`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
-            
-            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
-                //////Inserto los datos en la tabla  
-                    
-                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
-                
-            }
-            $sql=substr($sql, 0, -1);
-            $this->Query($sql);
-            $sql="";
-            fclose($handle); 
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
-        
-    }
-    
+       
     // insertar Rips de procedimientos generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsProcedimientos($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsProcedimientos($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAP']['type'])){
-            $TipoArchivo=$_FILES['UpAP']['type'];
-            $NombreArchivo=$_FILES['UpAP']['name'];
-            $handle = fopen($_FILES['UpAP']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_archivo_procedimientos_temp` "
@@ -256,30 +227,33 @@ class Rips extends ProcesoVenta{
                     
                     
                     $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$FechaConsulta', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]','$data[14]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
-                
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_procedimientos_temp` "
+                        . "(`id_procedimiento`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `fecha_procedimiento`, `num_autorizacion`, `cod_procedimiento`, `ambito_reali_procedimiento`, `finalidad_procedimiento`, `personal_atiende`, `cod_diagn_princ_procedimiento`, `cod_diagn_relac_procedimiento`, `complicaciones`, `realizacion_quirurgico`, `valor_procedimiento`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                        $i=0;
+                    }
+                    $i++;
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
             fclose($handle); 
             $sql="";
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+            
         
     }
     
     // insertar Rips de Otros Servicios generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsOtrosServicios($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsOtrosServicios($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAT']['type'])){
-            $TipoArchivo=$_FILES['UpAT']['type'];
-            $NombreArchivo=$_FILES['UpAT']['name'];
-            $handle = fopen($_FILES['UpAT']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_archivo_otros_servicios_temp` "
@@ -289,29 +263,33 @@ class Rips extends ProcesoVenta{
                 //////Inserto los datos en la tabla  
                     
                 $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
-                
+                if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_otros_servicios_temp` "
+                         . "(`id_otro_servicios`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `tipo_servicio`, `cod_servicio`, `nom_servicio`, `cantidad`, `valor_unit_material`, `valor_total_material`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                        $i=0;
+                    }
+                    $i++;
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
+            fclose($handle); 
             $sql="";
-            fclose($handle);
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
         
     }
     
     // insertar Rips de usuarios generados a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsUsuarios($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsUsuarios($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         if($Separador==1){
            $Separador=";"; 
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpUS']['type'])){
-            $TipoArchivo=$_FILES['UpUS']['type'];
-            $NombreArchivo=$_FILES['UpUS']['name'];
-            $handle = fopen($_FILES['UpUS']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_archivo_usuarios_temp` "
@@ -321,19 +299,26 @@ class Rips extends ProcesoVenta{
                 //////Inserto los datos en la tabla  
                     
                 $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]','$data[11]','$data[12]','$data[13]','$NombreArchivo','$FechaCargue','$idUser'),";
-                
+                if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `salud_archivo_usuarios_temp` "
+                            . "(`id_usuarios_salud`, `tipo_ident_usuario`, `num_ident_usuario`, `cod_ident_adm_pb`, `tipo_usuario`, `primer_ape_usuario`, `segundo_ape_usuario`, `primer_nom_usuario`, `segundo_nom_usuario`, `edad`, `unidad_medida_edad`, `sexo`, `cod_depa_residencial`, `cod_muni_residencial`, `zona_residencial`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                          $i=0;
+                    }
+                    $i++;
             }
             $sql=substr($sql, 0, -1);
             $this->Query($sql);
-            $sql="";
             fclose($handle); 
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-        }
+            $sql="";
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
         
     }
     
     // insertar Rips de facturas generadas a tabla temporal, despues por medio de un trigger se llevará a la general
-    public function InsertarRipsFacturacionGenerada($TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+    public function InsertarRipsFacturacionGenerada($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
         
         if($Separador==1){
@@ -341,11 +326,7 @@ class Rips extends ProcesoVenta{
         }else{
            $Separador=",";  
         }
-        if(!empty($_FILES['UpAF']['type'])){
-            $TipoArchivo=$_FILES['UpAF']['type'];
-            $NombreArchivo=$_FILES['UpAF']['name'];
-            
-            $handle = fopen($_FILES['UpAF']['tmp_name'], "r");
+        $handle = fopen("archivos/".$NombreArchivo, "r");
             $i=0;
             
             $sql="INSERT INTO `salud_rips_facturas_generadas_temp` "
@@ -406,9 +387,45 @@ class Rips extends ProcesoVenta{
             $this->Query($sql);
             $sql="";
             fclose($handle); 
-            $this->RegistreUpload($NombreArchivo,$FechaCargue,$idUser,"");
-            
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
+    }
+     
+    // insertar Rips de facturas generadas a tabla temporal, despues por medio de un trigger se llevará a la general
+    public function InsertarRipsMedicamentos($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
+        // si se recibe el archivo
+        
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
         }
+        
+                       
+        $handle = fopen("archivos/".$NombreArchivo, "r");
+        $i=0;
+
+        $sql="INSERT INTO `salud_archivo_medicamentos_temp` "
+              . "(`id_medicamentos`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `cod_medicamento`,  `tipo_medicamento`, `forma_farmaceutica`, `nom_medicamento`,`concentracion_medic`, `um_medicamento`, `num_und_medic`, `valor_unit_medic`, `valor_total_medic`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+            
+       while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+            $i++;
+            $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]', '$data[13]','$TipoNegociacion','$NombreArchivo','$FechaCargue','$idUser'),";
+                
+            if($i==10000){
+                $sql=substr($sql, 0, -1);
+                $this->Query($sql);
+                $sql="INSERT INTO `salud_archivo_medicamentos_temp` "
+                . "(`id_medicamentos`, `num_factura`, `cod_prest_servicio`, `tipo_ident_usuario`, `num_ident_usuario`, `num_autorizacion`, `cod_medicamento`,  `tipo_medicamento`, `forma_farmaceutica`, `nom_medicamento`,`concentracion_medic`, `um_medicamento`, `num_und_medic`, `valor_unit_medic`, `valor_total_medic`, `tipo_negociacion`, `nom_cargue`, `fecha_cargue`, `idUser`) VALUES";
+                $i=0;
+            }
+
+        }
+        $sql=substr($sql, 0, -1);
+        $this->Query($sql);
+        $sql="";
+        fclose($handle); 
+        $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
         
     }
     //Actualiza Autoincrementables
@@ -556,5 +573,32 @@ class Rips extends ProcesoVenta{
                 . "WHERE t1.`num_factura`=t2.`num_factura` AND t2.`valor_pagado`<t1.`valor_neto_pagar` ";
         $this->Query($sql);
     }
+    
+    //Verificar archivos subidos por zip
+    public function VerificarZip($NombreArchivo,$idUser,$Vector) {
+        $zip = new ZipArchive;
+        $Fecha=date("Y-m-d H:i:s");
+        //print("Entra");
+        if ($zip->open($NombreArchivo) === TRUE){
+            $zip->extractTo('archivos/'); //función para extraer el ZIP, le pasamos la ruta donde queremos que nos descomprima
+            for($i = 0; $i < $zip->numFiles; $i++){
+                //obtenemos ruta que tendrán los documentos cuando los descomprimamos
+                $nombresFichZIP['tmp_name'][$i] = 'archivos/'.$zip->getNameIndex($i);
+                //obtenemos nombre del fichero
+                $nombresFichZIP['name'][$i] = $zip->getNameIndex($i);
+                $DatosArchivos= $this->DevuelveValores("salud_upload_control", "nom_cargue", $nombresFichZIP['name'][$i]);
+                if($DatosArchivos==''){
+                    $this->RegistreUpload($nombresFichZIP['name'][$i], $Fecha, $idUser, "");
+                }
+               
+            }
+            
+
+            $zip->close();
+	}
+    }
+    
+    
+   
     //Fin Clases
 }

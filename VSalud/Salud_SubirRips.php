@@ -42,6 +42,44 @@ print("<body>");
     /////
     /////
     $css->CrearNotificacionAzul("Suba los archivos", 16);
+        $css->CrearForm2("FrmArchivosZip", $myPage, "post", "_self");
+        $css->CrearTabla();
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>SUBIR RIPS EN .ZIP</strong>", 4);
+            $css->CierraFilaTabla();
+            $css->FilaTabla(16);
+                $css->ColTabla("<strong>Separador</strong>", 1);
+                $css->ColTabla("<strong>Tipo de Negociacion</strong>", 1);
+                $css->ColTabla("<strong>ZIP</strong>", 1);
+                $css->ColTabla("<strong>Enviar</strong>", 1);
+            $css->CierraFilaTabla();   
+            $css->FilaTabla(16);
+                print("<td>");
+                    $css->CrearSelect("CmbSeparador", "",200);
+                    $css->CrearOptionSelect("", "Selecciones el Separador de los archivos", 0);
+                    $css->CrearOptionSelect(1, "punto y coma (;)", 0);
+                    $css->CrearOptionSelect(2, "Coma (,)", 1);
+                $css->CerrarSelect();
+                print("</td>");
+                print("<td>");
+                    $css->CrearSelect("CmbTipoNegociacion", "",200);
+                    $css->CrearOptionSelect("", "Tipo de Negociacion", 0);
+                    $css->CrearOptionSelect("evento", "Evento", 0);
+                    $css->CrearOptionSelect("capita", "Capita", 0);
+                $css->CerrarSelect();
+                print("</td>");
+                print("<td>");
+                    $css->CrearUpload("ArchivosZip");
+                print("</td>");
+                print("<td>");
+                    $css->CrearBotonNaranja("BtnSubirZip", "Subir");
+                print("</td>");
+                
+               
+            $css->CierraFilaTabla();   
+            $css->CerrarTabla();
+        $css->CerrarForm();
+        /*
     $css->CrearForm2("FrmArchivos", $myPage, "post", "_self");
     $css->CrearInputText("AnaliceArchivos", "hidden", "", 1, "", "", "", "", "", "", 0, 0);
     $css->CrearSelect("CmbTipoNegociacion", "");
@@ -123,6 +161,8 @@ print("<body>");
     $css->CrearBotonEvento("BtnEnviar", "Enviar y Analizar", 1, "OnClick", "ValidarUploads()", "naranja", "");    
     $css->CerrarForm();   
     
+         * 
+         */
     
     $css->CerrarDiv();//Cerramos contenedor Secundario
     $css->CerrarDiv();//Cerramos contenedor Principal
