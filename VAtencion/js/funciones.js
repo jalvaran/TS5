@@ -750,6 +750,14 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             document.getElementById(idTarget).innerHTML ='<br><img src="../images/processing.gif" alt="Cargando" height="100" width="100">';
             
         }
+        //Para cobros prejuridicos salud
+        if(BorrarId==3){
+            TipoCobro =document.getElementById('CmbCobro').value;
+            idEps =document.getElementById('idEps').value;                        
+            ValorElement="?idEPS="+idEps+"&TipoCobro="+TipoCobro;            
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
+            
+        }
         
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
