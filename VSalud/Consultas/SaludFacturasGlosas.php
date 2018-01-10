@@ -82,7 +82,8 @@ if(!empty($_REQUEST["idFactura"])){
                             $css->CierraFilaTabla();   
                             $css->FilaTabla(14);
                                 $css->ColTabla($DatosArchivo["nom_cargue"], 1);
-                                $css->ColTabla($DatosArchivo["cod_consulta"], 3);
+                                $DatosCups=$obGlosas->DevuelveValores("salud_cups", "codigo_sistema", $DatosArchivo["cod_consulta"]);
+                                $css->ColTabla($DatosArchivo["cod_consulta"]." ".$DatosCups["descripcion_cups"], 3);
                                 $css->ColTabla(number_format($DatosArchivo["valor_neto_pagar_consulta"]), 1);
                             $css->CierraFilaTabla();   
                             $css->FilaTabla(14);    
@@ -299,7 +300,8 @@ if(!empty($_REQUEST["idFactura"])){
                         
                         $css->FilaTabla(12);
                             $css->ColTabla($DatosArchivo["nom_cargue"], 1);
-                            $css->ColTabla($DatosArchivo["cod_procedimiento"], 3);
+                            $DatosCups=$obGlosas->DevuelveValores("salud_cups", "codigo_sistema", $DatosArchivo["cod_procedimiento"]);
+                            $css->ColTabla($DatosArchivo["cod_procedimiento"]." ".$DatosCups["descripcion_cups"], 3);
                             $css->ColTabla(number_format($DatosArchivo["valor_procedimiento"]), 1);
                         $css->CierraFilaTabla(); 
                         $css->FilaTabla(14);    
