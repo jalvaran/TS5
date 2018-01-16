@@ -18,7 +18,7 @@ if(isset($_REQUEST["BtnEnviar"])){
         move_uploaded_file($_FILES['UpSoporte']['tmp_name'],$Atras.$destino);
     }
     if(!empty($_FILES['UpZipPagos']['type'])){
-        if($_FILES['UpZipPagos']['type']=='application/x-zip-compressed'){
+        //if($_FILES['UpZipPagos']['type']=='application/x-zip-compressed'){
             $carpeta="archivos/";
             opendir($carpeta);
             $NombreArchivo=str_replace(' ','_',$_FILES['UpZipPagos']['name']);  
@@ -26,10 +26,10 @@ if(isset($_REQUEST["BtnEnviar"])){
             //move_uploaded_file($_FILES['ArchivosZip']['tmp_name'],$destino);
             
             $obRips->VerificarZip($_FILES['UpZipPagos']['tmp_name'],$idUser, "");
-        }else{
-            $css->CrearNotificacionRoja("Debe cargar un archivo .zip",16);
-            goto salir;
-        }
+        //}else{
+          //  $css->CrearNotificacionRoja("Debe cargar un archivo .zip",16);
+          //  goto salir;
+        //}
         $consulta= $obRips->ConsultarTabla("salud_upload_control", " WHERE Analizado='0'");
         while($DatosArchivos= $obRips->FetchArray($consulta)){
             $NombreArchivo=$DatosArchivos["nom_cargue"]; 
