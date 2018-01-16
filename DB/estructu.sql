@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 26, 2017 at 10:28 AM
+-- Generation Time: Jan 11, 2018 at 08:13 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -2265,16 +2265,19 @@ CREATE TABLE IF NOT EXISTS `librodiario` (
 --
 
 CREATE TABLE IF NOT EXISTS `libromayorbalances` (
-  `idLibroMayorBalances` int(11) NOT NULL AUTO_INCREMENT,
-  `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `FechaInicial` date NOT NULL,
+  `FechaFinal` date NOT NULL,
+  `CuentaPUC` bigint(20) DEFAULT NULL,
   `NombreCuenta` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Debito` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Credito` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `SaldoAnterior` double NOT NULL,
+  `Debito` double DEFAULT NULL,
+  `Credito` double DEFAULT NULL,
+  `NuevoSaldo` double NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`idLibroMayorBalances`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2768,7 +2771,7 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3425,7 +3428,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub1` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub1`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3440,7 +3443,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub2` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub2`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -4109,12 +4112,15 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_generados` (
   `numero_radicado` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero con que se radico la factura',
   `Soporte` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Ruta de Archivo de comprobación de radicado',
   `estado` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Indica en que tabla esta el registro en un momento dado ',
+  `EstadoCobro` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_fac_mov_generados`),
   UNIQUE KEY `num_factura` (`num_factura`),
   KEY `estado` (`estado`),
-  KEY `tipo_negociacion` (`tipo_negociacion`)
+  KEY `tipo_negociacion` (`tipo_negociacion`),
+  KEY `Updated` (`Updated`),
+  KEY `EstadoCobro` (`EstadoCobro`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de transacciones_AF_generadas';
 
 -- --------------------------------------------------------
@@ -4141,6 +4147,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `Soporte` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `idUser` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -4173,6 +4180,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados_temp` (
   `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
   `Estado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `Soporte` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `idUser` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -4349,12 +4357,45 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos` (
   `causa_muerte_rc` varchar(4) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Causa básica de muerte recien nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
   `fecha_muerte_rc` date NOT NULL COMMENT 'Fecha de muerte del recién nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
   `hora_muerte_rc` time NOT NULL COMMENT 'Hora de muerte del recién nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
-  `nom_cargue` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
+  `tipo_negociacion` enum('evento','capita') COLLATE utf8_spanish_ci NOT NULL,
+  `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
   `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
+  `idUser` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_recien_nacido`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_archivo_nacidos_temp`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos_temp` (
+  `id_recien_nacido` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
+  `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
+  `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
+  `tipo_ident_usuario` enum('CC','CE','PA','RC','TI','AS','MS') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de identificación de la madre " Ver Alineamientos tecnicos para ips ver pag 14"',
+  `num_ident_usuario` bigint(16) NOT NULL COMMENT 'Número de identificación de la madre en el Sistema " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `fecha_nacimiento_rn` date NOT NULL COMMENT 'Fecha de nacimiento del recién nacido " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `hora_nacimiento_rc` time NOT NULL COMMENT 'Hora de nacimiento " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `edad_gestacional` int(2) NOT NULL COMMENT 'Edad gestacional " Ver Alineamientos tecnicos para ips ver pag 39 "',
+  `control_prenatal` enum('1','2') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Control prenatal " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `sexo_rc` enum('1','2') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Sexo del recien nacido " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `peso_rc` int(4) NOT NULL COMMENT 'Peso del recien nacido " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `diagn_rc` varchar(4) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Diagnóstico del recién nacido " Ver Alineamientos tecnicos para ips ver pag 39"',
+  `causa_muerte_rc` varchar(4) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Causa básica de muerte recien nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
+  `fecha_muerte_rc` date NOT NULL COMMENT 'Fecha de muerte del recién nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
+  `hora_muerte_rc` time NOT NULL COMMENT 'Hora de muerte del recién nacido " Ver Alineamientos tecnicos para ips ver pag 40"',
+  `tipo_negociacion` enum('evento','capita') COLLATE utf8_spanish_ci NOT NULL,
+  `nom_cargue` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del archivo con el que se carga',
+  `fecha_cargue` datetime NOT NULL COMMENT 'Fecha en que se carga',
+  `idUser` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  KEY `id_recien_nacido` (`id_recien_nacido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
 
 -- --------------------------------------------------------
 
@@ -4589,6 +4630,40 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios_temp` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `salud_bancos`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_bancos` (
+  `ID` int(20) NOT NULL,
+  `nit_banco` bigint(12) NOT NULL COMMENT 'NIT del banco',
+  `banco_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del banco donde entra la transaccion',
+  `tipo_cuenta` enum('ahorros','corriente') COLLATE utf8_spanish_ci NOT NULL COMMENT 'tipo de cuenta',
+  `num_cuenta_banco` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de cuenta en la cual entra la transaccion',
+  `observacion` text COLLATE utf8_spanish_ci COMMENT 'observaciones de diagnostico ',
+  `fecha_hora_registro` datetime DEFAULT NULL COMMENT 'fecha y hora del registro',
+  `user` int(2) DEFAULT NULL COMMENT 'usuario que registra',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de banco';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_cie10`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_cie10` (
+  `ID` int(20) NOT NULL,
+  `codigo_sistema` varchar(4) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubCategoria de diagnostico ',
+  `descripcion_cups` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Descrpcion de la Clasificacion internacional de Emfermedades ',
+  `observacion` varchar(6) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'observaciones de CIE ',
+  `fecha_hora_registro` datetime DEFAULT NULL COMMENT 'fecha y hora del registro',
+  `user` int(2) DEFAULT NULL COMMENT 'usuario que registra',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de Clasificacion internacional de Emfermedades CIE10';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `salud_circular030_1`
 --
 
@@ -4717,6 +4792,71 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_4` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_circular030_4`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_cobros_prejuridicos`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TipoCobro` enum('1','2','3','4') COLLATE latin1_spanish_ci NOT NULL,
+  `Fecha` date NOT NULL,
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `Soporte` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `Fecha` (`Fecha`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_cobros_prejuridicos_relaciones`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos_relaciones` (
+  `idCobroPrejuridico` int(11) NOT NULL,
+  `num_factura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  KEY `idCobroPrejuridico` (`idCobroPrejuridico`),
+  KEY `num_factura` (`num_factura`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_cups`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_cups` (
+  `ID` int(20) NOT NULL,
+  `grupo` varchar(2) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Grupo de diagnostico ',
+  `subgrupo` varchar(1) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubGrupo de diagnostico ',
+  `categoria` varchar(1) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Categoria de diagnostico ',
+  `subcategoria` varchar(2) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubCategoria de diagnostico ',
+  `codigo_ley` varchar(9) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubCategoria de diagnostico ',
+  `codigo_sistema` varchar(6) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubCategoria de diagnostico ',
+  `descripcion_cups` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Descrpcion del C.U.P.S ',
+  `observacion` varchar(6) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'observaciones de diagnostico ',
+  `fecha_hora_registro` datetime DEFAULT NULL COMMENT 'fecha y hora del registro',
+  `user` int(2) DEFAULT NULL COMMENT 'usuario que registra',
+  PRIMARY KEY (`ID`),
+  KEY `codigo_sistema` (`codigo_sistema`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de cups';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salud_dias_habiles`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_dias_habiles` (
+  `fecha_dia` date NOT NULL COMMENT 'fecha del dia',
+  `dia` enum('lunes','martes','miercoles','jueves','viernes','sabado','domingo') COLLATE utf8_spanish_ci NOT NULL COMMENT 'dia de la semana',
+  `tipo_dia` enum('festivo','dominical','sabatino','normal','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'tipo de dia',
+  `estado_dia` enum('habil','no habil','','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'estado de dia es habil o no lo es'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='tabla para controlar los días hábiles';
 
 -- --------------------------------------------------------
 
@@ -4953,6 +5093,28 @@ CREATE TABLE IF NOT EXISTS `salud_rips_vencidos` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `salud_tesoreria`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_tesoreria` (
+  `ID` int(20) NOT NULL,
+  `cod_enti_administradora` varchar(6) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Código entidad que paga',
+  `nom_enti_administradora` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre entidad que paga',
+  `fecha_transaccion` date NOT NULL COMMENT 'fecha entra el dinero al banco',
+  `num_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de la transaccion con la cual entra al banco',
+  `banco_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del banco donde entra la transaccion',
+  `num_cuenta_banco` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de cuenta en la cual entra la transaccion',
+  `valor_transaccion` double(15,2) NOT NULL COMMENT 'Valor de transaccion ',
+  `Soporte` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Soporte que argumenta  o justifica el pago',
+  `observacion` text COLLATE utf8_spanish_ci COMMENT 'observaciones de diagnostico ',
+  `fecha_hora_registro` datetime DEFAULT NULL COMMENT 'fecha y hora del registro',
+  `user` int(2) DEFAULT NULL COMMENT 'usuario que registra',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de tesoreria';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `salud_tipo_glosas`
 --
 
@@ -4973,6 +5135,7 @@ CREATE TABLE IF NOT EXISTS `salud_upload_control` (
   `nom_cargue` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
   `idUser` int(11) NOT NULL,
+  `Analizado` bit(1) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_upload_control`),
@@ -6088,6 +6251,7 @@ CREATE TABLE IF NOT EXISTS `vista_salud_facturas_no_pagas` (
 ,`tipo_negociacion` enum('evento','capita')
 ,`dias_pactados` int(2)
 ,`Soporte` varchar(45)
+,`EstadoCobro` varchar(20)
 );
 -- --------------------------------------------------------
 
@@ -6112,6 +6276,30 @@ CREATE TABLE IF NOT EXISTS `vista_salud_facturas_pagas` (
 ,`fecha_radicado` date
 ,`numero_radicado` varchar(20)
 ,`Soporte` varchar(45)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_salud_facturas_prejuridicos`
+--
+CREATE TABLE IF NOT EXISTS `vista_salud_facturas_prejuridicos` (
+`ID` int(20)
+,`idCobroPrejuridico` int(11)
+,`num_factura` varchar(20)
+,`cod_prest_servicio` bigint(12)
+,`razon_social` varchar(60)
+,`num_ident_prest_servicio` bigint(20)
+,`fecha_factura` date
+,`cod_enti_administradora` varchar(6)
+,`nom_enti_administradora` varchar(30)
+,`valor_neto_pagar` double(15,2)
+,`tipo_negociacion` enum('evento','capita')
+,`fecha_radicado` date
+,`numero_radicado` varchar(20)
+,`SoporteRadicado` varchar(45)
+,`SoporteCobro` varchar(50)
+,`EstadoFactura` varchar(50)
+,`EstadoCobro` varchar(20)
 );
 -- --------------------------------------------------------
 
@@ -6331,7 +6519,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_salud_facturas_diferencias`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_diferencias` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,(select (`t1`.`valor_neto_pagar` - `t2`.`valor_pagado`)) AS `DiferenciaEnPago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'DIFERENCIA');
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_diferencias` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,(select (`t1`.`valor_neto_pagar` - `t2`.`valor_pagado`)) AS `DiferenciaEnPago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where ((`t1`.`estado` = 'DIFERENCIA') and (`t1`.`tipo_negociacion` = 'evento'));
 
 -- --------------------------------------------------------
 
@@ -6340,7 +6528,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vista_salud_facturas_no_pagas`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_no_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,(select ((to_days(now()) - to_days(`t1`.`fecha_radicado`)) - `t1`.`dias_pactados`)) AS `DiasMora`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`Soporte` AS `Soporte` from `salud_archivo_facturacion_mov_generados` `t1` where ((`t1`.`estado` = 'RADICADO') or (`t1`.`estado` = ''));
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_no_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,(select ((to_days(now()) - to_days(`t1`.`fecha_radicado`)) - `t1`.`dias_pactados`)) AS `DiasMora`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`Soporte` AS `Soporte`,`t1`.`EstadoCobro` AS `EstadoCobro` from `salud_archivo_facturacion_mov_generados` `t1` where ((`t1`.`tipo_negociacion` = 'evento') and ((`t1`.`estado` = 'RADICADO') or (`t1`.`estado` = '')));
 
 -- --------------------------------------------------------
 
@@ -6350,6 +6538,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_salud_facturas_pagas`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'PAGADA');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_salud_facturas_prejuridicos`
+--
+DROP TABLE IF EXISTS `vista_salud_facturas_prejuridicos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_salud_facturas_prejuridicos` AS select `t2`.`id_fac_mov_generados` AS `ID`,`t1`.`idCobroPrejuridico` AS `idCobroPrejuridico`,`t2`.`num_factura` AS `num_factura`,`t2`.`cod_prest_servicio` AS `cod_prest_servicio`,`t2`.`razon_social` AS `razon_social`,`t2`.`num_ident_prest_servicio` AS `num_ident_prest_servicio`,`t2`.`fecha_factura` AS `fecha_factura`,`t2`.`cod_enti_administradora` AS `cod_enti_administradora`,`t2`.`nom_enti_administradora` AS `nom_enti_administradora`,`t2`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`tipo_negociacion` AS `tipo_negociacion`,`t2`.`fecha_radicado` AS `fecha_radicado`,`t2`.`numero_radicado` AS `numero_radicado`,`t2`.`Soporte` AS `SoporteRadicado`,(select `salud_cobros_prejuridicos`.`Soporte` from `salud_cobros_prejuridicos` where (`salud_cobros_prejuridicos`.`ID` = `t1`.`idCobroPrejuridico`)) AS `SoporteCobro`,`t2`.`estado` AS `EstadoFactura`,`t2`.`EstadoCobro` AS `EstadoCobro` from (`salud_cobros_prejuridicos_relaciones` `t1` join `salud_archivo_facturacion_mov_generados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where ((`t2`.`EstadoCobro` = 'PREJURIDICO1') or (`t2`.`EstadoCobro` = 'PREJURIDICO2'));
 
 -- --------------------------------------------------------
 
