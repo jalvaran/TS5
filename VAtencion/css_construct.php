@@ -1444,7 +1444,75 @@ function Footer(){
             }
             $this->CerrarSelect();
         }
+        //Agrega graficos
+        public function AgregaJSGraficos() {
+            print('<script src="js/highcharts.js"></script>
+            <script src="js/modules/exporting.js"></script>');
+        }
         
+        //Agrega un Grafico
+        public function CreeGraficoBarrasSimple($Titulo,$Subtitulo,$EjeX,$EjeY,$VectorColumnas,$VectorValores,$idDiv,$Vector) {
+             ?>               
+        <script>
+        $(function () {
+            $('#<?php echo "$idDiv"?>').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '<?php echo "$Titulo"?>'
+                },
+                subtitle: {
+                    text: '<?php echo "$Subtitulo"?>'
+                },
+                xAxis: {
+                    categories: [
+
+                        <?php foreach ($VectorColumnas as $NombreColumnas){
+                            echo "'$NombreColumnas',";
+                        }
+                        ?> 
+                    ],
+
+
+
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '<?php echo "$EjeY"?>'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>$ {point.y:.1f} </b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '<?php echo "$EjeX"?>',
+                    data: [<?php foreach ($VectorValores as $Valores){
+                        print($Valores.",");    
+                        
+                        }
+                        ?> 
+        ]
+
+                },  ]
+            });
+        });
+        </script>
+	 <?php     
+        }
        
         //////////////////////////////////FIN
 }

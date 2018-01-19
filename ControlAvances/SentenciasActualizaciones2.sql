@@ -216,4 +216,11 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 ALTER TABLE `prod_bajas_altas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 ALTER TABLE `prod_bajas_altas` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 
+DROP VIEW IF EXISTS `vista_resumen_ventas_departamentos`;
+CREATE VIEW vista_resumen_ventas_departamentos AS 
+SELECT `FechaFactura`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`, 
+SUM(`TotalItem`) AS Total FROM `facturas_items` 
+WHERE `FechaFactura`>='2017-01-01' AND `FechaFactura`<='2017-12-31' 
+GROUP BY `FechaFactura`, `Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5` ;
+
 
