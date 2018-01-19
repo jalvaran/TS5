@@ -1,8 +1,9 @@
 <?php 
-$myPage="VentasDepartamentos.php";
+$myPage="GraficosVentasXDepartamentos.php";
 include_once("../sesiones/php_control.php");
 include_once("css_construct.php");
 $obVenta = new ProcesoVenta($idUser);
+
 $FechaInicial=date("Y-m-d");
 $FechaFinal=date("Y-m-d");
 if(isset($_REQUEST["TxtFechaFin"])){
@@ -23,6 +24,7 @@ while($DatosVentas=$obVenta->FetchArray($consulta)){
     $ValoresColumnas[$i]=$DatosVentas["Total"];
     $i++;
 }
+
 
 print("<html>");
 print("<head>");
@@ -59,9 +61,9 @@ print("<head>");
                             $css->CrearInputFecha("", "TxtFechaFin", $FechaFinal, 150, 30, "");
                         print("</td>");
                         print("<td>");
-                        $Page="VentasDepartamentos.php";
-                        $funcion="EnvieObjetoConsulta2(`$Page`,`TxtFechaFin`,`container`,`4`);";
-                            //$css->CrearBotonEvento("BtnEnviar", "Mostrar", 1, "onclick", $funcion, "naranja", "");
+                        //$Page="GraficosVentasXDepartamentos.query.php";
+                        //$funcion="EnvieObjetoConsulta2(`$Page`,`TxtFechaFin`,`DivGraficos`,`4`);";
+                        //$css->CrearBotonEvento("BtnEnviar", "Mostrar", 1, "onclick", $funcion, "naranja", "");
                         $css->CrearBotonNaranja("BtnEnviar", "Mostrar");
                         print("</td>");
                     $css->CierraFilaTabla();
@@ -76,15 +78,24 @@ print("<head>");
     $css->CrearDiv("DivGraficos2", "container", "center",1,1);
         
     $css->CerrarDiv();
-    $css->Footer();
+    
     $css->AgregaJS(); //Agregamos javascripts
     $css->AgregaJSGraficos();
     $css->AgregaSubir(); 
+    
     $Titulo="Ventas X Departamentos desde $FechaInicial hasta $FechaFinal";
     $Subtitulo="TS5";
-    $css->CreeGraficoBarrasSimple($Titulo, $Subtitulo, "Departamentos","Pesos ($)",$NombresColumnas, $ValoresColumnas, "DivGraficos", "");
-    $css->CreeGraficoBarrasSimple($Titulo, $Subtitulo, "prueba","eso ($)",$NombresColumnas, $ValoresColumnas, "DivGraficos2", "");
+    if(isset($NombresColumnas)){
+        $css->CreeGraficoBarrasSimple($Titulo, $Subtitulo, "Departamentos","Pesos ($)",$NombresColumnas, $ValoresColumnas, "DivGraficos", "");
     
+    }else{
+       $css->CrearDiv("DivNotificaciones", "container", "left", 1, 1);
+            $css->CrearNotificacionRoja("No hay datos en este rango de tiempo", 16);
+       $css->CerrarDiv();
+    }
+        
+   
+    $css->Footer();
     ////Fin HTML  
     print("</body></html>");
 ?> 

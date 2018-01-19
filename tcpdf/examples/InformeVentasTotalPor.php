@@ -72,7 +72,7 @@ while($DatosIVA=$obVenta->FetchArray($consulta)){
  */       
 if(isset($_POST["BtnAplicar"])){
 $sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , SubtotalItem=SubtotalItem*$Porcentaje, IVAItem=IVAItem*$Porcentaje "
-        . "  WHERE $CondicionFecha1 AND PorcentajeIVA<>'0%' AND PorcentajeIVA<>'Exc'";
+        . "  WHERE $CondicionFecha1 AND PorcentajeIVA<>'Exc'";
 $obVenta->Query($sql);
 
 
@@ -82,9 +82,9 @@ $obVenta->Query($sql);
 if(isset($_POST["BtnVistaPrevia"])){
     
 $sql="SELECT Departamento as idDepartamento, SUM(ValorOtrosImpuestos) as TotalBolsas,`PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems AND PorcentajeIVA<>'0%' AND PorcentajeIVA<>'Exc' GROUP BY Departamento,`PorcentajeIVA` UNION ALL"
+        . "  FROM $CondicionItems  AND PorcentajeIVA<>'Exc' GROUP BY Departamento,`PorcentajeIVA` UNION ALL"
         . " SELECT Departamento as idDepartamento,SUM(ValorOtrosImpuestos) as TotalBolsas, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems AND (PorcentajeIVA='0%' OR PorcentajeIVA='Exc') GROUP BY Departamento,`PorcentajeIVA` ORDER BY idDepartamento" ;
+        . "  FROM $CondicionItems AND ( PorcentajeIVA='Exc') GROUP BY Departamento,`PorcentajeIVA` ORDER BY idDepartamento" ;
 
 
 }else{
@@ -114,6 +114,8 @@ $DatosIVA["16%"]["Valor"]=0;
 $DatosIVA["16%"]["Base"]=0;
 $DatosIVA["19%"]["Valor"]=0;
 $DatosIVA["19%"]["Base"]=0;
+$DatosIVA["19"]["Valor"]=0;
+$DatosIVA["19"]["Base"]=0;
 $DatosIVA["Exc"]["Valor"]=0;
 $DatosIVA["Exc"]["Base"]=0;
 $DatosIVAP[]=0;

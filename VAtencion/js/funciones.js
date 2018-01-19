@@ -763,7 +763,7 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             FechaInicial =document.getElementById('TxtFechaIni').value;
             FechaFinal =document.getElementById('TxtFechaFin').value;                        
             ValorElement="?TxtFechaIni="+FechaInicial+"&TxtFechaFin="+FechaFinal;            
-            document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
+            //document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
             
         }
         
