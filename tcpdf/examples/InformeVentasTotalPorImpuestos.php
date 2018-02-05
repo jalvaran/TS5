@@ -8,9 +8,16 @@ $BaseIVA=0;
 $VerFacturas=0;
 $obVenta = new ProcesoVenta(1);
 $fecha=date("Y-m-d");
-$FechaIni = $obVenta->normalizar($_POST["TxtFechaIniP"]);
-$FechaFinal = $obVenta->normalizar($_POST["TxtFechaFinP"]);
-$Porcentaje=$obVenta->normalizar($_POST["TxtPorcentaje"])/100;
+$FechaIni = $obVenta->normalizar($_POST["TxtFechaIniPI"]);
+$FechaFinal = $obVenta->normalizar($_POST["TxtFechaFinPI"]);
+$consulta=$obVenta->ConsultarTabla("porcentajes_iva", "WHERE Habilitado='SI'");
+    while($DatosIVA=$obVenta->FetchArray($consulta)){
+        $idIVA=$DatosIVA["ID"];
+        if(isset($_POST["TxtPorcentaje".$idIVA])){
+            $PorcentajeIVAS[$idIVA]=$obVenta->normalizar($_POST["TxtPorcentaje".$idIVA])/100;
+        }
+    }
+//$Porcentaje=$obVenta->normalizar($_POST["TxtPorcentaje"])/100;
 
 $Condicion=" ori_facturas_items WHERE ";
 $Condicion2="ori_facturas WHERE ";
@@ -71,27 +78,60 @@ while($DatosIVA=$obVenta->FetchArray($consulta)){
 }
  */       
 if(isset($_POST["BtnAplicar"])){
-$sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , SubtotalItem=SubtotalItem*$Porcentaje, IVAItem=IVAItem*$Porcentaje "
-        . "  WHERE $CondicionFecha1 AND PorcentajeIVA<>'Exc'";
-$obVenta->Query($sql);
+    foreach($PorcentajeIVAS as $key => $value){
+        $idIVA = $key;
+        $DatosPIVA=$obVenta->DevuelveValores("porcentajes_iva", "ID", $idIVA);
+        $CondicionPorcentaje=$DatosPIVA["Valor"]*100;
+        $CondicionPorcentaje=$CondicionPorcentaje."%";
+        if($DatosPIVA["Valor"]=="E"){
+            $CondicionPorcentaje="Exc";
+        }
+        $DatosIVA[$CondicionPorcentaje]["Valor"]=0;
+        $DatosIVA[$CondicionPorcentaje]["Base"]=0;
+        $Porcentaje=$value;
+        $sql="UPDATE ori_facturas_items SET TotalItem = TotalItem * $Porcentaje , SubtotalItem=SubtotalItem*$Porcentaje, IVAItem=IVAItem*$Porcentaje "
+        . "  WHERE $CondicionFecha1 AND PorcentajeIVA='$CondicionPorcentaje'";
+        $obVenta->Query($sql);
+    }
+
 
 
 //$obVenta->ActualizaFacturasFromItems($FechaIni,$FechaFinal,1,"");
 }
 
 if(isset($_POST["BtnVistaPrevia"])){
-    
-$sql="SELECT Departamento as idDepartamento, SUM(ValorOtrosImpuestos) as TotalBolsas,`PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems  AND PorcentajeIVA<>'Exc' GROUP BY Departamento,`PorcentajeIVA` UNION ALL"
-        . " SELECT Departamento as idDepartamento,SUM(ValorOtrosImpuestos) as TotalBolsas, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems AND ( PorcentajeIVA='Exc') GROUP BY Departamento,`PorcentajeIVA` ORDER BY idDepartamento" ;
+    $z=0;
+    $sql="";
+    foreach($PorcentajeIVAS as $key => $value){
+        if($z==0){
+            $z=1;
+        }else{
+          $sql.=" UNION ALL "; 
+        }
+        $idIVA = $key;
+        $DatosPIVA=$obVenta->DevuelveValores("porcentajes_iva", "ID", $idIVA);
+        $CondicionPorcentaje=$DatosPIVA["Valor"]*100;
+        $CondicionPorcentaje=$CondicionPorcentaje."%";
+        if($DatosPIVA["Valor"]=="E"){
+            $CondicionPorcentaje="Exc";
+        }
+        $DatosIVA[$CondicionPorcentaje]["Valor"]=0;
+        $DatosIVA[$CondicionPorcentaje]["Base"]=0;
+        $Porcentaje=$value;
+        $sql.="SELECT Departamento as idDepartamento, SUM(ValorOtrosImpuestos) as TotalBolsas,`PorcentajeIVA`,sum(`TotalItem`)*$Porcentaje as Total, sum(`IVAItem`)*$Porcentaje as IVA, sum(`SubtotalItem`)*$Porcentaje as Subtotal, SUM(Cantidad) as Items"
+              . "  FROM $CondicionItems  AND PorcentajeIVA='$CondicionPorcentaje' GROUP BY Departamento,`PorcentajeIVA`";
+    }    
 
 
 }else{
-   $sql="SELECT Departamento as idDepartamento,SUM(ValorOtrosImpuestos) as TotalBolsas, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
+    
+    $sql="SELECT Departamento as idDepartamento,SUM(ValorOtrosImpuestos) as TotalBolsas, `PorcentajeIVA`,sum(`TotalItem`) as Total, sum(`IVAItem`) as IVA, sum(`SubtotalItem`) as Subtotal, SUM(Cantidad) as Items"
+    . "  FROM $CondicionItems GROUP BY Departamento,`PorcentajeIVA`";
+   
+   
 }
 
+//print($sql);
 
 $Datos=$obVenta->Query($sql);
 $TotalBolsas=0;
@@ -102,22 +142,10 @@ $TotalItems=0;
 $flagQuery=0;   //para indicar si hay resultados
 $i=-1;
 $TotalExluidos=0;
-$DatosIVA["0"]["Valor"]=0;
-$DatosIVA["0"]["Base"]=0;
-$DatosIVA["0%"]["Valor"]=0;
-$DatosIVA["0%"]["Base"]=0;
-$DatosIVA["5%"]["Valor"]=0;
-$DatosIVA["5%"]["Base"]=0;
-$DatosIVA["8%"]["Valor"]=0;
-$DatosIVA["8%"]["Base"]=0;
-$DatosIVA["16%"]["Valor"]=0;
-$DatosIVA["16%"]["Base"]=0;
-$DatosIVA["19%"]["Valor"]=0;
-$DatosIVA["19%"]["Base"]=0;
-$DatosIVA["19"]["Valor"]=0;
-$DatosIVA["19"]["Base"]=0;
-$DatosIVA["Exc"]["Valor"]=0;
-$DatosIVA["Exc"]["Base"]=0;
+
+$DatosIVA[0]["Valor"]=0;
+$DatosIVA[0]["Base"]=0;
+
 $DatosIVAP[]=0;
 while($DatosVentas=$obVenta->FetchArray($Datos)){
         $TotalBolsas=$TotalBolsas+$DatosVentas["TotalBolsas"];
@@ -139,11 +167,11 @@ while($DatosVentas=$obVenta->FetchArray($Datos)){
         $Items=number_format($DatosVentas["Items"]);
         $DatosDepartamento=$obVenta->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosVentas["idDepartamento"]);
         $NombreDep=$DatosDepartamento["Nombre"];
-        $DatosIVAP[$TipoIva]=$TipoIva;
         if(!isset($DatosIVA[$TipoIva]["Valor"])){
             $DatosIVA[$TipoIva]["Valor"]=0;
             $DatosIVA[$TipoIva]["Base"]=0;
         }
+        $DatosIVAP[$TipoIva]=$TipoIva;
         $DatosIVA[$TipoIva]["Valor"]=$DatosIVA[$TipoIva]["Valor"]+$IVA;
         $DatosIVA[$TipoIva]["Base"]=$DatosIVA[$TipoIva]["Base"]+$Subtotal1;
         $Subtotal=$Subtotal+$Subtotal1;
@@ -280,7 +308,7 @@ EOD;
 $pdf->writeHTML($tbl, false, false, false, false, '');
 foreach($DatosIVAP as $TipoIva){
 	
-    	
+		
     $Base= number_format($DatosIVA[$TipoIva]["Base"]);
     $Valor=number_format($DatosIVA[$TipoIva]["Valor"]);
     if($DatosIVA[$TipoIva]["Base"]<>0){
@@ -379,6 +407,7 @@ if(isset($_POST["BtnAplicar"])){
  
 //Close and output PDF document
 $pdf->Output($nombre_file.'.pdf', 'I');
+
 
 //============================================================+
 // END OF FILE

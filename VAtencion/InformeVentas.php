@@ -247,6 +247,43 @@ print("<body>");
         $css->CerrarTabla();
         $css->CerrarForm();
         
+        //Informe x Tipo de Iva
+        
+        $css->CrearNotificacionNaranja("GENERAR PRESUPUESTO SEGUN IMPUESTOS", 16);
+        $css->CrearForm2("FormPresupuestosImp", "../tcpdf/examples/InformeVentasTotalPorImpuestos.php", "post", "_blank");
+        $css->CrearTabla();
+        $css->FilaTabla(16);
+            $css->ColTabla("<strong>Fecha Inicial</strong>", 1);
+            $css->ColTabla("<strong>Fecha Final</strong>", 1);
+            $css->ColTabla("<strong>%</strong>", 1);
+            $css->ColTabla("<strong>Vista Previa</strong>", 1);
+            $css->ColTabla("<strong>Accion</strong>", 1);
+        $css->CierraFilaTabla();
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaIniPI", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            $css->CrearInputFecha("", "TxtFechaFinPI", date("Y-m-d"), 100, 30, "");
+            print("</td>");
+            print("<td>");
+            $consulta=$obVenta->ConsultarTabla("porcentajes_iva", "");
+            while($DatosIVA=$obVenta->FetchArray($consulta)){
+                print("$DatosIVA[Nombre]:<br>");
+                $css->CrearInputNumber("TxtPorcentaje".$DatosIVA["ID"], "number", "", 100, "porcentaje", "black", "", "", 100, 30, 0, 1, 0, 200, 1);
+                print("<br>");
+            }
+            print("</td>");
+            print("<td>");
+            $css->CrearBotonVerde("BtnVistaPrevia", "Vista Previa");
+            print("</td>");
+            print("<td>");
+            $css->CrearBotonConfirmado("BtnAplicar", "Aplicar");
+            print("</td>");
+        $css->FilaTabla(16);
+        $css->CierraFilaTabla();
+        $css->CerrarTabla();
+        $css->CerrarForm();
+        
         ////Informes de ventas Reales
         
         print("<br>");
