@@ -219,8 +219,27 @@ ALTER TABLE `prod_bajas_altas` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 DROP VIEW IF EXISTS `vista_resumen_ventas_departamentos`;
 CREATE VIEW vista_resumen_ventas_departamentos AS 
 SELECT `FechaFactura`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`, 
-SUM(`TotalItem`) AS Total FROM `facturas_items` 
-WHERE `FechaFactura`>='2017-01-01' AND `FechaFactura`<='2017-12-31' 
+SUM(`TotalItem`) AS Total FROM `facturas_items`  
 GROUP BY `FechaFactura`, `Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5` ;
 
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
+VALUES (28, 'Graficos', '1', 'MnuGraficosVentas.php', '_BLANK', '0', 'graficos.png', '1', '2017-10-13 14:16:49', '2017-10-13 14:16:49');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) 
+VALUES (41, 'Reportes Graficos', '17', '3', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
+VALUES (141, 'Reportes Graficos', '41', '1', 'MnuGraficosVentas.php', '_SELF', b'1', 'graficos.png', '1', '2017-12-19 11:03:31', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) 
+VALUES (42, 'Ventas', '28', '1', b'1', '2018-01-22 15:05:00', '2017-10-13 14:16:55');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
+VALUES (142, 'Comparacion Anual', '42', '5', 'YearsComparison.php', '_SELF', b'1', 'anualcomp.jpg', '1', '2017-11-23 13:19:43', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
+VALUES (143, 'Comparacion Diaria', '42', '5', 'DiasComparacion.php', '_SELF', b'1', 'diascomp.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
+VALUES (144, 'Graficos Ventas Departamentos', '42', '3', 'GraficosVentasXDepartamentos.php', '_SELF', b'1', 'graficos.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 

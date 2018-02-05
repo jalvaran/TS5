@@ -41,7 +41,7 @@ if(!empty($_REQUEST["key"])){
             $DatosProducto=$obVenta->FetchArray($consulta);
         if($DatosProducto["PrecioVenta"]>0){
             $tab="productosventa";
-            $css->CrearNotificacionAzul("Digite la cantidad que desea agregar del producto $DatosProducto[Nombre]", 14);
+            $css->CrearNotificacionAzul("Digite la cantidad que desea agregar del producto $DatosProducto[Nombre] Precio: ".number_format($DatosProducto["PrecioVenta"]), 14);
             $css->CrearForm2("FrmAgregarItem$CodBar", $myPage, 'post', '_self');
             $css->CrearInputText("CmbPreVentaAct", "hidden", "", $idPreventa, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);

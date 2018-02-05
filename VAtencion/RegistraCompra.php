@@ -83,7 +83,7 @@ print("<body>");
                 $VarSelect["Ancho"]="200";
                 $VarSelect["PlaceHolder"]="Seleccione la cuenta del servicio";
                 $css->CrearSelectChosen("CmbCuentaServicio", $VarSelect);
-                $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC LIKE '5%' OR PUC LIKE '6%' ORDER BY Cuentas_idPUC");
+                $consulta=$obVenta->ConsultarTabla("subcuentas", "WHERE PUC NOT LIKE '4%' ORDER BY Cuentas_idPUC");
                 while($DatosCuenta=$obVenta->FetchArray($consulta)){
                     $sel=0;
                     if($DatosCuenta["PUC"]=="513530"){

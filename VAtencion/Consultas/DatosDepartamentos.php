@@ -6,6 +6,7 @@ include_once("../css_construct.php");
 $css =  new CssIni("");
 $obVenta = new ProcesoVenta(1);
 $Valida=$obVenta->normalizar($_REQUEST['Valida']);
+
 if($Valida==1){
     $idDepartamento=$obVenta->normalizar($_REQUEST['idSel']);
     $Consulta=" WHERE idDepartamento='$idDepartamento'";
