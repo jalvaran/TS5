@@ -4,8 +4,8 @@
  */
 
 $host="localhost";
-$user="root";
-$pw="pirlo1985";
+$user="techno";
+$pw="techno";
 $db="ts5";
  
 /* Para un servidor la combinacion deberá ser $TipoPC="Server"; $TipoKardex="Caja";

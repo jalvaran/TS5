@@ -243,3 +243,25 @@ VALUES (143, 'Comparacion Diaria', '42', '5', 'DiasComparacion.php', '_SELF', b'
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
 VALUES (144, 'Graficos Ventas Departamentos', '42', '3', 'GraficosVentasXDepartamentos.php', '_SELF', b'1', 'graficos.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (145, 'Circular 030', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', '030.jpg', '3', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (146, 'SIHO', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'siho.png', '4', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (43, 'Tesoreria', '26', '6', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (147, 'Reportes', '43', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'tesoreria.png', '1', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+
+DROP VIEW IF EXISTS `vista_factura_compra_totales`;
+CREATE VIEW vista_factura_compra_totales AS 
+SELECT `idFacturaCompra`,(SELECT Fecha FROM factura_compra WHERE ID=`idFacturaCompra`) as Fecha,
+(SELECT Tercero FROM factura_compra WHERE ID=`idFacturaCompra`) as Tercero,
+sum(`SubtotalCompra`) AS Subtotal, sum(`ImpuestoCompra`) as Impuestos,
+(SELECT sum(ValorRetencion) FROM factura_compra_retenciones WHERE idCompra=`idFacturaCompra`) as TotalRetenciones,
+sum(`TotalCompra`) as Total, 
+(SELECT sum(Subtotal_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as SubtotalServicios, 
+(SELECT sum(Impuesto_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as ImpuestosServicios,
+(SELECT sum(Total_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as TotalServicios,
+(SELECT sum(SubtotalCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as SubtotalDevoluciones,
+(SELECT sum(ImpuestoCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as ImpuestosDevueltos,
+(SELECT sum(TotalCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as TotalDevolucion 
+FROM `factura_compra_items` GROUP BY `idFacturaCompra`;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (147, 'Totales en Compras', '13', '3', 'vista_factura_compra_totales.php', '_SELF', b'1', 'historial3.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');

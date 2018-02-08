@@ -1,7 +1,6 @@
 <?php
-$myPage="facturas.php";
+$myPage="vista_factura_compra_totales.php";
 include_once("../sesiones/php_control.php");
-
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -9,11 +8,15 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
     	$startpoint = ($page * $limit) - $limit;
 		
 /////////
-       
+
+
+        
+        
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
-include_once("Configuraciones/Facturas.ini.php");  //Clases de donde se escribirán las tablas
+include_once("Configuraciones/vista_factura_compra_totales.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
+
 
 $statement = $obTabla->CreeFiltro($Vector);
 //print($statement);
@@ -37,12 +40,11 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-$css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-$css->CrearImageLink("../VMenu/Menu.php", "../images/facturas2.png", "_self",200,200);
+//$css->CrearImageLink("../VMenu/Menu.php", "../images/cajas.png", "_self",200,200);
 
 
 ////Paginacion
@@ -55,30 +57,10 @@ print("</div>");
 ///Dibujo la tabla
 ////
 ///
-/*
- * Verifico que haya balance
- */
-
-$Consulta=$obVenta->Query("SELECT SUM(Total) as Total, SUM(IVA) as IVA, SUM(Subtotal) as Subtotal FROM $statement");
-$DatosFacturacion=$obVenta->FetchArray($Consulta);
-$Subtotal=  number_format($DatosFacturacion["Subtotal"]);
-$IVA=  number_format($DatosFacturacion["IVA"]);
-$Total=  number_format($DatosFacturacion["Total"]);
-$sql="SELECT Role FROM usuarios WHERE idUsuarios='$idUser'";
-    $Datos=$obVenta->Query($sql);
-    $DatosUser=$obVenta->FetchArray($Datos);
-    
-//$css->CrearTabla();
-if($DatosUser["Role"]=="SUPERVISOR"){
-    $css->CrearNotificacionAzul("Subtotal = $Subtotal <br>IVA = $IVA<br> Total = $Total", 16);
-}
-//$css->CerrarTabla();
- 
- 
-/////
 
 $obTabla->DibujeTabla($Vector);
 $css->CerrarDiv();//Cerramos contenedor Principal
+
 $css->Footer();
 $css->AgregaJS(); //Agregamos javascripts
 //$css->AgregaSubir();    

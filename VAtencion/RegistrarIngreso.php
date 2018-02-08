@@ -246,7 +246,7 @@ print("<body>");
         }else{
             $AntiposRecibidos=0;
         }
-        $css->CrearInputNumber("TxtAnticipos", "number", "Anticipos recibidos de este Cliente: $". number_format($AntiposRecibidos)."<br>", $AntiposRecibidos, "", "black", "onkeyup","CalculeTotalPagoIngreso()", 200,30, 0, 0, 1, $AntiposRecibidos, 1);
+        $css->CrearInputNumber("TxtAnticipos", "number", "Anticipos recibidos de este Cliente: $". number_format($AntiposRecibidos)."<br>", $AntiposRecibidos, "", "black", "onkeyup","CalculeTotalPagoIngreso()", 200,30, 0, 0, 0, $AntiposRecibidos, "any");
         
         //print("<br>");
         print("<br>");
