@@ -265,3 +265,25 @@ sum(`TotalCompra`) as Total,
 FROM `factura_compra_items` GROUP BY `idFacturaCompra`;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (147, 'Totales en Compras', '13', '3', 'vista_factura_compra_totales.php', '_SELF', b'1', 'historial3.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+ALTER TABLE `prod_comisiones` CHANGE `Dep_Comision` `Dep_Comision` INT NOT NULL;
+
+ALTER TABLE `prod_comisiones` CHANGE `Porcentaje_Comision` `Porcentaje_Comision` DOUBLE NOT NULL;
+ALTER TABLE `prod_comisiones` CHANGE `Valor_Comision` `Valor_Comision` DOUBLE NOT NULL;
+
+ALTER TABLE `preventa` CHANGE `Fecha` `Fecha` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `productos_impuestos_adicionales` ADD `Incluido` ENUM('SI','NO') NOT NULL DEFAULT 'NO' AFTER `NombreCuenta`;
+
+ALTER TABLE `prod_comisiones` CHANGE `Valor_Comision` `ValorComision1` DOUBLE NOT NULL;
+ALTER TABLE `prod_comisiones` ADD `ValorComision2` DOUBLE NOT NULL AFTER `ValorComision1`;
+ALTER TABLE `prod_comisiones` ADD `ValorComision3` DOUBLE NOT NULL AFTER `ValorComision2`;
+
+ALTER TABLE `facturas_items` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL 
+ALTER TABLE `productosventa` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL 
+
+DROP VIEW IF EXISTS `vista_comisiones_venta_productos`;
+
+ALTER TABLE `productosventa` ADD `ValorComision1` INT NOT NULL AFTER `CuentaPUC`, 
+ADD `ValorComision2` INT NOT NULL AFTER `ValorComision1`,
+ ADD `ValorComision3` INT NOT NULL AFTER `ValorComision2`;

@@ -235,6 +235,75 @@ class TS5_Excel extends Tabla{
    
     }
     
+    //resumen de ventas y comisiones en excel
+    // Clase para generar excel de un balance de comprobacion
+    
+    public function InformeComisionesXVentas($Tipo,$idCierre,$FechaInicial,$FechaFinal,$Vector) {
+        
+        require_once '../../librerias/Excel/PHPExcel.php';
+        $objPHPExcel = new PHPExcel();  
+        
+        $objPHPExcel->getActiveSheet()->getStyle('B:F')->getNumberFormat()->setFormatCode('#');
+        
+        $objPHPExcel->getActiveSheet()->getStyle("A:F")->getFont()->setSize(10);
+        
+        $f=1;
+        $Rango="DE $FechaInicial A $FechaFinal";
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[1].$f,"INFORME DE COMISIONES $Rango")
+                        
+            ;
+        $f=2;
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,"PRODUCTO")
+            ->setCellValue($this->Campos[1].$f,"CANTIDAD")
+            ->setCellValue($this->Campos[2].$f,"VALOR TOTAL")
+            ->setCellValue($this->Campos[3].$f,"COMISION 1")
+            ->setCellValue($this->Campos[4].$f,"COMISION 2")
+            ->setCellValue($this->Campos[5].$f,"COMISION 3")            
+            ;
+        $sql="SELECT `idCierre` as Cierre,`Referencia`,SUM(`Cantidad`) AS CantidadTotal, "
+                . "round(SUM( `TotalItem`+`ValorOtrosImpuestos`)) AS ValorTotal, "
+                . "(SUM(`Cantidad`)*(SELECT ValorComision1 FROM productosventa WHERE productosventa.Referencia=`facturas_items`.`Referencia`) ) AS Comision1, "
+                . "(SUM(`Cantidad`)*(SELECT ValorComision2 FROM productosventa WHERE productosventa.Referencia=`facturas_items`.`Referencia`)) AS Comision2, "
+                . "(SUM(`Cantidad`)*(SELECT ValorComision3 FROM productosventa WHERE productosventa.Referencia=`facturas_items`.`Referencia`) ) AS Comision3"
+                . " FROM `facturas_items`WHERE idCierre='$idCierre' GROUP BY `Referencia` ";
+        
+        $Consulta=$this->obCon->Query($sql);
+        $f=3;
+        while($DatosComisiones= $this->obCon->FetchArray($Consulta)){
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,$DatosComisiones["Referencia"])
+            ->setCellValue($this->Campos[1].$f,$DatosComisiones["CantidadTotal"])
+            ->setCellValue($this->Campos[2].$f,$DatosComisiones["ValorTotal"])
+            ->setCellValue($this->Campos[3].$f,$DatosComisiones["Comision1"])
+            ->setCellValue($this->Campos[4].$f,$DatosComisiones["Comision2"])
+            ->setCellValue($this->Campos[5].$f,$DatosComisiones["Comision3"])            
+            ;
+            $f++;
+        }
+        
+        //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com.co")
+        ->setLastModifiedBy("www.technosoluciones.com.co")
+        ->setTitle("Informe de Comisiones")
+        ->setSubject("Informe")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones sas")
+        ->setCategory("Informes Ventas");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Informe_Comisiones".'.xls"');
+    header('Cache-Control: max-age=0');
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+        
+    }
    //Fin Clases
 }
     

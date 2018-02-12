@@ -82,8 +82,8 @@ if(!empty($_REQUEST["CmbSub3"])){
     $ConsultaDetallada=1;
 }
 
-
-if($ConsultaDetallada=1){
+//print($sql);
+if($ConsultaDetallada==1){
     $consulta=$obVenta->Query($sql);
     $i=0;
     $TotalSub=0;

@@ -4288,17 +4288,21 @@ EOD;
     //HTML Totales Factura
     
     public function HTML_Totales_Factura($idFactura,$ObservacionesFactura,$ObservacionesLegales) {
-        $sql="SELECT SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, PorcentajeIVA FROM facturas_items "
+        $sql="SELECT SUM(ValorOtrosImpuestos) as ValorOtrosImpuestos,SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, PorcentajeIVA FROM facturas_items "
                 . " WHERE idFactura='$idFactura' GROUP BY PorcentajeIVA";
         $Consulta=$this->obCon->Query($sql);
         $SubtotalFactura=0;
         $TotalFactura=0;
         $TotalIVAFactura=0;
+        $OtrosImpuestos=0;
         while($TotalesFactura= $this->obCon->FetchArray($Consulta)){
+            
+            $OtrosImpuestos=$OtrosImpuestos+$TotalesFactura["ValorOtrosImpuestos"];
             $SubtotalFactura=$SubtotalFactura+$TotalesFactura["Subtotal"];
             $TotalFactura=$TotalFactura+$TotalesFactura["Total"];
             $TotalIVAFactura=$TotalIVAFactura+$TotalesFactura["IVA"];
             $PorcentajeIVA=$TotalesFactura["PorcentajeIVA"];
+            
             $TiposIVA[$PorcentajeIVA]=$TotalesFactura["PorcentajeIVA"];
             $IVA[$PorcentajeIVA]["Valor"]=$TotalesFactura["IVA"];
             $Bases[$PorcentajeIVA]["Valor"]=$TotalesFactura["Subtotal"];
@@ -4317,32 +4321,38 @@ EOD;
         ';
         
         $NumIvas=count($TiposIVA);
-        if($NumIvas>1){
+        
             $ReferenciaIVA="TOTAL IVA ";
             $tbl.='<table cellspacing="1" cellpadding="2" border="1">'
                 . ' <tr>';
+                      
+            
             foreach($TiposIVA as $PorcentajeIVA){
-                if($PorcentajeIVA<>'0%' and $PorcentajeIVA<>'Exc'){
+                
+                if($Bases[$PorcentajeIVA]["Valor"]>0){
+                    $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Base '.$PorcentajeIVA.': $ '.number_format($Bases[$PorcentajeIVA]["Valor"]).'</strong></td>';
+
+                }
+                if($IVA[$PorcentajeIVA]["Valor"]>0){
 
                    $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>IVA '.$PorcentajeIVA.': $ '.number_format($IVA[$PorcentajeIVA]["Valor"]).'</strong></td>';
 
                 }
-                if($PorcentajeIVA=='0%' or $PorcentajeIVA=='Exc'){
-                    $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Base '.$PorcentajeIVA.': $ '.number_format($Bases[$PorcentajeIVA]["Valor"]).'</strong></td>';
+                
+            }
+            if($OtrosImpuestos>0){
+                $tbl.='<td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Impoconsumo: $ '.number_format($OtrosImpuestos).'</strong></td>';
 
-                }
             }
         
         $tbl.='</tr></table>';
-    }else{
-        $ReferenciaIVA="IVA ".$TiposIVA[$PorcentajeIVA];
-    }
+    
     
     $tbl.= '
         <table cellspacing="1" cellpadding="2" border="1">
         <tr>
             <td height="25" width="435" style="border-bottom: 1px solid #ddd;background-color: white;">'.$ObservacionesLegales.'</td> 
-            <td align="rigth" width="217" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>'.$ReferenciaIVA.': $ '.number_format($TotalIVAFactura).'</strong></td>
+            <td align="rigth" width="217" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>Total Impuestos: $ '.number_format($TotalIVAFactura+$OtrosImpuestos).'</strong></td>
         </tr>
         </table> 
         ';
@@ -4350,7 +4360,7 @@ EOD;
         <td  height="50" align="center" style="border-bottom: 1px solid #ddd;background-color: white;"><br/><br/><br/><br/><br/>Firma Autorizada</td> 
         <td  height="50" align="center" style="border-bottom: 1px solid #ddd;background-color: white;"><br/><br/><br/><br/><br/>Firma Recibido</td> 
         
-        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTAL: $ '.number_format($TotalFactura).'</strong></td>
+        <td align="rigth" style="border-bottom: 1px solid #ddd;background-color: white;"><strong>TOTAL: $ '.number_format($TotalFactura+$OtrosImpuestos).'</strong></td>
     </tr>
      
 </table>';
@@ -4783,11 +4793,14 @@ EOD;
         $SubtotalFactura=0;
         $TotalFactura=0;
         $TotalIVAFactura=0;
+        $OtrosImpuestos=0;
         while($TotalesFactura= $this->obCon->FetchArray($Consulta)){
             $SubtotalFactura=$SubtotalFactura+$TotalesFactura["Subtotal"];
             $TotalFactura=$TotalFactura+$TotalesFactura["Total"];
             $TotalIVAFactura=$TotalIVAFactura+$TotalesFactura["IVA"];
             $PorcentajeIVA=$TotalesFactura["PorcentajeIVA"];
+            //$OtrosImpuestos=$OtrosImpuestos+$TotalesFactura["OtrosImpuestos"];
+            
             $TiposIVA[$PorcentajeIVA]=$TotalesFactura["PorcentajeIVA"];
             $IVA[$PorcentajeIVA]["Valor"]=$TotalesFactura["IVA"];
         }
@@ -4805,10 +4818,12 @@ EOD;
         ';
         
         $NumIvas=count($TiposIVA);
+        
         if($NumIvas>1){
             $ReferenciaIVA="TOTAL IVA ";
             $tbl.='<table cellspacing="1" cellpadding="2" border="1">'
                 . ' <tr>';
+            
             foreach($TiposIVA as $PorcentajeIVA){
                 if($PorcentajeIVA<>'0%'){
 

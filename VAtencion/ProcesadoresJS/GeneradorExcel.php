@@ -21,7 +21,9 @@ if(isset($_REQUEST["idDocumento"])){
             $obExcel->GenerarBalanceComprobacionExcel($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$idEmpresa,$CentroCosto,"");
             
             break;
-        
+        case 2: //Informe de Comisiones por ventas
+            $idCierre=$obVenta->normalizar($_REQUEST["idCierre"]);
+            $obExcel->InformeComisionesXVentas(1, 1146, "", "", "");
     }
 }else{
     print("No se recibió parametro de documento");
