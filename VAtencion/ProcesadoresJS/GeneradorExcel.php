@@ -23,7 +23,7 @@ if(isset($_REQUEST["idDocumento"])){
             break;
         case 2: //Informe de Comisiones por ventas
             $idCierre=$obVenta->normalizar($_REQUEST["idCierre"]);
-            $obExcel->InformeComisionesXVentas(1, 1146, "", "", "");
+            $obExcel->InformeComisionesXVentas(1, $idCierre, "", "", "");
     }
 }else{
     print("No se recibió parametro de documento");

@@ -44,7 +44,10 @@ if(!empty($_REQUEST["BtnCrearPV"])){
                 $Lista="TxtLista".$DatosListas["ID"];
                 if (isset($_POST[$Lista])){
                     $PrecioLista=$obVenta->normalizar($_POST[$Lista]);
-                    $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                    if($PrecioLista>0){
+                        $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                    }
+                    
                 }
                     
             }
@@ -57,7 +60,10 @@ if(!empty($_REQUEST["BtnCrearPV"])){
                 $Lista="TxtLista".$DatosListas["ID"];
                 if (isset($_POST[$Lista])){
                     $PrecioLista=$obVenta->normalizar($_POST[$Lista]);
-                    $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                    if($PrecioLista>0){
+                        $obVenta->AgregaPrecioProducto($idProducto, $PrecioLista, "productosventa", $DatosListas["ID"], $idUser, "");
+                    }
+                    
                 }
                     
             }

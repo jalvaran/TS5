@@ -246,6 +246,170 @@ class Documento extends Tabla{
         $this->PDF_Output("ComprobanteAltasBajas_$idComprobante");
     }
     
+    
+    
+    //HTML Movimientos Contables condicionado
+    public function HTML_Movimiento_Contable_Condicionado($Condicion,$Vector) {
+        $Consulta=$this->obCon->ConsultarTabla("librodiario", $Condicion);
+        $html = '   
+            <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
+                <tr align="center">
+                    <td><strong>Tercero</strong></td>
+                    <td><strong>Documento Interno</strong></td>
+                    <td><strong>Documento Referencia</strong></td>
+                    <td><strong>Cuenta PUC</strong></td>
+                    <td><strong>Nombre Cuenta</strong></td>
+                    <td><strong>Concepto</strong></td>
+                    <td><strong>Débitos</strong></td>
+                    <td><strong>Créditos</strong></td>
+                </tr>
+
+            
+        ';
+        $h=0;
+        $Debitos=0;
+        $Creditos=0;
+        while($DatosLibro=$this->obCon->FetchArray($Consulta)){
+            $Debitos=$Debitos+$DatosLibro["Debito"];
+            $Creditos=$Creditos+$DatosLibro["Credito"];
+            if(!($DatosLibro["Debito"]==0 and $DatosLibro["Credito"]==0)){
+                $NumeroDocInt=$DatosLibro["Num_Documento_Interno"];
+                if($DatosLibro["Tipo_Documento_Intero"]=='FACTURA'){
+                    $DatosNumeroDocInt=$this->obCon->DevuelveValores("facturas","idFacturas",$DatosLibro["Num_Documento_Interno"]);
+                    $NumeroDocInt=$DatosNumeroDocInt["NumeroFactura"];
+
+                }
+                $DatosDocumentoInterno=$this->obCon->DevuelveValores("documentos_generados","Libro",$DatosLibro["Tipo_Documento_Intero"]);
+                $DocInt=$DatosDocumentoInterno["Abreviatura"];
+                if($h==0){
+                    $Back="#f2f2f2";
+                    $h=1;
+                }else{
+                    $Back="white";
+                    $h=0;
+                } 
+                $html.= '  
+
+                    <tr align="left">
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Tercero_Identificacion"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DocInt.' '.$NumeroDocInt.'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Num_Documento_Externo"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["CuentaPUC"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["NombreCuenta"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Concepto"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Debito"]).'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Credito"]).'</td>
+                    </tr>
+                ';
+
+            }
+        }
+        $Back='#F7F8E0';
+        $html.='<tr > '
+                . '<td align="rigth" colspan="6" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">Totales:</td>'
+                . '<td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Debitos).'</td>
+                   <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Creditos).'</td>'
+                . '</tr>';
+        $html.='</table>';
+        return($html);
+    }
+    
+    //HTML Movimientos Contables condicionado simple
+    public function HTML_Movimientos_Resumen($sql,$Vector) {
+       $Consulta= $this->obCon->Query($sql);
+        //$Consulta=$this->obCon->ConsultarTabla("librodiario", $Condicion);
+        $html = '   
+            <table border="0" cellpadding="2" cellspacing="2" align="left" style="border-radius: 10px;">
+                <tr align="center">
+                    <td><strong>Tercero</strong></td>
+                    
+                    <td><strong>Cuenta PUC</strong></td>
+                    <td><strong>Nombre Cuenta</strong></td>
+                   
+                    <td><strong>Débitos</strong></td>
+                    <td><strong>Créditos</strong></td>
+                </tr>
+
+            
+        ';
+        $h=0;
+        $Debitos=0;
+        $Creditos=0;
+        while($DatosLibro=$this->obCon->FetchArray($Consulta)){
+            $Debitos=$Debitos+$DatosLibro["Debito"];
+            $Creditos=$Creditos+$DatosLibro["Credito"];
+            if(!($DatosLibro["Debito"]==0 and $DatosLibro["Credito"]==0)){
+                //$NumeroDocInt=$DatosLibro["Num_Documento_Interno"];
+                //if($DatosLibro["Tipo_Documento_Intero"]=='FACTURA'){
+                  //  $DatosNumeroDocInt=$this->obCon->DevuelveValores("facturas","idFacturas",$DatosLibro["Num_Documento_Interno"]);
+                    //$NumeroDocInt=$DatosNumeroDocInt["NumeroFactura"];
+
+                //}
+                //$DatosDocumentoInterno=$this->obCon->DevuelveValores("documentos_generados","Libro",$DatosLibro["Tipo_Documento_Intero"]);
+                //$DocInt=$DatosDocumentoInterno["Abreviatura"];
+                if($h==0){
+                    $Back="#f2f2f2";
+                    $h=1;
+                }else{
+                    $Back="white";
+                    $h=0;
+                } 
+                $html.= '  
+
+                    <tr align="left">
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Tercero_Identificacion"].'</td>
+                        
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["CuentaPUC"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["NombreCuenta"].'</td>
+                        
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Debito"]).'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($DatosLibro["Credito"]).'</td>
+                    </tr>
+                ';
+
+            }
+        }
+        $Back='#F7F8E0';
+        $html.='<tr > '
+                . '<td align="rigth" colspan="3" style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">Totales:</td>'
+                . '<td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Debitos).'</td>
+                   <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.number_format($Creditos).'</td>'
+                . '</tr>';
+        $html.='</table>';
+        return($html);
+    }
+    //Comprobante de movimientos Contables
+    
+     public function PDF_ComprobanteMovimientos($FechaInicial,$FechaFinal,$CuentaPUC,$Tercero,$Vector) {
+        $idFormato=29;
+        
+        $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
+        $DatosTercero=$this->obCon->DevuelveValores("proveedores", "Num_Identificacion", $Tercero);
+        if($DatosTercero["RazonSocial"]==''){
+            $DatosTercero=$this->obCon->DevuelveValores("clientes", "Num_Identificacion", $Tercero);
+        }
+        $Documento="$DatosFormatos[Nombre] del $FechaInicial al $FechaFinal";
+        
+        $this->PDF_Ini("ComprobanteMovimientosContables", 8, "");
+           
+        $this->PDF_Encabezado($DatosFormatos["Fecha"],1, $idFormato, "",$Documento);
+        $html="<br><br><br><br>";
+        $html.="Tercero: $DatosTercero[RazonSocial] $Tercero <br>"; 
+        $html.="Direccion: $DatosTercero[Direccion]"; 
+        $this->PDF_Write("<br>".$html);
+        //$Condicion="WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' AND Tercero_Identificacion='$Tercero' AND CuentaPUC like '$CuentaPUC%'";
+        //$html=$this->HTML_Movimiento_Contable_Condicionado($Condicion,"");
+        $sql="SELECT Tercero_Identificacion,SUM(Debito) as Debito,SUM(Credito) as Credito,CuentaPUC, NombreCuenta FROM librodiario  "
+               . "WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' AND Tercero_Identificacion='$Tercero' "
+                . "AND CuentaPUC like '$CuentaPUC%' GROUP BY Tercero_Identificacion";
+        $html=$this->HTML_Movimientos_Resumen($sql,"");
+        
+        $this->PDF_Write("<br>".$html);
+        $html=$this->HTML_Firmas_Documentos();
+        $this->PDF_Write("<br><br><br><br>".$html);
+        
+        $this->PDF_Output("ComprobanteMovimientosContables_$Tercero");
+    }
    //Fin Clases
 }
     

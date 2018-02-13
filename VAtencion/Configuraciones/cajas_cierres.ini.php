@@ -31,6 +31,13 @@ $Ruta="$myPage?idCierre=";
 $Vector["VerRegistro"]["Link"]=$Ruta;
 $Vector["VerRegistro"]["ColumnaLink"]="ID";
 
+// Nueva Accion
+$Ruta="ProcesadoresJS/GeneradorExcel.php?idDocumento=2&idCierre=";
+$Vector["NuevaAccionLink"][2]="Resumen";
+$Vector["NuevaAccion"]["Resumen"]["Titulo"]=" Resumen ";
+$Vector["NuevaAccion"]["Resumen"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["Resumen"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["Resumen"]["Target"]="_blank";
 /*
  * 
  * Selecciono las Columnas que tendran valores de otras tablas

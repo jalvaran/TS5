@@ -272,8 +272,17 @@ class TS5_Excel extends Tabla{
         
         $Consulta=$this->obCon->Query($sql);
         $f=3;
+        $TotalCantidad=0;
+        $TotalValor=0;
+        $TotalComision1=0;
+        $TotalComision2=0;
+        $TotalComision3=0;
         while($DatosComisiones= $this->obCon->FetchArray($Consulta)){
-            
+            $TotalCantidad=$TotalCantidad+$DatosComisiones["CantidadTotal"];
+            $TotalValor=$TotalValor+$DatosComisiones["ValorTotal"];
+            $TotalComision1=$TotalComision1+$DatosComisiones["Comision1"];
+            $TotalComision2=$TotalComision2+$DatosComisiones["Comision2"];
+            $TotalComision3=$TotalComision3+$DatosComisiones["Comision3"];
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue($this->Campos[0].$f,$DatosComisiones["Referencia"])
             ->setCellValue($this->Campos[1].$f,$DatosComisiones["CantidadTotal"])
@@ -284,7 +293,14 @@ class TS5_Excel extends Tabla{
             ;
             $f++;
         }
-        
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,"TOTALES")
+            ->setCellValue($this->Campos[1].$f,$TotalCantidad)
+            ->setCellValue($this->Campos[2].$f,$TotalValor)
+            ->setCellValue($this->Campos[3].$f,$TotalComision1)
+            ->setCellValue($this->Campos[4].$f,$TotalComision2)
+            ->setCellValue($this->Campos[5].$f,$TotalComision3)            
+            ;
         //Informacion del excel
    $objPHPExcel->
     getProperties()
