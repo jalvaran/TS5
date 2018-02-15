@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2018 at 08:13 AM
+-- Generation Time: Feb 13, 2018 at 01:40 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -1594,7 +1594,7 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   `FechaFactura` date NOT NULL,
   `idFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `TablaItems` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Tabla donde se encuentra el producto o servicio',
-  `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Referencia del producto o servicio',
+  `Referencia` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL COMMENT 'Referencia del producto o servicio',
   `Nombre` text CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `Departamento` int(11) NOT NULL,
   `SubGrupo1` int(11) NOT NULL,
@@ -1625,8 +1625,8 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   PRIMARY KEY (`ID`),
   KEY `idFactura` (`idFactura`),
   KEY `idCierre` (`idCierre`),
-  KEY `Referencia` (`Referencia`),
-  KEY `FechaFactura` (`FechaFactura`)
+  KEY `FechaFactura` (`FechaFactura`),
+  KEY `Referencia` (`Referencia`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
@@ -1696,7 +1696,7 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -2149,7 +2149,7 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias_temporal` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idKardexMercancias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -2751,7 +2751,7 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
 
 CREATE TABLE IF NOT EXISTS `preventa` (
   `idPrecotizacion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Fecha` date DEFAULT NULL,
   `Cantidad` double NOT NULL,
   `VestasActivas_idVestasActivas` int(11) NOT NULL,
   `idFacturas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -2926,7 +2926,7 @@ CREATE TABLE IF NOT EXISTS `productosalquiler` (
 CREATE TABLE IF NOT EXISTS `productosventa` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(70) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Existencias` double DEFAULT '0',
   `PrecioVenta` double DEFAULT NULL,
@@ -2947,6 +2947,9 @@ CREATE TABLE IF NOT EXISTS `productosventa` (
   `RutaImagen` text COLLATE utf8_spanish_ci NOT NULL,
   `Especial` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL DEFAULT '4135',
+  `ValorComision1` int(11) NOT NULL,
+  `ValorComision2` int(11) NOT NULL,
+  `ValorComision3` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
@@ -3164,6 +3167,7 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
   `ValorImpuesto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `CuentaPUC` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `NombreCuenta` text COLLATE latin1_spanish_ci NOT NULL,
+  `Incluido` enum('SI','NO') COLLATE latin1_spanish_ci NOT NULL DEFAULT 'NO',
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
@@ -3212,12 +3216,12 @@ CREATE TABLE IF NOT EXISTS `productos_precios_adicionales` (
 CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Fecha` date NOT NULL,
   `Departamento` int(11) NOT NULL,
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `Cantidad` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `CostoTotal` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Cantidad` double NOT NULL,
+  `CostoTotal` double NOT NULL,
   `Observaciones` text COLLATE utf8_spanish_ci NOT NULL,
   `Usuarios_idUsuarios` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -3342,13 +3346,15 @@ CREATE TABLE IF NOT EXISTS `prod_comisiones` (
   `idProd_Comisiones` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre_Comision` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `P_V` int(2) NOT NULL COMMENT '1 Valor 0 Porcentaje',
-  `Valor_Comision` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Porcentaje_Comision` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
-  `Dep_Comision` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `ValorComision1` double NOT NULL,
+  `ValorComision2` double NOT NULL,
+  `ValorComision3` double NOT NULL,
+  `Porcentaje_Comision` double NOT NULL,
+  `Dep_Comision` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProd_Comisiones`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3458,7 +3464,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub3` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub3`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -3473,7 +3479,7 @@ CREATE TABLE IF NOT EXISTS `prod_sub4` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub4`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -4225,7 +4231,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones` (
   PRIMARY KEY (`id_hospitalizacion`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de hospitalización AH';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de hospitalización AH';
 
 -- --------------------------------------------------------
 
@@ -4364,7 +4370,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_recien_nacido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
 
 -- --------------------------------------------------------
 
@@ -4555,7 +4561,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_urgencias` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_urgencias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de urgencias AU';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de urgencias AU';
 
 -- --------------------------------------------------------
 
@@ -4808,7 +4814,7 @@ CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos` (
   `Soporte` varchar(50) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `Fecha` (`Fecha`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -4902,7 +4908,7 @@ CREATE TABLE IF NOT EXISTS `salud_registro_glosas` (
   `idUser` int(11) NOT NULL COMMENT 'usuario que ingresó el registro',
   `TablaOrigen` varchar(45) COLLATE latin1_spanish_ci NOT NULL COMMENT 'tabla donde esta el archiv',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -5980,7 +5986,7 @@ CREATE TABLE IF NOT EXISTS `vista_compras_productos` (
 ,`RazonSocial` varchar(300)
 ,`NIT` bigint(20)
 ,`idProducto` bigint(20)
-,`Referencia` varchar(100)
+,`Referencia` varchar(200)
 ,`Producto` varchar(70)
 ,`PrecioVenta` double
 ,`Cantidad` double
@@ -6017,7 +6023,7 @@ CREATE TABLE IF NOT EXISTS `vista_compras_productos_devueltos` (
 ,`RazonSocial` varchar(300)
 ,`NIT` bigint(20)
 ,`idProducto` bigint(20)
-,`Referencia` varchar(100)
+,`Referencia` varchar(200)
 ,`Producto` varchar(70)
 ,`PrecioVenta` double
 ,`Cantidad` double
@@ -6085,6 +6091,26 @@ CREATE TABLE IF NOT EXISTS `vista_entregas` (
 -- --------------------------------------------------------
 
 --
+-- Stand-in structure for view `vista_factura_compra_totales`
+--
+CREATE TABLE IF NOT EXISTS `vista_factura_compra_totales` (
+`idFacturaCompra` bigint(20)
+,`Fecha` date
+,`Tercero` bigint(20)
+,`Subtotal` double
+,`Impuestos` double
+,`TotalRetenciones` double
+,`Total` double
+,`SubtotalServicios` double
+,`ImpuestosServicios` double
+,`TotalServicios` double
+,`SubtotalDevoluciones` double
+,`ImpuestosDevueltos` double
+,`TotalDevolucion` double
+);
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `vista_inventario_separados`
 --
 CREATE TABLE IF NOT EXISTS `vista_inventario_separados` (
@@ -6114,7 +6140,7 @@ CREATE TABLE IF NOT EXISTS `vista_kardex` (
 ,`ValorUnitario` varchar(45)
 ,`ValorTotal` varchar(45)
 ,`ProductosVenta_idProductosVenta` int(11)
-,`Referencia` varchar(100)
+,`Referencia` varchar(200)
 ,`Nombre` varchar(70)
 ,`Existencias` double
 ,`CostoUnitario` double
@@ -6183,7 +6209,7 @@ CREATE TABLE IF NOT EXISTS `vista_ori_facturas` (
 CREATE TABLE IF NOT EXISTS `vista_preventa` (
 `VestasActivas_idVestasActivas` int(11)
 ,`TablaItems` varchar(14)
-,`Referencia` varchar(100)
+,`Referencia` varchar(200)
 ,`Nombre` varchar(70)
 ,`Departamento` varchar(45)
 ,`SubGrupo1` varchar(45)
@@ -6205,6 +6231,42 @@ CREATE TABLE IF NOT EXISTS `vista_preventa` (
 ,`CuentaPUC` varchar(45)
 ,`Updated` timestamp
 ,`Sync` datetime
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_resumen_facturacion`
+--
+CREATE TABLE IF NOT EXISTS `vista_resumen_facturacion` (
+`ID` bigint(20) unsigned
+,`FechaInicial` date
+,`FechaFinal` date
+,`Referencia` varchar(200)
+,`Nombre` text
+,`Departamento` int(11)
+,`SubGrupo1` int(11)
+,`SubGrupo2` int(11)
+,`SubGrupo3` int(11)
+,`SubGrupo4` int(11)
+,`SubGrupo5` int(11)
+,`Cantidad` double
+,`TotalVenta` double(19,2)
+,`Costo` double(19,2)
+);
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vista_resumen_ventas_departamentos`
+--
+CREATE TABLE IF NOT EXISTS `vista_resumen_ventas_departamentos` (
+`FechaFactura` date
+,`Departamento` int(11)
+,`SubGrupo1` int(11)
+,`SubGrupo2` int(11)
+,`SubGrupo3` int(11)
+,`SubGrupo4` int(11)
+,`SubGrupo5` int(11)
+,`Total` double
 );
 -- --------------------------------------------------------
 
@@ -6479,6 +6541,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure for view `vista_factura_compra_totales`
+--
+DROP TABLE IF EXISTS `vista_factura_compra_totales`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_factura_compra_totales` AS select `factura_compra_items`.`idFacturaCompra` AS `idFacturaCompra`,(select `factura_compra`.`Fecha` from `factura_compra` where (`factura_compra`.`ID` = `factura_compra_items`.`idFacturaCompra`)) AS `Fecha`,(select `factura_compra`.`Tercero` from `factura_compra` where (`factura_compra`.`ID` = `factura_compra_items`.`idFacturaCompra`)) AS `Tercero`,sum(`factura_compra_items`.`SubtotalCompra`) AS `Subtotal`,sum(`factura_compra_items`.`ImpuestoCompra`) AS `Impuestos`,(select sum(`factura_compra_retenciones`.`ValorRetencion`) from `factura_compra_retenciones` where (`factura_compra_retenciones`.`idCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `TotalRetenciones`,sum(`factura_compra_items`.`TotalCompra`) AS `Total`,(select sum(`factura_compra_servicios`.`Subtotal_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `SubtotalServicios`,(select sum(`factura_compra_servicios`.`Impuesto_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `ImpuestosServicios`,(select sum(`factura_compra_servicios`.`Total_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `TotalServicios`,(select sum(`factura_compra_items_devoluciones`.`SubtotalCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `SubtotalDevoluciones`,(select sum(`factura_compra_items_devoluciones`.`ImpuestoCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `ImpuestosDevueltos`,(select sum(`factura_compra_items_devoluciones`.`TotalCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `factura_compra_items`.`idFacturaCompra`)) AS `TotalDevolucion` from `factura_compra_items` group by `factura_compra_items`.`idFacturaCompra`;
+
+-- --------------------------------------------------------
+
+--
 -- Structure for view `vista_inventario_separados`
 --
 DROP TABLE IF EXISTS `vista_inventario_separados`;
@@ -6511,6 +6582,24 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vista_preventa`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_preventa` AS select `p`.`VestasActivas_idVestasActivas` AS `VestasActivas_idVestasActivas`,'productosventa' AS `TablaItems`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `SubGrupo1`,`pv`.`Sub2` AS `SubGrupo2`,`pv`.`Sub3` AS `SubGrupo3`,`pv`.`Sub4` AS `SubGrupo4`,`pv`.`Sub5` AS `SubGrupo5`,`p`.`ValorAcordado` AS `ValorUnitarioItem`,`p`.`Cantidad` AS `Cantidad`,'1' AS `Dias`,(`p`.`ValorAcordado` * `p`.`Cantidad`) AS `SubtotalItem`,((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`) AS `IVAItem`,((select `productos_impuestos_adicionales`.`ValorImpuesto` from `productos_impuestos_adicionales` where (`productos_impuestos_adicionales`.`idProducto` = `p`.`ProductosVenta_idProductosVenta`)) * `p`.`Cantidad`) AS `ValorOtrosImpuestos`,((`p`.`ValorAcordado` * `p`.`Cantidad`) + ((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`)) AS `TotalItem`,concat((`pv`.`IVA` * 100),'%') AS `PorcentajeIVA`,`pv`.`CostoUnitario` AS `PrecioCostoUnitario`,(`pv`.`CostoUnitario` * `p`.`Cantidad`) AS `SubtotalCosto`,(select `prod_departamentos`.`TipoItem` from `prod_departamentos` where (`prod_departamentos`.`idDepartamentos` = `pv`.`Departamento`)) AS `TipoItem`,`pv`.`CuentaPUC` AS `CuentaPUC`,`p`.`Updated` AS `Updated`,`p`.`Sync` AS `Sync` from (`preventa` `p` join `productosventa` `pv` on((`p`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`))) where (`p`.`TablaItem` = 'productosventa');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_resumen_facturacion`
+--
+DROP TABLE IF EXISTS `vista_resumen_facturacion`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_resumen_facturacion` AS select `facturas_items`.`ID` AS `ID`,`facturas_items`.`FechaFactura` AS `FechaInicial`,`facturas_items`.`FechaFactura` AS `FechaFinal`,`facturas_items`.`Referencia` AS `Referencia`,`facturas_items`.`Nombre` AS `Nombre`,`facturas_items`.`Departamento` AS `Departamento`,`facturas_items`.`SubGrupo1` AS `SubGrupo1`,`facturas_items`.`SubGrupo2` AS `SubGrupo2`,`facturas_items`.`SubGrupo3` AS `SubGrupo3`,`facturas_items`.`SubGrupo4` AS `SubGrupo4`,`facturas_items`.`SubGrupo5` AS `SubGrupo5`,sum(`facturas_items`.`Cantidad`) AS `Cantidad`,round(sum(`facturas_items`.`TotalItem`),2) AS `TotalVenta`,round(sum(`facturas_items`.`SubtotalCosto`),2) AS `Costo` from `facturas_items` group by `facturas_items`.`Referencia`,`facturas_items`.`FechaFactura`;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vista_resumen_ventas_departamentos`
+--
+DROP TABLE IF EXISTS `vista_resumen_ventas_departamentos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_resumen_ventas_departamentos` AS select `facturas_items`.`FechaFactura` AS `FechaFactura`,`facturas_items`.`Departamento` AS `Departamento`,`facturas_items`.`SubGrupo1` AS `SubGrupo1`,`facturas_items`.`SubGrupo2` AS `SubGrupo2`,`facturas_items`.`SubGrupo3` AS `SubGrupo3`,`facturas_items`.`SubGrupo4` AS `SubGrupo4`,`facturas_items`.`SubGrupo5` AS `SubGrupo5`,sum(`facturas_items`.`TotalItem`) AS `Total` from `facturas_items` group by `facturas_items`.`FechaFactura`,`facturas_items`.`Departamento`,`facturas_items`.`SubGrupo1`,`facturas_items`.`SubGrupo2`,`facturas_items`.`SubGrupo3`,`facturas_items`.`SubGrupo4`,`facturas_items`.`SubGrupo5`;
 
 -- --------------------------------------------------------
 

@@ -566,7 +566,7 @@ ALTER TABLE `facturas_items` ADD INDEX(`idCierre`);
 INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
 (20, 'Anticipos realizados por clientes', 280505, 'ANTICIPOS REALIZADOS POR CLIENTES', '2017-09-29 15:24:03', '2017-06-06 12:13:00');
 
-
+ALTER TABLE `comprobantes_ingreso` ADD `Estado` VARCHAR(10) NOT NULL AFTER `Usuarios_idUsuarios`;
 ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`;
 UPDATE `comprobantes_ingreso` SET `idCierre`=1;
 ALTER TABLE `empresapro` ADD `CXPAutomaticas` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `FacturaSinInventario`;

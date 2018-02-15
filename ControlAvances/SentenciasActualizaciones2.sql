@@ -20,6 +20,8 @@ ALTER TABLE `inventarios_temporal` CHANGE `CostoTotal` `CostoTotal` DOUBLE NULL 
 ALTER TABLE `inventarios_temporal` ADD `CostoTotalPromedio` DOUBLE NOT NULL AFTER `CostoUnitarioPromedio`;
 
 INSERT INTO `subcuentas` (`PUC`, `Nombre`, `Valor`, `Cuentas_idPUC`, `Updated`, `Sync`) VALUES ('220505', 'PROVEEDORES NACIONALES', NULL, '2205', CURRENT_TIMESTAMP, '0000-00-00 00:00:00');
+ALTER TABLE `cuentasxpagar` ADD `Estado` VARCHAR(20) NOT NULL  AFTER `idUsuario`;
+
 ALTER TABLE `cuentasxpagar` ADD `CuentaPUC` VARCHAR(20) NOT NULL DEFAULT '220505' AFTER `Estado`;
 
 
@@ -226,7 +228,7 @@ INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `
 VALUES (28, 'Graficos', '1', 'MnuGraficosVentas.php', '_BLANK', '0', 'graficos.png', '1', '2017-10-13 14:16:49', '2017-10-13 14:16:49');
 
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) 
-VALUES (41, 'Reportes Graficos', '17', '3', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
+VALUES (41, 'Reportes Graficos', '17', '7', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
 VALUES (141, 'Reportes Graficos', '41', '1', 'MnuGraficosVentas.php', '_SELF', b'1', 'graficos.png', '1', '2017-12-19 11:03:31', '2017-10-13 14:16:57');
@@ -247,7 +249,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (146, 'SIHO', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'siho.png', '4', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
 
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (43, 'Tesoreria', '26', '6', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
-INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (147, 'Reportes', '43', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'tesoreria.png', '1', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
 
 DROP VIEW IF EXISTS `vista_factura_compra_totales`;
 CREATE VIEW vista_factura_compra_totales AS 
@@ -279,8 +280,8 @@ ALTER TABLE `prod_comisiones` CHANGE `Valor_Comision` `ValorComision1` DOUBLE NO
 ALTER TABLE `prod_comisiones` ADD `ValorComision2` DOUBLE NOT NULL AFTER `ValorComision1`;
 ALTER TABLE `prod_comisiones` ADD `ValorComision3` DOUBLE NOT NULL AFTER `ValorComision2`;
 
-ALTER TABLE `facturas_items` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL 
-ALTER TABLE `productosventa` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL 
+ALTER TABLE `facturas_items` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL ;
+ALTER TABLE `productosventa` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL ;
 
 DROP VIEW IF EXISTS `vista_comisiones_venta_productos`;
 
@@ -289,5 +290,5 @@ ADD `ValorComision2` INT NOT NULL AFTER `ValorComision1`,
  ADD `ValorComision3` INT NOT NULL AFTER `ValorComision2`;
 
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (29, 'COMPROBANTE DE MOVIMIENTOS CONTABLES', '001', 'F-GFC-003', '2018-02-13', '', '2018-01-10 17:22:33', '2017-10-20 10:30:00');
-INSERT INTO `ts5`.`menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (148, 'Generar Comprobante de movimientos contables', '16', '3', 'ComprobantesContables.php', '_SELF', b'1', 'comprobantes.png', '3', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (148, 'Generar Comprobante de movimientos contables', '16', '3', 'ComprobantesContables.php', '_SELF', b'1', 'comprobantes.png', '3', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
