@@ -31,12 +31,13 @@ if(isset($_REQUEST["BtnEnviar"])){
           //  goto salir;
         //}
         $consulta= $obRips->ConsultarTabla("salud_upload_control", " WHERE Analizado='0'");
+        $obRips->VaciarTabla("salud_archivo_facturacion_mov_pagados_temp"); //Vacío la tabla de subida temporal
+                
         while($DatosArchivos= $obRips->FetchArray($consulta)){
             $NombreArchivo=$DatosArchivos["nom_cargue"]; 
             $Prefijo=substr($NombreArchivo, 0, 2); 
             //Si hay Archivos de Recaudo
             if($Prefijo=="AR"){
-                $obRips->VaciarTabla("salud_archivo_facturacion_mov_pagados_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsPagos($NombreArchivo, $Separador, $FechaCargue, $idUser,$destino, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);

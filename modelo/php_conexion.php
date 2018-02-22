@@ -238,6 +238,8 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 
             $idFact=$Datos["ID"];		
             $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$idFact);
+            $idUsuario=$DatosFactura["Usuarios_idUsuarios"];
+            $DatosCaja=$this->DevuelveValores("cajas","idUsuario",$idUsuario);
             $fecha=$DatosFactura["Fecha"];	
             $CuentaDestino=$Datos["CuentaDestino"];
             $DatosCliente=$this->DevuelveValores("clientes","idClientes",$DatosFactura['Clientes_idClientes']);
@@ -269,6 +271,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                             $DatosCuenta=$this->DevuelveValores("subcuentas","PUC",$CuentaPUC);  //Si no hay cuentas frecuentes 
                         }
 			$NombreCuenta=$DatosCuenta["Nombre"];
+                        $NombreCuentaDestino=$NombreCuenta; //se utiliza en caso de haber pagos por otros medios
 		}else{	   //Si es factura a credito
                     $Parametros= $this->DevuelveValores("parametros_contables", "ID", 6);  //aqui se encuentras los parametros de la cuenta cliente
                     $CuentaPUC=$Parametros["CuentaPUC"];
@@ -305,7 +308,68 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 		$Columnas[25]="idEmpresa";		$Valores[25]=$EmpresaPro;
                 $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
                 
-		$this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                if($DatosFactura['FormaPago']<>"Contado"){
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                }
+                //Si se paga con tarjeta hay que debitar bancos y acreditar la caja
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]==0 and $DatosFactura["Cheques"]==0){
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);                   
+                }
+                //Si se paga con tarjeta hay que debitar bancos 
+                
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]>0){
+                    $Parametros=$this->DevuelveValores("parametros_contables", "ID", 17);
+                    $CuentaPUC=$Parametros["CuentaPUC"]; //cuenta para bancos
+
+                    $NombreCuenta=$Parametros["NombreCuenta"];
+
+                    $Valores[15]=$CuentaPUC;
+                    $Valores[16]=$NombreCuenta;
+                    $Valores[18]=$DatosFactura["Tarjetas"];//Debito se escribe el costo de la mercancia vendida
+                    $Valores[19]="0"; 			
+                    $Valores[20]=$DatosFactura["Tarjetas"];  	//para la sumatoria contemplar el balance
+
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                   
+                }
+                //Si se paga con cheques hay que debitar bancos 
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Cheques"]>0){
+                    $Parametros=$this->DevuelveValores("parametros_contables", "ID", 18);  //Cuenta de cheques
+                    $CuentaPUC=$Parametros["CuentaPUC"]; 
+
+                    $NombreCuenta=$Parametros["NombreCuenta"];
+
+                    $Valores[15]=$CuentaPUC;
+                    $Valores[16]=$NombreCuenta;
+                    $Valores[18]=$DatosFactura["Cheques"];//Debito se escribe el costo de la mercancia vendida
+                    $Valores[19]="0"; 			
+                    $Valores[20]=$DatosFactura["Cheques"];  	//para la sumatoria contemplar el balance
+
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+
+                }
+                
+                //Voy a ingresar o sacar la diferencia entre el total y otras formas de pago, de la caja
+		$TotalOtrasFormasPago=$DatosFactura["Tarjetas"]+$DatosFactura["Cheques"];
+                if($TotalOtrasFormasPago>0){
+                    $DiferenciaEfectivo=$Total-$TotalOtrasFormasPago;
+                    $Valores[15]=$CuentaDestino;
+                    $Valores[16]=$NombreCuentaDestino;
+                    if($DiferenciaEfectivo>0){
+                        $Valores[18]=$DiferenciaEfectivo;//lo que sobra deberia entrar a la caja
+                        $Valores[19]="0"; 			
+                        $Valores[20]=$DiferenciaEfectivo;  	//para la sumatoria contemplar el balance
+                        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                    }
+                    if($DiferenciaEfectivo<0){
+                        $Valores[18]=0;//lo que sobra deberia entrar a la caja
+                        $Valores[19]=$DiferenciaEfectivo*(-1); 			
+                        $Valores[20]=$DiferenciaEfectivo;  	//para la sumatoria contemplar el balance
+                        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                    }
+                    
+                }
 		
 		
 		///////////////////////Registramos ingresos
@@ -386,6 +450,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                 }
 
             }
+            
 
 
 
@@ -1395,6 +1460,10 @@ public function CalculePesoRemision($idCotizacion)
             $CuentaPUC=$DatosComprobante["CuentaPUC"];
             $NombreCuenta=$DatosComprobante["NombreCuenta"];
             $DatosCliente=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosComprobante["Tercero"]);
+            if($DatosCliente["Num_Identificacion"]==''){
+                $DatosCliente=$this->DevuelveValores("clientes", "Num_Identificacion", $DatosComprobante["Tercero"]);
+            
+            }
             $DatosCentro=$this->DevuelveValores("centrocosto", "ID", $DatosComprobante["CentroCostos"]);
             
             $Columnas[0]="Fecha";			$Valores[0]=$Fecha;

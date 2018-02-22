@@ -28,7 +28,7 @@ if(!empty($_REQUEST["TxtBuscarCredito"])){
     }
     $sql="SELECT cart.idCartera,cart.TipoCartera,cart.Facturas_idFacturas, cl.RazonSocial, cl.Num_Identificacion, cart.TotalFactura, cart.Saldo,cart.TotalAbonos, cl.idClientes FROM cartera cart"
             . " INNER JOIN clientes cl ON cart.idCliente = cl.idClientes "
-            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') AND cart.Saldo>0 LIMIT 40";
+            . " WHERE (cl.RazonSocial LIKE '%$key%' OR cl.Num_Identificacion LIKE '%$key%') AND cart.Saldo>1 LIMIT 40";
     $Datos=$obVenta->Query($sql);
     if($obVenta->NumRows($Datos)){
         $css->CrearTabla();

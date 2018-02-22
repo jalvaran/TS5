@@ -162,12 +162,21 @@ if(isset($_REQUEST["BtnSubirZip"])){
         //}
             
         $consulta= $obRips->ConsultarTabla("salud_upload_control", " WHERE Analizado='0'");
+        $obRips->VaciarTabla("salud_archivo_medicamentos_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_consultas_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_hospitalizaciones_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_procedimientos_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_otros_servicios_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_usuarios_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_archivo_nacidos_temp"); //Vacío la tabla de subida temporal
+        $obRips->VaciarTabla("salud_rips_facturas_generadas_temp"); //Vacío la tabla de subida temporal
+                                                                
         while($DatosArchivos= $obRips->FetchArray($consulta)){
             $NombreArchivo=$DatosArchivos["nom_cargue"]; 
             $Prefijo=substr($NombreArchivo, 0, 2); 
             //Si hay medicamentos
             if($Prefijo=="AM"){
-                $obRips->VaciarTabla("salud_archivo_medicamentos_temp"); //Vacío la tabla de subida temporal
+                
                 $obRips->InsertarRipsMedicamentos($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -175,7 +184,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             }
             //Si hay consultas
             if($Prefijo=="AC"){
-                $obRips->VaciarTabla("salud_archivo_consultas_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsConsultas($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -183,7 +191,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             }
             //Si hay hospitalizaciones 
             if($Prefijo=="AH"){
-                $obRips->VaciarTabla("salud_archivo_hospitalizaciones_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsHospitalizaciones($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -191,7 +198,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             }
             //Si hay procedimientos 
             if($Prefijo=="AP"){
-                $obRips->VaciarTabla("salud_archivo_procedimientos_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsProcedimientos($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -200,7 +206,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             
             //otros servicios
             if($Prefijo=="AT"){
-                $obRips->VaciarTabla("salud_archivo_otros_servicios_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsOtrosServicios($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -209,7 +214,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             
             //USUARIOS
             if($Prefijo=="US"){
-                $obRips->VaciarTabla("salud_archivo_usuarios_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsUsuarios($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -217,7 +221,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             }
             //Nacidos
             if($Prefijo=="AN"){
-                $obRips->VaciarTabla("salud_archivo_nacidos_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsNacidos($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
@@ -225,7 +228,6 @@ if(isset($_REQUEST["BtnSubirZip"])){
             }
             //facturacion generada
             if($Prefijo=="AF"){
-                $obRips->VaciarTabla("salud_rips_facturas_generadas_temp"); //Vacío la tabla de subida temporal
                 $obRips->InsertarRipsFacturacionGenerada($NombreArchivo, $TipoNegociacion, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
