@@ -2,15 +2,18 @@
 $myPage="ComprobantesContables.php";
 include_once("../sesiones/php_control.php");
 include_once("clases/ClasesPDFDocumentos.php");
+include_once("clases/ClasesDocumentosExcel.php");
 $obVenta = new ProcesoVenta($idUser);
-$obPDF = new Documento($db);
+
 if(isset($_REQUEST["BtnVerInforme"])){
-    
+    $obPDF = new Documento($db);
+    $obExcel = new TS5_Excel($db);
     $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIni"]);
     $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinal"]);
     $CuentaPUC=$obVenta->normalizar($_REQUEST["TxtCuentaPUC"]);
     
     $Tercero=$obVenta->normalizar($_REQUEST["TxtTercero"]);
+    $obExcel->AcumuladoXTerceroExcel($FechaInicial, $FechaFinal, $CuentaPUC, $Tercero, "");
     $obPDF->PDF_ComprobanteMovimientos($FechaInicial, $FechaFinal, $CuentaPUC, $Tercero, "");
     
 }
@@ -57,7 +60,7 @@ function CrearFormularioInformes($VectorInformes) {
                 $VarSelect["PlaceHolder"]="Busque un Tercero";
                 $VarSelect["Required"]=1;
                 $css->CrearSelectChosen("TxtTercero", $VarSelect);
-                //$css->CrearOptionSelect("All", "Todos" , 1);
+                $css->CrearOptionSelect("All", "Todos" , 1);
                     $sql="SELECT * FROM clientes";
                     $Consulta=$obVenta->Query($sql);
                     while($DatosCliente=$obVenta->FetchArray($Consulta)){

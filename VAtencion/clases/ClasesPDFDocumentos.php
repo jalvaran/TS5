@@ -357,7 +357,7 @@ class Documento extends Tabla{
                 $html.= '  
 
                     <tr align="left">
-                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Tercero_Identificacion"].'</td>
+                        <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["Tercero_Identificacion"].'<br>'.$DatosLibro["Tercero_Razon_Social"].'</td>
                         
                         <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["CuentaPUC"].'</td>
                         <td style="border-bottom: 1px solid #ddd;background-color: '.$Back.';">'.$DatosLibro["NombreCuenta"].'</td>
@@ -394,14 +394,22 @@ class Documento extends Tabla{
            
         $this->PDF_Encabezado($DatosFormatos["Fecha"],1, $idFormato, "",$Documento);
         $html="<br><br><br><br>";
-        $html.="Tercero: $DatosTercero[RazonSocial] $Tercero <br>"; 
-        $html.="Direccion: $DatosTercero[Direccion]"; 
-        $this->PDF_Write("<br>".$html);
+        if($Tercero<>'All'){
+            $html.="Tercero: $DatosTercero[RazonSocial] $Tercero <br>"; 
+            $html.="Direccion: $DatosTercero[Direccion]"; 
+        }    
+            $this->PDF_Write("<br>".$html);
+        
         //$Condicion="WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' AND Tercero_Identificacion='$Tercero' AND CuentaPUC like '$CuentaPUC%'";
         //$html=$this->HTML_Movimiento_Contable_Condicionado($Condicion,"");
-        $sql="SELECT Tercero_Identificacion,SUM(Debito) as Debito,SUM(Credito) as Credito,CuentaPUC, NombreCuenta FROM librodiario  "
-               . "WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' AND Tercero_Identificacion='$Tercero' "
-                . "AND CuentaPUC like '$CuentaPUC%' GROUP BY Tercero_Identificacion";
+        $CondicionTercero="AND Tercero_Identificacion='$Tercero'" ;
+        if($Tercero=='All'){
+            $CondicionTercero="" ;
+        }
+        $sql="SELECT Tercero_Identificacion,Tercero_Razon_Social,SUM(Debito) as Debito,SUM(Credito) as Credito,CuentaPUC, NombreCuenta FROM librodiario  "
+               . "WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' "
+                . "AND CuentaPUC like '$CuentaPUC%' $CondicionTercero GROUP BY Tercero_Identificacion,CuentaPUC";
+        //$this->PDF_Write("<br>$sql<br><br><br>");
         $html=$this->HTML_Movimientos_Resumen($sql,"");
         
         $this->PDF_Write("<br>".$html);

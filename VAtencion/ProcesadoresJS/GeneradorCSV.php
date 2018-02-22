@@ -37,12 +37,13 @@ if(isset($_REQUEST["Opcion"])){
             unlink($Link);
             $FechaIni=$obVenta->normalizar($_REQUEST["TxtFechaIni"]);
             $FechaFin=$obVenta->normalizar($_REQUEST["TxtFechaFin"]);
-            $sql="SELECT 'ID', 'FECHA', 'REFERENCIA','NOMBRE', 'DEPARTAMENTO', 'SUB1', 'SUB2','SUB3', 'SUB4','SUB5', 'CANTIDAD','TOTAL VENTA','COSTOS' UNION ALL ";
+            $sql="SELECT 'ID', 'FECHA', 'REFERENCIA','NOMBRE', 'DEPARTAMENTO', 'SUB1', 'SUB2','SUB3', 'SUB4','SUB5', 'CANTIDAD','TOTAL VENTA','COSTOS','EXISTENCIA' UNION ALL ";
             $sql.="SELECT ID,`FechaFactura`, `Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,"
-                . "`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`),2) as TotalVenta,"
-                . "round(SUM(`SubtotalCosto`),2) as Costo FROM `facturas_items` "
+                . "`SubGrupo3`,`SubGrupo4`,`SubGrupo5`,SUM(`Cantidad`) as Cantidad,round(SUM(`TotalItem`)) as TotalVenta,"
+                . "round(SUM(`SubtotalCosto`)) as Costo,(SELECT Existencias FROM productosventa WHERE productosventa.Referencia=facturas_items.Referencia) as Existencias"
+                    . " FROM `facturas_items` "
                 . "WHERE `FechaFactura`>='$FechaIni' AND `FechaFactura`<='$FechaFin' "
-                . "GROUP BY `Referencia`,`FechaFactura` "
+                . "GROUP BY `Referencia` "
                 . " INTO OUTFILE '$OuputFile' FIELDS TERMINATED BY ';' $Enclosed LINES TERMINATED BY '\r\n';";
             $obVenta->Query($sql);
             print("Resumen de Facturacion Generado exitosamente <a href='$Link'>Abrir</a>");

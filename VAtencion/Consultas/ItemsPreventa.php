@@ -357,8 +357,18 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
     while($DatosPreventa=$obVenta->FetchArray($pa)){
             
             $css->FilaTabla(16);
-            $DatosProducto=$obVenta->DevuelveValores($DatosPreventa["TablaItem"],"idProductosVenta",$DatosPreventa["ProductosVenta_idProductosVenta"]);
-            $css->ColTabla("$DatosProducto[Referencia]", 1);
+            $idTabla='idProductosVenta';
+            if($DatosPreventa["TablaItem"]=='sistemas'){
+                $idTabla='ID';
+            }
+            $DatosProducto=$obVenta->DevuelveValores($DatosPreventa["TablaItem"],$idTabla,$DatosPreventa["ProductosVenta_idProductosVenta"]);
+            
+            if($DatosPreventa["TablaItem"]=='sistemas'){
+                $Ref=$DatosPreventa["ProductosVenta_idProductosVenta"];
+            } else {
+                $Ref=$DatosProducto["Referencia"];
+            }
+            $css->ColTabla($Ref, 1);
             $css->ColTabla("$DatosProducto[Nombre]", 1);       
             
             $Autorizado=!$DatosPreventa["Autorizado"];
@@ -376,7 +386,7 @@ $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa' O
             print("</td>");
             $PrecioAcordado=round($DatosPreventa['ValorAcordado']);
             print("<td>");
-              $css->DivColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","","","","150","30",$Autorizado,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa,"TxtPrecioMayor",$DatosProducto["PrecioMayorista"]); 
+              $css->DivColTablaFormEditarPrecio("FrmEditPrecio$DatosPreventa[idPrecotizacion]",$myPage,"post","_self","TxtEditarPrecio$DatosPreventa[idPrecotizacion]","Number",$PrecioAcordado,"","","","","","","150","30",$Autorizado,0,"TxtPrecotizacion",$DatosPreventa['idPrecotizacion'],$idPreventa,"TxtPrecioMayor",$DatosPreventa["PrecioMayorista"]); 
             print("</td>");
             $css->ColTabla("<strong>".number_format($DatosPreventa['TotalVenta'])."</strong>", 1);    
             

@@ -292,3 +292,7 @@ ADD `ValorComision2` INT NOT NULL AFTER `ValorComision1`,
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (29, 'COMPROBANTE DE MOVIMIENTOS CONTABLES', '001', 'F-GFC-003', '2018-02-13', '', '2018-01-10 17:22:33', '2017-10-20 10:30:00');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (148, 'Generar Comprobante de movimientos contables', '16', '3', 'ComprobantesContables.php', '_SELF', b'1', 'comprobantes.png', '3', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
+ALTER TABLE `preventa` ADD `idSistema` INT NOT NULL AFTER `TipoItem`;
+
+ALTER TABLE `kardexmercancias` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
+

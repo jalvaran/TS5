@@ -424,7 +424,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 ///////////////////////////////////////////////////////////////////
 
 
-public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem,$ValorAcordado=0)
+public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$TablaItem,$ValorAcordado=0,$idSistema=0)
   {
         $fecha=$this->normalizar($fecha);
         $Cantidad=$this->normalizar($Cantidad);
@@ -451,7 +451,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
         $DatosDepartamento=$this->DevuelveValores("prod_departamentos", "idDepartamentos", $DatosProductoGeneral["Departamento"]);
         $DatosTablaItem=$this->DevuelveValores("tablas_ventas", "NombreTabla", $TablaItem);
         $TipoItem=$DatosDepartamento["TipoItem"];
-        $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' ORDER BY idPrecotizacion DESC");
+        $consulta=$this->ConsultarTabla("preventa", "WHERE TablaItem='$TablaItem' AND ProductosVenta_idProductosVenta='$idProducto' AND VestasActivas_idVestasActivas='$idVentaActiva' AND idSistema='$idSistema' ORDER BY idPrecotizacion DESC");
         $DatosProduto=$this->FetchArray($consulta);
         if($DatosProduto["Cantidad"]>0){
             if($DatosProductoGeneral["IVA"]=="E"){
@@ -508,8 +508,8 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $Total=$Subtotal+$impuesto;
             
             
-            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`, `CostoUnitario`, `PrecioMayorista`, `PorcentajeIVA`)
-                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem', '$CostoUnitario', '$PrecioMayor', '$PorcentajeIVA');";
+            $sql="INSERT INTO `preventa` ( `Fecha`, `Cantidad`, `VestasActivas_idVestasActivas`, `ProductosVenta_idProductosVenta`, `ValorUnitario`,`ValorAcordado`, `Subtotal`, `Impuestos`, `TotalVenta`, `TablaItem`, `TipoItem`, `CostoUnitario`, `PrecioMayorista`, `PorcentajeIVA`,`idSistema`)
+                    VALUES ('$fecha', '$Cantidad', '$idVentaActiva', '$idProducto', '$ValorUnitario','$ValorUnitario', '$Subtotal', '$impuesto', '$Total', '$TablaItem', '$TipoItem', '$CostoUnitario', '$PrecioMayor', '$PorcentajeIVA', '$idSistema');";
 
             $this->Query($sql);	
 	
@@ -1782,34 +1782,79 @@ public function CalculePesoRemision($idCotizacion)
         $idPreventa=$Datos["idPreventa"];
         $NumFactura=$Datos["ID"];
         $FechaFactura=$Datos["FechaFactura"];
-        /*
-        $sql="INSERT INTO facturas_items (FechaFactura,idFactura,TablaItems,Referencia,Nombre,Departamento,SubGrupo1,SubGrupo2,"
-                . "SubGrupo3,SubGrupo4,SubGrupo5,ValorUnitarioItem,Cantidad,Dias,SubtotalItem,IVAItem,ValorOtrosImpuestos,TotalItem,"
-                . "PorcentajeIVA,PrecioCostoUnitario,SubtotalCosto,TipoItem,CuentaPUC,idUsuarios) "
-                . " (SELECT '$FechaFactura' as FechaFactura,'$NumFactura' as idFactura, TablaItems,"
-                . " Referencia, Nombre,Departamento,SubGrupo1,SubGrupo2,SubGrupo3,SubGrupo4,SubGrupo5,ValorUnitarioItem,"
-                . " Cantidad,Dias,SubtotalItem,IVAItem,ValorOtrosImpuestos,TotalItem,PorcentajeIVA,PrecioCostoUnitario,SubtotalCosto"
-                . ", TipoItem,CuentaPUC,'$idUser' as idUsuarios"
-                . " FROM vista_preventa WHERE VestasActivas_idVestasActivas='$idPreventa') ";
-        
-        $Consulta=$this->Query($sql);
-        $this->RegistraKardexItemsFactura($NumFactura);
-         * 
-         */
-        
+                
         $sql="SELECT * FROM preventa WHERE VestasActivas_idVestasActivas='$idPreventa'";
         $Consulta=$this->Query($sql);
         $TotalSubtotal=0;
         $TotalIVA=0;
         $GranTotal=0;
         $TotalCostos=0;
-        
+        $DatosOtrosImpuestos["ValorImpuesto"]=0;
+        $DatosOtrosImpuestos["ID"]=0;
+        $Entra=0;
         while($DatosCotizacion=  $this->FetchArray($Consulta)){
             $TablaItem=$DatosCotizacion["TablaItem"];
-            $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaItem"], "idProductosVenta", $DatosCotizacion["ProductosVenta_idProductosVenta"]);
-            $DatosOtrosImpuestos=$this->DevuelveValores("productos_impuestos_adicionales","idProducto",$DatosCotizacion["ProductosVenta_idProductosVenta"]);
+            $idTabla='idProductosVenta';
             
+            if($DatosCotizacion["idSistema"]>0){
+                $idSistema=$DatosCotizacion["idSistema"];
+                
+                $consulta=$this->ConsultarTabla("facturas_items", " WHERE idFactura='$NumFactura' AND TablaItems='sistemas' AND Referencia='$idSistema'");
+                $DatosItem=$this->FetchArray($consulta);
+                if($DatosItem["ID"]==''){
+                    $Entra=1;
+                    $DatosSistema=$this->DevuelveValores("sistemas", "ID", $idSistema);
+                    $DatosCotizacionLineaSistema["TablaItem"]='sistemas';
+                    $DatosCotizacionLineaSistema["ValorAcordado"]=0;
+                    $DatosCotizacionLineaSistema["CostoUnitario"]=0;
+                    $DatosCotizacionLineaSistema["TipoItem"]='MO';
+                    $DatosCotizacionLineaSistema["Cantidad"]=0;
+                    $DatosProductoLineaSistema["Referencia"]=$idSistema;
+                    $DatosProductoLineaSistema["Nombre"]=$DatosSistema["Nombre"];
+                    $DatosProductoLineaSistema["Departamento"]=0;
+                    $DatosProductoLineaSistema["Sub1"]=0;
+                    $DatosProductoLineaSistema["Sub2"]=0;
+                    $DatosProductoLineaSistema["Sub3"]=0;
+                    $DatosProductoLineaSistema["Sub4"]=0;
+                    $DatosProductoLineaSistema["Sub5"]=0;
+                    $DatosProductoLineaSistema["CuentaPUC"]='';
+                    
+                    $this->ItemFacturaVenta($NumFactura, $DatosCotizacionLineaSistema, $DatosProductoLineaSistema, 0, 0, 0, 0, 0, '', $DatosOtrosImpuestos, "");
+                    
+                }
+                 
+                //$idTabla='ID';
+                
+            }else{
+                if($Entra==1){
+                    $Entra=0;
+                    
+                    $DatosCotizacionLineaSistema["TablaItem"]='ln';
+                    $DatosCotizacionLineaSistema["ValorAcordado"]=0;
+                    $DatosCotizacionLineaSistema["CostoUnitario"]=0;
+                    $DatosCotizacionLineaSistema["TipoItem"]='MO';
+                    $DatosCotizacionLineaSistema["Cantidad"]=0;
+                    $DatosProductoLineaSistema["Referencia"]="";
+                    $DatosProductoLineaSistema["Nombre"]="";
+                    $DatosProductoLineaSistema["Departamento"]=0;
+                    $DatosProductoLineaSistema["Sub1"]=0;
+                    $DatosProductoLineaSistema["Sub2"]=0;
+                    $DatosProductoLineaSistema["Sub3"]=0;
+                    $DatosProductoLineaSistema["Sub4"]=0;
+                    $DatosProductoLineaSistema["Sub5"]=0;
+                    $DatosProductoLineaSistema["CuentaPUC"]='';
+                    
+                    $this->ItemFacturaVenta($NumFactura, $DatosCotizacionLineaSistema, $DatosProductoLineaSistema, 0, 0, 0, 0, 0, '', $DatosOtrosImpuestos, "");
+                    
+                }
+            }
+            $DatosProducto=$this->DevuelveValores($DatosCotizacion["TablaItem"], $idTabla, $DatosCotizacion["ProductosVenta_idProductosVenta"]);
+            //Reviso si hay impuestos adicionales en los productos
             
+            if($DatosCotizacion["TablaItem"]=='productosventa'){
+                $DatosOtrosImpuestos=$this->DevuelveValores("productos_impuestos_adicionales","idProducto",$DatosCotizacion["ProductosVenta_idProductosVenta"]);
+                
+            }
             ////Empiezo a insertar en la tabla items facturas
             ///
             ///
@@ -1830,7 +1875,40 @@ public function CalculePesoRemision($idCotizacion)
             }else{
                 $PorcentajeIVA="Exc";
             }
-            //$ID=date("YmdHis").microtime(false);
+            $this->ItemFacturaVenta($NumFactura, $DatosCotizacion, $DatosProducto, $SubtotalItem, $IVAItem, $TotalItem, $PorcentajeIVA, $SubtotalCosto, $FechaFactura, $DatosOtrosImpuestos, "");
+            /*
+            if($DatosCotizacion["TipoItem"]=="PR"){
+                
+                $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
+                $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
+                $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
+                $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
+                $DatosKardex["Detalle"]="Factura";
+                $DatosKardex["idDocumento"]=$NumFactura;
+                $DatosKardex["TotalCosto"]=$SubtotalCosto;
+                $DatosKardex["Movimiento"]="SALIDA";
+                
+                $this->InserteKardex($DatosKardex);
+            }
+            *
+             * 
+             */ 
+             
+        }
+        $ID=$Datos["ID"]; 
+        $TotalSubtotal=$TotalSubtotal;
+        $TotalIVA=round($TotalIVA);
+        $GranTotal=round($GranTotal);
+        $TotalCostos=round($TotalCostos);
+        $sql="UPDATE facturas SET Subtotal='$TotalSubtotal', IVA='$TotalIVA', Total='$GranTotal', "
+                . "SaldoFact='$GranTotal', TotalCostos='$TotalCostos' WHERE idFacturas='$ID'";
+        $this->Query($sql);
+        
+        
+    } 
+    //inserta item de factura
+    public function ItemFacturaVenta($NumFactura,$DatosCotizacion,$DatosProducto,$SubtotalItem,$IVAItem,$TotalItem,$PorcentajeIVA,$SubtotalCosto,$FechaFactura,$DatosOtrosImpuestos,$Vector) {
+        //$ID=date("YmdHis").microtime(false);
             $tab="facturas_items";
             $NumRegistros=29;
             $Columnas[0]="ID";			$Valores[0]="";
@@ -1864,37 +1942,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[28]="ValorOtrosImpuestos";$Valores[28]= $DatosOtrosImpuestos["ValorImpuesto"]*$DatosCotizacion['Cantidad'];
             
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-            /*
-            if($DatosCotizacion["TipoItem"]=="PR"){
-                
-                $DatosKardex["Cantidad"]=$DatosCotizacion['Cantidad'];
-                $DatosKardex["idProductosVenta"]=$DatosProducto["idProductosVenta"];
-                $DatosKardex["CostoUnitario"]=$DatosProducto['CostoUnitario'];
-                $DatosKardex["Existencias"]=$DatosProducto['Existencias'];
-                $DatosKardex["Detalle"]="Factura";
-                $DatosKardex["idDocumento"]=$NumFactura;
-                $DatosKardex["TotalCosto"]=$SubtotalCosto;
-                $DatosKardex["Movimiento"]="SALIDA";
-                
-                $this->InserteKardex($DatosKardex);
-            }
-            *
-             * 
-             */ 
-             
-        }
-        $ID=$Datos["ID"]; 
-        $TotalSubtotal=$TotalSubtotal;
-        $TotalIVA=round($TotalIVA);
-        $GranTotal=round($GranTotal);
-        $TotalCostos=round($TotalCostos);
-        $sql="UPDATE facturas SET Subtotal='$TotalSubtotal', IVA='$TotalIVA', Total='$GranTotal', "
-                . "SaldoFact='$GranTotal', TotalCostos='$TotalCostos' WHERE idFacturas='$ID'";
-        $this->Query($sql);
-        
-        
-    } 
-    
+    }
     
     /*
      * Inserta Items de un separado a una factura
@@ -6730,9 +6778,10 @@ public function VerificaPermisos($VectorPermisos) {
     public function AgregueSistemaPreventa($idPreventa,$idSistema,$Cantidad,$Vector) {
         $consulta=$this->ConsultarTabla("sistemas_relaciones", "WHERE idSistema='$idSistema'");
         while($ItemsSistema=$this->FetchArray($consulta)){
+            
             $CantidadTotal=$Cantidad*$ItemsSistema["Cantidad"];
             $DatosProducto=$this->DevuelveValores($ItemsSistema["TablaOrigen"], "Referencia", $ItemsSistema["Referencia"]);
-            $this->AgregaPreventa(date("Y-m-d"), $CantidadTotal, $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"]);
+            $this->AgregaPreventa(date("Y-m-d"), $CantidadTotal, $idPreventa, $DatosProducto["idProductosVenta"], $ItemsSistema["TablaOrigen"], $ItemsSistema["ValorUnitario"],$idSistema);
         }
     }
     //Anule un separado

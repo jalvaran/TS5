@@ -320,6 +320,87 @@ class TS5_Excel extends Tabla{
     exit; 
         
     }
+    //resumen de ventas y comisiones en excel
+    // Clase para generar excel de un balance de comprobacion
+    
+    public function AcumuladoXTerceroExcel($FechaInicial,$FechaFinal,$CuentaPUC,$Tercero,$Vector) {
+        
+        require_once '../librerias/Excel/PHPExcel.php';
+        $objPHPExcel = new PHPExcel();  
+        
+        $objPHPExcel->getActiveSheet()->getStyle('E:F')->getNumberFormat()->setFormatCode('#');
+        
+        $objPHPExcel->getActiveSheet()->getStyle("A:F")->getFont()->setSize(10);
+        
+        $f=1;
+        $Rango="DE $FechaInicial A $FechaFinal";
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[1].$f,"ACUMULADO POR TERCERO $Rango")
+                        
+            ;
+        $f=2;
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,"TERCERO")
+            ->setCellValue($this->Campos[1].$f,"RAZON SOCIAL")
+            ->setCellValue($this->Campos[2].$f,"CUENTA PUC")
+            ->setCellValue($this->Campos[3].$f,"NOMBRE CUENTA")
+            ->setCellValue($this->Campos[4].$f,"DEBITOS")
+            ->setCellValue($this->Campos[5].$f,"CREDITOS")            
+            ;
+        $CondicionTercero="AND Tercero_Identificacion='$Tercero'" ;
+        if($Tercero=='All'){
+            $CondicionTercero="" ;
+        }
+        $sql="SELECT Tercero_Identificacion,Tercero_Razon_Social,SUM(Debito) as Debito,SUM(Credito) as Credito,CuentaPUC, NombreCuenta FROM librodiario  "
+               . "WHERE Fecha>='$FechaInicial' AND Fecha<='$FechaFinal' "
+                . "AND CuentaPUC like '$CuentaPUC%' $CondicionTercero GROUP BY Tercero_Identificacion,CuentaPUC";
+        $Consulta=$this->obCon->Query($sql);
+        $f=3;
+        $TotalCreditos=0;
+        $TotalDebitos=0;
+        
+        while($DatosLibro= $this->obCon->FetchArray($Consulta)){
+            $TotalDebitos=$TotalDebitos+$DatosLibro["Debito"];
+            $TotalCreditos=$TotalCreditos+$DatosLibro["Credito"];;
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,$DatosLibro["Tercero_Identificacion"])
+            ->setCellValue($this->Campos[1].$f,$DatosLibro["Tercero_Razon_Social"])
+            ->setCellValue($this->Campos[2].$f,$DatosLibro["CuentaPUC"])
+            ->setCellValue($this->Campos[3].$f,$DatosLibro["NombreCuenta"])
+            ->setCellValue($this->Campos[4].$f,$DatosLibro["Debito"])
+            ->setCellValue($this->Campos[5].$f,$DatosLibro["Credito"])            
+            ;
+            $f++;
+        }
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,"")
+            ->setCellValue($this->Campos[1].$f,"")
+            ->setCellValue($this->Campos[2].$f,"")
+            ->setCellValue($this->Campos[3].$f,"TOTALES")
+            ->setCellValue($this->Campos[4].$f,$TotalDebitos)
+            ->setCellValue($this->Campos[5].$f,$TotalCreditos)            
+            ;
+        //Informacion del excel
+   $objPHPExcel->
+    getProperties()
+        ->setCreator("www.technosoluciones.com.co")
+        ->setLastModifiedBy("www.technosoluciones.com.co")
+        ->setTitle("Acumulado por terceros")
+        ->setSubject("Informe")
+        ->setDescription("Documento generado con PHPExcel")
+        ->setKeywords("techno soluciones sas")
+        ->setCategory("Informes Ventas");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Acumulado".'.xls"');
+    header('Cache-Control: max-age=0');
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+        
+    }
    //Fin Clases
 }
     
