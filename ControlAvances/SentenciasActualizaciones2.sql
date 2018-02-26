@@ -296,3 +296,5 @@ ALTER TABLE `preventa` ADD `idSistema` INT NOT NULL AFTER `TipoItem`;
 
 ALTER TABLE `kardexmercancias` CHANGE `ProductosVenta_idProductosVenta` `ProductosVenta_idProductosVenta` BIGINT NOT NULL;
 
+ALTER TABLE `proveedores` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
+ALTER TABLE `clientes` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;

@@ -56,6 +56,7 @@ $Vector["CIUU"]["IDTabla"]="Codigo"; //id de la tabla que se vincula
 $Vector["CIUU"]["Display"]="Codigo"; 
 $Vector["CIUU"]["Predeterminado"]="0";
 
+$Vector["Soporte"]["Link"]=1;   //Indico que esta columna tendra un vinculo
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>

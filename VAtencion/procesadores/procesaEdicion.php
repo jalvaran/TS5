@@ -33,6 +33,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
             
             }else if($tab=="egresos"){
                 $carpeta="SoportesEgresos/";
+            
+            }else if($tab=="clientes" or $tab=="proveedores"){
+                $carpeta="SoportesTS5/Terceros/";
             }
             opendir($dir.$carpeta);
             $Name=str_replace(' ','_',$_FILES[$NombreCol]['name']);  

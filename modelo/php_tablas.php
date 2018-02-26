@@ -1008,7 +1008,7 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
             print("<td style='text-align: center'>");
             
             print($NombreCol."<br>");
-            if(property_exists($Parametros,$NombreCol)){
+            if(property_exists($Parametros,$NombreCol) and $NombreCol<>"Soporte"){
                 $Display=$Parametros->$NombreCol->Display;
                 $IDTabla=$Parametros->$NombreCol->IDTabla;
                 $TablaVinculo=$Parametros->$NombreCol->TablaVinculo;
@@ -1040,7 +1040,7 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
                 }
             }else{
                 if($lengCampo<100){
-                    if($NombreCol=="RutaImagen"){
+                    if($NombreCol=="RutaImagen" or $NombreCol=="Soporte"){
                         $this->css->CrearUpload($NombreCol);
                     }else{
                         if($DateBox==0){
@@ -1051,7 +1051,7 @@ public function FormularioInsertRegistro($Parametros,$VarInsert)  {
                         }
                     }
                 }else{
-                    if($NombreCol=="RutaImagen"){
+                    if($NombreCol=="RutaImagen" or $NombreCol=="Soporte"){
                         $this->css->CrearUpload($NombreCol);
                     }else{    
                         $this->css->CrearTextArea("$NombreCol", "", $Value, "", "$NombreCol", "black", "", "","100",$lengCampo."0", $ReadOnly, 1);
@@ -2978,7 +2978,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
             ;
                 
         $sql="SELECT `Fecha`,`Num_Documento_Externo`,`Tercero_Razon_Social`, SUM(`Debito`) AS Debitos,SUM(`Credito`) AS Creditos,`CuentaPUC`,`NombreCuenta`,`Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`Concepto`,`Detalle` "
-                . " FROM `librodiario` $Condicion GROUP BY `Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`CuentaPUC` ORDER BY `Tercero_Identificacion`,`idLibroDiario`,`CuentaPUC` ";
+                . " FROM `librodiario` $Condicion GROUP BY `Tercero_Identificacion`,`Tipo_Documento_Intero`,`Num_Documento_Interno`,`CuentaPUC` ORDER BY `Tercero_Identificacion`,`Fecha`,`CuentaPUC` ";
         $Datos=$this->obCon->Query($sql);
         $Tercero='';
         $SaldoAnterior=0;

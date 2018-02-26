@@ -48,7 +48,7 @@ $Vector["Tipo_Documento"]["TablaVinculo"]="cod_documentos";  //tabla de donde se
 $Vector["Tipo_Documento"]["IDTabla"]="Codigo"; //id de la tabla que se vincula
 $Vector["Tipo_Documento"]["Display"]="Descripcion"; 
 //$Vector["Cod_Dpto"]["Predeterminado"]=1004;
-
+$Vector["Soporte"]["Link"]=1;   //Indico que esta columna tendra un vinculo
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden
 ?>
