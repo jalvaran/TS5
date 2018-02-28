@@ -24,13 +24,6 @@ ALTER TABLE `cuentasxpagar` ADD `Estado` VARCHAR(20) NOT NULL  AFTER `idUsuario`
 
 ALTER TABLE `cuentasxpagar` ADD `CuentaPUC` VARCHAR(20) NOT NULL DEFAULT '220505' AFTER `Estado`;
 
-
-DROP VIEW IF EXISTS `vista_inventario_separados`;
-CREATE VIEW vista_inventario_separados AS
-SELECT si.`ID`,`Referencia`,`Nombre`,SUM(`Cantidad`) as Cantidad,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5` 
-FROM `separados_items` si INNER JOIN separados s ON s.ID=si.`idSeparado` 
-WHERE s.Estado='Abierto' GROUP BY si.`Referencia`;
-
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (113, 'Inventario de Separados', '22', '3', 'vista_inventario_separados.php', '_SELF', b'1', 'inventario_separados.png', '3', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 ALTER TABLE `separados` ADD `Observaciones` TEXT NOT NULL AFTER `Estado`;
@@ -54,36 +47,11 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (118, 'Radicar Facturas', '36', '3', 'salud_radicacion_facturas.php', '_SELF', b'1', 'radicar.jpg', '2', '2017-12-11 10:44:06', '2017-10-13 14:16:57');
 
-
-
-DROP VIEW IF EXISTS `vista_salud_facturas_pagas`;
-CREATE VIEW vista_salud_facturas_pagas AS 
-SELECT t1.`id_fac_mov_generados` as id_factura_generada,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,t1.`fecha_factura`,
-t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar`,t2.`id_pagados` as id_factura_pagada,t2.`fecha_pago_factura`,t2.`valor_pagado`,t2.`num_pago` ,t1.`tipo_negociacion`,
-t1.`dias_pactados`,t1.`fecha_radicado`,t1.`numero_radicado`,t1.`Soporte` 
-FROM salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 ON t1.`num_factura`=t2.`num_factura`
-WHERE t1.estado='PAGADA';
-
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (119, 'Historial de Facturas Pagas', '36', '3', 'vista_salud_facturas_pagas.php', '_SELF', b'1', 'historial.png', '4', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
-DROP VIEW IF EXISTS `vista_salud_facturas_no_pagas`;
-CREATE VIEW vista_salud_facturas_no_pagas AS 
-SELECT t1.`id_fac_mov_generados` as id_factura_generada, 
-(SELECT DATEDIFF(now(),t1.`fecha_radicado` ) - t1.`dias_pactados`) as DiasMora ,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,
-t1.`fecha_factura`, t1.`fecha_radicado`,t1.`numero_radicado`,t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar` ,t1.`tipo_negociacion`, 
-t1.`dias_pactados`,t1.`Soporte`
-FROM salud_archivo_facturacion_mov_generados t1 WHERE t1.tipo_negociacion='evento' AND (t1.estado='RADICADO' OR t1.estado=''); 
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (120, 'Historial de Facturas NO Pagadas', '36', '3', 'vista_salud_facturas_no_pagas.php', '_SELF', b'1', 'historial2.png', '5', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
-DROP VIEW IF EXISTS `vista_salud_facturas_diferencias`;
-CREATE VIEW vista_salud_facturas_diferencias AS 
-SELECT t1.`id_fac_mov_generados` as id_factura_generada,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,t1.`fecha_factura`,
-t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar`,t2.`id_pagados` as id_factura_pagada,t2.`fecha_pago_factura`,t2.`valor_pagado`,t2.`num_pago` ,
-(SELECT t1.`valor_neto_pagar`-t2.`valor_pagado`) as DiferenciaEnPago ,t1.`tipo_negociacion`,
-t1.`dias_pactados`,t1.`fecha_radicado`,t1.`numero_radicado`,t1.`Soporte` 
-FROM salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 ON t1.`num_factura`=t2.`num_factura`
-WHERE t1.estado='DIFERENCIA' AND t1.tipo_negociacion='evento';
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (121, 'Historial de Facturas Con Diferencias', '36', '3', 'vista_salud_facturas_diferencias.php', '_SELF', b'1', 'historial3.png', '6', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
@@ -152,13 +120,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (137, 'Listado de EPS', '36', '3', 'salud_eps.php', '_SELF', b'1', 'eps.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
--- Vista para seleccionar lo que se pagó pero no fue generado
-DROP VIEW IF EXISTS `vista_salud_pagas_no_generadas`;
-CREATE VIEW vista_salud_pagas_no_generadas AS 
-Select T1.* From salud_archivo_facturacion_mov_pagados T1 
-Left Outer Join salud_archivo_facturacion_mov_generados T2 ON T1.num_factura = T2.num_factura 
-where T2.num_factura is null ;
-
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (138, 'Facturas Pagas No Generadas', '37', '3', 'vista_salud_pagas_no_generadas.php', '_SELF', b'1', 'factura3.png', '8', '2017-12-18 07:51:25', '2017-10-13 14:16:57');
 
 DROP TABLE IF EXISTS `libromayorbalances`;
@@ -186,31 +147,9 @@ INSERT INTO `menu_carpetas` (`ID`, `Ruta`, `Updated`, `Sync`) VALUES (6, '../Sal
 ALTER TABLE `salud_archivo_facturacion_mov_pagados` ADD `Soporte` VARCHAR(45) NOT NULL AFTER `Estado`;
 ALTER TABLE `salud_archivo_facturacion_mov_pagados_temp` ADD `Soporte` VARCHAR(45) NOT NULL AFTER `Estado`;
 
-DROP VIEW IF EXISTS `vista_salud_facturas_no_pagas`;
-CREATE VIEW vista_salud_facturas_no_pagas AS 
-SELECT t1.`id_fac_mov_generados` as id_factura_generada, 
-(SELECT DATEDIFF(now(),t1.`fecha_radicado` ) - t1.`dias_pactados`) as DiasMora ,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,
-t1.`fecha_factura`, t1.`fecha_radicado`,t1.`numero_radicado`,t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar` ,t1.`tipo_negociacion`, 
-t1.`dias_pactados`,t1.`Soporte`,t1.`EstadoCobro`
-FROM salud_archivo_facturacion_mov_generados t1 WHERE t1.tipo_negociacion='evento' AND (t1.estado='RADICADO' OR t1.estado=''); 
 
-
-DROP VIEW IF EXISTS `vista_salud_facturas_diferencias`;
-CREATE VIEW vista_salud_facturas_diferencias AS 
-SELECT t1.`id_fac_mov_generados` as id_factura_generada,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,t1.`fecha_factura`,
-t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar`,t2.`id_pagados` as id_factura_pagada,t2.`fecha_pago_factura`,t2.`valor_pagado`,t2.`num_pago` ,
-(SELECT t1.`valor_neto_pagar`-t2.`valor_pagado`) as DiferenciaEnPago ,t1.`tipo_negociacion`,
-t1.`dias_pactados`,t1.`fecha_radicado`,t1.`numero_radicado`,t1.`Soporte` 
-FROM salud_archivo_facturacion_mov_generados t1 INNER JOIN salud_archivo_facturacion_mov_pagados t2 ON t1.`num_factura`=t2.`num_factura`
-WHERE t1.estado='DIFERENCIA' AND t1.tipo_negociacion='evento';
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (140, 'Generar Prejuridicos', '39', '6', 'SaludPrejuridicos.php', '_SELF', b'1', 'prejuridico.jpg', '1', '2018-01-04 08:40:15', '2017-10-13 14:16:57');
-
-DROP VIEW IF EXISTS `vista_salud_facturas_prejuridicos`;
-CREATE VIEW vista_salud_facturas_prejuridicos AS 
-SELECT t2.`id_fac_mov_generados` as ID,t1.idCobroPrejuridico,t2.`num_factura`,`cod_prest_servicio`,`razon_social`,`num_ident_prest_servicio`,`fecha_factura`,`cod_enti_administradora`,`nom_enti_administradora`,`valor_neto_pagar`,`tipo_negociacion`,`fecha_radicado`,`numero_radicado`,`Soporte` as SoporteRadicado,(SELECT Soporte FROM salud_cobros_prejuridicos WHERE ID=t1.idCobroPrejuridico) AS SoporteCobro,`estado` as EstadoFactura,`EstadoCobro` FROM `salud_cobros_prejuridicos_relaciones` t1 
-INNER JOIN salud_archivo_facturacion_mov_generados t2 ON t1.`num_factura`=t2.`num_factura`
-WHERE t2.EstadoCobro='PREJURIDICO1' OR t2.EstadoCobro='PREJURIDICO2';
 
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (27, 'COBRO PREJURIDICO 1', '001', 'F-GSL-001', '2018-01-02', '', '2017-10-20 10:30:00', '2017-10-20 10:30:00');
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (28, 'COBRO PREJURIDICO 2', '001', 'F-GSL-002', '2018-01-02', '', '2017-10-20 10:30:00', '2017-10-20 10:30:00');
@@ -218,11 +157,6 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 ALTER TABLE `prod_bajas_altas` CHANGE `Fecha` `Fecha` DATE NOT NULL;
 ALTER TABLE `prod_bajas_altas` CHANGE `Cantidad` `Cantidad` DOUBLE NOT NULL;
 
-DROP VIEW IF EXISTS `vista_resumen_ventas_departamentos`;
-CREATE VIEW vista_resumen_ventas_departamentos AS 
-SELECT `FechaFactura`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5`, 
-SUM(`TotalItem`) AS Total FROM `facturas_items`  
-GROUP BY `FechaFactura`, `Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,`SubGrupo4`,`SubGrupo5` ;
 
 INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) 
 VALUES (28, 'Graficos', '1', 'MnuGraficosVentas.php', '_BLANK', '0', 'graficos.png', '1', '2017-10-13 14:16:49', '2017-10-13 14:16:49');
@@ -250,21 +184,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (43, 'Tesoreria', '26', '6', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
 
-DROP VIEW IF EXISTS `vista_factura_compra_totales`;
-CREATE VIEW vista_factura_compra_totales AS 
-SELECT `idFacturaCompra`,(SELECT Fecha FROM factura_compra WHERE ID=`idFacturaCompra`) as Fecha,
-(SELECT Tercero FROM factura_compra WHERE ID=`idFacturaCompra`) as Tercero,
-sum(`SubtotalCompra`) AS Subtotal, sum(`ImpuestoCompra`) as Impuestos,
-(SELECT sum(ValorRetencion) FROM factura_compra_retenciones WHERE idCompra=`idFacturaCompra`) as TotalRetenciones,
-sum(`TotalCompra`) as Total, 
-(SELECT sum(Subtotal_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as SubtotalServicios, 
-(SELECT sum(Impuesto_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as ImpuestosServicios,
-(SELECT sum(Total_Servicio) FROM factura_compra_servicios WHERE factura_compra_servicios.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as TotalServicios,
-(SELECT sum(SubtotalCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as SubtotalDevoluciones,
-(SELECT sum(ImpuestoCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as ImpuestosDevueltos,
-(SELECT sum(TotalCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=`factura_compra_items`.`idFacturaCompra`) as TotalDevolucion 
-FROM `factura_compra_items` GROUP BY `idFacturaCompra`;
-
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (147, 'Totales en Compras', '13', '3', 'vista_factura_compra_totales.php', '_SELF', b'1', 'historial3.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 ALTER TABLE `prod_comisiones` CHANGE `Dep_Comision` `Dep_Comision` INT NOT NULL;
@@ -283,7 +202,6 @@ ALTER TABLE `prod_comisiones` ADD `ValorComision3` DOUBLE NOT NULL AFTER `ValorC
 ALTER TABLE `facturas_items` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL ;
 ALTER TABLE `productosventa` CHANGE `Referencia` `Referencia` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL ;
 
-DROP VIEW IF EXISTS `vista_comisiones_venta_productos`;
 
 ALTER TABLE `productosventa` ADD `ValorComision1` INT NOT NULL AFTER `CuentaPUC`, 
 ADD `ValorComision2` INT NOT NULL AFTER `ValorComision1`,
@@ -298,3 +216,7 @@ ALTER TABLE `kardexmercancias` CHANGE `ProductosVenta_idProductosVenta` `Product
 
 ALTER TABLE `proveedores` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
 ALTER TABLE `clientes` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (NULL, 'Diagnostico de RIPS Circular 030', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'diagnostico.png', '3', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+
+

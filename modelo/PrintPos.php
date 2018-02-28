@@ -303,9 +303,15 @@ class PrintPos extends ProcesoVenta{
 	while($DatosTotales=$this->FetchArray($Consulta)){
             $TotalVenta=$DatosTotales["Subtotal"]+$DatosTotales["IVA"]+$DatosTotales["OtrosImpuestos"];
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Base $DatosTotales[PorcentajeIVA]         ".str_pad("$".number_format($DatosTotales["Subtotal"],2),20," ",STR_PAD_LEFT));
+                fwrite($handle,"Base del $DatosTotales[PorcentajeIVA]      ".str_pad("$".number_format($DatosTotales["Subtotal"],2),20," ",STR_PAD_LEFT));
                 fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
-                fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"],2),20," ",STR_PAD_LEFT));
+                if($DatosTotales["PorcentajeIVA"]=='8%'){
+                    fwrite($handle,"Impoconsumo     ".str_pad("$".number_format($DatosTotales["IVA"],2),20," ",STR_PAD_LEFT));
+                
+                }else{
+                    fwrite($handle,"Impuesto $DatosTotales[PorcentajeIVA]     ".str_pad("$".number_format($DatosTotales["IVA"],2),20," ",STR_PAD_LEFT));
+                
+                }
                 if($DatosTotales["OtrosImpuestos"]>0){
                     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
                     fwrite($handle,"Impoconsumo      ".str_pad("$".number_format($DatosTotales["OtrosImpuestos"]),20," ",STR_PAD_LEFT));

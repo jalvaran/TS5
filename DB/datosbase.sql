@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2018 at 08:18 AM
+-- Generation Time: Feb 27, 2018 at 04:01 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -2649,16 +2649,6 @@ INSERT INTO `documentos_generados` (`ID`, `Nombre`, `Abreviatura`, `Libro`, `Upd
 (7, 'VENTA DE TITULO', 'VT', 'VentaTitulo', '2017-10-13 18:10:11', '2017-10-13 13:10:11');
 
 --
--- Dumping data for table `egresos_activos`
---
-
-INSERT INTO `egresos_activos` (`id`, `Nombre`, `Cuentas_idCuentas`, `Visible`, `Updated`, `Sync`) VALUES
-(1, 'Mercancias no fabricadas por la empresa', 1435, 1, '2017-10-13 18:10:18', '2017-10-13 13:10:18'),
-(2, 'Equipo Medico Cientifico', 1532, 1, '2017-10-13 18:10:18', '2017-10-13 13:10:18'),
-(3, 'Equipos de Oficina', 1524, 1, '2017-10-13 18:10:18', '2017-10-13 13:10:18'),
-(4, 'Equipos de Computacion y Comunicacion', 1528, 1, '2017-10-13 18:10:18', '2017-10-13 13:10:18');
-
---
 -- Dumping data for table `egresos_tipo`
 --
 
@@ -2692,7 +2682,7 @@ INSERT INTO `empresapro` (`idEmpresaPro`, `RazonSocial`, `NIT`, `Direccion`, `Te
 --
 
 INSERT INTO `empresapro_resoluciones_facturacion` (`ID`, `NombreInterno`, `NumResolucion`, `Fecha`, `NumSolicitud`, `Tipo`, `Factura`, `Prefijo`, `Desde`, `Hasta`, `FechaVencimiento`, `idEmpresaPro`, `Estado`, `Completada`, `Updated`, `Sync`) VALUES
-(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2018-01-04 16:38:45', '2017-10-20 10:29:51'),
+(1, 'Facturas por computador', '150000055430', '2015-03-26', '242', '02', 'Computador', 'A', 1, 1000, '2017-03-26', 1, '', 'NO', '2018-02-27 17:52:10', '2017-10-20 10:29:51'),
 (2, 'Facturas por POS', '1555431', '2016-03-28', '248', '03', 'POS', 'B', 1001, 2000, '2017-03-27', 1, '', 'NO', '2017-10-13 18:10:36', '2017-10-13 13:10:36');
 
 --
@@ -2749,7 +2739,8 @@ INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `N
 (25, 'COMPROBANTE DE BAJAS O ALTAS', '001', 'F-GI-006', '2017-08-09', '', '2017-10-13 19:10:40', '2017-10-13 14:10:40'),
 (26, 'ESTADO DE RESULTADO INTEGRAL', '001', 'F-GF-002', '2017-08-09', '', '2017-10-20 15:30:00', '2017-10-20 10:30:00'),
 (27, 'COBRO PREJURIDICO 1', '001', 'F-GSL-001', '2018-01-02', '', '2017-10-20 15:30:00', '2017-10-20 10:30:00'),
-(28, 'COBRO PREJURIDICO 2', '001', 'F-GSL-002', '2018-01-02', '', '2018-01-10 22:22:33', '2017-10-20 10:30:00');
+(28, 'COBRO PREJURIDICO 2', '001', 'F-GSL-002', '2018-01-02', '', '2018-01-10 22:22:33', '2017-10-20 10:30:00'),
+(29, 'ACUMULADO DE CUENTA POR TERCERO', '001', 'F-GFC-003', '2018-02-13', '', '2018-02-19 16:39:11', '2017-10-20 10:30:00');
 
 --
 -- Dumping data for table `gupocuentas`
@@ -2855,7 +2846,8 @@ INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `
 (24, 'Traslados', 1, 'MnuTraslados.php', '_BLANK', 0, 'traslados.png', 1, '2017-10-13 19:16:49', '2017-10-13 14:16:49'),
 (25, 'Marketing', 1, 'MnuPublicidad.php', '_BLANK', 1, 'pub.png', 17, '2017-10-17 01:26:13', '2017-10-13 14:16:49'),
 (26, 'Salud', 1, 'MnuSalud.php', '_BLANK', 1, 'salud.png', 18, '2017-12-11 15:31:39', '2017-10-13 14:16:49'),
-(27, 'Gestión Documental', 1, 'MnuGestionDocumental.php', '_BLANK', 0, 'gestiondocumental.png', 1, '2018-01-04 17:57:29', '2017-10-13 14:16:49');
+(27, 'Gestión Documental', 1, 'MnuGestionDocumental.php', '_BLANK', 0, 'gestiondocumental.png', 1, '2018-01-04 17:57:29', '2017-10-13 14:16:49'),
+(28, 'Graficos', 1, 'MnuGraficosVentas.php', '_BLANK', 0, 'graficos.png', 1, '2017-10-13 19:16:49', '2017-10-13 14:16:49');
 
 --
 -- Dumping data for table `menu_carpetas`
@@ -2913,7 +2905,10 @@ INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updat
 (37, 'Auditoria', 26, 2, b'1', '2017-12-20 15:07:49', '2017-10-13 14:16:55'),
 (38, 'Archivos', 26, 4, b'1', '2017-12-20 15:06:39', '2017-10-13 14:16:55'),
 (39, 'Legal', 26, 3, b'1', '2017-12-20 15:06:39', '2017-10-13 14:16:55'),
-(40, 'Informes Gerenciales', 26, 5, b'1', '2017-12-27 02:55:19', '2017-10-13 14:16:55');
+(40, 'Informes Gerenciales', 26, 5, b'1', '2017-12-27 02:55:19', '2017-10-13 14:16:55'),
+(41, 'Reportes Graficos', 17, 7, b'1', '2018-01-22 20:05:00', '2017-10-13 14:16:55'),
+(42, 'Ventas', 28, 1, b'1', '2018-01-22 20:05:00', '2017-10-13 14:16:55'),
+(43, 'Tesoreria', 26, 6, b'1', '2017-12-27 02:55:19', '2017-10-13 14:16:55');
 
 --
 -- Dumping data for table `menu_submenus`
@@ -2970,7 +2965,7 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 (48, 'Balance General y Estado de Resultados', 16, 3, 'BalanceComprobacion.php', '_SELF', b'1', 'resultados.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (49, 'Cuentas Auxiliares', 17, 3, 'Auxiliares.php', '_SELF', b'1', 'auxiliar.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (50, 'Informe de Ventas', 18, 3, 'InformeVentas.php', '_SELF', b'1', 'infventas.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
-(51, 'Reporte de IVA', 19, 3, 'ReporteFiscalIVA.php', '_SELF', b'1', 'fiscales.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
+(51, 'Reporte de IVA', 19, 3, 'ReporteFiscalIVA.php', '_SELF', b'1', 'fiscales.png', 1, '2018-01-22 20:04:38', '2017-10-13 14:16:57'),
 (52, 'Informe de Compras', 20, 3, 'InformeCompras.php', '_SELF', b'1', 'otrosinformes.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (53, 'Auditoria de Documentos', 21, 3, 'AuditoriaDocumentos.php', '_SELF', b'1', 'auditoria.png', 1, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
 (54, 'Historial de Ediciones', 21, 3, 'registra_ediciones.php', '_SELF', b'1', 'registros.png', 2, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
@@ -3058,15 +3053,15 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 (137, 'Listado de EPS', 36, 6, 'salud_eps.php', '_SELF', b'1', 'eps.png', 8, '2018-01-04 13:38:59', '2017-10-13 14:16:57'),
 (138, 'Pagos de posibles VIGENCIAS ANTERIORES', 36, 6, 'vista_salud_pagas_no_generadas.php', '_SELF', b'1', 'factura3.png', 8, '2018-01-04 13:38:56', '2017-10-13 14:16:57'),
 (139, 'Libro Mayor y Balances', 16, 3, 'libromayorbalances.php', '_SELF', b'1', 'libromayor.png', 1, '2018-01-03 15:30:02', '2017-10-13 14:16:57'),
-(140, 'Generar Prejuridicos', 39, 6, 'SaludPrejuridicos.php', '_SELF', b'1', 'prejuridico.jpg', 1, '2018-01-10 16:39:14', '2017-10-13 14:16:57');
-
---
--- Dumping data for table `ordenesdetrabajo_tipo`
---
-
-INSERT INTO `ordenesdetrabajo_tipo` (`ID`, `Tipo`, `Updated`, `Sync`) VALUES
-(1, 'EXTERNA', '2017-10-13 19:17:16', '2017-10-13 14:17:16'),
-(2, 'INTERNA', '2017-10-13 19:17:16', '2017-10-13 14:17:16');
+(140, 'Generar Prejuridicos', 39, 6, 'SaludPrejuridicos.php', '_SELF', b'1', 'prejuridico.jpg', 1, '2018-01-10 16:39:14', '2017-10-13 14:16:57'),
+(141, 'Reportes Graficos', 41, 1, 'MnuGraficosVentas.php', '_SELF', b'1', 'graficos.png', 1, '2018-01-22 20:00:42', '2017-10-13 14:16:57'),
+(142, 'Comparacion Anual', 42, 5, 'YearsComparison.php', '_SELF', b'1', 'anualcomp.jpg', 1, '2017-11-23 18:19:43', '2017-10-13 14:16:57'),
+(143, 'Comparacion Diaria', 42, 5, 'DiasComparacion.php', '_SELF', b'1', 'diascomp.png', 2, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
+(144, 'Graficos Ventas Departamentos', 42, 3, 'GraficosVentasXDepartamentos.php', '_SELF', b'1', 'graficos.png', 2, '2018-01-22 20:19:35', '2017-10-13 14:16:57'),
+(145, 'Circular 030', 40, 6, 'salud_edad_cartera.php', '_SELF', b'1', '030.jpg', 3, '2018-01-04 13:40:18', '2017-10-13 14:16:57'),
+(146, 'SIHO', 40, 6, 'salud_edad_cartera.php', '_SELF', b'1', 'siho.png', 4, '2018-01-04 13:40:18', '2017-10-13 14:16:57'),
+(147, 'Totales en Compras', 13, 3, 'vista_factura_compra_totales.php', '_SELF', b'1', 'historial3.png', 6, '2017-10-13 19:16:57', '2017-10-13 14:16:57'),
+(148, 'Generar Comprobante de Acumulado Cuenta por Tercero', 16, 3, 'ComprobantesContables.php', '_SELF', b'1', 'comprobantes.png', 3, '2018-02-19 16:38:42', '2017-10-13 14:16:57');
 
 --
 -- Dumping data for table `paginas`
@@ -3256,8 +3251,8 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 (14, 'Cuenta x pagar proveedores', 220505, 'PROVEEDORES NACIONALES', '2017-10-13 19:28:42', '2017-10-13 14:28:42'),
 (15, 'Descuentos en compras por pronto pago', 421040, 'DESCUENTOS COMERCIALES CONDICIONADOS', '2017-10-13 19:28:42', '2017-10-13 14:28:42'),
 (16, 'impuesto generado al consumo de bolsas plasticas', 24081004, 'IMPUESTO AL CONSUMO DE BOLSAS PLASTICAS', '2017-10-13 19:28:42', '2017-10-13 14:28:42'),
-(17, 'Cuenta para registrar los abonos a los creditos con tarjetas', 11100501, 'BANCOS', '2017-10-13 19:28:42', '2017-10-13 14:28:42'),
-(18, 'Cuenta para registrar los abonos a los creditos con Cheques', 11100510, 'BANCOS CHEQUES', '2017-10-13 19:28:42', '2017-10-13 14:28:42'),
+(17, 'Cuenta para registrar los abonos o pagos a los creditos o ventas desde ventas rapidas con tarjetas', 11100501, 'BANCOS', '2018-02-22 15:05:12', '2017-10-13 14:28:42'),
+(18, 'Cuenta para registrar los abonos o pagos en ventas rapidas a los creditos o ventas con Cheques', 11100510, 'BANCOS CHEQUES', '2018-02-22 15:04:49', '2017-10-13 14:28:42'),
 (19, 'Cuenta x pagar Intereses Siste Credito', 220505, 'PROVEEDORES NACIONALES', '2017-06-16 17:13:00', '2017-06-16 12:11:00'),
 (20, 'Anticipos realizados por clientes', 238020, 'ANTICIPOS REALIZADOS POR CLIENTES', '2017-12-11 13:53:33', '2017-06-06 12:13:00');
 
@@ -3490,58 +3485,6 @@ INSERT INTO `porcentajes_iva` (`ID`, `Nombre`, `Valor`, `Factor`, `CuentaPUC`, `
 (6, 'IVA del 19%', '0.19', 'M', 24080501, 24081001, 'Impuestos del 19%', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
 (7, 'ImpoConsumo Bolsas', '20', 'S', 24080511, 24081011, 'IMPUESTO AL CONSUMO DE BOLSAS', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50'),
 (8, 'impuesto del 1.9%', '0.019', 'M', 24080505, 24081005, 'Impuestos del 10% del 19%', 'SI', '2017-10-13 19:28:50', '2017-10-13 14:28:50');
-
---
--- Dumping data for table `productos_impuestos_adicionales`
---
-
-INSERT INTO `productos_impuestos_adicionales` (`ID`, `NombreImpuesto`, `idProducto`, `ValorImpuesto`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES
-(1, 'Impoconsumo', '216776', '20', '24081011', 'IMPUESTO AL CONSUMO DE BOLSAS', '2017-10-13 19:30:39', '2017-10-13 14:30:39');
-
---
--- Dumping data for table `publicidad_encabezado_cartel`
---
-
-INSERT INTO `publicidad_encabezado_cartel` (`ID`, `Titulo`, `ColorTitulo`, `Desde`, `Hasta`, `Mes`, `Anio`, `ColorRazonSocial`, `ColorPrecios`, `ColorBordes`, `Updated`, `Sync`) VALUES
-(1, 'DIA DEL PADRE', '#ff0000', 1, 30, 'Julio', 2017, '#ff0000', '#ff0000', '#58f1fa', '2017-10-13 19:37:10', '2017-10-13 14:37:10');
-
---
--- Dumping data for table `publicidad_paginas`
---
-
-INSERT INTO `publicidad_paginas` (`ID`, `idProducto`, `Observaciones`, `Updated`, `Sync`) VALUES
-(1, 216789, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(2, 216796, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(3, 216764, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(4, 216774, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(5, 216778, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(6, 300215860, '', '2017-11-29 21:29:00', '0000-00-00 00:00:00'),
-(7, 216770, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(8, 216765, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(9, 216763, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(10, 216758, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(11, 216761, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(12, 216760, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(13, 216759, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(14, 216762, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(15, 216772, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(16, 216754, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(17, 216752, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(18, 216749, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(19, 216748, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(20, 216747, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(21, 216745, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(22, 216743, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(23, 216742, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(24, 216741, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(25, 216740, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(26, 216737, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(27, 216732, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(28, 216731, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(29, 216730, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(31, 216728, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(32, 216727, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13'),
-(34, 1, '', '2017-10-13 19:37:13', '2017-10-13 14:37:13');
 
 --
 -- Dumping data for table `repuestas_forma_pago`
@@ -5210,7 +5153,7 @@ INSERT INTO `traslados_estados` (`ID`, `Estado`, `Descripcion`, `Updated`, `Sync
 INSERT INTO `usuarios` (`idUsuarios`, `Nombre`, `Apellido`, `Identificacion`, `Telefono`, `Login`, `Password`, `TipoUser`, `Email`, `Role`, `Updated`, `Sync`) VALUES
 (1, 'TECHNO ', 'SOLUCIONES', '900833180', '3177740609', 'admin', 'technosoluciones', 'administrador', 'info@technosoluciones.com', 'SUPERVISOR', '2017-10-13 19:44:50', '2017-10-13 14:44:50'),
 (2, 'ADMINISTRADOR', 'SOFTCONTECH', '1', '1', 'administrador', 'administrador', 'operador', 'no@no.com', 'SUPERVISOR', '2017-10-13 19:44:50', '2017-10-13 14:44:50'),
-(3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2017-10-13 19:44:50', '2017-10-13 14:44:50'),
+(3, 'JULIAN ANDRES', 'ALVARAN', '94481747', '3177740609', 'jalvaran', 'pirlo1985', 'administrador', 'jalvaran@gmail.com', 'SUPERVISOR', '2018-02-05 16:00:23', '2017-10-13 14:44:50'),
 (4, 'OPERADOR', 'OPERADOR ', '11111', '1', 'operador', 'demo', 'administrador', 'operador', 'prueba', '2017-10-13 19:44:50', '2017-10-13 14:44:50');
 
 --

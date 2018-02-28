@@ -263,7 +263,7 @@ class TS5_Excel extends Tabla{
             ->setCellValue($this->Campos[4].$f,"COMISION 2")
             ->setCellValue($this->Campos[5].$f,"COMISION 3")            
             ;
-        $sql="SELECT `idCierre` as Cierre,`Referencia`,SUM(`Cantidad`) AS CantidadTotal, "
+        $sql="SELECT `idCierre` as Cierre,`Referencia`,Nombre,SUM(`Cantidad`) AS CantidadTotal, "
                 . "round(SUM( `TotalItem`+`ValorOtrosImpuestos`)) AS ValorTotal, "
                 . "(SUM(`Cantidad`)*(SELECT ValorComision1 FROM productosventa WHERE productosventa.Referencia=`facturas_items`.`Referencia`) ) AS Comision1, "
                 . "(SUM(`Cantidad`)*(SELECT ValorComision2 FROM productosventa WHERE productosventa.Referencia=`facturas_items`.`Referencia`)) AS Comision2, "
@@ -284,7 +284,7 @@ class TS5_Excel extends Tabla{
             $TotalComision2=$TotalComision2+$DatosComisiones["Comision2"];
             $TotalComision3=$TotalComision3+$DatosComisiones["Comision3"];
             $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue($this->Campos[0].$f,$DatosComisiones["Referencia"])
+            ->setCellValue($this->Campos[0].$f,$DatosComisiones["Nombre"])
             ->setCellValue($this->Campos[1].$f,$DatosComisiones["CantidadTotal"])
             ->setCellValue($this->Campos[2].$f,$DatosComisiones["ValorTotal"])
             ->setCellValue($this->Campos[3].$f,$DatosComisiones["Comision1"])
