@@ -217,6 +217,8 @@ ALTER TABLE `kardexmercancias` CHANGE `ProductosVenta_idProductosVenta` `Product
 ALTER TABLE `proveedores` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
 ALTER TABLE `clientes` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
 
-INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (NULL, 'Diagnostico de RIPS Circular 030', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'diagnostico.png', '3', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (149, 'Diagnostico de RIPS Circular 030', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'diagnostico.png', '3', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (150, 'Historial Prejuridicos', '39', '6', 'salud_cobros_prejuridicos.php', '_SELF', b'1', 'historial.png', '1', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
 
 

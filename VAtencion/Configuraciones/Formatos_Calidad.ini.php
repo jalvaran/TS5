@@ -23,7 +23,13 @@ $Vector["VerRegistro"]["Deshabilitado"]=1;
 //$Vector["NuevoRegistro"]["Deshabilitado"]=1;                                 
 //$Vector["EditarRegistro"]["Deshabilitado"]=1;
 
-
+// Nueva Accion
+$Ruta="AgregarTextoEnriquecido.php?Tabla=formatos_calidad&idTabla=ID&Campo=CuerpoFormato&idItem=";
+$Vector["NuevaAccionLink"][1]="TextoEnriquecido";
+$Vector["NuevaAccion"]["TextoEnriquecido"]["Titulo"]="texto enriquecido para el Cuerpo del formato ";
+$Vector["NuevaAccion"]["TextoEnriquecido"]["Link"]=$Ruta;
+$Vector["NuevaAccion"]["TextoEnriquecido"]["ColumnaLink"]="ID";
+$Vector["NuevaAccion"]["TextoEnriquecido"]["Target"]="_blank";
 
 ///Filtros y orden
 $Vector["Order"]=" $idTabla DESC ";   //Orden

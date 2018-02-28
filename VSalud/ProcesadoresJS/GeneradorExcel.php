@@ -11,14 +11,10 @@ if(isset($_REQUEST["idDocumento"])){
     $idDocumento=$obVenta->normalizar($_REQUEST["idDocumento"]);
     
     switch ($idDocumento){
-        case 1: //Balance de comprobacion
-            $FechaInicial=$obVenta->normalizar($_REQUEST["TxtFechaIniBC"]);
-            $FechaFinal=$obVenta->normalizar($_REQUEST["TxtFechaFinalBC"]);
-            $FechaCorte=$obVenta->normalizar($_REQUEST["TxtFechaCorteBC"]);
-            $TipoReporte=$obVenta->normalizar($_REQUEST["CmbTipoReporteBC"]);
-            $idEmpresa=$obVenta->normalizar($_REQUEST["CmbEmpresaProBC"]);
-            $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCostosBC"]);
-            $obExcel->GenerarBalanceComprobacionExcel($TipoReporte,$FechaInicial,$FechaFinal,$FechaCorte,$idEmpresa,$CentroCosto,"");
+        case 1: //Relacion de facturas en cobros prejuridicos
+            $idCobro=$obVenta->normalizar($_REQUEST["idCobro"]);
+            
+            $obExcel->GenerarRelacionCobrosPrejuridicos($idCobro,"");
             
             break;
         
