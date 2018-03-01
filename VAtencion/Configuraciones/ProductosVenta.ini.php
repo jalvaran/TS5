@@ -27,14 +27,14 @@ $Vector["VerRegistro"]["Deshabilitado"]=1;
 
 $Vector["Enabled_PrinterCB"]=1;  //Habilita la impresion de los codigos de barras
 //$Vector["Enabled_PrinterLB"]=1;  //Habilita la impresion de los labels
-$Vector["Enabled_PrinterCC"]=1;  //Habilita la impresion de los codigos cortos
+//$Vector["Enabled_PrinterCC"]=1;  //Habilita la impresion de los codigos cortos
 
 
 ///Columnas excluidas
 
 $Vector["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;   //Indico que esta columna no se mostrará
 $Vector["Excluir"]["Especial"]=1;
-$Vector["Excluir"]["PrecioMayorista"]=1;
+//$Vector["Excluir"]["PrecioMayorista"]=1;
 $Vector["Excluir"]["Kit"]=1;
 ///Columnas requeridas al momento de una insercion
 $Vector["Required"]["Departamento"]=1;   

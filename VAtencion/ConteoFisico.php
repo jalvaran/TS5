@@ -36,7 +36,7 @@ print("<body>");
     $css->CierraFilaTabla();
     $css->FilaTabla(16);
      print("<td>");
-    $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+    $css->CrearInputNumber("TxtCantidad", "number", "", 1, "Cantidad", "", "", "", 100, 30, 0, 1, 1, 99, "any");
     print("</td>");
      print("<td>");
     $css->CrearInputText("TxtCodigoBarras", "text", "", "", "Codigo de Barras o ID", "", "", "", 200, 30, 0, 1);
