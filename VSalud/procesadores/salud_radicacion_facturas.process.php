@@ -15,7 +15,7 @@ if(isset($_REQUEST["BtnRadicar"])){
     if(!empty($_FILES['Soporte']['name'])){
         //echo "<script>alert ('entra foto')</script>";
             $Atras="../";
-            $carpeta="SoportesRadicados/";
+            $carpeta="SoportesSalud/SoportesRadicados/";
             opendir($Atras.$carpeta);
             $Name=str_replace(' ','_',$_FILES['Soporte']['name']);  
             $destino=$carpeta.$Name;
@@ -46,7 +46,7 @@ if(isset($_REQUEST["BtnRadicarXNumero"])){
     if(!empty($_FILES['Soporte']['name'])){
         //echo "<script>alert ('entra foto')</script>";
             $Atras="../";
-            $carpeta="SoportesRadicados/";
+            $carpeta="SoportesSalud/SoportesRadicados/";
             opendir($Atras.$carpeta);
             $Name=str_replace(' ','_',$_FILES['Soporte']['name']);  
             $destino=$carpeta.$Name;

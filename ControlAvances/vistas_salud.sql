@@ -46,4 +46,3 @@ WHERE t2.EstadoCobro='PREJURIDICO1' OR t2.EstadoCobro='PREJURIDICO2';
 
 
 
-
