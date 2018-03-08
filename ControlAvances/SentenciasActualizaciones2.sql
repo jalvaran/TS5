@@ -220,7 +220,10 @@ ALTER TABLE `clientes` ADD `Soporte` VARCHAR(150) NOT NULL AFTER `Cupo`;
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (149, 'Diagnostico de RIPS Circular 030', '40', '6', 'salud_edad_cartera.php', '_SELF', b'1', 'diagnostico.png', '3', '2018-01-04 08:40:18', '2017-10-13 14:16:57');
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (150, 'Historial Prejuridicos', '39', '6', 'salud_cobros_prejuridicos.php', '_SELF', b'1', 'historial.png', '1', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
---Salud
+
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (151, 'Historial de pagos ingresados por tesoreria', '43', '6', 'salud_tesoreria.php', '_SELF', b'1', 'historial2.png', '1', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (152, 'Registrar Pago', '43', '6', 'Salud_Ingresar_Pago_Tesoreria.php', '_SELF', b'1', 'pago.png', '2', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
+
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (153, 'Procesos Gerenciales', '40', '6', 'salud_procesos_gerenciales.php', '_SELF', b'1', 'gestion.png', '6', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
 
