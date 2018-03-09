@@ -84,3 +84,4 @@ INSERT INTO `salud_procesos_gerenciales_conceptos` (`ID`, `Concepto`, `Observaci
 (8, 'ALCALDIA DE GUAPI', '', 3),
 (9, 'CONTRATACIONES', '', 3);
 
+

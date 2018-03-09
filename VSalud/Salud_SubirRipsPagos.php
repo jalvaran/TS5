@@ -44,14 +44,22 @@ print("<body>");
     /////
     $css->CrearNotificacionRoja("Suba los Archivos de Relacion de Pagos", 16);
     $css->CrearForm2("FrmRipsPagos", $myPage, "post", "_self");
+    print("<strong>Separador de Archivo</strong><br>");
     $css->CrearSelect("CmbSeparador", "");
         $css->CrearOptionSelect("", "Selecciones el Separador de los archivos", 0);
-        $css->CrearOptionSelect(1, "punto y coma (;)", 1);
-        $css->CrearOptionSelect(2, "Coma (,)", 0);
+        $css->CrearOptionSelect(1, "punto y coma (;)", 0);
+        $css->CrearOptionSelect(2, "Coma (,)", 1);
+    $css->CerrarSelect();
+    print("<br><strong>Tipo de Giro</strong><br>");
+    $css->CrearSelect("CmbTipoGiro", "",200);
+        $css->CrearOptionSelect("", "Tipo de Giro", 0);
+        $css->CrearOptionSelect(1, "Giro Directo", 1);
+        $css->CrearOptionSelect(2, "Cuenta Maestra (Tesoreria)", 0);
     $css->CerrarSelect();
         $css->CrearTabla();
             $css->FilaTabla(16);
-                $css->ColTabla("<strong>Pagos (AR) en .zip</strong>", 1);
+                $css->ColTabla("<strong>Pagos (AR)</strong>", 1);
+                $css->ColTabla("<strong>Fecha de Giro</strong>", 1);
                 $css->ColTabla("<strong>Soporte de Pago</strong>", 1);
                 $css->ColTabla("<strong>Enviar</strong>", 1);
             $css->CierraFilaTabla();
@@ -60,7 +68,11 @@ print("<body>");
             $css->FilaTabla(16);
                 
                 print("<td>");
-                    $css->CrearUpload("UpZipPagos");
+                    $css->CrearUpload("UpPago");
+                    
+                print("</td>");
+                print("<td>");
+                    $css->CrearInputText("TxtFechaGira", "date", "", date("Y-m-d"), "", "", "", "", 200, 30, 0, 1);
                     
                 print("</td>");
                 print("<td>");

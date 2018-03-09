@@ -80,6 +80,69 @@ class Rips extends ProcesoVenta{
         
     }
     
+    //Rips de pagos formato adres
+    public function InsertarRipsPagosAdres($NombreArchivo,$Separador,$FechaCargue, $idUser,$destino,$FechaGiro,$TipoGiro, $Vector) {
+        // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        
+            
+            $handle = fopen("archivos/".$NombreArchivo, "r");
+            $i=0;
+            $z=0;
+            $h=0;
+            $tab="salud_pagos_temporal";
+            $sql="INSERT INTO `$tab` (`id_temp_rips_generados`, `Proceso`, `CodigoEPS`, `NombreEPS`, `FormaContratacion`, `Departamento`, `Municipio`, `FechaFactura`, `PrefijoFactura`, `NumeroFactura`, `ValorGiro`, `FechaPago`, `NumeroGiro`, `nom_cargue`, `fecha_cargue`, `idUser`, `Soporte`,`numero_factura`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                $i++;
+                $h++;
+                
+                if($h>=1 and $data[0]<>''){
+                    $NumeroFactura=$data[7]."-".$data[8];
+                    $ValorGiro=str_replace(".","",$data[9]);
+                    $Giro=str_replace(".","",$data[10]);
+                    $Giro=str_replace(",00","",$Giro);
+                    if($data[6]<>""){
+                        $FechaArchivo= explode("/", $data[6]);
+                        if(count($FechaArchivo)>1){
+                            $FechaFactura= $FechaArchivo[2]."-".$FechaArchivo[1]."-".$FechaArchivo[0];
+                        }else{
+                            $FechaFactura=$data[6];
+                        }
+
+                     }else{
+                        $FechaFactura="0000-00-00";
+                     }
+
+                    if($z==1){
+
+                        $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$FechaFactura', '$data[7]', '$data[8]', '$ValorGiro', '$FechaGiro', '$Giro', '$NombreArchivo','$FechaCargue','$idUser','$destino','$NumeroFactura'),";
+                    }
+                    $z=1;
+
+                    if($i==10000){
+                        $sql=substr($sql, 0, -1);
+                        $this->Query($sql);
+                        $sql="INSERT INTO `$tab` (`id_temp_rips_generados`, `Proceso`, `CodigoEPS`, `NombreEPS`, `FormaContratacion`, `Departamento`, `Municipio`, `FechaFactura`, `PrefijoFactura`, `NumeroFactura`, `ValorGiro`, `FechaPago`, `NumeroGiro`, `nom_cargue`, `fecha_cargue`, `idUser`, `Soporte`,`numero_factura`) VALUES";
+                        $i=0;
+                    }
+                }
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            fclose($handle); 
+            $sql="";
+            $this->RegistreUpload($NombreArchivo, $FechaCargue, $idUser, "");
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
+        
+    }
+    
     // insertar Rips de consultas generados a tabla temporal, despues por medio de un trigger se llevará a la general
     public function InsertarRipsConsultas($NombreArchivo,$TipoNegociacion,$Separador,$FechaCargue, $idUser, $Vector) {
         // si se recibe el archivo
@@ -625,6 +688,20 @@ class Rips extends ProcesoVenta{
         
         $this->Query($sql);
         $this->AjusteAutoIncrement("salud_archivo_facturacion_mov_pagados", "id_pagados", $Vector);
+    }
+    //Copia los registros de la tabla temporal facturas que no existan en la principal y los inserta
+    public function AnaliceInsercionFacturasPagadasAdres($Vector) {
+        //Secuencia SQL que selecciona los usuarios que no estan creados de la tabla temporal y los inserta en la principal
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_pagados` 
+            (`num_factura`,`fecha_pago_factura`,`num_pago`,`valor_pagado`,
+            `nom_cargue`,`fecha_cargue`,`Soporte`,`idUser`)
+            SELECT `numero_factura`,`FechaPago`,`NumeroGiro`,`ValorGiro`,`nom_cargue`,
+            `fecha_cargue`,`Soporte`,`idUser`
+            FROM salud_pagos_temporal as t1 WHERE NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_pagados` as t2  
+            WHERE t1.`nom_cargue`=t2.`nom_cargue` AND t1.`numero_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
     }
     //Copia los registros de la tabla temporal nacidos que no existan en la principal y los inserta
     public function AnaliceInsercionNacidos($Vector) {
