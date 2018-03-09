@@ -85,3 +85,27 @@ INSERT INTO `salud_procesos_gerenciales_conceptos` (`ID`, `Concepto`, `Observaci
 (9, 'CONTRATACIONES', '', 3);
 
 
+--
+-- Table structure for table `salud_pagos_temporal`
+--
+
+CREATE TABLE IF NOT EXISTS `salud_pagos_temporal` (
+  `id_temp_rips_generados` varchar(1) COLLATE latin1_spanish_ci NOT NULL,
+  `Proceso` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `CodigoEPS` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `NombreEPS` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `FormaContratacion` enum('Evento','Capitacion') COLLATE latin1_spanish_ci NOT NULL,
+  `Departamento` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Municipio` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `FechaFactura` date NOT NULL,
+  `PrefijoFactura` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `NumeroFactura` bigint(20) NOT NULL,
+  `ValorGiro` double NOT NULL,
+  `FechaPago` date NOT NULL,
+  `NumeroGiro` bigint(20) NOT NULL,
+  `nom_cargue` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
+  `fecha_cargue` datetime NOT NULL,
+  `Soporte` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
+  `numero_factura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
