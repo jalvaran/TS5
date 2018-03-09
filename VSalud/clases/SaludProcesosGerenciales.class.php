@@ -28,12 +28,14 @@ class ProcesoGerencial extends ProcesoVenta{
     }
     
     public function AgregarSoporteProcesoGerencial($Fecha,$idProceso,$Observaciones,$Vector) {
+        $id=$this->ObtenerMAX("salud_procesos_gerenciales_archivos", "ID", 1, "");
+        $id=$id+1;  //para evitar sobreescribir archivos
         if(!empty($_FILES['Soporte']['name'])){
             //echo "<script>alert ('entra foto')</script>";
             $Atras="../";
             $carpeta="SoportesSalud/ProcesosGerenciales/";
             opendir($Atras.$carpeta);
-            $Name=$idProceso."_".str_replace(' ','_',$_FILES['Soporte']['name']);
+            $Name=$id."_".str_replace(' ','_',$_FILES['Soporte']['name']);
             $destino=$carpeta.$Name;
             move_uploaded_file($_FILES['Soporte']['tmp_name'],$Atras.$destino);
 	}
