@@ -109,3 +109,8 @@ CREATE TABLE IF NOT EXISTS `salud_pagos_temporal` (
   `numero_factura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `idUser` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+ALTER TABLE `salud_eps` ADD `TipoIdentificacion` ENUM('MU','DE','DI','NI') NOT NULL AFTER `nit`;
+
+UPDATE `menu_submenus` SET `Pagina` = 'salud_genere_circular_030.php' WHERE `menu_submenus`.`ID` = 145;

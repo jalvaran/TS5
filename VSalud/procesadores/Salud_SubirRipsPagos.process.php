@@ -67,15 +67,15 @@ if(isset($_REQUEST["BtnEnviar"])){
                 $obRips->InsertarRipsPagosAdres($NombreAR,$Separador, $FechaCargue, $idUser,$destino,$FechaGiro,$TipoGiro, "");
                 $NumRegistros=$obRips->CalculeRegistros("archivos/".$NombreAR,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreAR cargados correctamente",16);
-                $css->CrearNotificacionNaranja("Tabla de Facturas Pagadas Analizada",16);
-                $obRips->EncuentreFacturasPagadasConDiferencia("");
-                $css->CrearNotificacionVerde("Facturas pagadas con diferencias verificadas",16);
-                $obRips->EncuentreFacturasPagadas("");
-                $css->CrearNotificacionAzul("Facturas pagadas con igual valor verificadas",16);
+                
             }else{
                 $css->CrearNotificacionAzul("El archivo ya fue subido el $DatosUploads[fecha_cargue], por el usuario $DatosUploads[idUser]",16);
             }
-            
+            $css->CrearNotificacionNaranja("Tabla de Facturas Pagadas Analizada",16);
+            $obRips->EncuentreFacturasPagadasConDiferencia("");
+            $css->CrearNotificacionVerde("Facturas pagadas con diferencias verificadas",16);
+            $obRips->EncuentreFacturasPagadas("");
+            $css->CrearNotificacionAzul("Facturas pagadas con igual valor verificadas",16);
                 //}
             //}
             $obRips->AnaliceInsercionFacturasPagadasAdres("");
