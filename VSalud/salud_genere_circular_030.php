@@ -1,7 +1,6 @@
 <?php 
 $myPage="salud_genere_circular_030.php";
 include_once("../sesiones/php_control.php");
-
 include_once("css_construct.php");
 
 print("<html>");
