@@ -227,3 +227,37 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (153, 'Procesos Gerenciales', '40', '6', 'salud_procesos_gerenciales.php', '_SELF', b'1', 'gestion.png', '6', '2018-01-10 11:39:14', '2017-10-13 14:16:57');
 
+DROP TABLE IF EXISTS `inventarios_temporal`;
+CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
+  `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `Nombre` varchar(70) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Existencias` double DEFAULT '0',
+  `PrecioVenta` double DEFAULT NULL,
+  `PrecioMayorista` double NOT NULL,
+  `CostoUnitario` double DEFAULT NULL,
+  `CostoTotal` double DEFAULT NULL,
+  `CostoUnitarioPromedio` double NOT NULL,
+  `CostoTotalPromedio` double NOT NULL,
+  `IVA` varchar(10) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+  `Bodega_idBodega` int(11) NOT NULL DEFAULT '1',
+  `Departamento` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Sub1` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Sub2` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Sub3` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Sub4` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Sub5` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
+  `Kit` int(11) NOT NULL,
+  `RutaImagen` text COLLATE utf8_spanish_ci NOT NULL,
+  `Especial` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL DEFAULT '4135',
+  `ValorComision1` int(11) NOT NULL,
+  `ValorComision2` int(11) NOT NULL,
+  `ValorComision3` int(11) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`idProductosVenta`),
+  UNIQUE KEY `Referencia` (`Referencia`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+

@@ -1,32 +1,12 @@
--- phpMyAdmin SQL Dump
--- version 4.1.12
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: Feb 27, 2018 at 03:52 PM
--- Server version: 5.6.16
--- PHP Version: 5.5.11
+-- Adminer 4.2.5 MySQL dump
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `ts5`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `abonos_libro`
---
-
-CREATE TABLE IF NOT EXISTS `abonos_libro` (
+DROP TABLE IF EXISTS `abonos_libro`;
+CREATE TABLE `abonos_libro` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Cantidad` float NOT NULL,
@@ -36,15 +16,11 @@ CREATE TABLE IF NOT EXISTS `abonos_libro` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `activos`
---
-
-CREATE TABLE IF NOT EXISTS `activos` (
+DROP TABLE IF EXISTS `activos`;
+CREATE TABLE `activos` (
   `idActivos` int(16) NOT NULL AUTO_INCREMENT,
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `NombreAct` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
@@ -58,13 +34,9 @@ CREATE TABLE IF NOT EXISTS `activos` (
   PRIMARY KEY (`idActivos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `act_movimientos`
---
-
-CREATE TABLE IF NOT EXISTS `act_movimientos` (
+DROP TABLE IF EXISTS `act_movimientos`;
+CREATE TABLE `act_movimientos` (
   `idAct_Movimientos` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -83,13 +55,9 @@ CREATE TABLE IF NOT EXISTS `act_movimientos` (
   PRIMARY KEY (`idAct_Movimientos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `act_ordenes`
---
-
-CREATE TABLE IF NOT EXISTS `act_ordenes` (
+DROP TABLE IF EXISTS `act_ordenes`;
+CREATE TABLE `act_ordenes` (
   `idAct_Ordenes` int(16) NOT NULL AUTO_INCREMENT,
   `NumOrden` int(16) NOT NULL,
   `idAct_Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -103,15 +71,11 @@ CREATE TABLE IF NOT EXISTS `act_ordenes` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idAct_Ordenes`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `act_pre_movimientos`
---
-
-CREATE TABLE IF NOT EXISTS `act_pre_movimientos` (
+DROP TABLE IF EXISTS `act_pre_movimientos`;
+CREATE TABLE `act_pre_movimientos` (
   `idAct_Movimientos` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -130,13 +94,9 @@ CREATE TABLE IF NOT EXISTS `act_pre_movimientos` (
   PRIMARY KEY (`idAct_Movimientos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `act_pre_ordenes`
---
-
-CREATE TABLE IF NOT EXISTS `act_pre_ordenes` (
+DROP TABLE IF EXISTS `act_pre_ordenes`;
+CREATE TABLE `act_pre_ordenes` (
   `idAct_Ordenes` int(16) NOT NULL DEFAULT '0',
   `NumOrden` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `idAct_Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -148,13 +108,9 @@ CREATE TABLE IF NOT EXISTS `act_pre_ordenes` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `alertas`
---
-
-CREATE TABLE IF NOT EXISTS `alertas` (
+DROP TABLE IF EXISTS `alertas`;
+CREATE TABLE `alertas` (
   `idAlertas` int(45) NOT NULL AUTO_INCREMENT,
   `AlertaTipo` varchar(45) NOT NULL,
   `Mensaje` varchar(500) NOT NULL,
@@ -165,28 +121,20 @@ CREATE TABLE IF NOT EXISTS `alertas` (
   PRIMARY KEY (`idAlertas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `autorizaciones_generales`
---
-
-CREATE TABLE IF NOT EXISTS `autorizaciones_generales` (
+DROP TABLE IF EXISTS `autorizaciones_generales`;
+CREATE TABLE `autorizaciones_generales` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Proceso` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Clave` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `bodega`
---
-
-CREATE TABLE IF NOT EXISTS `bodega` (
+DROP TABLE IF EXISTS `bodega`;
+CREATE TABLE `bodega` (
   `idBodega` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Direccion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -196,15 +144,11 @@ CREATE TABLE IF NOT EXISTS `bodega` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idBodega`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cajas`
---
-
-CREATE TABLE IF NOT EXISTS `cajas` (
+DROP TABLE IF EXISTS `cajas`;
+CREATE TABLE `cajas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `Base` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -220,15 +164,11 @@ CREATE TABLE IF NOT EXISTS `cajas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cajas_aperturas_cierres`
---
-
-CREATE TABLE IF NOT EXISTS `cajas_aperturas_cierres` (
+DROP TABLE IF EXISTS `cajas_aperturas_cierres`;
+CREATE TABLE `cajas_aperturas_cierres` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -255,15 +195,11 @@ CREATE TABLE IF NOT EXISTS `cajas_aperturas_cierres` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cartera`
---
-
-CREATE TABLE IF NOT EXISTS `cartera` (
+DROP TABLE IF EXISTS `cartera`;
+CREATE TABLE `cartera` (
   `idCartera` int(11) NOT NULL AUTO_INCREMENT,
   `Facturas_idFacturas` varchar(45) NOT NULL DEFAULT '0',
   `FechaIngreso` date NOT NULL DEFAULT '0000-00-00' COMMENT 'Fecha en la que ingresa a Cartera',
@@ -283,45 +219,33 @@ CREATE TABLE IF NOT EXISTS `cartera` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCartera`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `centrocosto`
---
-
-CREATE TABLE IF NOT EXISTS `centrocosto` (
+DROP TABLE IF EXISTS `centrocosto`;
+CREATE TABLE `centrocosto` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `EmpresaPro` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cierres_contables`
---
-
-CREATE TABLE IF NOT EXISTS `cierres_contables` (
+DROP TABLE IF EXISTS `cierres_contables`;
+CREATE TABLE `cierres_contables` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idUsuario` bigint(20) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ciuu`
---
-
-CREATE TABLE IF NOT EXISTS `ciuu` (
+DROP TABLE IF EXISTS `ciuu`;
+CREATE TABLE `ciuu` (
   `Codigo` int(11) NOT NULL,
   `Descripcion` varchar(300) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -329,13 +253,9 @@ CREATE TABLE IF NOT EXISTS `ciuu` (
   PRIMARY KEY (`Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `clasecuenta`
---
-
-CREATE TABLE IF NOT EXISTS `clasecuenta` (
+DROP TABLE IF EXISTS `clasecuenta`;
+CREATE TABLE `clasecuenta` (
   `PUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Clase` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -344,13 +264,9 @@ CREATE TABLE IF NOT EXISTS `clasecuenta` (
   PRIMARY KEY (`PUC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `clientes`
---
-
-CREATE TABLE IF NOT EXISTS `clientes` (
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE `clientes` (
   `idClientes` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo_Documento` int(11) NOT NULL,
   `Num_Identificacion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -376,15 +292,11 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idClientes`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cod_departamentos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_departamentos` (
+DROP TABLE IF EXISTS `cod_departamentos`;
+CREATE TABLE `cod_departamentos` (
   `Cod_dpto` int(11) NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -392,13 +304,9 @@ CREATE TABLE IF NOT EXISTS `cod_departamentos` (
   PRIMARY KEY (`Cod_dpto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cod_documentos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_documentos` (
+DROP TABLE IF EXISTS `cod_documentos`;
+CREATE TABLE `cod_documentos` (
   `Codigo` int(11) NOT NULL,
   `Descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -407,13 +315,9 @@ CREATE TABLE IF NOT EXISTS `cod_documentos` (
   KEY `Codigo_2` (`Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cod_municipios_dptos`
---
-
-CREATE TABLE IF NOT EXISTS `cod_municipios_dptos` (
+DROP TABLE IF EXISTS `cod_municipios_dptos`;
+CREATE TABLE `cod_municipios_dptos` (
   `ID` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `Cod_mcipio` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `Cod_Dpto` int(11) NOT NULL,
@@ -424,13 +328,9 @@ CREATE TABLE IF NOT EXISTS `cod_municipios_dptos` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cod_paises`
---
-
-CREATE TABLE IF NOT EXISTS `cod_paises` (
+DROP TABLE IF EXISTS `cod_paises`;
+CREATE TABLE `cod_paises` (
   `Codigo` int(11) NOT NULL,
   `Pais` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -438,13 +338,9 @@ CREATE TABLE IF NOT EXISTS `cod_paises` (
   PRIMARY KEY (`Codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `colaboradores`
---
-
-CREATE TABLE IF NOT EXISTS `colaboradores` (
+DROP TABLE IF EXISTS `colaboradores`;
+CREATE TABLE `colaboradores` (
   `idColaboradores` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(90) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Identificacion` bigint(20) DEFAULT NULL,
@@ -461,15 +357,11 @@ CREATE TABLE IF NOT EXISTS `colaboradores` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`idColaboradores`),
   UNIQUE KEY `Identificacion` (`Identificacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `colaboradores_ventas`
---
-
-CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
+DROP TABLE IF EXISTS `colaboradores_ventas`;
+CREATE TABLE `colaboradores_ventas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -478,15 +370,11 @@ CREATE TABLE IF NOT EXISTS `colaboradores_ventas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `col_registrohoras`
---
-
-CREATE TABLE IF NOT EXISTS `col_registrohoras` (
+DROP TABLE IF EXISTS `col_registrohoras`;
+CREATE TABLE `col_registrohoras` (
   `IdColRegistro` int(11) NOT NULL AUTO_INCREMENT,
   `IdColaborador` int(11) NOT NULL,
   `RegistroFecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -497,13 +385,9 @@ CREATE TABLE IF NOT EXISTS `col_registrohoras` (
   PRIMARY KEY (`IdColRegistro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comisiones`
---
-
-CREATE TABLE IF NOT EXISTS `comisiones` (
+DROP TABLE IF EXISTS `comisiones`;
+CREATE TABLE `comisiones` (
   `idComisiones` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Porcentaje` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -512,13 +396,9 @@ CREATE TABLE IF NOT EXISTS `comisiones` (
   PRIMARY KEY (`idComisiones`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comisionesporventas`
---
-
-CREATE TABLE IF NOT EXISTS `comisionesporventas` (
+DROP TABLE IF EXISTS `comisionesporventas`;
+CREATE TABLE `comisionesporventas` (
   `idComisionesPorVentas` int(11) NOT NULL AUTO_INCREMENT,
   `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci DEFAULT '5105',
   `NombreCuenta` varchar(300) COLLATE utf8_spanish_ci NOT NULL,
@@ -533,13 +413,9 @@ CREATE TABLE IF NOT EXISTS `comisionesporventas` (
   PRIMARY KEY (`idComisionesPorVentas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `compras`
---
-
-CREATE TABLE IF NOT EXISTS `compras` (
+DROP TABLE IF EXISTS `compras`;
+CREATE TABLE `compras` (
   `idCompras` int(11) NOT NULL AUTO_INCREMENT,
   `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci DEFAULT '62',
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -557,13 +433,9 @@ CREATE TABLE IF NOT EXISTS `compras` (
   PRIMARY KEY (`idCompras`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `compras_activas`
---
-
-CREATE TABLE IF NOT EXISTS `compras_activas` (
+DROP TABLE IF EXISTS `compras_activas`;
+CREATE TABLE `compras_activas` (
   `idComprasActivas` int(11) NOT NULL AUTO_INCREMENT,
   `idProveedor` int(11) NOT NULL,
   `Usuarios_idUsuarios` int(11) NOT NULL,
@@ -580,15 +452,11 @@ CREATE TABLE IF NOT EXISTS `compras_activas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idComprasActivas`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `compras_precompra`
---
-
-CREATE TABLE IF NOT EXISTS `compras_precompra` (
+DROP TABLE IF EXISTS `compras_precompra`;
+CREATE TABLE `compras_precompra` (
   `idPreCompra` int(11) NOT NULL AUTO_INCREMENT,
   `idProductosVenta` int(11) NOT NULL,
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -603,15 +471,11 @@ CREATE TABLE IF NOT EXISTS `compras_precompra` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPreCompra`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_contabilidad`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad` (
+DROP TABLE IF EXISTS `comprobantes_contabilidad`;
+CREATE TABLE `comprobantes_contabilidad` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
@@ -621,15 +485,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_contabilidad_items`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad_items` (
+DROP TABLE IF EXISTS `comprobantes_contabilidad_items`;
+CREATE TABLE `comprobantes_contabilidad_items` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `idComprobante` int(16) NOT NULL,
   `Fecha` date NOT NULL,
@@ -646,15 +506,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_contabilidad_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_egreso_items`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_egreso_items` (
+DROP TABLE IF EXISTS `comprobantes_egreso_items`;
+CREATE TABLE `comprobantes_egreso_items` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idComprobante` bigint(20) NOT NULL,
   `Fecha` date NOT NULL,
@@ -674,15 +530,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_egreso_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_ingreso`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_ingreso` (
+DROP TABLE IF EXISTS `comprobantes_ingreso`;
+CREATE TABLE `comprobantes_ingreso` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Clientes_idClientes` int(11) NOT NULL,
@@ -696,15 +548,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_ingreso_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_anulaciones` (
+DROP TABLE IF EXISTS `comprobantes_ingreso_anulaciones`;
+CREATE TABLE `comprobantes_ingreso_anulaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -715,15 +563,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_anulaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_ingreso_items`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_items` (
+DROP TABLE IF EXISTS `comprobantes_ingreso_items`;
+CREATE TABLE `comprobantes_ingreso_items` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idComprobante` int(16) NOT NULL,
   `Fecha` date NOT NULL,
@@ -743,15 +587,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_ingreso_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `comprobantes_pre`
---
-
-CREATE TABLE IF NOT EXISTS `comprobantes_pre` (
+DROP TABLE IF EXISTS `comprobantes_pre`;
+CREATE TABLE `comprobantes_pre` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Concepto` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -760,15 +600,11 @@ CREATE TABLE IF NOT EXISTS `comprobantes_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `concejales`
---
-
-CREATE TABLE IF NOT EXISTS `concejales` (
+DROP TABLE IF EXISTS `concejales`;
+CREATE TABLE `concejales` (
   `ID` bigint(20) NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `Cargo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -779,13 +615,9 @@ CREATE TABLE IF NOT EXISTS `concejales` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `concejales_intervenciones`
---
-
-CREATE TABLE IF NOT EXISTS `concejales_intervenciones` (
+DROP TABLE IF EXISTS `concejales_intervenciones`;
+CREATE TABLE `concejales_intervenciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idConcejal` bigint(20) NOT NULL,
   `idSesionConcejo` bigint(20) NOT NULL,
@@ -796,15 +628,11 @@ CREATE TABLE IF NOT EXISTS `concejales_intervenciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `concejo_sesiones`
---
-
-CREATE TABLE IF NOT EXISTS `concejo_sesiones` (
+DROP TABLE IF EXISTS `concejo_sesiones`;
+CREATE TABLE `concejo_sesiones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Sesion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `Fecha` date NOT NULL,
@@ -812,29 +640,21 @@ CREATE TABLE IF NOT EXISTS `concejo_sesiones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `concejo_tipo_sesiones`
---
-
-CREATE TABLE IF NOT EXISTS `concejo_tipo_sesiones` (
+DROP TABLE IF EXISTS `concejo_tipo_sesiones`;
+CREATE TABLE `concejo_tipo_sesiones` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `conceptos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos` (
+DROP TABLE IF EXISTS `conceptos`;
+CREATE TABLE `conceptos` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FechaHoraCreacion` datetime NOT NULL,
   `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
@@ -846,15 +666,11 @@ CREATE TABLE IF NOT EXISTS `conceptos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `conceptos_montos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos_montos` (
+DROP TABLE IF EXISTS `conceptos_montos`;
+CREATE TABLE `conceptos_montos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idConcepto` int(11) NOT NULL,
   `NombreMonto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -865,15 +681,11 @@ CREATE TABLE IF NOT EXISTS `conceptos_montos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `conceptos_movimientos`
---
-
-CREATE TABLE IF NOT EXISTS `conceptos_movimientos` (
+DROP TABLE IF EXISTS `conceptos_movimientos`;
+CREATE TABLE `conceptos_movimientos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idConcepto` int(11) NOT NULL,
   `idMonto` int(11) NOT NULL,
@@ -884,30 +696,22 @@ CREATE TABLE IF NOT EXISTS `conceptos_movimientos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `configuracion_general`
---
-
-CREATE TABLE IF NOT EXISTS `configuracion_general` (
+DROP TABLE IF EXISTS `configuracion_general`;
+CREATE TABLE `configuracion_general` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
   `Valor` text COLLATE latin1_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `config_codigo_barras`
---
-
-CREATE TABLE IF NOT EXISTS `config_codigo_barras` (
+DROP TABLE IF EXISTS `config_codigo_barras`;
+CREATE TABLE `config_codigo_barras` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `TituloEtiqueta` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `DistaciaEtiqueta1` int(11) NOT NULL,
@@ -922,15 +726,11 @@ CREATE TABLE IF NOT EXISTS `config_codigo_barras` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `config_puertos`
---
-
-CREATE TABLE IF NOT EXISTS `config_puertos` (
+DROP TABLE IF EXISTS `config_puertos`;
+CREATE TABLE `config_puertos` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Puerto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Utilizacion` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
@@ -938,15 +738,11 @@ CREATE TABLE IF NOT EXISTS `config_puertos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `config_tiketes_promocion`
---
-
-CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
+DROP TABLE IF EXISTS `config_tiketes_promocion`;
+CREATE TABLE `config_tiketes_promocion` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NombreTiket` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `Tope` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -955,30 +751,22 @@ CREATE TABLE IF NOT EXISTS `config_tiketes_promocion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `costos`
---
-
-CREATE TABLE IF NOT EXISTS `costos` (
+DROP TABLE IF EXISTS `costos`;
+CREATE TABLE `costos` (
   `idCostos` int(20) NOT NULL AUTO_INCREMENT,
   `NombreCosto` varchar(45) NOT NULL,
   `ValorCosto` double NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCostos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cotizacionesv5`
---
-
-CREATE TABLE IF NOT EXISTS `cotizacionesv5` (
+DROP TABLE IF EXISTS `cotizacionesv5`;
+CREATE TABLE `cotizacionesv5` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Clientes_idClientes` int(11) NOT NULL,
@@ -990,15 +778,11 @@ CREATE TABLE IF NOT EXISTS `cotizacionesv5` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cotizaciones_anexos`
---
-
-CREATE TABLE IF NOT EXISTS `cotizaciones_anexos` (
+DROP TABLE IF EXISTS `cotizaciones_anexos`;
+CREATE TABLE `cotizaciones_anexos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `FechaCreacion` datetime NOT NULL,
   `Titulo` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -1008,15 +792,11 @@ CREATE TABLE IF NOT EXISTS `cotizaciones_anexos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cot_itemscotizaciones`
---
-
-CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
+DROP TABLE IF EXISTS `cot_itemscotizaciones`;
+CREATE TABLE `cot_itemscotizaciones` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `idCliente` int(11) NOT NULL DEFAULT '0',
   `NumCotizacion` int(16) NOT NULL,
@@ -1040,15 +820,11 @@ CREATE TABLE IF NOT EXISTS `cot_itemscotizaciones` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `NumCotizacion` (`NumCotizacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `crono_controles`
---
-
-CREATE TABLE IF NOT EXISTS `crono_controles` (
+DROP TABLE IF EXISTS `crono_controles`;
+CREATE TABLE `crono_controles` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `idSesionConcejo` bigint(20) NOT NULL,
   `idConcejal` bigint(20) NOT NULL,
@@ -1058,15 +834,11 @@ CREATE TABLE IF NOT EXISTS `crono_controles` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cuentas`
---
-
-CREATE TABLE IF NOT EXISTS `cuentas` (
+DROP TABLE IF EXISTS `cuentas`;
+CREATE TABLE `cuentas` (
   `idPUC` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
   `Valor` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1076,13 +848,9 @@ CREATE TABLE IF NOT EXISTS `cuentas` (
   PRIMARY KEY (`idPUC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cuentasfrecuentes`
---
-
-CREATE TABLE IF NOT EXISTS `cuentasfrecuentes` (
+DROP TABLE IF EXISTS `cuentasfrecuentes`;
+CREATE TABLE `cuentasfrecuentes` (
   `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `ClaseCuenta` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -1092,13 +860,9 @@ CREATE TABLE IF NOT EXISTS `cuentasfrecuentes` (
   PRIMARY KEY (`CuentaPUC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cuentasxpagar`
---
-
-CREATE TABLE IF NOT EXISTS `cuentasxpagar` (
+DROP TABLE IF EXISTS `cuentasxpagar`;
+CREATE TABLE `cuentasxpagar` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `DocumentoReferencia` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
@@ -1131,15 +895,11 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `cuentasxpagar_abonos`
---
-
-CREATE TABLE IF NOT EXISTS `cuentasxpagar_abonos` (
+DROP TABLE IF EXISTS `cuentasxpagar_abonos`;
+CREATE TABLE `cuentasxpagar_abonos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -1150,15 +910,11 @@ CREATE TABLE IF NOT EXISTS `cuentasxpagar_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `devolucionesventas`
---
-
-CREATE TABLE IF NOT EXISTS `devolucionesventas` (
+DROP TABLE IF EXISTS `devolucionesventas`;
+CREATE TABLE `devolucionesventas` (
   `idComprasDevoluciones` int(11) NOT NULL AUTO_INCREMENT,
   `NumVenta` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1171,13 +927,9 @@ CREATE TABLE IF NOT EXISTS `devolucionesventas` (
   PRIMARY KEY (`idComprasDevoluciones`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `documentos_generados`
---
-
-CREATE TABLE IF NOT EXISTS `documentos_generados` (
+DROP TABLE IF EXISTS `documentos_generados`;
+CREATE TABLE `documentos_generados` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
   `Abreviatura` varchar(3) COLLATE utf8_spanish2_ci NOT NULL,
@@ -1186,15 +938,11 @@ CREATE TABLE IF NOT EXISTS `documentos_generados` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Abreviatura` (`Abreviatura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos`
---
-
-CREATE TABLE IF NOT EXISTS `egresos` (
+DROP TABLE IF EXISTS `egresos`;
+CREATE TABLE `egresos` (
   `idEgresos` int(45) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) NOT NULL,
   `PagoProg` varchar(10) NOT NULL,
@@ -1226,15 +974,11 @@ CREATE TABLE IF NOT EXISTS `egresos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idEgresos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos_activos`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_activos` (
+DROP TABLE IF EXISTS `egresos_activos`;
+CREATE TABLE `egresos_activos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) NOT NULL,
   `Cuentas_idCuentas` int(11) NOT NULL,
@@ -1242,15 +986,11 @@ CREATE TABLE IF NOT EXISTS `egresos_activos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
+DROP TABLE IF EXISTS `egresos_anulaciones`;
+CREATE TABLE `egresos_anulaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -1260,15 +1000,11 @@ CREATE TABLE IF NOT EXISTS `egresos_anulaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos_items`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_items` (
+DROP TABLE IF EXISTS `egresos_items`;
+CREATE TABLE `egresos_items` (
   `ID` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaDestino` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Tercero` int(11) NOT NULL,
@@ -1285,13 +1021,9 @@ CREATE TABLE IF NOT EXISTS `egresos_items` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos_pre`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_pre` (
+DROP TABLE IF EXISTS `egresos_pre`;
+CREATE TABLE `egresos_pre` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idCuentaXPagar` bigint(20) NOT NULL,
   `Abono` double NOT NULL,
@@ -1300,15 +1032,11 @@ CREATE TABLE IF NOT EXISTS `egresos_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `egresos_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `egresos_tipo` (
+DROP TABLE IF EXISTS `egresos_tipo`;
+CREATE TABLE `egresos_tipo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(100) NOT NULL,
   `Cuentas_idCuentas` int(11) NOT NULL,
@@ -1316,15 +1044,11 @@ CREATE TABLE IF NOT EXISTS `egresos_tipo` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `empresapro`
---
-
-CREATE TABLE IF NOT EXISTS `empresapro` (
+DROP TABLE IF EXISTS `empresapro`;
+CREATE TABLE `empresapro` (
   `idEmpresaPro` int(11) NOT NULL AUTO_INCREMENT,
   `RazonSocial` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `NIT` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1345,15 +1069,11 @@ CREATE TABLE IF NOT EXISTS `empresapro` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idEmpresaPro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `empresapro_resoluciones_facturacion`
---
-
-CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
+DROP TABLE IF EXISTS `empresapro_resoluciones_facturacion`;
+CREATE TABLE `empresapro_resoluciones_facturacion` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NombreInterno` text COLLATE utf8_spanish2_ci NOT NULL,
   `NumResolucion` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
@@ -1371,15 +1091,11 @@ CREATE TABLE IF NOT EXISTS `empresapro_resoluciones_facturacion` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `empresa_pro_sucursales`
---
-
-CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
+DROP TABLE IF EXISTS `empresa_pro_sucursales`;
+CREATE TABLE `empresa_pro_sucursales` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `Ciudad` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -1391,15 +1107,11 @@ CREATE TABLE IF NOT EXISTS `empresa_pro_sucursales` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `estadosfinancieros_mayor_temporal`
---
-
-CREATE TABLE IF NOT EXISTS `estadosfinancieros_mayor_temporal` (
+DROP TABLE IF EXISTS `estadosfinancieros_mayor_temporal`;
+CREATE TABLE `estadosfinancieros_mayor_temporal` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FechaCorte` date NOT NULL,
   `Clase` int(11) NOT NULL,
@@ -1411,15 +1123,11 @@ CREATE TABLE IF NOT EXISTS `estadosfinancieros_mayor_temporal` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas`
---
-
-CREATE TABLE IF NOT EXISTS `facturas` (
+DROP TABLE IF EXISTS `facturas`;
+CREATE TABLE `facturas` (
   `idFacturas` varchar(45) NOT NULL,
   `idResolucion` int(11) NOT NULL,
   `TipoFactura` varchar(10) NOT NULL,
@@ -1457,39 +1165,29 @@ CREATE TABLE IF NOT EXISTS `facturas` (
   PRIMARY KEY (`idFacturas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Triggers `facturas`
---
-DROP TRIGGER IF EXISTS `Actualiza_OriFacturas`;
-DELIMITER //
-CREATE TRIGGER `Actualiza_OriFacturas` AFTER UPDATE ON `facturas`
- FOR EACH ROW BEGIN
 
-REPLACE INTO ori_facturas SELECT * FROM facturas WHERE idFacturas=New.idFacturas;
+DELIMITER ;;
 
-
-END
-//
-DELIMITER ;
-DROP TRIGGER IF EXISTS `InsertFacturaOri`;
-DELIMITER //
-CREATE TRIGGER `InsertFacturaOri` AFTER INSERT ON `facturas`
- FOR EACH ROW BEGIN
+CREATE TRIGGER `InsertFacturaOri` AFTER INSERT ON `facturas` FOR EACH ROW
+BEGIN
 
 INSERT INTO ori_facturas SELECT * FROM facturas WHERE idFacturas=New.idFacturas;
 
 
-END
-//
+END;;
+
+CREATE TRIGGER `Actualiza_OriFacturas` AFTER UPDATE ON `facturas` FOR EACH ROW
+BEGIN
+
+REPLACE INTO ori_facturas SELECT * FROM facturas WHERE idFacturas=New.idFacturas;
+
+
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `facturas_abonos`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_abonos` (
+DROP TABLE IF EXISTS `facturas_abonos`;
+CREATE TABLE `facturas_abonos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
@@ -1503,15 +1201,11 @@ CREATE TABLE IF NOT EXISTS `facturas_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_anticipos`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_anticipos` (
+DROP TABLE IF EXISTS `facturas_anticipos`;
+CREATE TABLE `facturas_anticipos` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idCliente` int(11) NOT NULL,
@@ -1525,13 +1219,9 @@ CREATE TABLE IF NOT EXISTS `facturas_anticipos` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_autoretenciones`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_autoretenciones` (
+DROP TABLE IF EXISTS `facturas_autoretenciones`;
+CREATE TABLE `facturas_autoretenciones` (
   `idFacturasAutoretenciones` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `NombreAutoRetencion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1547,13 +1237,9 @@ CREATE TABLE IF NOT EXISTS `facturas_autoretenciones` (
   PRIMARY KEY (`idFacturasAutoretenciones`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_formapago`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_formapago` (
+DROP TABLE IF EXISTS `facturas_formapago`;
+CREATE TABLE `facturas_formapago` (
   `idFacturas_FormaPago` int(16) NOT NULL AUTO_INCREMENT,
   `Total` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Paga` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -1565,13 +1251,9 @@ CREATE TABLE IF NOT EXISTS `facturas_formapago` (
   PRIMARY KEY (`idFacturas_FormaPago`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_intereses_sistecredito`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
+DROP TABLE IF EXISTS `facturas_intereses_sistecredito`;
+CREATE TABLE `facturas_intereses_sistecredito` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -1582,15 +1264,11 @@ CREATE TABLE IF NOT EXISTS `facturas_intereses_sistecredito` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_items`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_items` (
+DROP TABLE IF EXISTS `facturas_items`;
+CREATE TABLE `facturas_items` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `FechaFactura` date NOT NULL,
   `idFactura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
@@ -1628,29 +1306,22 @@ CREATE TABLE IF NOT EXISTS `facturas_items` (
   KEY `idCierre` (`idCierre`),
   KEY `FechaFactura` (`FechaFactura`),
   KEY `Referencia` (`Referencia`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
---
--- Triggers `facturas_items`
---
-DROP TRIGGER IF EXISTS `InsertFacturasItems`;
-DELIMITER //
-CREATE TRIGGER `InsertFacturasItems` AFTER INSERT ON `facturas_items`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `InsertFacturasItems` AFTER INSERT ON `facturas_items` FOR EACH ROW
+BEGIN
 
 INSERT INTO ori_facturas_items SELECT * FROM facturas_items WHERE ID=New.ID;
 
-END
-//
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `facturas_kardex`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_kardex` (
+DROP TABLE IF EXISTS `facturas_kardex`;
+CREATE TABLE `facturas_kardex` (
   `idFacturas` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `CuentaDestino` bigint(20) NOT NULL,
   `Kardex` varchar(2) COLLATE latin1_spanish_ci NOT NULL DEFAULT 'NO',
@@ -1660,13 +1331,9 @@ CREATE TABLE IF NOT EXISTS `facturas_kardex` (
   PRIMARY KEY (`idFacturas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_pre`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_pre` (
+DROP TABLE IF EXISTS `facturas_pre`;
+CREATE TABLE `facturas_pre` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `FechaFactura` date NOT NULL,
   `idFactura` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -1697,15 +1364,11 @@ CREATE TABLE IF NOT EXISTS `facturas_pre` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `facturas_reten_aplicadas`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_reten_aplicadas` (
+DROP TABLE IF EXISTS `facturas_reten_aplicadas`;
+CREATE TABLE `facturas_reten_aplicadas` (
   `idFacturasRetAplicadas` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `NombreRetencion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1721,13 +1384,11 @@ CREATE TABLE IF NOT EXISTS `facturas_reten_aplicadas` (
   PRIMARY KEY (`idFacturasRetAplicadas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Triggers `facturas_reten_aplicadas`
---
-DROP TRIGGER IF EXISTS `ActualizaSaldoFact`;
-DELIMITER //
-CREATE TRIGGER `ActualizaSaldoFact` AFTER INSERT ON `facturas_reten_aplicadas`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `ActualizaSaldoFact` AFTER INSERT ON `facturas_reten_aplicadas` FOR EACH ROW
+BEGIN
 
 SELECT SaldoFact into @SaldoAnt FROM facturas WHERE idFacturas=NEW.Facturas_idFacturas;
 
@@ -1736,28 +1397,10 @@ SET @Saldo=@SaldoAnt-NEW.Monto;
 UPDATE facturas SET SaldoFact=@Saldo WHERE idFacturas=NEW.Facturas_idFacturas;
 
 
-END
-//
-DELIMITER ;
-DROP TRIGGER IF EXISTS `ActualizaSaldoFactDel`;
-DELIMITER //
-CREATE TRIGGER `ActualizaSaldoFactDel` BEFORE DELETE ON `facturas_reten_aplicadas`
- FOR EACH ROW BEGIN
+END;;
 
-SELECT SaldoFact into @SaldoAnt FROM facturas WHERE idFacturas=OLD.Facturas_idFacturas;
-
-SET @Saldo=@SaldoAnt+OLD.Monto;
-
-UPDATE facturas SET SaldoFact=@Saldo WHERE idFacturas=OLD.Facturas_idFacturas;
-
-
-END
-//
-DELIMITER ;
-DROP TRIGGER IF EXISTS `ActualizaSaldoFactUpdate`;
-DELIMITER //
-CREATE TRIGGER `ActualizaSaldoFactUpdate` AFTER UPDATE ON `facturas_reten_aplicadas`
- FOR EACH ROW BEGIN
+CREATE TRIGGER `ActualizaSaldoFactUpdate` AFTER UPDATE ON `facturas_reten_aplicadas` FOR EACH ROW
+BEGIN
 
 SELECT SaldoFact into @SaldoAnt FROM facturas WHERE idFacturas=NEW.Facturas_idFacturas;
 
@@ -1766,32 +1409,35 @@ SET @Saldo=@SaldoAnt+(OLD.Monto-NEW.Monto);
 UPDATE facturas SET SaldoFact=@Saldo WHERE idFacturas=NEW.Facturas_idFacturas;
 
 
-END
-//
+END;;
+
+CREATE TRIGGER `ActualizaSaldoFactDel` BEFORE DELETE ON `facturas_reten_aplicadas` FOR EACH ROW
+BEGIN
+
+SELECT SaldoFact into @SaldoAnt FROM facturas WHERE idFacturas=OLD.Facturas_idFacturas;
+
+SET @Saldo=@SaldoAnt+OLD.Monto;
+
+UPDATE facturas SET SaldoFact=@Saldo WHERE idFacturas=OLD.Facturas_idFacturas;
+
+
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `facturas_tipo_pago`
---
-
-CREATE TABLE IF NOT EXISTS `facturas_tipo_pago` (
+DROP TABLE IF EXISTS `facturas_tipo_pago`;
+CREATE TABLE `facturas_tipo_pago` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `TipoPago` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Leyenda` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra` (
+DROP TABLE IF EXISTS `factura_compra`;
+CREATE TABLE `factura_compra` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Tercero` bigint(20) NOT NULL,
@@ -1807,15 +1453,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
+DROP TABLE IF EXISTS `factura_compra_anulaciones`;
+CREATE TABLE `factura_compra_anulaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -1825,15 +1467,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra_anulaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_descuentos`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_descuentos` (
+DROP TABLE IF EXISTS `factura_compra_descuentos`;
+CREATE TABLE `factura_compra_descuentos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idCompra` bigint(20) NOT NULL,
   `CuentaPUCDescuento` bigint(20) NOT NULL,
@@ -1844,13 +1482,9 @@ CREATE TABLE IF NOT EXISTS `factura_compra_descuentos` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_items`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_items` (
+DROP TABLE IF EXISTS `factura_compra_items`;
+CREATE TABLE `factura_compra_items` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idFacturaCompra` bigint(20) NOT NULL,
   `idProducto` bigint(20) NOT NULL,
@@ -1867,15 +1501,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra_items` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `idFacturaCompra` (`idFacturaCompra`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_items_devoluciones`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_items_devoluciones` (
+DROP TABLE IF EXISTS `factura_compra_items_devoluciones`;
+CREATE TABLE `factura_compra_items_devoluciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idFacturaCompra` bigint(20) NOT NULL,
   `idProducto` bigint(20) NOT NULL,
@@ -1888,15 +1518,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra_items_devoluciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_retenciones`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_retenciones` (
+DROP TABLE IF EXISTS `factura_compra_retenciones`;
+CREATE TABLE `factura_compra_retenciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idCompra` bigint(20) NOT NULL,
   `CuentaPUC` bigint(20) NOT NULL,
@@ -1906,15 +1532,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra_retenciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `factura_compra_servicios`
---
-
-CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
+DROP TABLE IF EXISTS `factura_compra_servicios`;
+CREATE TABLE `factura_compra_servicios` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idFacturaCompra` bigint(20) NOT NULL,
   `CuentaPUC_Servicio` bigint(20) NOT NULL,
@@ -1927,15 +1549,11 @@ CREATE TABLE IF NOT EXISTS `factura_compra_servicios` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `fechas_descuentos`
---
-
-CREATE TABLE IF NOT EXISTS `fechas_descuentos` (
+DROP TABLE IF EXISTS `fechas_descuentos`;
+CREATE TABLE `fechas_descuentos` (
   `idFechaDescuentos` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Motivo` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
@@ -1947,33 +1565,26 @@ CREATE TABLE IF NOT EXISTS `fechas_descuentos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idFechaDescuentos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `formatos_calidad`
---
-
-CREATE TABLE IF NOT EXISTS `formatos_calidad` (
+DROP TABLE IF EXISTS `formatos_calidad`;
+CREATE TABLE `formatos_calidad` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
   `Version` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Codigo` text COLLATE utf8_spanish2_ci NOT NULL,
   `Fecha` date NOT NULL,
+  `CuerpoFormato` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `NotasPiePagina` text COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `gupocuentas`
---
-
-CREATE TABLE IF NOT EXISTS `gupocuentas` (
+DROP TABLE IF EXISTS `gupocuentas`;
+CREATE TABLE `gupocuentas` (
   `PUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -1983,13 +1594,9 @@ CREATE TABLE IF NOT EXISTS `gupocuentas` (
   PRIMARY KEY (`PUC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `impret`
---
-
-CREATE TABLE IF NOT EXISTS `impret` (
+DROP TABLE IF EXISTS `impret`;
+CREATE TABLE `impret` (
   `idImpRet` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Tipo` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2000,15 +1607,11 @@ CREATE TABLE IF NOT EXISTS `impret` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idImpRet`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ingresos`
---
-
-CREATE TABLE IF NOT EXISTS `ingresos` (
+DROP TABLE IF EXISTS `ingresos`;
+CREATE TABLE `ingresos` (
   `idIngresos` int(200) NOT NULL AUTO_INCREMENT,
   `Observaciones` varchar(500) NOT NULL,
   `Total` int(10) NOT NULL,
@@ -2024,13 +1627,9 @@ CREATE TABLE IF NOT EXISTS `ingresos` (
   PRIMARY KEY (`idIngresos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ingresosvarios`
---
-
-CREATE TABLE IF NOT EXISTS `ingresosvarios` (
+DROP TABLE IF EXISTS `ingresosvarios`;
+CREATE TABLE `ingresosvarios` (
   `idIngresosVarios` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Descripcion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2040,13 +1639,9 @@ CREATE TABLE IF NOT EXISTS `ingresosvarios` (
   PRIMARY KEY (`idIngresosVarios`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `inventarios_diferencias`
---
-
-CREATE TABLE IF NOT EXISTS `inventarios_diferencias` (
+DROP TABLE IF EXISTS `inventarios_diferencias`;
+CREATE TABLE `inventarios_diferencias` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2069,13 +1664,9 @@ CREATE TABLE IF NOT EXISTS `inventarios_diferencias` (
   PRIMARY KEY (`idProductosVenta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `inventarios_temporal`
---
-
-CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
+DROP TABLE IF EXISTS `inventarios_temporal`;
+CREATE TABLE `inventarios_temporal` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2102,15 +1693,11 @@ CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `kardexmercancias`
---
-
-CREATE TABLE IF NOT EXISTS `kardexmercancias` (
+DROP TABLE IF EXISTS `kardexmercancias`;
+CREATE TABLE `kardexmercancias` (
   `idKardexMercancias` bigint(20) NOT NULL AUTO_INCREMENT,
   `idBodega` int(11) NOT NULL DEFAULT '1',
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2126,15 +1713,11 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idKardexMercancias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `kardexmercancias_temporal`
---
-
-CREATE TABLE IF NOT EXISTS `kardexmercancias_temporal` (
+DROP TABLE IF EXISTS `kardexmercancias_temporal`;
+CREATE TABLE `kardexmercancias_temporal` (
   `idKardexMercancias` bigint(20) NOT NULL AUTO_INCREMENT,
   `idBodega` int(11) NOT NULL DEFAULT '1',
   `Fecha` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2152,13 +1735,9 @@ CREATE TABLE IF NOT EXISTS `kardexmercancias_temporal` (
   PRIMARY KEY (`idKardexMercancias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `kardex_alquiler`
---
-
-CREATE TABLE IF NOT EXISTS `kardex_alquiler` (
+DROP TABLE IF EXISTS `kardex_alquiler`;
+CREATE TABLE `kardex_alquiler` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Movimiento` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
@@ -2177,15 +1756,11 @@ CREATE TABLE IF NOT EXISTS `kardex_alquiler` (
   PRIMARY KEY (`ID`),
   KEY `idProducto` (`idProducto`),
   KEY `idProducto_2` (`idProducto`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `kits`
---
-
-CREATE TABLE IF NOT EXISTS `kits` (
+DROP TABLE IF EXISTS `kits`;
+CREATE TABLE `kits` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -2194,13 +1769,9 @@ CREATE TABLE IF NOT EXISTS `kits` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `kits_relaciones`
---
-
-CREATE TABLE IF NOT EXISTS `kits_relaciones` (
+DROP TABLE IF EXISTS `kits_relaciones`;
+CREATE TABLE `kits_relaciones` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `TablaProducto` varchar(60) COLLATE utf8_spanish2_ci NOT NULL,
   `ReferenciaProducto` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2211,13 +1782,9 @@ CREATE TABLE IF NOT EXISTS `kits_relaciones` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `librodiario`
---
-
-CREATE TABLE IF NOT EXISTS `librodiario` (
+DROP TABLE IF EXISTS `librodiario`;
+CREATE TABLE `librodiario` (
   `idLibroDiario` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date DEFAULT NULL,
   `Tipo_Documento_Intero` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -2257,15 +1824,11 @@ CREATE TABLE IF NOT EXISTS `librodiario` (
   KEY `Num_Documento_Interno` (`Num_Documento_Interno`),
   KEY `CuentaPUC` (`CuentaPUC`),
   KEY `Fecha` (`Fecha`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `libromayorbalances`
---
-
-CREATE TABLE IF NOT EXISTS `libromayorbalances` (
+DROP TABLE IF EXISTS `libromayorbalances`;
+CREATE TABLE `libromayorbalances` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `FechaInicial` date NOT NULL,
   `FechaFinal` date NOT NULL,
@@ -2278,30 +1841,22 @@ CREATE TABLE IF NOT EXISTS `libromayorbalances` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `maquinas`
---
-
-CREATE TABLE IF NOT EXISTS `maquinas` (
+DROP TABLE IF EXISTS `maquinas`;
+CREATE TABLE `maquinas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `FechaInicio` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `menu`
---
-
-CREATE TABLE IF NOT EXISTS `menu` (
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(80) COLLATE latin1_spanish_ci NOT NULL,
   `idCarpeta` int(11) NOT NULL,
@@ -2313,29 +1868,21 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `menu_carpetas`
---
-
-CREATE TABLE IF NOT EXISTS `menu_carpetas` (
+DROP TABLE IF EXISTS `menu_carpetas`;
+CREATE TABLE `menu_carpetas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Ruta` varchar(90) COLLATE latin1_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `menu_pestanas`
---
-
-CREATE TABLE IF NOT EXISTS `menu_pestanas` (
+DROP TABLE IF EXISTS `menu_pestanas`;
+CREATE TABLE `menu_pestanas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `idMenu` int(11) NOT NULL,
@@ -2344,15 +1891,11 @@ CREATE TABLE IF NOT EXISTS `menu_pestanas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `menu_submenus`
---
-
-CREATE TABLE IF NOT EXISTS `menu_submenus` (
+DROP TABLE IF EXISTS `menu_submenus`;
+CREATE TABLE `menu_submenus` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
   `idPestana` int(11) NOT NULL,
@@ -2365,15 +1908,11 @@ CREATE TABLE IF NOT EXISTS `menu_submenus` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `notascontables`
---
-
-CREATE TABLE IF NOT EXISTS `notascontables` (
+DROP TABLE IF EXISTS `notascontables`;
+CREATE TABLE `notascontables` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `FechaProgramada` date NOT NULL,
@@ -2390,15 +1929,11 @@ CREATE TABLE IF NOT EXISTS `notascontables` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `notascontables_anulaciones`
---
-
-CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
+DROP TABLE IF EXISTS `notascontables_anulaciones`;
+CREATE TABLE `notascontables_anulaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -2408,15 +1943,11 @@ CREATE TABLE IF NOT EXISTS `notascontables_anulaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `notascredito`
---
-
-CREATE TABLE IF NOT EXISTS `notascredito` (
+DROP TABLE IF EXISTS `notascredito`;
+CREATE TABLE `notascredito` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` varchar(20) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2427,15 +1958,11 @@ CREATE TABLE IF NOT EXISTS `notascredito` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ordenesdecompra`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdecompra` (
+DROP TABLE IF EXISTS `ordenesdecompra`;
+CREATE TABLE `ordenesdecompra` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Tercero` int(11) NOT NULL,
@@ -2449,15 +1976,11 @@ CREATE TABLE IF NOT EXISTS `ordenesdecompra` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ordenesdecompra_items`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdecompra_items` (
+DROP TABLE IF EXISTS `ordenesdecompra_items`;
+CREATE TABLE `ordenesdecompra_items` (
   `ID` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `NumOrden` int(11) NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -2473,13 +1996,9 @@ CREATE TABLE IF NOT EXISTS `ordenesdecompra_items` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ordenesdetrabajo`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdetrabajo` (
+DROP TABLE IF EXISTS `ordenesdetrabajo`;
+CREATE TABLE `ordenesdetrabajo` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `FechaOT` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -2495,15 +2014,11 @@ CREATE TABLE IF NOT EXISTS `ordenesdetrabajo` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ordenesdetrabajo_items`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_items` (
+DROP TABLE IF EXISTS `ordenesdetrabajo_items`;
+CREATE TABLE `ordenesdetrabajo_items` (
   `ID` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `idOT` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Actividad` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -2518,27 +2033,19 @@ CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_items` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ordenesdetrabajo_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `ordenesdetrabajo_tipo` (
+DROP TABLE IF EXISTS `ordenesdetrabajo_tipo`;
+CREATE TABLE `ordenesdetrabajo_tipo` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ori_facturas`
---
-
-CREATE TABLE IF NOT EXISTS `ori_facturas` (
+DROP TABLE IF EXISTS `ori_facturas`;
+CREATE TABLE `ori_facturas` (
   `idFacturas` varchar(45) CHARACTER SET utf8 NOT NULL,
   `idResolucion` int(11) NOT NULL,
   `TipoFactura` varchar(10) CHARACTER SET utf8 NOT NULL,
@@ -2576,13 +2083,9 @@ CREATE TABLE IF NOT EXISTS `ori_facturas` (
   PRIMARY KEY (`idFacturas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ori_facturas_items`
---
-
-CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
+DROP TABLE IF EXISTS `ori_facturas_items`;
+CREATE TABLE `ori_facturas_items` (
   `ID` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL,
   `FechaFactura` date NOT NULL,
   `idFactura` varchar(45) NOT NULL,
@@ -2618,13 +2121,9 @@ CREATE TABLE IF NOT EXISTS `ori_facturas_items` (
   KEY `idFactura` (`idFactura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `paginas`
---
-
-CREATE TABLE IF NOT EXISTS `paginas` (
+DROP TABLE IF EXISTS `paginas`;
+CREATE TABLE `paginas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
   `TipoPagina` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2632,15 +2131,11 @@ CREATE TABLE IF NOT EXISTS `paginas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `paginas_bloques`
---
-
-CREATE TABLE IF NOT EXISTS `paginas_bloques` (
+DROP TABLE IF EXISTS `paginas_bloques`;
+CREATE TABLE `paginas_bloques` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `TipoUsuario` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Pagina` varchar(50) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2648,15 +2143,11 @@ CREATE TABLE IF NOT EXISTS `paginas_bloques` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `parametros_contables`
---
-
-CREATE TABLE IF NOT EXISTS `parametros_contables` (
+DROP TABLE IF EXISTS `parametros_contables`;
+CREATE TABLE `parametros_contables` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPUC` bigint(20) NOT NULL,
@@ -2664,15 +2155,11 @@ CREATE TABLE IF NOT EXISTS `parametros_contables` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `parametros_generales`
---
-
-CREATE TABLE IF NOT EXISTS `parametros_generales` (
+DROP TABLE IF EXISTS `parametros_generales`;
+CREATE TABLE `parametros_generales` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `KardexCotizacion` bit(1) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -2680,27 +2167,19 @@ CREATE TABLE IF NOT EXISTS `parametros_generales` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `plataforma_tablas`
---
-
-CREATE TABLE IF NOT EXISTS `plataforma_tablas` (
+DROP TABLE IF EXISTS `plataforma_tablas`;
+CREATE TABLE `plataforma_tablas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `porcentajes_iva`
---
-
-CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
+DROP TABLE IF EXISTS `porcentajes_iva`;
+CREATE TABLE `porcentajes_iva` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Valor` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2712,15 +2191,11 @@ CREATE TABLE IF NOT EXISTS `porcentajes_iva` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `precotizacion`
---
-
-CREATE TABLE IF NOT EXISTS `precotizacion` (
+DROP TABLE IF EXISTS `precotizacion`;
+CREATE TABLE `precotizacion` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `NumSolicitud` varchar(45) NOT NULL,
   `Cantidad` double NOT NULL,
@@ -2744,13 +2219,9 @@ CREATE TABLE IF NOT EXISTS `precotizacion` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `preventa`
---
-
-CREATE TABLE IF NOT EXISTS `preventa` (
+DROP TABLE IF EXISTS `preventa`;
+CREATE TABLE `preventa` (
   `idPrecotizacion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Fecha` date DEFAULT NULL,
   `Cantidad` double NOT NULL,
@@ -2773,15 +2244,11 @@ CREATE TABLE IF NOT EXISTS `preventa` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idPrecotizacion`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `produccion_actividades`
---
-
-CREATE TABLE IF NOT EXISTS `produccion_actividades` (
+DROP TABLE IF EXISTS `produccion_actividades`;
+CREATE TABLE `produccion_actividades` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idOrdenTrabajo` bigint(20) NOT NULL,
   `Fecha_Planeada_Inicio` date NOT NULL,
@@ -2804,29 +2271,21 @@ CREATE TABLE IF NOT EXISTS `produccion_actividades` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `produccion_horas_cronograma`
---
-
-CREATE TABLE IF NOT EXISTS `produccion_horas_cronograma` (
+DROP TABLE IF EXISTS `produccion_horas_cronograma`;
+CREATE TABLE `produccion_horas_cronograma` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Hora` varchar(10) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `produccion_ordenes_trabajo`
---
-
-CREATE TABLE IF NOT EXISTS `produccion_ordenes_trabajo` (
+DROP TABLE IF EXISTS `produccion_ordenes_trabajo`;
+CREATE TABLE `produccion_ordenes_trabajo` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Compromiso_Entrega` date NOT NULL,
@@ -2848,15 +2307,11 @@ CREATE TABLE IF NOT EXISTS `produccion_ordenes_trabajo` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `produccion_pausas_predefinidas`
---
-
-CREATE TABLE IF NOT EXISTS `produccion_pausas_predefinidas` (
+DROP TABLE IF EXISTS `produccion_pausas_predefinidas`;
+CREATE TABLE `produccion_pausas_predefinidas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
   `Observaciones` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -2864,15 +2319,11 @@ CREATE TABLE IF NOT EXISTS `produccion_pausas_predefinidas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `produccion_registro_tiempos`
---
-
-CREATE TABLE IF NOT EXISTS `produccion_registro_tiempos` (
+DROP TABLE IF EXISTS `produccion_registro_tiempos`;
+CREATE TABLE `produccion_registro_tiempos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idActividad` bigint(20) NOT NULL,
   `FechaHora` datetime NOT NULL,
@@ -2882,15 +2333,11 @@ CREATE TABLE IF NOT EXISTS `produccion_registro_tiempos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosalquiler`
---
-
-CREATE TABLE IF NOT EXISTS `productosalquiler` (
+DROP TABLE IF EXISTS `productosalquiler`;
+CREATE TABLE `productosalquiler` (
   `idProductosVenta` int(11) NOT NULL AUTO_INCREMENT,
   `Referencia` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
@@ -2917,15 +2364,11 @@ CREATE TABLE IF NOT EXISTS `productosalquiler` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosventa`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa` (
+DROP TABLE IF EXISTS `productosventa`;
+CREATE TABLE `productosventa` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
@@ -2956,15 +2399,13 @@ CREATE TABLE IF NOT EXISTS `productosventa` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Triggers `productosventa`
---
-DROP TRIGGER IF EXISTS `insKardex`;
-DELIMITER //
-CREATE TRIGGER `insKardex` AFTER INSERT ON `productosventa`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `insKardex` AFTER INSERT ON `productosventa` FOR EACH ROW
+BEGIN
 
 SET @fecha=CURDATE();
     INSERT INTO kardexmercancias (`Fecha`, `Movimiento`, `Detalle`, `Cantidad`,`ValorUnitario`, `ValorTotal`, `ProductosVenta_idProductosVenta`) VALUES (@fecha,'ENTRADA','INICIO',NEW.Existencias,NEW.CostoUnitario,NEW.CostoTotal,NEW.idProductosVenta);
@@ -2982,17 +2423,12 @@ SET @Codigo=CONCAT(@Dep,@Sub1,@id);
 
 INSERT INTO prod_codbarras (`CodigoBarras`,`ProductosVenta_idProductosVenta`) VALUES (@Codigo,NEW.idProductosVenta);
 
-END
-//
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `productosventa_bodega_1`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa_bodega_1` (
+DROP TABLE IF EXISTS `productosventa_bodega_1`;
+CREATE TABLE `productosventa_bodega_1` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3020,13 +2456,9 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_1` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosventa_bodega_2`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa_bodega_2` (
+DROP TABLE IF EXISTS `productosventa_bodega_2`;
+CREATE TABLE `productosventa_bodega_2` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3054,13 +2486,9 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_2` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosventa_bodega_3`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa_bodega_3` (
+DROP TABLE IF EXISTS `productosventa_bodega_3`;
+CREATE TABLE `productosventa_bodega_3` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3088,13 +2516,9 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_3` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosventa_bodega_4`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa_bodega_4` (
+DROP TABLE IF EXISTS `productosventa_bodega_4`;
+CREATE TABLE `productosventa_bodega_4` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3122,13 +2546,9 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_4` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productosventa_bodega_5`
---
-
-CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
+DROP TABLE IF EXISTS `productosventa_bodega_5`;
+CREATE TABLE `productosventa_bodega_5` (
   `idProductosVenta` bigint(20) NOT NULL AUTO_INCREMENT,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Referencia` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3156,13 +2576,9 @@ CREATE TABLE IF NOT EXISTS `productosventa_bodega_5` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productos_impuestos_adicionales`
---
-
-CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
+DROP TABLE IF EXISTS `productos_impuestos_adicionales`;
+CREATE TABLE `productos_impuestos_adicionales` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NombreImpuesto` text COLLATE latin1_spanish_ci NOT NULL,
   `idProducto` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
@@ -3173,15 +2589,11 @@ CREATE TABLE IF NOT EXISTS `productos_impuestos_adicionales` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productos_lista_precios`
---
-
-CREATE TABLE IF NOT EXISTS `productos_lista_precios` (
+DROP TABLE IF EXISTS `productos_lista_precios`;
+CREATE TABLE `productos_lista_precios` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
@@ -3189,15 +2601,11 @@ CREATE TABLE IF NOT EXISTS `productos_lista_precios` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `productos_precios_adicionales`
---
-
-CREATE TABLE IF NOT EXISTS `productos_precios_adicionales` (
+DROP TABLE IF EXISTS `productos_precios_adicionales`;
+CREATE TABLE `productos_precios_adicionales` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idProducto` bigint(20) NOT NULL,
   `idListaPrecios` int(11) NOT NULL,
@@ -3207,15 +2615,11 @@ CREATE TABLE IF NOT EXISTS `productos_precios_adicionales` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='tabla para agregar precios a los productos';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='tabla para agregar precios a los productos';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_bajas_altas`
---
-
-CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
+DROP TABLE IF EXISTS `prod_bajas_altas`;
+CREATE TABLE `prod_bajas_altas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Movimiento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Fecha` date NOT NULL,
@@ -3229,15 +2633,11 @@ CREATE TABLE IF NOT EXISTS `prod_bajas_altas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_bodega`
---
-
-CREATE TABLE IF NOT EXISTS `prod_bodega` (
+DROP TABLE IF EXISTS `prod_bodega`;
+CREATE TABLE `prod_bodega` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `idProductoAlquiler` int(11) NOT NULL,
   `Bodega_idCliente` int(11) NOT NULL,
@@ -3247,13 +2647,9 @@ CREATE TABLE IF NOT EXISTS `prod_bodega` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras` (
+DROP TABLE IF EXISTS `prod_codbarras`;
+CREATE TABLE `prod_codbarras` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(90) COLLATE utf8_spanish_ci NOT NULL,
@@ -3261,90 +2657,66 @@ CREATE TABLE IF NOT EXISTS `prod_codbarras` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras_bodega_1`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_1` (
+DROP TABLE IF EXISTS `prod_codbarras_bodega_1`;
+CREATE TABLE `prod_codbarras_bodega_1` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras_bodega_2`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_2` (
+DROP TABLE IF EXISTS `prod_codbarras_bodega_2`;
+CREATE TABLE `prod_codbarras_bodega_2` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras_bodega_3`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_3` (
+DROP TABLE IF EXISTS `prod_codbarras_bodega_3`;
+CREATE TABLE `prod_codbarras_bodega_3` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras_bodega_4`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_4` (
+DROP TABLE IF EXISTS `prod_codbarras_bodega_4`;
+CREATE TABLE `prod_codbarras_bodega_4` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_codbarras_bodega_5`
---
-
-CREATE TABLE IF NOT EXISTS `prod_codbarras_bodega_5` (
+DROP TABLE IF EXISTS `prod_codbarras_bodega_5`;
+CREATE TABLE `prod_codbarras_bodega_5` (
   `idCodBarras` bigint(20) NOT NULL AUTO_INCREMENT,
   `ProductosVenta_idProductosVenta` bigint(20) NOT NULL,
   `CodigoBarras` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idCodBarras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_comisiones`
---
-
-CREATE TABLE IF NOT EXISTS `prod_comisiones` (
+DROP TABLE IF EXISTS `prod_comisiones`;
+CREATE TABLE `prod_comisiones` (
   `idProd_Comisiones` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre_Comision` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `P_V` int(2) NOT NULL COMMENT '1 Valor 0 Porcentaje',
@@ -3356,15 +2728,11 @@ CREATE TABLE IF NOT EXISTS `prod_comisiones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProd_Comisiones`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_departamentos`
---
-
-CREATE TABLE IF NOT EXISTS `prod_departamentos` (
+DROP TABLE IF EXISTS `prod_departamentos`;
+CREATE TABLE `prod_departamentos` (
   `idDepartamentos` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `TablaOrigen` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -3373,15 +2741,11 @@ CREATE TABLE IF NOT EXISTS `prod_departamentos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idDepartamentos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_kits`
---
-
-CREATE TABLE IF NOT EXISTS `prod_kits` (
+DROP TABLE IF EXISTS `prod_kits`;
+CREATE TABLE `prod_kits` (
   `idKits` int(11) NOT NULL AUTO_INCREMENT,
   `TablaProducto` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `ReferenciaProducto` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
@@ -3391,13 +2755,9 @@ CREATE TABLE IF NOT EXISTS `prod_kits` (
   PRIMARY KEY (`idKits`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sinc`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sinc` (
+DROP TABLE IF EXISTS `prod_sinc`;
+CREATE TABLE `prod_sinc` (
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Departamento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
@@ -3407,104 +2767,77 @@ CREATE TABLE IF NOT EXISTS `prod_sinc` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Triggers `prod_sinc`
---
-DROP TRIGGER IF EXISTS `Productos_Sinc`;
-DELIMITER //
-CREATE TRIGGER `Productos_Sinc` AFTER INSERT ON `prod_sinc`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `Productos_Sinc` AFTER INSERT ON `prod_sinc` FOR EACH ROW
+BEGIN
 
 UPDATE productosventa SET PrecioVenta=NEW.PrecioVenta WHERE Referencia=NEW.Referencia AND Departamento=NEW.Departamento;
 
 UPDATE productosventa SET PrecioMayorista=NEW.PrecioMayorista WHERE Referencia=NEW.Referencia AND Departamento=NEW.Departamento;
 
-END
-//
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `prod_sub1`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub1` (
+DROP TABLE IF EXISTS `prod_sub1`;
+CREATE TABLE `prod_sub1` (
   `idSub1` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub1` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idDepartamento` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub1`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sub2`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub2` (
+DROP TABLE IF EXISTS `prod_sub2`;
+CREATE TABLE `prod_sub2` (
   `idSub2` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub2` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idSub1` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub2`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sub3`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub3` (
+DROP TABLE IF EXISTS `prod_sub3`;
+CREATE TABLE `prod_sub3` (
   `idSub3` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub3` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idSub2` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub3`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sub4`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub4` (
+DROP TABLE IF EXISTS `prod_sub4`;
+CREATE TABLE `prod_sub4` (
   `idSub4` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub4` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idSub3` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub4`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sub5`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub5` (
+DROP TABLE IF EXISTS `prod_sub5`;
+CREATE TABLE `prod_sub5` (
   `idSub5` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub5` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idSub4` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idSub5`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `prod_sub6`
---
-
-CREATE TABLE IF NOT EXISTS `prod_sub6` (
+DROP TABLE IF EXISTS `prod_sub6`;
+CREATE TABLE `prod_sub6` (
   `idSub6` int(11) NOT NULL AUTO_INCREMENT,
   `NombreSub6` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL,
   `idSub5` int(11) NOT NULL,
@@ -3513,13 +2846,9 @@ CREATE TABLE IF NOT EXISTS `prod_sub6` (
   PRIMARY KEY (`idSub6`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `proveedores`
---
-
-CREATE TABLE IF NOT EXISTS `proveedores` (
+DROP TABLE IF EXISTS `proveedores`;
+CREATE TABLE `proveedores` (
   `idProveedores` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo_Documento` int(11) NOT NULL,
   `Num_Identificacion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -3549,15 +2878,11 @@ CREATE TABLE IF NOT EXISTS `proveedores` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProveedores`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `publicidad_encabezado_cartel`
---
-
-CREATE TABLE IF NOT EXISTS `publicidad_encabezado_cartel` (
+DROP TABLE IF EXISTS `publicidad_encabezado_cartel`;
+CREATE TABLE `publicidad_encabezado_cartel` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Titulo` text COLLATE latin1_spanish_ci NOT NULL,
   `ColorTitulo` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
@@ -3571,30 +2896,22 @@ CREATE TABLE IF NOT EXISTS `publicidad_encabezado_cartel` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `publicidad_paginas`
---
-
-CREATE TABLE IF NOT EXISTS `publicidad_paginas` (
+DROP TABLE IF EXISTS `publicidad_paginas`;
+CREATE TABLE `publicidad_paginas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `idProducto` bigint(20) NOT NULL,
   `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `registra_apertura_documentos`
---
-
-CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
+DROP TABLE IF EXISTS `registra_apertura_documentos`;
+CREATE TABLE `registra_apertura_documentos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Documento` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -3604,15 +2921,11 @@ CREATE TABLE IF NOT EXISTS `registra_apertura_documentos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `registra_ediciones`
---
-
-CREATE TABLE IF NOT EXISTS `registra_ediciones` (
+DROP TABLE IF EXISTS `registra_ediciones`;
+CREATE TABLE `registra_ediciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -3625,15 +2938,11 @@ CREATE TABLE IF NOT EXISTS `registra_ediciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `registra_eliminaciones`
---
-
-CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
+DROP TABLE IF EXISTS `registra_eliminaciones`;
+CREATE TABLE `registra_eliminaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -3648,15 +2957,11 @@ CREATE TABLE IF NOT EXISTS `registra_eliminaciones` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `TablaOrigen` (`TablaOrigen`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `registro_basculas`
---
-
-CREATE TABLE IF NOT EXISTS `registro_basculas` (
+DROP TABLE IF EXISTS `registro_basculas`;
+CREATE TABLE `registro_basculas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Gramos` double NOT NULL,
   `idBascula` int(11) NOT NULL,
@@ -3666,13 +2971,9 @@ CREATE TABLE IF NOT EXISTS `registro_basculas` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `relacioncompras`
---
-
-CREATE TABLE IF NOT EXISTS `relacioncompras` (
+DROP TABLE IF EXISTS `relacioncompras`;
+CREATE TABLE `relacioncompras` (
   `idRelacionCompras` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Documento` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -3686,15 +2987,13 @@ CREATE TABLE IF NOT EXISTS `relacioncompras` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idRelacionCompras`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Triggers `relacioncompras`
---
-DROP TRIGGER IF EXISTS `KardexCompras`;
-DELIMITER //
-CREATE TRIGGER `KardexCompras` AFTER INSERT ON `relacioncompras`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `KardexCompras` AFTER INSERT ON `relacioncompras` FOR EACH ROW
+BEGIN
 
 
 SELECT Existencias into @Cantidad FROM productosventa WHERE idProductosVenta=NEW.ProductosVenta_idProductosVenta;
@@ -3723,17 +3022,12 @@ UPDATE productosventa SET `CostoUnitario`= NEW.ValorUnitarioAntesIVA WHERE idPro
 UPDATE productosventa SET `CostoTotal`= @TotalSaldo WHERE idProductosVenta = NEW.ProductosVenta_idProductosVenta;
 
 
-END
-//
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `remisiones`
---
-
-CREATE TABLE IF NOT EXISTS `remisiones` (
+DROP TABLE IF EXISTS `remisiones`;
+CREATE TABLE `remisiones` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Clientes_idClientes` int(11) NOT NULL,
@@ -3754,15 +3048,11 @@ CREATE TABLE IF NOT EXISTS `remisiones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `rem_devoluciones`
---
-
-CREATE TABLE IF NOT EXISTS `rem_devoluciones` (
+DROP TABLE IF EXISTS `rem_devoluciones`;
+CREATE TABLE `rem_devoluciones` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `idRemision` int(16) NOT NULL,
   `idItemCotizacion` int(16) NOT NULL,
@@ -3778,15 +3068,11 @@ CREATE TABLE IF NOT EXISTS `rem_devoluciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `rem_devoluciones_totalizadas`
---
-
-CREATE TABLE IF NOT EXISTS `rem_devoluciones_totalizadas` (
+DROP TABLE IF EXISTS `rem_devoluciones_totalizadas`;
+CREATE TABLE `rem_devoluciones_totalizadas` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `FechaDevolucion` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `HoraDevolucion` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -3799,15 +3085,11 @@ CREATE TABLE IF NOT EXISTS `rem_devoluciones_totalizadas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `rem_pre_devoluciones`
---
-
-CREATE TABLE IF NOT EXISTS `rem_pre_devoluciones` (
+DROP TABLE IF EXISTS `rem_pre_devoluciones`;
+CREATE TABLE `rem_pre_devoluciones` (
   `ID` int(16) NOT NULL AUTO_INCREMENT,
   `idRemision` int(16) NOT NULL,
   `idItemCotizacion` int(16) NOT NULL,
@@ -3820,15 +3102,11 @@ CREATE TABLE IF NOT EXISTS `rem_pre_devoluciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `rem_relaciones`
---
-
-CREATE TABLE IF NOT EXISTS `rem_relaciones` (
+DROP TABLE IF EXISTS `rem_relaciones`;
+CREATE TABLE `rem_relaciones` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `FechaEntrega` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `CantidadEntregada` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -3839,30 +3117,22 @@ CREATE TABLE IF NOT EXISTS `rem_relaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `repuestas_forma_pago`
---
-
-CREATE TABLE IF NOT EXISTS `repuestas_forma_pago` (
+DROP TABLE IF EXISTS `repuestas_forma_pago`;
+CREATE TABLE `repuestas_forma_pago` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `DiasCartera` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Etiqueta` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `requerimientos_proyectos`
---
-
-CREATE TABLE IF NOT EXISTS `requerimientos_proyectos` (
+DROP TABLE IF EXISTS `requerimientos_proyectos`;
+CREATE TABLE `requerimientos_proyectos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(90) COLLATE utf8_spanish2_ci NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -3873,43 +3143,31 @@ CREATE TABLE IF NOT EXISTS `requerimientos_proyectos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `respuestas_condicional`
---
-
-CREATE TABLE IF NOT EXISTS `respuestas_condicional` (
+DROP TABLE IF EXISTS `respuestas_condicional`;
+CREATE TABLE `respuestas_condicional` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Valor` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `respuestas_tipo_item`
---
-
-CREATE TABLE IF NOT EXISTS `respuestas_tipo_item` (
+DROP TABLE IF EXISTS `respuestas_tipo_item`;
+CREATE TABLE `respuestas_tipo_item` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Valor` varchar(4) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restaurante_cierres`
---
-
-CREATE TABLE IF NOT EXISTS `restaurante_cierres` (
+DROP TABLE IF EXISTS `restaurante_cierres`;
+CREATE TABLE `restaurante_cierres` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -3917,15 +3175,11 @@ CREATE TABLE IF NOT EXISTS `restaurante_cierres` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restaurante_mesas`
---
-
-CREATE TABLE IF NOT EXISTS `restaurante_mesas` (
+DROP TABLE IF EXISTS `restaurante_mesas`;
+CREATE TABLE `restaurante_mesas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Capacidad` int(11) NOT NULL,
@@ -3933,15 +3187,11 @@ CREATE TABLE IF NOT EXISTS `restaurante_mesas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restaurante_pedidos`
---
-
-CREATE TABLE IF NOT EXISTS `restaurante_pedidos` (
+DROP TABLE IF EXISTS `restaurante_pedidos`;
+CREATE TABLE `restaurante_pedidos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -3959,15 +3209,11 @@ CREATE TABLE IF NOT EXISTS `restaurante_pedidos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `restaurante_pedidos_items`
---
-
-CREATE TABLE IF NOT EXISTS `restaurante_pedidos_items` (
+DROP TABLE IF EXISTS `restaurante_pedidos_items`;
+CREATE TABLE `restaurante_pedidos_items` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -3994,15 +3240,11 @@ CREATE TABLE IF NOT EXISTS `restaurante_pedidos_items` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `idPedido` (`idPedido`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_conceptos_glosas`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_conceptos_glosas` (
+DROP TABLE IF EXISTS `salud_archivo_conceptos_glosas`;
+CREATE TABLE `salud_archivo_conceptos_glosas` (
   `id_concepto_glosa` int(20) NOT NULL AUTO_INCREMENT,
   `cod_glosa` int(3) NOT NULL COMMENT 'Codigo de glosa, Devolucion o Respuestas',
   `cod_concepto_general` int(1) NOT NULL COMMENT 'Concepto general de la glosa',
@@ -4012,15 +3254,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_conceptos_glosas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_concepto_glosa`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='manual unico glosas,devoluciones y resp Ver Anexo tecn #6';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='manual unico glosas,devoluciones y resp Ver Anexo tecn #6';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_consultas`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_consultas` (
+DROP TABLE IF EXISTS `salud_archivo_consultas`;
+CREATE TABLE `salud_archivo_consultas` (
   `id_consultas` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4048,15 +3286,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_consultas` (
   PRIMARY KEY (`id_consultas`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de cosnultas AC';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de cosnultas AC';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_consultas_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_consultas_temp` (
+DROP TABLE IF EXISTS `salud_archivo_consultas_temp`;
+CREATE TABLE `salud_archivo_consultas_temp` (
   `id_consultas` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4086,13 +3320,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_consultas_temp` (
   KEY `nom_cargue` (`nom_cargue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de cosnultas AC';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_facturacion_mov_generados`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_generados` (
+DROP TABLE IF EXISTS `salud_archivo_facturacion_mov_generados`;
+CREATE TABLE `salud_archivo_facturacion_mov_generados` (
   `id_fac_mov_generados` int(20) NOT NULL AUTO_INCREMENT,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado  " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4119,7 +3349,7 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_generados` (
   `dias_pactados` int(2) DEFAULT NULL COMMENT 'Dias que se pactaron para el pago de la factura con eps',
   `fecha_radicado` date DEFAULT NULL COMMENT 'Fecha de la radicacion de la factura',
   `numero_radicado` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero con que se radico la factura',
-  `Soporte` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Ruta de Archivo de comprobación de radicado',
+  `Soporte` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Ruta de Archivo de comprobación de radicado',
   `estado` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Indica en que tabla esta el registro en un momento dado ',
   `EstadoCobro` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -4130,15 +3360,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_generados` (
   KEY `tipo_negociacion` (`tipo_negociacion`),
   KEY `Updated` (`Updated`),
   KEY `EstadoCobro` (`EstadoCobro`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de transacciones_AF_generadas';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de transacciones_AF_generadas';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_facturacion_mov_pagados`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados` (
+DROP TABLE IF EXISTS `salud_archivo_facturacion_mov_pagados`;
+CREATE TABLE `salud_archivo_facturacion_mov_pagados` (
   `id_pagados` bigint(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura ',
   `fecha_pago_factura` date NOT NULL COMMENT 'Fecha de pago de la factura',
@@ -4165,13 +3391,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados` (
   KEY `nom_cargue` (`nom_cargue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de transacciones_AF_pagadas';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_facturacion_mov_pagados_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados_temp` (
+DROP TABLE IF EXISTS `salud_archivo_facturacion_mov_pagados_temp`;
+CREATE TABLE `salud_archivo_facturacion_mov_pagados_temp` (
   `id_pagados` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura ',
   `fecha_pago_factura` date NOT NULL COMMENT 'Fecha de pago de la factura',
@@ -4198,13 +3420,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_facturacion_mov_pagados_temp` (
   KEY `num_factura` (`num_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo temporal de rips pagados';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_hospitalizaciones`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones` (
+DROP TABLE IF EXISTS `salud_archivo_hospitalizaciones`;
+CREATE TABLE `salud_archivo_hospitalizaciones` (
   `id_hospitalizacion` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4234,15 +3452,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones` (
   PRIMARY KEY (`id_hospitalizacion`),
   KEY `num_factura` (`num_factura`),
   KEY `nom_cargue` (`nom_cargue`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de hospitalización AH';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de hospitalización AH';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_hospitalizaciones_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones_temp` (
+DROP TABLE IF EXISTS `salud_archivo_hospitalizaciones_temp`;
+CREATE TABLE `salud_archivo_hospitalizaciones_temp` (
   `id_hospitalizacion` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4274,13 +3488,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_hospitalizaciones_temp` (
   KEY `nom_cargue` (`nom_cargue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de hospitalización AH';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_medicamentos`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos` (
+DROP TABLE IF EXISTS `salud_archivo_medicamentos`;
+CREATE TABLE `salud_archivo_medicamentos` (
   `id_medicamentos` bigint(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4307,15 +3517,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos` (
   KEY `nom_cargue` (`nom_cargue`),
   KEY `nom_cargue_2` (`nom_cargue`),
   KEY `num_factura_2` (`num_factura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de medicamentos AM';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de medicamentos AM';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_medicamentos_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos_temp` (
+DROP TABLE IF EXISTS `salud_archivo_medicamentos_temp`;
+CREATE TABLE `salud_archivo_medicamentos_temp` (
   `id_medicamentos` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4344,13 +3550,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_medicamentos_temp` (
   KEY `num_factura_2` (`num_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de medicamentos AM';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_nacidos`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos` (
+DROP TABLE IF EXISTS `salud_archivo_nacidos`;
+CREATE TABLE `salud_archivo_nacidos` (
   `id_recien_nacido` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4375,13 +3577,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos` (
   PRIMARY KEY (`id_recien_nacido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_nacidos_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos_temp` (
+DROP TABLE IF EXISTS `salud_archivo_nacidos_temp`;
+CREATE TABLE `salud_archivo_nacidos_temp` (
   `id_recien_nacido` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4406,13 +3604,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_nacidos_temp` (
   KEY `id_recien_nacido` (`id_recien_nacido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de recien nacidos AN';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_otros_servicios`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios` (
+DROP TABLE IF EXISTS `salud_archivo_otros_servicios`;
+CREATE TABLE `salud_archivo_otros_servicios` (
   `id_otro_servicios` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4434,15 +3628,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios` (
   PRIMARY KEY (`id_otro_servicios`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de otros servicios AT';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de otros servicios AT';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_otros_servicios_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios_temp` (
+DROP TABLE IF EXISTS `salud_archivo_otros_servicios_temp`;
+CREATE TABLE `salud_archivo_otros_servicios_temp` (
   `id_otro_servicios` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4466,13 +3656,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_otros_servicios_temp` (
   KEY `num_factura` (`num_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de otros servicios AT';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_procedimientos`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos` (
+DROP TABLE IF EXISTS `salud_archivo_procedimientos`;
+CREATE TABLE `salud_archivo_procedimientos` (
   `id_procedimiento` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4498,15 +3684,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos` (
   PRIMARY KEY (`id_procedimiento`),
   KEY `nom_cargue` (`nom_cargue`),
   KEY `num_factura` (`num_factura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de procedimientos AP';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de procedimientos AP';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_procedimientos_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos_temp` (
+DROP TABLE IF EXISTS `salud_archivo_procedimientos_temp`;
+CREATE TABLE `salud_archivo_procedimientos_temp` (
   `id_procedimiento` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4534,13 +3716,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_procedimientos_temp` (
   KEY `num_factura` (`num_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de procedimientos AP';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_urgencias`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_urgencias` (
+DROP TABLE IF EXISTS `salud_archivo_urgencias`;
+CREATE TABLE `salud_archivo_urgencias` (
   `id_urgencias` int(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Número de la factura " Ver Alineamientos tecnicos para ips ver pag 12"',
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4566,13 +3744,9 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_urgencias` (
   PRIMARY KEY (`id_urgencias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de urgencias AU';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_usuarios`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios` (
+DROP TABLE IF EXISTS `salud_archivo_usuarios`;
+CREATE TABLE `salud_archivo_usuarios` (
   `id_usuarios_salud` int(20) NOT NULL AUTO_INCREMENT,
   `tipo_ident_usuario` enum('CC','CE','PA','RC','TI','AS','MS') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de identificación del usuario " Ver Alineamientos tecnicos para ips ver pag 14"',
   `num_ident_usuario` bigint(16) NOT NULL COMMENT 'Número de identificación del usuario del sistema " Ver Alineamientos tecnicos para ips ver pag 16"',
@@ -4599,15 +3773,11 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios` (
   KEY `segundo_ape_usuario` (`segundo_ape_usuario`),
   KEY `primer_nom_usuario` (`primer_nom_usuario`),
   KEY `segundo_nom_usuario` (`segundo_nom_usuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='Archivo de usuarios US';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='Archivo de usuarios US';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_archivo_usuarios_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios_temp` (
+DROP TABLE IF EXISTS `salud_archivo_usuarios_temp`;
+CREATE TABLE `salud_archivo_usuarios_temp` (
   `id_usuarios_salud` varchar(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '',
   `tipo_ident_usuario` enum('CC','CE','PA','RC','TI','AS','MS') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de identificación del usuario " Ver Alineamientos tecnicos para ips ver pag 14"',
   `num_ident_usuario` bigint(16) NOT NULL COMMENT 'Número de identificación del usuario del sistema " Ver Alineamientos tecnicos para ips ver pag 16"',
@@ -4636,16 +3806,12 @@ CREATE TABLE IF NOT EXISTS `salud_archivo_usuarios_temp` (
   KEY `segundo_nom_usuario` (`segundo_nom_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci ROW_FORMAT=COMPACT COMMENT='Archivo de usuarios US';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_bancos`
---
-
-CREATE TABLE IF NOT EXISTS `salud_bancos` (
-  `ID` int(20) NOT NULL,
+DROP TABLE IF EXISTS `salud_bancos`;
+CREATE TABLE `salud_bancos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `nit_banco` bigint(12) NOT NULL COMMENT 'NIT del banco',
-  `banco_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del banco donde entra la transaccion',
+  `banco_transaccion` varchar(45) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del banco donde entra la transaccion',
   `tipo_cuenta` enum('ahorros','corriente') COLLATE utf8_spanish_ci NOT NULL COMMENT 'tipo de cuenta',
   `num_cuenta_banco` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de cuenta en la cual entra la transaccion',
   `observacion` text COLLATE utf8_spanish_ci COMMENT 'observaciones de diagnostico ',
@@ -4654,13 +3820,9 @@ CREATE TABLE IF NOT EXISTS `salud_bancos` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de banco';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_cie10`
---
-
-CREATE TABLE IF NOT EXISTS `salud_cie10` (
+DROP TABLE IF EXISTS `salud_cie10`;
+CREATE TABLE `salud_cie10` (
   `ID` int(20) NOT NULL,
   `codigo_sistema` varchar(4) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubCategoria de diagnostico ',
   `descripcion_cups` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'Descrpcion de la Clasificacion internacional de Emfermedades ',
@@ -4670,15 +3832,12 @@ CREATE TABLE IF NOT EXISTS `salud_cie10` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de Clasificacion internacional de Emfermedades CIE10';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_circular030_1`
---
-
-CREATE TABLE IF NOT EXISTS `salud_circular030_1` (
-  `Tipo_registro` int(1) NOT NULL COMMENT 'Tipo de registro " Ver circulra 030 anexo tecnico 2"',
-  `id_circular030_1` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Consecutivo de registro debe comenzar en 1 " Ver circulra 030 anexo tecnico 2"',
+DROP TABLE IF EXISTS `salud_circular030`;
+CREATE TABLE `salud_circular030` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TipoRegistro` int(1) NOT NULL,
+  `Consecutivo` int(10) NOT NULL,
   `tipo_ident_erp` enum('NI','MU','DE','DI') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
   `num_ident_erp` bigint(12) NOT NULL COMMENT 'Número de identificación de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
   `razon_social` varchar(250) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
@@ -4700,16 +3859,12 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_1` (
   `etapa_proceso` enum('0','1','2','3','4','5','6','7','8') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Etapa en que se encuentra el proceso "Ver circulra 030 anexo tecnico 2"',
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id_circular030_1`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_circular030_2`
---
-
-CREATE TABLE IF NOT EXISTS `salud_circular030_2` (
+DROP TABLE IF EXISTS `salud_circular030_2`;
+CREATE TABLE `salud_circular030_2` (
   `Tipo_registro` int(1) NOT NULL COMMENT 'Tipo de registro " Ver circulra 030 anexo tecnico 2"',
   `id_circular030_2` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Consecutivo de registro debe comenzar en 1 " Ver circulra 030 anexo tecnico 2"',
   `tipo_ident_erp` enum('NI','MU','DE','DI') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
@@ -4736,13 +3891,9 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_2` (
   PRIMARY KEY (`id_circular030_2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_circular030_3`
---
-
-CREATE TABLE IF NOT EXISTS `salud_circular030_3` (
+DROP TABLE IF EXISTS `salud_circular030_3`;
+CREATE TABLE `salud_circular030_3` (
   `Tipo_registro` int(1) NOT NULL COMMENT 'Tipo de registro " Ver circulra 030 anexo tecnico 2"',
   `id_circular030_3` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Consecutivo de registro debe comenzar en 1 " Ver circulra 030 anexo tecnico 2"',
   `tipo_ident_erp` enum('NI','MU','DE','DI') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
@@ -4769,13 +3920,9 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_3` (
   PRIMARY KEY (`id_circular030_3`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_circular030_4`
---
-
-CREATE TABLE IF NOT EXISTS `salud_circular030_4` (
+DROP TABLE IF EXISTS `salud_circular030_4`;
+CREATE TABLE `salud_circular030_4` (
   `Tipo_registro` int(1) NOT NULL COMMENT 'Tipo de registro " Ver circulra 030 anexo tecnico 2"',
   `id_circular030_4` int(10) NOT NULL AUTO_INCREMENT COMMENT 'Consecutivo de registro debe comenzar en 1 " Ver circulra 030 anexo tecnico 2"',
   `tipo_ident_erp` enum('NI','MU','DE','DI') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de ERP Empresa responsable del pago" Ver circulra 030 anexo tecnico 2"',
@@ -4802,13 +3949,25 @@ CREATE TABLE IF NOT EXISTS `salud_circular030_4` (
   PRIMARY KEY (`id_circular030_4`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Formato Anexo tecnico 2 cir030';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_cobros_prejuridicos`
---
+DROP TABLE IF EXISTS `salud_circular_030_control`;
+CREATE TABLE `salud_circular_030_control` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `TipoRegistro` int(1) NOT NULL,
+  `TipoIdentificacion` varchar(2) COLLATE latin1_spanish_ci NOT NULL DEFAULT 'NI',
+  `NumIdentificacion` bigint(20) NOT NULL,
+  `RazonSocial` varchar(250) COLLATE latin1_spanish_ci NOT NULL,
+  `FechaInicial` date NOT NULL,
+  `FechaFinal` date NOT NULL,
+  `NumRegistros` bigint(10) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `FechaGeneracion` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos` (
+
+DROP TABLE IF EXISTS `salud_cobros_prejuridicos`;
+CREATE TABLE `salud_cobros_prejuridicos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `TipoCobro` enum('1','2','3','4') COLLATE latin1_spanish_ci NOT NULL,
   `Fecha` date NOT NULL,
@@ -4819,26 +3978,18 @@ CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos` (
   KEY `Fecha` (`Fecha`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_cobros_prejuridicos_relaciones`
---
-
-CREATE TABLE IF NOT EXISTS `salud_cobros_prejuridicos_relaciones` (
+DROP TABLE IF EXISTS `salud_cobros_prejuridicos_relaciones`;
+CREATE TABLE `salud_cobros_prejuridicos_relaciones` (
   `idCobroPrejuridico` int(11) NOT NULL,
   `num_factura` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   KEY `idCobroPrejuridico` (`idCobroPrejuridico`),
   KEY `num_factura` (`num_factura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_cups`
---
-
-CREATE TABLE IF NOT EXISTS `salud_cups` (
+DROP TABLE IF EXISTS `salud_cups`;
+CREATE TABLE `salud_cups` (
   `ID` int(20) NOT NULL,
   `grupo` varchar(2) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Grupo de diagnostico ',
   `subgrupo` varchar(1) COLLATE utf8_spanish_ci DEFAULT NULL COMMENT 'SubGrupo de diagnostico ',
@@ -4854,60 +4005,103 @@ CREATE TABLE IF NOT EXISTS `salud_cups` (
   KEY `codigo_sistema` (`codigo_sistema`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de cups';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_dias_habiles`
---
-
-CREATE TABLE IF NOT EXISTS `salud_dias_habiles` (
+DROP TABLE IF EXISTS `salud_dias_habiles`;
+CREATE TABLE `salud_dias_habiles` (
   `fecha_dia` date NOT NULL COMMENT 'fecha del dia',
   `dia` enum('lunes','martes','miercoles','jueves','viernes','sabado','domingo') COLLATE utf8_spanish_ci NOT NULL COMMENT 'dia de la semana',
   `tipo_dia` enum('festivo','dominical','sabatino','normal','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'tipo de dia',
   `estado_dia` enum('habil','no habil','','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'estado de dia es habil o no lo es'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='tabla para controlar los días hábiles';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_eps`
---
-
-CREATE TABLE IF NOT EXISTS `salud_eps` (
+DROP TABLE IF EXISTS `salud_eps`;
+CREATE TABLE `salud_eps` (
   `ID` int(20) NOT NULL AUTO_INCREMENT,
   `cod_pagador_min` varchar(6) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Codigo del pagador ante el ministerio de salud ',
   `nit` bigint(20) NOT NULL,
+  `TipoIdentificacion` enum('MU','DE','DI','NI') COLLATE utf8_spanish_ci NOT NULL,
   `sigla_nombre` varchar(120) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre corto del pagador del servicio salud',
   `nombre_completo` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre completo del pagador del servicio',
   `tipo_regimen` enum('CONTRIBUTIVO','SUBSIDIADO','','') COLLATE utf8_spanish_ci NOT NULL COMMENT 'Tipo de regimen',
   `dias_convenio` int(11) NOT NULL,
   `Nombre_gerente` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del gerente del pagador',
+  `saldo_inicial` double NOT NULL,
+  `fecha_saldo_inicial` date NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `cod_pagador_min` (`cod_pagador_min`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='directorio de empresas promotoras de salud (EPS)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='directorio de empresas promotoras de salud (EPS)';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_facturas_radicacion_numero`
---
-
-CREATE TABLE IF NOT EXISTS `salud_facturas_radicacion_numero` (
+DROP TABLE IF EXISTS `salud_facturas_radicacion_numero`;
+CREATE TABLE `salud_facturas_radicacion_numero` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `idFactura` bigint(20) NOT NULL,
   `idUser` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_registro_glosas`
---
+DROP TABLE IF EXISTS `salud_pagos_temporal`;
+CREATE TABLE `salud_pagos_temporal` (
+  `id_temp_rips_generados` varchar(1) COLLATE latin1_spanish_ci NOT NULL,
+  `Proceso` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `CodigoEPS` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `NombreEPS` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `FormaContratacion` enum('Evento','Capitacion') COLLATE latin1_spanish_ci NOT NULL,
+  `Departamento` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Municipio` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `FechaFactura` date NOT NULL,
+  `PrefijoFactura` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `NumeroFactura` bigint(20) NOT NULL,
+  `ValorGiro` double NOT NULL,
+  `FechaPago` date NOT NULL,
+  `NumeroGiro` bigint(20) NOT NULL,
+  `nom_cargue` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
+  `fecha_cargue` datetime NOT NULL,
+  `Soporte` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
+  `numero_factura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
-CREATE TABLE IF NOT EXISTS `salud_registro_glosas` (
+
+DROP TABLE IF EXISTS `salud_procesos_gerenciales`;
+CREATE TABLE `salud_procesos_gerenciales` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `EPS` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `NombreProceso` text COLLATE latin1_spanish_ci NOT NULL,
+  `Concepto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+DROP TABLE IF EXISTS `salud_procesos_gerenciales_archivos`;
+CREATE TABLE `salud_procesos_gerenciales_archivos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idProceso` int(11) NOT NULL,
+  `Fecha` date NOT NULL,
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
+  `Soporte` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+DROP TABLE IF EXISTS `salud_procesos_gerenciales_conceptos`;
+CREATE TABLE `salud_procesos_gerenciales_conceptos` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Concepto` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
+DROP TABLE IF EXISTS `salud_registro_glosas`;
+CREATE TABLE `salud_registro_glosas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `num_factura` varchar(30) COLLATE latin1_spanish_ci NOT NULL,
   `PrefijoArchivo` enum('AC','AM','AP','AT','AF') COLLATE latin1_spanish_ci NOT NULL COMMENT 'AC, AM, AP, AT,AF',
@@ -4926,13 +4120,9 @@ CREATE TABLE IF NOT EXISTS `salud_registro_glosas` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_rips_diferencias`
---
-
-CREATE TABLE IF NOT EXISTS `salud_rips_diferencias` (
+DROP TABLE IF EXISTS `salud_rips_diferencias`;
+CREATE TABLE `salud_rips_diferencias` (
   `id_rips_diferencias` int(20) NOT NULL,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4965,13 +4155,9 @@ CREATE TABLE IF NOT EXISTS `salud_rips_diferencias` (
   PRIMARY KEY (`id_rips_diferencias`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de diferencias de validacion';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_rips_facturas_generadas_temp`
---
-
-CREATE TABLE IF NOT EXISTS `salud_rips_facturas_generadas_temp` (
+DROP TABLE IF EXISTS `salud_rips_facturas_generadas_temp`;
+CREATE TABLE `salud_rips_facturas_generadas_temp` (
   `id_temp_rips_generados` varchar(1) COLLATE utf8_spanish_ci NOT NULL,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -4999,13 +4185,9 @@ CREATE TABLE IF NOT EXISTS `salud_rips_facturas_generadas_temp` (
   KEY `id_temp_rips_generados` (`id_temp_rips_generados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo temporal de rips generados';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_rips_nopagados`
---
-
-CREATE TABLE IF NOT EXISTS `salud_rips_nopagados` (
+DROP TABLE IF EXISTS `salud_rips_nopagados`;
+CREATE TABLE `salud_rips_nopagados` (
   `id_rips_nopagados` int(20) NOT NULL,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -5036,13 +4218,9 @@ CREATE TABLE IF NOT EXISTS `salud_rips_nopagados` (
   PRIMARY KEY (`id_rips_nopagados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='archivos de rips no pagados';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_rips_pagos_validados`
---
-
-CREATE TABLE IF NOT EXISTS `salud_rips_pagos_validados` (
+DROP TABLE IF EXISTS `salud_rips_pagos_validados`;
+CREATE TABLE `salud_rips_pagos_validados` (
   `id_rips_pagos_validados` int(20) NOT NULL,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -5074,13 +4252,9 @@ CREATE TABLE IF NOT EXISTS `salud_rips_pagos_validados` (
   PRIMARY KEY (`id_rips_pagos_validados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de pagos validados';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_rips_vencidos`
---
-
-CREATE TABLE IF NOT EXISTS `salud_rips_vencidos` (
+DROP TABLE IF EXISTS `salud_rips_vencidos`;
+CREATE TABLE `salud_rips_vencidos` (
   `id_rips_vencidos` int(20) NOT NULL,
   `cod_prest_servicio` bigint(12) NOT NULL COMMENT 'Código del prestador de servicios de salud " Ver Alineamientos tecnicos para ips ver pag 12"',
   `razon_social` varchar(60) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Razón social o apellidos y nombre del prestado " Ver Alineamientos tecnicos para ips ver pag 12"',
@@ -5112,47 +4286,35 @@ CREATE TABLE IF NOT EXISTS `salud_rips_vencidos` (
   PRIMARY KEY (`id_rips_vencidos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='archivos de rips vencidos';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_tesoreria`
---
-
-CREATE TABLE IF NOT EXISTS `salud_tesoreria` (
-  `ID` int(20) NOT NULL,
+DROP TABLE IF EXISTS `salud_tesoreria`;
+CREATE TABLE `salud_tesoreria` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `cod_enti_administradora` varchar(6) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Código entidad que paga',
   `nom_enti_administradora` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre entidad que paga',
   `fecha_transaccion` date NOT NULL COMMENT 'fecha entra el dinero al banco',
-  `num_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de la transaccion con la cual entra al banco',
+  `num_transaccion` varchar(45) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de la transaccion con la cual entra al banco',
   `banco_transaccion` varchar(10) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del banco donde entra la transaccion',
   `num_cuenta_banco` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Numero de cuenta en la cual entra la transaccion',
   `valor_transaccion` double(15,2) NOT NULL COMMENT 'Valor de transaccion ',
-  `Soporte` varchar(30) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Soporte que argumenta  o justifica el pago',
+  `Soporte` varchar(200) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Soporte que argumenta  o justifica el pago',
   `observacion` text COLLATE utf8_spanish_ci COMMENT 'observaciones de diagnostico ',
   `fecha_hora_registro` datetime DEFAULT NULL COMMENT 'fecha y hora del registro',
-  `user` int(2) DEFAULT NULL COMMENT 'usuario que registra',
+  `idUser` int(11) DEFAULT NULL COMMENT 'usuario que registra',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci COMMENT='Archivo de tesoreria';
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_tipo_glosas`
---
-
-CREATE TABLE IF NOT EXISTS `salud_tipo_glosas` (
+DROP TABLE IF EXISTS `salud_tipo_glosas`;
+CREATE TABLE `salud_tipo_glosas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `TipoGlosa` varchar(15) COLLATE latin1_spanish_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `salud_upload_control`
---
-
-CREATE TABLE IF NOT EXISTS `salud_upload_control` (
+DROP TABLE IF EXISTS `salud_upload_control`;
+CREATE TABLE `salud_upload_control` (
   `id_upload_control` bigint(20) NOT NULL AUTO_INCREMENT,
   `nom_cargue` varchar(20) COLLATE latin1_spanish_ci NOT NULL,
   `fecha_cargue` datetime NOT NULL,
@@ -5162,15 +4324,11 @@ CREATE TABLE IF NOT EXISTS `salud_upload_control` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id_upload_control`),
   KEY `nom_cargue` (`nom_cargue`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `separados`
---
-
-CREATE TABLE IF NOT EXISTS `separados` (
+DROP TABLE IF EXISTS `separados`;
+CREATE TABLE `separados` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -5184,15 +4342,11 @@ CREATE TABLE IF NOT EXISTS `separados` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `separados_abonos`
---
-
-CREATE TABLE IF NOT EXISTS `separados_abonos` (
+DROP TABLE IF EXISTS `separados_abonos`;
+CREATE TABLE `separados_abonos` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -5205,15 +4359,11 @@ CREATE TABLE IF NOT EXISTS `separados_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `separados_items`
---
-
-CREATE TABLE IF NOT EXISTS `separados_items` (
+DROP TABLE IF EXISTS `separados_items`;
+CREATE TABLE `separados_items` (
   `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idSeparado` bigint(20) NOT NULL,
@@ -5242,15 +4392,11 @@ CREATE TABLE IF NOT EXISTS `separados_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `servicios`
---
-
-CREATE TABLE IF NOT EXISTS `servicios` (
+DROP TABLE IF EXISTS `servicios`;
+CREATE TABLE `servicios` (
   `idProductosVenta` int(16) NOT NULL AUTO_INCREMENT,
   `Referencia` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(1000) COLLATE utf8_spanish_ci NOT NULL,
@@ -5271,15 +4417,11 @@ CREATE TABLE IF NOT EXISTS `servicios` (
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idProductosVenta`),
   UNIQUE KEY `Referencia` (`Referencia`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `servidores`
---
-
-CREATE TABLE IF NOT EXISTS `servidores` (
+DROP TABLE IF EXISTS `servidores`;
+CREATE TABLE `servidores` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `IP` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -5289,15 +4431,11 @@ CREATE TABLE IF NOT EXISTS `servidores` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `sistemas`
---
-
-CREATE TABLE IF NOT EXISTS `sistemas` (
+DROP TABLE IF EXISTS `sistemas`;
+CREATE TABLE `sistemas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` text COLLATE utf8_spanish2_ci NOT NULL,
   `RutaImagen` text COLLATE utf8_spanish2_ci NOT NULL,
@@ -5307,15 +4445,11 @@ CREATE TABLE IF NOT EXISTS `sistemas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `sistemas_relaciones`
---
-
-CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
+DROP TABLE IF EXISTS `sistemas_relaciones`;
+CREATE TABLE `sistemas_relaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `TablaOrigen` varchar(90) COLLATE utf8_spanish_ci NOT NULL,
   `Referencia` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
@@ -5325,15 +4459,11 @@ CREATE TABLE IF NOT EXISTS `sistemas_relaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `subcuentas`
---
-
-CREATE TABLE IF NOT EXISTS `subcuentas` (
+DROP TABLE IF EXISTS `subcuentas`;
+CREATE TABLE `subcuentas` (
   `PUC` int(11) NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Valor` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -5343,13 +4473,9 @@ CREATE TABLE IF NOT EXISTS `subcuentas` (
   PRIMARY KEY (`PUC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `subcuentas_equivalencias_niif`
---
-
-CREATE TABLE IF NOT EXISTS `subcuentas_equivalencias_niif` (
+DROP TABLE IF EXISTS `subcuentas_equivalencias_niif`;
+CREATE TABLE `subcuentas_equivalencias_niif` (
   `CuentaNIIF` int(11) NOT NULL,
   `NombreCuentaNIIF` int(11) NOT NULL,
   `Equivale_A` int(11) NOT NULL,
@@ -5359,13 +4485,9 @@ CREATE TABLE IF NOT EXISTS `subcuentas_equivalencias_niif` (
   UNIQUE KEY `Equivale_A` (`Equivale_A`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `tablas_ventas`
---
-
-CREATE TABLE IF NOT EXISTS `tablas_ventas` (
+DROP TABLE IF EXISTS `tablas_ventas`;
+CREATE TABLE `tablas_ventas` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NombreTabla` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `idTabla` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -5375,15 +4497,11 @@ CREATE TABLE IF NOT EXISTS `tablas_ventas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `tarjetas_forma_pago`
---
-
-CREATE TABLE IF NOT EXISTS `tarjetas_forma_pago` (
+DROP TABLE IF EXISTS `tarjetas_forma_pago`;
+CREATE TABLE `tarjetas_forma_pago` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -5393,15 +4511,11 @@ CREATE TABLE IF NOT EXISTS `tarjetas_forma_pago` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `tiposretenciones`
---
-
-CREATE TABLE IF NOT EXISTS `tiposretenciones` (
+DROP TABLE IF EXISTS `tiposretenciones`;
+CREATE TABLE `tiposretenciones` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(100) COLLATE utf8_spanish2_ci NOT NULL,
   `CuentaPasivo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -5411,15 +4525,11 @@ CREATE TABLE IF NOT EXISTS `tiposretenciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_abonos`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_abonos` (
+DROP TABLE IF EXISTS `titulos_abonos`;
+CREATE TABLE `titulos_abonos` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -5433,15 +4543,11 @@ CREATE TABLE IF NOT EXISTS `titulos_abonos` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_asignaciones`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_asignaciones` (
+DROP TABLE IF EXISTS `titulos_asignaciones`;
+CREATE TABLE `titulos_asignaciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Promocion` int(11) NOT NULL,
@@ -5453,15 +4559,11 @@ CREATE TABLE IF NOT EXISTS `titulos_asignaciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_comisiones`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_comisiones` (
+DROP TABLE IF EXISTS `titulos_comisiones`;
+CREATE TABLE `titulos_comisiones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -5475,15 +4577,11 @@ CREATE TABLE IF NOT EXISTS `titulos_comisiones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_cuentasxcobrar`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_cuentasxcobrar` (
+DROP TABLE IF EXISTS `titulos_cuentasxcobrar`;
+CREATE TABLE `titulos_cuentasxcobrar` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `FechaIngreso` date NOT NULL,
   `Origen` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -5505,15 +4603,11 @@ CREATE TABLE IF NOT EXISTS `titulos_cuentasxcobrar` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_devoluciones`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_devoluciones` (
+DROP TABLE IF EXISTS `titulos_devoluciones`;
+CREATE TABLE `titulos_devoluciones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idVenta` bigint(20) NOT NULL,
@@ -5526,15 +4620,11 @@ CREATE TABLE IF NOT EXISTS `titulos_devoluciones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_listados_promocion_1`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_1` (
+DROP TABLE IF EXISTS `titulos_listados_promocion_1`;
+CREATE TABLE `titulos_listados_promocion_1` (
   `Mayor1` int(11) NOT NULL,
   `Mayor2` int(11) NOT NULL,
   `Adicional` int(11) NOT NULL,
@@ -5553,13 +4643,9 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_1` (
   PRIMARY KEY (`Mayor1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_listados_promocion_6`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_6` (
+DROP TABLE IF EXISTS `titulos_listados_promocion_6`;
+CREATE TABLE `titulos_listados_promocion_6` (
   `Mayor1` int(11) NOT NULL,
   `Mayor2` int(11) NOT NULL,
   `Adicional` int(11) NOT NULL,
@@ -5577,13 +4663,9 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_6` (
   PRIMARY KEY (`Mayor1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_listados_promocion_7`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_7` (
+DROP TABLE IF EXISTS `titulos_listados_promocion_7`;
+CREATE TABLE `titulos_listados_promocion_7` (
   `Mayor1` int(11) NOT NULL,
   `Mayor2` int(11) NOT NULL,
   `Adicional` int(11) NOT NULL,
@@ -5602,13 +4684,9 @@ CREATE TABLE IF NOT EXISTS `titulos_listados_promocion_7` (
   PRIMARY KEY (`Mayor1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_promociones`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_promociones` (
+DROP TABLE IF EXISTS `titulos_promociones`;
+CREATE TABLE `titulos_promociones` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `MayorInicial` int(11) NOT NULL,
@@ -5624,15 +4702,11 @@ CREATE TABLE IF NOT EXISTS `titulos_promociones` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_traslados`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_traslados` (
+DROP TABLE IF EXISTS `titulos_traslados`;
+CREATE TABLE `titulos_traslados` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Promocion` int(11) NOT NULL,
@@ -5645,15 +4719,11 @@ CREATE TABLE IF NOT EXISTS `titulos_traslados` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `titulos_ventas`
---
-
-CREATE TABLE IF NOT EXISTS `titulos_ventas` (
+DROP TABLE IF EXISTS `titulos_ventas`;
+CREATE TABLE `titulos_ventas` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `Promocion` int(11) NOT NULL,
@@ -5674,30 +4744,22 @@ CREATE TABLE IF NOT EXISTS `titulos_ventas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `traslados_estados`
---
-
-CREATE TABLE IF NOT EXISTS `traslados_estados` (
+DROP TABLE IF EXISTS `traslados_estados`;
+CREATE TABLE `traslados_estados` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Estado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Descripcion` text COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `traslados_items`
---
-
-CREATE TABLE IF NOT EXISTS `traslados_items` (
+DROP TABLE IF EXISTS `traslados_items`;
+CREATE TABLE `traslados_items` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   `idTraslado` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
@@ -5727,15 +4789,11 @@ CREATE TABLE IF NOT EXISTS `traslados_items` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `traslados_mercancia`
---
-
-CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
+DROP TABLE IF EXISTS `traslados_mercancia`;
+CREATE TABLE `traslados_mercancia` (
   `ID` varchar(200) COLLATE utf8_spanish2_ci NOT NULL,
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
@@ -5754,13 +4812,9 @@ CREATE TABLE IF NOT EXISTS `traslados_mercancia` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `usuarios`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios` (
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios` (
   `idUsuarios` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Apellido` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -5774,15 +4828,11 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idUsuarios`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `usuarios_ip`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios_ip` (
+DROP TABLE IF EXISTS `usuarios_ip`;
+CREATE TABLE `usuarios_ip` (
   `Direccion` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `idUsuario` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -5790,13 +4840,9 @@ CREATE TABLE IF NOT EXISTS `usuarios_ip` (
   PRIMARY KEY (`Direccion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `usuarios_keys`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios_keys` (
+DROP TABLE IF EXISTS `usuarios_keys`;
+CREATE TABLE `usuarios_keys` (
   `KeyUsuario` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `Usuarios_idUsuarios` int(11) NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -5804,27 +4850,19 @@ CREATE TABLE IF NOT EXISTS `usuarios_keys` (
   PRIMARY KEY (`KeyUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `usuarios_tipo`
---
-
-CREATE TABLE IF NOT EXISTS `usuarios_tipo` (
+DROP TABLE IF EXISTS `usuarios_tipo`;
+CREATE TABLE `usuarios_tipo` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tipo` varchar(45) COLLATE utf8_spanish2_ci NOT NULL,
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ventas`
---
-
-CREATE TABLE IF NOT EXISTS `ventas` (
+DROP TABLE IF EXISTS `ventas`;
+CREATE TABLE `ventas` (
   `idVentas` int(11) NOT NULL AUTO_INCREMENT,
   `NumVenta` int(16) DEFAULT NULL,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -5854,13 +4892,11 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   PRIMARY KEY (`idVentas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
---
--- Triggers `ventas`
---
-DROP TRIGGER IF EXISTS `UpdateProductos`;
-DELIMITER //
-CREATE TRIGGER `UpdateProductos` AFTER INSERT ON `ventas`
- FOR EACH ROW BEGIN
+
+DELIMITER ;;
+
+CREATE TRIGGER `UpdateProductos` AFTER INSERT ON `ventas` FOR EACH ROW
+BEGIN
 
 
 SELECT Existencias into @Cantidad FROM productosventa WHERE idProductosVenta=NEW.Productos_idProductos;
@@ -5889,17 +4925,12 @@ INSERT INTO cotizaciones (`NumCotizacion`, `Fecha`, `Descripcion`,`Referencia`, 
 
 END IF;
 
-END
-//
+END;;
+
 DELIMITER ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `ventas_devoluciones`
---
-
-CREATE TABLE IF NOT EXISTS `ventas_devoluciones` (
+DROP TABLE IF EXISTS `ventas_devoluciones`;
+CREATE TABLE `ventas_devoluciones` (
   `idDevoluciones` int(16) NOT NULL AUTO_INCREMENT,
   `Facturas_idFacturas` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `FechaDevolucion` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -5923,13 +4954,9 @@ CREATE TABLE IF NOT EXISTS `ventas_devoluciones` (
   PRIMARY KEY (`idDevoluciones`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ventas_nota_credito`
---
-
-CREATE TABLE IF NOT EXISTS `ventas_nota_credito` (
+DROP TABLE IF EXISTS `ventas_nota_credito`;
+CREATE TABLE `ventas_nota_credito` (
   `idNotasCredito` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
   `CuentaPUC` varchar(45) COLLATE utf8_spanish_ci NOT NULL,
@@ -5943,13 +4970,9 @@ CREATE TABLE IF NOT EXISTS `ventas_nota_credito` (
   PRIMARY KEY (`idNotasCredito`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `ventas_separados`
---
-
-CREATE TABLE IF NOT EXISTS `ventas_separados` (
+DROP TABLE IF EXISTS `ventas_separados`;
+CREATE TABLE `ventas_separados` (
   `idVentas_Separados` int(11) NOT NULL AUTO_INCREMENT,
   `Facturas_idFacturas` int(11) NOT NULL,
   `Retirado` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
@@ -5960,13 +4983,9 @@ CREATE TABLE IF NOT EXISTS `ventas_separados` (
   PRIMARY KEY (`idVentas_Separados`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `vestasactivas`
---
-
-CREATE TABLE IF NOT EXISTS `vestasactivas` (
+DROP TABLE IF EXISTS `vestasactivas`;
+CREATE TABLE `vestasactivas` (
   `idVestasActivas` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `Usuario_idUsuario` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -5975,8 +4994,161 @@ CREATE TABLE IF NOT EXISTS `vestasactivas` (
   `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`idVestasActivas`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+DROP VIEW IF EXISTS `vista_abonos`;
+CREATE TABLE `vista_abonos` (`Tabla` varchar(16), `TipoAbono` varchar(45), `Fecha` date, `Valor` double, `idUsuario` int(11), `idCierre` bigint(20));
+
+
+DROP VIEW IF EXISTS `vista_compras_productos`;
+CREATE TABLE `vista_compras_productos` (`ID` bigint(20), `Fecha` date, `NumeroFactura` varchar(100), `RazonSocial` varchar(300), `NIT` bigint(20), `idProducto` bigint(20), `Referencia` varchar(200), `Producto` varchar(70), `PrecioVenta` double, `Cantidad` double, `CostoUnitario` double, `Subtotal` double, `Impuestos` double, `Total` double, `Tipo_Impuesto` varchar(10), `Departamento` varchar(45), `Sub1` varchar(45), `Sub2` varchar(45), `Sub3` varchar(45), `Sub4` varchar(45), `Sub5` varchar(45), `Concepto` text, `Observaciones` text, `TipoCompra` varchar(2), `Soporte` varchar(150), `idUsuario` bigint(20), `idCentroCostos` int(11), `idSucursal` int(11), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_compras_productos_devueltos`;
+CREATE TABLE `vista_compras_productos_devueltos` (`ID` bigint(20), `Fecha` date, `NumeroFactura` varchar(100), `RazonSocial` varchar(300), `NIT` bigint(20), `idProducto` bigint(20), `Referencia` varchar(200), `Producto` varchar(70), `PrecioVenta` double, `Cantidad` double, `CostoUnitario` double, `Subtotal` double, `Impuestos` double, `Total` double, `Tipo_Impuesto` varchar(10), `Departamento` varchar(45), `Sub1` varchar(45), `Sub2` varchar(45), `Sub3` varchar(45), `Sub4` varchar(45), `Sub5` varchar(45), `Concepto` text, `Observaciones` text, `TipoCompra` varchar(2), `Soporte` varchar(150), `idUsuario` bigint(20), `idCentroCostos` int(11), `idSucursal` int(11), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_compras_servicios`;
+CREATE TABLE `vista_compras_servicios` (`ID` bigint(20), `Fecha` date, `NumeroFactura` varchar(100), `RazonSocial` varchar(300), `NIT` bigint(20), `Cuenta` bigint(20), `NombreCuenta` varchar(100), `Concepto_Servicio` text, `Subtotal` double, `Impuestos` double, `Total` double, `Tipo_Impuesto` double, `Concepto` text, `Observaciones` text, `TipoCompra` varchar(2), `Soporte` varchar(150), `idUsuario` bigint(20), `idCentroCostos` int(11), `idSucursal` int(11), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_entregas`;
+CREATE TABLE `vista_entregas` (`Tabla` varchar(16), `Tipo` varchar(45), `Fecha` varchar(45), `idUsuario` int(11), `Total` varchar(45));
+
+
+DROP VIEW IF EXISTS `vista_factura_compra_totales`;
+CREATE TABLE `vista_factura_compra_totales` (`idFacturaCompra` bigint(20), `Fecha` date, `NumeroFactura` varchar(100), `Tercero` bigint(20), `RazonSocial` varchar(300), `Subtotal` double, `Impuestos` double, `TotalRetenciones` double, `Total` double, `Concepto` text, `SubtotalServicios` double, `ImpuestosServicios` double, `TotalServicios` double, `SubtotalDevoluciones` double, `ImpuestosDevueltos` double, `TotalDevolucion` double, `Usuario` bigint(20));
+
+
+DROP VIEW IF EXISTS `vista_inventario_separados`;
+CREATE TABLE `vista_inventario_separados` (`ID` bigint(20) unsigned, `Referencia` varchar(45), `Nombre` text, `Cantidad` decimal(32,0), `Departamento` int(11), `SubGrupo1` int(11), `SubGrupo2` int(11), `SubGrupo3` int(11), `SubGrupo4` int(11), `SubGrupo5` int(11));
+
+
+DROP VIEW IF EXISTS `vista_kardex`;
+CREATE TABLE `vista_kardex` (`ID` bigint(20), `Fecha` varchar(45), `Movimiento` varchar(45), `Detalle` varchar(400), `idDocumento` varchar(100), `Cantidad` varchar(45), `ValorUnitario` varchar(45), `ValorTotal` varchar(45), `ProductosVenta_idProductosVenta` bigint(20), `Referencia` varchar(200), `Nombre` varchar(70), `Existencias` double, `CostoUnitario` double, `CostoTotal` double, `IVA` varchar(10), `Departamento` varchar(45), `Sub1` varchar(45), `Sub2` varchar(45), `Sub3` varchar(45), `Sub4` varchar(45), `Sub5` varchar(45), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_ori_facturas`;
+CREATE TABLE `vista_ori_facturas` (`Fecha` date, `idFactura` varchar(45), `Referencia` varchar(200), `Nombre` varchar(500), `Departamento` int(11), `SubGrupo1` int(11), `SubGrupo2` int(11), `SubGrupo3` int(11), `SubGrupo4` int(11), `SubGrupo5` int(11), `ValorUnitarioItem` int(11), `Cantidad` varchar(45), `Dias` varchar(45), `SubtotalItem` varchar(45), `IVAItem` varchar(45), `ValorOtrosImpuestos` double, `TotalItem` double, `PorcentajeIVA` varchar(10), `idOtrosImpuestos` int(11), `idPorcentajeIVA` int(11), `PrecioCostoUnitario` varchar(45), `SubtotalCosto` varchar(45), `TipoItem` varchar(10), `CuentaPUC` int(11), `GeneradoDesde` varchar(100), `NumeroIdentificador` varchar(45), `idUsuarios` int(11), `idCierre` bigint(20), `idResolucion` int(11), `TipoFactura` varchar(10), `Prefijo` varchar(45), `NumeroFactura` int(16), `Hora` varchar(20), `FormaPago` varchar(20), `CentroCosto` int(11), `idSucursal` int(11), `EmpresaPro_idEmpresaPro` int(11), `Clientes_idClientes` int(11), `ObservacionesFact` text);
+
+
+DROP VIEW IF EXISTS `vista_preventa`;
+CREATE TABLE `vista_preventa` (`VestasActivas_idVestasActivas` int(11), `TablaItems` varchar(14), `Referencia` varchar(200), `Nombre` varchar(70), `Departamento` varchar(45), `SubGrupo1` varchar(45), `SubGrupo2` varchar(45), `SubGrupo3` varchar(45), `SubGrupo4` varchar(45), `SubGrupo5` varchar(45), `ValorUnitarioItem` double, `Cantidad` double, `Dias` varchar(1), `SubtotalItem` double, `IVAItem` double, `ValorOtrosImpuestos` double, `TotalItem` double, `PorcentajeIVA` varchar(24), `PrecioCostoUnitario` double, `SubtotalCosto` double, `TipoItem` varchar(2), `CuentaPUC` varchar(45), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_resumen_facturacion`;
+CREATE TABLE `vista_resumen_facturacion` (`ID` bigint(20) unsigned, `FechaInicial` date, `FechaFinal` date, `Referencia` varchar(200), `Nombre` text, `Departamento` int(11), `SubGrupo1` int(11), `SubGrupo2` int(11), `SubGrupo3` int(11), `SubGrupo4` int(11), `SubGrupo5` int(11), `Cantidad` double, `TotalVenta` double(19,2), `Costo` double(19,2));
+
+
+DROP VIEW IF EXISTS `vista_resumen_ventas_departamentos`;
+CREATE TABLE `vista_resumen_ventas_departamentos` (`FechaFactura` date, `Departamento` int(11), `SubGrupo1` int(11), `SubGrupo2` int(11), `SubGrupo3` int(11), `SubGrupo4` int(11), `SubGrupo5` int(11), `Total` double);
+
+
+DROP VIEW IF EXISTS `vista_salud_facturas_diferencias`;
+CREATE TABLE `vista_salud_facturas_diferencias` (`id_factura_generada` int(20), `cod_prest_servicio` bigint(12), `razon_social` varchar(60), `num_factura` varchar(20), `fecha_factura` date, `cod_enti_administradora` varchar(6), `nom_enti_administradora` varchar(30), `valor_neto_pagar` double(15,2), `id_factura_pagada` bigint(20), `fecha_pago_factura` date, `valor_pagado` double(15,2), `num_pago` int(10), `DiferenciaEnPago` double(19,2), `tipo_negociacion` enum('evento','capita'), `dias_pactados` int(2), `fecha_radicado` date, `numero_radicado` varchar(20), `Soporte` varchar(200));
+
+
+DROP VIEW IF EXISTS `vista_salud_facturas_no_pagas`;
+CREATE TABLE `vista_salud_facturas_no_pagas` (`id_factura_generada` int(20), `DiasMora` bigint(12), `cod_prest_servicio` bigint(12), `razon_social` varchar(60), `num_factura` varchar(20), `fecha_factura` date, `fecha_radicado` date, `numero_radicado` varchar(20), `cod_enti_administradora` varchar(6), `nom_enti_administradora` varchar(30), `valor_neto_pagar` double(15,2), `tipo_negociacion` enum('evento','capita'), `dias_pactados` int(2), `Soporte` varchar(200), `EstadoCobro` varchar(20));
+
+
+DROP VIEW IF EXISTS `vista_salud_facturas_pagas`;
+CREATE TABLE `vista_salud_facturas_pagas` (`id_factura_generada` int(20), `cod_prest_servicio` bigint(12), `razon_social` varchar(60), `num_factura` varchar(20), `fecha_factura` date, `cod_enti_administradora` varchar(6), `nom_enti_administradora` varchar(30), `valor_neto_pagar` double(15,2), `id_factura_pagada` bigint(20), `fecha_pago_factura` date, `valor_pagado` double(15,2), `num_pago` int(10), `tipo_negociacion` enum('evento','capita'), `dias_pactados` int(2), `fecha_radicado` date, `numero_radicado` varchar(20), `Soporte` varchar(200));
+
+
+DROP VIEW IF EXISTS `vista_salud_facturas_prejuridicos`;
+CREATE TABLE `vista_salud_facturas_prejuridicos` (`ID` int(20), `idCobroPrejuridico` int(11), `num_factura` varchar(20), `cod_prest_servicio` bigint(12), `razon_social` varchar(60), `num_ident_prest_servicio` bigint(20), `fecha_factura` date, `cod_enti_administradora` varchar(6), `nom_enti_administradora` varchar(30), `valor_neto_pagar` double(15,2), `tipo_negociacion` enum('evento','capita'), `fecha_radicado` date, `numero_radicado` varchar(20), `SoporteRadicado` varchar(200), `SoporteCobro` varchar(50), `EstadoFactura` varchar(50), `EstadoCobro` varchar(20));
+
+
+DROP VIEW IF EXISTS `vista_salud_pagas_no_generadas`;
+CREATE TABLE `vista_salud_pagas_no_generadas` (`id_pagados` bigint(20), `num_factura` varchar(20), `fecha_pago_factura` date, `num_pago` int(10), `valor_bruto_pagar` double(15,2), `valor_descuento` double(15,2), `valor_iva` double(15,2), `valor_retefuente` double(15,2), `valor_reteiva` double(15,2), `valor_reteica` double(15,2), `valor_otrasretenciones` double(15,2), `valor_cruces` double(15,2), `valor_anticipos` double(15,2), `valor_pagado` double(15,2), `nom_cargue` varchar(20), `fecha_cargue` datetime, `Estado` varchar(10), `idUser` int(11), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_salud_procesos_gerenciales`;
+CREATE TABLE `vista_salud_procesos_gerenciales` (`ID` bigint(20), `idProceso` int(11), `Fecha` date, `EPS` varchar(50), `NombreProceso` text, `Concepto` varchar(45), `Observaciones` text, `Soporte` varchar(200));
+
+
+DROP VIEW IF EXISTS `vista_sistemas`;
+CREATE TABLE `vista_sistemas` (`ID` bigint(20), `idSistema` bigint(20), `Nombre_Sistema` text, `Observaciones` text, `TablaOrigen` varchar(90), `CodigoInterno` bigint(20), `Nombre` text, `Cantidad` double, `PrecioUnitario` double, `PrecioVenta` double(17,0), `CostoUnitario` double(17,0), `Costo_Total_Item` double(17,0), `IVA` varchar(10), `Departamento` varchar(45), `Sub1` varchar(45), `Sub2` varchar(45), `Sub3` varchar(45), `Sub4` varchar(45), `Sub5` varchar(45), `Updated` timestamp, `Sync` datetime);
+
+
+DROP VIEW IF EXISTS `vista_titulos_abonos`;
+CREATE TABLE `vista_titulos_abonos` (`ID` bigint(20), `Fecha` date, `Hora` time, `Monto` double, `idVenta` bigint(20), `Promocion` int(11), `Mayor` int(11), `Concepto` text, `idColaborador` bigint(20), `NombreColaborador` varchar(90), `Estado` varchar(45), `idComprobanteIngreso` bigint(20), `Mayor2` int(11), `Adicional` int(11), `Valor` bigint(20), `TotalAbonos` bigint(20), `Saldo` bigint(20), `idCliente` bigint(20), `NombreCliente` varchar(90));
+
+
+DROP VIEW IF EXISTS `vista_titulos_comisiones`;
+CREATE TABLE `vista_titulos_comisiones` (`ID` bigint(20), `Fecha` date, `Hora` time, `Monto` double, `idVenta` bigint(20), `Promocion` int(11), `Mayor` int(11), `Concepto` text, `idColaborador` bigint(20), `NombreColaborador` varchar(90), `idUsuario` int(11), `idEgreso` bigint(20), `Mayor2` int(11), `Adicional` int(11), `Valor` bigint(20), `TotalAbonos` bigint(20), `Saldo` bigint(20), `idCliente` bigint(20), `NombreCliente` varchar(90));
+
+
+DROP VIEW IF EXISTS `vista_titulos_devueltos`;
+CREATE TABLE `vista_titulos_devueltos` (`ID` bigint(20), `Fecha` date, `idVenta` bigint(20), `Promocion` int(11), `Mayor` bigint(20), `Concepto` text, `idColaborador` bigint(20), `NombreColaborador` varchar(90), `idUsuario` int(11), `Mayor2` int(11), `Adicional` int(11), `Valor` bigint(20), `TotalAbonos` bigint(20), `Saldo` bigint(20), `idCliente` bigint(20), `NombreCliente` varchar(90));
+
+
+DROP TABLE IF EXISTS `vista_abonos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_abonos` AS select 'abonos_factura' AS `Tabla`,`fa`.`FormaPago` AS `TipoAbono`,`fa`.`Fecha` AS `Fecha`,`fa`.`Valor` AS `Valor`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`idCierre` AS `idCierre` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'Separados' AS `TipoAbono`,`fa`.`Fecha` AS `Fecha`,`fa`.`Valor` AS `Valor`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`idCierre` AS `idCierre` from `separados_abonos` `fa`;
+
+DROP TABLE IF EXISTS `vista_compras_productos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_compras_productos` AS select `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,`fi`.`idProducto` AS `idProducto`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Producto`,`pv`.`PrecioVenta` AS `PrecioVenta`,`fi`.`Cantidad` AS `Cantidad`,`fi`.`CostoUnitarioCompra` AS `CostoUnitario`,`fi`.`SubtotalCompra` AS `Subtotal`,`fi`.`ImpuestoCompra` AS `Impuestos`,`fi`.`TotalCompra` AS `Total`,`fi`.`Tipo_Impuesto` AS `Tipo_Impuesto`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,`c`.`idSucursal` AS `idSucursal`,`c`.`Updated` AS `Updated`,`c`.`Sync` AS `Sync` from (((`factura_compra` `c` join `proveedores` `t` on((`c`.`Tercero` = `t`.`Num_Identificacion`))) join `factura_compra_items` `fi` on((`fi`.`idFacturaCompra` = `c`.`ID`))) join `productosventa` `pv` on((`fi`.`idProducto` = `pv`.`idProductosVenta`))) where (`c`.`Estado` = 'CERRADA');
+
+DROP TABLE IF EXISTS `vista_compras_productos_devueltos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_compras_productos_devueltos` AS select `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,`fi`.`idProducto` AS `idProducto`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Producto`,`pv`.`PrecioVenta` AS `PrecioVenta`,`fi`.`Cantidad` AS `Cantidad`,`fi`.`CostoUnitarioCompra` AS `CostoUnitario`,`fi`.`SubtotalCompra` AS `Subtotal`,`fi`.`ImpuestoCompra` AS `Impuestos`,`fi`.`TotalCompra` AS `Total`,`fi`.`Tipo_Impuesto` AS `Tipo_Impuesto`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,`c`.`idSucursal` AS `idSucursal`,`c`.`Updated` AS `Updated`,`c`.`Sync` AS `Sync` from (((`factura_compra` `c` join `proveedores` `t` on((`c`.`Tercero` = `t`.`Num_Identificacion`))) join `factura_compra_items_devoluciones` `fi` on((`fi`.`idFacturaCompra` = `c`.`ID`))) join `productosventa` `pv` on((`fi`.`idProducto` = `pv`.`idProductosVenta`))) where (`c`.`Estado` = 'CERRADA');
+
+DROP TABLE IF EXISTS `vista_compras_servicios`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_compras_servicios` AS select `c`.`ID` AS `ID`,`c`.`Fecha` AS `Fecha`,`c`.`NumeroFactura` AS `NumeroFactura`,`t`.`RazonSocial` AS `RazonSocial`,`c`.`Tercero` AS `NIT`,`fs`.`CuentaPUC_Servicio` AS `Cuenta`,`fs`.`Nombre_Cuenta` AS `NombreCuenta`,`fs`.`Concepto_Servicio` AS `Concepto_Servicio`,`fs`.`Subtotal_Servicio` AS `Subtotal`,`fs`.`Impuesto_Servicio` AS `Impuestos`,`fs`.`Total_Servicio` AS `Total`,`fs`.`Tipo_Impuesto` AS `Tipo_Impuesto`,`c`.`Concepto` AS `Concepto`,`c`.`Observaciones` AS `Observaciones`,`c`.`TipoCompra` AS `TipoCompra`,`c`.`Soporte` AS `Soporte`,`c`.`idUsuario` AS `idUsuario`,`c`.`idCentroCostos` AS `idCentroCostos`,`c`.`idSucursal` AS `idSucursal`,`c`.`Updated` AS `Updated`,`c`.`Sync` AS `Sync` from ((`factura_compra` `c` join `proveedores` `t` on((`c`.`Tercero` = `t`.`Num_Identificacion`))) join `factura_compra_servicios` `fs` on((`fs`.`idFacturaCompra` = `c`.`ID`))) where (`c`.`Estado` = 'CERRADA');
+
+DROP TABLE IF EXISTS `vista_entregas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_entregas` AS select 'ventas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`TotalItem` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'bolsas' AS `Tabla`,`f`.`FormaPago` AS `Tipo`,`fa`.`FechaFactura` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`ValorOtrosImpuestos` AS `Total` from (`ori_facturas_items` `fa` join `ori_facturas` `f` on((`f`.`idFacturas` = `fa`.`idFactura`))) where (`f`.`FormaPago` = 'Contado') union select 'abonos_creditos' AS `Tabla`,`fa`.`FormaPago` AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuarios_idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `facturas_abonos` `fa` union select 'abonos_separados' AS `Tabla`,'AbonoSeparado' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`idUsuarios` AS `idUsuario`,`fa`.`Valor` AS `Total` from `separados_abonos` `fa` union select 'egresos' AS `Tabla`,'Egresos' AS `Tipo`,`fa`.`Fecha` AS `Fecha`,`fa`.`Usuario_idUsuario` AS `idUsuario`,`fa`.`Valor` AS `Total` from `egresos` `fa` where (`fa`.`TipoEgreso` = 'VentasRapidas');
+
+DROP TABLE IF EXISTS `vista_factura_compra_totales`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_factura_compra_totales` AS select `fci`.`idFacturaCompra` AS `idFacturaCompra`,(select `factura_compra`.`Fecha` from `factura_compra` where (`factura_compra`.`ID` = `fci`.`idFacturaCompra`)) AS `Fecha`,(select `factura_compra`.`NumeroFactura` from `factura_compra` where (`factura_compra`.`ID` = `fci`.`idFacturaCompra`)) AS `NumeroFactura`,`fc`.`Tercero` AS `Tercero`,(select `proveedores`.`RazonSocial` from `proveedores` where (`proveedores`.`Num_Identificacion` = `fc`.`Tercero`) limit 1) AS `RazonSocial`,sum(`fci`.`SubtotalCompra`) AS `Subtotal`,sum(`fci`.`ImpuestoCompra`) AS `Impuestos`,(select sum(`factura_compra_retenciones`.`ValorRetencion`) from `factura_compra_retenciones` where (`factura_compra_retenciones`.`idCompra` = `fci`.`idFacturaCompra`)) AS `TotalRetenciones`,sum(`fci`.`TotalCompra`) AS `Total`,`fc`.`Concepto` AS `Concepto`,(select sum(`factura_compra_servicios`.`Subtotal_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `SubtotalServicios`,(select sum(`factura_compra_servicios`.`Impuesto_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `ImpuestosServicios`,(select sum(`factura_compra_servicios`.`Total_Servicio`) from `factura_compra_servicios` where (`factura_compra_servicios`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `TotalServicios`,(select sum(`factura_compra_items_devoluciones`.`SubtotalCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `SubtotalDevoluciones`,(select sum(`factura_compra_items_devoluciones`.`ImpuestoCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `ImpuestosDevueltos`,(select sum(`factura_compra_items_devoluciones`.`TotalCompra`) from `factura_compra_items_devoluciones` where (`factura_compra_items_devoluciones`.`idFacturaCompra` = `fci`.`idFacturaCompra`)) AS `TotalDevolucion`,`fc`.`idUsuario` AS `Usuario` from (`factura_compra_items` `fci` join `factura_compra` `fc` on((`fc`.`ID` = `fci`.`idFacturaCompra`))) group by `fci`.`idFacturaCompra`;
+
+DROP TABLE IF EXISTS `vista_inventario_separados`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_inventario_separados` AS select `si`.`ID` AS `ID`,`si`.`Referencia` AS `Referencia`,`si`.`Nombre` AS `Nombre`,sum(`si`.`Cantidad`) AS `Cantidad`,`si`.`Departamento` AS `Departamento`,`si`.`SubGrupo1` AS `SubGrupo1`,`si`.`SubGrupo2` AS `SubGrupo2`,`si`.`SubGrupo3` AS `SubGrupo3`,`si`.`SubGrupo4` AS `SubGrupo4`,`si`.`SubGrupo5` AS `SubGrupo5` from (`separados_items` `si` join `separados` `s` on((`s`.`ID` = `si`.`idSeparado`))) where (`s`.`Estado` = 'Abierto') group by `si`.`Referencia`;
+
+DROP TABLE IF EXISTS `vista_kardex`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_kardex` AS select `k`.`idKardexMercancias` AS `ID`,`k`.`Fecha` AS `Fecha`,`k`.`Movimiento` AS `Movimiento`,`k`.`Detalle` AS `Detalle`,`k`.`idDocumento` AS `idDocumento`,`k`.`Cantidad` AS `Cantidad`,`k`.`ValorUnitario` AS `ValorUnitario`,`k`.`ValorTotal` AS `ValorTotal`,`k`.`ProductosVenta_idProductosVenta` AS `ProductosVenta_idProductosVenta`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Existencias` AS `Existencias`,`pv`.`CostoUnitario` AS `CostoUnitario`,`pv`.`CostoTotal` AS `CostoTotal`,`pv`.`IVA` AS `IVA`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `Sub1`,`pv`.`Sub2` AS `Sub2`,`pv`.`Sub3` AS `Sub3`,`pv`.`Sub4` AS `Sub4`,`pv`.`Sub5` AS `Sub5`,`k`.`Updated` AS `Updated`,`k`.`Sync` AS `Sync` from (`kardexmercancias` `k` join `productosventa` `pv` on((`k`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`)));
+
+DROP TABLE IF EXISTS `vista_ori_facturas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_ori_facturas` AS select `fi`.`FechaFactura` AS `Fecha`,`fi`.`idFactura` AS `idFactura`,`fi`.`Referencia` AS `Referencia`,`fi`.`Nombre` AS `Nombre`,`fi`.`Departamento` AS `Departamento`,`fi`.`SubGrupo1` AS `SubGrupo1`,`fi`.`SubGrupo2` AS `SubGrupo2`,`fi`.`SubGrupo3` AS `SubGrupo3`,`fi`.`SubGrupo4` AS `SubGrupo4`,`fi`.`SubGrupo5` AS `SubGrupo5`,`fi`.`ValorUnitarioItem` AS `ValorUnitarioItem`,`fi`.`Cantidad` AS `Cantidad`,`fi`.`Dias` AS `Dias`,`fi`.`SubtotalItem` AS `SubtotalItem`,`fi`.`IVAItem` AS `IVAItem`,`fi`.`ValorOtrosImpuestos` AS `ValorOtrosImpuestos`,`fi`.`TotalItem` AS `TotalItem`,`fi`.`PorcentajeIVA` AS `PorcentajeIVA`,`fi`.`idOtrosImpuestos` AS `idOtrosImpuestos`,`fi`.`idPorcentajeIVA` AS `idPorcentajeIVA`,`fi`.`PrecioCostoUnitario` AS `PrecioCostoUnitario`,`fi`.`SubtotalCosto` AS `SubtotalCosto`,`fi`.`TipoItem` AS `TipoItem`,`fi`.`CuentaPUC` AS `CuentaPUC`,`fi`.`GeneradoDesde` AS `GeneradoDesde`,`fi`.`NumeroIdentificador` AS `NumeroIdentificador`,`fi`.`idUsuarios` AS `idUsuarios`,`fi`.`idCierre` AS `idCierre`,`f`.`idResolucion` AS `idResolucion`,`f`.`TipoFactura` AS `TipoFactura`,`f`.`Prefijo` AS `Prefijo`,`f`.`NumeroFactura` AS `NumeroFactura`,`f`.`Hora` AS `Hora`,`f`.`FormaPago` AS `FormaPago`,`f`.`CentroCosto` AS `CentroCosto`,`f`.`idSucursal` AS `idSucursal`,`f`.`EmpresaPro_idEmpresaPro` AS `EmpresaPro_idEmpresaPro`,`f`.`Clientes_idClientes` AS `Clientes_idClientes`,`f`.`ObservacionesFact` AS `ObservacionesFact` from (`ori_facturas_items` `fi` join `facturas` `f` on((`fi`.`idFactura` = `f`.`idFacturas`)));
+
+DROP TABLE IF EXISTS `vista_preventa`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_preventa` AS select `p`.`VestasActivas_idVestasActivas` AS `VestasActivas_idVestasActivas`,'productosventa' AS `TablaItems`,`pv`.`Referencia` AS `Referencia`,`pv`.`Nombre` AS `Nombre`,`pv`.`Departamento` AS `Departamento`,`pv`.`Sub1` AS `SubGrupo1`,`pv`.`Sub2` AS `SubGrupo2`,`pv`.`Sub3` AS `SubGrupo3`,`pv`.`Sub4` AS `SubGrupo4`,`pv`.`Sub5` AS `SubGrupo5`,`p`.`ValorAcordado` AS `ValorUnitarioItem`,`p`.`Cantidad` AS `Cantidad`,'1' AS `Dias`,(`p`.`ValorAcordado` * `p`.`Cantidad`) AS `SubtotalItem`,((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`) AS `IVAItem`,((select `productos_impuestos_adicionales`.`ValorImpuesto` from `productos_impuestos_adicionales` where (`productos_impuestos_adicionales`.`idProducto` = `p`.`ProductosVenta_idProductosVenta`)) * `p`.`Cantidad`) AS `ValorOtrosImpuestos`,((`p`.`ValorAcordado` * `p`.`Cantidad`) + ((`p`.`ValorAcordado` * `p`.`Cantidad`) * `pv`.`IVA`)) AS `TotalItem`,concat((`pv`.`IVA` * 100),'%') AS `PorcentajeIVA`,`pv`.`CostoUnitario` AS `PrecioCostoUnitario`,(`pv`.`CostoUnitario` * `p`.`Cantidad`) AS `SubtotalCosto`,(select `prod_departamentos`.`TipoItem` from `prod_departamentos` where (`prod_departamentos`.`idDepartamentos` = `pv`.`Departamento`)) AS `TipoItem`,`pv`.`CuentaPUC` AS `CuentaPUC`,`p`.`Updated` AS `Updated`,`p`.`Sync` AS `Sync` from (`preventa` `p` join `productosventa` `pv` on((`p`.`ProductosVenta_idProductosVenta` = `pv`.`idProductosVenta`))) where (`p`.`TablaItem` = 'productosventa');
+
+DROP TABLE IF EXISTS `vista_resumen_facturacion`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_resumen_facturacion` AS select `facturas_items`.`ID` AS `ID`,`facturas_items`.`FechaFactura` AS `FechaInicial`,`facturas_items`.`FechaFactura` AS `FechaFinal`,`facturas_items`.`Referencia` AS `Referencia`,`facturas_items`.`Nombre` AS `Nombre`,`facturas_items`.`Departamento` AS `Departamento`,`facturas_items`.`SubGrupo1` AS `SubGrupo1`,`facturas_items`.`SubGrupo2` AS `SubGrupo2`,`facturas_items`.`SubGrupo3` AS `SubGrupo3`,`facturas_items`.`SubGrupo4` AS `SubGrupo4`,`facturas_items`.`SubGrupo5` AS `SubGrupo5`,sum(`facturas_items`.`Cantidad`) AS `Cantidad`,round(sum(`facturas_items`.`TotalItem`),2) AS `TotalVenta`,round(sum(`facturas_items`.`SubtotalCosto`),2) AS `Costo` from `facturas_items` group by `facturas_items`.`Referencia`,`facturas_items`.`FechaFactura`;
+
+DROP TABLE IF EXISTS `vista_resumen_ventas_departamentos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_resumen_ventas_departamentos` AS select `facturas_items`.`FechaFactura` AS `FechaFactura`,`facturas_items`.`Departamento` AS `Departamento`,`facturas_items`.`SubGrupo1` AS `SubGrupo1`,`facturas_items`.`SubGrupo2` AS `SubGrupo2`,`facturas_items`.`SubGrupo3` AS `SubGrupo3`,`facturas_items`.`SubGrupo4` AS `SubGrupo4`,`facturas_items`.`SubGrupo5` AS `SubGrupo5`,sum(`facturas_items`.`TotalItem`) AS `Total` from `facturas_items` group by `facturas_items`.`FechaFactura`,`facturas_items`.`Departamento`,`facturas_items`.`SubGrupo1`,`facturas_items`.`SubGrupo2`,`facturas_items`.`SubGrupo3`,`facturas_items`.`SubGrupo4`,`facturas_items`.`SubGrupo5`;
+
+DROP TABLE IF EXISTS `vista_salud_facturas_diferencias`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_facturas_diferencias` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,(select (`t1`.`valor_neto_pagar` - `t2`.`valor_pagado`)) AS `DiferenciaEnPago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where ((`t1`.`estado` = 'DIFERENCIA') and (`t1`.`tipo_negociacion` = 'evento'));
+
+DROP TABLE IF EXISTS `vista_salud_facturas_no_pagas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_facturas_no_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,(select ((to_days(now()) - to_days(`t1`.`fecha_radicado`)) - `t1`.`dias_pactados`)) AS `DiasMora`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`Soporte` AS `Soporte`,`t1`.`EstadoCobro` AS `EstadoCobro` from `salud_archivo_facturacion_mov_generados` `t1` where ((`t1`.`tipo_negociacion` = 'evento') and ((`t1`.`estado` = 'RADICADO') or (`t1`.`estado` = '')));
+
+DROP TABLE IF EXISTS `vista_salud_facturas_pagas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_facturas_pagas` AS select `t1`.`id_fac_mov_generados` AS `id_factura_generada`,`t1`.`cod_prest_servicio` AS `cod_prest_servicio`,`t1`.`razon_social` AS `razon_social`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_factura` AS `fecha_factura`,`t1`.`cod_enti_administradora` AS `cod_enti_administradora`,`t1`.`nom_enti_administradora` AS `nom_enti_administradora`,`t1`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`id_pagados` AS `id_factura_pagada`,`t2`.`fecha_pago_factura` AS `fecha_pago_factura`,`t2`.`valor_pagado` AS `valor_pagado`,`t2`.`num_pago` AS `num_pago`,`t1`.`tipo_negociacion` AS `tipo_negociacion`,`t1`.`dias_pactados` AS `dias_pactados`,`t1`.`fecha_radicado` AS `fecha_radicado`,`t1`.`numero_radicado` AS `numero_radicado`,`t1`.`Soporte` AS `Soporte` from (`salud_archivo_facturacion_mov_generados` `t1` join `salud_archivo_facturacion_mov_pagados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where (`t1`.`estado` = 'PAGADA');
+
+DROP TABLE IF EXISTS `vista_salud_facturas_prejuridicos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_facturas_prejuridicos` AS select `t2`.`id_fac_mov_generados` AS `ID`,`t1`.`idCobroPrejuridico` AS `idCobroPrejuridico`,`t2`.`num_factura` AS `num_factura`,`t2`.`cod_prest_servicio` AS `cod_prest_servicio`,`t2`.`razon_social` AS `razon_social`,`t2`.`num_ident_prest_servicio` AS `num_ident_prest_servicio`,`t2`.`fecha_factura` AS `fecha_factura`,`t2`.`cod_enti_administradora` AS `cod_enti_administradora`,`t2`.`nom_enti_administradora` AS `nom_enti_administradora`,`t2`.`valor_neto_pagar` AS `valor_neto_pagar`,`t2`.`tipo_negociacion` AS `tipo_negociacion`,`t2`.`fecha_radicado` AS `fecha_radicado`,`t2`.`numero_radicado` AS `numero_radicado`,`t2`.`Soporte` AS `SoporteRadicado`,(select `salud_cobros_prejuridicos`.`Soporte` from `salud_cobros_prejuridicos` where (`salud_cobros_prejuridicos`.`ID` = `t1`.`idCobroPrejuridico`)) AS `SoporteCobro`,`t2`.`estado` AS `EstadoFactura`,`t2`.`EstadoCobro` AS `EstadoCobro` from (`salud_cobros_prejuridicos_relaciones` `t1` join `salud_archivo_facturacion_mov_generados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where ((`t2`.`EstadoCobro` = 'PREJURIDICO1') or (`t2`.`EstadoCobro` = 'PREJURIDICO2'));
+
+DROP TABLE IF EXISTS `vista_salud_pagas_no_generadas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_pagas_no_generadas` AS select `t1`.`id_pagados` AS `id_pagados`,`t1`.`num_factura` AS `num_factura`,`t1`.`fecha_pago_factura` AS `fecha_pago_factura`,`t1`.`num_pago` AS `num_pago`,`t1`.`valor_bruto_pagar` AS `valor_bruto_pagar`,`t1`.`valor_descuento` AS `valor_descuento`,`t1`.`valor_iva` AS `valor_iva`,`t1`.`valor_retefuente` AS `valor_retefuente`,`t1`.`valor_reteiva` AS `valor_reteiva`,`t1`.`valor_reteica` AS `valor_reteica`,`t1`.`valor_otrasretenciones` AS `valor_otrasretenciones`,`t1`.`valor_cruces` AS `valor_cruces`,`t1`.`valor_anticipos` AS `valor_anticipos`,`t1`.`valor_pagado` AS `valor_pagado`,`t1`.`nom_cargue` AS `nom_cargue`,`t1`.`fecha_cargue` AS `fecha_cargue`,`t1`.`Estado` AS `Estado`,`t1`.`idUser` AS `idUser`,`t1`.`Updated` AS `Updated`,`t1`.`Sync` AS `Sync` from (`salud_archivo_facturacion_mov_pagados` `t1` left join `salud_archivo_facturacion_mov_generados` `t2` on((`t1`.`num_factura` = `t2`.`num_factura`))) where isnull(`t2`.`num_factura`);
+
+DROP TABLE IF EXISTS `vista_salud_procesos_gerenciales`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_salud_procesos_gerenciales` AS select `t1`.`ID` AS `ID`,`t1`.`idProceso` AS `idProceso`,`t1`.`Fecha` AS `Fecha`,(select `salud_eps`.`nombre_completo` from `salud_eps` where (`salud_eps`.`cod_pagador_min` = `t2`.`EPS`)) AS `EPS`,`t2`.`NombreProceso` AS `NombreProceso`,`t2`.`Concepto` AS `Concepto`,`t1`.`Observaciones` AS `Observaciones`,`t1`.`Soporte` AS `Soporte` from (`salud_procesos_gerenciales_archivos` `t1` join `salud_procesos_gerenciales` `t2` on((`t1`.`idProceso` = `t2`.`ID`)));
+
+DROP TABLE IF EXISTS `vista_sistemas`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_sistemas` AS select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `servicios` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`))) union select `si`.`ID` AS `ID`,`st`.`ID` AS `idSistema`,`st`.`Nombre` AS `Nombre_Sistema`,`st`.`Observaciones` AS `Observaciones`,`si`.`TablaOrigen` AS `TablaOrigen`,`s`.`idProductosVenta` AS `CodigoInterno`,`s`.`Nombre` AS `Nombre`,`si`.`Cantidad` AS `Cantidad`,`si`.`ValorUnitario` AS `PrecioUnitario`,round((`si`.`ValorUnitario` * `si`.`Cantidad`),0) AS `PrecioVenta`,round(`s`.`CostoUnitario`,0) AS `CostoUnitario`,round((`si`.`Cantidad` * `s`.`CostoUnitario`),0) AS `Costo_Total_Item`,`s`.`IVA` AS `IVA`,`s`.`Departamento` AS `Departamento`,`s`.`Sub1` AS `Sub1`,`s`.`Sub2` AS `Sub2`,`s`.`Sub3` AS `Sub3`,`s`.`Sub4` AS `Sub4`,`s`.`Sub5` AS `Sub5`,`st`.`Updated` AS `Updated`,`st`.`Sync` AS `Sync` from ((`sistemas_relaciones` `si` join `productosventa` `s` on((`s`.`Referencia` = `si`.`Referencia`))) join `sistemas` `st` on((`st`.`ID` = `si`.`idSistema`)));
+
+DROP TABLE IF EXISTS `vista_titulos_abonos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_titulos_abonos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`Estado` AS `Estado`,`td`.`idComprobanteIngreso` AS `idComprobanteIngreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_abonos` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
+
+DROP TABLE IF EXISTS `vista_titulos_comisiones`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_titulos_comisiones` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`Hora` AS `Hora`,`td`.`Monto` AS `Monto`,`td`.`idVenta` AS `idVenta`,`tv`.`Promocion` AS `Promocion`,`tv`.`Mayor1` AS `Mayor`,`td`.`Observaciones` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`td`.`idEgreso` AS `idEgreso`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_comisiones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
+
+DROP TABLE IF EXISTS `vista_titulos_devueltos`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_titulos_devueltos` AS select `td`.`ID` AS `ID`,`td`.`Fecha` AS `Fecha`,`td`.`idVenta` AS `idVenta`,`td`.`Promocion` AS `Promocion`,`td`.`Mayor` AS `Mayor`,`td`.`Concepto` AS `Concepto`,`td`.`idColaborador` AS `idColaborador`,`td`.`NombreColaborador` AS `NombreColaborador`,`td`.`idUsuario` AS `idUsuario`,`tv`.`Mayor2` AS `Mayor2`,`tv`.`Adicional` AS `Adicional`,`tv`.`Valor` AS `Valor`,`tv`.`TotalAbonos` AS `TotalAbonos`,`tv`.`Saldo` AS `Saldo`,`tv`.`idCliente` AS `idCliente`,`tv`.`NombreCliente` AS `NombreCliente` from (`titulos_devoluciones` `td` join `titulos_ventas` `tv` on((`td`.`idVenta` = `tv`.`ID`)));
+
+-- 2018-03-15 15:35:11

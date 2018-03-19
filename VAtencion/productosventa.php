@@ -18,7 +18,7 @@ include_once ('funciones/function.php');  //En esta funcion está la paginacion
 include_once("Configuraciones/ProductosVenta.ini.php");  //Clases de donde se escribirán las tablas
 include_once("procesadores/procesaProductosVenta.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-
+$obVenta=new ProcesoVenta($idUser);
 $statement = $obTabla->CreeFiltro($Vector);
 //print($statement);
 $Vector["statement"]=$statement;   //Filtro necesario para la paginacion
@@ -72,7 +72,12 @@ if($Diana==1){
 ///Dibujo la tabla
 ////
 ///
-
+if($_SESSION["tipouser"]=="administrador"){
+    $sql="SELECT SUM(Existencias) as Items, SUM(CostoTotal) as Costo FROM $statement";
+    $Consulta=$obVenta->Query($sql);
+    $DatosInventario=$obVenta->FetchArray($Consulta);
+    $css->CrearNotificacionVerde("Total Items: ".number_format($DatosInventario["Items"])."; Costo Total: $".number_format($DatosInventario["Costo"]), 16);
+}
 $obTabla->DibujeTabla($Vector);
 $css->CerrarDiv();//Cerramos contenedor Principal
 $css->Footer();

@@ -294,7 +294,7 @@ $obPrint=new PrintPos($idUser);
                         $DatosCaja=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
                         $CentroCosto=$DatosCaja["CentroCostos"];
                         $CuentaDestino=$DatosCaja["CuentaPUCEfectivo"];
-                        $Concepto="ANTICIPO POR SEPARADO No $idSeparado";
+                        $Concepto="ANTICIPO POR SEPARADO";
                         $VectorIngreso["Separado"]=1;
                         
                         $idComprobanteIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Abono,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
