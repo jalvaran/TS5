@@ -401,7 +401,7 @@ public function DibujeTabla($Vector){
     $ColFiltro=$NumCols-1;
     $this->css->CrearTabla();
     $this->css->FilaTabla(18);
-    print("<td ><strong>$Titulo </strong>");
+    print("<td ><strong>$Titulo</strong>");
     print("</td>");
     print("<td style='text-align: left' colspan=$ColFiltro>");
     $this->css->CrearLink("$myPage","_self","Limpiar ");
@@ -418,7 +418,54 @@ public function DibujeTabla($Vector){
     $imagerute="../images/pdf2.png";
     
     $this->css->CrearImageLink("CreePDFFromTabla.php?BtnVerPDF=1&TxtT=$TxtTabla&TxtL=$TxtSt", $imagerute, "_blank",50,50);
-   
+    if($_SESSION["tipouser"]=='administrador'){
+        $Titulo="Ajustes";
+        $Nombre="ImgShowMenu";
+        $RutaImage="../images/options.gif";
+        $javascript="";
+        $VectorBim["f"]=0;
+        $target="#DialTabla";
+        $this->css->CrearBotonImagen($Titulo,$Nombre,$target,$RutaImage,"",80,80,"fixed","left:10px;top:50",$VectorBim);
+        
+        $this->css->CrearCuadroDeDialogo("DialTabla", "Opciones para $tbl");
+            $this->css->CrearDiv("DivUpdateCampo", "", "center", 1, 1);
+            $this->css->CerrarDiv();
+            $this->css->CrearTabla();
+            
+                $this->css->FilaTabla(16);
+                    $this->css->ColTabla("<strong>Columna</strong>", 1);
+                    $this->css->ColTabla("<strong>Visualizar</strong>", 1);
+                    //$this->css->ColTabla("<strong>Editar</strong>", 1);
+                    
+                $this->css->CierraFilaTabla();
+                
+                    foreach ($Columnas as $Campo){
+                        $consulta=$this->obCon->ConsultarTabla("tablas_campos_control", "WHERE NombreTabla='$tbl' AND Campo='$Campo'");
+                        $DatosCampo=$this->obCon->FetchArray($consulta);
+                        if($DatosCampo["Habilitado"]=='' or $DatosCampo["Habilitado"]=='1'){
+                            $this->css->FilaTabla(16);
+                                $this->css->ColTabla($Campo, 1);
+                                print("<td>");
+
+
+                                $Page="Consultas/ControlCamposTablas.php?idElement=Act_$Campo&Tbl=$tbl&Campo=$Campo&Ret=";
+                                $js="OnClick=EnvieObjetoConsulta2(`$Page`,`Act_$Campo`,`DivUpdateCampo`,`5`);return false;";
+                                $Act=0;
+                                if($DatosCampo["Visible"]=='' or $DatosCampo["Visible"]=='1'){
+                                    $Act=1;
+                                }
+                                
+                                $this->css->CheckOnOff("Act_$Campo", $js, $Act, "");
+                                print("</td>");
+                            $this->css->CierraFilaTabla();
+                        }
+                    }
+                    
+                
+            $this->css->CerrarTabla();
+            
+        $this->css->CerrarCuadroDeDialogo();
+    }
     print("</td>");
     $this->css->CierraFilaTabla();
     
@@ -432,9 +479,19 @@ public function DibujeTabla($Vector){
             $this->css->ColTabla("<strong>Abonar</strong>","");
         }
         foreach($Columnas as $NombreCol){
+            $consulta=$this->obCon->ConsultarTabla("tablas_campos_control", "WHERE NombreTabla='$tbl' AND Campo='$NombreCol'");
+            $DatosCampo=$this->obCon->FetchArray($consulta);
+            if($DatosCampo["Visible"]<>''){
+                if($DatosCampo["Visible"]==0 or $DatosCampo["Habilitado"]==0){
+                    $Vector["Excluir"][$NombreCol]=1;
+                }
+                
+            } 
+            
             if(isset($Vector[$NombreCol]["Link"])){
                 $Colink[$i]=1;
             }
+            $Ancho=50;
             if(!isset($Vector["Excluir"][$NombreCol])){
                 
                 print("<td><strong>$NombreCol</strong><br>");

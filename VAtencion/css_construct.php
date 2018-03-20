@@ -1513,7 +1513,28 @@ function Footer(){
         </script>
 	 <?php   
         }
-       
+        
+        //Checkbox animado
+        public function CheckOnOff($Nombre,$JavaScript,$Activo,$Vector) {
+            
+            if($Activo==1){
+                $imagerute="../images/on.png";
+                $Alterno="On";
+                
+            }
+            if($Activo==0){
+                $imagerute="../images/off.png";
+                $Alterno="Off";
+                
+            }
+            if($Activo==2){
+                $imagerute="../images/unable.png";
+                $Alterno="Off";
+                $JavaScript="";
+            }
+                
+            $this->CrearImage($Nombre, $imagerute, $Alterno, 60, 100, $JavaScript);
+        }
         //////////////////////////////////FIN
 }
 	

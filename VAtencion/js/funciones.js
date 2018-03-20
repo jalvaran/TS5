@@ -766,6 +766,11 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             //document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
             
         }
+        //Cambio del boton switch ON
+        if(BorrarId==5){
+            CambiarImagenOnOff(idElement);
+        }
+        
         
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -1142,4 +1147,16 @@ function CopiarCodigoGlosa(){
     idCajaGlosa=document.getElementById('CajaAsigna').value;
     Valor=document.getElementById('CmbGlosas').value;
     document.getElementById(idCajaGlosa).value=Valor;
+}
+
+function CambiarImagenOnOff(idElement){
+    Img=document.getElementById(idElement).src;
+    //alert(Img.substr(-5));
+    if(Img.substr(-5)=='f.png'){
+        document.getElementById(idElement).src = "../images/on.png";
+    }else{
+        document.getElementById(idElement).src = "../images/off.png";
+    }
+     
+    
 }

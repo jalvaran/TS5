@@ -261,3 +261,26 @@ CREATE TABLE IF NOT EXISTS `inventarios_temporal` (
   UNIQUE KEY `Referencia` (`Referencia`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- tabla para visualizar los campos
+--
+
+CREATE TABLE IF NOT EXISTS `tablas_campos_control` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `NombreTabla` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Campo` varchar(100) COLLATE latin1_spanish_ci NOT NULL,
+  `Visible` int(1) NOT NULL,
+  `Editable` int(1) NOT NULL,
+  `Habilitado` int(1) NOT NULL,
+  `TipoUser` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tablas_campos_control`
+--
+
+INSERT INTO `tablas_campos_control` (`ID`, `NombreTabla`, `Campo`, `Visible`, `Editable`, `Habilitado`, `TipoUser`, `idUser`) VALUES
+(1, 'usuarios', 'Password', 0, 1, 1, 'administrador', 3);
+

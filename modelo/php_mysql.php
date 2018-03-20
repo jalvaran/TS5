@@ -15,15 +15,15 @@ class db_conexion{
         $str=str_ireplace("'", "", $string);
         $str=str_ireplace('"', "", $string);
         //$str=$string;
-        $str=str_ireplace("CREATE", "ISQL", $str);
-        $str=str_ireplace("DROP", "ISQL", $str);
-        $str=str_ireplace("ALTER", "ISQL", $str);
-        $str=str_ireplace("SELECT", "ISQL", $str);
-        $str=str_ireplace("INSERT", "ISQL", $str);
-        $str=str_ireplace("UPDATE", "ISQL", $str);
-        $str=str_ireplace("DELETE", "ISQL", $str);
-        $str=str_ireplace("REPLACE", "ISQL", $str);
-        $str=str_ireplace("TRUNCATE", "ISQL", $str);
+        $str=str_ireplace("CREATE ", "ISQL", $str);
+        $str=str_ireplace("DROP ", "ISQL", $str);
+        $str=str_ireplace("ALTER ", "ISQL", $str);
+        $str=str_ireplace("SELECT ", "ISQL", $str);
+        $str=str_ireplace("INSERT ", "ISQL", $str);
+        $str=str_ireplace("UPDATE ", "ISQL", $str);
+        $str=str_ireplace("DELETE ", "ISQL", $str);
+        $str=str_ireplace("REPLACE ", "ISQL", $str);
+        $str=str_ireplace("TRUNCATE ", "ISQL", $str);
         //$str=filter_var($string, FILTER_SANITIZE_STRING);
         return($str);
     }
