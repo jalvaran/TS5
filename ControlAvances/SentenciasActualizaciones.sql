@@ -569,6 +569,7 @@ INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCue
 ALTER TABLE `comprobantes_ingreso` ADD `Estado` VARCHAR(10) NOT NULL AFTER `Usuarios_idUsuarios`;
 ALTER TABLE `comprobantes_ingreso` ADD `idCierre` BIGINT NOT NULL AFTER `Estado`;
 UPDATE `comprobantes_ingreso` SET `idCierre`=1;
+ALTER TABLE `empresapro` ADD `FacturaSinInventario` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `RutaImagen`;
 ALTER TABLE `empresapro` ADD `CXPAutomaticas` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `FacturaSinInventario`;
 ALTER TABLE `colaboradores` ADD `Activo` VARCHAR(2) NOT NULL DEFAULT 'SI' AFTER `SalarioBasico`;
 INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (25, 'COMPROBANTE DE BAJAS O ALTAS', '001', 'F-GI-006', '2017-08-09', '', '2017-06-15 09:03:57', '2017-06-15 09:03:57');

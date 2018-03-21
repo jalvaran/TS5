@@ -11,13 +11,13 @@ $DatosCampo=$obVenta->FetchArray($consulta);
 if($DatosCampo["Visible"]<>""){
     if($DatosCampo["Visible"]==1){
         $obVenta->ActualizaRegistro("tablas_campos_control", "Visible", 0, "ID", $DatosCampo["ID"]);
-        print("Actualizado el campo $Campo de la tabla $tbl a 0 ");
+        print("$Campo de $tbl a 0 ");
         //print("<script>CambiarImagenOnOff($idElement);</script>");
     }
     if($DatosCampo["Visible"]==0){
         $obVenta->ActualizaRegistro("tablas_campos_control", "Visible", 1, "ID", $DatosCampo["ID"]);
         //print("<script>CambiarImagenOnOff($idElement);</script>");
-        print("Actualizado el campo $Campo de la tabla $tbl a 1");
+        print("$Campo de $tbl a 1");
     }
 }else{
     $sql="INSERT INTO `tablas_campos_control` (`ID`, `NombreTabla`, `Campo`, `Visible`, `Editable`, `Habilitado`, `TipoUser`, `idUser`) 
