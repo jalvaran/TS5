@@ -284,3 +284,6 @@ CREATE TABLE IF NOT EXISTS `tablas_campos_control` (
 INSERT INTO `tablas_campos_control` (`ID`, `NombreTabla`, `Campo`, `Visible`, `Editable`, `Habilitado`, `TipoUser`, `idUser`) VALUES
 (1, 'usuarios', 'Password', 0, 1, 1, 'administrador', 3);
 
+INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (29, 'Reservas', '1', 'MnuReservas.php', '_BLANK', '1', 'reservas.png', '22', '2017-10-13 14:16:49', '2017-10-13 14:16:49');
+INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (44, 'Reservas', '29', '1', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (154, 'Reserva de Espacios', '44', '3', 'ReservaEspacios.php', '_SELF', b'1', 'reservas2.png', '1', '2018-02-19 11:38:42', '2017-10-13 14:16:57');

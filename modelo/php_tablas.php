@@ -1302,7 +1302,7 @@ public function CrearCuadroClientes ($id,$titulo,$myPage,$VectorCDC){
     /////////////////Cuadro de dialogo de Clientes create
 	$this->css->CrearCuadroDeDialogo($id,$titulo); 
 	 
-        $this->css->CrearForm("FrmCrearCliente",$myPage,"post","_self");
+        $this->css->CrearForm2("FrmCrearCliente",$myPage,"post","_self");
         $this->css->CrearSelect("CmbTipoDocumento","Oculta()");
         $this->css->CrearOptionSelect('13','Cedula',1);
         $this->css->CrearOptionSelect('31','NIT',0);

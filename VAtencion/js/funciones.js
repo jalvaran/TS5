@@ -771,7 +771,21 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             CambiarImagenOnOff(idElement);
         }
         
-        
+        //Para Reserva de espacios
+        if(BorrarId==6){
+            Fecha =document.getElementById('TxtFecha').value;
+            idEspacio =document.getElementById('CmbEspacio').value;
+            if(idEspacio == ''){
+                alert("Debes Elegir un Espacio");
+                exit();
+            }
+            if(Fecha == ''){
+                alert("Debes Elegir una Fecha");
+                exit();
+            }
+            
+            ValorElement="?TxtFecha="+Fecha+"&idEspacio="+idEspacio;
+        }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();

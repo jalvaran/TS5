@@ -712,10 +712,11 @@ class CssIni{
 	}
 	
 	function CrearImageLink($page,$imagerute,$target,$Alto,$Ancho){
-		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'" style="height:'.$Alto.'px; width:'.$Ancho.'px"></a>');
+		print('<a href="'.$page.'" target="'.$target.'"><img src="'.$imagerute.'" style="cursor:pointer;height:'.$Alto.'px; width:'.$Ancho.'px"></a>');
 	}
         function CrearImage($Nombre,$imagerute,$Alterno,$Alto,$Ancho,$Javascript=""){
-		print('<img id="'.$Nombre.'"  nombre="'.$Nombre.'" '.$Javascript.'  src="'.$imagerute.'" onerror="this.src=`'.$Alterno.'`;" style="height:'.$Alto.'px; width:'.$Ancho.'px">');
+            
+            print('<img id="'.$Nombre.'"  nombre="'.$Nombre.'" '.$Javascript.'  src="'.$imagerute.'" onerror="this.src=`'.$Alterno.'`;" style="cursor:pointer;height:'.$Alto.'px; width:'.$Ancho.'px; " data-toggle="tooltip" title="'.$Alterno.'">');
 	}
 	function CrearLink($link,$target,$Titulo){
 		print('<a href="'.$link.'" target="'.$target.'" >'.$Titulo.'</a>');
@@ -982,13 +983,13 @@ class CssIni{
 ////////////////////////////Crear Footer	
 		
 function Footer(){
-		
+		$Year=date("Y");
 		print('<footer>    
   <div style="text-align: center">
     <div>
        <a href="../VMenu/Menu.php" class="f_logo"><img src="../images/header-logo.png" alt=""></a>
       <div class="copy">
-      &copy; 2016 | <a href="#">Privacy Policy</a> <br> Software  designed by <a href="http://technosoluciones.com.co/" rel="nofollow" target="_blank">Techno Soluciones SAS</a>
+      &copy; '.$Year.' | <a href="#">Privacy Policy</a> <br> Software  designed by <a href="http://technosoluciones.com.co/" rel="nofollow" target="_blank">Techno Soluciones SAS</a>
       </div>
     </div>
   </div>
@@ -1017,12 +1018,29 @@ function Footer(){
            }else{
                $Required="";
            }
-           if(isset($VarSelect["Title"])){
+           if(isset($VarSelect["Title"]) and !empty($VarSelect["Title"])){
                 print("<strong>$VarSelect[Title]</strong><br>");
            }
            echo '<select id="'.$Nombre.'" data-placeholder="'.$PlaceHolder.'" class="chosen-select"  tabindex="2" name="'.$Nombre.'" '.$Required.' style="width:200px;">';
            
        	
+	}   
+        
+        /////////////////////Crear una Chosen
+	
+	function CrearTableChosen($Nombre,$Tabla,$Condicion,$Display1,$Display2,$Display3,$idItem, $Ancho,$Requerido,$PlaceHolder,$Titulo){
+            $obCon=new ProcesoVenta(1);
+            $consulta=$obCon->ConsultarTabla($Tabla, $Condicion);
+            $VarSelect["Ancho"]=$Ancho;
+            $VarSelect["Required"]=$Requerido;
+            $VarSelect["PlaceHolder"]=$PlaceHolder;
+            $VarSelect["Title"]=$Titulo;
+            $this->CrearSelectChosen($Nombre, $VarSelect);
+            $this->CrearOptionSelect("", $PlaceHolder, 0);
+            while($DatosTabla=$obCon->FetchArray($consulta)){
+               $this->CrearOptionSelect($DatosTabla[$idItem], "$DatosTabla[$Display1] $DatosTabla[$Display2] $DatosTabla[$Display3]", 0);
+            }
+            $this->CerrarSelect();
 	}   
         
         /////////////////////Asignar ancho a un elemento por id
@@ -1383,7 +1401,7 @@ function Footer(){
         }
         
         public function DivNotificacionesJS() {
-            print("<div id='DivRespuestasJS' style='position: fixed;bottom: 50%;right: 50%;width: 300px;'></div>");
+            print("<div id='DivRespuestasJS' style='position: scroll;bottom:10px; right:10px;width: 300px;'></div>");
         }
         //Imagen que oculta o muestra un div o un objeto
         public function ImageOcultarMostrar($Nombre,$Leyenda,$idObjeto,$Ancho,$Alto,$Vector,$RutaImage='../images/hidde.png') {
@@ -1534,6 +1552,46 @@ function Footer(){
             }
                 
             $this->CrearImage($Nombre, $imagerute, $Alterno, 60, 100, $JavaScript);
+        }
+        
+        //Cuadro de dialogo para crear tercero
+        
+        public function DialTercero($id,$titulo,$myPage,$Vector) {
+            $obCon=new ProcesoVenta(1);
+            $this->CrearCuadroDeDialogo($id,$titulo); 
+	 
+                $this->CrearForm2("FrmCrearCliente",$myPage,"post","_self");
+                $this->CrearSelect("CmbTipoDocumento","Oculta()");
+                $this->CrearOptionSelect('13','Cedula',1);
+                $this->CrearOptionSelect('31','NIT',0);
+                $this->CerrarSelect();
+                //$css->CrearInputText("CmbPreVentaAct","hidden","",$idPreventa,"","","","",0,0,0,0);
+                $this->CrearInputText("TxtNIT","number","","","Identificacion","black","","",200,30,0,1);
+                $this->CrearInputText("TxtPA","text","","","Primer Apellido","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+                $this->CrearInputText("TxtSA","text","","","Segundo Apellido","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+                $this->CrearInputText("TxtPN","text","","","Primer Nombre","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+                $this->CrearInputText("TxtON","text","","","Otros Nombres","black","onkeyup","CreaRazonSocial()",200,30,0,0);
+                $this->CrearInputText("TxtRazonSocial","text","","","Razon Social","black","","",200,30,0,1);
+                $this->CrearInputText("TxtDireccion","text","","","Direccion","black","","",200,30,0,1);
+                $this->CrearInputText("TxtTelefono","text","","","Telefono","black","","",200,30,0,1);
+                $this->CrearInputText("TxtEmail","text","","","Email","black","","",200,30,0,1);
+                $VarSelect["Ancho"]="200";
+                $VarSelect["PlaceHolder"]="Seleccione el municipio";
+                $this->CrearSelectChosen("CmbCodMunicipio", $VarSelect);
+                $sql="SELECT * FROM cod_municipios_dptos";
+                $Consulta=$obCon->Query($sql);
+                   while($DatosMunicipios=$obCon->FetchArray($Consulta)){
+                       $Sel=0;
+                       if($DatosMunicipios["ID"]==1011){
+                           $Sel=1;
+                       }
+                       $this->CrearOptionSelect($DatosMunicipios["ID"], $DatosMunicipios["Ciudad"], $Sel);
+                   }
+                $this->CerrarSelect();
+                echo '<br><br>';
+                $this->CrearBoton("BtnCrearCliente", "Crear Cliente");
+                $this->CerrarForm();
+            $this->CerrarCuadroDeDialogo(); 
         }
         //////////////////////////////////FIN
 }
