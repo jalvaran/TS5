@@ -287,3 +287,60 @@ INSERT INTO `tablas_campos_control` (`ID`, `NombreTabla`, `Campo`, `Visible`, `E
 INSERT INTO `menu` (`ID`, `Nombre`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (29, 'Reservas', '1', 'MnuReservas.php', '_BLANK', '1', 'reservas.png', '22', '2017-10-13 14:16:49', '2017-10-13 14:16:49');
 INSERT INTO `menu_pestanas` (`ID`, `Nombre`, `idMenu`, `Orden`, `Estado`, `Updated`, `Sync`) VALUES (44, 'Reservas', '29', '1', b'1', '2017-12-26 21:55:19', '2017-10-13 14:16:55');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (154, 'Reserva de Espacios', '44', '3', 'ReservaEspacios.php', '_SELF', b'1', 'reservas2.png', '1', '2018-02-19 11:38:42', '2017-10-13 14:16:57');
+
+INSERT INTO `parametros_contables` (`ID`, `Descripcion`, `CuentaPUC`, `NombreCuenta`, `Updated`, `Sync`) VALUES (21, 'Cuenta para utilizar en operaciones donde el ingreso o la salida van a la caja general, ejemplo facturacion desde Reservas', '110505', 'CAJA GENERAL', '2017-10-13 14:28:42', '2017-10-13 14:28:42');
+
+--
+-- Table structure for table `reservas_espacios`
+--
+
+DROP TABLE IF EXISTS `reservas_espacios`;
+CREATE TABLE IF NOT EXISTS `reservas_espacios` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Nombre` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `HoraInicial` int(11) NOT NULL,
+  `HoraFinal` int(11) NOT NULL,
+  `TarifaNormal` double NOT NULL,
+  `TarifaMinima` double NOT NULL,
+  `idProductoRelacionado` bigint(20) NOT NULL COMMENT 'Indica el producto que esta relacionado al momento de realizar una factura',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+--
+-- Dumping data for table `reservas_espacios`
+--
+
+INSERT INTO `reservas_espacios` (`ID`, `Nombre`, `HoraInicial`, `HoraFinal`, `TarifaNormal`, `TarifaMinima`, `idProductoRelacionado`, `Updated`, `Sync`) VALUES
+(1, 'Cancha 1', 8, 23, 70000, 55000, 0, '2018-03-27 02:10:23', '0000-00-00 00:00:00'),
+(2, 'Cancha 2', 8, 23, 70000, 55000, 0, '2018-03-27 02:10:23', '0000-00-00 00:00:00'),
+(3, 'Cancha 3', 8, 23, 70000, 55000, 0, '2018-03-27 02:10:23', '0000-00-00 00:00:00'),
+(4, 'Espacio para Fiestas', 8, 23, 70000, 55000, 0, '2018-03-27 02:10:23', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservas_eventos`
+--
+
+DROP TABLE IF EXISTS `reservas_eventos`;
+CREATE TABLE IF NOT EXISTS `reservas_eventos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `idEspacio` int(11) NOT NULL,
+  `NombreEvento` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `FechaInicio` datetime NOT NULL,
+  `FechaFin` datetime NOT NULL,
+  `idCliente` bigint(20) NOT NULL,
+  `Telefono` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `Observaciones` text COLLATE latin1_spanish_ci NOT NULL,
+  `Tarifa` double NOT NULL,
+  `Estado` enum('RE','FA','AN') COLLATE latin1_spanish_ci NOT NULL DEFAULT 'RE' COMMENT 'FA:Facturado,RE:Reservado,AN:Anulado',
+  `idFactura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`),
+  KEY `FechaInicio` (`FechaInicio`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+

@@ -1593,6 +1593,7 @@ function Footer(){
                 $this->CerrarForm();
             $this->CerrarCuadroDeDialogo(); 
         }
+        
         //////////////////////////////////FIN
 }
 	

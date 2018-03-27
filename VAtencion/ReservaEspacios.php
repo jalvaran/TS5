@@ -10,7 +10,7 @@ $css =  new CssIni("Reserva de Espacios");
 
 print("</head>");
 print("<body>");
-    
+     
       
     $css->CabeceraIni("Reserva de Espacios"); //Inicia la cabecera de la pagina
         $css->CreaBotonDesplegable("DialCliente","Crear Cliente");
@@ -19,6 +19,13 @@ print("<body>");
     /////
     /////
     $css->CrearDiv("principal", "container", "center",1,1);
+        $ConsultaCajas=$obVenta->ConsultarTabla("cajas", "WHERE idUsuario='$idUser' AND Estado='ABIERTA'");
+        $DatosCaja=$obVenta->FetchArray($ConsultaCajas);
+
+        if($DatosCaja["ID"]<=0){
+           $css->CrearNotificacionRoja("No tiene asignada una Caja, por favor Asignese a una Caja, <a href='HabilitarUser.php' target='_blank'>Vamos</a>", 16);
+           exit();
+        }  
         $css->DialTercero("DialCliente","Crear Cliente",$myPage,"");
         include_once 'procesadores/ReservaEspacios.process.php';
     $css->CrearTabla();
@@ -26,7 +33,7 @@ print("<body>");
             $css->ColTabla("<strong>Espacio</strong>", 1);
             $css->ColTabla("<strong>Fecha</strong>", 1);
             $css->ColTabla("<strong>Cliente</strong>", 1);
-            
+            $css->ColTabla("<strong>Totales</strong>", 1);
         $css->CierraFilaTabla();
         $css->FilaTabla(16);
             print("<td>");
@@ -43,6 +50,9 @@ print("<body>");
             print("<td>");
                 $css->CrearTableChosen("CmbTercero", "clientes", "ORDER BY RazonSocial ASC", "RazonSocial", "Num_Identificacion", "Telefono", "idClientes", 400, 1, "Seleccione un Cliente", "");
                
+            print("</td>");
+            print("<td>");
+                $css->CrearBotonEvento("BtnVerTotales", "Ver Totales", 1, "OnClick", "MuestraOculta('DivTotales')", "naranja", "");
             print("</td>");
             
         $css->CierraFilaTabla();
