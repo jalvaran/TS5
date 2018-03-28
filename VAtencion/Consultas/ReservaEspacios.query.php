@@ -183,9 +183,10 @@ $css->CrearTabla();
         $Disable=0;
         if($DatosReservas["Estado"]=='FA'){
             $Disable=1;
+            
         }
         $css->FilaTabla(16);
-            
+        
             $css->ColTabla($Hora, 1);
             print("<td><A name='tag$i'></a>");
                 if($DatosReservas["ID"]>0){
