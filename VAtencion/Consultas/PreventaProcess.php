@@ -105,6 +105,9 @@ if($DatosImpresora["Habilitado"]=="SI" AND $CmbPrint=='SI'){
         $obPrint->ImprimirTiketePromo($NumFactura,$DatosTikete["NombreTiket"],$DatosImpresora["Puerto"],$Copias,$VectorTiket);
     }
 }
+if($CmbPrint=='NO'){
+    $obPrint->AbreCajon( "");
+}
 
 if(!empty($idColaborador)){
     $obVenta->AgregueVentaColaborador($NumFactura,$idColaborador);

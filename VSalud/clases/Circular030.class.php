@@ -27,9 +27,11 @@ class Circular030 extends ProcesoVenta{
             fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
             '0' as ValorPagado,'0' as ValorGlosaAceptada,'NO' as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='RADICADO' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE  t1.GeneraCircular='S' AND t1.estado='RADICADO' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
+                
             UNION
+            
             SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
             tipo_ident_prest_servicio as TipoIdentificacionERP, 
             (SELECT nit FROM salud_eps WHERE salud_eps.cod_pagador_min=t1.cod_enti_administradora) as NumeroIdentificacionERP, 
@@ -40,8 +42,8 @@ class Circular030 extends ProcesoVenta{
             fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
             '0' as ValorPagado,'0' as ValorGlosaAceptada,'NO' as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'SI' as CobroJuridico, EstadoCobro as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='JURIDICO' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='JURIDICO' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
 
             UNION
 
@@ -55,9 +57,11 @@ class Circular030 extends ProcesoVenta{
             fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
             '0' as ValorPagado,'0' as ValorGlosaAceptada,'NO' as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='RADICADO' AND fecha_radicado<'$FechaInicial'
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='RADICADO' AND fecha_radicado<'$FechaInicial'
+                
             UNION
+            
             SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
             tipo_ident_prest_servicio as TipoIdentificacionERP,  
             (SELECT nit FROM salud_eps WHERE salud_eps.cod_pagador_min=t1.cod_enti_administradora) as NumeroIdentificacionERP, 
@@ -68,8 +72,8 @@ class Circular030 extends ProcesoVenta{
             fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
             '0' as ValorPagado,'0' as ValorGlosaAceptada,'NO' as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'SI' as CobroJuridico, EstadoCobro as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='JURIDICO' AND fecha_radicado<'$FechaInicial'
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='JURIDICO' AND fecha_radicado<'$FechaInicial'
 
             UNION 
 
@@ -85,8 +89,8 @@ class Circular030 extends ProcesoVenta{
             (SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura) as ValorGlosaAceptada,
             (SELECT IF((SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura)>0,'SI','NO')) as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='DIFERENCIA' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='DIFERENCIA' AND fecha_radicado>='$FechaInicial' AND fecha_radicado<='$FechaFinal'
 
             UNION 
 
@@ -102,8 +106,29 @@ class Circular030 extends ProcesoVenta{
             (SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura) as ValorGlosaAceptada,
             (SELECT IF((SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura)>0,'SI','NO')) as GlosaRespondida, 
             valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
-            FROM (SELECT @rownum:=0) r, salud_archivo_facturacion_mov_generados t1 
-            WHERE t1.tipo_negociacion='evento' AND t1.estado='DIFERENCIA' AND fecha_radicado<'$FechaInicial' ";
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='DIFERENCIA' AND fecha_radicado<'$FechaInicial'
+             
+            UNION 
+
+            SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
+            tipo_ident_erp as TipoIdentificacionERP, 
+            num_ident_erp as NumeroIdentificacionERP, 
+            razon_social as RazonSocialIPS, 
+            tipo_ident_ips as TipoIdentificacionIPS, 
+            num_ident_ips as NumeroIdentificacionIPS, 
+            tipo_cobro as TipoCobro,numero_factura as num_factura,'E' as IndicadorActualizacion,valor_factura as Valor,
+            fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
+            valor_total_pagos  as ValorPagado,
+            valor_glosa_acept as ValorGlosaAceptada,
+            glosa_respondida as GlosaRespondida, 
+            saldo_factura as SaldoFactura, cobro_juridico as CobroJuridico, etapa_proceso as EtapaCobroJuridico
+            FROM (SELECT @rownum:=0) r, salud_circular030_inicial t1 
+            WHERE t1.indic_act_fact='E' AND t1.fecha_radicado<'$FechaFinal'
+
+            "
+             
+             ;
         $consulta=$this->Query($sql);
         if($archivo = fopen($nombre_archivo, "a")){
             $mensaje="";

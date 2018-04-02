@@ -1667,5 +1667,27 @@ fwrite($handle, chr(27). chr(100). chr(1));// SALTO DE LINEA
     fclose($handle); // cierra el fichero PRN
     $salida = shell_exec('lpr $COMPrinter');
     }
+    //Abrir cajon
+    
+    public function AbreCajon($Vector) {
+        $DatosImpresora=$this->DevuelveValores("config_puertos", "ID", 1);   
+        if($DatosImpresora["Habilitado"]<>"SI"){
+            return;
+        }
+        $COMPrinter= $this->COMPrinter;
+        if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
+            die('ERROR:\nNo se puedo Abrir el cajon, Verifique la conexion de la IMPRESORA');
+        }
+        
+        fwrite($handle,chr(27). chr(64));//REINICIO
+        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
+        fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
+        fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO
+        fwrite($handle,"*************************************");
+        
+    fclose($handle); // cierra el fichero PRN
+    $salida = shell_exec('lpr $COMPrinter');
+    }
     //Fin Clases
 }

@@ -59,4 +59,6 @@ t2.`NombreProceso`,t2.`Concepto`,t1.`Observaciones`,t1.`Soporte`
 FROM `salud_procesos_gerenciales_archivos` t1 
 INNER JOIN salud_procesos_gerenciales t2 ON t1.`idProceso`=t2.`ID`;
 
-
+DROP VIEW IF EXISTS `vista_af`;
+CREATE VIEW vista_af AS
+SELECT *,(SELECT Genera030 FROM salud_eps WHERE salud_eps.cod_pagador_min=`salud_archivo_facturacion_mov_generados`. cod_enti_administradora) as GeneraCircular FROM `salud_archivo_facturacion_mov_generados` ;

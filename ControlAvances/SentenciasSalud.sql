@@ -114,3 +114,15 @@ CREATE TABLE IF NOT EXISTS `salud_pagos_temporal` (
 ALTER TABLE `salud_eps` ADD `TipoIdentificacion` ENUM('MU','DE','DI','NI') NOT NULL AFTER `nit`;
 
 UPDATE `menu_submenus` SET `Pagina` = 'salud_genere_circular_030.php' WHERE `menu_submenus`.`ID` = 145;
+
+--
+-- 2018-03-28
+--
+
+ALTER TABLE `salud_archivo_facturacion_mov_generados` ADD `Arma030Anterior` ENUM('S','N') NOT NULL DEFAULT 'N' AFTER `EstadoCobro`;
+ALTER TABLE `salud_archivo_facturacion_mov_pagados` ADD `Arma030Anterior` ENUM('S','N') NOT NULL DEFAULT 'N' AFTER `idUser`;
+
+ALTER TABLE `salud_circular030_inicial` COMMENT = 'Circular 030 inicial, esta debe ser otorgada por el cliente';
+
+ALTER TABLE `salud_circular030_inicial` ADD `fecha_cargue` INT NOT NULL AFTER `etapa_proceso`;
+ALTER TABLE `salud_circular030_inicial` ADD `idUser` INT NOT NULL AFTER `fecha_cargue`;

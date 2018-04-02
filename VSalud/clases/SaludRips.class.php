@@ -756,7 +756,131 @@ class Rips extends ProcesoVenta{
 	}
     }
     
-    
+    //Subir Circular 030 inicial
+    public function SubirCircular030Inicial($NombreArchivo,$Separador,$FechaCargue, $idUser, $Vector) {
+         // si se recibe el archivo
+        if($Separador==1){
+           $Separador=";"; 
+        }else{
+           $Separador=",";  
+        }
+        
+            $this->RegistreUpload($NombreArchivo, $FechaCargue, $idUser, "");
+            $handle = fopen("ArchivosTemporales/".$NombreArchivo, "r");
+            $i=0;
+            $z=0;
+            $tab="salud_circular030_inicial";
+            $sql="INSERT INTO `$tab` (`ID`, `TipoRegistro`, `Consecutivo`, `tipo_ident_erp`, `num_ident_erp`, `razon_social`, `tipo_ident_ips`, `num_ident_ips`, `tipo_cobro`, `pref_factura`, `num_factura`, `indic_act_fact`, `valor_factura`, `fecha_factura`, `fecha_radicado`, `fecha_devolucion`, `valor_total_pagos`, `valor_glosa_acept`, `glosa_respondida`, `saldo_factura`, `cobro_juridico`, `etapa_proceso`, `numero_factura`,`fecha_cargue`, `idUser`) VALUES";
+            
+            while (($data = fgetcsv($handle, 1000, $Separador)) !== FALSE) {
+                //////Inserto los datos en la tabla  
+                $i++;
+                $NumFactura=$data[8]."-".$data[9];                
+                if($z==1){
+                    
+                    $sql.="('', '$data[0]', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$data[7]', '$data[8]', '$data[9]', '$data[10]', '$data[11]', '$data[12]','$data[13]','$data[14]','$data[15]','$data[16]','$data[17]','$data[18]','$data[19]','$data[20]','$NumFactura','$FechaCargue','$idUser'),";
+                }
+                $z=1;
+                
+                if($i==10000){
+                    $sql=substr($sql, 0, -1);
+                    $this->Query($sql);
+                    $sql="INSERT INTO `$tab` (`ID`, `TipoRegistro`, `Consecutivo`, `tipo_ident_erp`, `num_ident_erp`, `razon_social`, `tipo_ident_ips`, `num_ident_ips`, `tipo_cobro`, `pref_factura`, `num_factura`, `indic_act_fact`, `valor_factura`, `fecha_factura`, `fecha_radicado`, `fecha_devolucion`, `valor_total_pagos`, `valor_glosa_acept`, `glosa_respondida`, `saldo_factura`, `cobro_juridico`, `etapa_proceso`, `numero_factura`,`fecha_cargue`, `idUser`) VALUES";
+                    $i=0;
+                }
+            }
+            $sql=substr($sql, 0, -1);
+            $this->Query($sql);
+            fclose($handle); 
+            $sql="";
+            $this->update("salud_upload_control", "Analizado", 1, " WHERE nom_cargue='$NombreArchivo'");
+        
+            //Actualiza los codigos de las eps porque la 030 inicial no los tiene
+            $sql="UPDATE `salud_circular030_inicial` t1 INNER JOIN salud_eps t2 ON t2.nit=t1.`num_ident_erp`  "
+                . "SET `Cod_Entidad_Administradora`=t2.cod_pagador_min;";
+            $this->Query($sql);
+    }
    
+    //Copia los registros de la tabla temporal de la circular 030 que no existan en los AF
+    public function InserteRegistrosAFDesde030Inicial($Vector) {
+        //Secuencia SQL mueve las facturas pagadas desde la circular 030 inicial
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_generados` 
+            (`cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,
+            `num_factura`,`fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,
+            `nom_enti_administradora`,`num_contrato`,`plan_beneficios`,`num_poliza`,`valor_total_pago`,
+            `valor_comision`,`valor_descuentos`,`valor_neto_pagar`,`tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser`,`Arma030Anterior`,`estado`,`fecha_radicado`)
+            SELECT '193180011501',(SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocial,`tipo_ident_erp`,`num_ident_erp`,`numero_factura`,
+            `fecha_factura`,`fecha_factura`,`fecha_factura`,Cod_Entidad_Administradora,`razon_social`,'',
+            '','',valor_total_pagos,'','',`valor_factura`,
+            'Evento','030_Inicial',`fecha_cargue`,`idUser`,'S','PAGADA',fecha_radicado
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND saldo_factura=0 AND NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_generados` as t2 
+            WHERE t1.`numero_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+        //Secuencia SQL mueve las facturas no pagadas desde la circular 030 inicial
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_generados` 
+            (`cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,
+            `num_factura`,`fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,
+            `nom_enti_administradora`,`num_contrato`,`plan_beneficios`,`num_poliza`,`valor_total_pago`,
+            `valor_comision`,`valor_descuentos`,`valor_neto_pagar`,`tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser`,`Arma030Anterior`,`estado`,`fecha_radicado`)
+            SELECT '193180011501',(SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocial,`tipo_ident_erp`,`num_ident_erp`,`numero_factura`,
+            `fecha_factura`,`fecha_factura`,`fecha_factura`,Cod_Entidad_Administradora,`razon_social`,'',
+            '','',valor_total_pagos,'','',`valor_factura`,
+            'Evento','030_Inicial',`fecha_cargue`,`idUser`,'S','RADICADO' ,fecha_radicado
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND saldo_factura=valor_factura AND NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_generados` as t2 
+            WHERE t1.`numero_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+        
+        //Secuencia SQL mueve las facturas con diferencia pero sin glosa aun
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_generados` 
+            (`cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,
+            `num_factura`,`fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,
+            `nom_enti_administradora`,`num_contrato`,`plan_beneficios`,`num_poliza`,`valor_total_pago`,
+            `valor_comision`,`valor_descuentos`,`valor_neto_pagar`,`tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser`,`Arma030Anterior`,`estado`,`fecha_radicado`)
+            SELECT '193180011501',(SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocial,`tipo_ident_erp`,`num_ident_erp`,`numero_factura`,
+            `fecha_factura`,`fecha_factura`,`fecha_factura`,Cod_Entidad_Administradora,`razon_social`,'',
+            '','',valor_total_pagos,'','',`valor_factura`,
+            'Evento','030_Inicial',`fecha_cargue`,`idUser`,'S','DIFERENCIA' ,fecha_radicado
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND saldo_factura<>valor_factura AND saldo_factura>0 AND valor_glosa_acept=0 AND NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_generados` as t2 
+            WHERE t1.`numero_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+        
+        //Secuencia SQL mueve las facturas con diferencia y glosa
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_generados` 
+            (`cod_prest_servicio`,`razon_social`,`tipo_ident_prest_servicio`,`num_ident_prest_servicio`,
+            `num_factura`,`fecha_factura`,`fecha_inicio`,`fecha_final`,`cod_enti_administradora`,
+            `nom_enti_administradora`,`num_contrato`,`plan_beneficios`,`num_poliza`,`valor_total_pago`,
+            `valor_comision`,`valor_descuentos`,`valor_neto_pagar`,`tipo_negociacion`,`nom_cargue`,`fecha_cargue`,`idUser`,`Arma030Anterior`,`estado`,`fecha_radicado`)
+            SELECT '193180011501',(SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocial,`tipo_ident_erp`,`num_ident_erp`,`numero_factura`,
+            `fecha_factura`,`fecha_factura`,`fecha_factura`,Cod_Entidad_Administradora,`razon_social`,'',
+            '','',valor_total_pagos,'','',`valor_factura`,
+            'Evento','030_Inicial',`fecha_cargue`,`idUser`,'S','DIFERENCIA' ,fecha_radicado
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND saldo_factura<>valor_factura AND 	valor_glosa_acept>0 AND NOT EXISTS  
+            (SELECT 1 FROM `salud_archivo_facturacion_mov_generados` as t2 
+            WHERE t1.`numero_factura`=t2.`num_factura`); ";
+        
+        $this->Query($sql);
+        
+        
+    }
+    //Registra las glosas desde la circular 030 inicial
+    public function RegistroDeGlosasDesde030Inicial($param) {
+        //Secuencia SQL mueve las facturas con diferencia y glosa
+        $sql="INSERT INTO `salud_registro_glosas` 
+            (`num_factura`,`PrefijoArchivo`,`idArchivo`,`TipoGlosa`,
+            `CodigoGlosa`,`FechaReporte`,`GlosaEPS`,`GlosaAceptada`,`Observaciones`,
+            `cod_enti_administradora`,`fecha_factura`,`idUser`,`TablaOrigen`)
+            SELECT numero_factura,'AF','','3','',
+            `fecha_devolucion`,`valor_glosa_acept`,`valor_glosa_acept`,'030_Inicial',`Cod_Entidad_Administradora`,fecha_factura,
+            idUser,'salud_circular030_inicial'
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND saldo_factura<>valor_factura AND 	valor_glosa_acept>0; ";
+        
+        $this->Query($sql);
+    }
     //Fin Clases
 }
