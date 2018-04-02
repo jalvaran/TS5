@@ -112,6 +112,46 @@ class Circular030 extends ProcesoVenta{
             UNION 
 
             SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
+            tipo_ident_prest_servicio as TipoIdentificacionERP, 
+            (SELECT nit FROM salud_eps WHERE salud_eps.cod_pagador_min=t1.cod_enti_administradora) as NumeroIdentificacionERP, 
+            (SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocialIPS, 
+            'NI' as TipoIdentificacionIPS, 
+            (SELECT NIT FROM empresapro WHERE idEmpresaPro=1) as NumeroIdentificacionIPS, 
+            'F' as TipoCobro,num_factura,'E' as IndicadorActualizacion,valor_neto_pagar as Valor,
+            fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
+            (SELECT SUM(valor_pagado) FROM salud_archivo_facturacion_mov_pagados WHERE salud_archivo_facturacion_mov_pagados.num_factura=t1.num_factura)   as ValorPagado,
+            (SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura) as ValorGlosaAceptada,
+            (SELECT IF((SELECT SUM(GlosaAceptada) FROM salud_registro_glosas WHERE salud_registro_glosas.num_factura=t1.num_factura)>0,'SI','NO')) as GlosaRespondida, 
+            valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE t1.GeneraCircular='S' AND t1.estado='DEVUELTA' AND fecha_radicado<='$FechaFinal'
+                
+            "
+             
+             ;
+        
+        //Las pagas si el usuario elije esa opcion
+        if($Tipo=='2'){
+            $sql.=" UNION
+                SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
+            tipo_ident_prest_servicio as TipoIdentificacionERP, 
+            (SELECT nit FROM salud_eps WHERE salud_eps.cod_pagador_min=t1.cod_enti_administradora) as NumeroIdentificacionERP, 
+            (SELECT RazonSocial FROM empresapro WHERE idEmpresaPro=1) as RazonSocialIPS, 
+            'NI' as TipoIdentificacionIPS, 
+            (SELECT NIT FROM empresapro WHERE idEmpresaPro=1) as NumeroIdentificacionIPS, 
+            'F' as TipoCobro,num_factura,'A' as IndicadorActualizacion,valor_neto_pagar as Valor,
+            fecha_factura as FechaEmision,fecha_radicado as FechaPresentacion,'' as FechaDevolucion,
+            '0' as ValorPagado,'0' as ValorGlosaAceptada,'NO' as GlosaRespondida, 
+            valor_neto_pagar as SaldoFactura, 'NO' as CobroJuridico, '0' as EtapaCobroJuridico
+            FROM (SELECT @rownum:=0) r, vista_af t1 
+            WHERE  t1.GeneraCircular='S' AND t1.estado='PAGADA' AND fecha_radicado<='$FechaFinal'
+                
+                     ";
+        }
+        //Las eliminadas del 030 inicial
+        $sql.=" UNION 
+
+            SELECT '2' as TipoRegistro, @rownum:=@rownum+1 as ConsecutivoRegistro, 
             tipo_ident_erp as TipoIdentificacionERP, 
             num_ident_erp as NumeroIdentificacionERP, 
             razon_social as RazonSocialIPS, 
@@ -125,10 +165,8 @@ class Circular030 extends ProcesoVenta{
             saldo_factura as SaldoFactura, cobro_juridico as CobroJuridico, etapa_proceso as EtapaCobroJuridico
             FROM (SELECT @rownum:=0) r, salud_circular030_inicial t1 
             WHERE t1.indic_act_fact='E' AND t1.fecha_radicado<'$FechaFinal'
-
-            "
-             
-             ;
+                  ";
+                
         $consulta=$this->Query($sql);
         if($archivo = fopen($nombre_archivo, "a")){
             $mensaje="";

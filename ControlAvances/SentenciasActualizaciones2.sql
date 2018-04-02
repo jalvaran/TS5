@@ -345,4 +345,4 @@ CREATE TABLE IF NOT EXISTS `reservas_eventos` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 
-INSERT INTO `ts5`.`menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (155, 'Subir Circular 030 inicial', '40', '6', 'salud_subir_circular_030_inicial.php', '_SELF', b'1', '030_inicial.png', '2', '2018-03-11 11:38:11', '2017-10-13 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (155, 'Subir Circular 030 inicial', '40', '6', 'salud_subir_circular_030_inicial.php', '_SELF', b'1', '030_inicial.png', '2', '2018-03-11 11:38:11', '2017-10-13 14:16:57');

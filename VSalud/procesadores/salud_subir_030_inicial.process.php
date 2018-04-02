@@ -22,10 +22,9 @@ if(isset($_REQUEST["BtnEnviar"])){
                 $SeparadorT=",";  
              }
             
-            $obRips->VaciarTabla("salud_circular030_inicial"); //Vacío la tabla de subida temporal
-
             $DatosUploads=$obRips->DevuelveValores("salud_upload_control", "nom_cargue", $NombreArchivo);
             if($DatosUploads["id_upload_control"]==''){
+                $obRips->VaciarTabla("salud_circular030_inicial"); //Vacío la tabla de subida temporal
                 $obRips->SubirCircular030Inicial($NombreArchivo, $Separador, $FechaCargue, $idUser, "");
                 $NumRegistros=$obRips->CalculeRegistros("ArchivosTemporales/".$NombreArchivo,$Separador); // se calculan cuantos registros tiene el archivo
                 $css->CrearNotificacionVerde(number_format($NumRegistros)." Registros del archivo $NombreArchivo cargados correctamente",16);
