@@ -346,3 +346,22 @@ CREATE TABLE IF NOT EXISTS `reservas_eventos` (
 
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (155, 'Subir Circular 030 inicial', '40', '6', 'salud_subir_circular_030_inicial.php', '_SELF', b'1', '030_inicial.png', '2', '2018-03-11 11:38:11', '2017-10-13 14:16:57');
+
+
+CREATE TABLE IF NOT EXISTS `registro_autorizaciones_pos` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` datetime NOT NULL,
+  `idProducto` bigint(20) NOT NULL,
+  `TablaItem` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `ValorUnitario` double NOT NULL,
+  `ValorAcordado` double NOT NULL,
+  `Cantidad` double NOT NULL,
+  `PorcentajeIVA` double NOT NULL,
+  `Total` double NOT NULL,
+  `idFactura` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `idUser` bigint(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci AUTO_INCREMENT=1 ;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (156, 'Historial de Autorizaciones', '21', '3', 'registro_autorizaciones_pos.php', '_SELF', b'1', 'autorizacion.png', '4', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+

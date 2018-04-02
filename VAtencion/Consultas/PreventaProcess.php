@@ -86,6 +86,10 @@ if($TipoPago<>"Contado"){
 //print("<script>alert('Entra 1')</script>");
 $NumFactura=$obVenta->RegistreVentaRapida($idPreventa, $idCliente, $TipoPago, $Efectivo, $Devuelta, $CuentaDestino, $DatosVentaRapida);
 $obVenta->FacturaKardex($NumFactura,$CuentaDestino, $idUser, "");
+$sql="INSERT INTO `registro_autorizaciones_pos`( `Fecha`, `idProducto`, `TablaItem`, `ValorUnitario`, `ValorAcordado`, `Cantidad`, `PorcentajeIVA`, `Total`, `idUser`,`idFactura`) "
+        . "SELECT  `Updated`,`ProductosVenta_idProductosVenta`,`TablaItem`,`ValorUnitario`,`ValorAcordado`,`Cantidad`,`PorcentajeIVA`,`TotalVenta`,`Autorizado`,'$NumFactura' "
+        . "FROM preventa WHERE Autorizado>0 AND VestasActivas_idVestasActivas='$idPreventa'";
+$obVenta->Query($sql);
 //print("<script>alert('Entra 2')</script>");
 $obVenta->BorraReg("preventa","VestasActivas_idVestasActivas",$idPreventa);
 //$obVenta->ActualizaRegistro("vestasactivas","SaldoFavor", 0, "idVestasActivas", $idPreventa);
