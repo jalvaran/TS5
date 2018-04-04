@@ -33,3 +33,20 @@ sum(`TotalCompra`) as Total, fc.Concepto as Concepto,
 fc.idUsuario as Usuario
 FROM `factura_compra_items` fci INNER JOIN factura_compra fc ON fc.ID=fci.idFacturaCompra GROUP BY `idFacturaCompra`;
 
+DROP VIEW IF EXISTS `vista_diferencia_inventarios`;
+CREATE VIEW vista_diferencia_inventarios AS
+SELECT idProductosVenta,`Referencia`,`Nombre`,`Existencias` as ExistenciaAnterior,
+(SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia) as ExistenciaActual,
+Existencias - (SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia) as Diferencia
+  FROM `productosventa`;
+
+DROP VIEW IF EXISTS `vista_facturacion_detalles`;
+CREATE VIEW vista_facturacion_detalles AS
+SELECT `ID`,`FechaFactura`,
+(SELECT NumeroFactura FROM facturas WHERE idFacturas=`idFactura`) as NumeroFactura,
+(SELECT FormaPago FROM facturas WHERE idFacturas=`idFactura`) as TipoFactura, 
+`TablaItems`,`Referencia`,`Nombre`,`Departamento`,`SubGrupo1`,`SubGrupo2`,`SubGrupo3`,
+`SubGrupo4`,`SubGrupo5`,`ValorUnitarioItem`,`Cantidad`,`SubtotalItem`,`IVAItem`,`TotalItem`,
+`PorcentajeIVA`,`PrecioCostoUnitario`,`SubtotalCosto`,CuentaPUC,idUsuarios,idCierre,
+(SELECT ObservacionesFact FROM facturas WHERE idFacturas=`idFactura`) as Observaciones 
+FROM `facturas_items` ;

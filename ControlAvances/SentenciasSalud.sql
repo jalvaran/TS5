@@ -121,3 +121,5 @@ UPDATE `menu_submenus` SET `Pagina` = 'salud_genere_circular_030.php' WHERE `men
 
 ALTER TABLE `salud_archivo_facturacion_mov_generados` ADD `Arma030Anterior` ENUM('S','N') NOT NULL DEFAULT 'N' AFTER `EstadoCobro`;
 ALTER TABLE `salud_archivo_facturacion_mov_pagados` ADD `Arma030Anterior` ENUM('S','N') NOT NULL DEFAULT 'N' AFTER `idUser`;
+
+ALTER TABLE `salud_archivo_facturacion_mov_generados` CHANGE `nom_enti_administradora` `nom_enti_administradora` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre entidad administradora \" Ver Alineamientos tecnicos para ips ver pag 13\" ';

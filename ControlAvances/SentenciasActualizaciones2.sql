@@ -365,3 +365,5 @@ CREATE TABLE IF NOT EXISTS `registro_autorizaciones_pos` (
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (156, 'Historial de Autorizaciones', '21', '3', 'registro_autorizaciones_pos.php', '_SELF', b'1', 'autorizacion.png', '4', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
+ALTER TABLE `facturas` CHANGE `idFacturas` `idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
+

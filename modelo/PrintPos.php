@@ -184,7 +184,7 @@ class PrintPos extends ProcesoVenta{
     /*
      * Imprime una factura pos
      */
-    public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias){
+    public function ImprimeFacturaPOS($idFactura,$COMPrinter,$Copias,$AbreCajon=1){
         $COMPrinter= $this->COMPrinter;
         if(($handle = @fopen("$COMPrinter", "w")) === FALSE){
             die('ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA');
@@ -222,7 +222,10 @@ class PrintPos extends ProcesoVenta{
         $NumFact=$DatosFactura["Prefijo"]." - ".$DatosFactura["NumeroFactura"];
         for($i=1; $i<=$Copias;$i++){
         fwrite($handle,chr(27). chr(64));//REINICIO
-        fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        if($AbreCajon==1){
+            fwrite($handle, chr(27). chr(112). chr(48));//ABRIR EL CAJON
+        }
+        
         fwrite($handle, chr(27). chr(100). chr(0));// SALTO DE CARRO VACIO
         fwrite($handle, chr(27). chr(33). chr(8));// NEGRITA
         fwrite($handle, chr(27). chr(97). chr(1));// CENTRADO

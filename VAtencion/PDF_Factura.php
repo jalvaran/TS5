@@ -18,7 +18,7 @@ if(isset($_REQUEST["ImgPrintFactura"])){
     
     $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
     if($DatosImpresora["Habilitado"]=="SI"){
-        $obPrint->ImprimeFacturaPOS($idFactura,$DatosImpresora["Puerto"],1);
+        $obPrint->ImprimeFacturaPOS($idFactura,$DatosImpresora["Puerto"],1,0);
     }
 }
 ?>
