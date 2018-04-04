@@ -37,7 +37,8 @@ DROP VIEW IF EXISTS `vista_diferencia_inventarios`;
 CREATE VIEW vista_diferencia_inventarios AS
 SELECT idProductosVenta,`Referencia`,`Nombre`,`Existencias` as ExistenciaAnterior,
 (SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia) as ExistenciaActual,
-Existencias - (SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia) as Diferencia
+(SELECT ExistenciaActual) - (Existencias) as Diferencia,PrecioVenta,CostoUnitario,
+(SELECT Diferencia)*CostoUnitario AS TotalCostosDiferencia,Departamento,Sub1,Sub2,Sub3,Sub4,Sub5
   FROM `productosventa`;
 
 DROP VIEW IF EXISTS `vista_facturacion_detalles`;

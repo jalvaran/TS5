@@ -882,5 +882,17 @@ class Rips extends ProcesoVenta{
         
         $this->Query($sql);
     }
+    //Copia los registros de la tabla temporal de la circular 030 que no existan en los AR
+    public function InserteARDesde030Inicial($Vector) {
+        //Secuencia SQL mueve las facturas pagadas desde la circular 030 inicial
+        $sql="INSERT INTO `salud_archivo_facturacion_mov_pagados` 
+            (`num_factura`,`fecha_pago_factura`,`num_pago`,`valor_pagado`,
+            `nom_cargue`,`fecha_cargue`,`idUser`,`Arma030Anterior`)
+            SELECT numero_factura,`fecha_radicado`,'1',`valor_total_pagos`,
+            '030_Inicial',`fecha_cargue`,`idUser`,'S'
+            FROM salud_circular030_inicial as t1 WHERE indic_act_fact='A' AND valor_total_pagos>0 ; ";
+        
+        $this->Query($sql);
+    }
     //Fin Clases
 }

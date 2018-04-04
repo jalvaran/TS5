@@ -35,8 +35,10 @@ if(isset($_REQUEST["BtnEnviar"])){
             
             $obRips->InserteRegistrosAFDesde030Inicial("");
             $css->CrearNotificacionAzul("Registros AF Insertados a partir de la Circular 030 Inicial",16);
+            $obRips->InserteARDesde030Inicial("");
+            $css->CrearNotificacionVerde("Registros AR Insertados a partir de la Circular 030 Inicial",16);
             $obRips->RegistroDeGlosasDesde030Inicial("");
-            $css->CrearNotificacionVerde("Se registraron las glosas a partir de la Circular 030 Inicial",16);
+            $css->CrearNotificacionAzul("Se registraron las glosas a partir de la Circular 030 Inicial",16);
             //$obRips->EncuentreFacturasPagadas("");
             //$css->CrearNotificacionAzul("Facturas pagadas con igual valor verificadas",16);
                 //}

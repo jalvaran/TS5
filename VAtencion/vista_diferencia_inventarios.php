@@ -1,7 +1,6 @@
 <?php
-$myPage="facturas_abonos.php";
+$myPage="vista_diferencia_inventarios.php";
 include_once("../sesiones/php_control.php");
-include_once("../modelo/PrintPos.php");
 ////////// Paginacion
 $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
 
@@ -15,18 +14,9 @@ $page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"]);
         
 include_once ('funciones/function.php');  //En esta funcion está la paginacion
 
-include_once("Configuraciones/facturas_abonos.ini.php");  //Clases de donde se escribirán las tablas
+include_once("Configuraciones/vista_diferencia_inventarios.ini.php");  //Clases de donde se escribirán las tablas
 $obTabla = new Tabla($db);
-$obPrint = new PrintPos($idUser);
-if(isset($_REQUEST["idAbono"])){
-    $idAbono=$_REQUEST["idAbono"];
-    $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);
-    if($DatosImpresora["Habilitado"]=="SI"){
-             
-        $obPrint->ImprimeComprobanteAbonoFactura($idAbono, $DatosImpresora["Puerto"], 1);
-        
-    }
-}
+
 
 $statement = $obTabla->CreeFiltro($Vector);
 //print($statement);
@@ -50,12 +40,11 @@ $css->CabeceraFin();
     /////
     /////
 $css->CrearDiv("principal", "container", "center",1,1);
-$css->DivNotificacionesJS();
 //print($statement);
 ///////////////Creamos la imagen representativa de la pagina
     /////
     /////	
-$css->CrearImageLink("../VMenu/Menu.php", "../images/abonar.jpg", "_self",200,200);
+//$css->CrearImageLink("../VMenu/Menu.php", "../images/cajas.png", "_self",200,200);
 
 
 ////Paginacion
@@ -71,6 +60,7 @@ print("</div>");
 
 $obTabla->DibujeTabla($Vector);
 $css->CerrarDiv();//Cerramos contenedor Principal
+
 $css->Footer();
 $css->AgregaJS(); //Agregamos javascripts
 //$css->AgregaSubir();    
