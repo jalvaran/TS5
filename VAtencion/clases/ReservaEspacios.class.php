@@ -6,7 +6,7 @@
  */
 //include_once '../../php_conexion.php';
 class Reserva extends ProcesoVenta{
-    public function CrearReserva($idEspacio,$NombreEvento,$FechaInicio,$FechaFin,$idCliente,$Telefono, $Observaciones,$idUser, $Vector) {
+    public function CrearReserva($idEspacio,$NombreEvento,$FechaInicio,$FechaFin,$idCliente,$Telefono, $Observaciones,$idUser,$Repite, $Vector) {
         
         $DatosEspacio=$this->DevuelveValores("reservas_espacios", "ID", $idEspacio);     
         $tab="reservas_eventos";
@@ -22,8 +22,28 @@ class Reserva extends ProcesoVenta{
         $Columnas[6]="idUser";          $Valores[6]=$idUser;
         $Columnas[7]="idEspacio";       $Valores[7]=$idEspacio;
         $Columnas[8]="Tarifa";          $Valores[8]=$DatosEspacio["TarifaNormal"];
-       
-        $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        if($Repite==1){
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+        }
+        //Si se requiere programar un año el mismo evento
+        $FechaInicioRepeticion=$FechaInicio;
+        $FechaFinRepeticion=$FechaFin;
+        if($Repite>1){
+            for ($i=1;$i<=$Repite;$i++){
+                
+                $FechaInicioRepeticion=$this->SumeDiasFechaReserva($FechaInicioRepeticion, 7, "");
+                $FechaFinRepeticion=$this->SumeDiasFechaReserva($FechaFinRepeticion, 7, "");
+                $Valores[1]=$FechaInicioRepeticion;
+                $Valores[2]=$FechaFinRepeticion;
+                //Primero verifico que en la fecha solicitada no haya otro evento
+                $Verifica=$this->ValorActual("reservas_eventos", "ID", " FechaInicio='$FechaInicioRepeticion' AND Estado='RE'");
+                if($Verifica==''){
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                }
+            }
+            
+            
+        }
 
         $idReserva=$this->ObtenerMAX($tab,"ID", 1,"");
         return $idReserva;
@@ -56,5 +76,12 @@ class Reserva extends ProcesoVenta{
         return($NumFactura);
     }
        
+    public function SumeDiasFechaReserva($Fecha,$Dias,$Vector){		
+        $nuevafecha = date('Y-m-d H:i:s', strtotime($Fecha) + 86400);
+        $nuevafecha = date('Y-m-d H:i:s', strtotime("$Fecha + $Dias day"));
+
+        return($nuevafecha);
+
+    }
     //Fin Clases
 }

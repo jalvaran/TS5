@@ -43,6 +43,10 @@ if(isset($_REQUEST["Hora"]) and isset($_REQUEST["idCliente"])){
     $idCliente=$obReserva->normalizar($_REQUEST["idCliente"]);
     
     if($idCliente>0){
+        $Repite=1;
+        if(isset($_REQUEST["Repite"])){
+            $Repite=$obReserva->normalizar($_REQUEST["Repite"]);
+        }
         $DatosCliente=$obReserva->DevuelveValores("clientes", "idClientes", $idCliente);
         $FechaInicio=$Fecha." ".$Hora;
         $HoraFinal=$Hora+1;
@@ -50,8 +54,13 @@ if(isset($_REQUEST["Hora"]) and isset($_REQUEST["idCliente"])){
             $HoraFinal="23:59:00";
         }
         $FechaFin=$Fecha." ".($HoraFinal);
-        $idReserva=$obReserva->CrearReserva($idEspacio,$DatosCliente["RazonSocial"], $FechaInicio, $FechaFin, $idCliente, $DatosCliente["Telefono"], "", $idUser, "");
-        $css->CrearNotificacionVerde("Se ha asignado el Cliente $idCliente el $DiaSemana[$NumDia] a las $Hora", 16);
+        $idReserva=$obReserva->CrearReserva($idEspacio,$DatosCliente["RazonSocial"], $FechaInicio, $FechaFin, $idCliente, $DatosCliente["Telefono"], "", $idUser,$Repite, "");
+        if($Repite==1){
+            $css->CrearNotificacionVerde("Se ha asignado el Cliente $idCliente el $DiaSemana[$NumDia] a las $Hora", 16);
+        }else{
+            $css->CrearNotificacionNaranja("Se ha reservado el Cliente $idCliente el $DiaSemana[$NumDia] a las $Hora por un año", 16);
+       
+        }
     }else{
         $css->VentanaFlotante("Por favor Selecciona un Cliente");
     }
@@ -190,10 +199,19 @@ $css->CrearTabla();
             $css->ColTabla($Hora, 1);
             print("<td><A name='tag$i'></a>");
                 if($DatosReservas["ID"]>0){
+                    
                     $Page="Consultas/ReservaEspacios.query.php?idEspacio=$idEspacio&TxtFecha=$Fecha&idEvento=$DatosReservas[ID]&TxtA=2&TxtObservaciones=";
                     $Javascript="onClick=EnvieObjetoConsulta2(`$Page`,`TxtObservaciones$i`,`DivAgenda`,`99`);return false;";
                     if($Disable==0){
+                        
                         $css->CrearImage("ImgDescartar$i", "../images/delete.png", "Descartar", 30, 30, $Javascript);
+                        print(" &nbsp;&nbsp; ");
+                        $idCliente=$DatosReservas["idCliente"];
+                        $Page="Consultas/ReservaEspacios.query.php?idEspacio=$idEspacio&TxtFecha=$Fecha&Hora=$Hora&idCliente=$idCliente&Repite=51&TxtObservaciones=";
+                        $Javascript="onClick=EnvieObjetoConsulta2(`$Page`,`TxtObservaciones$i`,`DivAgenda`,`98`);return false;";
+
+                        $css->CrearImage("ImgRepetir$i", "../images/repeat.png", "Repetir este evento durante 1 año", 30, 30, $Javascript);
+                        
                     }
                                        
                 }else{
@@ -210,6 +228,7 @@ $css->CrearTabla();
                     
                     $DatosClienteReserva=$obReserva->DevuelveValores("clientes", "idClientes",$DatosReservas["idCliente"] );
                      print($DatosClienteReserva["RazonSocial"]);
+                     
                 }else{
                     
                 }

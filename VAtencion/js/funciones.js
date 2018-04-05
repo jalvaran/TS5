@@ -786,6 +786,9 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             
             ValorElement="?TxtFecha="+Fecha+"&idEspacio="+idEspacio;
         }
+        if(BorrarId==98){
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
+        }
         if (window.XMLHttpRequest) {
                 // code for IE7+, Firefox, Chrome, Opera, Safari
                 httpEdicion = new XMLHttpRequest();

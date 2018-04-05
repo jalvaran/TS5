@@ -32,6 +32,7 @@ print("<body>");
         $css->FilaTabla(16);
             $css->ColTabla("<strong>Espacio</strong>", 1);
             $css->ColTabla("<strong>Fecha</strong>", 1);
+            
             $css->ColTabla("<strong>Cliente</strong>", 1);
             $css->ColTabla("<strong>Totales</strong>", 1);
         $css->CierraFilaTabla();
@@ -47,6 +48,7 @@ print("<body>");
                 //$FuncionJS="EnvieObjetoConsulta2(`$Page`,`CmbEspacio`,`DivAgenda`,`6`);return false;";
                 $css->CrearInputText("TxtFecha", "date", "", date("Y-m-d"), "Fecha", "", "OnChange", $FuncionJS, 200, 30, 0, 1);
             print("</td>");
+            
             print("<td>");
                 $css->CrearTableChosen("CmbTercero", "clientes", "ORDER BY RazonSocial ASC", "RazonSocial", "Num_Identificacion", "Telefono", "idClientes", 400, 1, "Seleccione un Cliente", "");
                

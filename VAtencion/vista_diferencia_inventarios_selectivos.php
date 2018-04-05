@@ -45,6 +45,7 @@ if(isset($_REQUEST["BtnVaciar"])){ //Si se desea reiniciar los conteos
     $obVenta->VaciarTabla("inventarios_conteo_selectivo");
     $css->CrearNotificacionNaranja("Inventario Reiniciado", 16);
 }
+//Si se elige la opcion de actualizar 
 if(isset($_REQUEST["BtnActualizar"])){ //Si se desea reiniciar los conteos
     $Consulta=$obVenta->ConsultarTabla("vista_diferencia_inventarios_selectivos", "WHERE Diferencia<>0");
     while($DatosVista=$obVenta->FetchArray($Consulta)){
