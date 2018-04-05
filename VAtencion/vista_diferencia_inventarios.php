@@ -57,7 +57,11 @@ print("</div>");
 ///Dibujo la tabla
 ////
 ///
-
+$Consulta=$obVenta->Query("SELECT SUM(TotalCostosDiferencia) as Total, COUNT(*) as TotalItems FROM $statement");
+$DatosConsulta=$obVenta->FetchArray($Consulta);
+$TotalItems=  number_format($DatosConsulta["TotalItems"]);
+$TotalCostos=  number_format($DatosConsulta["Total"]);
+$css->CrearNotificacionVerde("El total de items con diferencias son: $TotalItems, con un costo Total de: $TotalCostos", 16);
 $obTabla->DibujeTabla($Vector);
 $css->CerrarDiv();//Cerramos contenedor Principal
 

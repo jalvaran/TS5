@@ -367,3 +367,6 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 ALTER TABLE `facturas` CHANGE `idFacturas` `idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
 
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (157, 'Inventarios Selectivos', '28', '3', 'vista_diferencia_inventarios_selectivos.php', '_SELF', b'1', 'diferencias.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+UPDATE `menu_submenus` SET `Pagina` = 'vista_diferencia_inventarios.php' WHERE `menu_submenus`.`ID` = 81;
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (158, 'Conteo Selectivo', '28', '3', 'ConteoFisicoSelectivo.php', '_SELF', b'1', 'conteo_selectivo.png', '7', '2018-04-04 17:19:47', '2017-10-13 14:16:57');

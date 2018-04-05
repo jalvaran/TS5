@@ -33,13 +33,27 @@ sum(`TotalCompra`) as Total, fc.Concepto as Concepto,
 fc.idUsuario as Usuario
 FROM `factura_compra_items` fci INNER JOIN factura_compra fc ON fc.ID=fci.idFacturaCompra GROUP BY `idFacturaCompra`;
 
+
+DROP VIEW IF EXISTS `vista_diferencia_inventarios_selectivos`;
+CREATE VIEW vista_diferencia_inventarios_selectivos AS
+SELECT idProductosVenta,`Referencia`,`Nombre`,`Existencias` as ExistenciaAnterior,
+(SELECT IFNULL((SELECT Cantidad FROM inventarios_conteo_selectivo WHERE productosventa.Referencia = inventarios_conteo_selectivo.Referencia),0)) as ExistenciaActual,
+(SELECT ExistenciaActual) - (Existencias) as Diferencia,PrecioVenta,CostoUnitario,
+(SELECT Diferencia)*CostoUnitario AS TotalCostosDiferencia,Departamento,Sub1,Sub2,Sub3,Sub4,Sub5
+  FROM `productosventa` 
+WHERE (SELECT IFNULL((SELECT Cantidad FROM inventarios_conteo_selectivo WHERE productosventa.Referencia = inventarios_conteo_selectivo.Referencia),0))-Existencias<>0
+ AND (SELECT IFNULL((SELECT Cantidad FROM inventarios_conteo_selectivo WHERE productosventa.Referencia = inventarios_conteo_selectivo.Referencia),0))>0;
+
+
 DROP VIEW IF EXISTS `vista_diferencia_inventarios`;
 CREATE VIEW vista_diferencia_inventarios AS
 SELECT idProductosVenta,`Referencia`,`Nombre`,`Existencias` as ExistenciaAnterior,
-(SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia) as ExistenciaActual,
+(SELECT IFNULL((SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia),0)) as ExistenciaActual,
 (SELECT ExistenciaActual) - (Existencias) as Diferencia,PrecioVenta,CostoUnitario,
 (SELECT Diferencia)*CostoUnitario AS TotalCostosDiferencia,Departamento,Sub1,Sub2,Sub3,Sub4,Sub5
-  FROM `productosventa`;
+  FROM `productosventa` 
+WHERE (SELECT IFNULL((SELECT Existencias FROM inventarios_temporal WHERE productosventa.Referencia = inventarios_temporal.Referencia),0))-Existencias<>0;
+
 
 DROP VIEW IF EXISTS `vista_facturacion_detalles`;
 CREATE VIEW vista_facturacion_detalles AS

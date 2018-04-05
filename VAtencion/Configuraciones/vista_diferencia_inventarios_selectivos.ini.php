@@ -1,9 +1,9 @@
 <?php
 
-$myTabla="vista_diferencia_inventarios";
+$myTabla="vista_diferencia_inventarios_selectivos";
 $idTabla="idProductosVenta";
-$myPage="vista_diferencia_inventarios.php";
-$myTitulo="Diferencia en inventarios";
+$myPage="vista_diferencia_inventarios_selectivos.php";
+$myTitulo="Diferencia en inventarios selectivos";
 
 
 
