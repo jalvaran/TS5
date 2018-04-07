@@ -6,7 +6,7 @@
 $TablaConfig="productosventa";
 $Vector[$TablaConfig]["Excluir"]["CodigoBarras"]=1;
 $Vector[$TablaConfig]["Excluir"]["Existencias"]=1;
-$Vector[$TablaConfig]["Excluir"]["Especial"]=1;
+//$Vector[$TablaConfig]["Excluir"]["Especial"]=1;
 $Vector[$TablaConfig]["Excluir"]["Kit"]=1;
 //$Vector[$TablaConfig]["Excluir"]["CostoTotal"]=1;
 //$Vector[$TablaConfig]["Excluir"]["CostoUnitario"]=1;

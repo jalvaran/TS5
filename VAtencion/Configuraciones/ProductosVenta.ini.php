@@ -33,7 +33,7 @@ $Vector["Enabled_PrinterCB"]=1;  //Habilita la impresion de los codigos de barra
 ///Columnas excluidas
 
 $Vector["Excluir"]["ImagenesProductos_idImagenesProductos"]=1;   //Indico que esta columna no se mostrará
-$Vector["Excluir"]["Especial"]=1;
+//$Vector["Excluir"]["Especial"]=1;
 //$Vector["Excluir"]["PrecioMayorista"]=1;
 $Vector["Excluir"]["Kit"]=1;
 ///Columnas requeridas al momento de una insercion

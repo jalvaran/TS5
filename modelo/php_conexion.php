@@ -564,8 +564,12 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
                     $ValorUnitario=$ValorUnitario*$Porcentaje;
 
             }
-
             $Subtotal=$ValorUnitario*$Cantidad;
+            //Para colocarle el valor totoal al producto especial
+            if($DatosProductoGeneral["Especial"]=="SI"){
+                $Subtotal=$ValorUnitario;
+            }
+            
             
             $impuesto=($impuesto-1)*$Subtotal +($DatosImpuestosAdicionales["ValorImpuesto"]*$Cantidad);
             

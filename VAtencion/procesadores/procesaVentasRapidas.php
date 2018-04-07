@@ -81,25 +81,28 @@ $obPrint=new PrintPos($idUser);
 		
 	if(!empty($_REQUEST['TxtAgregarItemPreventa'])){
 		
-		$idItem=$_REQUEST['TxtAgregarItemPreventa'];
-		$TablaItem=$_REQUEST['TxtTablaItem'];
-                $Cantidad=$_REQUEST['TxtCantidad'];
-                $fecha=date("Y-m-d");
-                
-
+		
                 $obVenta=new ProcesoVenta($idUser);
-                if($TablaItem=="sistemas"){
-                    $obVenta->AgregueSistemaPreventa($idPreventa, $idItem, $Cantidad, "");
-                }else{
-                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem);
+                $idItem=$obVenta->normalizar($_REQUEST['TxtAgregarItemPreventa']);
+		$TablaItem=$obVenta->normalizar($_REQUEST['TxtTablaItem']);
+                $Cantidad=$obVenta->normalizar($_REQUEST['TxtCantidad']);
+                $fecha=date("Y-m-d");
+                $ValorAcordado=0;
+                if(isset($_REQUEST['TxtValorAcordadoBascula'])){
+                    $ValorAcordado=$obVenta->normalizar($_REQUEST['TxtValorAcordadoBascula']);
                 }
-                
-                
                 
                 if(isset($_REQUEST['Bascula'])){
                     $obVenta->update("registro_basculas", "Leido", 1, "WHERE idBascula='1'");
                     
                 }
+                if($TablaItem=="sistemas"){
+                    $obVenta->AgregueSistemaPreventa($idPreventa, $idItem, $Cantidad, "");
+                }else{
+                    $obVenta->AgregaPreventa($fecha,$Cantidad,$idPreventa,$idItem,$TablaItem,$ValorAcordado);
+                }
+                
+                
 		header("location:$myPage?CmbPreVentaAct=$idPreventa");
 			
 	}

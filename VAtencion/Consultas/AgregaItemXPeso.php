@@ -36,7 +36,7 @@ if(!empty($_REQUEST["key"])){
         }
     if($DatosProducto["idProductosVenta"]){
         $id=$DatosProducto["idProductosVenta"];
-        $sql="SELECT idProductosVenta,PrecioVenta,Nombre FROM productosventa WHERE idProductosVenta='$id'";
+        $sql="SELECT idProductosVenta,PrecioVenta,Nombre,Especial FROM productosventa WHERE idProductosVenta='$id'";
             $consulta=$obVenta->Query($sql);
             $DatosProducto=$obVenta->FetchArray($consulta);
         if($DatosProducto["PrecioVenta"]>0){
@@ -47,12 +47,15 @@ if(!empty($_REQUEST["key"])){
             $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("Bascula", "hidden", "", 1, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
-            $sql="SELECT Gramos,ID FROM registro_basculas WHERE idBascula='1' AND Leido=0 ORDER BY ID DESC LIMIT 1";
+            $sql="SELECT Gramos FROM registro_basculas WHERE idBascula='1' AND Leido=0";
             $DatosBascula=$obVenta->Query($sql);
             $DatosBascula=$obVenta->FetchArray($DatosBascula);
             $css->CrearInputNumber("TxtCantidad", "number", "", $DatosBascula["Gramos"], "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
+            if($DatosProducto["Especial"]=='SI'){
+                $css->CrearInputNumber("TxtValorAcordadoBascula", "number", "", $DatosProducto["PrecioVenta"], "PrecioVenta", "", "", "", 100, 30, 0, 1, 50, "", 1);
+            }
             $css->CrearBotonNaranja("BtnAgregar", "Agregar");
-             
+            $css->CerrarForm(); 
             
         }else{
            $css->CrearNotificacionRoja("Este producto no tiene precio de venta, no lo entregue", 16); 
