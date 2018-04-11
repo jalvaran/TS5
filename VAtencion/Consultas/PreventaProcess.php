@@ -110,7 +110,12 @@ if($DatosImpresora["Habilitado"]=="SI" AND $CmbPrint=='SI'){
     }
 }
 if($CmbPrint=='NO'){
-    $obPrint->AbreCajon( "");
+    $ip=$_SERVER['REMOTE_ADDR'];
+    $ipServer=$_SERVER['SERVER_ADDR'];
+    if($ip==$ipServer){
+        $obPrint->AbreCajon("");        
+    }
+    
 }
 
 if(!empty($idColaborador)){

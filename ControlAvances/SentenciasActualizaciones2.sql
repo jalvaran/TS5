@@ -374,3 +374,18 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 ALTER TABLE `registro_basculas` DROP `ID`;
 ALTER TABLE `registro_basculas` ADD UNIQUE(`idBascula`);
+
+
+--
+-- Table structure for table `inventarios_conteo_selectivo`
+--
+
+CREATE TABLE IF NOT EXISTS `inventarios_conteo_selectivo` (
+  `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `Cantidad` double NOT NULL,
+  PRIMARY KEY (`Referencia`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+ALTER TABLE `cajas` ADD `idBascula` INT NOT NULL AFTER `idResolucionDian`;
+
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (159, 'Actualizacion de Precios Manual', '26', '3', 'ActualizarPreciosManual.php', '_SELF', b'1', 'pagos.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');

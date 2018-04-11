@@ -31,7 +31,8 @@ sum(`TotalCompra`) as Total, fc.Concepto as Concepto,
 (SELECT sum(ImpuestoCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=fci.`idFacturaCompra`) as ImpuestosDevueltos,
 (SELECT sum(TotalCompra) FROM factura_compra_items_devoluciones WHERE factura_compra_items_devoluciones.idFacturaCompra=fci.`idFacturaCompra`) as TotalDevolucion,
 fc.idUsuario as Usuario
-FROM `factura_compra_items` fci INNER JOIN factura_compra fc ON fc.ID=fci.idFacturaCompra GROUP BY `idFacturaCompra`;
+FROM `factura_compra_items` fci INNER JOIN factura_compra fc ON fc.ID=fci.idFacturaCompra 
+WHERE fc.Estado<>'ANULADA' GROUP BY `idFacturaCompra`;
 
 
 DROP VIEW IF EXISTS `vista_diferencia_inventarios_selectivos`;

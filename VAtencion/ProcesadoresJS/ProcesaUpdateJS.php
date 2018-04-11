@@ -19,7 +19,7 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
     $ProcesoInterno=0;
     $css =  new CssIni($tab);
     if(isset($_REQUEST["NoConfirma"])){
-        $MuestraNotificacion=0;
+        $MuestraNotificacion=$_REQUEST["NoConfirma"];
         $ProcesoInterno=1;
     }
     $obVenta->ActualizaRegistro($tab, $NombreCol, $Edicion, $idTabla, $IDEdit,$ProcesoInterno);
@@ -54,6 +54,9 @@ if(!empty($_REQUEST["BtnEditarRegistro"])){
    $obVenta->ActualizaRegistro($tab, "Updated", $Fecha, $idTabla, $IDEdit);
    if($MuestraNotificacion==1){
         $css->VentanaFlotante("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion");
+   }
+   if($MuestraNotificacion==2){
+       print("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion");
    }
    //$css->CrearNotificacionAzul("Se ha Actualizado la Columna $NombreCol de la tabla $tab con el Valor: $Edicion",16);
      

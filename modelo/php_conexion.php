@@ -257,6 +257,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
               
             $tab="librodiario";
             $NumRegistros=27;
+            $Entra=0;
             while($DatosItems=$this->FetchArray($Consulta)){
                 
 		$Subtotal=round($DatosItems["SubtotalItem"],2);
@@ -308,16 +309,19 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
 		$Columnas[25]="idEmpresa";		$Valores[25]=$EmpresaPro;
                 $Columnas[26]="idSucursal";		$Valores[26]=$DatosSucursal["ID"];
                 
-                if($DatosFactura['FormaPago']<>"Contado"){
+                if($DatosFactura['FormaPago']<>"Contado" AND $Entra==0){
                     $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+                    $Entra=1;
                 }
                 //Si se paga con tarjeta hay que debitar bancos y acreditar la caja
-                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]==0 and $DatosFactura["Cheques"]==0){
-                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);                   
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]==0 and $DatosFactura["Cheques"]==0 AND $Entra==0){
+                    $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores); 
+                    $Entra=1;
                 }
                 //Si se paga con tarjeta hay que debitar bancos 
                 
-                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]>0){
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Tarjetas"]>0 and $Entra==0){
+                    $Entra=1;
                     $Parametros=$this->DevuelveValores("parametros_contables", "ID", 17);
                     $CuentaPUC=$Parametros["CuentaPUC"]; //cuenta para bancos
 
@@ -334,7 +338,8 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                    
                 }
                 //Si se paga con cheques hay que debitar bancos 
-                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Cheques"]>0){
+                if($DatosFactura['FormaPago']=="Contado" and $DatosFactura["Cheques"]>0 and $Entra==0){
+                    $Entra=1;
                     $Parametros=$this->DevuelveValores("parametros_contables", "ID", 18);  //Cuenta de cheques
                     $CuentaPUC=$Parametros["CuentaPUC"]; 
 
@@ -352,7 +357,8 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                 
                 //Voy a ingresar o sacar la diferencia entre el total y otras formas de pago, de la caja
 		$TotalOtrasFormasPago=$DatosFactura["Tarjetas"]+$DatosFactura["Cheques"];
-                if($TotalOtrasFormasPago>0){
+                if($TotalOtrasFormasPago>0 and $Entra==0){
+                    $Entra=1;
                     $DiferenciaEfectivo=$Total-$TotalOtrasFormasPago;
                     $Valores[15]=$CuentaDestino;
                     $Valores[16]=$NombreCuentaDestino;

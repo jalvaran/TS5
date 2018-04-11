@@ -25,6 +25,8 @@ if(!empty($_REQUEST["key"])){
     $DatosProducto=$obVenta->FetchArray($Consulta);
     
     */
+    $DatosCajas=$obVenta->DevuelveValores("cajas", "idUsuario", $idUser);
+    $idBascula=$DatosCajas["idBascula"];
     $sql="SELECT ProductosVenta_idProductosVenta as idProductosVenta FROM prod_codbarras WHERE CodigoBarras='$CodBar'";
         $consulta=$obVenta->Query($sql);
         $DatosProducto=$obVenta->FetchArray($consulta);
@@ -47,7 +49,7 @@ if(!empty($_REQUEST["key"])){
             $css->CrearInputText("TxtTablaItem", "hidden", "", $tab, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("Bascula", "hidden", "", 1, "", "", "", "", "", "", 0, 0);
             $css->CrearInputText("TxtAgregarItemPreventa", "hidden", "", $DatosProducto["idProductosVenta"], "", "", "", "", "", "", 0, 0);
-            $sql="SELECT Gramos FROM registro_basculas WHERE idBascula='1' AND Leido=0";
+            $sql="SELECT Gramos FROM registro_basculas WHERE idBascula='$idBascula' AND Leido=0";
             $DatosBascula=$obVenta->Query($sql);
             $DatosBascula=$obVenta->FetchArray($DatosBascula);
             $css->CrearInputNumber("TxtCantidad", "number", "", $DatosBascula["Gramos"], "Cantidad", "", "", "", 100, 30, 0, 1, 0, "", "any");
