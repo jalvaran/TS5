@@ -1186,7 +1186,7 @@ public function CalculePesoRemision($idCotizacion)
 
     public function InsertarFacturaEnCartera($Datos){		
         $TipoCartera="Interna";
-        if(isset($Datos["SisteCredito"])){
+        if(isset($Datos["SisteCredito"]) and !empty($Datos["SisteCredito"])){
             $TipoCartera="SisteCredito";
         }
         $idFactura=$Datos["idFactura"]; 

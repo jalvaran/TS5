@@ -27,7 +27,7 @@
         //Esta opcion borra la tabla cartera y la restaura a partir de la tabla facturacion
         if(isset($_REQUEST['BtnRestaurarCartera'])){
             $obVenta->VaciarTabla("cartera");
-            $consulta=$obVenta->ConsultarTabla("facturas", "WHERE FormaPago<>'Contado' AND FormaPago<>'ANULADA' AND SaldoFact>0");
+            $consulta=$obVenta->ConsultarTabla("facturas", "WHERE FormaPago<>'Contado' AND FormaPago<>'ANULADA' AND FormaPago<>'Separado' AND SaldoFact>10");
             while($DatosFactura=$obVenta->FetchArray($consulta)){
                 $Dias=substr($DatosFactura["FormaPago"], 10, 2);
                 $Datos["Fecha"]=$DatosFactura["Fecha"]; 
@@ -38,6 +38,7 @@
                     $Datos["Dias"]=30;
                     $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
                 }else{
+                    $Datos["SisteCredito"]=0;
                     $FechaVencimiento=$obVenta->SumeDiasFecha($Datos);
                 }
                     $Datos["SaldoFactura"]=$DatosFactura["SaldoFact"]; 

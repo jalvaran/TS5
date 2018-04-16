@@ -672,6 +672,8 @@ class PrintPos extends ProcesoVenta{
     fwrite($handle, chr(27). chr(97). chr(1));// CENTRO
     fwrite($handle,"***GRACIAS POR ELEGIRNOS***");
     fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
+    fwrite($handle,"**EL PLAZO MAXIMO PARA RETIRAR SU SEPARADO ES DE 30 DIAS***");
+    fwrite($handle, chr(27). chr(100). chr(1));//salto de linea
     //fwrite($handle, chr(27). chr(32). chr(0));//ESTACIO ENTRE LETRAS
     //fwrite($handle, chr(27). chr(100). chr(0));
     //fwrite($handle, chr(29). chr(107). chr(4)); //CODIGO BARRAS
