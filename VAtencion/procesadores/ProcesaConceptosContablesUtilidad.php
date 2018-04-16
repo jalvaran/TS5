@@ -23,7 +23,7 @@ if(!empty($_REQUEST["BtnGuardar"])){
     $Observaciones=$obContable->normalizar($_REQUEST["TxtObservacionesConcepto"]);
     $NumFactura=$obContable->normalizar($_REQUEST["TxtNumFactura"]);
     
-    $DatosRetorno=$obContable->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
+    $DatosRetorno=$obContable->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$idUser,"");
     $Ruta= base64_encode($DatosRetorno["Ruta"]);
     header("location:$myPage?RutaPrint=$Ruta");
     $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$DatosRetorno[Ruta]' target='_blank'> Imprimir Comprobante</a>", 16);

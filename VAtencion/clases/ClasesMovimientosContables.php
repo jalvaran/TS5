@@ -102,13 +102,14 @@ class Contabilidad extends ProcesoVenta{
     }
     
     // Clase para Ejecutar un Concepto Contable
-        public function EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$Vector){
+        public function EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$idUser,$Vector){
             $DatosConcepto=$this->DevuelveValores("conceptos", "ID", $idConcepto);
             $TipoDocInterno=$DatosConcepto["Genera"];
             $DatosProveedor=$this->DevuelveValores("proveedores", "Num_Identificacion", $Tercero);
             $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
             $Subtotal=0;
             $IVA=0;
+            
             while($DatosMonto=  $this->FetchArray($Consulta)){
                 $idMonto=$DatosMonto["ID"];
                 $Monto[$idMonto]=round($this->normalizar($_REQUEST["Monto$idMonto"]));
@@ -124,13 +125,13 @@ class Contabilidad extends ProcesoVenta{
             if($TipoDocInterno=="CE"){
                 $TipoDocInterno="CompEgreso";
                        
-                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $this->idUser, $CentroCosto, "Contado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
+                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $idUser, $CentroCosto, "Contado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
                 $DatosRetorno["Ruta"]="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$DocumentoInterno";
                 
             }
             if($TipoDocInterno=="CC"){
                 
-                $idComprobante=$this->CrearComprobanteContable($Fecha, $DatosConcepto["Nombre"], date("H:i"), $this->idUser, "");
+                $idComprobante=$this->CrearComprobanteContable($Fecha, $DatosConcepto["Nombre"], date("H:i"), $idUser, "");
                 
                 $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");
                 while($DatosMovimientos=$this->FetchArray($Consulta)){
@@ -168,7 +169,9 @@ class Contabilidad extends ProcesoVenta{
                 
             }
             $Detalle=$DatosConcepto["Observaciones"];
-            
+            if($DatosConcepto["TerceroCuentaCobro"]=='SI'){
+                $idCuenta=$this->CrearCuentaCobroXTercero($Fecha, $Tercero, $idConcepto, $Valor, $idUser, "");
+            }
             /*
             $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");
             while($DatosMovimientos=$this->FetchArray($Consulta)){
@@ -183,6 +186,20 @@ class Contabilidad extends ProcesoVenta{
              */
             return($DatosRetorno);
         }
-        
+        //Crear cuenta de cobro para un tercero
+        public function CrearCuentaCobroXTercero($Fecha,$Tercero,$idConcepto,$Valor,$idUser,$Vector) {
+            $tab="terceros_cuentas_cobro";
+            $NumRegistros=5;
+
+            $Columnas[0]="Fecha";		   $Valores[0]=$Fecha;
+            $Columnas[1]="Tercero";                $Valores[1]=$Tercero;
+            $Columnas[2]="idConceptoContable";     $Valores[2]=$idConcepto;
+            $Columnas[3]="Valor";		   $Valores[3]=$Valor;
+            $Columnas[4]="idUser";                 $Valores[4]=$idUser;
+                        
+            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+            $idComprobante=$this->ObtenerMAX($tab, "ID", 1, "");
+            return $idComprobante;
+        }
     //Fin Clases
 }

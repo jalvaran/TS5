@@ -389,3 +389,5 @@ CREATE TABLE IF NOT EXISTS `inventarios_conteo_selectivo` (
 ALTER TABLE `cajas` ADD `idBascula` INT NOT NULL AFTER `idResolucionDian`;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (159, 'Actualizacion de Precios Manual', '26', '3', 'ActualizarPreciosManual.php', '_SELF', b'1', 'pagos.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
+
+ALTER TABLE `conceptos` ADD `TerceroCuentaCobro` ENUM('SI','NO') NOT NULL DEFAULT 'NO' AFTER `Activo`;
