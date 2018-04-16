@@ -1,5 +1,7 @@
 <?php 
+include_once 'clases/ClasesMovimientosContables.php';
 $obVenta=new ProcesoVenta($idUser);
+$obContable=new Contabilidad($idUser);
 if(!empty($_REQUEST['del'])){
     $id=$_REQUEST['del'];
     $Tabla=$_REQUEST['TxtTabla'];
@@ -13,14 +15,14 @@ if(!empty($_REQUEST['del'])){
 
 if(!empty($_REQUEST["BtnCrearComC"])){
     
-    $fecha=$_REQUEST["TxtFecha"];
+    $fecha=$obContable->normalizar($_REQUEST["TxtFecha"]);
     $hora=date("H:i");
-    $Concepto=$_REQUEST["TxtConceptoComprobante"];
-    
+    $Concepto=$obContable->normalizar($_REQUEST["TxtConceptoComprobante"]);
+    $idComprobante=$obContable->CrearComprobanteContable($fecha, $Concepto, $hora, $idUser, "");
      ////////////////Creo el comprobante
     /////
     ////
-    
+    /*
     $tab="comprobantes_contabilidad";
     $NumRegistros=4; 
 
@@ -31,7 +33,7 @@ if(!empty($_REQUEST["BtnCrearComC"])){
     
     $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     $idComprobante=$obVenta->ObtenerMAX($tab, "ID", 1, "");
-    
+    */
     ////////////////Creo el pre movimiento
     /////
     ////
@@ -63,21 +65,21 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
         move_uploaded_file($_FILES['foto']['tmp_name'],$destino);
     }
     
-    $idComprobante=$_REQUEST["TxtIdCC"];
+    $idComprobante=$obContable->normalizar($_REQUEST["TxtIdCC"]);
     $DatosComprobante=$obVenta->DevuelveValores("comprobantes_contabilidad", "ID", $idComprobante);
     $fecha=$DatosComprobante["Fecha"];
     
-    $Concepto=$_REQUEST["TxtConceptoEgreso"];
-    $CentroCosto=$_REQUEST["CmbCentroCosto"];
-    $Tercero=$_REQUEST["CmbTerceroItem"];
+    $Concepto=$obContable->normalizar($_REQUEST["TxtConceptoEgreso"]);
+    $CentroCosto=$obContable->normalizar($_REQUEST["CmbCentroCosto"]);
+    $Tercero=$obContable->normalizar($_REQUEST["CmbTerceroItem"]);
     $DatosCuentaDestino=$_REQUEST["CmbCuentaDestino"];
     $DatosCuentaDestino=explode(";",$DatosCuentaDestino);
     $CuentaPUC=$DatosCuentaDestino[0];
     $NombreCuenta=str_replace("_"," ",$DatosCuentaDestino[1]);
     
-    $Valor=$_REQUEST["TxtValorItem"];
-    $DC=$_REQUEST["CmbDebitoCredito"];
-    $NumDocSoporte=$_REQUEST["TxtNumFactura"];
+    $Valor=$obContable->normalizar($_REQUEST["TxtValorItem"]);
+    $DC=$obContable->normalizar($_REQUEST["CmbDebitoCredito"]);
+    $NumDocSoporte=$obContable->normalizar($_REQUEST["TxtNumFactura"]);
     if($DC=="C"){
         $Debito=0;
         $Credito= $Valor;       
@@ -85,10 +87,11 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
        $Debito=$Valor;
        $Credito=0; 
     }
+    $obContable->IngreseMovimientoComprobanteContable($fecha, $CentroCosto, $Tercero, $CuentaPUC, $Debito, $Credito, $Concepto, $NumDocSoporte, $destino, $idComprobante, $NombreCuenta, "");
      ////////////////Ingreso el Item
     /////
     ////
-    
+    /*
     $tab="comprobantes_contabilidad_items";
     $NumRegistros=11;
 
@@ -105,6 +108,8 @@ if(!empty($_REQUEST["BtnAgregarItemMov"])){
     $Columnas[10]="NombreCuenta";		$Valores[10]=$NombreCuenta;
 
     $obVenta->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
+     * 
+     */
     //header("location:$myPage?idComprobante=$idComprobante");
 }
 
@@ -118,7 +123,7 @@ if(!empty($_REQUEST["CmbComprobante"])){
 if(!empty($_REQUEST["BtnGuardarMovimiento"])){
     
     $idComprobante=$_REQUEST["TxtIdComprobanteContable"];    
-    $obVenta->RegistreComprobanteContable($idComprobante);    
+    $obContable->RegistreComprobanteContable($idComprobante);    
     header("location:$myPage?ImprimeCC=$idComprobante");
     
 }

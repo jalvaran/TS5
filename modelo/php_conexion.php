@@ -1457,61 +1457,7 @@ public function CalculePesoRemision($idCotizacion)
         
     }
     
-    public function RegistreComprobanteContable($idComprobante){
-        
-        $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", 1); 
-        $DatosGenerales=$this->DevuelveValores("comprobantes_contabilidad","ID",$idComprobante);
-        $Consulta=$this->ConsultarTabla("comprobantes_contabilidad_items", "WHERE idComprobante=$idComprobante");
-        while($DatosComprobante=$this->FetchArray($Consulta)){
-            $Fecha=$DatosComprobante["Fecha"];
-            
-            $tab="librodiario";
-            $NumRegistros=28;
-            $CuentaPUC=$DatosComprobante["CuentaPUC"];
-            $NombreCuenta=$DatosComprobante["NombreCuenta"];
-            $DatosCliente=$this->DevuelveValores("proveedores", "Num_Identificacion", $DatosComprobante["Tercero"]);
-            if($DatosCliente["Num_Identificacion"]==''){
-                $DatosCliente=$this->DevuelveValores("clientes", "Num_Identificacion", $DatosComprobante["Tercero"]);
-            
-            }
-            $DatosCentro=$this->DevuelveValores("centrocosto", "ID", $DatosComprobante["CentroCostos"]);
-            
-            $Columnas[0]="Fecha";			$Valores[0]=$Fecha;
-            $Columnas[1]="Tipo_Documento_Intero";	$Valores[1]="COMPROBANTE CONTABLE";
-            $Columnas[2]="Num_Documento_Interno";	$Valores[2]=$idComprobante;
-            $Columnas[3]="Tercero_Tipo_Documento";	$Valores[3]=$DatosCliente['Tipo_Documento'];
-            $Columnas[4]="Tercero_Identificacion";	$Valores[4]=$DatosCliente['Num_Identificacion'];
-            $Columnas[5]="Tercero_DV";                  $Valores[5]=$DatosCliente['DV'];
-            $Columnas[6]="Tercero_Primer_Apellido";	$Valores[6]=$DatosCliente['Primer_Apellido'];
-            $Columnas[7]="Tercero_Segundo_Apellido";    $Valores[7]=$DatosCliente['Segundo_Apellido'];
-            $Columnas[8]="Tercero_Primer_Nombre";	$Valores[8]=$DatosCliente['Primer_Nombre'];
-            $Columnas[9]="Tercero_Otros_Nombres";	$Valores[9]=$DatosCliente['Otros_Nombres'];
-            $Columnas[10]="Tercero_Razon_Social";	$Valores[10]=$DatosCliente['RazonSocial'];
-            $Columnas[11]="Tercero_Direccion";          $Valores[11]=$DatosCliente['Direccion'];
-            $Columnas[12]="Tercero_Cod_Dpto";           $Valores[12]=$DatosCliente['Cod_Dpto'];
-            $Columnas[13]="Tercero_Cod_Mcipio";         $Valores[13]=$DatosCliente['Cod_Mcipio'];
-            $Columnas[14]="Tercero_Pais_Domicilio";     $Valores[14]=$DatosCliente['Pais_Domicilio'];
-
-            $Columnas[15]="CuentaPUC";                  $Valores[15]=$CuentaPUC;
-            $Columnas[16]="NombreCuenta";		$Valores[16]=$NombreCuenta;
-            $Columnas[17]="Detalle";                    $Valores[17]=$DatosGenerales["Concepto"];
-            $Columnas[18]="Debito";			$Valores[18]=$DatosComprobante["Debito"];
-            $Columnas[19]="Credito";                    $Valores[19]=$DatosComprobante["Credito"];
-            $Columnas[20]="Neto";			$Valores[20]=$Valores[18]-$Valores[19];
-            $Columnas[21]="Mayor";			$Valores[21]="NO";
-            $Columnas[22]="Esp";			$Valores[22]="NO";
-            $Columnas[23]="Concepto";                   $Valores[23]=$DatosComprobante["Concepto"];
-            $Columnas[24]="idCentroCosto";		$Valores[24]=$DatosComprobante["CentroCostos"];
-            $Columnas[25]="idEmpresa";                  $Valores[25]=$DatosCentro["EmpresaPro"];
-            $Columnas[26]="idSucursal";                 $Valores[26]=$DatosSucursal["ID"];
-            $Columnas[27]="Num_Documento_Externo";      $Valores[27]=$DatosComprobante["NumDocSoporte"];
-            $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
-            
-            
-        }
-        $this->ActualizaRegistro("comprobantes_contabilidad", "Estado", "C", "ID", $idComprobante);
-        $this->ActualizaRegistro("comprobantes_pre", "Estado", "C", "idComprobanteContabilidad", $idComprobante);
-    }
+    
     //Funcion para ingresar los items en caso de anulacion de una factura
     public function ReingreseItemsInventario($idFactura){
         $Consulta=$this->ConsultarTabla("facturas_items", "WHERE idFactura='$idFactura'");
@@ -4919,52 +4865,6 @@ public function VerificaPermisos($VectorPermisos) {
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }
         
-        // Clase para Ejecutar un Concepto Contable
-        public function EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$Vector){
-            $DatosConcepto=$this->DevuelveValores("conceptos", "ID", $idConcepto);
-            $TipoDocInterno=$DatosConcepto["Genera"];
-            $DatosProveedor=$this->DevuelveValores("proveedores", "Num_Identificacion", $Tercero);
-            $Consulta=$this->ConsultarTabla("conceptos_montos", " WHERE idConcepto='$idConcepto'");
-            $Subtotal=0;
-            $IVA=0;
-            while($DatosMonto=  $this->FetchArray($Consulta)){
-                $idMonto=$DatosMonto["ID"];
-                $Monto[$idMonto]=round($this->normalizar($_REQUEST["Monto$idMonto"]));
-                if($DatosMonto["NombreMonto"]=="Subtotal"){
-                    $Subtotal=$Monto[$idMonto];
-                }
-                
-                if($DatosMonto["NombreMonto"]=="IVA"){
-                    $IVA=$Monto[$idMonto];
-                }
-            }
-            $Total=$Subtotal+$IVA;
-            if($TipoDocInterno=="CE"){
-                $TipoDocInterno="CompEgreso";
-                       
-                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $this->idUser, $CentroCosto, "Contado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
-                $DatosRetorno["Ruta"]="../tcpdf/examples/imprimircomp.php?ImgPrintComp=$DocumentoInterno";
-                
-            }
-            if($TipoDocInterno=="CC"){
-                $TipoDocInterno="NotaContable";
-                $DocumentoInterno=$this->CrearEgreso($Fecha, $Fecha, $this->idUser, $CentroCosto, "Programado", 0, 0, 0, $DatosProveedor["idProveedores"], $Observaciones, $NumFactura, $destino, 20, $Subtotal, $IVA, $Total, 0, 0, 0, 0, 0, 0, "");
-                $DatosRetorno["Ruta"]="../tcpdf/examples/NotaContablePrint.php?ImgPrintComp=$DocumentoInterno";
-            }
-            $Detalle=$DatosConcepto["Observaciones"];
-            
-            
-            $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");
-            while($DatosMovimientos=$this->FetchArray($Consulta)){
-                $CuentaPUC=$DatosMovimientos["CuentaPUC"];
-                $idMonto=$DatosMovimientos["idMonto"];
-                $NombreCuenta=$DatosMovimientos["NombreCuentaPUC"];
-                $Valor=$Monto[$idMonto];
-                $TipoMovimiento=$DatosMovimientos["TipoMovimiento"];
-                $this->IngreseMovimientoLibroDiario($Fecha,$TipoDocInterno,$DocumentoInterno,$NumFactura,$Tercero,$CuentaPUC,$NombreCuenta,$Detalle,$TipoMovimiento,$Valor,$Observaciones,$CentroCosto,$Sede,"");
-            }
-            return($DatosRetorno);
-        }
         
         // Clase para Agregar un movimiento al libro diario
         
@@ -6901,6 +6801,8 @@ public function VerificaPermisos($VectorPermisos) {
         
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
+    
+    
 //////////////////////////////Fin	
 }
 	

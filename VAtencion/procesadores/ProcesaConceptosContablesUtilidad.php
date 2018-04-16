@@ -1,6 +1,7 @@
 <?php 
-
+include_once 'clases/ClasesMovimientosContables.php';
 $obVenta=new ProcesoVenta($idUser);
+$obContable=new Contabilidad($idUser);
 
 if(!empty($_REQUEST["BtnGuardar"])){
     
@@ -14,15 +15,15 @@ if(!empty($_REQUEST["BtnGuardar"])){
         $destino=$carpeta.$Name;
         move_uploaded_file($_FILES['foto']['tmp_name'],$destino);
     }
-    $idConcepto=$obVenta->normalizar($_REQUEST["CmbConcepto"]);
-    $Fecha=$obVenta->normalizar($_REQUEST["TxtFecha"]);
-    $Tercero=$obVenta->normalizar($_REQUEST["CmbTercero"]);
-    $CentroCosto=$obVenta->normalizar($_REQUEST["CmbCentroCostos"]);
-    $Sede=$obVenta->normalizar($_REQUEST["CmbSede"]);
-    $Observaciones=$obVenta->normalizar($_REQUEST["TxtObservacionesConcepto"]);
-    $NumFactura=$obVenta->normalizar($_REQUEST["TxtNumFactura"]);
+    $idConcepto=$obContable->normalizar($_REQUEST["CmbConcepto"]);
+    $Fecha=$obContable->normalizar($_REQUEST["TxtFecha"]);
+    $Tercero=$obContable->normalizar($_REQUEST["CmbTercero"]);
+    $CentroCosto=$obContable->normalizar($_REQUEST["CmbCentroCostos"]);
+    $Sede=$obContable->normalizar($_REQUEST["CmbSede"]);
+    $Observaciones=$obContable->normalizar($_REQUEST["TxtObservacionesConcepto"]);
+    $NumFactura=$obContable->normalizar($_REQUEST["TxtNumFactura"]);
     
-    $DatosRetorno=$obVenta->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
+    $DatosRetorno=$obContable->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,"");
     $Ruta= base64_encode($DatosRetorno["Ruta"]);
     header("location:$myPage?RutaPrint=$Ruta");
     $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$DatosRetorno[Ruta]' target='_blank'> Imprimir Comprobante</a>", 16);
