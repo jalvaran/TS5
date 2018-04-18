@@ -235,7 +235,7 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
  */
 
     public function InsertarFacturaLibroDiario($Datos){
-
+            
             $idFact=$Datos["ID"];		
             $DatosFactura=$this->DevuelveValores("facturas","idFacturas",$idFact);
             $idUsuario=$DatosFactura["Usuarios_idUsuarios"];
@@ -249,6 +249,10 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
             $EmpresaPro=$DatosFactura["EmpresaPro_idEmpresaPro"];
             $CentroCostos=$DatosFactura["CentroCosto"];
             $idSucursal=$DatosFactura["idSucursal"];
+            $idSeparado=0;
+            if(isset($Datos["idSeparado"])){
+                $idSeparado=$Datos["idSeparado"];
+            }
             $DatosSucursal=  $this->DevuelveValores("empresa_pro_sucursales", "Actual", $idSucursal);
             $sql="SELECT PorcentajeIVA,CuentaPUC, TipoItem, sum(SubtotalItem) as SubtotalItem,sum(TotalItem) as TotalItem,sum(IVAItem) as IVAItem ,sum(SubtotalCosto) as SubtotalCosto  "
                     . "FROM facturas_items WHERE idFactura='$idFact' GROUP BY CuentaPUC, PorcentajeIVA";
@@ -273,8 +277,14 @@ public function RegFactLibroDiario($NumFact,$CuentaDestino,$CuentaIngresos,$Tabl
                         }
 			$NombreCuenta=$DatosCuenta["Nombre"];
                         $NombreCuentaDestino=$NombreCuenta; //se utiliza en caso de haber pagos por otros medios
-		}else{	   //Si es factura a credito
-                    $Parametros= $this->DevuelveValores("parametros_contables", "ID", 6);  //aqui se encuentras los parametros de la cuenta cliente
+		}else{	   //Si es factura a credito o es un separado
+                    if($idSeparado==0){
+                        $Parametros= $this->DevuelveValores("parametros_contables", "ID", 6);  //aqui se encuentras los parametros de la cuenta cliente
+                    
+                    }else{
+                        $Parametros= $this->DevuelveValores("parametros_contables", "ID", 20);  //parametros de la cuenta para anticipos
+                    
+                    }
                     $CuentaPUC=$Parametros["CuentaPUC"];
                     $NombreCuenta=$Parametros["NombreCuenta"];
 		}
@@ -509,7 +519,7 @@ public function AgregaPreventa($fecha,$Cantidad,$idVentaActiva,$idProducto,$Tabl
             $CostoUnitario=$DatosProductoGeneral["CostoUnitario"];
         }
         if($TablaItem=="productosventa"){
-            $CostoUnitario=$DatosProductoGeneral["CostoUnitarioPromedio"];
+            $CostoUnitario=$DatosProductoGeneral["CostoUnitario"];
         }
         if(isset($DatosProductoGeneral["PrecioMayorista"])){
             $PrecioMayor=$DatosProductoGeneral["PrecioMayorista"];
@@ -1954,7 +1964,7 @@ public function CalculePesoRemision($idCotizacion)
             $Columnas[15]="IVAItem";		$Valores[15]=$IVAItem;
             $Columnas[16]="TotalItem";		$Valores[16]=$TotalItem;
             $Columnas[17]="PorcentajeIVA";	$Valores[17]=$PorcentajeIVA;
-            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosCotizacion['CostoUnitario'];
+            $Columnas[18]="PrecioCostoUnitario";$Valores[18]=$DatosProducto['CostoUnitario'];
             $Columnas[19]="SubtotalCosto";	$Valores[19]=$SubtotalCosto;
             $Columnas[20]="TipoItem";		$Valores[20]=$DatosCotizacion["TipoItem"];
             $Columnas[21]="CuentaPUC";		$Valores[21]=$DatosProducto['CuentaPUC'];
@@ -2418,7 +2428,7 @@ public function CalculePesoRemision($idCotizacion)
                 
                 $Concepto="Cruce de anticipos por salida de separado No $idSeparado";
                 $VectorCruce["fut"]="";
-                $this->CruceAnticiposSeparados($FechaFactura,$CuentaDestino,$DatosSeparado["idCliente"],$DatosSeparadoItems["Total"],1,$Concepto,$this->idUser,$ID,$VectorCruce);
+                //$this->CruceAnticiposSeparados($FechaFactura,$CuentaDestino,$DatosSeparado["idCliente"],$DatosSeparadoItems["Total"],1,$Concepto,$this->idUser,$ID,$VectorCruce);
                                  
             }    
           

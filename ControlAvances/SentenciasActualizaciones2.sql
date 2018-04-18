@@ -383,11 +383,28 @@ ALTER TABLE `registro_basculas` ADD UNIQUE(`idBascula`);
 CREATE TABLE IF NOT EXISTS `inventarios_conteo_selectivo` (
   `Referencia` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
   `Cantidad` double NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`Referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 
 ALTER TABLE `cajas` ADD `idBascula` INT NOT NULL AFTER `idResolucionDian`;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (159, 'Actualizacion de Precios Manual', '26', '3', 'ActualizarPreciosManual.php', '_SELF', b'1', 'pagos.png', '2', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
-
+ALTER TABLE `formatos_calidad` ADD `CuerpoFormato` TEXT NOT NULL AFTER `Fecha`;
 ALTER TABLE `conceptos` ADD `TerceroCuentaCobro` ENUM('SI','NO') NOT NULL DEFAULT 'NO' AFTER `Activo`;
+INSERT INTO `formatos_calidad` (`ID`, `Nombre`, `Version`, `Codigo`, `Fecha`, `CuerpoFormato`, `NotasPiePagina`, `Updated`, `Sync`) VALUES (30, 'CUENTA DE COBRO', '001', 'F-GFC-004', '2018-02-13', '', '', '2018-02-19 11:39:11', '2017-10-20 10:30:00');
+
+CREATE TABLE IF NOT EXISTS `terceros_cuentas_cobro` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Tercero` bigint(20) NOT NULL,
+  `idConceptoContable` int(11) NOT NULL COMMENT 'relacion que mostrara el concepto y movimientos contables a realizar viene de la tabla conceptos',
+  `Valor` double NOT NULL,
+  `idUser` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='Tabla para realizar cuentas de cobro por parte de terceros' AUTO_INCREMENT=9 ;
+
+

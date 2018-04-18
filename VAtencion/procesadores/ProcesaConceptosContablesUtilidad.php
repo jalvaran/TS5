@@ -24,9 +24,15 @@ if(!empty($_REQUEST["BtnGuardar"])){
     $NumFactura=$obContable->normalizar($_REQUEST["TxtNumFactura"]);
     
     $DatosRetorno=$obContable->EjecutarConceptoContable($idConcepto,$Fecha,$Tercero,$CentroCosto,$Sede, $Observaciones,$NumFactura,$destino,$idUser,"");
-    $Ruta= base64_encode($DatosRetorno["Ruta"]);
-    header("location:$myPage?RutaPrint=$Ruta");
+    //$Ruta= base64_encode($DatosRetorno["Ruta"]);
+    if(isset($DatosRetorno["RutaCuentaCobro"])){
+        
+        $css->CrearNotificacionNaranja("Se ha creado un modelo de cuenta de cobro para el tercero;<a href='$DatosRetorno[RutaCuentaCobro]' target='_blank'> Imprimir Cuenta de Cobro</a>", 16);
+    
+    }
+    //header("location:$myPage?RutaPrint=$Ruta");
     $css->CrearNotificacionVerde("Concepto ejecutado correctamente;<a href='$DatosRetorno[Ruta]' target='_blank'> Imprimir Comprobante</a>", 16);
+    
     //print("<script>history.go(1);</script>");
 }
 

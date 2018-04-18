@@ -418,6 +418,40 @@ class Documento extends Tabla{
         
         $this->PDF_Output("ComprobanteMovimientosContables_$Tercero");
     }
+    //Cuenta de Cobro que envia un tercero
+    //
+    public function CuentaCobroTercero($idCuenta,$Vector) {
+        $idFormato=30;
+        $DatosEmpresa=$this->obCon->DevuelveValores("empresapro", "idEmpresaPro", 1);
+        $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
+        $DatosCuentaCobro=$this->obCon->DevuelveValores("terceros_cuentas_cobro", "ID", $idCuenta);
+        $DatosConcepto=$this->obCon->DevuelveValores("conceptos", "ID", $DatosCuentaCobro["idConceptoContable"]);
+        $DatosTercero=$this->obCon->DevuelveValores("proveedores", "Num_Identificacion", $DatosCuentaCobro["Tercero"]);
+        if($DatosTercero["RazonSocial"]==''){
+            $DatosTercero=$this->obCon->DevuelveValores("clientes", "Num_Identificacion", $Tercero);
+        }
+        $this->PDF_Ini("Cuenta de Cobro", 8, "");
+        $html="<br><br><br><br><br><br><br><br>";
+        $html.='<div style="text-align:center;"><strong>REGIMEN SIMPLIFICADO<BR>DEL IMPUESTO A LAS VENTAS<BR>'
+                . "NO OBLIGADO A DECLARAR.<BR>CUENTA DE COBRO $idCuenta</strong></div>";
+        $html.="<br><br><br><br><br><br><br><br>$DatosEmpresa[Ciudad], $DatosCuentaCobro[Fecha].<br><br><br><br><br>";
+        //$this->PDF->Write(0, $html, '', 0, 'C', true, 0, false, false, 0);
+        
+        $html.='<div style="text-align:center;">'.$DatosEmpresa["RazonSocial"]."<br>$DatosEmpresa[NIT]<br>"
+                . "DEBE A<BR>$DatosTercero[RazonSocial]<br>$DatosTercero[Num_Identificacion]</div><br><br><br>";
+        $html.="<br><br><br><br><strong>DESCRIPCION DEL BIEN O SERVICIO PRESTADO:</strong><br>";
+        $html.="<br><br>$DatosConcepto[Nombre] por $". number_format($DatosCuentaCobro["Valor"]);
+        $html.="<br><br><br><br><br><br><br><br><br><br><br><br>"
+                . "Declaro bajo la gravedad de juramento que se efectuó aporte a la seguridad social, "
+                . "de acuerdo con lo establecido en ley 1393 de julio de 2010,<br><br>articulo 27."
+                . " ASI MISMO DECLARO QUE NO ESTOY OBLIGADO A EXPEDIR FACTURA.";
+        $html.="<br><br><br><br><br><br><br><br><br><br><br><br>Atentamente,<br><br><br><br><br><br><br><br><br><br><br><br>"
+                . "$DatosTercero[RazonSocial]<br><br>$DatosTercero[Num_Identificacion]";
+        
+        $this->PDF_Write("<br>".$html);
+        
+        $this->PDF_Output($idCuenta."_CuentaCobro");
+    }
    //Fin Clases
 }
     

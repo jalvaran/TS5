@@ -171,6 +171,7 @@ class Contabilidad extends ProcesoVenta{
             $Detalle=$DatosConcepto["Observaciones"];
             if($DatosConcepto["TerceroCuentaCobro"]=='SI'){
                 $idCuenta=$this->CrearCuentaCobroXTercero($Fecha, $Tercero, $idConcepto, $Valor, $idUser, "");
+                $DatosRetorno["RutaCuentaCobro"]="PDF_Documentos.php?idDocumento=30&idCuenta=$idCuenta";
             }
             /*
             $Consulta=$this->ConsultarTabla("conceptos_movimientos", " WHERE idConcepto='$idConcepto'");

@@ -424,13 +424,14 @@ $obPrint=new PrintPos($idUser);
             $CentroCosto=$DatosCaja["CentroCostos"];
             $Concepto="ABONO A SEPARADO No $idSeparado";
             $VectorIngreso["Separado"]=1;
+            $idCliente=$_REQUEST['TxtIdClientes'];
             $idIngreso=$obVenta->RegistreAnticipo2($fecha,$CuentaDestino,$idCliente,$Valor,$CentroCosto,$Concepto,$idUser,$VectorIngreso);
             
             
             
             $VectorSeparados["idCompIngreso"]=$idIngreso;
             $Saldo=$obVenta->RegistreAbonoSeparado($idSeparado,$Valor,$fecha,$Hora,$VectorSeparados);
-            $idCliente=$_REQUEST['TxtIdClientes'];
+            
             
             
             $DatosImpresora=$obVenta->DevuelveValores("config_puertos", "ID", 1);

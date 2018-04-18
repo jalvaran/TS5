@@ -21,6 +21,10 @@ if(isset($_REQUEST["idDocumento"])){
             $idComprobante=$obVenta->normalizar($_REQUEST["idComprobante"]);
             $obDoc->PDF_CompBajasAltas($idComprobante);            
             break;
+        case 30: //Cuenta de cobro para un tercero
+            $idCuenta=$obVenta->normalizar($_REQUEST["idCuenta"]);
+            $obDoc->CuentaCobroTercero($idCuenta,"");            
+            break;
     }
 }else{
     print("No se recibió parametro de documento");
