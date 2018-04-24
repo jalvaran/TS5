@@ -37,5 +37,10 @@ class DocumentoEquivalente extends ProcesoVenta{
         $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
     }
     
+    //Clase para guardar un documento
+    public function GuardarDocumento($idDocumento,$Vector) {
+        $this->ActualizaRegistro("documento_equivalente", "Estado", "CE", "ID", $idDocumento);
+    }
+    
     //Fin Clases
 }

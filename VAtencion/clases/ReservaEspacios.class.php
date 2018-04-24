@@ -6,9 +6,14 @@
  */
 //include_once '../../php_conexion.php';
 class Reserva extends ProcesoVenta{
-    public function CrearReserva($idEspacio,$NombreEvento,$FechaInicio,$FechaFin,$idCliente,$Telefono, $Observaciones,$idUser,$Repite, $Vector) {
+    public function CrearReserva($idEspacio,$NombreEvento,$NumDia,$FechaInicio,$FechaFin,$idCliente,$Telefono, $Observaciones,$idUser,$Repite, $Vector) {
         
-        $DatosEspacio=$this->DevuelveValores("reservas_espacios", "ID", $idEspacio);     
+        $DatosEspacio=$this->DevuelveValores("reservas_espacios", "ID", $idEspacio); 
+        if($NumDia>=2 and $NumDia<=5){
+            $Tarifa=$DatosEspacio["TarifaNormal"];
+        }else{
+            $Tarifa=$DatosEspacio["TarifaNormal2"];
+        }
         $tab="reservas_eventos";
         
         $NumRegistros=9;
@@ -21,7 +26,7 @@ class Reserva extends ProcesoVenta{
         $Columnas[5]="Observaciones";   $Valores[5]=$Observaciones;
         $Columnas[6]="idUser";          $Valores[6]=$idUser;
         $Columnas[7]="idEspacio";       $Valores[7]=$idEspacio;
-        $Columnas[8]="Tarifa";          $Valores[8]=$DatosEspacio["TarifaNormal"];
+        $Columnas[8]="Tarifa";          $Valores[8]=$Tarifa;
         if($Repite==1){
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
         }

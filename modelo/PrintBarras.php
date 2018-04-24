@@ -645,5 +645,92 @@ class Barras extends ProcesoVenta{
         $salida = shell_exec('lpr $Puerto');
         
      }
+     
+     //imprime codigo barras con diferencia de mas 10000 y menos 10000 solicitud diana carvajal
+    
+    public function ImprimirCodigoBarrasMonarch2($Tabla,$idProducto,$Cantidad,$Puerto,$DatosCB){
+        $Left1=65;
+        $Left2=415;
+        $Left3=750;
+        $Config="{I,B,1,1,0,0 | }";  //Se configura para GAP
+        `mode $Puerto: BAUD=9600 PARITY=N data=8 stop=1 xon=off`;  //inicializamos el puerto
+        $enter="\r\n";
+        if(($handle = @fopen("$Puerto", "w")) === FALSE){
+            die("<script>alert( 'ERROR:\nNo se puedo Imprimir, Verifique la conexion de la IMPRESORA')</script>");
+        }
+        if(!isset($DatosCB["CodigoBarras"])){
+            $sql="SELECT CodigoBarras FROM prod_codbarras WHERE ProductosVenta_idProductosVenta='$idProducto' LIMIT 1";
+            $Consulta =  $this->Query($sql);
+            $DatosCodigo=  $this->FetchArray($Consulta);  
+            $Codigo=$DatosCodigo["CodigoBarras"]; 
+        }else{
+            $Codigo=$DatosCB["CodigoBarras"]; 
+        }
+        
+        $Codigo=$idProducto;
+        //$Cantidad=$Cantidad/3;
+        //$Numpages=ceil($Cantidad);
+        $Numpages=$Cantidad;
+        $idEmpresaPro=$DatosCB["EmpresaPro"];
+        $DatosEmpresa=$this->DevuelveValores("empresapro", "idEmpresaPro", $idEmpresaPro);
+        $fecha=date("y-m-d");
+        $DatosConfigCB = $this->DevuelveValores("config_codigo_barras", "ID", 1);
+        $RazonSocial=substr($DatosConfigCB["TituloEtiqueta"],0,13);
+        $DatosProducto=$this->DevuelveValores($Tabla, "idProductosVenta", $idProducto);
+       
+        $Descripcion=substr($DatosProducto["Nombre"],0,22);
+	$PrecioVentaMiles=substr($DatosProducto["PrecioVenta"],0,-3);
+	$PrecioVenta=($PrecioVentaMiles+10)."/".$PrecioVentaMiles."/".(date("y"));
+        //$PrecioVenta= number_format($PrecioVenta);
+	
+        $Referencia= $DatosProducto["Referencia"];
+        $ID= $DatosProducto["idProductosVenta"];
+        $Costo2= substr($DatosProducto["CostoUnitario"], 1, -1);
+        $Costo1= substr($DatosProducto["CostoUnitario"], 0, 1);
+        $Costo=$Costo1."/".$Costo2;
+        //fwrite($handle,$Config);
+        fwrite($handle,'{F,25,A,R,M,508,1080,"Code-128" |
+                        T,1,18,V,250,'.$Left1.',1,1,1,1,B,C,0,0,1 |
+                        B,2,2710,V,125,'.$Left1.',8,0,50,0,L,0 |
+                        T,3,30,V,105,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,4,30,V,83,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,5,23,V,60,'.$Left1.',1,2,1,1,B,C,0,0,1 |
+                        T,6,18,V,2,'.$Left1.',1,1,2,1,B,L,0,0,1 |
+                        T,7,18,V,180,'.$Left2.',1,1,1,1,B,C,0,0,1 |
+                        B,8,2710,V,125,'.$Left2.',8,0,50,0,L,0 |
+                        T,9,30,V,105,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,10,30,V,83,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,11,23,V,60,'.$Left2.',1,2,1,1,B,C,0,0,1 |
+                        T,12,18,V,2,'.$Left2.',1,1,2,1,B,L,0,0,1 |
+                        T,13,18,V,180,'.$Left3.',1,1,1,1,B,C,0,0,1 |    
+                        B,14,2710,V,125,'.$Left3.',8,0,50,0,L,0 |
+                        T,15,30,V,105,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,16,30,V,83,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,17,23,V,60,'.$Left3.',1,2,1,1,B,C,0,0,1 |
+                        T,18,18,V,2,'.$Left3.',1,1,2,1,B,L,0,0,1 |}
+                        {B,25,N,'.$Numpages.' |
+                        1,"'.$RazonSocial.'" | 
+                        2,"'.$Codigo.'" |
+                        3,"'.$Codigo.' '.$Referencia.'" |
+                        4,"'.$fecha.' '.$Costo.'" |
+                        5,"'.$Descripcion.'" |
+                        6,"'.$PrecioVenta.'"|
+                        7,"'.$RazonSocial.'" |     
+                        8,"'.$Codigo.'" |
+                        9,"'.$Codigo.' '.$Referencia.'" |
+                        10,"'.$fecha.' '.$Costo.'" |
+                        11,"'.$Descripcion.'" |
+                        12,"'.$PrecioVenta.'"|
+                        13,"'.$RazonSocial.'" | 
+                        14,"'.$Codigo.'" |
+                        15,"'.$Codigo.' '.$Referencia.'" |
+                        16,"'.$fecha.' '.$Costo.'" |
+                        17,"'.$Descripcion.'" |
+                        18,"'.$PrecioVenta.'"|}');
+        
+
+        $salida = shell_exec('lpr $Puerto');
+        
+     }
     //Fin Clases
 }

@@ -20,6 +20,14 @@
         $obDocumento->AgregarItemADocumento($idDocumento,$Descripcion,$Cantidad,$ValorUnitario,"");
         $css->CrearNotificacionAzul("Se ha agredo exitosamente $Cantidad unidades de $Descripcion al documento $idDocumento", 16);
     }
+    //Si se recibe la opcion de guardar
+    if(isset($_REQUEST["BtnGuardar"])){
+        
+        $idDocumento=$obDocumento->normalizar($_REQUEST["CmbDocumento"]);
+        $obDocumento->GuardarDocumento($idDocumento,"");
+        $css->CrearNotificacionVerde("Se ha Guardado exitosamente el documento", 16);
+        $idDocumento=0;
+    }
     
     //Si se recibe la opcion de eliminar item
     if(isset($_REQUEST["del"])){

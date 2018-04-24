@@ -97,6 +97,7 @@ $css->CrearDiv("principal", "container", "center",1,1);
         $css->CerrarForm();
         
         $css->CrearNotificacionVerde("Items en este Documento Equivalente", 16);
+        $css->CrearForm2("FormGuardar", $myPage, "post", "_self");
         $css->CrearTabla();
             $css->FilaTabla(16);
                 $css->ColTabla("<strong>Cantidad</strong>", 1);
@@ -117,7 +118,24 @@ $css->CrearDiv("principal", "container", "center",1,1);
                     $css->ColTablaDel($myPage, "", "", $DatosItem["ID"],$idDocumento);
                 $css->CierraFilaTabla();   
             }
+            $css->FilaTabla(16);
+                print("<td colspan='3' style=text-align:right>");
+                    print("<strong>TOTAL</strong>");
+                print("</td>");
+                
+                $css->ColTabla(number_format($Total), 1);
+                $css->ColTabla("", 1);
+            $css->CierraFilaTabla();
+            if($Total>0){
+                $css->FilaTabla(16);
+                    print("<td colspan='5' style=text-align:center>");
+                        $css->CrearInputText("CmbDocumento", "hidden", "", $idDocumento, "", "", "", "", "", "", 0, 0);
+                        $css->CrearBotonConfirmado("BtnGuardar", "Guardar");
+                    print("</td>");
+                $css->CierraFilaTabla();
+            }
         $css->CerrarTabla();
+        $css->CerrarForm();
     }
     
 $css->CerrarDiv();//Cerramos contenedor Principal

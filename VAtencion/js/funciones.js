@@ -786,6 +786,15 @@ function EnvieObjetoConsulta2(Page,idElement,idTarget,BorrarId=1){
             
             ValorElement="?TxtFecha="+Fecha+"&idEspacio="+idEspacio;
         }
+        
+        //Para informes de reservas
+        if(BorrarId==7){
+            FechaInicial =document.getElementById('TxtFechaInicial').value;
+            FechaFinal =document.getElementById('TxtFechaFinal').value;
+                       
+            ValorElement="?TxtFechaInicial="+FechaInicial+"&TxtFechaFinal="+FechaFinal;
+            document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
+        }
         if(BorrarId==98){
             document.getElementById(idTarget).innerHTML ='<br><img src="../images/cargando.gif" alt="Cargando" height="100" width="100">';
         }

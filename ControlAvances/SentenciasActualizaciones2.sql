@@ -408,3 +408,11 @@ CREATE TABLE IF NOT EXISTS `terceros_cuentas_cobro` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci COMMENT='Tabla para realizar cuentas de cobro por parte de terceros' AUTO_INCREMENT=9 ;
 
 
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (160, 'Informes', '44', '3', 'ReservasInformes.php', '_SELF', b'1', 'informes.png', '2', '2018-03-21 19:23:50', '2017-10-13 14:16:57');
+
+ALTER TABLE `facturas` CHANGE `Total` `Total` DOUBLE NOT NULL;
+ALTER TABLE `facturas` CHANGE `Subtotal` `Subtotal` DOUBLE NOT NULL;
+ALTER TABLE `facturas` CHANGE `IVA` `IVA` DOUBLE NOT NULL;
+ALTER TABLE `facturas` CHANGE `SaldoFact` `SaldoFact` DOUBLE NOT NULL;
+
+

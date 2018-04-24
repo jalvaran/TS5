@@ -54,7 +54,7 @@ if(isset($_REQUEST["Hora"]) and isset($_REQUEST["idCliente"])){
             $HoraFinal="23:59:00";
         }
         $FechaFin=$Fecha." ".($HoraFinal);
-        $idReserva=$obReserva->CrearReserva($idEspacio,$DatosCliente["RazonSocial"], $FechaInicio, $FechaFin, $idCliente, $DatosCliente["Telefono"], "", $idUser,$Repite, "");
+        $idReserva=$obReserva->CrearReserva($idEspacio,$DatosCliente["RazonSocial"],$NumDia, $FechaInicio, $FechaFin, $idCliente, $DatosCliente["Telefono"], "", $idUser,$Repite, "");
         if($Repite==1){
             $css->CrearNotificacionVerde("Se ha asignado el Cliente $idCliente el $DiaSemana[$NumDia] a las $Hora", 16);
         }else{
