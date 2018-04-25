@@ -419,3 +419,32 @@ ALTER TABLE `facturas` CHANGE `SaldoFact` `SaldoFact` DOUBLE NOT NULL;
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (161, 'Historial de Documentos Equivalentes', '12', '3', 'vista_documentos_equivalentes.php', '_SELF', b'1', 'equivalente.png', '7', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (162, 'Realizar un documento equivalente', '12', '3', 'CrearDocumentoEquivalente.php', '_SELF', b'1', 'docequivalente.png', '8', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
 
+CREATE TABLE IF NOT EXISTS `documento_equivalente` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Fecha` date NOT NULL,
+  `Tercero` bigint(20) NOT NULL,
+  `Estado` enum('AB','CE') COLLATE latin1_spanish_ci NOT NULL DEFAULT 'AB' COMMENT 'AB abierto,CE Cerrado',
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documento_equivalente_items`
+--
+
+CREATE TABLE IF NOT EXISTS `documento_equivalente_items` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `Descripcion` text COLLATE latin1_spanish_ci NOT NULL,
+  `Cantidad` double NOT NULL,
+  `ValorUnitario` double NOT NULL,
+  `Total` double NOT NULL,
+  `idDocumento` bigint(20) NOT NULL,
+  `Updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Sync` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+
