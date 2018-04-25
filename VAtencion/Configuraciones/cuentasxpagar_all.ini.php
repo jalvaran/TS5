@@ -23,7 +23,7 @@ $Vector["Limit"]=$limit;            //Numero de Registros a mostrar
 
 $Vector["NuevoRegistro"]["Deshabilitado"]=1;            
 $Vector["VerRegistro"]["Deshabilitado"]=1;                      
-$Vector["EditarRegistro"]["Deshabilitado"]=1; 
+//$Vector["EditarRegistro"]["Deshabilitado"]=1; 
 
 
 ///Filtros y orden

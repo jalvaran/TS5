@@ -366,6 +366,7 @@ CREATE TABLE IF NOT EXISTS `registro_autorizaciones_pos` (
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (156, 'Historial de Autorizaciones', '21', '3', 'registro_autorizaciones_pos.php', '_SELF', b'1', 'autorizacion.png', '4', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
 
 ALTER TABLE `facturas` CHANGE `idFacturas` `idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
+ALTER TABLE `ori_facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
 ALTER TABLE `cartera` CHANGE `Facturas_idFacturas` `Facturas_idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (157, 'Inventarios Selectivos', '28', '3', 'vista_diferencia_inventarios_selectivos.php', '_SELF', b'1', 'diferencias.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');
@@ -415,4 +416,6 @@ ALTER TABLE `facturas` CHANGE `Subtotal` `Subtotal` DOUBLE NOT NULL;
 ALTER TABLE `facturas` CHANGE `IVA` `IVA` DOUBLE NOT NULL;
 ALTER TABLE `facturas` CHANGE `SaldoFact` `SaldoFact` DOUBLE NOT NULL;
 
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (161, 'Historial de Documentos Equivalentes', '12', '3', 'vista_documentos_equivalentes.php', '_SELF', b'1', 'equivalente.png', '7', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
+INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (162, 'Realizar un documento equivalente', '12', '3', 'CrearDocumentoEquivalente.php', '_SELF', b'1', 'docequivalente.png', '8', '2017-10-13 14:16:57', '2017-10-11 14:16:57');
 

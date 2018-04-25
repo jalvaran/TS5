@@ -320,7 +320,7 @@ class TS5_Excel extends Tabla{
     exit; 
         
     }
-    //resumen de ventas y comisiones en excel
+    
     // Clase para generar excel de un balance de comprobacion
     
     public function AcumuladoXTerceroExcel($FechaInicial,$FechaFinal,$CuentaPUC,$Tercero,$Vector) {
@@ -395,6 +395,297 @@ class TS5_Excel extends Tabla{
  
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="'."Acumulado".'.xls"');
+    header('Cache-Control: max-age=0');
+    $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+    $objWriter->save('php://output');
+    exit; 
+        
+    }
+    //Estilos alineacion
+    public function EstilosAlineacion($Vector) {
+        $Estilos=array('HG'=>PHPExcel_Style_Alignment::HORIZONTAL_GENERAL,
+                'HL'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'HR'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'HC'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'HCC'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER_CONTINUOUS,
+                'HJ'=>PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
+                'VB'=>PHPExcel_Style_Alignment::VERTICAL_BOTTOM,
+                'VT'=>PHPExcel_Style_Alignment::VERTICAL_TOP,
+                'VC'=>PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'VJ'=>PHPExcel_Style_Alignment::VERTICAL_JUSTIFY,
+                
+                );
+        return($Estilos);
+    }
+    
+    //Estilos desde array
+    public function EstilosDeBordes($E,$Vector) {
+        switch ($E) {
+            case 1:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_NONE;//Sin Borde
+                break;
+            case 2:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_DASHDOT;//punteado
+                break;
+            case 3:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_DASHDOTDOT;//punteado
+                break;
+            case 4:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_DASHED;//punteado
+                break;
+            case 5:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_DOTTED;//punteado
+                break;
+            case 6:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_DOUBLE;//Doble continuo
+                break;
+            case 7:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_HAIR;//punteado leve
+                break;
+            case 8:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_MEDIUM;//Borde de cuadro grueso continuo
+                break;
+            case 9:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_MEDIUMDASHDOT;//Grueso punteado
+                break;
+            case 10:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_MEDIUMDASHDOTDOT;//Grueso punteado
+                break;
+            case 11:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_MEDIUMDASHED;//Grueso punteado
+                break;
+            case 12:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_SLANTDASHDOT;//punteado grueso rectangulos
+                break;
+            case 13:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THICK;//Grueso incluyendo las de adentro
+                break;
+            case 14:
+                $Estyle['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THIN;//Con Borde
+                break;
+
+        }
+        return($Estyle);
+    }
+    // Clase para generar una factura equivalente
+    
+    public function DocumentoEquivalenteExcel($idDocumento,$Vector) {
+        $DiaSem=array('','Lunes','Martes','Miercoles','Viernes','Sabados','Domingos');
+        $Mes=array('','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+        require_once '../../librerias/Excel/PHPExcel.php';
+        $Estilos=$this->EstilosAlineacion("");
+        
+        $objPHPExcel = new PHPExcel();  
+        $DatosEmpresa=$this->obCon->DevuelveValores("empresapro","idEmpresaPro",1);
+        $DatosDocumento=$this->obCon->DevuelveValores("documento_equivalente","ID",$idDocumento);
+        $DatosTercero=$this->obCon->DevuelveValores("proveedores","Num_Identificacion",$DatosDocumento["Tercero"]);
+        
+        $f=1;
+        $objPHPExcel->getActiveSheet()->getStyle("A1")->getFont()->setSize(14)->setBold(true); //pongo la celda A1 en Negrita  con tamaño 14
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:F1'); //Se combinan las celdas A1 a la F1
+        
+        //Escribo la razon social de la empresa propietaria
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[0].$f,$DatosEmpresa["RazonSocial"])
+                        
+            ;
+        //Coloco el NIT
+        $f=2;
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getAlignment()->setWrapText(true); // texto envolvente
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth('13');//Ancho de la Columna
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getNumberFormat()->setFormatCode('#');
+        $objPHPExcel->getActiveSheet()->getStyle("C2:D2")->getFont()->setSize(12)->setBold(true); //Tamaño 12
+        //Escribo la razon social de la empresa propietaria
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($this->Campos[2].$f,"NIT:")
+            ->setCellValue($this->Campos[3].$f,$DatosEmpresa["NIT"])            
+            ;
+        //Coloco la direccion
+        $objPHPExcel->getActiveSheet()->getStyle("A3")->getFont()->setSize(10)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A3')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A3:F3'); //Se combinan las celdas A3 a la F3
+        $f=3;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,$DatosEmpresa["Direccion"])            
+            ;
+        
+        //Regimen
+        
+        $objPHPExcel->getActiveSheet()->getStyle("A4")->getFont()->setSize(10)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A4')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A4:F4'); //Se combinan las celdas A3 a la F3
+        $f=4;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"RESPONSABLE DE IVA REGIMEN COMÚN")            
+            ;
+        
+        //informacion de retenciones
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("F5")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle("A5")->getFont()->setSize(10)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A5:F5')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A5:E5'); //Se combinan las celdas A3 a la F3
+        $f=5;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"AGENTE DE RETENCION EN LA FUENTE") 
+            ->setCellValue($this->Campos[5].$f,"NO")    
+            ;
+        
+        //Numeracion del documento
+        $EstiloBordes=$this->EstilosDeBordes(8, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle('G')->getAlignment()->setWrapText(true); // texto envolvente
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth('15.7');//Ancho de la Columna
+        $objPHPExcel->getActiveSheet()->getStyle("G2:G4")->applyFromArray($EstiloBordes);//Aplico bordes
+        $objPHPExcel->getActiveSheet()->getStyle("G2")->getFont()->setSize(12)->setBold(true);
+        //$objPHPExcel->getActiveSheet()->getStyle("G4")->getFont()->setSize(14)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('G2:G4')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('G2:G4'); //Se combinan las celdas A3 a la F3
+        
+        $f=2;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[6].$f++,"FACTURA\r\nEQUIVALENTE\r\n".$idDocumento) 
+            
+            ;
+        //Ciudad y fecha
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A7:G7")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle('A7:G7')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        
+        $objPHPExcel->getActiveSheet()->getStyle("A7")->getFont()->setSize(10)->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A7:G7'); //Se combinan las celdas A3 a la F3
+        $f=7;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"CIUDAD Y FECHA DE LA OPERACIÓN") 
+            
+            ;
+        
+        //Ciudad y fecha
+        
+        $NumDia=date("N",strtotime($DatosDocumento["Fecha"]));
+        $NumFecha=date("j",strtotime($DatosDocumento["Fecha"]));
+        $NumMes=date("n",strtotime($DatosDocumento["Fecha"]));
+        $Anio=date("Y",strtotime($DatosDocumento["Fecha"]));
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A8:G8")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle('A8:G8')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        
+        //$objPHPExcel->getActiveSheet()->getStyle("A8")->getFont()->setSize(10)->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A8:B8'); 
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('C8:G8'); 
+        $f=8;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,$DatosEmpresa["Ciudad"]) 
+            ->setCellValue($this->Campos[2].$f,$DiaSem[$NumDia]." ".$NumFecha." de ".$Mes[$NumMes]." del ".$Anio) 
+            ;
+        
+        //Titulo tercero
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A10:G10")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle("A10:G10")->getFont()->setSize(10)->setBold(true);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A10:G10')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A10:F10'); //Se combinan las celdas A3 a la F3
+        $f=10;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"PERSONA NATURAL DE QUIEN SE ADQUIEREN LOS BIENES Y/O SERVICIOS")
+            ->setCellValue($this->Campos[6].$f,"NIT ó CC")
+            ;
+        
+        //Informacion tercero
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A11:G11")->applyFromArray($EstiloBordes);
+        //$objPHPExcel->getActiveSheet()->getStyle("A10:G10")->getFont()->setSize(10)->setBold(true);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A11:G11')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A11:F11'); //Se combinan las celdas A3 a la F3
+        $f=11;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,$DatosTercero["RazonSocial"])
+            ->setCellValue($this->Campos[6].$f,$DatosTercero["Num_Identificacion"])
+            ;
+        
+        //Cabecera articulos
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A13:G13")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle("A13:G13")->getFont()->setSize(10)->setBold(true);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A13:G13')->getAlignment()->setHorizontal($Estilos['VC']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B13:E13'); //Se combinan las celdas A3 a la F3
+        $f=13;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"CANT")
+            ->setCellValue($this->Campos[1].$f,"DESCRIPCION")
+            ->setCellValue($this->Campos[5].$f,"VR. UNIT")
+            ->setCellValue($this->Campos[6].$f,"VR. PARCIAL")
+            ;
+        
+        //Articulos
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A14:G14")->applyFromArray($EstiloBordes);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('F14:G14')->getAlignment()->setHorizontal($Estilos['HR']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B14:E14'); //Se combinan las celdas A3 a la F3
+        $f=14;
+        $sql="SELECT * FROM documento_equivalente_items WHERE idDocumento=$idDocumento LIMIT 6";
+        $Consulta=$this->obCon->Query($sql);
+        $Total=0;
+        $z=0;
+        while($DatosItems= $this->obCon->FetchArray($Consulta)){ 
+            $z++;
+            $Total=$Total+$DatosItems["Total"];
+            $objPHPExcel->setActiveSheetIndex(0)
+                     
+                ->setCellValue($this->Campos[0].$f,$DatosItems["Cantidad"])
+                ->setCellValue($this->Campos[1].$f,$DatosItems["Descripcion"])
+                ->setCellValue($this->Campos[5].$f,$DatosItems["ValorUnitario"])
+                ->setCellValue($this->Campos[6].$f,$DatosItems["Total"])
+                ;
+            $f++;
+        }
+        $objPHPExcel->getActiveSheet()->getStyle("A15:G20")->applyFromArray($EstiloBordes);
+        for($i=15;$i<=19;$i++){
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B'.$i.':E'.$i);
+        }
+        //Total
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("G20")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle("A20:G20")->getFont()->setSize(11)->setBold(true);
+        
+        $objPHPExcel->getActiveSheet()->getStyle('A20')->getAlignment()->setHorizontal($Estilos['HR']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A20:F20'); //Se combinan las celdas A3 a la F3
+        $f=20;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"TOTAL FACTURA")
+            ->setCellValue($this->Campos[6].$f,$Total)
+           
+            ;
+        
+        //Obervaciones y firma
+        $EstiloBordes=$this->EstilosDeBordes(14, $Vector);//Borde continuo normal
+        $objPHPExcel->getActiveSheet()->getStyle("A21:G24")->applyFromArray($EstiloBordes);
+        $objPHPExcel->getActiveSheet()->getStyle('A21')->getAlignment()->setWrapText(true); // texto envolvente
+        $objPHPExcel->getActiveSheet()->getStyle('A21:G24')->getAlignment()->setHorizontal($Estilos['VB']); //se centra el texto
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A21:G24'); //Se combinan las celdas A3 a la F3
+        $f=21;
+        $objPHPExcel->setActiveSheetIndex(0)            
+            ->setCellValue($this->Campos[0].$f,"                                                     _______________________"
+                    . "\r\n                                                          FIRMA DEL VENDEDOR")
+                      
+            ;
+        //Informacion del excel
+        $objPHPExcel->
+         getProperties()
+             ->setCreator("www.technosoluciones.com.co")
+             ->setLastModifiedBy("www.technosoluciones.com.co")
+             ->setTitle("Acumulado por terceros")
+             ->setSubject("Informe")
+             ->setDescription("Documento generado con PHPExcel")
+             ->setKeywords("techno soluciones sas")
+             ->setCategory("Informes Ventas");    
+ 
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'."Equivalente_$idDocumento".'.xls"');
     header('Cache-Control: max-age=0');
     $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
     $objWriter->save('php://output');

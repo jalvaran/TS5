@@ -66,3 +66,9 @@ SELECT `ID`,`FechaFactura`,
 `PorcentajeIVA`,`PrecioCostoUnitario`,`SubtotalCosto`,CuentaPUC,idUsuarios,idCierre,
 (SELECT ObservacionesFact FROM facturas WHERE idFacturas=`idFactura`) as Observaciones 
 FROM `facturas_items` ;
+
+DROP VIEW IF EXISTS `vista_documentos_equivalentes`;
+CREATE VIEW vista_documentos_equivalentes AS
+SELECT de.ID,de.Fecha,de.Tercero,de.Estado,
+(SELECT SUM(Total) FROM documento_equivalente_items dei WHERE dei.idDocumento=de.`ID`) as Total
+FROM `documento_equivalente` de ;
