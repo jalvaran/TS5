@@ -253,7 +253,7 @@ print("<body>");
         //print("<br>");
         print("<br>");
         $css->CrearInputNumber("TxtPagoH", "hidden", "", $DatosCartera["Saldo"], "", "", "","", "", 30,1, 1, 1, 1, "", "any");
-        $css->CrearInputNumber("TxtPago", "number", "Total Pago: <br>", $DatosCartera["Saldo"]-$AntiposRecibidos, "", "black", "","", 200,30, 0, 0, 1, $DatosCartera["Saldo"], 1);
+        $css->CrearInputNumber("TxtPago", "number", "Total Pago: <br>", $DatosCartera["Saldo"]-$AntiposRecibidos, "", "black", "","", 200,30, 0, 0, 0, $DatosCartera["Saldo"], 1);
         print("<br>");
         $css->CrearBotonConfirmado("BtnGuardarPago","Guardar");	
             

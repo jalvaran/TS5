@@ -367,6 +367,8 @@ INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`,
 
 ALTER TABLE `facturas` CHANGE `idFacturas` `idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
 ALTER TABLE `ori_facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
+ALTER TABLE `facturas_items` CHANGE `idFactura` `idFactura` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
+
 ALTER TABLE `cartera` CHANGE `Facturas_idFacturas` `Facturas_idFacturas` VARCHAR(45) CHARACTER SET utf8 COLLATE utf8_spanish2_ci NOT NULL;
 
 INSERT INTO `menu_submenus` (`ID`, `Nombre`, `idPestana`, `idCarpeta`, `Pagina`, `Target`, `Estado`, `Image`, `Orden`, `Updated`, `Sync`) VALUES (157, 'Inventarios Selectivos', '28', '3', 'vista_diferencia_inventarios_selectivos.php', '_SELF', b'1', 'diferencias.png', '6', '2017-10-13 14:16:57', '2017-10-13 14:16:57');

@@ -3077,7 +3077,7 @@ public function GenerarInformeComprasComparativo($TipoReporte,$FechaInicial,$Fec
                 
                 $Cuenta=substr($CuentaPUC,0,4);
                 if($TipoReporte<>"Corte"){
-                    $sql="SELECT SUM(`Neto`) AS SaldoAnterior FROM librodiario WHERE Fecha<'$FechaCalculoAnterior' AND CuentaPUC LIKE '$Cuenta%' AND Tercero_Identificacion='$Tercero'";
+                    $sql="SELECT SUM(`Neto`) AS SaldoAnterior FROM librodiario WHERE Fecha<'$FechaCalculoAnterior' AND CuentaPUC LIKE '$CuentaPUC%' AND Tercero_Identificacion='$Tercero'";
                     $ConsultaAnterior=  $this->obCon->Query($sql);
                     $DatosConsultaAnterior=$this->obCon->FetchArray($ConsultaAnterior);
                     $SaldoAnterior=$DatosConsultaAnterior["SaldoAnterior"];
