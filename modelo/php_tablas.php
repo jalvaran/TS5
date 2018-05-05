@@ -4917,7 +4917,7 @@ EOD;
     public function HTML_VentasXDepartamentos($CondicionItems) {
         $html="";
         $sql="SELECT Departamento as idDepartamento, SUM(SubtotalItem) as Subtotal, SUM(IVAItem) as IVA, SUM(TotalItem) as Total, SUM(Cantidad) as Items"
-        . "  FROM $CondicionItems GROUP BY Departamento";
+        . " $CondicionItems GROUP BY Departamento";
         $Datos=$this->obCon->Query($sql);
         
         if($this->obCon->NumRows($Datos)){
@@ -5000,11 +5000,10 @@ EOD;
         
          * 
          */
-        $sql="SELECT fi.idUsuarios as IdUsuarios,fa.FormaPago as TipoVenta,sum(fi.`TotalItem`) as Total,sum(fi.`IVAItem`) as IVA,sum(fi.`SubtotalItem`) as Subtotal,"
+        $sql="SELECT fi.idUsuarios as IdUsuarios,f.FormaPago as TipoVenta,sum(fi.`TotalItem`) as Total,sum(fi.`IVAItem`) as IVA,sum(fi.`SubtotalItem`) as Subtotal,"
                 . "sum(fi.`SubtotalCosto`) as TotalCostos, sum(fi.`ValorOtrosImpuestos`) as Bolsas, "
-                . "SUM(fi.`Cantidad`) AS Items, fi.idUsuarios FROM `ori_facturas_items` fi "
-                . "INNER JOIN facturas fa ON fi.idFactura=fa.idFacturas "
-                . "WHERE $CondicionFecha3 GROUP BY fi.idUsuarios,fa.FormaPago";
+                . "SUM(fi.`Cantidad`) AS Items, fi.idUsuarios $CondicionFacturas "
+                . " GROUP BY fi.idUsuarios,f.FormaPago";
         $Datos= $this->obCon->Query($sql);
         if($this->obCon->NumRows($Datos)){
             $html='<br><span style="color:RED;font-family:Bookman Old Style;font-size:12px;"><strong><em>Total de Ventas Discriminadas por Usuarios y Tipo de Venta:
@@ -5577,6 +5576,8 @@ EOD;
     }
     ///Clases para hacer el informe de administrador
     public function PDF_Informe_Ventas_Admin($TipoReporte,$FechaCorte,$FechaIni, $FechaFinal,$CentroCostos,$EmpresaPro,$Vector) {
+        
+        
         $Condicion=" ori_facturas_items WHERE ";
         $Condicion2=" ori_facturas WHERE ";
         if($TipoReporte=="Corte"){
@@ -5593,6 +5594,11 @@ EOD;
 
         $CondicionItems=$Condicion.$CondicionFecha1;
         $CondicionFacturas=$Condicion2.$CondicionFecha2;
+        
+        $CondicionItems=" FROM `ori_facturas_items` fi INNER JOIN facturas f ON fi.`idFactura` = f.idFacturas 
+            WHERE $CondicionFecha1
+            ";
+        
         $idFormato=16;
         $DatosFormatos= $this->obCon->DevuelveValores("formatos_calidad", "ID", $idFormato);
         
@@ -5604,8 +5610,10 @@ EOD;
                
         $html= $this->HTML_VentasXDepartamentos($CondicionItems);
         $this->PDF_Write($html);
-        $html= $this->HTML_VentasXUsuario($CondicionFacturas,$CondicionFecha1,$CondicionFecha3);
+        
+        $html= $this->HTML_VentasXUsuario($CondicionItems,$CondicionFecha1,$CondicionFecha3);
         $this->PDF_Write($html);
+        
         $html= $this->HTML_Uso_Resoluciones($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
         $this->PDF_Write($html);
         $html= $this->HTML_Egresos_Admin($CondicionFecha2);
@@ -5620,6 +5628,7 @@ EOD;
         $this->PDF_Write($html);
         $html= $this->HTML_Ventas_Colaboradores($CondicionFecha2, $CentroCostos, $EmpresaPro, "");
         $this->PDF_Write($html);
+         
         /*Solo Juan Car
         $this->PDF_Add();
         //$this->PDF->SetFont('helvetica', '', 6);

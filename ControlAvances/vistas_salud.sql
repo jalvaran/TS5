@@ -62,3 +62,14 @@ INNER JOIN salud_procesos_gerenciales t2 ON t1.`idProceso`=t2.`ID`;
 DROP VIEW IF EXISTS `vista_af`;
 CREATE VIEW vista_af AS
 SELECT *,(SELECT Genera030 FROM salud_eps WHERE salud_eps.cod_pagador_min=`salud_archivo_facturacion_mov_generados`. cod_enti_administradora) as GeneraCircular FROM `salud_archivo_facturacion_mov_generados` ;
+
+
+DROP VIEW IF EXISTS `vista_SIHO`;
+CREATE VIEW vista_SIHO AS 
+SELECT t1.`id_fac_mov_generados` as id_factura_generada, (SELECT dias_convenio FROM salud_eps WHERE salud_eps.cod_pagador_min=t1.cod_enti_administradora) as diasPago,
+(SELECT DATEDIFF('2018-05-02',t1.`fecha_radicado` ) - (SELECT(diasPago))) as DiasMora ,t1.`cod_prest_servicio`,t1.`razon_social`,t1.`num_factura`,
+t1.`fecha_factura`, t1.`fecha_radicado`,t1.`numero_radicado`,t1.`cod_enti_administradora`,t1.`nom_enti_administradora`,t1.`valor_neto_pagar` ,t1.`tipo_negociacion`, 
+ t1.estado
+FROM salud_archivo_facturacion_mov_generados t1 WHERE (t1.estado != 'PAGADA' AND t1.estado != 'DEVUELTA'  AND t1.estado != ''); 
+
+

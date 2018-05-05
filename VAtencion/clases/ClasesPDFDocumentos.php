@@ -440,7 +440,7 @@ class Documento extends Tabla{
         $html.='<div style="text-align:center;">'.$DatosEmpresa["RazonSocial"]."<br>$DatosEmpresa[NIT]<br>"
                 . "DEBE A<BR>$DatosTercero[RazonSocial]<br>$DatosTercero[Num_Identificacion]</div><br><br><br>";
         $html.="<br><br><br><br><strong>DESCRIPCION DEL BIEN O SERVICIO PRESTADO:</strong><br>";
-        $html.="<br><br>$DatosConcepto[Nombre] por $". number_format($DatosCuentaCobro["Valor"]);
+        $html.="<br><br>$DatosConcepto[Nombre] por $". number_format($DatosCuentaCobro["Valor"]).", $DatosCuentaCobro[Observaciones].";
         $html.="<br><br><br><br><br><br><br><br><br><br><br><br>"
                 . "Declaro bajo la gravedad de juramento que se efectuó aporte a la seguridad social, "
                 . "de acuerdo con lo establecido en ley 1393 de julio de 2010,<br><br>articulo 27."

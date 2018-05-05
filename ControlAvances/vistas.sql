@@ -72,3 +72,48 @@ CREATE VIEW vista_documentos_equivalentes AS
 SELECT de.ID,de.Fecha,de.Tercero,de.Estado,
 (SELECT SUM(Total) FROM documento_equivalente_items dei WHERE dei.idDocumento=de.`ID`) as Total
 FROM `documento_equivalente` de ;
+
+
+DROP VIEW IF EXISTS `vista_exogena`;
+CREATE VIEW vista_exogena AS
+select `librodiario`.`Tipo_Documento_Intero` AS `Tipo_Documento_Intero`,
+(select if((`librodiario`.`Tipo_Documento_Intero` = 'FACTURA'),(select `facturas`.`NumeroFactura` from `facturas` where (`facturas`.`idFacturas` = `librodiario`.`Num_Documento_Interno`)),
+`librodiario`.`Num_Documento_Interno`)) AS `NumDocumento`,
+`librodiario`.`Num_Documento_Externo` AS `Num_Documento_Externo`,
+`librodiario`.`Tercero_Tipo_Documento` AS `Tercero_Tipo_Documento`,
+`librodiario`.`Tercero_Identificacion` AS `Tercero_Identificacion`,
+`librodiario`.`Tercero_DV` AS `Tercero_DV`,
+`librodiario`.`Tercero_Primer_Apellido` AS `Tercero_Primer_Apellido`,
+`librodiario`.`Tercero_Segundo_Apellido` AS `Tercero_Segundo_Apellido`,
+`librodiario`.`Tercero_Primer_Nombre` AS `Tercero_Primer_Nombre`,
+`librodiario`.`Tercero_Otros_Nombres` AS `Tercero_Otros_Nombres`,
+`librodiario`.`Tercero_Razon_Social` AS `Tercero_Razon_Social`,
+`librodiario`.`Tercero_Direccion` AS `Tercero_Direccion`,
+`librodiario`.`Tercero_Cod_Mcipio` AS `Tercero_Cod_Mcipio`,
+`librodiario`.`Tercero_Pais_Domicilio` AS `Tercero_Pais_Domicilio`,
+`librodiario`.`Concepto` AS `Concepto`,`librodiario`.`CuentaPUC` AS `CuentaPUC`,
+`librodiario`.`NombreCuenta` AS `NombreCuenta`,`librodiario`.`Detalle` AS `Detalle`,
+round(sum(`librodiario`.`Debito`)) AS `Debitos`,round(sum(`librodiario`.`Credito`)) AS `Creditos` 
+from `librodiario` where ((`librodiario`.`Fecha` >= '2017-01-01') and (`librodiario`.`Fecha` <= '2017-12-31'))
+ group by `librodiario`.`CuentaPUC`,`librodiario`.`Tercero_Identificacion`;
+
+DROP VIEW IF EXISTS `vista_exogena2`;
+CREATE VIEW vista_exogena2 AS
+select 
+`librodiario`.`Tercero_Tipo_Documento` AS `Tercero_Tipo_Documento`,
+`librodiario`.`Tercero_Identificacion` AS `Tercero_Identificacion`,
+`librodiario`.`Tercero_DV` AS `Tercero_DV`,
+`librodiario`.`Tercero_Primer_Apellido` AS `Tercero_Primer_Apellido`,
+`librodiario`.`Tercero_Segundo_Apellido` AS `Tercero_Segundo_Apellido`,
+`librodiario`.`Tercero_Primer_Nombre` AS `Tercero_Primer_Nombre`,
+`librodiario`.`Tercero_Otros_Nombres` AS `Tercero_Otros_Nombres`,
+`librodiario`.`Tercero_Razon_Social` AS `Tercero_Razon_Social`,
+`librodiario`.`Tercero_Direccion` AS `Tercero_Direccion`,
+`librodiario`.`Tercero_Cod_Mcipio` AS `Tercero_Cod_Mcipio`,
+`librodiario`.`Tercero_Pais_Domicilio` AS `Tercero_Pais_Domicilio`,
+`librodiario`.`Concepto` AS `Concepto`,SUBSTRING(`CuentaPUC`,1,4) AS `CuentaPUC`,
+`librodiario`.`NombreCuenta` AS `NombreCuenta`,`librodiario`.`Detalle` AS `Detalle`,
+round(sum(`librodiario`.`Debito`)) AS `Debitos`,round(sum(`librodiario`.`Credito`)) AS `Creditos` 
+from `librodiario` where ((`librodiario`.`Fecha` >= '2017-01-01') and (`librodiario`.`Fecha` <= '2017-12-31'))
+ group by SUBSTRING(`CuentaPUC`,1,4),`librodiario`.`Tercero_Identificacion`;
+

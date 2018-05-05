@@ -25,7 +25,7 @@
         
         $idDocumento=$obDocumento->normalizar($_REQUEST["CmbDocumento"]);
         $obDocumento->GuardarDocumento($idDocumento,"");
-        $css->CrearNotificacionVerde("Se ha Guardado exitosamente el documento", 16);
+        $css->CrearNotificacionVerde("Se ha Guardado exitosamente el documento <a href='ProcesadoresJS/GeneradorExcel.php?idDocumento=3&idDocumentoEquivalente=$idDocumento'> Abrir</a>", 16);
         $idDocumento=0;
     }
     

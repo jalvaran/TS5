@@ -170,7 +170,7 @@ class Contabilidad extends ProcesoVenta{
             }
             $Detalle=$DatosConcepto["Observaciones"];
             if($DatosConcepto["TerceroCuentaCobro"]=='SI'){
-                $idCuenta=$this->CrearCuentaCobroXTercero($Fecha, $Tercero, $idConcepto, $Valor, $idUser, "");
+                $idCuenta=$this->CrearCuentaCobroXTercero($Fecha, $Tercero, $idConcepto, $Valor,$Detalle, $idUser, "");
                 $DatosRetorno["RutaCuentaCobro"]="PDF_Documentos.php?idDocumento=30&idCuenta=$idCuenta";
             }
             /*
@@ -188,15 +188,16 @@ class Contabilidad extends ProcesoVenta{
             return($DatosRetorno);
         }
         //Crear cuenta de cobro para un tercero
-        public function CrearCuentaCobroXTercero($Fecha,$Tercero,$idConcepto,$Valor,$idUser,$Vector) {
+        public function CrearCuentaCobroXTercero($Fecha,$Tercero,$idConcepto,$Valor,$Observaciones,$idUser,$Vector) {
             $tab="terceros_cuentas_cobro";
-            $NumRegistros=5;
+            $NumRegistros=6;
 
             $Columnas[0]="Fecha";		   $Valores[0]=$Fecha;
             $Columnas[1]="Tercero";                $Valores[1]=$Tercero;
             $Columnas[2]="idConceptoContable";     $Valores[2]=$idConcepto;
             $Columnas[3]="Valor";		   $Valores[3]=$Valor;
             $Columnas[4]="idUser";                 $Valores[4]=$idUser;
+            $Columnas[5]="Observaciones";          $Valores[5]=$Observaciones;
                         
             $this->InsertarRegistro($tab,$NumRegistros,$Columnas,$Valores);
             $idComprobante=$this->ObtenerMAX($tab, "ID", 1, "");
